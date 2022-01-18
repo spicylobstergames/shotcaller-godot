@@ -1,0 +1,383 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "BTDecorator",
+"class": "BTAlways",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/decorators/bt_always.gd"
+}, {
+"base": "BTNode",
+"class": "BTComposite",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/bt_composite.gd"
+}, {
+"base": "BTDecorator",
+"class": "BTConditional",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/decorators/bt_conditional.gd"
+}, {
+"base": "BTNode",
+"class": "BTDecorator",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/bt_decorator.gd"
+}, {
+"base": "BTDecorator",
+"class": "BTGuard",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/decorators/bt_guard.gd"
+}, {
+"base": "BTNode",
+"class": "BTLeaf",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/bt_leaf.gd"
+}, {
+"base": "Node",
+"class": "BTNode",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/bt_node.gd"
+}, {
+"base": "BTComposite",
+"class": "BTParallel",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/composites/bt_parallel.gd"
+}, {
+"base": "BTSelector",
+"class": "BTRandomSelector",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/composites/bt_random_selector.gd"
+}, {
+"base": "BTSequence",
+"class": "BTRandomSequence",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/composites/bt_random_sequence.gd"
+}, {
+"base": "BTDecorator",
+"class": "BTRepeat",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/decorators/bt_repeat.gd"
+}, {
+"base": "BTDecorator",
+"class": "BTRepeatUntil",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/decorators/bt_repeat_until.gd"
+}, {
+"base": "BTDecorator",
+"class": "BTRevert",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/decorators/bt_revert.gd"
+}, {
+"base": "BTComposite",
+"class": "BTSelector",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/composites/bt_selector.gd"
+}, {
+"base": "BTComposite",
+"class": "BTSequence",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/composites/bt_sequence.gd"
+}, {
+"base": "BTLeaf",
+"class": "BTWait",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/btnodes/leaves/bt_wait.gd"
+}, {
+"base": "Node",
+"class": "BehaviorTree",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/behavior_tree.gd"
+}, {
+"base": "Node",
+"class": "Blackboard",
+"language": "GDScript",
+"path": "res://addons/behavior_tree/src/blackboard.gd"
+}, {
+"base": "Reference",
+"class": "GSAIAgentLocation",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAIAgentLocation.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAIArrive",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIArrive.gd"
+}, {
+"base": "GSAIGroupBehavior",
+"class": "GSAIAvoidCollisions",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIAvoidCollisions.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAIBlend",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIBlend.gd"
+}, {
+"base": "GSAIGroupBehavior",
+"class": "GSAICohesion",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAICohesion.gd"
+}, {
+"base": "GSAIPursue",
+"class": "GSAIEvade",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIEvade.gd"
+}, {
+"base": "GSAIMatchOrientation",
+"class": "GSAIFace",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIFace.gd"
+}, {
+"base": "GSAISeek",
+"class": "GSAIFlee",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIFlee.gd"
+}, {
+"base": "GSAIArrive",
+"class": "GSAIFollowPath",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIFollowPath.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAIGroupBehavior",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAIGroupBehavior.gd"
+}, {
+"base": "GSAIProximity",
+"class": "GSAIInfiniteProximity",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Proximities/GSAIInfiniteProximity.gd"
+}, {
+"base": "GSAISpecializedAgent",
+"class": "GSAIKinematicBody2DAgent",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Agents/GSAIKinematicBody2DAgent.gd"
+}, {
+"base": "GSAISpecializedAgent",
+"class": "GSAIKinematicBody3DAgent",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Agents/GSAIKinematicBody3DAgent.gd"
+}, {
+"base": "GSAIMatchOrientation",
+"class": "GSAILookWhereYouGo",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAILookWhereYouGo.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAIMatchOrientation",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIMatchOrientation.gd"
+}, {
+"base": "Reference",
+"class": "GSAIPath",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAIPath.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAIPriority",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIPriority.gd"
+}, {
+"base": "Reference",
+"class": "GSAIProximity",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Proximities/GSAIProximity.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAIPursue",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAIPursue.gd"
+}, {
+"base": "GSAIProximity",
+"class": "GSAIRadiusProximity",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Proximities/GSAIRadiusProximity.gd"
+}, {
+"base": "GSAISpecializedAgent",
+"class": "GSAIRigidBody2DAgent",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Agents/GSAIRigidBody2DAgent.gd"
+}, {
+"base": "GSAISpecializedAgent",
+"class": "GSAIRigidBody3DAgent",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Agents/GSAIRigidBody3DAgent.gd"
+}, {
+"base": "GSAISteeringBehavior",
+"class": "GSAISeek",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAISeek.gd"
+}, {
+"base": "GSAIGroupBehavior",
+"class": "GSAISeparation",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Behaviors/GSAISeparation.gd"
+}, {
+"base": "GSAISteeringAgent",
+"class": "GSAISpecializedAgent",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/Agents/GSAISpecializedAgent.gd"
+}, {
+"base": "GSAIAgentLocation",
+"class": "GSAISteeringAgent",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAISteeringAgent.gd"
+}, {
+"base": "Reference",
+"class": "GSAISteeringBehavior",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAISteeringBehavior.gd"
+}, {
+"base": "Reference",
+"class": "GSAITargetAcceleration",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAITargetAcceleration.gd"
+}, {
+"base": "Reference",
+"class": "GSAIUtils",
+"language": "GDScript",
+"path": "res://addons/com.gdquest.godot-steering-ai-framework/GSAIUtils.gd"
+}, {
+"base": "Node",
+"class": "State",
+"language": "GDScript",
+"path": "res://addons/xsm/state.gd"
+}, {
+"base": "State",
+"class": "StateRoot",
+"language": "GDScript",
+"path": "res://addons/xsm/state_root.gd"
+}, {
+"base": "Node",
+"class": "Utils",
+"language": "GDScript",
+"path": "res://Utils/Utils.gd"
+} ]
+_global_script_class_icons={
+"BTAlways": "res://addons/behavior_tree/icons/btalways.svg",
+"BTComposite": "res://addons/behavior_tree/icons/btcomposite.svg",
+"BTConditional": "res://addons/behavior_tree/icons/btconditional.png",
+"BTDecorator": "res://addons/behavior_tree/icons/btdecorator.svg",
+"BTGuard": "res://addons/behavior_tree/icons/btguard.svg",
+"BTLeaf": "res://addons/behavior_tree/icons/btleaf.svg",
+"BTNode": "res://addons/behavior_tree/icons/btnode.svg",
+"BTParallel": "res://addons/behavior_tree/icons/btparallel.svg",
+"BTRandomSelector": "res://addons/behavior_tree/icons/btrndselector.svg",
+"BTRandomSequence": "res://addons/behavior_tree/icons/btrndsequence.svg",
+"BTRepeat": "res://addons/behavior_tree/icons/btrepeat.svg",
+"BTRepeatUntil": "res://addons/behavior_tree/icons/btrepeatuntil.svg",
+"BTRevert": "res://addons/behavior_tree/icons/btrevert.svg",
+"BTSelector": "res://addons/behavior_tree/icons/btselector.svg",
+"BTSequence": "res://addons/behavior_tree/icons/btsequence.svg",
+"BTWait": "res://addons/behavior_tree/icons/btwait.svg",
+"BehaviorTree": "res://addons/behavior_tree/icons/bt.svg",
+"Blackboard": "res://addons/behavior_tree/icons/blackboard.svg",
+"GSAIAgentLocation": "",
+"GSAIArrive": "",
+"GSAIAvoidCollisions": "",
+"GSAIBlend": "",
+"GSAICohesion": "",
+"GSAIEvade": "",
+"GSAIFace": "",
+"GSAIFlee": "",
+"GSAIFollowPath": "",
+"GSAIGroupBehavior": "",
+"GSAIInfiniteProximity": "",
+"GSAIKinematicBody2DAgent": "",
+"GSAIKinematicBody3DAgent": "",
+"GSAILookWhereYouGo": "",
+"GSAIMatchOrientation": "",
+"GSAIPath": "",
+"GSAIPriority": "",
+"GSAIProximity": "",
+"GSAIPursue": "",
+"GSAIRadiusProximity": "",
+"GSAIRigidBody2DAgent": "",
+"GSAIRigidBody3DAgent": "",
+"GSAISeek": "",
+"GSAISeparation": "",
+"GSAISpecializedAgent": "",
+"GSAISteeringAgent": "",
+"GSAISteeringBehavior": "",
+"GSAITargetAcceleration": "",
+"GSAIUtils": "",
+"State": "",
+"StateRoot": "",
+"Utils": ""
+}
+
+[application]
+
+config/name="Shotcaller ( Prototype )"
+run/main_scene="res://TestScene.tscn"
+config/icon="res://Assets/Icons/Beer.png"
+
+[autoload]
+
+Units="*res://Autoloads/Units.gd"
+Player="*res://Autoloads/Player.gd"
+Game="*res://Autoloads/Game.gd"
+
+[display]
+
+window/size/width=512
+window/size/height=300
+window/size/always_on_top=true
+window/size/test_width=1280
+window/size/test_height=720
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/behavior_tree/plugin.cfg", "res://addons/xsm/plugin.cfg" )
+
+[global]
+
+debug=true
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": false,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/normal_map_invert_y": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
+
+[layer_names]
+
+2d_physics/layer_9="Unit"
+2d_physics/layer_10="Blocker"
+2d_physics/layer_11="Navigation"
+2d_physics/layer_17="BasicAttack"
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+2d/snapping/use_gpu_pixel_snap=true
+environment/default_environment="res://default_env.tres"

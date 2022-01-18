@@ -1,0 +1,174 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Character/Child/Leader/Leader.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Character/Leader/Maori/Maori_Blue.png" type="Texture" id=2]
+[ext_resource path="res://Character/Child/Leader/Maori/Maori.gd" type="Script" id=3]
+[ext_resource path="res://Assets/Character/Leader/Maori/Maori_Red.png" type="Texture" id=4]
+[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Walk_AnimPlayer.tres" type="Animation" id=5]
+[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Idle_AnimPlayer.tres" type="Animation" id=6]
+
+[sub_resource type="Animation" id=16]
+resource_name = "Attack"
+length = 0.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.951913, 1.15349 ), Vector2( 0.927869, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 7.48751 ]
+}
+tracks/2/type = "animation"
+tracks/2/path = NodePath("AttackAnimPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"clips": PoolStringArray( "Attack_1" ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+// This shader only works properly with premultiplied alpha blend mode
+uniform float aura_width = 2.0;
+uniform vec4 aura_color : hint_color;
+
+void fragment() {
+	vec4 col = texture(TEXTURE, UV);
+	vec2 ps = TEXTURE_PIXEL_SIZE;
+	float a;
+	float maxa = col.a;
+	float mina = col.a;
+
+	a = texture(TEXTURE, UV + vec2(0.0, -aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(0.0, aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(-aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	col.rgb *= col.a;
+
+	COLOR = col;
+	COLOR.rgb += aura_color.rgb * (maxa - mina);
+}"
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = SubResource( 9 )
+shader_param/aura_width = 0.0
+shader_param/aura_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="CircleShape2D" id=13]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id=24]
+resource_local_to_scene = true
+radius = 19.3197
+
+[node name="Maori" instance=ExtResource( 1 )]
+collision_mask = 0
+script = ExtResource( 3 )
+team = 2
+blue_team_texture = ExtResource( 2 )
+red_team_texture = ExtResource( 4 )
+
+[node name="BehaviorAnimPlayer" parent="." index="4"]
+autoplay = "RESET"
+anims/Attack = SubResource( 16 )
+anims/Idle = ExtResource( 6 )
+anims/RESET = SubResource( 4 )
+anims/Walk = ExtResource( 5 )
+
+[node name="HealthBar" parent="HUD" index="0"]
+margin_top = -35.0
+margin_bottom = -35.0
+
+[node name="Sprite" parent="TextureContainer" index="0"]
+material = SubResource( 12 )
+position = Vector2( 0.95642, -1.18363 )
+texture = ExtResource( 2 )
+offset = Vector2( -7, -14 )
+
+[node name="Shadow" parent="TextureContainer" index="1"]
+modulate = Color( 1, 1, 1, 1 )
+texture = null
+
+[node name="CollisionShape2D" parent="." index="8"]
+position = Vector2( 0, -3 )
+shape = SubResource( 13 )
+
+[node name="UnitSelector" parent="." index="9"]
+position = Vector2( -1, -14 )
+
+[node name="CollisionShape2D" parent="UnitSelector" index="0"]
+shape = SubResource( 24 )
+
+[node name="UnitDetector" parent="." index="10"]
+collision_mask = 257
+
+[node name="Node" type="Node" parent="." index="13"]
+
+[node name="Line2D" type="Line2D" parent="Node" index="0"]
+width = 2.0
+
+[editable path="UnitSelector"]
+[editable path="ObjectAvoid"]

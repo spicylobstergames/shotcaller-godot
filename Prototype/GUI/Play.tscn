@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://GUI/Play.gd" type="Script" id=1]
+
+[sub_resource type="ButtonGroup" id=2]
+
+[node name="Play" type="Button"]
+modulate = Color( 1, 0.176471, 0.176471, 1 )
+margin_left = 308.0
+margin_right = 408.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 100, 0 )
+toggle_mode = true
+group = SubResource( 2 )
+text = "Red"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="." to="." method="_on_Play_pressed"]

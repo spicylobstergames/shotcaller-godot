@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Stats/Stats.gd" type="Script" id=1]
+
+[node name="Stats" type="Node"]
+script = ExtResource( 1 )
+team = 0
+unit_type = 0
+state_behavior = 0
+state_action = 0
+stats_health = 0
+stats_max_health = 0
+stats_mana = 0
+stats_max_mana = 0
+stats_leader_damage = 0
+stats_creep_damage = 0
+stats_building_damage = 0
+stats_attack_speed = 0
+stats_movement_speed = 0
+area_attack_range = 0
+area_unit = 0
+area_selection = 0
+area_unit_detection = 0
+area_distance_between_units = 0

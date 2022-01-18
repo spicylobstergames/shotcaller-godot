@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Character/Character.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Character/Child/Leader/Leader.gd" type="Script" id=4]
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+// This shader only works properly with premultiplied alpha blend mode
+uniform float aura_width = 2.0;
+uniform vec4 aura_color : hint_color;
+
+void fragment() {
+	vec4 col = texture(TEXTURE, UV);
+	vec2 ps = TEXTURE_PIXEL_SIZE;
+	float a;
+	float maxa = col.a;
+	float mina = col.a;
+
+	a = texture(TEXTURE, UV + vec2(0.0, -aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(0.0, aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(-aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	col.rgb *= col.a;
+
+	COLOR = col;
+	COLOR.rgb += aura_color.rgb * (maxa - mina);
+}"
+
+[sub_resource type="ShaderMaterial" id=10]
+resource_local_to_scene = true
+shader = SubResource( 9 )
+shader_param/aura_width = 0.0
+shader_param/aura_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="CircleShape2D" id=12]
+resource_local_to_scene = true
+
+[sub_resource type="CircleShape2D" id=13]
+resource_local_to_scene = true
+radius = 19.3197
+
+[node name="Leader" groups=["leader"] instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+
+[node name="Stats" parent="." index="0"]
+unit_type = 1
+
+[node name="Sprite" parent="TextureContainer" index="0"]
+material = SubResource( 10 )
+
+[node name="CollisionShape2D" parent="." index="8"]
+shape = SubResource( 12 )
+
+[node name="CollisionShape2D" parent="UnitSelector" index="0"]
+shape = SubResource( 13 )
+
+[editable path="UnitSelector"]

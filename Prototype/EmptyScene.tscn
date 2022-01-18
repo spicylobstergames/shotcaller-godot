@@ -1,0 +1,539 @@
+[gd_scene load_steps=31 format=2]
+
+[ext_resource path="res://addons/xsm/state.gd" type="Script" id=1]
+[ext_resource path="res://Utils/ObjectAvoid.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Utils/UnitSelector.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/xsm/state_root.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Character/Leader/Maori/Maori_Blue.png" type="Texture" id=5]
+[ext_resource path="res://Character/FSM/Movement/WalkAvoidance.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/Character/Leader/Maori/Maori_Red.png" type="Texture" id=7]
+[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Walk_AnimPlayer.tres" type="Animation" id=8]
+[ext_resource path="res://Assets/Character/Leader/Maori/Weapon/Axe.png" type="Texture" id=9]
+[ext_resource path="res://Character/FSM/Movement/Idle.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Idle_AnimPlayer.tres" type="Animation" id=11]
+[ext_resource path="res://Debug/AreaDebug.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Character/Child/Leader/Maori/Maori.gd" type="Script" id=13]
+[ext_resource path="res://HealthBar/HealthBar.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Debug/StateDebug.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Stats/Stats.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Character/FSM/Movement/WalkToTargetLocation.tscn" type="PackedScene" id=17]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 40.0
+
+[sub_resource type="GDScript" id=21]
+script/source = "tool
+extends State
+
+
+# FUNCTIONS AVAILABLE TO INHERIT
+
+func _on_enter(_args) -> void:
+	pass
+
+func _after_enter(_args) -> void:
+	pass
+
+func _on_update(_delta) -> void:
+	pass
+
+func _after_update(_delta) -> void:
+	pass
+
+func _before_exit(_args) -> void:
+	pass
+
+func _on_exit(_args) -> void:
+	pass
+
+func _on_timeout(_name) -> void:
+	pass
+"
+
+[sub_resource type="GDScript" id=22]
+script/source = "tool
+extends State
+
+
+# FUNCTIONS AVAILABLE TO INHERIT
+
+func _on_enter(_args) -> void:
+	pass
+
+func _after_enter(_args) -> void:
+	pass
+
+func _on_update(_delta) -> void:
+	pass
+
+func _after_update(_delta) -> void:
+	pass
+
+func _before_exit(_args) -> void:
+	pass
+
+func _on_exit(_args) -> void:
+	pass
+
+func _on_timeout(_name) -> void:
+	pass
+"
+
+[sub_resource type="Animation" id=16]
+resource_name = "Attack"
+length = 0.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.951913, 1.15349 ), Vector2( 0.927869, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 7.48751 ]
+}
+tracks/2/type = "animation"
+tracks/2/path = NodePath("AttackAnimPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"clips": PoolStringArray( "Attack_1" ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=17]
+resource_name = "Attack_1"
+length = 0.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Axe:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ -67.9954, 13.3689, 22.5143 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Axe:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.40476, 1.40476 ), Vector2( 1.48327, 1.40476 ), Vector2( 1.40476, 1.40476 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Axe:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 7.15256e-07, -12 ), Vector2( 1, -8 ), Vector2( 1, -6 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Axe:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=20]
+resource_name = "NoAttack"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Axe:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -55.0316 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Axe:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1.40476, 1.40476 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Axe:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 2, -25 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Axe:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=18]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Axe:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -55.0316 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Axe:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1.40476, 1.40476 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Axe:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 2, -25 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Axe:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+// This shader only works properly with premultiplied alpha blend mode
+uniform float aura_width = 2.0;
+uniform vec4 aura_color : hint_color;
+
+void fragment() {
+	vec4 col = texture(TEXTURE, UV);
+	vec2 ps = TEXTURE_PIXEL_SIZE;
+	float a;
+	float maxa = col.a;
+	float mina = col.a;
+
+	a = texture(TEXTURE, UV + vec2(0.0, -aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(0.0, aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(-aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	col.rgb *= col.a;
+
+	COLOR = col;
+	COLOR.rgb += aura_color.rgb * (maxa - mina);
+}"
+
+[sub_resource type="ShaderMaterial" id=24]
+resource_local_to_scene = true
+shader = SubResource( 9 )
+shader_param/aura_width = 0.0
+shader_param/aura_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="CircleShape2D" id=13]
+radius = 9.0
+
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 14, 16.5 )
+
+[sub_resource type="CircleShape2D" id=25]
+resource_local_to_scene = true
+radius = 100.0
+
+[node name="EmptyScene" type="Node2D"]
+
+[node name="ObjectAvoid" parent="." instance=ExtResource( 2 )]
+position = Vector2( 192, 144 )
+collision_mask = 1
+
+[node name="CollisionShape2D" parent="ObjectAvoid" index="0"]
+shape = SubResource( 1 )
+
+[node name="Maori" type="KinematicBody2D" parent="."]
+position = Vector2( 168, 160 )
+script = ExtResource( 13 )
+blue_team_texture = ExtResource( 5 )
+red_team_texture = ExtResource( 7 )
+
+[node name="Stats" parent="Maori" instance=ExtResource( 16 )]
+team = 0
+unit_type = 1
+health = 100
+max_health = 100
+mana = 100
+max_mana = 100
+attack_speed = 0
+movement_speed = 60
+attack_range = 30
+unit_area = 50
+unit_detection_range = 100
+distance_between_units = 30
+
+[node name="Abilities" type="Node" parent="Maori"]
+
+[node name="StateRoot" type="Node" parent="Maori"]
+script = ExtResource( 4 )
+fsm_owner = NodePath("..")
+animation_player = NodePath("../BehaviorAnimPlayer")
+
+[node name="Live" type="Node" parent="Maori/StateRoot"]
+script = SubResource( 21 )
+has_regions = true
+fsm_owner = null
+animation_player = null
+
+[node name="Movement" type="Node" parent="Maori/StateRoot/Live"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="Idles" type="Node" parent="Maori/StateRoot/Live/Movement"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="Idle" parent="Maori/StateRoot/Live/Movement/Idles" instance=ExtResource( 10 )]
+fsm_owner = null
+animation_player = null
+
+[node name="Walks" type="Node" parent="Maori/StateRoot/Live/Movement"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="WalkToLocation" parent="Maori/StateRoot/Live/Movement/Walks" instance=ExtResource( 17 )]
+fsm_owner = null
+animation_player = null
+
+[node name="WalkAvoidance" parent="Maori/StateRoot/Live/Movement/Walks" instance=ExtResource( 6 )]
+fsm_owner = null
+animation_player = null
+
+[node name="Action" type="Node" parent="Maori/StateRoot/Live"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="NoAction" type="Node" parent="Maori/StateRoot/Live/Action"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="Attacks" type="Node" parent="Maori/StateRoot/Live/Action"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="Abilities" type="Node" parent="Maori/StateRoot/Live/Action"]
+script = ExtResource( 1 )
+fsm_owner = null
+animation_player = null
+
+[node name="Dead" type="Node" parent="Maori/StateRoot"]
+script = SubResource( 22 )
+fsm_owner = null
+animation_player = null
+
+[node name="BehaviorAnimPlayer" type="AnimationPlayer" parent="Maori"]
+autoplay = "RESET"
+playback_default_blend_time = 0.1
+playback_speed = 1.5
+anims/Attack = SubResource( 16 )
+anims/Idle = ExtResource( 11 )
+anims/RESET = SubResource( 4 )
+anims/Walk = ExtResource( 8 )
+
+[node name="AbilityAnimPlayer" type="AnimationPlayer" parent="Maori"]
+
+[node name="AttackAnimPlayer" type="AnimationPlayer" parent="Maori"]
+autoplay = "RESET"
+anims/Attack_1 = SubResource( 17 )
+anims/NoAttack = SubResource( 20 )
+anims/RESET = SubResource( 18 )
+
+[node name="HUD" type="Position2D" parent="Maori"]
+z_index = 10
+z_as_relative = false
+
+[node name="HealthBar" parent="Maori/HUD" instance=ExtResource( 14 )]
+margin_left = 0.0
+margin_top = -35.0
+margin_right = 0.0
+margin_bottom = -35.0
+
+[node name="TextureContainer" type="Position2D" parent="Maori"]
+
+[node name="Sprite" type="Sprite" parent="Maori/TextureContainer"]
+material = SubResource( 24 )
+position = Vector2( 0.95642, -1.18363 )
+texture = ExtResource( 5 )
+offset = Vector2( -7, -14 )
+
+[node name="Axe" type="Sprite" parent="Maori/TextureContainer"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 2, -25 )
+rotation = -0.960483
+scale = Vector2( 1.40476, 1.40476 )
+texture = ExtResource( 9 )
+offset = Vector2( 8.75142, -5.84707 )
+
+[node name="DebugContainer" type="Position2D" parent="Maori"]
+show_behind_parent = true
+z_index = -10
+z_as_relative = false
+
+[node name="AttackRange" parent="Maori/DebugContainer" instance=ExtResource( 12 )]
+radius = 20
+color = Color( 1, 1, 1, 0.0784314 )
+
+[node name="UnitDetectionRange" parent="Maori/DebugContainer" instance=ExtResource( 12 )]
+radius = 100
+color = Color( 1, 1, 1, 0.0784314 )
+
+[node name="StateDebug" parent="Maori/DebugContainer" instance=ExtResource( 15 )]
+position = Vector2( 0, -45 )
+state_root_path = NodePath("../../StateRoot")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Maori"]
+visible = false
+position = Vector2( 0, -3 )
+shape = SubResource( 13 )
+
+[node name="UnitSelector" parent="Maori" instance=ExtResource( 3 )]
+visible = false
+
+[node name="CollisionShape2D" parent="Maori/UnitSelector" index="0"]
+position = Vector2( -2, -16.5 )
+shape = SubResource( 14 )
+
+[node name="UnitDetector" type="Area2D" parent="Maori"]
+visible = false
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Maori/UnitDetector"]
+shape = SubResource( 25 )
+
+[node name="Node" type="Node" parent="Maori"]
+
+[node name="Line2D" type="Line2D" parent="Maori/Node"]
+width = 2.0
+
+[connection signal="some_state_changed" from="Maori/StateRoot" to="Maori" method="_on_StateRoot_some_state_changed"]
+
+[editable path="ObjectAvoid"]
+[editable path="Maori/UnitSelector"]

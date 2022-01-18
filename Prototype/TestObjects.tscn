@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Character/Child/Creep/MeleeCreep/MeleeCreep.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Building/Child/Tower/Tower.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Character/Child/Creep/RangeCreep/RangeCreep.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CircleShape2D" id=13]
+resource_local_to_scene = true
+
+[node name="TestObjects" type="YSort"]
+
+[node name="MeleeCreep" parent="." groups=["units"] instance=ExtResource( 1 )]
+position = Vector2( 280, 176 )
+collision_layer = 256
+collision_mask = 768
+team = 2
+
+[node name="RangeCreep" parent="." groups=["units"] instance=ExtResource( 3 )]
+position = Vector2( 230, 141 )
+collision_layer = 256
+collision_mask = 768
+team = 2
+
+[node name="Tower" parent="." instance=ExtResource( 2 )]
+position = Vector2( 304, 137 )
+team = 3
+
+[node name="Stats" parent="Tower" index="0"]
+team = 3
+stats_health = 100
+stats_max_health = 100
+
+[node name="CollisionShape2D" parent="Tower" index="6"]
+shape = SubResource( 13 )
+
+[editable path="Tower"]
+[editable path="Tower/UnitSelector"]

@@ -1,0 +1,363 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Building/Building.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Level/Building/BlueBuilding.png" type="Texture" id=2]
+[ext_resource path="res://Building/Node/Flag.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Building/Child/Tower/Tower.gd" type="Script" id=4]
+
+[sub_resource type="Animation" id=5]
+resource_name = "Attack"
+length = 0.7
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3 ),
+"transitions": PoolRealArray( 1, 0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 0, 8 ), Vector2( -0.00104673, 7.94029 ), Vector2( 0, 8 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 0.5, 0.5, 0.5 ),
+"update": 0,
+"values": [ 2.5901, -1.00424, -3.01272, -4.07776 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Sprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 0.5, 0.5, 0.5 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.07022, 0.932982 ), Vector2( 0.946576, 1.04356 ), Vector2( 0.946576, 0.994811 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "Dead"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 0.5, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 0.5, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 8 ), Vector2( 0, 8 ), Vector2( 0, -3 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Sprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 0.5, 1, 0.5 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.125, 0.909091 ), Vector2( 0.875, 1.13122 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("TextureContainer/Sprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 0.5, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("HUD/HealthBar:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 8 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Sprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 8 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Sprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("TextureContainer/Sprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("HUD/HealthBar:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Setup"
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 8 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("TextureContainer/Sprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="CircleShape2D" id=3]
+resource_local_to_scene = true
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 15.5, 28 )
+
+[node name="Tower" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+
+[node name="Stats" parent="." index="0"]
+stats_health = 500
+stats_max_health = 500
+area_attack_range = 50
+area_unit = 30
+
+[node name="HealthBar" parent="HUD" index="0"]
+margin_top = -80.0
+margin_bottom = -80.0
+
+[node name="Sprite" parent="TextureContainer" index="0"]
+position = Vector2( 0, 8 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -39 )
+region_enabled = true
+region_rect = Rect2( 96, 43, 32, 77 )
+
+[node name="Flag" parent="TextureContainer/Sprite" index="0" instance=ExtResource( 3 )]
+show_behind_parent = true
+position = Vector2( 0, -70 )
+
+[node name="BehaviorAnimPlayer" parent="." index="5"]
+anims/Attack = SubResource( 5 )
+anims/Dead = SubResource( 8 )
+anims/Idle = SubResource( 6 )
+anims/RESET = SubResource( 7 )
+anims/Setup = SubResource( 4 )
+
+[node name="CollisionShape2D" parent="." index="6"]
+position = Vector2( 0, -4 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D" parent="UnitSelector" index="0"]
+visible = false
+position = Vector2( 0, -28 )
+shape = SubResource( 2 )
+
+[node name="HitArea" parent="." index="9"]
+position = Vector2( 0, -5 )
+
+[editable path="UnitSelector"]

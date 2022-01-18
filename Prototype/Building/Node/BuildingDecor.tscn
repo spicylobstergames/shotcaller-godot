@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Building/Node/BuildingDecor.gd" type="Script" id=1]
+
+[node name="BuildingDecor" type="Position2D"]
+script = ExtResource( 1 )

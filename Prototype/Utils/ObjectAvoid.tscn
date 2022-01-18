@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Utils/ObjectAvoid.gd" type="Script" id=1]
+
+[node name="ObjectAvoid" type="Position2D"]
+visible = false
+script = ExtResource( 1 )
