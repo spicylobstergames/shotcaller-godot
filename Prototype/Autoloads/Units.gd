@@ -61,7 +61,7 @@ func get_closest_units_by(node: Node2D, sort_type: int, units: Array) -> Array:
 		data_units.append({
 			node = u,
 			distance = node.global_position.distance_to(u.global_position),
-			health = u.stats.stats_health
+			health = u.attributes.stats.health
 		})
 		
 	match sort_type:
@@ -157,7 +157,7 @@ func get_allies(node: Node2D, current_team: int, current_type: int, target_types
 	var filtered_allies = []
 	if not target_types.empty():
 		for i in range(allies.size()):
-			if allies[i].stats.unit_type in target_types:
+			if allies[i].attributes.primary.unit_type in target_types:
 				filtered_allies.append(allies[i])
 		return filtered_allies
 				
@@ -192,7 +192,7 @@ func get_enemies(node: Node2D, current_team: int, current_type: int, target_type
 	var filtered_enemies = []
 	if not target_types.empty():
 		for i in range(enemies.size()):
-			if enemies[i].stats.unit_type in target_types:
+			if enemies[i].attributes.primary.unit_type in target_types:
 				filtered_enemies.append(enemies[i])
 		return filtered_enemies
 
@@ -211,7 +211,7 @@ func _get_all(node: Node2D, target_teams: PoolIntArray, target_types: PoolIntArr
 			units = get_tree().get_nodes_in_group("units")
 	
 	for u in units:
-		if u.stats.team in target_teams and u.stats.unit_type in target_types:
+		if u.attributes.primary.unit_team in target_teams and u.attributes.primary.unit_type in target_types:
 			if node.global_position.distance_to(u.global_position) < radius:
 				filtered_units.append(u)
 	

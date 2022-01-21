@@ -9,6 +9,36 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Resource",
+"class": "AttrRes",
+"language": "GDScript",
+"path": "res://Utils/Attributes/Scripts/Res/AttrRes.gd"
+}, {
+"base": "AttrRes",
+"class": "AttrResPrimary",
+"language": "GDScript",
+"path": "res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd"
+}, {
+"base": "AttrRes",
+"class": "AttrResRadius",
+"language": "GDScript",
+"path": "res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd"
+}, {
+"base": "AttrRes",
+"class": "AttrResState",
+"language": "GDScript",
+"path": "res://Utils/Attributes/Scripts/Res/State/AttrResState.gd"
+}, {
+"base": "AttrRes",
+"class": "AttrResStats",
+"language": "GDScript",
+"path": "res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd"
+}, {
+"base": "Node",
+"class": "Attributes",
+"language": "GDScript",
+"path": "res://Utils/Attributes/Attributes.gd"
+}, {
 "base": "BTDecorator",
 "class": "BTAlways",
 "language": "GDScript",
@@ -253,13 +283,14 @@ _global_script_classes=[ {
 "class": "StateRoot",
 "language": "GDScript",
 "path": "res://addons/xsm/state_root.gd"
-}, {
-"base": "Node",
-"class": "Utils",
-"language": "GDScript",
-"path": "res://Utils/Utils.gd"
 } ]
 _global_script_class_icons={
+"AttrRes": "",
+"AttrResPrimary": "",
+"AttrResRadius": "",
+"AttrResState": "",
+"AttrResStats": "",
+"Attributes": "",
 "BTAlways": "res://addons/behavior_tree/icons/btalways.svg",
 "BTComposite": "res://addons/behavior_tree/icons/btcomposite.svg",
 "BTConditional": "res://addons/behavior_tree/icons/btconditional.png",
@@ -308,8 +339,7 @@ _global_script_class_icons={
 "GSAITargetAcceleration": "",
 "GSAIUtils": "",
 "State": "",
-"StateRoot": "",
-"Utils": ""
+"StateRoot": ""
 }
 
 [application]
@@ -320,6 +350,7 @@ config/icon="res://Assets/Icons/Beer.png"
 
 [autoload]
 
+Utils="*res://Autoloads/Utils.gd"
 Units="*res://Autoloads/Units.gd"
 Player="*res://Autoloads/Player.gd"
 Game="*res://Autoloads/Game.gd"
@@ -336,7 +367,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/behavior_tree/plugin.cfg", "res://addons/xsm/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/behavior_tree/plugin.cfg" )
 
 [global]
 

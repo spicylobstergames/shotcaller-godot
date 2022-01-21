@@ -1,9 +1,49 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Building/Building.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Level/Building/BlueBuilding.png" type="Texture" id=2]
 [ext_resource path="res://Building/Node/Flag.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Building/Child/Core/Core.gd" type="Script" id=4]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=5]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=6]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=7]
+
+[sub_resource type="Resource" id=3]
+resource_local_to_scene = true
+script = ExtResource( 5 )
+unit_team = 0
+unit_type = 3
+mirror_mode = false
+
+[sub_resource type="Resource" id=4]
+resource_local_to_scene = true
+script = ExtResource( 7 )
+health = 2000.0
+max_health = 2000.0
+health_regeneration_rate = 0.1
+health_regeneration_step = 1.0
+mana = 0.0
+max_mana = 0.0
+mana_regeneration_rate = 0.0
+mana_regeneration_step = 0.0
+move_speed = 0.0
+move_acceleration = 0.0
+attack_speed = 0.0
+creep_damage = 0.0
+leader_damage = 0.0
+tower_damage = 0.0
+
+[sub_resource type="Resource" id=5]
+resource_local_to_scene = true
+script = ExtResource( 6 )
+collision_size = 0.0
+attack_range = 0.0
+unit_detection = 0.0
+area_selection = 0.0
+hurt_area = {
+"height": 0.0,
+"radius": 0.0
+}
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 28, 36 )
@@ -11,15 +51,13 @@ extents = Vector2( 28, 36 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 41, 46.5 )
 
-[sub_resource type="CircleShape2D" id=3]
-resource_local_to_scene = true
-radius = 0.0
-
-[sub_resource type="CircleShape2D" id=4]
-resource_local_to_scene = true
-
 [node name="Core" instance=ExtResource( 1 )]
 script = ExtResource( 4 )
+
+[node name="Attributes" parent="." index="0"]
+primary = SubResource( 3 )
+stats = SubResource( 4 )
+radius = SubResource( 5 )
 
 [node name="Flag2" parent="TextureContainer" index="0" instance=ExtResource( 3 )]
 position = Vector2( 23, -113 )
@@ -39,7 +77,7 @@ position = Vector2( 34, -80 )
 [node name="Flag4" parent="TextureContainer" index="4" instance=ExtResource( 3 )]
 position = Vector2( -34, -80 )
 
-[node name="CollisionShape2D" parent="." index="7"]
+[node name="CollisionShape2D" parent="." index="6"]
 position = Vector2( 0, -39 )
 shape = SubResource( 1 )
 
@@ -47,11 +85,5 @@ shape = SubResource( 1 )
 visible = false
 position = Vector2( -1, -48.5 )
 shape = SubResource( 2 )
-
-[node name="CollisionShape2D" parent="UnitDetector" index="0"]
-shape = SubResource( 3 )
-
-[node name="CollisionShape2D" parent="HitArea" index="0"]
-shape = SubResource( 4 )
 
 [editable path="UnitSelector"]

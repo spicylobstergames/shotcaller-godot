@@ -1,10 +1,50 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Character/Child/Creep/Creep.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character/Child/Creep/MeleeCreep/MeleeCreep.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Character/Creep/MeleeCreep/MeleeCreep_Blue.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Character/Creep/MeleeCreep/MeleeCreep_Red.png" type="Texture" id=4]
 [ext_resource path="res://Utils/BasicAttackArea.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=6]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=7]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=8]
+
+[sub_resource type="Resource" id=35]
+resource_local_to_scene = true
+script = ExtResource( 6 )
+unit_team = 0
+unit_type = 2
+mirror_mode = false
+
+[sub_resource type="Resource" id=36]
+resource_local_to_scene = true
+script = ExtResource( 8 )
+health = 150.0
+max_health = 150.0
+health_regeneration_rate = 0.1
+health_regeneration_step = 0.01
+mana = 0.0
+max_mana = 0.0
+mana_regeneration_rate = 0.0
+mana_regeneration_step = 0.0
+move_speed = 35.0
+move_acceleration = 2000.0
+attack_speed = 50.0
+creep_damage = 20.0
+leader_damage = 20.0
+tower_damage = 20.0
+
+[sub_resource type="Resource" id=37]
+resource_local_to_scene = true
+script = ExtResource( 7 )
+collision_size = 5.0
+attack_range = 10.0
+unit_detection = 80.0
+area_selection = 20.0
+hurt_area = {
+"height": 0.0,
+"radius": 0.0
+}
 
 [sub_resource type="Animation" id=23]
 resource_name = "Attack"
@@ -920,14 +960,6 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 24, 24 )
-
 [sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 24, 24 )
@@ -935,6 +967,14 @@ region = Rect2( 48, 0, 24, 24 )
 [sub_resource type="AtlasTexture" id=26]
 atlas = ExtResource( 4 )
 region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 24, 24 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 3 )
@@ -946,14 +986,14 @@ region = Rect2( 72, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 15 ), SubResource( 24 ) ],
-"loop": false,
-"name": "Attack",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 17 ), SubResource( 26 ) ],
 "loop": false,
 "name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 15 ), SubResource( 24 ) ],
+"loop": false,
+"name": "Attack",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 16 ), SubResource( 25 ) ],
@@ -1036,20 +1076,12 @@ script = ExtResource( 2 )
 blue_team_texture = ExtResource( 3 )
 red_team_texture = ExtResource( 4 )
 
-[node name="Stats" parent="." index="0"]
-stats_health = 150
-stats_max_health = 150
-stats_max_mana = 100
-stats_leader_damage = 20
-stats_creep_damage = 20
-stats_building_damage = 20
-stats_attack_speed = 50
-stats_movement_speed = 35
-area_attack_range = 10
-area_selection = 20
-area_unit_detection = 100
+[node name="Attributes" parent="." index="0"]
+primary = SubResource( 35 )
+stats = SubResource( 36 )
+radius = SubResource( 37 )
 
-[node name="BehaviorAnimPlayer" parent="." index="4"]
+[node name="BehaviorAnimPlayer" parent="." index="3"]
 anims/Attack = SubResource( 23 )
 anims/Dead = SubResource( 34 )
 anims/Idle = SubResource( 21 )
@@ -1095,17 +1127,17 @@ texture = ExtResource( 3 )
 offset = Vector2( -2, -10 )
 region_rect = Rect2( 50, 2, 20, 21 )
 
-[node name="CollisionShape2D" parent="." index="8"]
+[node name="CollisionShape2D" parent="." index="7"]
 visible = false
 shape = SubResource( 30 )
 
-[node name="UnitSelector" parent="." index="9"]
+[node name="UnitSelector" parent="." index="8"]
 monitoring = false
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 12 )
 
-[node name="HitArea" parent="." index="11"]
+[node name="HitArea" parent="." index="10"]
 position = Vector2( -1, -11 )
 
 [connection signal="animation_changed" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_changed"]

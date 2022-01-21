@@ -33,10 +33,10 @@ func _tick(agent: Node, blackboard: Blackboard) -> bool:
 		blackboard.set_data("targeted_enemy", null)
 		return succeed()
 		
-	if _agent.global_position.distance_to(targeted_enemy.global_position) <= (_agent.stats.area_attack_range + targeted_enemy.stats.area_unit/2):
+	if _agent.global_position.distance_to(targeted_enemy.global_position) <= (_agent.attributes.radius.attack_range + targeted_enemy.attributes.radius.collision_size):
 		return succeed()
 #
-	if _agent.global_position.distance_to(targeted_enemy.global_position) >= _agent.stats.area_unit_detection:
+	if _agent.global_position.distance_to(targeted_enemy.global_position) >= _agent.attributes.radius.unit_detection:
 		return succeed()
 	
 	_agent._setup_state_debug(name)
@@ -69,7 +69,7 @@ func _setup_ai_chase_to_enemy(agent: PhysicsBody2D, blackboard: Blackboard) -> v
 		ai_radius_proximity_chase = GSAIRadiusProximity.new(agent.ai_agent, ai_allies, 60)
 		ai_separation_chase = GSAISeparation.new(agent.ai_agent, ai_radius_proximity_chase)
 		ai_cohesion_chase = GSAICohesion.new(agent.ai_agent, ai_radius_proximity_chase)
-		ai_radius_proximity_avoid_chase = GSAIRadiusProximity.new(agent.ai_agent, ai_allies, agent.stats.area_unit)
+		ai_radius_proximity_avoid_chase = GSAIRadiusProximity.new(agent.ai_agent, ai_allies, agent.attributes.radius.collision_size)
 		ai_avoid_chase = GSAIAvoidCollisions.new(agent.ai_agent, ai_radius_proximity_avoid_chase)
 
 #		var aai_radius_proximity_avoid_chase = GSAIRadiusProximity.new(agent.ai_agent, ai_allies, 100)
@@ -102,7 +102,7 @@ func _setup_update_closest_enemy(agent: PhysicsBody2D, blackboard: Blackboard) -
 		var enemies: Array = blackboard.get_data("enemies")
 		if not enemies.empty():
 			var new_targeted_enemy = blackboard.get_data("targeted_enemy")
-			var distance = agent.stats.area_unit_detection
+			var distance = agent.attributes.radius.unit_detection
 			for e in enemies:
 				var new_distance = agent.global_position.distance_to(e.global_position)
 				if new_distance < distance:
