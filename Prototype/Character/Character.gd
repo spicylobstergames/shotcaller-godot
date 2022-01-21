@@ -34,6 +34,7 @@ var circle_shape = CircleShape2D.new()
 onready var space_state = get_world_2d().direct_space_state
 
 
+onready var attributes: Node = $Attributes
 onready var stats: Node = $Stats
 onready var sprite: Sprite = $TextureContainer/Sprite
 onready var texture_container: Position2D = $TextureContainer
@@ -65,7 +66,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	velocity = GSAIUtils.to_vector2(ai_agent.linear_velocity)
-	if stats.stats_health <= 0:
+	if attributes.stats.health <= 0:
 		_setup_dead()
 	else:
 		var enemies = Units.get_enemies(
@@ -74,7 +75,7 @@ func _physics_process(_delta: float) -> void:
 				Units.TypeID.Creep,
 				[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
 				Units.DetectionTypeID.Area,
-				stats.area_unit_detection
+				attributes.radius.unit_detection
 				)
 		
 		$Blackboard.set_data("enemies", enemies)
@@ -85,20 +86,20 @@ func _physics_process(_delta: float) -> void:
 				Units.TypeID.Creep,
 				[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
 				Units.DetectionTypeID.Area,
-				stats.area_unit_detection
+				attributes.radius.unit_detection
 				)
 		$Blackboard.set_data("allies", allies)
 
-		$Blackboard.set_data("state_behavior", stats.state_behavior)
-		$Blackboard.set_data("state_action", stats.state_action)
-		$Blackboard.set_data("state_reaction", stats.state_reaction)
+#		$Blackboard.set_data("state_behavior", attributes.state.behavior)
+#		$Blackboard.set_data("state_action", attributes.state.action)
+#		$Blackboard.set_data("state_reaction", attributes.state.reaction)
 
 
 func _draw() -> void:
 	if ProjectSettings.get("global/debug"):
-		Utils.draw_line_circle(self, stats.area_attack_range, 1.0, Color.blue)
-		Utils.draw_line_circle(self, stats.area_unit, 1.0, Color.orangered)
-		Utils.draw_line_circle(self, stats.area_unit_detection, 1.0, Color.goldenrod)
+		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color.blue)
+		Utils.draw_line_circle(self, attributes.radius.collision_size, 1.0, Color.orangered)
+		Utils.draw_line_circle(self, attributes.radius.unit_detection, 1.0, Color.goldenrod)
 
 
 func _setup_state_debug(text: String) -> void:
@@ -114,22 +115,22 @@ func _setup_face_direction(target_position: Vector2) -> void:
 
 
 func _setup_ai_agent() -> void:
-	ai_agent.linear_speed_max = stats.stats_movement_speed
-	ai_agent.linear_acceleration_max = 2000
+	ai_agent.linear_speed_max = attributes.stats.move_speed
+	ai_agent.linear_acceleration_max = attributes.stats.move_acceleration
 	ai_agent.linear_velocity = GSAIUtils.to_vector3(Vector2.ZERO)
-	ai_agent.bounding_radius = stats.area_unit
+	ai_agent.bounding_radius = attributes.radius.collision_size
 	ai_agent.linear_drag_percentage = 0.0
 	ai_agent.zero_linear_speed_threshold = 0.1
 
 
 func _setup_radius_collision() -> void:
-	$CollisionShape2D.shape.radius = stats.area_unit
-	$UnitSelector/CollisionShape2D.shape.radius = stats.area_selection
-	$UnitDetector/CollisionShape2D.shape.radius = stats.area_unit_detection
+	$CollisionShape2D.shape.radius = attributes.radius.collision_size
+	$UnitSelector/CollisionShape2D.shape.radius = attributes.radius.area_selection
+	$UnitDetector/CollisionShape2D.shape.radius = attributes.radius.unit_detection
 
 
 func _setup_team() -> void:
-	stats.team = team
+	attributes.primary.unit_team = team
 	if blue_team_texture != null and red_team_texture != null:
 		match team:
 			Units.TeamID.Blue:
@@ -139,16 +140,16 @@ func _setup_team() -> void:
 
 
 func _setup_healthbar() -> void:
-	healthbar.stats_max_health = stats.stats_max_health
-	healthbar.stats_health = stats.stats_health
-	healthbar.stats_max_mana = stats.stats_max_mana
-	healthbar.stats_mana = stats.stats_mana
+	healthbar.set_max_health(attributes.stats.max_health)
+	healthbar.set_health(attributes.stats.health)
+	healthbar.set_max_mana(attributes.stats.max_mana)
+	healthbar.set_mana(attributes.stats.mana)
 
 
 func _setup_blackboard() -> void:
 	$Blackboard.set_data("is_dead", false)
-	$Blackboard.set_data("stats_health", stats.stats_health)
-	$Blackboard.set_data("stats_mana", stats.stats_mana)
+	$Blackboard.set_data("stats_health", attributes.stats.health)
+	$Blackboard.set_data("stats_mana", attributes.stats.mana)
 	$Blackboard.set_data("enemies", [])
 	$Blackboard.set_data("allies", [])
 	$Blackboard.set_data("buildings", [])
@@ -213,8 +214,8 @@ func _setup_dead() -> void:
 
 func _setup_spawn() -> void:
 	is_dead = false
-	stats.stats_health = 100
-	stats.stats_max_health = 100
+#	stats.stats_health = 100
+#	stats.stats_max_health = 100
 	collision_layer = 256
 	collision_mask = 768
 	$HitArea.collision_mask = 65536
@@ -222,6 +223,9 @@ func _setup_spawn() -> void:
 	$UnitDetector.collision_mask = 256
 	$BehaviorTree.is_active = true
 	$BehaviorTree.start()
+	
+	for p in attributes.stats._saved_init_properties.keys():
+		attributes.stats.set(p, attributes.stats._saved_init_properties[p])
 	
 	set_team(team)
 	_setup_healthbar()
@@ -243,7 +247,7 @@ func _on_HitArea_area_entered(area: Area2D) -> void:
 		target_lock = true
 
 		var damage = 0
-		match stats.unit_type:
+		match attributes.primary.unit_type:
 			Units.TypeID.Creep:
 				damage = area.creep_damage
 			Units.TypeID.Leader:
@@ -251,13 +255,13 @@ func _on_HitArea_area_entered(area: Area2D) -> void:
 			Units.TypeID.Building:
 				damage = area.building_damage
 		
-		stats.change([
-			{name = "stats_health", value = stats.stats_health - damage}
-		])
+#		stats.change([
+#			{name = "stats_health", value = stats.stats_health - damage}
+#		])
 
 
 func _on_Stats_changed(_properties: Array) -> void:
-	$Blackboard.set_data("stats_health", stats.stats_health)
-	$Blackboard.set_data("stats_mana", stats.stats_mana)
-	$Blackboard.set_data("is_dead", stats.stats_health <= 0)
-	_setup_healthbar()
+	$Blackboard.set_data("stats_health", attributes.stats.health)
+	$Blackboard.set_data("stats_mana", attributes.stats.mana)
+	$Blackboard.set_data("is_dead", attributes.stats.health <= 0)
+#	_setup_healthbar()

@@ -35,7 +35,7 @@ func _tick(agent: Node, blackboard: Blackboard) -> bool:
 	if blackboard.get_data("stats_health") <= 0:
 		return fail()
 		
-	if _agent.global_position.distance_to(blackboard.get_data("target_end_point")) < _agent.stats.area_attack_range:
+	if _agent.global_position.distance_to(blackboard.get_data("target_end_point")) < _agent.attributes.radius.attack_range:
 		_agent.get_node("ObjectAvoid").enabled = false
 		return fail()
 

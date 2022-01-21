@@ -28,9 +28,9 @@ func _setup_basic_attack() -> void:
 		var arrow: Area2D = _arrow.instance()
 		arrow.position = Vector2.ZERO
 		
-		arrow.creep_damage = stats.stats_creep_damage
-		arrow.leader_damage = stats.stats_leader_damage
-		arrow.building_damage = stats.stats_building_damage
+		arrow.creep_damage = attributes.stats.creep_damage
+		arrow.leader_damage = attributes.stats.leader_damage
+		arrow.building_damage = attributes.stats.tower_damage
 		arrow.target = target
 		
 		$TextureContainer/Position2D/Weapon/ArrowInitPosition.add_child(arrow)

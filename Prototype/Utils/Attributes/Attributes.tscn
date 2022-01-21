@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Utils/Attributes/Attributes.gd" type="Script" id=1]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=2]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=3]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=4]
+
+[sub_resource type="Resource" id=2]
+resource_local_to_scene = true
+script = ExtResource( 3 )
+unit_team = 0
+unit_type = 0
+mirror_mode = false
+
+[sub_resource type="Resource" id=1]
+resource_local_to_scene = true
+script = ExtResource( 2 )
+health = 0.0
+max_health = 0.0
+health_regeneration_rate = 0.0
+health_regeneration_step = 0.0
+mana = 0.0
+max_mana = 0.0
+mana_regeneration_rate = 0.0
+mana_regeneration_step = 0.0
+move_speed = 0.0
+move_acceleration = 0.0
+attack_speed = 0.0
+creep_damage = 0.0
+leader_damage = 0.0
+tower_damage = 0.0
+
+[sub_resource type="Resource" id=3]
+resource_local_to_scene = true
+script = ExtResource( 4 )
+collision_size = 0.0
+attack_range = 0.0
+unit_detection = 0.0
+area_selection = 0.0
+hurt_area = {
+"height": 0.0,
+"radius": 0.0
+}
+
+[node name="Attributes" type="Node"]
+script = ExtResource( 1 )
+primary = SubResource( 2 )
+stats = SubResource( 1 )
+radius = SubResource( 3 )
