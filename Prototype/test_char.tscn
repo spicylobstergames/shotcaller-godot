@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Character/Creep/MeleeCreep/MeleeCreep_Blue.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+var team
+var mirror_mode = false
+func _ready():
+	pass
+
+func spawn():
+	global_position += Vector2(
+		randf()*4.0,
+		randf()*4.0
+	)
+"
+
+[node name="Node2D" type="Sprite"]
+texture = ExtResource( 1 )
+script = SubResource( 1 )

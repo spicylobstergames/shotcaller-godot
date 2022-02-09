@@ -37,42 +37,18 @@ func _setup_move_creep():
 		print(move_points)
 		for c in get_children():
 			c._setup_spawn()
-			c.get_node("Blackboard").set_data("move_points", move_points)
-			c.get_node("Blackboard").set_data("target_end_point", target_end_point)
-			c.get_node("Blackboard").set_data("allies", get_children())
-			c.get_node("Blackboard").set_data("enemies", [])
-			c.get_node("Blackboard").set_data("buildings", buildings)
+			c.set("move_points", move_points)
+			c.set("target_end_point", target_end_point)
+			c.set("allies", get_children())
+			c.set("enemies", [])
+			c.set("buildings", buildings)
 
 
 func _setup_formation() -> void:
-	if creep_formations.empty():
+	for c in get_children():
+		c.set_team(team)
 		if mirror_mode:
-			var mirror_formations = []
-			scale.x = -1
-			for c in get_children():
-				c.set_team(team)
-				mirror_formations.append({
-					node = c,
-					position = c.global_position
-				})
-			scale.x = 1
-			
-			for f in mirror_formations:
-				f.node.global_position = f.position
-				f.node.get_node("TextureContainer").scale.x = -1
-
-		for c in get_children():
-			creep_formations.append({
-				node = c,
-				position = c.position,
-				team = team,
-				scale = c.get_node("TextureContainer").scale
-			})
-	else:
-		for f in creep_formations:
-			f.node.position = f.position
-			f.node.team = f.team
-			f.node.get_node("TextureContainer").scale.x = f.scale.x
+			c.get_node("TextureContainer").scale.x = -1
 
 
 func _on_Creep_dead(unit: PhysicsBody2D) -> void:

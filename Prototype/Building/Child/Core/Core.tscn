@@ -77,7 +77,7 @@ position = Vector2( 34, -80 )
 [node name="Flag4" parent="TextureContainer" index="4" instance=ExtResource( 3 )]
 position = Vector2( -34, -80 )
 
-[node name="CollisionShape2D" parent="." index="6"]
+[node name="CollisionShape2D" parent="." index="5"]
 position = Vector2( 0, -39 )
 shape = SubResource( 1 )
 

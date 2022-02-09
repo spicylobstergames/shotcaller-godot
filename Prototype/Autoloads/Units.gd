@@ -29,29 +29,20 @@ func _ready() -> void:
 
 func spawn_one(team: int, packed_scene: PackedScene, parent_node: Node2D, spawn_position: Vector2) -> Node2D:
 	var new_units = packed_scene.instance()
+	new_units.team = team
 	parent_node.add_child(new_units)
 	new_units.global_position = spawn_position
 	return new_units
 
 
-func spawn_creep(parent_node: Node2D) -> void:
+func try_spawn_creep_wave(parent_node: Node2D) -> void:
 	for t in arena_teams.keys():
 		var new_creep_group: YSort = null
-		
-		if creep_group_pool_count < creep_group_max_pool_count and not creep_group_pool_count > creep_group_max_pool_count:
-			new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].creep_spawner_position)
-			creep_group_pool_count += 2
-		else:
-			new_creep_group = available_creep_groups_pools.pop_front()
+		new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].creep_spawner_position)
 		
 		if new_creep_group:
-			new_creep_group.team = t
-			if arena_teams[t].mirror_mode:
-				new_creep_group.mirror_mode = true
-
+			new_creep_group.mirror_mode = arena_teams[t].mirror_mode
 			new_creep_group.spawn()
-			for c in new_creep_group.get_children():
-				c.set_team(t)
 
 func get_closest_units_by(node: Node2D, sort_type: int, units: Array) -> Array:
 	var data_units = []
@@ -257,7 +248,7 @@ func _setup_navigation() -> void:
 	for n in get_tree().get_nodes_in_group("navigation"):
 		if n.is_in_group("leader_navigation"):
 			leader_navmap = n
-		elif n.is_in_group("creep_navigation"):
+		if n.is_in_group("creep_navigation"):
 			creep_navmap = n
 
 

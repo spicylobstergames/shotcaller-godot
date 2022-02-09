@@ -1,6 +1,6 @@
 extends Node2D
 
-
+onready var leader_scene = preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn")
 
 func _ready() -> void:
 	Game.connect("playing", self, "_on_Game_playing")
@@ -12,12 +12,14 @@ func _process(delta: float) -> void:
 
 func _on_Game_playing() -> void:
 	if not Game.is_playing:
-		Units.call_deferred("spawn_creep", $BattleField)
+		var team = Player.selected_team
+		Units.call_deferred("try_spawn_creep_wave", $BattleField)
+		Units.call_deferred("spawn_one",team, leader_scene, $BattleField, Units.arena_teams[team].creep_spawner_position)
 		$CreepRespawnTimer.start(Game.creep_respawn_time)
 		Game.is_playing = true
 		print("First Spawn Creep")
 
 
 func _on_CreepRespawnTimer_timeout() -> void:
-	Units.call_deferred("spawn_creep", $BattleField)
+	Units.call_deferred("try_spawn_creep_wave", $BattleField)
 	print("Spawn Creep")

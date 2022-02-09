@@ -1,4 +1,4 @@
-extends BTLeaf
+extends BTNode
 
 var ai_path: GSAIPath
 var ai_follow_path: GSAIFollowPath
@@ -6,54 +6,28 @@ var ai_follow_path: GSAIFollowPath
 var move_points: Array = []
 
 
-func _pre_tick(agent: Node, blackboard: Blackboard) -> void:
-	var _agent:KinematicBody2D = agent
+func do_stuff(agent: Node) -> int:
 
-#	_setup_ai_move_to_path(_agent, blackboard)
-	_agent.get_node("ObjectAvoid").enabled = true
-	
-	if not blackboard.has_data("move_points") or not blackboard.has_data("target_end_point"):
-		 fail()
+	agent.get_node("ObjectAvoid").enabled = true
 
 	if move_points.empty():
-		for v in blackboard.get_data("move_points"):
+		for v in agent.get("move_points"):
 			move_points.append(GSAIUtils.to_vector3(v))
-
-#		if move_points.size() > 1:
-#			_setup_update_ai_move_to_path(move_points)
-
-	if _agent.behavior_animplayer.has_animation("Walk") and _agent.behavior_animplayer.current_animation != "Walk":
-		_agent.behavior_animplayer.play("Walk")
-
-
-func _tick(agent: Node, blackboard: Blackboard) -> bool:
-	var _agent:KinematicBody2D = agent
-	
-	_agent._setup_state_debug(name)
-	Units.get_move_points(_agent, blackboard.get_data("target_end_point"), Units.TypeID.Creep)
-
-	if blackboard.get_data("stats_health") <= 0:
-		return fail()
-		
-	if _agent.global_position.distance_to(blackboard.get_data("target_end_point")) < _agent.attributes.radius.attack_range:
-		_agent.get_node("ObjectAvoid").enabled = false
-		return fail()
-
-	if blackboard.has_data("enemies") and blackboard.get_data("enemies"):
-		_agent.get_node("ObjectAvoid").enabled = false
-		return fail()
-
+	var distance_threshold = agent.get_node("Skills").get_skill(0).get_range() * 0.75
+	if is_instance_valid(agent.targeted_enemy) and agent.global_position.distance_to(agent.targeted_enemy.global_position) <= distance_threshold:
+#	if agent.global_position.distance_to(agent.targeted_enemy.global_position) <= distance_threshold:
+		return NodeStatus.Success
 	if not move_points.empty():
-		if not _agent.get_node("ObjectAvoid").move_points:
-			_agent.get_node("ObjectAvoid").move_points = move_points
+		if not agent.get_node("ObjectAvoid").move_points:
+			agent.get_node("ObjectAvoid").move_points = move_points
 	
-		_agent.get_node("ObjectAvoid").custom_calculate_steering(_agent.ai_agent, _agent.ai_accel, 0.1)
-		_agent.ai_agent._apply_steering(_agent.ai_accel, _agent.get_physics_process_delta_time())
-		
-	return succeed()
+		agent.get_node("ObjectAvoid").custom_calculate_steering(agent.ai_agent, agent.ai_accel, 0.1)
+		agent.ai_agent._apply_steering(agent.ai_accel, agent.get_physics_process_delta_time())
+		return NodeStatus.In_Progress
+	return NodeStatus.Success
 
 
-func _setup_ai_move_to_path(agent: KinematicBody2D, blackboard: Blackboard) -> void:
+func _setup_ai_move_to_path(agent: KinematicBody2D) -> void:
 	if not ai_path and not ai_follow_path:
 		ai_path = GSAIPath.new(
 			[

@@ -93,7 +93,7 @@ __meta__ = {
 }
 
 [node name="CreepSpawnerPosition" type="Position2D" parent="."]
-position = Vector2( 176, 128 )
+position = Vector2( 242.071, 127 )
 
 [node name="AreaDecoration" parent="." instance=ExtResource( 1 )]
 

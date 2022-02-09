@@ -4,14 +4,14 @@
 [ext_resource path="res://Character/Character.gd" type="Script" id=2]
 [ext_resource path="res://Utils/HitArea.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Utils/UnitDetector.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Character/Skills/SkillHandler.gd" type="Script" id=5]
 [ext_resource path="res://Assets/Character/shadow.png" type="Texture" id=6]
 [ext_resource path="res://Utils/ObjectAvoid.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Utils/Attributes/Attributes.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=9]
 [ext_resource path="res://Utils/UnitSelector.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=11]
-[ext_resource path="res://addons/behavior_tree/src/blackboard.gd" type="Script" id=12]
-[ext_resource path="res://addons/behavior_tree/src/behavior_tree.gd" type="Script" id=13]
+[ext_resource path="res://BT/BehaviorTree.gd" type="Script" id=12]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=14]
 
 [sub_resource type="Resource" id=14]
@@ -110,13 +110,12 @@ primary = SubResource( 14 )
 stats = SubResource( 15 )
 radius = SubResource( 16 )
 
-[node name="Blackboard" type="Node" parent="."]
-script = ExtResource( 12 )
+[node name="Skills" type="Node" parent="."]
+script = ExtResource( 5 )
 
 [node name="BehaviorTree" type="Node" parent="."]
-script = ExtResource( 13 )
-_blackboard = NodePath("../Blackboard")
-_agent = NodePath("..")
+script = ExtResource( 12 )
+agent = NodePath("..")
 
 [node name="BehaviorAnimPlayer" type="AnimationPlayer" parent="."]
 playback_default_blend_time = 0.3

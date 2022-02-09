@@ -1,0 +1,234 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://Character/Child/Leader/Leader.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/Daniel.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Character/Leader/Daniel/Daniel_Blue.png" type="Texture" id=3]
+[ext_resource path="res://Character/Skills/Shared/BasicMeleeAttack.gd" type="Script" id=4]
+[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Walk_AnimPlayer.tres" type="Animation" id=5]
+[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Idle_AnimPlayer.tres" type="Animation" id=6]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=7]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=8]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=9]
+[ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/Skills/RockProjectile.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Character/Skills/Shared/BasicRangedAttack.gd" type="Script" id=11]
+[ext_resource path="res://Assets/Character/Leader/Daniel/Daniel_Red.png" type="Texture" id=12]
+
+[sub_resource type="Resource" id=1]
+resource_local_to_scene = true
+script = ExtResource( 8 )
+unit_team = 0
+unit_type = 1
+mirror_mode = false
+
+[sub_resource type="Resource" id=2]
+resource_local_to_scene = true
+script = ExtResource( 7 )
+health = 1000.0
+max_health = 1000.0
+health_regeneration_rate = 1.0
+health_regeneration_step = 1.0
+mana = 0.0
+max_mana = 0.0
+mana_regeneration_rate = 0.0
+mana_regeneration_step = 0.0
+move_speed = 50.0
+move_acceleration = 4000.0
+attack_speed = 50.0
+creep_damage = 50.0
+leader_damage = 50.0
+tower_damage = 50.0
+
+[sub_resource type="Resource" id=3]
+resource_local_to_scene = true
+script = ExtResource( 9 )
+collision_size = 5.0
+attack_range = 10.0
+unit_detection = 80.0
+area_selection = 20.0
+hurt_area = {
+"height": 0.0,
+"radius": 0.0
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Attack"
+length = 0.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.951913, 1.15349 ), Vector2( 0.927869, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 7.48751 ]
+}
+tracks/2/type = "animation"
+tracks/2/path = NodePath("AttackAnimPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"clips": PoolStringArray( "Attack_1" ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureContainer/Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureContainer/Sprite:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+// This shader only works properly with premultiplied alpha blend mode
+uniform float aura_width = 2.0;
+uniform vec4 aura_color : hint_color;
+
+void fragment() {
+	vec4 col = texture(TEXTURE, UV);
+	vec2 ps = TEXTURE_PIXEL_SIZE;
+	float a;
+	float maxa = col.a;
+	float mina = col.a;
+
+	a = texture(TEXTURE, UV + vec2(0.0, -aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(0.0, aura_width) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(-aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	a = texture(TEXTURE, UV + vec2(aura_width, 0.0) * ps).a;
+	maxa = max(a, maxa);
+	mina = min(a, mina);
+
+	col.rgb *= col.a;
+
+	COLOR = col;
+	COLOR.rgb += aura_color.rgb * (maxa - mina);
+}"
+
+[sub_resource type="ShaderMaterial" id=7]
+resource_local_to_scene = true
+shader = SubResource( 6 )
+shader_param/aura_width = 0.0
+shader_param/aura_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="CircleShape2D" id=8]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id=9]
+resource_local_to_scene = true
+radius = 19.3197
+
+[node name="Daniel" instance=ExtResource( 1 )]
+collision_mask = 0
+script = ExtResource( 2 )
+blue_team_texture = ExtResource( 3 )
+red_team_texture = ExtResource( 12 )
+
+[node name="Attributes" parent="." index="0"]
+primary = SubResource( 1 )
+stats = SubResource( 2 )
+radius = SubResource( 3 )
+
+[node name="BasicAttack" type="Node" parent="Skills" index="0"]
+script = ExtResource( 4 )
+cooldown_length = 0.5
+damage = 100.0
+attack_range = 50.0
+
+[node name="RockToss" type="Node" parent="Skills" index="1"]
+script = ExtResource( 11 )
+cooldown_length = 5.0
+slot = 1
+projectile_range = 400.0
+speed = 20.0
+projectile_scene = ExtResource( 10 )
+
+[node name="BehaviorAnimPlayer" parent="." index="3"]
+autoplay = "RESET"
+anims/Attack = SubResource( 4 )
+anims/Idle = ExtResource( 6 )
+anims/RESET = SubResource( 5 )
+anims/Walk = ExtResource( 5 )
+
+[node name="HealthBar" parent="HUD" index="0"]
+margin_top = -35.0
+margin_bottom = -35.0
+
+[node name="Sprite" parent="TextureContainer" index="0"]
+material = SubResource( 7 )
+position = Vector2( 0.95642, -1.18363 )
+texture = ExtResource( 3 )
+offset = Vector2( -7, -14 )
+
+[node name="Shadow" parent="TextureContainer" index="1"]
+modulate = Color( 1, 1, 1, 1 )
+texture = null
+
+[node name="CollisionShape2D" parent="." index="7"]
+position = Vector2( 0, -3 )
+shape = SubResource( 8 )
+
+[node name="UnitSelector" parent="." index="8"]
+position = Vector2( -1, -14 )
+
+[node name="CollisionShape2D" parent="UnitSelector" index="0"]
+shape = SubResource( 9 )
+
+[node name="UnitDetector" parent="." index="9"]
+collision_mask = 257
+
+[node name="Node" type="Node" parent="." index="12"]
+
+[node name="Line2D" type="Line2D" parent="Node" index="0"]
+width = 2.0
+
+[editable path="UnitSelector"]
+[editable path="ObjectAvoid"]

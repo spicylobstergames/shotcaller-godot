@@ -31,11 +31,15 @@ var ai_target_location: GSAIAgentLocation
 var shape = Physics2DShapeQueryParameters.new()
 var circle_shape = CircleShape2D.new()
 
+var allies = []
+var enemies = []
+var buildings = []
+var target_end_point
+
 onready var space_state = get_world_2d().direct_space_state
 
 
 onready var attributes: Node = $Attributes
-onready var stats: Node = $Stats
 onready var sprite: Sprite = $TextureContainer/Sprite
 onready var texture_container: Position2D = $TextureContainer
 onready var behavior_animplayer: AnimationPlayer = $BehaviorAnimPlayer
@@ -58,6 +62,11 @@ func set_team(value: int) -> void:
 	
 func _ready() -> void:
 	_is_ready = true
+	
+	is_dead = false
+	targeted_enemy = null
+	target_end_point = global_position
+	
 	set_physics_process(false)
 	set_team(team)
 	_setup_spawn()
@@ -66,10 +75,13 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	velocity = GSAIUtils.to_vector2(ai_agent.linear_velocity)
+	if velocity.length() > 0.1:
+		if behavior_animplayer.has_animation("Walk") and behavior_animplayer.current_animation != "Walk":
+			behavior_animplayer.play("Walk")
 	if attributes.stats.health <= 0:
 		_setup_dead()
 	else:
-		var enemies = Units.get_enemies(
+		enemies = Units.get_enemies(
 				self,
 				team,
 				Units.TypeID.Creep,
@@ -78,9 +90,7 @@ func _physics_process(_delta: float) -> void:
 				attributes.radius.unit_detection
 				)
 		
-		$Blackboard.set_data("enemies", enemies)
-		
-		var allies = Units.get_allies(
+		allies = Units.get_allies(
 				self,
 				team,
 				Units.TypeID.Creep,
@@ -88,11 +98,7 @@ func _physics_process(_delta: float) -> void:
 				Units.DetectionTypeID.Area,
 				attributes.radius.unit_detection
 				)
-		$Blackboard.set_data("allies", allies)
 
-#		$Blackboard.set_data("state_behavior", attributes.state.behavior)
-#		$Blackboard.set_data("state_action", attributes.state.action)
-#		$Blackboard.set_data("state_reaction", attributes.state.reaction)
 
 
 func _draw() -> void:
@@ -138,59 +144,11 @@ func _setup_team() -> void:
 			Units.TeamID.Red:
 				sprite.texture = red_team_texture
 
-
 func _setup_healthbar() -> void:
 	healthbar.set_max_health(attributes.stats.max_health)
 	healthbar.set_health(attributes.stats.health)
 	healthbar.set_max_mana(attributes.stats.max_mana)
 	healthbar.set_mana(attributes.stats.mana)
-
-
-func _setup_blackboard() -> void:
-	$Blackboard.set_data("is_dead", false)
-	$Blackboard.set_data("stats_health", attributes.stats.health)
-	$Blackboard.set_data("stats_mana", attributes.stats.mana)
-	$Blackboard.set_data("enemies", [])
-	$Blackboard.set_data("allies", [])
-	$Blackboard.set_data("buildings", [])
-	$Blackboard.set_data("targeted_enemy", null)
-	$Blackboard.set_data("target_end_point", global_position)
-	$Blackboard.set_data("state_action", Units.ActionStateID.None)
-	$Blackboard.set_data("state_reaction", Units.ReactionStateID.None)
-	$Blackboard.set_data("state_behavior", Units.BehaviorStateID.None)
-
-
-#func _setup_units_detector() -> void:
-#	shape.set_shape(circle_shape)
-#	shape.exclude = [self]
-#	shape.collide_with_bodies = true
-#	shape.collision_layer = 256
-#	circle_shape.radius = stats.area_attack_range
-#
-#	if $Blackboard.has_data("allies"):
-#		shape.exclude.append_array($Blackboard.get_data("allies"))
-	
-	
-
-#func _setup_update_units_detector() -> void:
-#	var query = space_state.intersect_shape(shape, 5)
-#	print(query)
-#	if $Blackboard.has_data("allies"):
-#		shape.exclude.append_array($Blackboard.get_data("allies"))
-#	if query:
-#		var enemies = []
-#		for e in query:
-#			if e is KinematicBody2D:
-#				enemies.append(e.collider)
-#		$Blackboard.set_data(
-#			"enemies",
-#			enemies
-#		)
-#
-#	var ci_rid = VisualServer.canvas_item_create()
-#	VisualServer.canvas_item_set_parent(ci_rid, get_canvas_item())
-#	var circle_shape = VisualServer.canvas_item_add_circle(ci_rid, Vector2.ZERO, 30, Color(1.0, 0.0, 0.0, 0.2))
-#	intersect_point_on_canvas(point: Vector2, canvas_instance_id: int, max_results: int = 32, exclude: Array = [  ], collision_layer: int = 0x7FFFFFFF, collide_with_bodies: bool = true, collide_with_areas: bool = false)
 
 
 func _setup_dead() -> void:
@@ -202,14 +160,14 @@ func _setup_dead() -> void:
 	$UnitDetector.collision_mask = 0
 	$UnitSelector.collision_layer = 0
 	$BehaviorTree.is_active = false
-	$Blackboard.set_data("is_dead", is_dead)
 	emit_signal("dead", self)
 
 	if behavior_animplayer.has_animation("Dead") and behavior_animplayer.current_animation != "Dead":
 		behavior_animplayer.play("Dead")
 
 	yield(behavior_animplayer, "animation_finished")
-	position.y = global_position.y - 1000
+	queue_free()
+#	position.y = global_position.y - 1000
 
 
 func _setup_spawn() -> void:
@@ -222,7 +180,6 @@ func _setup_spawn() -> void:
 	$UnitSelector.collision_layer = 256
 	$UnitDetector.collision_mask = 256
 	$BehaviorTree.is_active = true
-	$BehaviorTree.start()
 	
 	for p in attributes.stats._saved_init_properties.keys():
 		attributes.stats.set(p, attributes.stats._saved_init_properties[p])
@@ -231,7 +188,6 @@ func _setup_spawn() -> void:
 	_setup_healthbar()
 	_setup_ai_agent()
 	_setup_radius_collision()
-	_setup_blackboard()
 	
 	emit_signal("respawn", self)
 	set_physics_process(true)
@@ -260,8 +216,8 @@ func _on_HitArea_area_entered(area: Area2D) -> void:
 #		])
 
 
-func _on_Stats_changed(_properties: Array) -> void:
-	$Blackboard.set_data("stats_health", attributes.stats.health)
-	$Blackboard.set_data("stats_mana", attributes.stats.mana)
-	$Blackboard.set_data("is_dead", attributes.stats.health <= 0)
-#	_setup_healthbar()
+func _on_attributes_stats_changed(prop_name, prop_value) -> void:
+	match prop_name:
+		"health", "mana", "max_health", "max_mana":
+			_setup_healthbar()
+
