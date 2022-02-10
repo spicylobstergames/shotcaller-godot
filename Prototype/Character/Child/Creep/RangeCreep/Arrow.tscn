@@ -9,9 +9,6 @@ radius = 3.80957
 height = 20.1513
 
 [node name="Arrow" instance=ExtResource( 2 )]
-collision_layer = 0
-collision_mask = 256
-monitoring = true
 script = ExtResource( 3 )
 
 [node name="CollisionShape2D" parent="." index="0"]

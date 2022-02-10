@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://HealthBar/HealthBar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character/Character.gd" type="Script" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Utils/UnitSelector.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=11]
 [ext_resource path="res://BT/BehaviorTree.gd" type="Script" id=12]
+[ext_resource path="res://Character/StateDebug.gd" type="Script" id=13]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=14]
 
 [sub_resource type="Resource" id=14]
@@ -145,6 +146,7 @@ rect_scale = Vector2( 0.3, 0.3 )
 text = "null"
 align = 1
 valign = 1
+script = ExtResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -173,10 +175,10 @@ shape = SubResource( 13 )
 visible = false
 
 [node name="HitArea" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, -12 )
+collision_mask = 65536
 
 [node name="ObjectAvoid" parent="." instance=ExtResource( 7 )]
 _target = NodePath("..")
-
-[connection signal="area_entered" from="HitArea" to="." method="_on_HitArea_area_entered"]
 
 [editable path="UnitSelector"]

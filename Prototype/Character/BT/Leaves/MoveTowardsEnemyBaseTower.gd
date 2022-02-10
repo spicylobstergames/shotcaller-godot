@@ -14,8 +14,7 @@ func do_stuff(agent: Node) -> int:
 		for v in agent.get("move_points"):
 			move_points.append(GSAIUtils.to_vector3(v))
 	var distance_threshold = agent.get_node("Skills").get_skill(0).get_range() * 0.75
-	if is_instance_valid(agent.targeted_enemy) and agent.global_position.distance_to(agent.targeted_enemy.global_position) <= distance_threshold:
-#	if agent.global_position.distance_to(agent.targeted_enemy.global_position) <= distance_threshold:
+	if agent.global_position.distance_to(agent.targeted_enemy.global_position) <= distance_threshold:
 		return NodeStatus.Success
 	if not move_points.empty():
 		if not agent.get_node("ObjectAvoid").move_points:

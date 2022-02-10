@@ -165,4 +165,7 @@ shape = SubResource( 14 )
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 18 )
 
+[node name="HitArea" parent="." index="11"]
+collision_mask = 0
+
 [editable path="UnitSelector"]

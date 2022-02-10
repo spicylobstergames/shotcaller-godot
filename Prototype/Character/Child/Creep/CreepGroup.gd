@@ -47,7 +47,13 @@ func _setup_move_creep():
 func _setup_formation() -> void:
 	for c in get_children():
 		c.set_team(team)
+		var random_spread = 5.0
+		c.position += Vector2(
+			rand_range(-random_spread, random_spread),
+			rand_range(-random_spread, random_spread))
 		if mirror_mode:
+			
+			c.position.x *= -1.0
 			c.get_node("TextureContainer").scale.x = -1
 
 

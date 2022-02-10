@@ -911,14 +911,6 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 4 )
-region = Rect2( 48, 0, 24, 24 )
-
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 24, 24 )
@@ -926,6 +918,14 @@ region = Rect2( 0, 0, 24, 24 )
 [sub_resource type="AtlasTexture" id=24]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 4 )
+region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 3 )
@@ -937,14 +937,14 @@ region = Rect2( 72, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 38 ), SubResource( 26 ) ],
-"loop": false,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 15 ), SubResource( 24 ) ],
 "loop": false,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 38 ), SubResource( 26 ) ],
+"loop": false,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 16 ), SubResource( 25 ) ],
@@ -1078,9 +1078,10 @@ monitoring = false
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
-position = Vector2( -1, -11 )
+position = Vector2( 0, -15.92 )
 
 [connection signal="animation_changed" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_changed"]
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
+[connection signal="area_entered" from="HitArea" to="." method="_on_HitArea_area_entered"]
 
 [editable path="UnitSelector"]

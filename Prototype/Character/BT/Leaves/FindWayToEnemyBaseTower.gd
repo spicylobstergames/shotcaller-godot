@@ -19,9 +19,7 @@ func do_stuff(agent: Node) -> int:
 	if closest_buildings.size() <= 0:
 		return NodeStatus.Failure
 	var move_points = Units.get_move_points(agent, closest_buildings[0].global_position, Units.TypeID.Creep)
-#	print("closest_building: %s" % [closest_buildings[0]])
-	agent.targeted_enemy = closest_buildings[0] #TODO: Figure out why this doesn't do anything
-#	print("targeted_enemy: %s" % [agent.targeted_enemy])
+	agent.targeted_enemy = closest_buildings[0]
 	agent.move_points = move_points
 	
 	if agent.has_node("Node/Line2D"):

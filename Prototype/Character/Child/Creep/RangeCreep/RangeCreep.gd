@@ -2,7 +2,7 @@ extends "res://Character/Child/Creep/Creep.gd"
 
 func _physics_process(delta: float) -> void:
 	if is_instance_valid(targeted_enemy):
-		$TextureContainer/Position2D.look_at(targeted_enemy.global_position)
+		$TextureContainer/Position2D.look_at(targeted_enemy.get_node("HitArea").global_position)
 
 
 func _setup_team() -> void:

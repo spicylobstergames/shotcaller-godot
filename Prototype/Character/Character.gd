@@ -18,8 +18,8 @@ var velocity = Vector2.ZERO
 var is_dead = false
 
 var targeted_location: Vector2 = Vector2.ZERO
-var targeted_enemy: KinematicBody2D = null
-var targeted_ally: KinematicBody2D = null
+var targeted_enemy: PhysicsBody2D = null
+var targeted_ally: PhysicsBody2D = null
 
 var detected_units: Dictionary = {}
 
@@ -195,25 +195,6 @@ func _setup_spawn() -> void:
 
 func _on_BehaviorAnimPlayer_animation_started(anim_name: String) -> void:
 	set_team(team)
-
-
-func _on_HitArea_area_entered(area: Area2D) -> void:
-	var target_lock = false
-	if area.target == self and not target_lock:
-		target_lock = true
-
-		var damage = 0
-		match attributes.primary.unit_type:
-			Units.TypeID.Creep:
-				damage = area.creep_damage
-			Units.TypeID.Leader:
-				damage = area.leader_damage
-			Units.TypeID.Building:
-				damage = area.building_damage
-		
-#		stats.change([
-#			{name = "stats_health", value = stats.stats_health - damage}
-#		])
 
 
 func _on_attributes_stats_changed(prop_name, prop_value) -> void:
