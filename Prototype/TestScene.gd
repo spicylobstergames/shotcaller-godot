@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var leader_scene = preload("res://Character/Child/Leader/Maori/Maori.tscn")
+onready var leader_scene = preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn")
 
 func _ready() -> void:
 	Game.connect("playing", self, "_on_Game_playing")

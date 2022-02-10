@@ -26,5 +26,4 @@ func do_stuff(agent: Node) -> int:
 		var line2d: Line2D = agent.get_node("Node/Line2D")
 		line2d.points = move_points
 	
-	agent.get_node("ObjectAvoid").enabled = true
 	return NodeStatus.Success

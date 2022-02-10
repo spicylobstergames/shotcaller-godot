@@ -23,7 +23,6 @@ var marching_squares_lut = {
 }
 
 
-
 func tile_to_key(tile_index: int) -> int:
 	match tile_index:
 		0:
@@ -131,8 +130,19 @@ class LineCombiner:
 			i += 1
 		polygons.append(current_polygon)
 		current_polygon = []
-		
+
+func is_inside_building(point: Vector2) -> bool:
+	var test_shape = CircleShape2D.new()
+	test_shape.radius = 8.0
+	var test_shape_transform = Transform2D(0.0, point)
+	for unit in get_tree().get_nodes_in_group("units"):
+		var shape: Shape2D = unit.get_node("CollisionShape2D").shape
+		if shape.collide(unit.get_node("CollisionShape2D").global_transform,test_shape,test_shape_transform):
+			return true
+	return false
+
 func _ready():
+	
 	var tilemap: TileMap = get_parent().get_node("TileMap")
 	
 	var tilemap_rect = tilemap.get_used_rect()
@@ -143,8 +153,10 @@ func _ready():
 	
 	var vertex_dict = VertexDictionary.new()
 	var indices = []
-#	for x in range(tilemap_rect.position.x,tilemap_rect.size.x):
-#		for y in range(tilemap_rect.position.y,tilemap_rect.size.y):
+	
+	var collider_vertex_dict = VertexDictionary.new()
+	var collider_indices = []
+
 	
 	var step_size = 8.0
 	var offset = 4.0
@@ -157,25 +169,28 @@ func _ready():
 #			print("x: %s, y: %s is %s" % [x,y, tilemap.get_cell(x,y)])			
 			var map_coordinates = tilemap.world_to_map(Vector2(x, y))
 			
+			
 			var top_left = tile_to_key(tilemap.get_cellv(map_coordinates))
 			var top_right = tile_to_key(tilemap.get_cellv(map_coordinates + Vector2(1.0,0.0)))
 			var bottom_left = tile_to_key(tilemap.get_cellv(map_coordinates + Vector2(0.0, 1.0)))
 			var bottom_right = tile_to_key(tilemap.get_cellv(map_coordinates + Vector2(1.0,1.0)))
 			
+			var collider_top_left = tile_to_key(tilemap.get_cellv(map_coordinates))
+			var collider_top_right = tile_to_key(tilemap.get_cellv(map_coordinates + Vector2(1.0,0.0)))
+			var collider_bottom_left = tile_to_key(tilemap.get_cellv(map_coordinates + Vector2(0.0, 1.0)))
+			var collider_bottom_right = tile_to_key(tilemap.get_cellv(map_coordinates + Vector2(1.0,1.0)))
+			
+			if is_inside_building(Vector2(x,y)):
+				top_left = 0
+			if is_inside_building(Vector2(x,y) + Vector2(8.0,0.0)):
+				top_right = 0
+			if is_inside_building(Vector2(x,y) + Vector2(0.0, 8.0)):
+				bottom_left = 0
+			if is_inside_building(Vector2(x,y) + Vector2(8.0,8.0)):
+				bottom_right = 0
+			
 			var edge_indices = marching_squares_lut[[top_left,top_right,bottom_right,bottom_left]]
 			
-			if draw_debug_symbols:
-				var new_marker = test_marker.instance()
-				new_marker.global_position = Vector2(x,y)
-				new_marker.modulate.r *= top_left
-				get_parent().call_deferred("add_child", new_marker)
-				
-				var center_marker = test_marker.instance()
-				center_marker.global_position = Vector2(x - offset,y - offset)
-				center_marker.modulate = Color.green
-				get_parent().call_deferred("add_child", center_marker)
-			
-			var debug_points = []
 			for edge in edge_indices:
 				var edge_position = (edge_index_to_vec(edge) * 8.0 + Vector2(x,y))
 				if vertex_dict.has_vertex(edge_position):
@@ -183,22 +198,15 @@ func _ready():
 				else:
 					indices.append(vertex_dict.vertices.size())
 					vertex_dict.vertices.append(edge_position)
-				if draw_debug_symbols:
-					debug_points.append(edge_position)
-					var edge_marker = test_marker.instance()
-					edge_marker.global_position = edge_position
-					edge_marker.modulate = Color.red
-					get_parent().call_deferred("add_child", edge_marker)
-			if draw_debug_symbols:
-				for point_index in range(0, debug_points.size(),2):
-					var new_line = Line2D.new()
-					new_line.width = 0.5
-					new_line.points = [
-						debug_points[point_index],
-						debug_points[point_index + 1]
-					]
-					get_parent().call_deferred("add_child", new_line)
+			var collider_edge_indices = marching_squares_lut[[collider_top_left,collider_top_right,collider_bottom_right,collider_bottom_left]]
 			
+			for edge in collider_edge_indices:
+				var edge_position = (edge_index_to_vec(edge) * 8.0 + Vector2(x,y))
+				if collider_vertex_dict.has_vertex(edge_position):
+					collider_indices.append(collider_vertex_dict.find(edge_position))
+				else:
+					collider_indices.append(collider_vertex_dict.vertices.size())
+					collider_vertex_dict.vertices.append(edge_position)
 			y += step_size
 		x += step_size
 	
@@ -225,6 +233,40 @@ func _ready():
 		for index in line_indices:
 			points.append(vertex_dict.vertices[index])
 		nav_polygon.add_outline(PoolVector2Array(points))
+
+	var collider_line_combiner = LineCombiner.new()
+	for i in range(0, collider_indices.size(), 2):
+		var static_body = StaticBody2D.new()
+		get_tree().get_nodes_in_group("battlefield")[0].add_child(static_body)
+		static_body.collision_layer = 512
+		var collision_shape = CollisionShape2D.new()
+		var segment_shape = SegmentShape2D.new()
+		collision_shape.shape = segment_shape
+		segment_shape.a = collider_vertex_dict.vertices[collider_indices[i]]
+		segment_shape.b = collider_vertex_dict.vertices[collider_indices[i+1]]
+		static_body.add_child(collision_shape)
+		
+		
+#		var new_line = IndexLine.new(collider_indices[i], collider_indices[i + 1])
+#		collider_line_combiner.lines.append(new_line)
+	
+#	while collider_line_combiner.lines.size() > 0:
+#		if collider_line_combiner.current_polygon.size() <= 0:
+#			collider_line_combiner.current_polygon.append(collider_line_combiner.lines[0])
+#			collider_line_combiner.lines.remove(0)
+#		collider_line_combiner.add_connecting_line(0)
+#
+#
+#	for polygon in collider_line_combiner.polygons:
+#		var line_indices = []
+#		for line in polygon:
+#			line_indices.append(line.b)
+#
+#		var points = []
+#		for index in line_indices:
+#			points.append(collider_vertex_dict.vertices[index])
+#
+
 	
 	nav_polygon.make_polygons_from_outlines()
 	navpoly = nav_polygon

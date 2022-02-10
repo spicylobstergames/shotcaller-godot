@@ -26,7 +26,6 @@ var detected_units: Dictionary = {}
 
 var ai_accel: GSAITargetAcceleration = GSAITargetAcceleration.new()
 var ai_agent: GSAIKinematicBody2DAgent = GSAIKinematicBody2DAgent.new(self, GSAIKinematicBody2DAgent.MovementType.COLLIDE)
-var ai_target_location: GSAIAgentLocation
 
 var shape = Physics2DShapeQueryParameters.new()
 var circle_shape = CircleShape2D.new()
@@ -72,11 +71,13 @@ func _ready() -> void:
 	_setup_spawn()
 
 
-
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	
+	ai_agent._apply_steering(ai_accel, delta)
+	ai_accel.set_zero()
 	velocity = GSAIUtils.to_vector2(ai_agent.linear_velocity)
-	if velocity.length() > 0.1:
-		if behavior_animplayer.has_animation("Walk") and behavior_animplayer.current_animation != "Walk":
+	if velocity.length() > 1.0:
+		if behavior_animplayer.has_animation("Walk") and behavior_animplayer.current_animation != "Walk" :
 			behavior_animplayer.play("Walk")
 	if attributes.stats.health <= 0:
 		_setup_dead()
@@ -84,7 +85,7 @@ func _physics_process(_delta: float) -> void:
 		enemies = Units.get_enemies(
 				self,
 				team,
-				Units.TypeID.Creep,
+				attributes.primary.unit_type,
 				[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
 				Units.DetectionTypeID.Area,
 				attributes.radius.unit_detection
@@ -93,13 +94,12 @@ func _physics_process(_delta: float) -> void:
 		allies = Units.get_allies(
 				self,
 				team,
-				Units.TypeID.Creep,
+				attributes.primary.unit_type,
 				[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
 				Units.DetectionTypeID.Area,
 				attributes.radius.unit_detection
 				)
-
-
+	
 
 func _draw() -> void:
 	if ProjectSettings.get("global/debug"):
@@ -125,7 +125,8 @@ func _setup_ai_agent() -> void:
 	ai_agent.linear_acceleration_max = attributes.stats.move_acceleration
 	ai_agent.linear_velocity = GSAIUtils.to_vector3(Vector2.ZERO)
 	ai_agent.bounding_radius = attributes.radius.collision_size
-	ai_agent.linear_drag_percentage = 0.0
+	ai_agent.linear_drag_percentage = 0.1
+	ai_agent.apply_linear_drag = true
 	ai_agent.zero_linear_speed_threshold = 0.1
 
 

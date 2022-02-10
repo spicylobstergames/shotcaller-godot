@@ -31,20 +31,20 @@ mana = 0.0
 max_mana = 0.0
 mana_regeneration_rate = 0.0
 mana_regeneration_step = 0.0
-move_speed = 50.0
+move_speed = 100.0
 move_acceleration = 4000.0
 attack_speed = 50.0
 creep_damage = 50.0
 leader_damage = 50.0
 tower_damage = 50.0
 
-[sub_resource type="Resource" id=3]
+[sub_resource type="Resource" id=11]
 resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
-attack_range = 10.0
-unit_detection = 80.0
-area_selection = 20.0
+attack_range = 0.0
+unit_detection = 1000.0
+area_selection = 10.0
 hurt_area = {
 "height": 0.0,
 "radius": 0.0
@@ -78,15 +78,19 @@ tracks/1/keys = {
 "update": 0,
 "values": [ 0.0, 7.48751 ]
 }
-tracks/2/type = "animation"
-tracks/2/path = NodePath("AttackAnimPlayer")
+tracks/2/type = "method"
+tracks/2/path = NodePath("Skills/BasicAttack")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"clips": PoolStringArray( "Attack_1" ),
-"times": PoolRealArray( 0 )
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "cast"
+} ]
 }
 
 [sub_resource type="Animation" id=10]
@@ -298,12 +302,11 @@ red_team_texture = ExtResource( 12 )
 [node name="Attributes" parent="." index="0"]
 primary = SubResource( 1 )
 stats = SubResource( 2 )
-radius = SubResource( 3 )
+radius = SubResource( 11 )
 
 [node name="BasicAttack" type="Node" parent="Skills" index="0"]
 script = ExtResource( 4 )
-cooldown_length = 0.5
-damage = 100.0
+damage = 250.0
 attack_range = 50.0
 
 [node name="RockToss" type="Node" parent="Skills" index="1"]
@@ -352,7 +355,7 @@ collision_mask = 257
 [node name="HitArea" parent="." index="10"]
 position = Vector2( 0, -15.92 )
 
-[node name="Node" type="Node" parent="." index="12"]
+[node name="Node" type="Node" parent="." index="11"]
 
 [node name="Line2D" type="Line2D" parent="Node" index="0"]
 width = 2.0
@@ -360,4 +363,3 @@ width = 2.0
 [connection signal="area_entered" from="HitArea" to="." method="_on_HitArea_area_entered"]
 
 [editable path="UnitSelector"]
-[editable path="ObjectAvoid"]

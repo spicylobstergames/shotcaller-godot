@@ -226,6 +226,7 @@ tracks/3/keys = {
 }
 
 [sub_resource type="Animation" id=7]
+resource_name = "RESET"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("TextureContainer:modulate")

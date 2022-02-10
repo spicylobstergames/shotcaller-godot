@@ -10,7 +10,6 @@ var is_dead: bool = false
 
 var ai_accel: GSAITargetAcceleration = GSAITargetAcceleration.new()
 var ai_agent: GSAISteeringAgent = GSAISteeringAgent.new()
-var ai_target_location: GSAIAgentLocation
 
 var targeted_enemy
 
@@ -111,9 +110,12 @@ func _setup_dead() -> void:
 		behavior_animplayer.play("Dead")
 
 	yield(behavior_animplayer, "animation_finished")
+	final_actions()
 	queue_free()
 #	position.y = global_position.y - 1000
 
+func final_actions():
+	pass
 
 func _setup_spawn() -> void:
 	behavior_tree.is_active = true

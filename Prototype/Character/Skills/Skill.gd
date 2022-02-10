@@ -15,7 +15,6 @@ var cooldown: float
 var agent: Node2D
 
 func _ready():
-	pass
 	agent = get_parent().get_parent()
 	
 func react(skill: Skill):

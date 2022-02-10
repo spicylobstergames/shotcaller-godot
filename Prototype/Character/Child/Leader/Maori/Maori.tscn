@@ -38,7 +38,7 @@ tower_damage = 0.0
 [sub_resource type="Resource" id=27]
 resource_local_to_scene = true
 script = ExtResource( 8 )
-collision_size = 0.0
+collision_size = 5.0
 attack_range = 0.0
 unit_detection = 0.0
 area_selection = 0.0
@@ -74,16 +74,6 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ 0.0, 7.48751 ]
-}
-tracks/2/type = "animation"
-tracks/2/path = NodePath("AttackAnimPlayer")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"clips": PoolStringArray( "Attack_1" ),
-"times": PoolRealArray( 0 )
 }
 
 [sub_resource type="Animation" id=4]
@@ -165,7 +155,6 @@ resource_local_to_scene = true
 radius = 19.3197
 
 [node name="Maori" instance=ExtResource( 1 )]
-collision_mask = 0
 script = ExtResource( 3 )
 team = 2
 blue_team_texture = ExtResource( 2 )
@@ -210,10 +199,9 @@ shape = SubResource( 24 )
 [node name="UnitDetector" parent="." index="9"]
 collision_mask = 257
 
-[node name="Node" type="Node" parent="." index="12"]
+[node name="Node" type="Node" parent="." index="11"]
 
 [node name="Line2D" type="Line2D" parent="Node" index="0"]
 width = 2.0
 
 [editable path="UnitSelector"]
-[editable path="ObjectAvoid"]
