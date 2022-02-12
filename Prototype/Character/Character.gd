@@ -37,12 +37,12 @@ onready var space_state = get_world_2d().direct_space_state
 onready var attributes: Node = $Attributes
 onready var stats: Node = $Stats
 onready var sprite: Sprite = $TextureContainer/Sprite
+onready var smoke: AnimatedSprite = $TextureContainer/Smoke
 onready var texture_container: Position2D = $TextureContainer
 onready var behavior_animplayer: AnimationPlayer = $BehaviorAnimPlayer
 onready var ability_animplayer: AnimationPlayer = $AbilityAnimPlayer
 onready var state_debug: Label = $HUD/StateDebug
 onready var healthbar: Control = $HUD/HealthBar
-
 
 func set_is_selected(value: bool) -> void:
 	is_selected = value
@@ -61,7 +61,10 @@ func _ready() -> void:
 	set_physics_process(false)
 	set_team(team)
 	_setup_spawn()
-
+	randomize()
+	var offset: int = rand_range(0, smoke.frames.get_frame_count('run') );
+	smoke.frame = offset
+	smoke.play('run')
 
 
 func _physics_process(_delta: float) -> void:
@@ -96,8 +99,9 @@ func _physics_process(_delta: float) -> void:
 
 
 func _draw() -> void:
+	
 	if ProjectSettings.get("global/debug"):
-		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color.blue)
+		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color(0,0,1,0.5))
 		Utils.draw_line_circle(self, attributes.radius.collision_size, 1.0, Color.orangered)
 		Utils.draw_line_circle(self, attributes.radius.unit_detection, 1.0, Color.goldenrod)
 
