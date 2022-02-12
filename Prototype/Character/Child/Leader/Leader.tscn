@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Character/Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=2]
@@ -10,7 +10,8 @@
 [ext_resource path="res://Character/BT/Leaves/MoveToPoint.gd" type="Script" id=8]
 [ext_resource path="res://Character/BT/Leaves/TriggerAnimation.gd" type="Script" id=9]
 [ext_resource path="res://Character/BT/Leaves/FIndClosestEnemy.gd" type="Script" id=10]
-[ext_resource path="res://BT/BTNode.gd" type="Script" id=11]
+[ext_resource path="res://BT/BTSelector.gd" type="Script" id=11]
+[ext_resource path="res://BT/BTSequential.gd" type="Script" id=12]
 
 [sub_resource type="Resource" id=1]
 resource_local_to_scene = true
@@ -109,11 +110,9 @@ radius = SubResource( 9 )
 
 [node name="Selector" type="Node" parent="BehaviorTree" index="0"]
 script = ExtResource( 11 )
-node_type = 2
 
 [node name="Sequence" type="Node" parent="BehaviorTree/Selector" index="0"]
-script = ExtResource( 11 )
-node_type = 1
+script = ExtResource( 12 )
 
 [node name="IsTargetPointSet" type="Node" parent="BehaviorTree/Selector/Sequence" index="0"]
 script = ExtResource( 6 )

@@ -1,4 +1,4 @@
-extends BTNode
+extends BTLeaf
 
 var ai_path: GSAIPath
 var ai_follow_path: GSAIFollowPath

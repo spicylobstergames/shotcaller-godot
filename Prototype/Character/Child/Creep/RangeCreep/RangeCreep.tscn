@@ -1145,6 +1145,10 @@ shape = SubResource( 12 )
 [node name="HitArea" parent="." index="11"]
 position = Vector2( 0, -15.92 )
 
+[node name="AimPoint" parent="." index="12"]
+self_modulate = Color( 1, 1, 1, 1 )
+z_index = 0
+
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
 
 [editable path="UnitSelector"]

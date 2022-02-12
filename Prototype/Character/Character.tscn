@@ -179,6 +179,8 @@ position = Vector2( 0, -12 )
 collision_mask = 65536
 
 [node name="AimPoint" type="Sprite" parent="."]
+self_modulate = Color( 1, 1, 1, 0.286275 )
+z_index = 1
 texture = ExtResource( 11 )
 
 [editable path="UnitSelector"]

@@ -1,4 +1,4 @@
-extends BTNode
+extends BTLeaf
 
 func do_stuff(agent: Node) -> int:
 	

@@ -1,4 +1,4 @@
-extends BTNode
+extends BTLeaf
 
 export var key: String
 
