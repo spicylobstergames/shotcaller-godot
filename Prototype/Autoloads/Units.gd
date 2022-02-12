@@ -127,6 +127,12 @@ func move_one(unit: PhysicsBody2D, target_position: Vector2, type: int = TypeID.
 		unit.move_position = move_points[move_points.size() - 1]
 		unit.move_points = move_points
 
+func get_all_allies(current_team: int) -> Array:
+	var output = []
+	for unit in get_tree().get_nodes_in_group("units"):
+		if unit.attributes.primary.unit_team == current_team:
+			output.append(unit)
+	return output
 
 func get_allies(node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
 	var allies: Array = []
@@ -153,7 +159,7 @@ func get_allies(node: Node2D, current_team: int, current_type: int, target_types
 		return filtered_allies
 				
 	return allies
-
+	
 
 func get_enemies(node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
 	var enemies: Array = []
@@ -207,7 +213,6 @@ func _get_all(node: Node2D, target_teams: PoolIntArray, target_types: PoolIntArr
 				filtered_units.append(u)
 	
 	return filtered_units
-
 
 func _get_position_list_arround(target_position: Vector2, units: Array) -> PoolVector2Array:
 	var positions: PoolVector2Array = PoolVector2Array()

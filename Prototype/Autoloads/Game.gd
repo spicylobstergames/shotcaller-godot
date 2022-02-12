@@ -18,4 +18,7 @@ func game_over(loser: int):
 		_:
 			winner = Units.TeamID.None
 	print("Game is over, winner is %s" % [Units.TeamID.keys()[winner]])
+	for unit in Units.get_all_allies(winner):
+		if "winner" in unit:
+			unit.winner = true
 	is_playing = false

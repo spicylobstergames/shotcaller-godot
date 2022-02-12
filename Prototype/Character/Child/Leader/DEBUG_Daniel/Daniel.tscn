@@ -43,7 +43,7 @@ resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
 attack_range = 0.0
-unit_detection = 1000.0
+unit_detection = 300.0
 area_selection = 10.0
 hurt_area = {
 "height": 0.0,
@@ -306,7 +306,7 @@ radius = SubResource( 11 )
 
 [node name="BasicAttack" type="Node" parent="Skills" index="0"]
 script = ExtResource( 4 )
-damage = 250.0
+damage = 500.0
 attack_range = 50.0
 
 [node name="RockToss" type="Node" parent="Skills" index="1"]

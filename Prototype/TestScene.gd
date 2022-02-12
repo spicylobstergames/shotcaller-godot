@@ -8,7 +8,7 @@ func _ready() -> void:
 	
 func _process(delta: float) -> void:
 	$Menu/FPS.set_text((str(Engine.get_frames_per_second())))
-	
+
 
 func _on_Game_playing() -> void:
 	if not Game.is_playing:
