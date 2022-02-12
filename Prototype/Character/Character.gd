@@ -65,7 +65,7 @@ func _ready() -> void:
 	is_dead = false
 	targeted_enemy = null
 	target_end_point = global_position
-	
+	$AimPoint.visible = ProjectSettings.get("global/debug")
 	set_physics_process(false)
 	set_team(team)
 	_setup_spawn()
@@ -99,8 +99,11 @@ func _physics_process(delta: float) -> void:
 				Units.DetectionTypeID.Area,
 				attributes.radius.unit_detection
 				)
-	
-
+	if is_instance_valid(targeted_enemy):
+		$AimPoint.visible = true
+		$AimPoint.global_position = targeted_enemy.get_node("HitArea").global_position
+	else:
+		$AimPoint.visible = false
 func _draw() -> void:
 	if ProjectSettings.get("global/debug"):
 		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color.blue)

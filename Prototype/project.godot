@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://BT/BTNode.gd"
 }, {
-"base": "Node",
+"base": "Reference",
 "class": "BehaviorTree",
 "language": "GDScript",
 "path": "res://BT/BehaviorTree.gd"
