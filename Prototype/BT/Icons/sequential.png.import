@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/parallel.svg-cfdc59f3e1953d0c63b3d7117f89d8be.stex"
+path="res://.import/sequential.png-9458cddc6440f14939ce593a3f9278f2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://BT/Icons/parallel.svg"
-dest_files=[ "res://.import/parallel.svg-cfdc59f3e1953d0c63b3d7117f89d8be.stex" ]
+source_file="res://BT/Icons/sequential.png"
+dest_files=[ "res://.import/sequential.png-9458cddc6440f14939ce593a3f9278f2.stex" ]
 
 [params]
 
@@ -24,7 +24,7 @@ flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
-process/fix_alpha_border=false
+process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false

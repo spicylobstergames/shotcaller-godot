@@ -1,4 +1,4 @@
-class_name BTSequential, "res://BT/Icons/sequential.svg" extends BTNode
+class_name BTSequential, "res://BT/Icons/sequential.png" extends BTNode
 
 func tick(agent:Node) -> int:
 	for child in get_children():

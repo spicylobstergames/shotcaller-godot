@@ -9,6 +9,9 @@
    id="svg5"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="random_sequential.svg"
+   inkscape:export-filename="D:\dev\shotcaller-godot\Prototype\BT\Icons\random_sequential.png"
+   inkscape:export-xdpi="6.3499999"
+   inkscape:export-ydpi="6.3499999"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,15 +26,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.0482005"
-     inkscape:cx="192.71122"
-     inkscape:cy="151.21153"
+     inkscape:zoom="0.74118968"
+     inkscape:cx="26.309055"
+     inkscape:cy="257.01923"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:snap-midpoints="false" />
   <defs
      id="defs2">
     <marker
@@ -84,18 +88,20 @@
     <g
        aria-label="1"
        id="text9883"
-       style="font-size:50.8px;line-height:1.25;stroke-width:0.264583">
+       style="font-size:50.8px;line-height:1.25;fill:#001e1e;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
       <path
          d="m 12.72587,39.512169 h 8.185547 V 11.25963 l -8.904883,1.785938 V 8.4815054 l 8.855274,-1.7859375 h 5.010547 V 39.512169 h 8.185546 v 4.216797 H 12.72587 Z"
-         id="path4201" />
+         id="path4201"
+         style="fill:#001e1e;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
        aria-label="2"
        id="text15263"
-       style="font-size:50.8px;line-height:1.25;stroke-width:0.264583">
+       style="font-size:50.8px;line-height:1.25;fill:#001e1e;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
       <path
          d="m 54.548119,77.351112 h 17.487305 v 4.216797 H 48.52058 v -4.216797 q 2.852539,-2.951757 7.763867,-7.912695 4.936133,-4.985742 6.201172,-6.424414 2.406055,-2.703711 3.348633,-4.564062 0.967383,-1.885156 0.967383,-3.695899 0,-2.951757 -2.083594,-4.812109 -2.058789,-1.860351 -5.382617,-1.860351 -2.356445,0 -4.985742,0.818554 -2.604492,0.818555 -5.581055,2.480469 v -5.060156 q 3.026172,-1.21543 5.655469,-1.835547 2.629297,-0.620117 4.812109,-0.620117 5.754687,0 9.177734,2.877344 3.423047,2.877343 3.423047,7.689453 0,2.282031 -0.868164,4.34082 -0.843359,2.033984 -3.100586,4.812109 -0.620117,0.719336 -3.943945,4.167188 -3.323828,3.423046 -9.376172,9.599413 z"
-         id="path4198" />
+         id="path4198"
+         style="fill:#001e1e;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
        id="text19939"
@@ -103,28 +109,29 @@
     <g
        aria-label="3"
        id="text22423"
-       style="font-size:50.8px;line-height:1.25;stroke-width:0.264583">
+       style="font-size:50.8px;line-height:1.25;fill:#001e1e;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-opacity:1">
       <path
          d="m 110.39094,99.974533 q 3.59668,0.768947 5.60586,3.199807 2.03398,2.43086 2.03398,6.00273 0,5.48184 -3.77031,8.48321 -3.77031,3.00136 -10.71562,3.00136 -2.33165,0 -4.812114,-0.47129 -2.455664,-0.44648 -5.084961,-1.36425 v -4.83692 q 2.083594,1.21543 4.564063,1.83555 2.480472,0.62012 5.184182,0.62012 4.71289,0 7.16855,-1.86036 2.48047,-1.86035 2.48047,-5.40742 0,-3.27422 -2.30684,-5.10976 -2.28203,-1.86035 -6.3748,-1.86035 h -4.31602 v -4.117583 h 4.51446 q 3.6959,0 5.65547,-1.463476 1.95957,-1.488282 1.95957,-4.266407 0,-2.852539 -2.03399,-4.365625 -2.00918,-1.53789 -5.77949,-1.53789 -2.05879,0 -4.415234,0.446484 -2.356446,0.446485 -5.18418,1.389063 v -4.464844 q 2.852539,-0.79375 5.333004,-1.190625 2.50528,-0.396875 4.71289,-0.396875 5.70508,0 9.02891,2.604492 3.32383,2.579688 3.32383,6.994922 0,3.075781 -1.76113,5.208984 -1.76114,2.108399 -5.01055,2.926953 z"
-         id="path4194" />
+         id="path4194"
+         style="fill:#001e1e;fill-opacity:1;stroke:none;stroke-opacity:1" />
     </g>
     <path
-       style="fill:none;stroke:#000000;stroke-width:1.465;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       style="fill:none;stroke:#000000;stroke-width:1.465;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend);fill-opacity:1"
        d="m 31.047256,21.455421 c 16.010567,-4.80688 22.136888,1.681147 23.474756,14.640169"
        id="path30658"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1.465;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       style="fill:none;stroke:#000000;stroke-width:1.465;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend);fill-opacity:1"
        d="m 80.520933,59.317929 c 14.128391,-0.327309 16.031685,8.636968 17.164338,16.91192"
        id="path30660"
        sodipodi:nodetypes="cc" />
     <g
        aria-label="R"
        id="text44227"
-       style="font-size:50.8px;line-height:1.25;fill:#ff1e1e;stroke-width:0.264583">
+       style="font-size:50.8px;line-height:1.25;fill:#ff1e1e;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none">
       <path
          d="M 96.579217,11.978425 94.049139,25.12491 h 6.449221 q 3.79512,0 6.12676,-2.083594 2.35644,-2.108399 2.35644,-5.481836 0,-2.703711 -1.5875,-4.142383 -1.56269,-1.438672 -4.51445,-1.438672 z m 9.202543,15.130859 q 1.5875,0.372071 2.62929,1.835547 1.0666,1.463477 2.45567,5.829102 l 3.15019,10.120312 h -5.2834 l -2.90214,-9.500195 q -1.11622,-3.671094 -2.57969,-4.911328 -1.46348,-1.240234 -4.48965,-1.240234 H 93.230585 L 90.179608,44.894245 H 85.144257 L 92.362421,7.8608473 h 11.286129 q 5.13457,0 7.86309,2.3316407 2.75332,2.306836 2.75332,6.672461 0,3.869531 -2.33164,6.697265 -2.33164,2.827735 -6.15156,3.54707 z"
-         style="font-style:italic"
+         style="font-style:italic;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none"
          id="path4191" />
     </g>
   </g>

@@ -1,4 +1,4 @@
-class_name BTSelector, "res://BT/Icons/selector.svg" extends BTNode
+class_name BTSelector, "res://BT/Icons/selector.png" extends BTNode
 
 func tick(agent: Node) -> int:
 	for child in get_children():

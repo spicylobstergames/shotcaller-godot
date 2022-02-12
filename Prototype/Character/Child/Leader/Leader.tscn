@@ -1,17 +1,19 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Character/Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=2]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=3]
 [ext_resource path="res://Character/Child/Leader/Leader.gd" type="Script" id=4]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=5]
-[ext_resource path="res://Character/BT/Leaves/IsAgentConditionTrue.gd" type="Script" id=6]
+[ext_resource path="res://Character/BT/Leaves/ChaseToEnemy.gd" type="Script" id=6]
 [ext_resource path="res://Character/BT/Leaves/Idle.gd" type="Script" id=7]
-[ext_resource path="res://Character/BT/Leaves/MoveToPoint.gd" type="Script" id=8]
+[ext_resource path="res://Character/BT/Leaves/FindWayToEnemyBaseTower.gd" type="Script" id=8]
 [ext_resource path="res://Character/BT/Leaves/TriggerAnimation.gd" type="Script" id=9]
 [ext_resource path="res://Character/BT/Leaves/FIndClosestEnemy.gd" type="Script" id=10]
 [ext_resource path="res://BT/BTSelector.gd" type="Script" id=11]
 [ext_resource path="res://BT/BTSequential.gd" type="Script" id=12]
+[ext_resource path="res://Character/BT/Leaves/MoveTowardsEnemyBaseTower.gd" type="Script" id=13]
+[ext_resource path="res://BT/BTSelectorRandom.gd" type="Script" id=14]
 
 [sub_resource type="Resource" id=1]
 resource_local_to_scene = true
@@ -111,25 +113,37 @@ radius = SubResource( 9 )
 [node name="Selector" type="Node" parent="BehaviorTree" index="0"]
 script = ExtResource( 11 )
 
-[node name="Sequence" type="Node" parent="BehaviorTree/Selector" index="0"]
+[node name="Idle" type="Node" parent="BehaviorTree/Selector" index="0"]
+script = ExtResource( 7 )
+
+[node name="AttackCloseEnemy" type="Node" parent="BehaviorTree/Selector" index="1"]
 script = ExtResource( 12 )
 
-[node name="IsTargetPointSet" type="Node" parent="BehaviorTree/Selector/Sequence" index="0"]
-script = ExtResource( 6 )
-key = "target_point_set"
-
-[node name="MoveToPoint" type="Node" parent="BehaviorTree/Selector/Sequence" index="1"]
-script = ExtResource( 8 )
-
-[node name="FindClosestEnemy" type="Node" parent="BehaviorTree/Selector/Sequence" index="2"]
+[node name="UpdateTargetedEnemy" type="Node" parent="BehaviorTree/Selector/AttackCloseEnemy" index="0"]
 script = ExtResource( 10 )
 
-[node name="Attack" type="Node" parent="BehaviorTree/Selector/Sequence" index="3"]
+[node name="ChaseToEnemy" type="Node" parent="BehaviorTree/Selector/AttackCloseEnemy" index="1"]
+script = ExtResource( 6 )
+
+[node name="BTSelectorRandom" type="Node" parent="BehaviorTree/Selector/AttackCloseEnemy" index="2"]
+script = ExtResource( 14 )
+
+[node name="Attack" type="Node" parent="BehaviorTree/Selector/AttackCloseEnemy/BTSelectorRandom" index="0"]
 script = ExtResource( 9 )
 animation = "Attack"
 
-[node name="Idle" type="Node" parent="BehaviorTree/Selector" index="1"]
-script = ExtResource( 7 )
+[node name="PushLane" type="Node" parent="BehaviorTree/Selector" index="2"]
+script = ExtResource( 12 )
+
+[node name="FindTower" type="Node" parent="BehaviorTree/Selector/PushLane" index="0"]
+script = ExtResource( 8 )
+
+[node name="MoveTowardsTower" type="Node" parent="BehaviorTree/Selector/PushLane" index="1"]
+script = ExtResource( 13 )
+
+[node name="Attack" type="Node" parent="BehaviorTree/Selector/PushLane" index="2"]
+script = ExtResource( 9 )
+animation = "Attack"
 
 [node name="Sprite" parent="TextureContainer" index="0"]
 material = SubResource( 5 )
