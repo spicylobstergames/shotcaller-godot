@@ -23,6 +23,7 @@ onready var behavior_tree: BehaviorTree = $BehaviorTree
 var enemies = []
 var allies = []
 
+
 func set_team(value: int) -> void:
 	team = value
 	if _is_ready:

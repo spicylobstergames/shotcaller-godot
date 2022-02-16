@@ -20,6 +20,7 @@ func cast():
 			new_projectile.global_position = get_node(spawn_position_node).global_position
 		else:
 			new_projectile.global_position = agent.global_position
+		
 		new_projectile.rotation = agent.get_node("AimPoint").global_position.angle_to_point(new_projectile.global_position)
 		new_projectile.team = agent.attributes.primary.unit_team
 		new_projectile.creep_damage = creep_damage

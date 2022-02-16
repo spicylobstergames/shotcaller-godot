@@ -45,6 +45,9 @@ func _setup_move_creep():
 
 
 func _setup_formation() -> void:
+	
+	var leader:Node2D = get_children()[0]
+	
 	for c in get_children():
 		c.set_team(team)
 		var random_spread = 5.0
@@ -55,7 +58,8 @@ func _setup_formation() -> void:
 			
 			c.position.x *= -1.0
 			c.get_node("TextureContainer").scale.x = -1
-
+		c.leader = leader
+		c.formation_target = leader.to_local(c.global_position)
 
 func _on_Creep_dead(unit: PhysicsBody2D) -> void:
 	if not unit in dead_members:

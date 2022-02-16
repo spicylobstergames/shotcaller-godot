@@ -17,6 +17,9 @@ var avoid_weight = 0.5
 var velocity = Vector2.ZERO
 var is_dead = false
 
+var leader: Node = null
+var formation_target: Vector2 = Vector2(0.0, 0.0)
+
 var targeted_location: Vector2 = Vector2.ZERO
 var targeted_enemy: PhysicsBody2D = null
 var targeted_ally: PhysicsBody2D = null
@@ -76,7 +79,7 @@ func _physics_process(delta: float) -> void:
 	ai_agent._apply_steering(ai_accel, delta)
 	ai_accel.set_zero()
 	velocity = GSAIUtils.to_vector2(ai_agent.linear_velocity)
-	if velocity.length() > 1.0:
+	if velocity.length() > 10.0:
 		if behavior_animplayer.has_animation("Walk") and behavior_animplayer.current_animation != "Walk" :
 			behavior_animplayer.play("Walk")
 	if attributes.stats.health <= 0:

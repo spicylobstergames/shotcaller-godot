@@ -14,7 +14,12 @@ func _on_Game_playing() -> void:
 	if not Game.is_playing:
 		var team = Player.selected_team
 		Units.call_deferred("try_spawn_creep_wave", $BattleField)
-		Units.call_deferred("spawn_one",team, leader_scene, $BattleField, Units.arena_teams[team].creep_spawner_position)
+		Units.call_deferred(
+			"spawn_one",
+			team,
+			leader_scene, 
+			$BattleField, 
+			Units.arena_teams[team].creep_spawner_position + Vector2(rand_range(-100.0, 100.0), rand_range(-100.0, 100.0)))
 		$CreepRespawnTimer.start(Game.creep_respawn_time)
 		Game.is_playing = true
 		print("First Spawn Creep")

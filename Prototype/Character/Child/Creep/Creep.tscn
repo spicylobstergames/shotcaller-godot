@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Character/Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character/Child/Creep/Creep.gd" type="Script" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=11]
 [ext_resource path="res://Character/BT/Leaves/FIndClosestEnemy.gd" type="Script" id=12]
 [ext_resource path="res://BT/BTSelector.gd" type="Script" id=13]
+[ext_resource path="res://Character/BT/Leaves/IsFormationLeader.gd" type="Script" id=14]
+[ext_resource path="res://Character/BT/Leaves/FormUp.gd" type="Script" id=15]
 
 [sub_resource type="Resource" id=15]
 resource_local_to_scene = true
@@ -127,17 +129,19 @@ animation = "Attack"
 [node name="PushLane" type="Node" parent="BehaviorTree/BTSelector" index="1"]
 script = ExtResource( 3 )
 
-[node name="FindTower" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="0"]
+[node name="IsFormationLeader" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="0"]
+script = ExtResource( 14 )
+
+[node name="FindTower" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="1"]
 script = ExtResource( 7 )
 
-[node name="MoveTowardsTower" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="1"]
+[node name="MoveTowardsTower" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="2"]
 script = ExtResource( 10 )
 
-[node name="Attack" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="2"]
-script = ExtResource( 5 )
-animation = "Attack"
+[node name="FormUp" type="Node" parent="BehaviorTree/BTSelector" index="2"]
+script = ExtResource( 15 )
 
-[node name="Idle" type="Node" parent="BehaviorTree/BTSelector" index="2"]
+[node name="Idle" type="Node" parent="BehaviorTree/BTSelector" index="3"]
 script = ExtResource( 6 )
 
 [node name="Node" type="Node" parent="." index="4"]

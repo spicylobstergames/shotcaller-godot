@@ -7,9 +7,9 @@ func do_stuff(agent: Node) -> int:
 		return NodeStatus.Failure
 	var closest_enemy = sorted_enemies[0]
 	
-	var distance_threshold = agent.get_node("Skills").get_skill(0).get_range() * 0.75
-	if agent.global_position.distance_to(closest_enemy.global_position) > distance_threshold:
-		return NodeStatus.Failure
+#	var distance_threshold = agent.get_node("Skills").get_skill(0).get_range() * 0.75
+#	if agent.global_position.distance_to(closest_enemy.global_position) > distance_threshold:
+#		return NodeStatus.Failure
 	
 	agent.targeted_enemy = closest_enemy
 	return NodeStatus.Success

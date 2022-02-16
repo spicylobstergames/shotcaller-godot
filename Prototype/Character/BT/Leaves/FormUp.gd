@@ -1,20 +1,21 @@
 extends BTLeaf
 
-var ai_path: GSAIPath
-var ai_follow_path: GSAIFollowPath
-
-var move_points: Array = []
-
-
 func do_stuff(agent: Node) -> int:
-
-	if move_points.empty():
-		for v in agent.get("move_points"):
-			move_points.append(GSAIUtils.to_vector3(v))
-	var distance_threshold = agent.get_node("Skills").get_skill(0).get_range() * 0.75
-	if agent.global_position.distance_to(agent.targeted_enemy.global_position) <= distance_threshold:
+	var target_point: Vector2
+	if not is_instance_valid(agent.leader):
+		return NodeStatus.Failure
+	target_point = agent.leader.to_global(agent.formation_target)
+	if agent.global_position.distance_to(target_point) < 1.0:
 		return NodeStatus.Success
-	var path = GSAIPath.new(move_points)
+	
+	var move_points = Units.get_move_points(agent, target_point, Units.TypeID.Creep)
+	var path_points = []
+	for point in move_points:
+		path_points.append(GSAIUtils.to_vector3(point))
+	
+	
+	var path = GSAIPath.new(path_points)
+	
 	var ai_follow_path = GSAIFollowPath.new(agent.ai_agent, path)
 	ai_follow_path.path_offset = 0.1
 	ai_follow_path.prediction_time = 0.1
@@ -24,4 +25,5 @@ func do_stuff(agent: Node) -> int:
 	ai_follow_path.is_arrive_enabled = false
 	
 	ai_follow_path.calculate_steering(agent.ai_accel)
+	
 	return NodeStatus.In_Progress
