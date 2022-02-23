@@ -9,11 +9,85 @@
 script = ExtResource( 4 )
 team = 0
 
-[node name="TopCreepSpawner" type="Position2D" parent="."]
+[node name="Layout" type="CanvasLayer" parent="."]
 
-[node name="MidCreepSpawner" type="Position2D" parent="."]
+[node name="Control" type="Control" parent="Layout"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="BottomCreepSpawner" type="Position2D" parent="."]
+[node name="ColorRect" type="PanelContainer" parent="Layout/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -64.0
+margin_bottom = 204.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect4" type="PanelContainer" parent="Layout/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+margin_top = -64.0
+margin_bottom = 204.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ColorRect2" type="PanelContainer" parent="Layout/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = -64.0
+margin_bottom = 92.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ColorRect3" type="PanelContainer" parent="Layout/Control"]
+anchor_right = 1.016
+anchor_bottom = 0.693
+margin_left = 1.0
+margin_top = 64.0
+margin_right = -8.19202
+margin_bottom = 38.28
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect5" type="PanelContainer" parent="Layout/Control"]
+anchor_right = 1.016
+anchor_bottom = 0.693
+margin_left = 128.0
+margin_top = 64.0
+margin_right = 89.36
+margin_bottom = 38.28
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="CreepSpawnerPosition" type="Position2D" parent="."]
+position = Vector2( 242.071, 127 )
+
+[node name="AreaDecoration" parent="." instance=ExtResource( 1 )]
 
 [node name="BuildingContainer" type="YSort" parent="."]
 

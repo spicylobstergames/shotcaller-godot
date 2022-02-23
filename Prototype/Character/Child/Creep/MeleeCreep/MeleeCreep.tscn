@@ -1,13 +1,16 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Character/Child/Creep/Creep.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character/Child/Creep/MeleeCreep/MeleeCreep.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Character/Creep/MeleeCreep/MeleeCreep_Blue.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Character/Creep/MeleeCreep/MeleeCreep_Red.png" type="Texture" id=4]
-[ext_resource path="res://Utils/BasicAttackArea.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Character/Skills/Shared/BasicMeleeAttack.gd" type="Script" id=5]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=6]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=8]
+[ext_resource path="res://BT/BehaviorTree.gd" type="Script" id=9]
+[ext_resource path="res://Character/Skills/SkillHandler.gd" type="Script" id=10]
+[ext_resource path="res://Character/StateDebug.gd" type="Script" id=11]
 
 [sub_resource type="Resource" id=35]
 resource_local_to_scene = true
@@ -46,7 +49,7 @@ hurt_area = {
 "radius": 0.0
 }
 
-[sub_resource type="Animation" id=23]
+[sub_resource type="Animation" id=39]
 resource_name = "Attack"
 length = 0.7
 loop = true
@@ -153,42 +156,39 @@ tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "_setup_team"
-}, {
-"args": [  ],
-"method": "_setup_basic_attack"
 } ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("TextureContainer/Weapon/BasicAttackArea:collision_mask")
+tracks/9/path = NodePath("TextureContainer/AnimatedSprite:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 0, 65536, 0 ]
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("TextureContainer/Weapon/BasicAttackArea:monitorable")
+tracks/10/path = NodePath("HUD:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
 tracks/10/enabled = true
 tracks/10/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ false, false, true, false ]
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/11/type = "value"
-tracks/11/path = NodePath("TextureContainer/AnimatedSprite:modulate")
+tracks/11/path = NodePath("TextureContainer:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
@@ -199,29 +199,19 @@ tracks/11/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
-tracks/12/type = "value"
-tracks/12/path = NodePath("HUD:modulate")
+tracks/12/type = "method"
+tracks/12/path = NodePath("Skills/Sword")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/imported = false
 tracks/12/enabled = true
 tracks/12/keys = {
-"times": PoolRealArray( 0 ),
+"times": PoolRealArray( 0.2 ),
 "transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("TextureContainer:modulate")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
+"values": [ {
+"args": [  ],
+"method": "cast"
+} ]
 }
 
 [sub_resource type="Animation" id=34]
@@ -612,7 +602,7 @@ tracks/7/keys = {
 "values": [ 0.0 ]
 }
 tracks/8/type = "value"
-tracks/8/path = NodePath("TextureContainer/Weapon/BasicAttackArea:monitoring")
+tracks/8/path = NodePath("TextureContainer/AnimatedSprite:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
@@ -621,10 +611,10 @@ tracks/8/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ false ]
+"values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("TextureContainer/Weapon/BasicAttackArea:collision_mask")
+tracks/9/path = NodePath("HUD:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
@@ -633,10 +623,10 @@ tracks/9/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 256 ]
+"values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("TextureContainer/Weapon/BasicAttackArea:monitorable")
+tracks/10/path = NodePath("TextureContainer/Weapon:frame")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
@@ -645,51 +635,15 @@ tracks/10/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ true ]
+"values": [ 0 ]
 }
 tracks/11/type = "value"
-tracks/11/path = NodePath("TextureContainer/AnimatedSprite:modulate")
+tracks/11/path = NodePath("TextureContainer:modulate")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
 tracks/11/enabled = true
 tracks/11/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/12/type = "value"
-tracks/12/path = NodePath("HUD:modulate")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("TextureContainer/Weapon:frame")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
-tracks/14/type = "value"
-tracks/14/path = NodePath("TextureContainer:modulate")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
@@ -960,7 +914,15 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 3 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 4 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 24, 24 )
 
@@ -976,17 +938,14 @@ region = Rect2( 0, 0, 24, 24 )
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 3 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 4 )
-region = Rect2( 72, 0, 24, 24 )
-
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 17 ), SubResource( 26 ) ],
+"frames": [ SubResource( 16 ), SubResource( 25 ) ],
+"loop": false,
+"name": "Walk",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 38 ), SubResource( 26 ) ],
 "loop": false,
 "name": "Idle",
 "speed": 5.0
@@ -994,11 +953,6 @@ animations = [ {
 "frames": [ SubResource( 15 ), SubResource( 24 ) ],
 "loop": false,
 "name": "Attack",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 16 ), SubResource( 25 ) ],
-"loop": false,
-"name": "Walk",
 "speed": 5.0
 } ]
 
@@ -1017,10 +971,6 @@ animations = [ {
 "name": "Sword",
 "speed": 5.0
 } ]
-
-[sub_resource type="CapsuleShape2D" id=33]
-radius = 14.1191
-height = 12.3536
 
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
@@ -1081,8 +1031,19 @@ primary = SubResource( 35 )
 stats = SubResource( 36 )
 radius = SubResource( 37 )
 
+[node name="Skills" parent="." index="1"]
+script = ExtResource( 10 )
+
+[node name="Sword" type="Node" parent="Skills" index="0"]
+script = ExtResource( 5 )
+damage = 20.0
+attack_range = 25.0
+
+[node name="BehaviorTree" parent="." index="2"]
+script = ExtResource( 9 )
+
 [node name="BehaviorAnimPlayer" parent="." index="3"]
-anims/Attack = SubResource( 23 )
+anims/Attack = SubResource( 39 )
 anims/Dead = SubResource( 34 )
 anims/Idle = SubResource( 21 )
 anims/RESET = SubResource( 19 )
@@ -1096,6 +1057,7 @@ margin_bottom = -24.0
 [node name="StateDebug" parent="HUD" index="1"]
 margin_top = -47.0
 margin_bottom = -33.0
+script = ExtResource( 11 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="TextureContainer" index="0"]
 position = Vector2( -2, 0 )
@@ -1110,38 +1072,26 @@ frames = SubResource( 27 )
 animation = "Sword"
 offset = Vector2( 5.30694, -5.61707 )
 
-[node name="BasicAttackArea" parent="TextureContainer/Weapon" index="0" instance=ExtResource( 5 )]
-visible = false
-position = Vector2( 3.89439, -3.71937 )
-rotation = 0.585449
-collision_mask = 256
-
-[node name="CollisionShape2D" parent="TextureContainer/Weapon/BasicAttackArea" index="0"]
-position = Vector2( -0.891303, -3.34522 )
-rotation = -0.205743
-shape = SubResource( 33 )
-
 [node name="Sprite" parent="TextureContainer" index="2"]
 material = SubResource( 10 )
 texture = ExtResource( 3 )
 offset = Vector2( -2, -10 )
 region_rect = Rect2( 50, 2, 20, 21 )
 
-[node name="CollisionShape2D" parent="." index="7"]
-visible = false
+[node name="CollisionShape2D" parent="." index="8"]
 shape = SubResource( 30 )
 
-[node name="UnitSelector" parent="." index="8"]
+[node name="UnitSelector" parent="." index="9"]
 monitoring = false
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 12 )
 
-[node name="HitArea" parent="." index="10"]
-position = Vector2( -1, -11 )
+[node name="HitArea" parent="." index="11"]
+position = Vector2( 0, -15.92 )
 
 [connection signal="animation_changed" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_changed"]
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
+[connection signal="area_entered" from="HitArea" to="." method="_on_HitArea_area_entered"]
 
-[editable path="TextureContainer/Weapon/BasicAttackArea"]
 [editable path="UnitSelector"]
