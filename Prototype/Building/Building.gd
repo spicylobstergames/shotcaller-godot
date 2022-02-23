@@ -23,6 +23,7 @@ onready var behavior_tree: BehaviorTree = $BehaviorTree
 var enemies = []
 var allies = []
 
+var associated_nav_outline_index: int
 
 func set_team(value: int) -> void:
 	team = value
@@ -104,6 +105,14 @@ func _setup_dead() -> void:
 	$UnitDetector.collision_mask = 0
 	$UnitSelector.collision_layer = 0
 	behavior_tree.is_active = false
+	var navmap = Units.get_navmap()
+	
+	#Navigation map updating. Might want to move this to a different file
+	navmap.get_node("NavigationPolygonInstance").navpoly.remove_outline(associated_nav_outline_index)
+	navmap.get_node("NavigationPolygonInstance").navpoly.add_outline_at_index(
+		PoolVector2Array([]), associated_nav_outline_index) 	#This is a little gross, but we do this to keep the outline indices from being offset
+	navmap.get_node("NavigationPolygonInstance").navpoly.make_polygons_from_outlines()
+	
 	set_physics_process(false)
 	emit_signal("dead", self)
 

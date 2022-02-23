@@ -238,6 +238,7 @@ func update_navmap():
 			var points = []
 			for index in line_indices:
 				points.append(unit_vertex_dict.vertices[index])
+			unit.associated_nav_outline_index = nav_polygon.get_outline_count()
 			nav_polygon.add_outline(PoolVector2Array(points))
 	
 	#"Expand" the tilemap with NavBlockers so units don't get stuck on the edges

@@ -11,8 +11,7 @@ enum StatusEffectID {Stun, Root, Silence, Slow}
 
 
 var units_selected: Array = []
-var leader_navmap: Navigation2D = null
-var creep_navmap: Navigation2D = null
+var navmap: Navigation2D = null
 
 var arena_teams = {TeamID.Blue: null, TeamID.Red: null}
 
@@ -101,7 +100,7 @@ func get_closest_units_by(node: Node2D, sort_type: int, units: Array) -> Array:
 
 # Handle Movable Unit
 func get_move_points(node: Node2D, target_position: Vector2, type: int = TypeID.Leader) -> PoolVector2Array:
-	var navmap = get_navmap(type)
+	var navmap = get_navmap()
 	var move_points = []
 	if navmap:
 		move_points = navmap.get_simple_path(node.global_position, target_position, true)
@@ -121,7 +120,7 @@ func get_move(units: Array, target_position: Vector2, type: int = TypeID.Leader,
 
 
 func move_one(unit: PhysicsBody2D, target_position: Vector2, type: int = TypeID.Leader) -> void:
-	var navmap = get_navmap(type)
+	var navmap = get_navmap()
 	var move_points = navmap.get_simple_path(unit.global_position, target_position, true)
 	if not move_points.empty():
 		unit.move_position = move_points[move_points.size() - 1]
@@ -235,26 +234,14 @@ func _get_arena_teams() -> Dictionary:
 	return new_arena_teams
 
 
-func get_navmap(type: int) -> Navigation2D:
-	if leader_navmap == null or creep_navmap == null:
-		return null
-		
-	match type:
-		TypeID.Leader:
-			return leader_navmap
-		TypeID.Creep:
-			return creep_navmap
-		_:
-			return null
+func get_navmap() -> Navigation2D:
+	return navmap
+
 
 
 
 func _setup_navigation() -> void:
-	for n in get_tree().get_nodes_in_group("navigation"):
-		if n.is_in_group("leader_navigation"):
-			leader_navmap = n
-		if n.is_in_group("creep_navigation"):
-			creep_navmap = n
+ navmap = get_tree().get_nodes_in_group("navigation")[0]
 
 
 func _sort_by_health(a: Dictionary, b: Dictionary) -> bool:
