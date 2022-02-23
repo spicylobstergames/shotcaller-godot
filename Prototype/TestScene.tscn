@@ -80,8 +80,10 @@ team = 1
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 512, 128 )
+position = Vector2( 257, 152 )
 current = true
+limit_left = 0
+limit_top = 0
 script = ExtResource( 1 )
 
 [node name="UnitController" parent="." instance=ExtResource( 2 )]
