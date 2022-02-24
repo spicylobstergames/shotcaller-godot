@@ -22,8 +22,6 @@ var marching_squares_lut = {
 	[1,1,1,1]: [],
 }
 
-var worker_thread: Thread
-
 func tile_to_key(tile_index: int, is_collider = false) -> int:
 	match tile_index:
 		0:
@@ -69,8 +67,8 @@ class VertexDictionary:
 				return i
 		return -1
 
+#Line made up of indices
 class IndexLine:
-	#Line made up of indices
 	var a: int
 	var b: int
 
@@ -95,9 +93,6 @@ class LineCombiner:
 		Not
 	}
 	func are_lines_connected(first: IndexLine, second: IndexLine) -> int:
-#		var first = lines[first_index]
-#		var second = lines[second_index]
-		
 		if first.a == second.b:
 			return ConnectedResult.Left
 		elif first.b == second.a:
@@ -155,17 +150,6 @@ func is_inside_specific_building(building: Node2D, point: Vector2) -> bool:
 	return shape.collide(building.get_node("CollisionShape2D").global_transform,test_shape,test_shape_transform)
 
 func _ready():
-	update_navmap()
-	worker_thread = Thread.new()
-
-#func _physics_process(delta):
-#	if not worker_thread.is_alive():
-#		worker_thread.start(self, "worker_thread_call_navmap")
-
-func _exit_tree():
-	worker_thread.wait_to_finish()
-
-func worker_thread_call_navmap(_unused):
 	update_navmap()
 
 func update_navmap():
@@ -301,6 +285,7 @@ func update_navmap():
 		var new_line = IndexLine.new(indices[i], indices[i + 1])
 		line_combiner.lines.append(new_line)
 	
+	#Create polygons from set of lines
 	while line_combiner.lines.size() > 0:
 		if line_combiner.current_polygon.size() <= 0:
 			line_combiner.current_polygon.append(line_combiner.lines[0])
