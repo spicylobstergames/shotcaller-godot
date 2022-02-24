@@ -38,7 +38,12 @@ func spawn_one(team: int, packed_scene: PackedScene, parent_node: Node2D, spawn_
 func try_spawn_creep_wave(parent_node: Node2D) -> void:
 	for t in arena_teams.keys():
 		var new_creep_group: YSort = null
-		new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].mid_creep_spawner_position)
+		if creep_group_pool_count < creep_group_max_pool_count and not creep_group_pool_count > creep_group_max_pool_count:
+			new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].creep_spawner_position)
+			creep_group_pool_count += 2
+		else:
+			new_creep_group = available_creep_groups_pools.pop_front()
+
 		
 		if new_creep_group:
 			new_creep_group.mirror_mode = arena_teams[t].mirror_mode

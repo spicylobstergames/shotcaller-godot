@@ -192,8 +192,8 @@ texture = ExtResource( 6 )
 
 [node name="Smoke" type="AnimatedSprite" parent="TextureContainer"]
 modulate = Color( 0, 0, 0, 0.313726 )
-position = Vector2( -17.9741, -4.49999 )
-scale = Vector2( 0.179877, 0.189655 )
+position = Vector2( -16.1265, -5.25 )
+scale = Vector2( 1.00568, 1.06034 )
 frames = SubResource( 22 )
 animation = "run"
 frame = 1

@@ -72,9 +72,27 @@ func _ready() -> void:
 	set_physics_process(false)
 	set_team(team)
 	_setup_spawn()
+	# if animation == running
+	set_smoke()
+
+var resize_smoke = true;
+func set_smoke() -> void:
+	var size = 10
+	var count: int = smoke.frames.get_frame_count('run')
+	if (resize_smoke):
+		resize_smoke = false;
+		for n in count:
+			var texture: Texture = smoke.get_sprite_frames().get_frame('run', n);
+			if (texture):
+				var image: Image = texture.get_data()
+				image.resize(size, size, Image.INTERPOLATE_NEAREST)
+				var texture2 = ImageTexture.new()
+				texture2.create_from_image(image, 0)
+				smoke.get_sprite_frames().set_frame('run', n, texture2)
+	# finish resize_smoke
 	randomize()
-	var offset: int = rand_range(0, smoke.frames.get_frame_count('run') );
-	smoke.frame = offset
+	var offset: int = rand_range(0, count );
+	smoke.set_frame(offset)
 	smoke.play('run')
 
 func _physics_process(delta: float) -> void:
