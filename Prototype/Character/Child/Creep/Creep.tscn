@@ -138,7 +138,14 @@ script = ExtResource( 7 )
 [node name="MoveTowardsTower" type="Node" parent="BehaviorTree/BTSelector/PushLane" index="2"]
 script = ExtResource( 10 )
 
-[node name="FormUp" type="Node" parent="BehaviorTree/BTSelector" index="2"]
+[node name="TryFormUp" type="Node" parent="BehaviorTree/BTSelector" index="2"]
+script = ExtResource( 3 )
+
+[node name="IsNotFormationLeader" type="Node" parent="BehaviorTree/BTSelector/TryFormUp" index="0"]
+script = ExtResource( 14 )
+flipped = true
+
+[node name="FormUp" type="Node" parent="BehaviorTree/BTSelector/TryFormUp" index="1"]
 script = ExtResource( 15 )
 
 [node name="Idle" type="Node" parent="BehaviorTree/BTSelector" index="3"]
