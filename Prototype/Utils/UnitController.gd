@@ -46,11 +46,13 @@ func _unhandled_input(event):
 			query.transform = Transform2D(0, (drag_end + drag_start) / 2)
 			# Result is an array of dictionaries. Each has a "collider" key.
 			Units.units_selected = []
+			
+			""" ERROR invalid get stats
 			for q in space.intersect_shape(query):
 				if q.collider.owner is LeaderClass and q.collider.owner.team == Player.selected_team:
 					if q.collider.owner.stats.unit_type in [Units.TypeID.Leader]:
 						Units.units_selected.append(q.collider.owner)
-
+			"""
 			for u in Units.units_selected:
 				u.is_selected = true
 
