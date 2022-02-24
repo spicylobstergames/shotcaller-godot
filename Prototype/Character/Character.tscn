@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://HealthBar/HealthBar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character/Character.gd" type="Script" id=2]
@@ -97,31 +97,31 @@ shader_param/aura_width = 0.0
 shader_param/aura_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 5 )
+atlas = ExtResource( 15 )
 region = Rect2( 0, 0, 67, 58 )
 
 [sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 5 )
+atlas = ExtResource( 15 )
 region = Rect2( 67, 0, 67, 58 )
 
 [sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 5 )
+atlas = ExtResource( 15 )
 region = Rect2( 134, 0, 67, 58 )
 
 [sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 5 )
+atlas = ExtResource( 15 )
 region = Rect2( 201, 0, 67, 58 )
 
 [sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 5 )
+atlas = ExtResource( 15 )
 region = Rect2( 268, 0, 67, 58 )
 
 [sub_resource type="SpriteFrames" id=22]
 animations = [ {
-"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), null, null, null, null ],
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), null, null, null, null, null, null, null, null ],
 "loop": true,
-"name": "run",
-"speed": 12.0
+"name": "default",
+"speed": 15.0
 } ]
 
 [sub_resource type="CircleShape2D" id=12]
@@ -192,10 +192,9 @@ texture = ExtResource( 6 )
 
 [node name="Smoke" type="AnimatedSprite" parent="TextureContainer"]
 modulate = Color( 0, 0, 0, 0.313726 )
-position = Vector2( -16.1265, -5.25 )
-scale = Vector2( 1.00568, 1.06034 )
+position = Vector2( -17.9263, -4.5 )
+scale = Vector2( 0.838021, 0.844828 )
 frames = SubResource( 22 )
-animation = "run"
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

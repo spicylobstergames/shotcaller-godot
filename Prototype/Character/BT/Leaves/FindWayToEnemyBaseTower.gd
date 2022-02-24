@@ -22,8 +22,8 @@ func do_stuff(agent: Node) -> int:
 	agent.targeted_enemy = closest_buildings[0]
 	agent.move_points = move_points
 
-	if ProjectSettings.get("global/debug") and _agent.has_node("Node/Line2D"):
-		var line2d: Line2D = _agent.get_node("Node/Line2D")
+	if ProjectSettings.get("global/debug") and agent.has_node("Node/Line2D"):
+		var line2d: Line2D = agent.get_node("Node/Line2D")
 		line2d.points = move_points
 	
 	return NodeStatus.Success
