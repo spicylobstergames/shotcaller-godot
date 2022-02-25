@@ -94,7 +94,6 @@ margin_bottom = 0.0
 [node name="BehaviorAnimPlayer" type="AnimationPlayer" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource( 1 )
 
 [node name="UnitSelector" parent="." instance=ExtResource( 1 )]
