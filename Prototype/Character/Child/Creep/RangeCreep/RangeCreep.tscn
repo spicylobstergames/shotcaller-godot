@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://Character/Child/Creep/Creep.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Character/Creep/RangeCreep/RangeCreep_Blue.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=9]
+[ext_resource path="res://Character/Skills/Shared/BasicRangedAttack.gd" type="Script" id=10]
 
 [sub_resource type="Resource" id=42]
 resource_local_to_scene = true
@@ -40,7 +41,7 @@ resource_local_to_scene = true
 script = ExtResource( 8 )
 collision_size = 5.0
 attack_range = 60.0
-unit_detection = 80.0
+unit_detection = 160.0
 area_selection = 20.0
 hurt_area = {
 "height": 0.0,
@@ -121,7 +122,7 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.2, 0.4, 0.5 ),
 "transitions": PoolRealArray( 2, 0.5, 0.5, 1 ),
 "update": 0,
-"values": [ -17.5235, 65.4846, 39.9516, -5.57232 ]
+"values": [ -17.5235, 65.4846, 39.9516, 0.0 ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("TextureContainer/Position2D/Weapon:scale")
@@ -154,14 +155,11 @@ tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 0, 0.7 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
-"args": [  ],
+"args": [ null, null ],
 "method": "_setup_team"
-}, {
-"args": [  ],
-"method": "_setup_basic_attack"
 } ]
 }
 tracks/9/type = "value"
@@ -207,7 +205,7 @@ tracks/12/loop_wrap = true
 tracks/12/imported = false
 tracks/12/enabled = true
 tracks/12/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"times": PoolRealArray( 0, 0.2, 0.4, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
@@ -235,6 +233,20 @@ tracks/14/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/15/type = "method"
+tracks/15/path = NodePath("Skills/Bow")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "cast"
+} ]
 }
 
 [sub_resource type="Animation" id=34]
@@ -981,17 +993,17 @@ region = Rect2( 32, 0, 32, 32 )
 animations = [ {
 "frames": [ SubResource( 35 ), SubResource( 41 ) ],
 "loop": true,
+"name": "Walk",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 35 ), SubResource( 41 ) ],
+"loop": true,
 "name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 36 ), SubResource( 40 ) ],
 "loop": true,
 "name": "Attack",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 35 ), SubResource( 41 ) ],
-"loop": true,
-"name": "Walk",
 "speed": 5.0
 } ]
 
@@ -1064,12 +1076,21 @@ resource_local_to_scene = true
 script = ExtResource( 3 )
 blue_team_texture = ExtResource( 2 )
 red_team_texture = ExtResource( 4 )
-_arrow = ExtResource( 6 )
 
 [node name="Attributes" parent="." index="0"]
 primary = SubResource( 42 )
 stats = SubResource( 43 )
 radius = SubResource( 44 )
+
+[node name="Bow" type="Node" parent="Skills" index="0"]
+script = ExtResource( 10 )
+projectile_range = 200.0
+speed = 500.0
+projectile_scene = ExtResource( 6 )
+creep_damage = 20
+leader_damage = 20
+building_damage = 20
+spawn_position_node = NodePath("../../TextureContainer/Position2D/Weapon/ArrowInitPosition")
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
 anims/Attack = SubResource( 23 )
@@ -1115,15 +1136,18 @@ material = SubResource( 10 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -15 )
 
-[node name="CollisionShape2D" parent="." index="7"]
-visible = false
+[node name="CollisionShape2D" parent="." index="8"]
 shape = SubResource( 11 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 12 )
 
-[node name="HitArea" parent="." index="10"]
-position = Vector2( -1, -12 )
+[node name="HitArea" parent="." index="11"]
+position = Vector2( 0, -15.92 )
+
+[node name="AimPoint" parent="." index="12"]
+self_modulate = Color( 1, 1, 1, 1 )
+z_index = 0
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
 

@@ -1,6 +1,5 @@
 extends Position2D
 
-
 export(bool) var enabled: bool = false setget set_enabled
 export(NodePath) var _target: NodePath = ""
 export(Array) var move_points: Array = []
@@ -117,7 +116,7 @@ func _setup_avoid_direction() -> void:
 	
 	
 func _draw() -> void:
-	if ProjectSettings.get("global/debug"):
+	if false:#ProjectSettings.get("global/debug"):
 		if target and _is_ready and enabled:
 			for i in ray_count:
 				draw_line(Vector2.ZERO, ray_directions[i] * radius * interest_angle_directions[i], Color.purple, 1.0)

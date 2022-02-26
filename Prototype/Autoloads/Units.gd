@@ -11,8 +11,7 @@ enum StatusEffectID {Stun, Root, Silence, Slow}
 
 
 var units_selected: Array = []
-var leader_navmap: Navigation2D = null
-var creep_navmap: Navigation2D = null
+var navmap: Navigation2D = null
 
 var arena_teams = {TeamID.Blue: null, TeamID.Red: null}
 
@@ -29,29 +28,25 @@ func _ready() -> void:
 
 func spawn_one(team: int, packed_scene: PackedScene, parent_node: Node2D, spawn_position: Vector2) -> Node2D:
 	var new_units = packed_scene.instance()
+	new_units.team = team
 	parent_node.add_child(new_units)
 	new_units.global_position = spawn_position
 	return new_units
 
 
-func spawn_creep(parent_node: Node2D) -> void:
+func try_spawn_creep_wave(parent_node: Node2D) -> void:
 	for t in arena_teams.keys():
 		var new_creep_group: YSort = null
-		
 		if creep_group_pool_count < creep_group_max_pool_count and not creep_group_pool_count > creep_group_max_pool_count:
-			new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].creep_spawner_position)
+			new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].mid_creep_spawner_position)
 			creep_group_pool_count += 2
 		else:
 			new_creep_group = available_creep_groups_pools.pop_front()
+
 		
 		if new_creep_group:
-			new_creep_group.team = t
-			if arena_teams[t].mirror_mode:
-				new_creep_group.mirror_mode = true
-
+			new_creep_group.mirror_mode = arena_teams[t].mirror_mode
 			new_creep_group.spawn()
-			for c in new_creep_group.get_children():
-				c.set_team(t)
 
 func get_closest_units_by(node: Node2D, sort_type: int, units: Array) -> Array:
 	var data_units = []
@@ -110,7 +105,7 @@ func get_closest_units_by(node: Node2D, sort_type: int, units: Array) -> Array:
 
 # Handle Movable Unit
 func get_move_points(node: Node2D, target_position: Vector2, type: int = TypeID.Leader) -> PoolVector2Array:
-	var navmap = get_navmap(type)
+	var navmap = get_navmap()
 	var move_points = []
 	if navmap:
 		move_points = navmap.get_simple_path(node.global_position, target_position, true)
@@ -130,12 +125,18 @@ func get_move(units: Array, target_position: Vector2, type: int = TypeID.Leader,
 
 
 func move_one(unit: PhysicsBody2D, target_position: Vector2, type: int = TypeID.Leader) -> void:
-	var navmap = get_navmap(type)
+	var navmap = get_navmap()
 	var move_points = navmap.get_simple_path(unit.global_position, target_position, true)
 	if not move_points.empty():
 		unit.move_position = move_points[move_points.size() - 1]
 		unit.move_points = move_points
 
+func get_all_allies(current_team: int) -> Array:
+	var output = []
+	for unit in get_tree().get_nodes_in_group("units"):
+		if unit.attributes.primary.unit_team == current_team:
+			output.append(unit)
+	return output
 
 func get_allies(node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
 	var allies: Array = []
@@ -162,7 +163,7 @@ func get_allies(node: Node2D, current_team: int, current_type: int, target_types
 		return filtered_allies
 				
 	return allies
-
+	
 
 func get_enemies(node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
 	var enemies: Array = []
@@ -217,7 +218,6 @@ func _get_all(node: Node2D, target_teams: PoolIntArray, target_types: PoolIntArr
 	
 	return filtered_units
 
-
 func _get_position_list_arround(target_position: Vector2, units: Array) -> PoolVector2Array:
 	var positions: PoolVector2Array = PoolVector2Array()
 	
@@ -239,26 +239,12 @@ func _get_arena_teams() -> Dictionary:
 	return new_arena_teams
 
 
-func get_navmap(type: int) -> Navigation2D:
-	if leader_navmap == null or creep_navmap == null:
-		return null
-		
-	match type:
-		TypeID.Leader:
-			return leader_navmap
-		TypeID.Creep:
-			return creep_navmap
-		_:
-			return null
-
+func get_navmap() -> Navigation2D:
+	return navmap
 
 
 func _setup_navigation() -> void:
-	for n in get_tree().get_nodes_in_group("navigation"):
-		if n.is_in_group("leader_navigation"):
-			leader_navmap = n
-		elif n.is_in_group("creep_navigation"):
-			creep_navmap = n
+	navmap =  get_tree().get_nodes_in_group("navigation")[0]
 
 
 func _sort_by_health(a: Dictionary, b: Dictionary) -> bool:

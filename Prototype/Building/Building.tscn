@@ -1,18 +1,13 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Utils/UnitSelector.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Building/Building.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Level/Building/RedBuilding.png" type="Texture" id=3]
 [ext_resource path="res://Assets/Level/Building/BlueBuilding.png" type="Texture" id=4]
+[ext_resource path="res://Character/BT/Leaves/Idle.gd" type="Script" id=5]
 [ext_resource path="res://HealthBar/HealthBar.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Building/BT/Conditions/IsEnemyClose.gd" type="Script" id=7]
+[ext_resource path="res://BT/BehaviorTree.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Attributes.tscn" type="PackedScene" id=8]
-[ext_resource path="res://addons/behavior_tree/src/behavior_tree.gd" type="Script" id=9]
-[ext_resource path="res://addons/behavior_tree/src/blackboard.gd" type="Script" id=10]
-[ext_resource path="res://addons/behavior_tree/src/btnodes/composites/bt_sequence.gd" type="Script" id=11]
-[ext_resource path="res://Building/BT/Leaves/AttackEnemy.gd" type="Script" id=12]
-[ext_resource path="res://addons/behavior_tree/src/btnodes/decorators/bt_repeat_until.gd" type="Script" id=13]
-[ext_resource path="res://Building/BT/Leaves/GetTargetEnemy.gd" type="Script" id=14]
 [ext_resource path="res://Utils/HitArea.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Utils/UnitDetector.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=17]
@@ -75,28 +70,12 @@ primary = SubResource( 3 )
 stats = SubResource( 4 )
 radius = SubResource( 5 )
 
-[node name="Blackboard" type="Node" parent="."]
-script = ExtResource( 10 )
-
 [node name="BehaviorTree" type="Node" parent="."]
-script = ExtResource( 9 )
-_blackboard = NodePath("../Blackboard")
-_agent = NodePath("..")
-
-[node name="BTSequence" type="Node" parent="BehaviorTree"]
-script = ExtResource( 11 )
-
-[node name="IsEnemyClose" type="Node" parent="BehaviorTree/BTSequence"]
 script = ExtResource( 7 )
+agent = NodePath("..")
 
-[node name="GetTargetEnemy" type="Node" parent="BehaviorTree/BTSequence/IsEnemyClose"]
-script = ExtResource( 14 )
-
-[node name="BTRepeatUntil" type="Node" parent="BehaviorTree/BTSequence"]
-script = ExtResource( 13 )
-
-[node name="AttackEnemy" type="Node" parent="BehaviorTree/BTSequence/BTRepeatUntil"]
-script = ExtResource( 12 )
+[node name="Idle" type="Node" parent="BehaviorTree"]
+script = ExtResource( 5 )
 
 [node name="HUD" type="Position2D" parent="."]
 z_index = 10
@@ -115,7 +94,6 @@ margin_bottom = 0.0
 [node name="BehaviorAnimPlayer" type="AnimationPlayer" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource( 1 )
 
 [node name="UnitSelector" parent="." instance=ExtResource( 1 )]

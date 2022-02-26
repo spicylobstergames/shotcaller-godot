@@ -226,6 +226,7 @@ tracks/3/keys = {
 }
 
 [sub_resource type="Animation" id=7]
+resource_name = "RESET"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("TextureContainer:modulate")
@@ -380,14 +381,14 @@ region_rect = Rect2( 96, 43, 32, 77 )
 show_behind_parent = true
 position = Vector2( 0, -70 )
 
-[node name="BehaviorAnimPlayer" parent="." index="5"]
+[node name="BehaviorAnimPlayer" parent="." index="4"]
 anims/Attack = SubResource( 5 )
 anims/Dead = SubResource( 8 )
 anims/Idle = SubResource( 6 )
 anims/RESET = SubResource( 7 )
 anims/Setup = SubResource( 4 )
 
-[node name="CollisionShape2D" parent="." index="6"]
+[node name="CollisionShape2D" parent="." index="5"]
 position = Vector2( 0, -4 )
 shape = SubResource( 3 )
 
@@ -396,7 +397,7 @@ visible = false
 position = Vector2( 0, -28 )
 shape = SubResource( 2 )
 
-[node name="HitArea" parent="." index="9"]
+[node name="HitArea" parent="." index="8"]
 position = Vector2( 0, -5 )
 
 [editable path="UnitSelector"]

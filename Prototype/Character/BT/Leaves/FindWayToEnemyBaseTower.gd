@@ -1,24 +1,29 @@
 extends BTLeaf
 
-func _tick(agent: Node, blackboard: Blackboard) -> bool:
-	var _agent: KinematicBody2D = agent
+func do_stuff(agent: Node) -> int:
+
+	var enemy_buildings = Units.get_enemies(
+				agent,
+				agent.team,
+				Units.TypeID.Creep,
+				[Units.TypeID.Building],
+				Units.DetectionTypeID.Global,
+				INF
+				)
+	var closest_buildings = Units.get_closest_units_by(
+		agent,
+		Units.SortTypeID.Distance,
+		enemy_buildings
+	)
 	
-	_agent._setup_state_debug(name)
+	if closest_buildings.size() <= 0:
+		return NodeStatus.Failure
+	var move_points = Units.get_move_points(agent, closest_buildings[0].global_position, Units.TypeID.Creep)
+	agent.targeted_enemy = closest_buildings[0]
+	agent.move_points = move_points
 
-	if blackboard.get_data("stats_health") <= 0:
-		return fail()
-
-	if not blackboard.has_data("target_end_point"):
-		return fail()
-		
-	var target_end_point = blackboard.get_data("target_end_point")
-	var move_points = Units.get_move_points(_agent, target_end_point, Units.TypeID.Creep)
-
-	blackboard.set_data("move_points", move_points)
-	
-	if _agent.has_node("Node/Line2D"):
-		var line2d: Line2D = _agent.get_node("Node/Line2D")
+	if ProjectSettings.get("global/debug") and agent.has_node("Node/Line2D"):
+		var line2d: Line2D = agent.get_node("Node/Line2D")
 		line2d.points = move_points
 	
-	_agent.get_node("ObjectAvoid").enabled = true
-	return succeed()
+	return NodeStatus.Success

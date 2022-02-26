@@ -2,5 +2,6 @@ extends "res://Character/Character.gd"
 
 
 
-func _setup_basic_attack() -> void:
-	pass
+func _ready():
+	$Node/Line2D.visible = ProjectSettings.get("global/debug")
+	._ready()

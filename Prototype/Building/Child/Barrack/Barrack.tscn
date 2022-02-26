@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=1]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=2]
+[ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=3]
+[ext_resource path="res://Building/Building.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Resource" id=1]
+resource_local_to_scene = true
+script = ExtResource( 3 )
+unit_team = 0
+unit_type = 3
+mirror_mode = false
+
+[sub_resource type="Resource" id=2]
+resource_local_to_scene = true
+script = ExtResource( 2 )
+health = 0.0
+max_health = 0.0
+health_regeneration_rate = 0.0
+health_regeneration_step = 0.0
+mana = 0.0
+max_mana = 0.0
+mana_regeneration_rate = 0.0
+mana_regeneration_step = 0.0
+move_speed = 0.0
+move_acceleration = 0.0
+attack_speed = 0.0
+creep_damage = 0.0
+leader_damage = 0.0
+tower_damage = 0.0
+
+[sub_resource type="Resource" id=3]
+resource_local_to_scene = true
+script = ExtResource( 1 )
+collision_size = 0.0
+attack_range = 0.0
+unit_detection = 0.0
+area_selection = 0.0
+hurt_area = {
+"height": 0.0,
+"radius": 0.0
+}
+
+[sub_resource type="StreamTexture" id=4]
+load_path = "res://.import/BlueBuilding.png-8b3f3c6de3018b7555202aea51febc9d.stex"
+
+[sub_resource type="CircleShape2D" id=5]
+resource_local_to_scene = true
+radius = 15.0
+
+[sub_resource type="CircleShape2D" id=6]
+resource_local_to_scene = true
+
+[node name="Barrack" instance=ExtResource( 4 )]
+
+[node name="Attributes" parent="." index="0"]
+primary = SubResource( 1 )
+stats = SubResource( 2 )
+radius = SubResource( 3 )
+
+[node name="HealthBar" parent="HUD" index="0"]
+margin_top = -64.0
+margin_bottom = -64.0
+
+[node name="Sprite" parent="TextureContainer" index="0"]
+texture = SubResource( 4 )
+offset = Vector2( 0, -24 )
+region_enabled = true
+region_rect = Rect2( 129, 64, 54, 56 )
+
+[node name="CollisionShape2D" parent="." index="6"]
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D" parent="UnitSelector" index="0"]
+shape = SubResource( 6 )
+
+[editable path="UnitSelector"]
