@@ -37,7 +37,7 @@ func spawn_one(team: int, packed_scene: PackedScene, parent_node: Node2D, spawn_
 func try_spawn_creep_wave(parent_node: Node2D) -> void:
 	for t in arena_teams.keys():
 		var new_creep_group: YSort = null
-		if creep_group_pool_count < creep_group_max_pool_count and not creep_group_pool_count > creep_group_max_pool_count:
+		if creep_group_pool_count < creep_group_max_pool_count:
 			new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].mid_creep_spawner_position)
 			creep_group_pool_count += 2
 		else:
@@ -244,7 +244,7 @@ func get_navmap() -> Navigation2D:
 
 
 func _setup_navigation() -> void:
-	navmap =  get_tree().get_nodes_in_group("navigation")[0]
+	navmap = get_tree().get_nodes_in_group("navigation")[0]
 
 
 func _sort_by_health(a: Dictionary, b: Dictionary) -> bool:

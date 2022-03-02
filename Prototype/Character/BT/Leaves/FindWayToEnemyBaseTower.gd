@@ -18,6 +18,8 @@ func do_stuff(agent: Node) -> int:
 	
 	if closest_buildings.size() <= 0:
 		return NodeStatus.Failure
+	
+	
 	var move_points = Units.get_move_points(agent, closest_buildings[0].global_position, Units.TypeID.Creep)
 	agent.targeted_enemy = closest_buildings[0]
 	agent.move_points = move_points

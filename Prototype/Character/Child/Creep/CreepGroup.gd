@@ -30,11 +30,9 @@ func _setup_move_creep():
 		Units.get_enemies(self, team, Units.TypeID.Creep, [Units.TypeID.Building], Units.DetectionTypeID.Global)
 	)
 	buildings.invert()
-	
 	if buildings:
 		var target_end_point = buildings[0].global_position
 		var move_points = Units.get_move_points(self, target_end_point, Units.TypeID.Creep)
-		print(move_points)
 		for c in get_children():
 			c._setup_spawn()
 			c.set("move_points", move_points)

@@ -29,7 +29,7 @@ mana = 0.0
 max_mana = 0.0
 mana_regeneration_rate = 0.0
 mana_regeneration_step = 0.0
-move_speed = 35.0
+move_speed = 50.0
 move_acceleration = 2000.0
 attack_speed = 50.0
 creep_damage = 30.0
@@ -993,17 +993,17 @@ region = Rect2( 32, 0, 32, 32 )
 animations = [ {
 "frames": [ SubResource( 35 ), SubResource( 41 ) ],
 "loop": true,
-"name": "Walk",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 35 ), SubResource( 41 ) ],
-"loop": true,
 "name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 36 ), SubResource( 40 ) ],
 "loop": true,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 35 ), SubResource( 41 ) ],
+"loop": true,
+"name": "Walk",
 "speed": 5.0
 } ]
 

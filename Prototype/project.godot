@@ -39,17 +39,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Utils/Attributes/Attributes.gd"
 }, {
-"base": "Reference",
+"base": "BTNode",
 "class": "BTLeaf",
 "language": "GDScript",
 "path": "res://BT/BTLeaf.gd"
 }, {
-"base": "Reference",
+"base": "Node",
 "class": "BTNode",
 "language": "GDScript",
 "path": "res://BT/BTNode.gd"
 }, {
-"base": "Reference",
+"base": "BTNode",
 "class": "BTSelector",
 "language": "GDScript",
 "path": "res://BT/BTSelector.gd"
@@ -69,7 +69,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://BT/BTSequentialRandom.gd"
 }, {
-"base": "Reference",
+"base": "Node",
 "class": "BehaviorTree",
 "language": "GDScript",
 "path": "res://BT/BehaviorTree.gd"
@@ -243,11 +243,6 @@ _global_script_classes=[ {
 "class": "StateRoot",
 "language": "GDScript",
 "path": "res://addons/xsm/state_root.gd"
-}, {
-"base": "CollisionShape2D",
-"class": "TilemapBrush",
-"language": "GDScript",
-"path": "res://Utils/TilemapBrush.gd"
 } ]
 _global_script_class_icons={
 "AttrRes": "",
@@ -256,9 +251,9 @@ _global_script_class_icons={
 "AttrResState": "",
 "AttrResStats": "",
 "Attributes": "",
-"BTLeaf": "",
+"BTLeaf": "res://BT/Icons/leaf.png",
 "BTNode": "",
-"BTSelector": "",
+"BTSelector": "res://BT/Icons/selector.png",
 "BTSelectorRandom": "res://BT/Icons/random_selector.png",
 "BTSequential": "res://BT/Icons/sequential.png",
 "BTSequentialRandom": "res://BT/Icons/random_sequential.png",
@@ -296,8 +291,7 @@ _global_script_class_icons={
 "Skill": "",
 "SkillHandler": "",
 "State": "",
-"StateRoot": "",
-"TilemapBrush": ""
+"StateRoot": ""
 }
 
 [application]
