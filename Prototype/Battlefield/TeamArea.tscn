@@ -32,16 +32,10 @@ position = Vector2( 176, 128 )
 
 [node name="TopTower2" parent="BuildingContainer" instance=ExtResource( 2 )]
 
-[node name="TopTower3" parent="BuildingContainer" instance=ExtResource( 2 )]
-
 [node name="MidTower1" parent="BuildingContainer" instance=ExtResource( 2 )]
 
 [node name="MidTower2" parent="BuildingContainer" instance=ExtResource( 2 )]
 
-[node name="MidTower3" parent="BuildingContainer" instance=ExtResource( 2 )]
-
 [node name="BottomTower1" parent="BuildingContainer" instance=ExtResource( 2 )]
 
 [node name="BottomTower2" parent="BuildingContainer" instance=ExtResource( 2 )]
-
-[node name="BottomTower3" parent="BuildingContainer" instance=ExtResource( 2 )]

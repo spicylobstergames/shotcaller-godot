@@ -72,15 +72,15 @@ func _ready() -> void:
 	set_physics_process(false)
 	set_team(team)
 	_setup_spawn()
-	# if animation == running
-	set_smoke()
+	_setup_smoke()
 
-var resize_smoke = true;
-func set_smoke() -> void:
+# move to units
+var _resize_smoke: bool = true;
+func _setup_smoke() -> void:
 	var size = 10
 	var count: int = smoke.frames.get_frame_count('default')
-	if (resize_smoke):
-		resize_smoke = false;
+	if (_resize_smoke):
+		_resize_smoke = false;
 		for n in count:
 			var texture: Texture = smoke.get_sprite_frames().get_frame('default', n);
 			if (texture):

@@ -18,10 +18,10 @@ mirror_mode = false
 [sub_resource type="Resource" id=4]
 resource_local_to_scene = true
 script = ExtResource( 7 )
-health = 2000.0
-max_health = 2000.0
-health_regeneration_rate = 0.1
-health_regeneration_step = 1.0
+health = 200.0
+max_health = 200.0
+health_regeneration_rate = 0.0
+health_regeneration_step = 0.0
 mana = 0.0
 max_mana = 0.0
 mana_regeneration_rate = 0.0
@@ -198,18 +198,23 @@ tracks/5/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 28, 36 )
+extents = Vector2( 35.5, 38 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 41, 46.5 )
 
 [node name="Core" instance=ExtResource( 1 )]
+position = Vector2( 0, 2 )
 script = ExtResource( 4 )
 
 [node name="Attributes" parent="." index="0"]
 primary = SubResource( 3 )
 stats = SubResource( 4 )
 radius = SubResource( 5 )
+
+[node name="HealthBar" parent="HUD" index="0"]
+margin_top = -124.0
+margin_bottom = -124.0
 
 [node name="Flag2" parent="TextureContainer" index="0" instance=ExtResource( 3 )]
 position = Vector2( 23, -113 )
@@ -235,7 +240,7 @@ anims/Dead = SubResource( 8 )
 anims/RESET = SubResource( 7 )
 
 [node name="CollisionShape2D" parent="." index="5"]
-position = Vector2( 0, -39 )
+position = Vector2( 0, -37 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]

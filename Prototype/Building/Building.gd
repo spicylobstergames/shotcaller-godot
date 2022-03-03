@@ -105,7 +105,7 @@ func _setup_dead() -> void:
 	$UnitSelector.collision_layer = 0
 	behavior_tree.is_active = false
 	set_physics_process(false)
-	emit_signal("dead", self)
+	#emit_signal("dead", self)
 
 	if behavior_animplayer.has_animation("Dead") and behavior_animplayer.current_animation != "Dead":
 		behavior_animplayer.play("Dead")

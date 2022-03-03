@@ -21,7 +21,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	for a in [primary, stats, state, radius]:
-		if a != null and  a.has_method("on_ready"):
+		if a != null and a.has_method("on_ready"):
 			a.on_ready()
 
 
