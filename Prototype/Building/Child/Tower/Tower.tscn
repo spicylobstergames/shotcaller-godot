@@ -18,8 +18,8 @@ mirror_mode = false
 [sub_resource type="Resource" id=10]
 resource_local_to_scene = true
 script = ExtResource( 7 )
-health = 1000.0
-max_health = 1000.0
+health = 100.0
+max_health = 100.0
 health_regeneration_rate = 0.0
 health_regeneration_step = 0.0
 mana = 0.0
@@ -28,9 +28,9 @@ mana_regeneration_rate = 0.0
 mana_regeneration_step = 0.0
 move_speed = 0.0
 move_acceleration = 0.0
-attack_speed = 0.0
-creep_damage = 0.0
-leader_damage = 0.0
+attack_speed = 1.0
+creep_damage = 1.0
+leader_damage = 1.0
 tower_damage = 0.0
 
 [sub_resource type="Resource" id=11]
@@ -354,6 +354,7 @@ tracks/3/keys = {
 
 [sub_resource type="CircleShape2D" id=3]
 resource_local_to_scene = true
+radius = 14.0
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 15.5, 28 )
@@ -367,8 +368,8 @@ stats = SubResource( 10 )
 radius = SubResource( 11 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -80.0
-margin_bottom = -80.0
+margin_top = -76.0
+margin_bottom = -76.0
 
 [node name="Sprite" parent="TextureContainer" index="0"]
 position = Vector2( 0, 8 )
@@ -389,7 +390,7 @@ anims/RESET = SubResource( 7 )
 anims/Setup = SubResource( 4 )
 
 [node name="CollisionShape2D" parent="." index="5"]
-position = Vector2( 0, -4 )
+position = Vector2( 0, -7 )
 shape = SubResource( 3 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]

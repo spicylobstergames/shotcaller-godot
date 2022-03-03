@@ -121,9 +121,8 @@ tracks/5/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="CircleShape2D" id=5]
-resource_local_to_scene = true
-radius = 15.0
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 23.5, 24 )
 
 [sub_resource type="CircleShape2D" id=6]
 resource_local_to_scene = true
@@ -137,8 +136,8 @@ stats = SubResource( 2 )
 radius = SubResource( 3 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -100.0
-margin_bottom = -100.0
+margin_top = -96.0
+margin_bottom = -96.0
 
 [node name="Sprite" parent="TextureContainer" index="0"]
 position = Vector2( 1, -6 )
@@ -155,7 +154,8 @@ position = Vector2( -1, -76 )
 anims/Dead = SubResource( 8 )
 
 [node name="CollisionShape2D" parent="." index="5"]
-shape = SubResource( 5 )
+position = Vector2( -0.5, -19 )
+shape = SubResource( 9 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 6 )

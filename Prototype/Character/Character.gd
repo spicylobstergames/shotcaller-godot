@@ -74,6 +74,7 @@ func _ready() -> void:
 	_setup_spawn()
 	_setup_smoke()
 
+# move to units
 var _resize_smoke: bool = true;
 func _setup_smoke() -> void:
 	var size = 10
