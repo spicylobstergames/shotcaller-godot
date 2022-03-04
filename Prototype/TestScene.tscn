@@ -1,41 +1,26 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://MainCamera.gd" type="Script" id=1]
 [ext_resource path="res://Utils/UnitController.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Battlefield/BattleField.tscn" type="PackedScene" id=3]
 [ext_resource path="res://TestScene.gd" type="Script" id=4]
+[ext_resource path="res://Items/Inventory/LeadersInventory.gd" type="Script" id=5]
 [ext_resource path="res://GUI/SelectTeamButton/SelectTeamButton.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Items/Shop/Shop.gd" type="Script" id=7]
 [ext_resource path="res://GUI/Play.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ButtonGroup" id=2]
 
 [sub_resource type="ButtonGroup" id=3]
 
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.192157, 0.188235, 0.223529, 1 )
+
 [node name="TestScene" type="Node2D"]
 position = Vector2( 0, -1 )
 script = ExtResource( 4 )
 
 [node name="Menu" type="CanvasLayer" parent="."]
-
-[node name="FPS" type="Label" parent="Menu"]
-margin_right = 58.0
-margin_bottom = 26.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Menu"]
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_top = 103.0
-margin_bottom = 117.0
-size_flags_horizontal = 3
-text = "18 seconds for creep respawn"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Menu"]
 anchor_top = 1.0
@@ -45,9 +30,6 @@ margin_top = -29.0
 margin_bottom = -9.0
 mouse_filter = 2
 alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="BlueButton" parent="Menu/HBoxContainer" instance=ExtResource( 6 )]
 modulate = Color( 0, 0.666667, 1, 1 )
@@ -75,6 +57,123 @@ margin_bottom = 20.0
 toggle_mode = true
 group = SubResource( 2 )
 team = 3
+
+[node name="FPS" type="Label" parent="Menu"]
+margin_right = 58.0
+margin_bottom = 26.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menu"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = 103.0
+margin_bottom = 117.0
+size_flags_horizontal = 3
+text = "18 seconds for creep respawn"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GoldLabel" type="Label" parent="Menu"]
+visible = false
+margin_top = 265.0
+margin_right = 43.0
+margin_bottom = 279.0
+custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_as_outline = 1
+text = "1"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeadersInventory" type="HBoxContainer" parent="Menu"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 45.0
+margin_top = -44.0
+margin_right = -327.0
+size_flags_vertical = 8
+script = ExtResource( 5 )
+
+[node name="Shop" type="Panel" parent="Menu"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 4 )
+script = ExtResource( 7 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Menu/Shop"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/Shop/ScrollContainer"]
+margin_right = 492.0
+margin_bottom = 240.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 88.0
+margin_right = 492.0
+margin_bottom = 92.0
+
+[node name="Label" type="Label" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 96.0
+margin_right = 492.0
+margin_bottom = 110.0
+text = "Equip"
+
+[node name="EquipItems" type="HBoxContainer" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 114.0
+margin_right = 492.0
+margin_bottom = 114.0
+size_flags_horizontal = 3
+
+[node name="HSeparator2" type="HSeparator" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 118.0
+margin_right = 492.0
+margin_bottom = 122.0
+
+[node name="Label2" type="Label" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 126.0
+margin_right = 492.0
+margin_bottom = 140.0
+text = "Consumable"
+
+[node name="ConsumableItems" type="HBoxContainer" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 144.0
+margin_right = 492.0
+margin_bottom = 144.0
+size_flags_horizontal = 3
+
+[node name="HSeparator3" type="HSeparator" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
+margin_top = 148.0
+margin_right = 492.0
+margin_bottom = 152.0
+
+[node name="ShopButton" type="Button" parent="Menu"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -20.0
+margin_right = 43.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 11
+text = "shop"
 
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 
