@@ -15,8 +15,9 @@ var navmap: Navigation2D = null
 
 var arena_teams = {TeamID.Blue: null, TeamID.Red: null}
 
-var creep_group_max_pool_count: int = 2
-var creep_group_pool_count: int = 0
+var creep_group_max_pool_count: Array = [2,2,2,2]
+var creep_group_pool_count: Array = [0,0,0,0]
+
 var available_creep_groups_pools: Array = []
 
 onready var CreepGroupClass = load("res://Character/Child/Creep/CreepGroup.tscn")
@@ -35,11 +36,12 @@ func spawn_one(team: int, packed_scene: PackedScene, parent_node: Node2D, spawn_
 
 
 func try_spawn_creep_wave(parent_node: Node2D) -> void:
+	print(arena_teams.keys())
 	for t in arena_teams.keys():
 		var new_creep_group: YSort = null
-		if creep_group_pool_count < creep_group_max_pool_count:
+		if creep_group_pool_count[t] < creep_group_max_pool_count[t]:
 			new_creep_group = spawn_one(t, CreepGroupClass, parent_node, arena_teams[t].mid_creep_spawner_position)
-			creep_group_pool_count += 2
+			creep_group_pool_count[t] += 2
 		else:
 			new_creep_group = available_creep_groups_pools.pop_front()
 
