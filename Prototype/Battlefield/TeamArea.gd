@@ -34,6 +34,7 @@ func _ready() -> void:
 		
 		Game.connect("playing", self, "_on_Game_playing")
 		connect("spawn_creep", self, "_on_TeamArea_spawn_creep")
+		
 		set_team(team)
 		
 
