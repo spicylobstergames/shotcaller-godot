@@ -130,7 +130,7 @@ func _physics_process(delta: float) -> void:
 		$AimPoint.visible = false
 func _draw() -> void:
 	
-	if ProjectSettings.get("global/debug"):
+	if false:#ProjectSettings.get("global/debug"):
 		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color(0,0,1,0.5))
 		Utils.draw_line_circle(self, attributes.radius.collision_size, 1.0, Color.orangered)
 		Utils.draw_line_circle(self, attributes.radius.unit_detection, 1.0, Color.goldenrod)
@@ -174,6 +174,7 @@ func _setup_team() -> void:
 				sprite.texture = red_team_texture
 
 func _setup_healthbar() -> void:
+	healthbar.set_team(attributes.primary.unit_team)
 	healthbar.set_max_health(attributes.stats.max_health)
 	healthbar.set_health(attributes.stats.health)
 	healthbar.set_max_mana(attributes.stats.max_mana)
