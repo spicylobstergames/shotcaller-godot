@@ -330,6 +330,6 @@ func update_navmap():
 		static_body.add_child(collision_shape)
 	
 	nav_polygon.make_polygons_from_outlines()
-	#nav_polygon.polygons.size())
+	print(nav_polygon.polygons.size())
 	navpoly = nav_polygon
 

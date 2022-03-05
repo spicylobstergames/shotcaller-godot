@@ -24,18 +24,6 @@ script = ExtResource( 2 )
 [node name="BlueTeamBuilding" parent="." instance=ExtResource( 1 )]
 team = 2
 
-[node name="CreepSpawnerPosition" parent="BlueTeamBuilding" index="0"]
-visible = false
-
-[node name="TopCreepSpawner" parent="BlueTeamBuilding" index="1"]
-position = Vector2( 192, 1365 )
-
-[node name="MidCreepSpawner" parent="BlueTeamBuilding" index="2"]
-position = Vector2( 732, 1088 )
-
-[node name="BottomCreepSpawner" parent="BlueTeamBuilding" index="3"]
-position = Vector2( 433, 1599 )
-
 [node name="Core" parent="BlueTeamBuilding/BuildingContainer" index="0"]
 position = Vector2( 223, 1584 )
 
