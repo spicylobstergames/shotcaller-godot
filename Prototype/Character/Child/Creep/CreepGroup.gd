@@ -41,6 +41,9 @@ func _setup_move_creep():
 			c.set("enemies", [])
 			c.set("buildings", buildings)
 
+func set_lane(lane: Lane):
+	for creep in get_children():
+		creep.lane = lane
 
 func _setup_formation() -> void:
 	
@@ -53,11 +56,12 @@ func _setup_formation() -> void:
 			rand_range(-random_spread, random_spread),
 			rand_range(-random_spread, random_spread))
 		if mirror_mode:
-			
 			c.position.x *= -1.0
 			c.get_node("TextureContainer").scale.x = -1
 		c.leader = leader
 		c.formation_target = leader.to_local(c.global_position)
+	leader.set_speed_multiplier(0.9)
+
 
 func _on_Creep_dead(unit: PhysicsBody2D) -> void:
 	if not unit in dead_members:

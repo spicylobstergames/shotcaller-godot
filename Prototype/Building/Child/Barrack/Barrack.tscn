@@ -127,8 +127,9 @@ extents = Vector2( 23.5, 24 )
 [sub_resource type="CircleShape2D" id=6]
 resource_local_to_scene = true
 
-[node name="Barrack" instance=ExtResource( 4 )]
+[node name="Barrack" groups=["creep_spawner"] instance=ExtResource( 4 )]
 script = ExtResource( 5 )
+team = null
 
 [node name="Attributes" parent="." index="0"]
 primary = SubResource( 1 )

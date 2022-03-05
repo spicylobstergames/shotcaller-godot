@@ -22,6 +22,8 @@ onready var behavior_tree: BehaviorTree = $BehaviorTree
 
 var enemies = []
 var allies = []
+export var _lane: NodePath
+onready var lane: Lane = get_node(_lane)
 
 
 func set_team(value: int) -> void:
