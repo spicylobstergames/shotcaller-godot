@@ -13,9 +13,6 @@ var bottom_creep_spawner_position: Vector2 = Vector2.ZERO
 var buildings: Array = []
 
 onready var building_container: YSort = $BuildingContainer
-onready var top_creep_spawner: Position2D = $TopCreepSpawner
-onready var mid_creep_spawner: Position2D = $MidCreepSpawner
-onready var bottom_creep_spawner: Position2D = $BottomCreepSpawner
 
 
 func set_team(value: int) -> void:
@@ -27,9 +24,6 @@ func set_team(value: int) -> void:
 func _ready() -> void:
 	if not Engine.editor_hint:
 		_is_ready = true
-		top_creep_spawner_position = top_creep_spawner.global_position
-		mid_creep_spawner_position = mid_creep_spawner.global_position
-		bottom_creep_spawner_position = bottom_creep_spawner.global_position
 		buildings = $BuildingContainer.get_children()
 		
 		Game.connect("playing", self, "_on_Game_playing")

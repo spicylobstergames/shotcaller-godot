@@ -9,15 +9,6 @@
 script = ExtResource( 4 )
 team = 0
 
-[node name="CreepSpawnerPosition" type="Position2D" parent="."]
-position = Vector2( 176, 128 )
-
-[node name="TopCreepSpawner" type="Position2D" parent="."]
-
-[node name="MidCreepSpawner" type="Position2D" parent="."]
-
-[node name="BottomCreepSpawner" type="Position2D" parent="."]
-
 [node name="BuildingContainer" type="YSort" parent="."]
 
 [node name="Core" parent="BuildingContainer" instance=ExtResource( 3 )]

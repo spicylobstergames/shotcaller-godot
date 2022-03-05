@@ -8,6 +8,8 @@ func cast() -> bool:
 	var super_result = .cast()
 	if super_result:
 		var target = agent.targeted_enemy
+		if not is_instance_valid(target):
+			return super_result
 		var target_attributes = target.get_node("Attributes")
 		var agent_attributes = agent.get_node("Attributes")
 		if target_attributes.primary.unit_team != agent_attributes.primary.unit_team:

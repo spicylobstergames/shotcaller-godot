@@ -5,10 +5,12 @@ func do_stuff(agent: Node) -> int:
 	if not is_instance_valid(agent.leader):
 		return NodeStatus.Failure
 	target_point = agent.leader.to_global(agent.formation_target)
-	if agent.global_position.distance_to(target_point) < 1.0:
+	if agent.global_position.distance_to(target_point) < 10.0:
 		return NodeStatus.Success
 	
 	var move_points = Units.get_move_points(agent, target_point, Units.TypeID.Creep)
+	if move_points[0].distance_to(move_points[1]) <= 1.0:
+		return NodeStatus.Failure
 	var path_points = []
 	for point in move_points:
 		path_points.append(GSAIUtils.to_vector3(point))

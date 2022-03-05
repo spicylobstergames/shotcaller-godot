@@ -21,7 +21,7 @@ func cast():
 		else:
 			new_projectile.global_position = agent.global_position
 		
-		new_projectile.rotation = agent.get_node("AimPoint").global_position.angle_to_point(new_projectile.global_position)
+
 		new_projectile.team = agent.attributes.primary.unit_team
 		new_projectile.creep_damage = creep_damage
 		new_projectile.leader_damage = leader_damage
@@ -29,6 +29,7 @@ func cast():
 		new_projectile.velocity = speed
 		new_projectile.lifetime = lifetime
 		battlefield.add_child(new_projectile)
+		new_projectile.rotation = agent.get_node("AimPoint").global_position.angle_to_point(new_projectile.global_position)
 	return super_result
 
 func get_range():

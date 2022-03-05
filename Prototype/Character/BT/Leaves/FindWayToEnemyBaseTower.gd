@@ -1,27 +1,17 @@
 extends BTLeaf
 
 func do_stuff(agent: Node) -> int:
-
-	var enemy_buildings = Units.get_enemies(
-				agent,
-				agent.team,
-				Units.TypeID.Creep,
-				[Units.TypeID.Building],
-				Units.DetectionTypeID.Global,
-				INF
-				)
-	var closest_buildings = Units.get_closest_units_by(
-		agent,
-		Units.SortTypeID.Distance,
-		enemy_buildings
-	)
-	
-	if closest_buildings.size() <= 0:
+	var lane_points = PoolVector2Array([]) + agent.lane.points
+	if agent.attributes.primary.unit_team == Units.TeamID.Red:
+		lane_points.invert()
+	if agent.current_lane_point >= lane_points.size():
 		return NodeStatus.Failure
-	
-	
-	var move_points = Units.get_move_points(agent, closest_buildings[0].global_position, Units.TypeID.Creep)
-	agent.targeted_enemy = closest_buildings[0]
+	while agent.global_position.distance_to(lane_points[agent.current_lane_point]) < 10.0:
+		agent.current_lane_point += 1
+		if agent.current_lane_point >= lane_points.size():
+			return NodeStatus.Failure
+
+	var move_points = Units.get_move_points(agent, lane_points[agent.current_lane_point], Units.TypeID.Creep)
 	agent.move_points = move_points
 
 	if ProjectSettings.get("global/debug") and agent.has_node("Node/Line2D"):
