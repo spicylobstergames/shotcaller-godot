@@ -201,6 +201,7 @@ frame = 1
 shape = SubResource( 12 )
 
 [node name="UnitSelector" parent="." instance=ExtResource( 10 )]
+visible = false
 monitorable = false
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
@@ -214,7 +215,7 @@ position = Vector2( 0, -12 )
 collision_mask = 65536
 
 [node name="AimPoint" type="Sprite" parent="."]
-self_modulate = Color( 1, 1, 1, 0.00784314 )
+self_modulate = Color( 1, 1, 1, 0.286275 )
 z_index = 1
 texture = ExtResource( 11 )
 

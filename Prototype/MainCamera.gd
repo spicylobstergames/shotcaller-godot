@@ -6,7 +6,7 @@ var last_mouse:Vector2 = Vector2(0.0,0.0)
 
 var zoom_limit:Vector2 = Vector2(0.2,3.52)
 
-var margin:float = limit_right + 1;
+var margin:int = limit_right;
 
 #Seems like get_global_mouse_transform doesn't update immediately after the camera is moved
 func custom_get_global_mouse_position(): 
@@ -31,7 +31,6 @@ func _unhandled_input(event):
 func _process(delta):
 	scale = Vector2(1.0/zoom.x, 1.0/zoom.y)		
 	var ratio = get_viewport().size.x / get_viewport().size.y
-	var ascale = 1/get_viewport_transform()[0][0]
 	
 	limit_top = -margin
 	limit_bottom = margin

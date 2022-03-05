@@ -37,8 +37,8 @@ tower_damage = 20.0
 [sub_resource type="Resource" id=37]
 resource_local_to_scene = true
 script = ExtResource( 7 )
-collision_size = 8.0
-attack_range = 16.0
+collision_size = 5.0
+attack_range = 10.0
 unit_detection = 80.0
 area_selection = 20.0
 hurt_area = {
@@ -1014,7 +1014,6 @@ shader_param/aura_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=30]
 resource_local_to_scene = true
-custom_solver_bias = 1.0
 
 [sub_resource type="CircleShape2D" id=12]
 resource_local_to_scene = true
@@ -1043,8 +1042,8 @@ anims/Setup = SubResource( 20 )
 anims/Walk = SubResource( 22 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -26.0
-margin_bottom = -26.0
+margin_top = -24.0
+margin_bottom = -24.0
 
 [node name="StateDebug" parent="HUD" index="1"]
 margin_top = -47.0
@@ -1070,24 +1069,16 @@ offset = Vector2( -2, -10 )
 region_rect = Rect2( 50, 2, 20, 21 )
 
 [node name="CollisionShape2D" parent="." index="8"]
-visible = false
 shape = SubResource( 30 )
 
 [node name="UnitSelector" parent="." index="9"]
-visible = false
 monitoring = false
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
-visible = false
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
-visible = false
-position = Vector2( 0, -9.92 )
-
-[node name="AimPoint" parent="." index="12"]
-visible = false
-self_modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 0, -15.92 )
 
 [connection signal="animation_changed" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_changed"]
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
