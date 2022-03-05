@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Items/Inventory/InventoryItemButton.gd" type="Script" id=1]
+[ext_resource path="res://Items/ItemButton.tscn" type="PackedScene" id=2]
+
+[node name="InventoryItemButton" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -468.0
+margin_bottom = -256.0
+rect_min_size = Vector2( 44, 44 )
+script = ExtResource( 1 )
+
+[node name="ItemButton" parent="." instance=ExtResource( 2 )]
+margin_right = 0.0
+margin_bottom = 0.0
+
+[node name="SellButton" type="Button" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -20.0
+text = "sell"
+__meta__ = {
+"_edit_use_anchors_": false
+}
