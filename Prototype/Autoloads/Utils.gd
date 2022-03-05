@@ -40,7 +40,7 @@ func change_periodic(object: Object, prop_name: String, step_value: float, max_v
 		return
 	
 	if not _timers.has(key):
-		print(13, key)
+		#print(13, key)
 		_timers[key] = rate
 	
 	_timers[key] -= get_physics_process_delta_time()
