@@ -79,6 +79,7 @@ func _setup_team() -> void:
 
 
 func _setup_healthbar() -> void:
+	healthbar.set_team(attributes.primary.unit_team)
 	healthbar.set_max_health(attributes.stats.max_health)
 	healthbar.set_health(attributes.stats.health)
 	healthbar.set_max_mana(attributes.stats.max_mana)
