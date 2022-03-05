@@ -30,7 +30,7 @@ visible = false
 position = Vector2( 192, 1365 )
 
 [node name="MidCreepSpawner" parent="BlueTeamBuilding" index="2"]
-position = Vector2( 364, 1404 )
+position = Vector2( 732, 1088 )
 
 [node name="BottomCreepSpawner" parent="BlueTeamBuilding" index="3"]
 position = Vector2( 433, 1599 )
@@ -76,7 +76,7 @@ visible = false
 position = Vector2( 1354, 197 )
 
 [node name="MidCreepSpawner" parent="RedTeamBuilding" index="2"]
-position = Vector2( 1462, 372 )
+position = Vector2( 1093, 649 )
 
 [node name="BottomCreepSpawner" parent="RedTeamBuilding" index="3"]
 position = Vector2( 1599, 426 )

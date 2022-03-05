@@ -94,6 +94,8 @@ func calculate_target_position(target_distance: float) -> Vector3:
 
 	var distance := desired_segment.cumulative_length - target_distance
 
+	if desired_segment.length == 0: return Vector3(0,0,0)
+		
 	return (
 		((desired_segment.begin - desired_segment.end) * (distance / desired_segment.length))
 		+ desired_segment.end

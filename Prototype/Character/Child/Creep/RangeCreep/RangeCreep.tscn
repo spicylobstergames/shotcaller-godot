@@ -39,7 +39,7 @@ tower_damage = 30.0
 [sub_resource type="Resource" id=44]
 resource_local_to_scene = true
 script = ExtResource( 8 )
-collision_size = 5.0
+collision_size = 8.0
 attack_range = 60.0
 unit_detection = 160.0
 area_selection = 20.0
@@ -1137,16 +1137,21 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -15 )
 
 [node name="CollisionShape2D" parent="." index="8"]
+visible = false
 shape = SubResource( 11 )
+
+[node name="UnitSelector" parent="." index="9"]
+visible = false
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
-position = Vector2( 0, -15.92 )
+visible = false
+position = Vector2( 0, -10.92 )
 
 [node name="AimPoint" parent="." index="12"]
-self_modulate = Color( 1, 1, 1, 1 )
+self_modulate = Color( 1, 1, 1, 0 )
 z_index = 0
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]

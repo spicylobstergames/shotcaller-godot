@@ -7,22 +7,18 @@
 [node name="CreepGroup" type="YSort" groups=["creep_group"]]
 script = ExtResource( 4 )
 
-[node name="MeleeCreep" parent="." groups=["units"] instance=ExtResource( 2 )]
-position = Vector2( 74.1197, -0.396851 )
-collision_layer = 256
+[node name="MeleeCreep" parent="." instance=ExtResource( 2 )]
+position = Vector2( 42.1197, -0.396851 )
 collision_mask = 256
 
-[node name="MeleeCreep2" parent="." groups=["units"] instance=ExtResource( 2 )]
-position = Vector2( 63.811, 23.0646 )
-collision_layer = 256
+[node name="MeleeCreep2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 31.811, 23.0646 )
 collision_mask = 256
 
-[node name="MeleeCreep3" parent="." groups=["units"] instance=ExtResource( 2 )]
-position = Vector2( 63.2409, -25.0409 )
-collision_layer = 256
+[node name="MeleeCreep3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 31.2409, -25.0409 )
 collision_mask = 256
 
-[node name="RangeCreep" parent="." groups=["units"] instance=ExtResource( 3 )]
+[node name="RangeCreep" parent="." instance=ExtResource( 3 )]
 position = Vector2( -8, 0 )
-collision_layer = 256
 collision_mask = 256
