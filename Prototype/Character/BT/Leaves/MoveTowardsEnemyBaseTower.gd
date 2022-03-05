@@ -10,13 +10,7 @@ func do_stuff(agent: Node) -> int:
 	move_points = []
 	for v in agent.get("move_points"):
 		move_points.append(GSAIUtils.to_vector3(v))
-	var distance_threshold = agent.get_node("Skills").get_skill(0).get_range() * 0.75
 	var path = GSAIPath.new(move_points)
-	var end_point = GSAIUtils.to_vector2(path.get_end_point())
-	if agent.global_position.distance_to(end_point) <= distance_threshold:
-		return NodeStatus.Success
-	
-
 	var ai_follow_path = GSAIFollowPath.new(agent.ai_agent, path)
 	ai_follow_path.path_offset = 0.1
 	ai_follow_path.prediction_time = 0.1
