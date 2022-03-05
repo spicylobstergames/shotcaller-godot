@@ -79,8 +79,12 @@ team = 3
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 257, 152 )
+offset = Vector2( 896, 896 )
 current = true
+limit_left = -900
+limit_top = -900
+limit_right = 900
+limit_bottom = 900
 smoothing_speed = 2.0
 script = ExtResource( 1 )
 

@@ -142,6 +142,7 @@ tile_data = PoolIntArray( 33, 6, 0, 39, 6, 0, 40, 6, 0, 44, 6, 0, 49, 6, 0, 54, 
 random_place = true
 
 [node name="NavigationMap" type="Navigation2D" parent="." groups=["navigation"]]
+visible = false
 script = ExtResource( 3 )
 grow_amount = 15.0
 
@@ -151,6 +152,7 @@ navpoly = SubResource( 1 )
 enabled = false
 
 [node name="TerrainBlockers" type="StaticBody2D" parent="NavigationMap"]
+visible = false
 collision_layer = 512
 collision_mask = 0
 
@@ -508,12 +510,15 @@ __meta__ = {
 }
 
 [node name="Top" parent="." instance=ExtResource( 7 )]
+visible = false
 points = PoolVector2Array( 194, 1353, 182, 217, 1327, 177 )
 
 [node name="Mid" parent="." instance=ExtResource( 7 )]
+visible = false
 points = PoolVector2Array( 380, 1407, 893, 880, 1410, 363 )
 
 [node name="Bottom" parent="." instance=ExtResource( 7 )]
+visible = false
 points = PoolVector2Array( 451, 1596, 1599, 1596, 1595, 452 )
 
 [editable path="BlueTeamBuilding"]
