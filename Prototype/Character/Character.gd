@@ -38,6 +38,9 @@ var enemies = []
 var buildings = []
 var target_end_point
 
+var lane: Lane
+var current_lane_point = 1
+
 onready var space_state = get_world_2d().direct_space_state
 
 
@@ -147,6 +150,8 @@ func _setup_face_direction(target_position: Vector2) -> void:
 		return
 	texture_container.scale.x = 1
 
+func set_speed_multiplier(multiplier):
+	ai_agent.linear_speed_max = attributes.stats.move_speed * multiplier
 
 func _setup_ai_agent() -> void:
 	ai_agent.linear_speed_max = attributes.stats.move_speed
