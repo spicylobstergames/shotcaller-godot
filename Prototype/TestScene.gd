@@ -19,7 +19,7 @@ func _on_Game_playing() -> void:
 			team,
 			leader_scene, 
 			$BattleField, 
-			$BattleField/Mid.points[0])
+			$BattleField/Mid.points[1])
 		$CreepRespawnTimer.start(Game.creep_respawn_time)
 		Game.is_playing = true
 
