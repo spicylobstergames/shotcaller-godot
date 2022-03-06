@@ -1,7 +1,7 @@
 extends Navigation2D
 
 
-var astar: AStar2D = AStar2D.new()
+#var astar: AStar2D = AStar2D.new()
 
 #onready var tilemap: TileMap = $TileMap
 

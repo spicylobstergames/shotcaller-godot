@@ -14,9 +14,9 @@ const MAP_BOUNDS = 1e5
 func get_polygon(shape: Shape2D) -> PoolVector2Array:
 	if shape is CircleShape2D:
 		var out_array = PoolVector2Array([])
-		var segments = 10
+		var segments = 4
 		for i in range(segments):
-			out_array.append(Vector2(1.0, 0.0).rotated(float(i) / float(segments) * TAU))
+			out_array.append(Vector2(1.0, 1.0).rotated(float(i) / float(segments) * TAU))
 		for i in range(out_array.size()):
 			out_array[i] *= shape.radius
 		return out_array
