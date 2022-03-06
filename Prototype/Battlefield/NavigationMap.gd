@@ -93,9 +93,14 @@ func merge_polygons(polygons: Array) -> MergePolygonsResult:
 func update_building_navpolygons(_unused = null):
 	if not Engine.editor_hint:
 		return
-	
+		
+	var finalNavigationPolygonInstance = get_node_or_null("FinalNavigationPolygonInstance")
 #	$FinalNavigationPolygonInstance.navpoly = $BaseNavigationPolygonInstance.navpoly.duplicate()
-	$FinalNavigationPolygonInstance.navpoly = NavigationPolygon.new()
+	
+	if not finalNavigationPolygonInstance:
+		return
+
+	finalNavigationPolygonInstance.navpoly = NavigationPolygon.new()
 
 	var inflated_polygons = []
 	for outline in $BaseNavigationPolygonInstance.navpoly.outlines:

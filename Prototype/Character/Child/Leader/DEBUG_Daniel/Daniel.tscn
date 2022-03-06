@@ -4,8 +4,8 @@
 [ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/Daniel.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Character/Leader/Daniel/Daniel_Blue.png" type="Texture" id=3]
 [ext_resource path="res://Character/Skills/Shared/BasicMeleeAttack.gd" type="Script" id=4]
-[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Walk_AnimPlayer.tres" type="Animation" id=5]
-[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Idle_AnimPlayer.tres" type="Animation" id=6]
+[ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/res/Daniel_Walk_AnimPlayer.tres" type="Animation" id=5]
+[ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/res/Daniel_Idle_AnimPlayer.tres" type="Animation" id=6]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=9]
@@ -321,9 +321,9 @@ projectile_scene = ExtResource( 10 )
 autoplay = "RESET"
 anims/Attack = SubResource( 4 )
 anims/Dead = SubResource( 10 )
-anims/Idle = ExtResource( 6 )
 anims/RESET = SubResource( 5 )
-anims/Walk = ExtResource( 5 )
+anims/idle = ExtResource( 6 )
+anims/walk = ExtResource( 5 )
 
 [node name="HealthBar" parent="HUD" index="0"]
 margin_top = -35.0

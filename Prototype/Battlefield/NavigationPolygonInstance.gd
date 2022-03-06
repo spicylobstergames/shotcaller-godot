@@ -169,7 +169,6 @@ func worker_thread_call_navmap(_unused):
 	update_navmap()
 
 func update_navmap():
-	
 	var tilemap: TileMap = get_parent().get_node("TileMap")
 
 	var nav_polygon = NavigationPolygon.new()

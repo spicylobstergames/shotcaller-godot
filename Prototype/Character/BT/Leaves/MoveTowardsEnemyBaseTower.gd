@@ -11,7 +11,7 @@ func do_stuff(agent: Node) -> int:
 	for v in agent.get("move_points"):
 		move_points.append(GSAIUtils.to_vector3(v))
 	var path = GSAIPath.new(move_points)
-	var ai_follow_path = GSAIFollowPath.new(agent.ai_agent, path)
+	ai_follow_path = GSAIFollowPath.new(agent.ai_agent, path)
 	ai_follow_path.path_offset = 0.1
 	ai_follow_path.prediction_time = 0.1
 	ai_follow_path.arrival_tolerance = 5

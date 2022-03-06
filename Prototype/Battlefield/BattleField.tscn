@@ -26,6 +26,7 @@ team = 2
 
 [node name="Core" parent="BlueTeamBuilding/BuildingContainer" index="0"]
 position = Vector2( 223, 1584 )
+_lane = NodePath("../../../Mid")
 
 [node name="TopBarrack" parent="BlueTeamBuilding/BuildingContainer" index="1"]
 position = Vector2( 192, 1416 )
@@ -69,6 +70,7 @@ mirror_mode = true
 
 [node name="Core" parent="RedTeamBuilding/BuildingContainer" index="0"]
 position = Vector2( 1568, 257 )
+_lane = NodePath("../../../Mid")
 
 [node name="TopBarrack" parent="RedTeamBuilding/BuildingContainer" index="1"]
 position = Vector2( 1408, 200 )

@@ -43,24 +43,23 @@ func add_item(leader_name, new_item):
 	inventories[leader_name].add_item(new_item)
 	
 	# THERE SHOULD BE LEADER SELECTION CODE
-	return
-	var leader
+	#return
+	#var leader
 	#
 	
-	if new_item.type == new_item.ItemType.EQUIP:
-		for key in new_item.attributes.keys():
-			leader.attributes.stats[key] += new_item.attributes[key]
+	#if new_item.type == new_item.ItemType.EQUIP:
+	#	for key in new_item.attributes.keys():
+	#		leader.attributes.stats[key] += new_item.attributes[key]
 	
-	if leader_name == leader.name:
-		 update_gui(leader_name)
+	#if leader_name == leader.name:
+	#	 update_gui(leader_name)
 
 
 func _process(delta):
 	# THERE SHOULD BE LEADER SELECTION CODE
 	return
 	var leader
-	#
-	
+
 	var leader_inventory = inventories[leader.name]
 	
 	# Updating gold label
@@ -79,6 +78,7 @@ func _process(delta):
 	else:
 		for item_button in _equip_item_buttons + _consumable_item_buttons:
 			item_button.sell_button.hide()
+
 
 
 func update_gui(leader_name):
