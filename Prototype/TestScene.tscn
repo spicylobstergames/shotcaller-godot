@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://MainCamera.gd" type="Script" id=1]
 [ext_resource path="res://Utils/UnitController.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Items/Inventory/LeadersInventory.gd" type="Script" id=5]
 [ext_resource path="res://GUI/SelectTeamButton/SelectTeamButton.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Items/Shop/Shop.gd" type="Script" id=7]
+[ext_resource path="res://Character/Selection/Leader.tscn" type="PackedScene" id=8]
 [ext_resource path="res://GUI/Play.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ButtonGroup" id=2]
@@ -86,6 +87,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Leader Selection" parent="Menu" instance=ExtResource( 8 )]
+margin_right = -104.0
+margin_bottom = -308.0
+
 [node name="GoldLabel" type="Label" parent="Menu"]
 margin_left = 30.0
 margin_top = 471.0
@@ -106,7 +111,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 45.0
 margin_top = -44.0
-margin_right = -327.0
+margin_right = 45.0
 margin_bottom = -24.0
 size_flags_vertical = 8
 script = ExtResource( 5 )

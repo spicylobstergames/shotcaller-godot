@@ -1,0 +1,99 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Character/Selection/Leader.gd" type="Script" id=1]
+
+[sub_resource type="ButtonGroup" id=1]
+resource_name = "Leaders"
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 104.0
+margin_top = 80.0
+margin_right = -88.0
+margin_bottom = -303.0
+rect_pivot_offset = Vector2( -495, -182 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="YSort" type="YSort" parent="."]
+
+[node name="Label" type="Label" parent="YSort"]
+margin_left = 89.0
+margin_top = 35.0
+margin_right = 204.0
+margin_bottom = 49.0
+text = "Select your leader"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="YSort"]
+margin_left = 3.0
+margin_top = 72.0
+margin_right = 290.0
+margin_bottom = 92.0
+columns = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="maori" type="Button" parent="YSort/GridContainer"]
+margin_right = 48.0
+margin_bottom = 20.0
+toggle_mode = true
+pressed = true
+group = SubResource( 1 )
+text = "Maori"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="raja" type="Button" parent="YSort/GridContainer"]
+margin_left = 52.0
+margin_right = 90.0
+margin_bottom = 20.0
+toggle_mode = true
+group = SubResource( 1 )
+text = "Raja"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="rollo" type="Button" parent="YSort/GridContainer"]
+margin_left = 94.0
+margin_right = 138.0
+margin_bottom = 20.0
+toggle_mode = true
+group = SubResource( 1 )
+text = "Rollo"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sami" type="Button" parent="YSort/GridContainer"]
+margin_left = 142.0
+margin_right = 185.0
+margin_bottom = 20.0
+toggle_mode = true
+group = SubResource( 1 )
+text = "Sami"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="daniel" type="Button" parent="YSort/GridContainer"]
+margin_left = 189.0
+margin_right = 287.0
+margin_bottom = 20.0
+toggle_mode = true
+group = SubResource( 1 )
+text = "Debug Daniel"
+
+[connection signal="toggled" from="YSort/GridContainer/maori" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="YSort/GridContainer/raja" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="YSort/GridContainer/rollo" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="YSort/GridContainer/sami" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="YSort/GridContainer/daniel" to="." method="_on_button_pressed"]
