@@ -158,9 +158,9 @@ func _ready():
 	update_navmap()
 	worker_thread = Thread.new()
 
-#func _physics_process(delta):
-#	if not worker_thread.is_alive():
-#		worker_thread.start(self, "worker_thread_call_navmap")
+func _physics_process(delta):
+	if not worker_thread.is_alive():
+		worker_thread.start(self, "worker_thread_call_navmap")
 
 func _exit_tree():
 	worker_thread.wait_to_finish()
