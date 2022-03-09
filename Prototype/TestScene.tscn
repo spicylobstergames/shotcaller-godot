@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://MainCamera.gd" type="Script" id=1]
 [ext_resource path="res://Utils/UnitController.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Items/Inventory/LeadersInventory.gd" type="Script" id=5]
 [ext_resource path="res://GUI/SelectTeamButton/SelectTeamButton.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Items/Shop/Shop.gd" type="Script" id=7]
+[ext_resource path="res://Character/Selection/Leader.tscn" type="PackedScene" id=8]
 [ext_resource path="res://GUI/Play.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ButtonGroup" id=2]
@@ -26,7 +27,7 @@ script = ExtResource( 4 )
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -29.0
+margin_top = -41.0
 margin_bottom = -9.0
 mouse_filter = 2
 alignment = 1
@@ -38,7 +39,7 @@ __meta__ = {
 modulate = Color( 0, 0.666667, 1, 1 )
 margin_left = 102.0
 margin_right = 202.0
-margin_bottom = 20.0
+margin_bottom = 32.0
 toggle_mode = true
 pressed = true
 group = SubResource( 2 )
@@ -48,7 +49,7 @@ text = "Blue"
 modulate = Color( 0.258824, 1, 0, 1 )
 margin_left = 206.0
 margin_right = 306.0
-margin_bottom = 20.0
+margin_bottom = 32.0
 group = SubResource( 3 )
 text = "Play"
 
@@ -56,24 +57,29 @@ text = "Play"
 modulate = Color( 1, 0.176471, 0.176471, 1 )
 margin_left = 310.0
 margin_right = 410.0
-margin_bottom = 20.0
+margin_bottom = 32.0
 toggle_mode = true
 group = SubResource( 2 )
 team = 3
 
 [node name="FPS" type="Label" parent="Menu"]
-margin_right = 58.0
-margin_bottom = 26.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 68.0
+margin_bottom = 36.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="Menu"]
+visible = false
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = 103.0
-margin_bottom = 117.0
+margin_left = 113.0
+margin_top = -246.0
+margin_right = -113.0
+margin_bottom = -232.0
 size_flags_horizontal = 3
 text = "18 seconds for creep respawn"
 align = 1
@@ -81,11 +87,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="LeaderSelection" parent="Menu" instance=ExtResource( 8 )]
+margin_right = -104.0
+margin_bottom = -308.0
+
 [node name="GoldLabel" type="Label" parent="Menu"]
-visible = false
-margin_top = 265.0
-margin_right = 43.0
-margin_bottom = 279.0
+margin_left = 30.0
+margin_top = 471.0
+margin_right = 73.0
+margin_bottom = 485.0
 custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
@@ -101,9 +111,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 45.0
 margin_top = -44.0
-margin_right = -327.0
+margin_right = 45.0
+margin_bottom = -24.0
 size_flags_vertical = 8
 script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Shop" type="Panel" parent="Menu"]
 visible = false
@@ -170,13 +184,18 @@ margin_right = 492.0
 margin_bottom = 152.0
 
 [node name="ShopButton" type="Button" parent="Menu"]
-anchor_top = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.8
+anchor_top = 0.05
+anchor_right = 0.9
+anchor_bottom = 0.075
 margin_top = -20.0
 margin_right = 43.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 11
 text = "shop"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 

@@ -32,7 +32,6 @@ func _item_button_down():
 	# THERE SHOULD BE LEADER SELECTION CODE
 	return
 	var leader
-	#
 	
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]

@@ -11,12 +11,12 @@ var type
 var attributes
 
 
-func build(name, sprite, description, price, type, attributes):
-	self.name = name
-	self.sprite = sprite
-	self.description = description
-	self.price = price
-	self.type = type
-	self.attributes = attributes
+func build(_name, _sprite, _description, _price, _type, _attributes):
+	self.name = _name
+	self.sprite = _sprite
+	self.description = _description
+	self.price = _price
+	self.type = _type
+	self.attributes = _attributes
 	
 	return self

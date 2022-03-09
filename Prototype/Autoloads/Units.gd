@@ -11,7 +11,7 @@ enum StatusEffectID {Stun, Root, Silence, Slow}
 
 
 var units_selected: Array = []
-var navmap: Navigation2D = null
+var _navmap: Navigation2D = null
 
 var arena_teams = {TeamID.Blue: null, TeamID.Red: null}
 
@@ -230,11 +230,11 @@ func _get_arena_teams() -> Dictionary:
 
 
 func get_navmap() -> Navigation2D:
-	return navmap
+	return _navmap
 
 
 func _setup_navigation() -> void:
-	navmap = get_tree().get_nodes_in_group("navigation")[0]
+	_navmap = get_tree().get_nodes_in_group("navigation")[0]
 
 
 func _sort_by_health(a: Dictionary, b: Dictionary) -> bool:

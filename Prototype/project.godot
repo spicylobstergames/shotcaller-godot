@@ -319,6 +319,13 @@ Units="*res://Autoloads/Units.gd"
 Player="*res://Autoloads/Player.gd"
 Game="*res://Autoloads/Game.gd"
 
+[debug]
+
+gdscript/warnings/unused_variable=false
+gdscript/warnings/unused_argument=false
+gdscript/warnings/unused_signal=false
+gdscript/warnings/return_value_discarded=false
+
 [display]
 
 window/size/width=512
@@ -413,5 +420,10 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+quality/intended_usage/framebuffer_allocation=1
+quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
+threads/thread_model=2
+quality/filters/anisotropic_filter_level=2
+environment/default_clear_color=Color( 0.317647, 0.337255, 0.384314, 1 )
 environment/default_environment="res://default_env.tres"

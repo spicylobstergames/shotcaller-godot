@@ -94,7 +94,7 @@ func _setup_smoke() -> void:
 				smoke.get_sprite_frames().set_frame('default', n, texture2)
 	# finish resize_smoke
 	randomize()
-	var offset: int = rand_range(0, count );
+	var offset: int = int(rand_range(0, count));
 	smoke.set_frame(offset)
 	smoke.play('default')
 
@@ -228,10 +228,12 @@ func _setup_spawn() -> void:
 	set_physics_process(true)
 
 
+# warning-ignore:unused_argument
 func _on_BehaviorAnimPlayer_animation_started(anim_name: String) -> void:
 	set_team(team)
 
 
+# warning-ignore:unused_argument
 func _on_attributes_stats_changed(prop_name, prop_value) -> void:
 	match prop_name:
 		"health", "mana", "max_health", "max_mana":

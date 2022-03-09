@@ -1,20 +1,17 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Character/Child/Leader/Leader.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/Daniel.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Character/Leader/Daniel/Daniel_Blue.png" type="Texture" id=3]
 [ext_resource path="res://Character/Skills/Shared/BasicMeleeAttack.gd" type="Script" id=4]
-[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Walk_AnimPlayer.tres" type="Animation" id=5]
-[ext_resource path="res://Character/Child/Leader/Maori/Res/Maori_Idle_AnimPlayer.tres" type="Animation" id=6]
+[ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/res/Daniel_Walk_AnimPlayer.tres" type="Animation" id=5]
+[ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/res/Daniel_Idle_AnimPlayer.tres" type="Animation" id=6]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=9]
 [ext_resource path="res://Character/Child/Leader/DEBUG_Daniel/Skills/RockProjectile.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Character/Skills/Shared/BasicRangedAttack.gd" type="Script" id=11]
 [ext_resource path="res://Assets/Character/Leader/Daniel/Daniel_Red.png" type="Texture" id=12]
-[ext_resource path="res://BT/BehaviorTree.gd" type="Script" id=13]
-[ext_resource path="res://Character/Skills/SkillHandler.gd" type="Script" id=14]
-[ext_resource path="res://Character/StateDebug.gd" type="Script" id=15]
 
 [sub_resource type="Resource" id=1]
 resource_local_to_scene = true
@@ -307,9 +304,6 @@ primary = SubResource( 1 )
 stats = SubResource( 2 )
 radius = SubResource( 11 )
 
-[node name="Skills" parent="." index="1"]
-script = ExtResource( 14 )
-
 [node name="BasicAttack" type="Node" parent="Skills" index="0"]
 script = ExtResource( 4 )
 damage = 500.0
@@ -323,23 +317,17 @@ projectile_range = 400.0
 speed = 20.0
 projectile_scene = ExtResource( 10 )
 
-[node name="BehaviorTree" parent="." index="2"]
-script = ExtResource( 13 )
-
 [node name="BehaviorAnimPlayer" parent="." index="3"]
 autoplay = "RESET"
 anims/Attack = SubResource( 4 )
 anims/Dead = SubResource( 10 )
-anims/Idle = ExtResource( 6 )
 anims/RESET = SubResource( 5 )
-anims/Walk = ExtResource( 5 )
+anims/idle = ExtResource( 6 )
+anims/walk = ExtResource( 5 )
 
 [node name="HealthBar" parent="HUD" index="0"]
 margin_top = -35.0
 margin_bottom = -35.0
-
-[node name="StateDebug" parent="HUD" index="1"]
-script = ExtResource( 15 )
 
 [node name="Sprite" parent="TextureContainer" index="0"]
 material = SubResource( 7 )

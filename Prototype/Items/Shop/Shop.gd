@@ -73,10 +73,10 @@ func _process(delta):
 func buy(item):
 	# THERE SHOULD BE LEADER SELECTION CODE
 	return
-	var leader
+	#var leader
 	#
-	_leaders_inventory.inventories[leader.name].gold -= item.price
-	_deliveries[leader.name].start(item)
+	#_leaders_inventory.inventories[leader.name].gold -= item.price
+	#_deliveries[leader.name].start(item)
 
 
 func sell(item_index):

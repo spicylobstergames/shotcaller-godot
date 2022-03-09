@@ -158,9 +158,9 @@ func _ready():
 	update_navmap()
 	worker_thread = Thread.new()
 
-#func _physics_process(delta):
-#	if not worker_thread.is_alive():
-#		worker_thread.start(self, "worker_thread_call_navmap")
+func _physics_process(delta):
+	if not worker_thread.is_alive():
+		worker_thread.start(self, "worker_thread_call_navmap")
 
 func _exit_tree():
 	worker_thread.wait_to_finish()
@@ -169,7 +169,6 @@ func worker_thread_call_navmap(_unused):
 	update_navmap()
 
 func update_navmap():
-	
 	var tilemap: TileMap = get_parent().get_node("TileMap")
 
 	var nav_polygon = NavigationPolygon.new()
@@ -330,6 +329,6 @@ func update_navmap():
 		static_body.add_child(collision_shape)
 	
 	nav_polygon.make_polygons_from_outlines()
-	print(nav_polygon.polygons.size())
+	#print(nav_polygon.polygons.size())
 	navpoly = nav_polygon
 
