@@ -199,9 +199,4 @@ shape = SubResource( 24 )
 [node name="UnitDetector" parent="." index="9"]
 collision_mask = 257
 
-[node name="Node" type="Node" parent="." index="11"]
-
-[node name="Line2D" type="Line2D" parent="Node" index="0"]
-width = 2.0
-
 [editable path="UnitSelector"]

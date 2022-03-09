@@ -87,7 +87,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Leader Selection" parent="Menu" instance=ExtResource( 8 )]
+[node name="LeaderSelection" parent="Menu" instance=ExtResource( 8 )]
 margin_right = -104.0
 margin_bottom = -308.0
 
