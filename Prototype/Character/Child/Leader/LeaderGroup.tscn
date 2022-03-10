@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Character/Child/Creep/CreepGroup.gd" type="Script" id=4]
+
+[node name="LeaderGroup" type="YSort" groups=["creep_group"]]
+script = ExtResource( 4 )

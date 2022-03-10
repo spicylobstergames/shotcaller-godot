@@ -1,10 +1,6 @@
 extends Node2D
 
-onready var leaders = {
-	"maori": preload("res://Character/Child/Leader/Maori/Maori.tscn"),
-	"daniel": preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn"),
-	"raja": preload("res://Character/Child/Leader/Raja/Raja.tscn")
-}
+onready var Leader_Group_Class = preload("res://Character/Child/Leader/LeaderGroup.tscn")
 
 func _ready() -> void:
 	Game.connect("playing", self, "_on_Game_playing")
@@ -18,14 +14,18 @@ func _process(delta: float) -> void:
 
 
 func _on_Game_playing() -> void:
-	if not Game.is_playing:
-		var current_leader = $Menu/LeaderSelection.curent_leader
+	if not Game.is_playing:	
 		var team = Player.selected_team
+		
+		var leader = $Menu/LeaderSelection.curent_leader.instance()
+		var leader_group = Leader_Group_Class.instance()
+		leader_group.add_child(leader);
+		
 		Units.call_deferred("try_spawn_creep_wave", $BattleField)
 		Units.call_deferred(
 			"spawn_one",
 			team,
-			leaders[current_leader], 
+			leader_group,
 			$BattleField, 
 			$BattleField/Mid.points[1])
 		$CreepRespawnTimer.start(Game.creep_respawn_time)

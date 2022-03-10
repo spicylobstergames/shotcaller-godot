@@ -27,9 +27,14 @@ func _ready() -> void:
 	arena_teams = _get_arena_teams()
 
 
-func spawn_one(team: int, packed_scene: PackedScene, parent_node: Node2D, spawn_position: Vector2) -> Node2D:
-	var new_units = packed_scene.instance()
+func spawn_one(team: int, new_units, parent_node: Node2D, spawn_position: Vector2) -> Node2D:
 	new_units.team = team
+	new_units.mirror_mode = Units.arena_teams[team].mirror_mode
+	for c in new_units.get_children():
+		c.team = team
+		if new_units.mirror_mode:
+			c.position.x *= -1.0
+			c.get_node("TextureContainer").scale.x = -1
 	parent_node.add_child(new_units)
 	new_units.global_position = spawn_position
 	return new_units

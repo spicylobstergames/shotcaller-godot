@@ -156,7 +156,6 @@ radius = 19.3197
 
 [node name="Maori" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
-team = 2
 blue_team_texture = ExtResource( 2 )
 red_team_texture = ExtResource( 4 )
 
