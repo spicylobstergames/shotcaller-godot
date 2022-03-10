@@ -19,7 +19,7 @@ func _setup_team() -> void:
 
 func spawn_creep_wave(parent_node: Node2D):
 	var new_creep_group: YSort = null
-	new_creep_group = Units.spawn_one(team, CreepGroupClass, parent_node, creep_spawn_positon)
+	new_creep_group = Units.spawn_one(team, CreepGroupClass.instance(), parent_node, creep_spawn_positon)
 	new_creep_group.set_lane(lane)
 	if new_creep_group:
 		new_creep_group.mirror_mode = Units.arena_teams[team].mirror_mode
