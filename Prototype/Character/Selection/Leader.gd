@@ -6,9 +6,12 @@ onready var selected_button = find_node(curent_leader_name)
 onready var group = selected_button.group
 
 onready var leaders = {
+	"daniel": preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn"),	
 	"maori": preload("res://Character/Child/Leader/Maori/Maori.tscn"),
-	"daniel": preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn"),
-	"raja": preload("res://Character/Child/Leader/Raja/Raja.tscn")
+	"raja": preload("res://Character/Child/Leader/Raja/Raja.tscn"),
+	"robin": preload("res://Character/Child/Leader/Robin/Robin.tscn"),
+	"rollo": preload("res://Character/Child/Leader/Rollo/Rollo.tscn"),
+	"sami": preload("res://Character/Child/Leader/Sami/Sami.tscn")
 }
 
 onready var curent_leader = leaders[curent_leader_name]

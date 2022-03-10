@@ -33,9 +33,9 @@ __meta__ = {
 [node name="GridContainer" type="GridContainer" parent="YSort"]
 margin_left = 3.0
 margin_top = 72.0
-margin_right = 290.0
-margin_bottom = 92.0
-columns = 5
+margin_right = 304.0
+margin_bottom = 116.0
+columns = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -66,7 +66,6 @@ __meta__ = {
 margin_left = 94.0
 margin_right = 138.0
 margin_bottom = 20.0
-disabled = true
 toggle_mode = true
 group = SubResource( 1 )
 text = "Rollo"
@@ -74,11 +73,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sami" type="Button" parent="YSort/GridContainer"]
+[node name="robin" type="Button" parent="YSort/GridContainer"]
 margin_left = 142.0
-margin_right = 185.0
+margin_right = 190.0
 margin_bottom = 20.0
-disabled = true
+toggle_mode = true
+group = SubResource( 1 )
+text = "Robin"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sami" type="Button" parent="YSort/GridContainer"]
+margin_left = 194.0
+margin_right = 237.0
+margin_bottom = 20.0
 toggle_mode = true
 group = SubResource( 1 )
 text = "Sami"
@@ -87,15 +96,16 @@ __meta__ = {
 }
 
 [node name="daniel" type="Button" parent="YSort/GridContainer"]
-margin_left = 189.0
-margin_right = 287.0
+margin_left = 241.0
+margin_right = 294.0
 margin_bottom = 20.0
 toggle_mode = true
 group = SubResource( 1 )
-text = "Debug Daniel"
+text = "Debug"
 
 [connection signal="toggled" from="YSort/GridContainer/maori" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="YSort/GridContainer/raja" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="YSort/GridContainer/rollo" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="YSort/GridContainer/robin" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="YSort/GridContainer/sami" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="YSort/GridContainer/daniel" to="." method="_on_button_pressed"]
