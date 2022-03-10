@@ -993,7 +993,7 @@ region = Rect2( 32, 0, 32, 32 )
 animations = [ {
 "frames": [ SubResource( 35 ), SubResource( 41 ) ],
 "loop": true,
-"name": "Walk",
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 36 ), SubResource( 40 ) ],
@@ -1003,7 +1003,7 @@ animations = [ {
 }, {
 "frames": [ SubResource( 35 ), SubResource( 41 ) ],
 "loop": true,
-"name": "Idle",
+"name": "Walk",
 "speed": 5.0
 } ]
 
