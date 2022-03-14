@@ -1027,17 +1027,17 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="AtlasTexture" id=37]
+[sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 2 )
 region = Rect2( 64, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=38]
+[sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 32, 32 )
 
-[sub_resource type="SpriteFrames" id=24]
+[sub_resource type="SpriteFrames" id=49]
 animations = [ {
-"frames": [ SubResource( 37 ), SubResource( 38 ) ],
+"frames": [ SubResource( 47 ), SubResource( 48 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -1142,7 +1142,7 @@ position = Vector2( 0, -11 )
 [node name="Weapon" type="AnimatedSprite" parent="TextureContainer/Position2D" index="0"]
 visible = false
 position = Vector2( 6, -11 )
-frames = SubResource( 24 )
+frames = SubResource( 49 )
 
 [node name="Arrow" type="Sprite" parent="TextureContainer/Position2D/Weapon" index="0"]
 position = Vector2( 1.00386, 1.89644 )
