@@ -34,20 +34,20 @@ func _unhandled_input(event):
 func _process(delta):
 	var ratio = get_viewport().size.x / get_viewport().size.y
 	
+	if is_panning: translate(relative_position * zoom.x)
+	relative_position = Vector2(0,0)
+	
 	limit_top = -margin
 	limit_bottom = margin
 	limit_left = -margin
 	limit_right = margin
 	
-	if is_panning: translate(relative_position * zoom.x)
-	relative_position = Vector2(0,0)
-	
-	if ratio >= 1:
-		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit[0]) * 0.6)
-		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit[0]) * 0.6)
-	else:
-		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.6)
-		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.6)
-	
+	if ratio >= 1 and zoom.x > 1:
+		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit[0]) * 0.65)
+		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit[0]) * 0.65)
+
+	if ratio <= 1 and zoom.x > 1:
+		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.65)
+		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.65)
 
 

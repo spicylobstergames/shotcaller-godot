@@ -25,12 +25,12 @@ resource_local_to_scene = true
 script = ExtResource( 7 )
 health = 1000.0
 max_health = 1000.0
-health_regeneration_rate = 1.0
+health_regeneration_rate = 10.0
 health_regeneration_step = 1.0
-mana = 0.0
-max_mana = 0.0
-mana_regeneration_rate = 0.0
-mana_regeneration_step = 0.0
+mana = 1000.0
+max_mana = 1000.0
+mana_regeneration_rate = 10.0
+mana_regeneration_step = 1.0
 move_speed = 100.0
 move_acceleration = 4000.0
 attack_speed = 50.0
@@ -157,6 +157,7 @@ tracks/4/keys = {
 }
 
 [sub_resource type="Animation" id=5]
+resource_name = "RESET"
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("TextureContainer/Sprite:scale")
@@ -359,7 +360,5 @@ position = Vector2( 0, -15.92 )
 
 [node name="Line2D" type="Line2D" parent="Node" index="0"]
 width = 2.0
-
-[connection signal="area_entered" from="HitArea" to="." method="_on_HitArea_area_entered"]
 
 [editable path="UnitSelector"]

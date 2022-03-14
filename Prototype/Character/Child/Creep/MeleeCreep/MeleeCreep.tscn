@@ -19,20 +19,20 @@ mirror_mode = false
 [sub_resource type="Resource" id=36]
 resource_local_to_scene = true
 script = ExtResource( 8 )
-health = 150.0
-max_health = 150.0
-health_regeneration_rate = 0.1
-health_regeneration_step = 0.01
+health = 100.0
+max_health = 100.0
+health_regeneration_rate = 0.0
+health_regeneration_step = 0.0
 mana = 0.0
 max_mana = 0.0
 mana_regeneration_rate = 0.0
 mana_regeneration_step = 0.0
 move_speed = 50.0
 move_acceleration = 2000.0
-attack_speed = 50.0
-creep_damage = 20.0
-leader_damage = 20.0
-tower_damage = 20.0
+attack_speed = 100.0
+creep_damage = 25.0
+leader_damage = 25.0
+tower_damage = 25.0
 
 [sub_resource type="Resource" id=37]
 resource_local_to_scene = true
@@ -1080,8 +1080,6 @@ shape = SubResource( 12 )
 [node name="HitArea" parent="." index="11"]
 position = Vector2( 0, -15.92 )
 
-[connection signal="animation_changed" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_changed"]
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
-[connection signal="area_entered" from="HitArea" to="." method="_on_HitArea_area_entered"]
 
 [editable path="UnitSelector"]

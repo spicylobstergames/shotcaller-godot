@@ -4,8 +4,6 @@
 [ext_resource path="res://Assets/Character/Leader/Sami/Sami_Blue.png" type="Texture" id=2]
 [ext_resource path="res://Character/Child/Leader/Sami/Sami.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Character/Leader/Sami/Sami_Red.png" type="Texture" id=4]
-[ext_resource path="res://Character/Child/Leader/Sami/res/Sami_Walk_AnimPlayer.tres" type="Animation" id=5]
-[ext_resource path="res://Character/Child/Leader/Sami/res/Sami_Idle_AnimPlayer.tres" type="Animation" id=6]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=9]
@@ -20,20 +18,20 @@ mirror_mode = false
 [sub_resource type="Resource" id=14]
 resource_local_to_scene = true
 script = ExtResource( 8 )
-health = 0.0
-max_health = 0.0
-health_regeneration_rate = 0.0
-health_regeneration_step = 0.0
-mana = 0.0
-max_mana = 0.0
-mana_regeneration_rate = 0.0
-mana_regeneration_step = 0.0
-move_speed = 0.0
-move_acceleration = 0.0
-attack_speed = 0.0
-creep_damage = 0.0
-leader_damage = 0.0
-tower_damage = 0.0
+health = 150.0
+max_health = 150.0
+health_regeneration_rate = 1.0
+health_regeneration_step = 1.0
+mana = 100.0
+max_mana = 100.0
+mana_regeneration_rate = 1.0
+mana_regeneration_step = 1.0
+move_speed = 50.0
+move_acceleration = 2000.0
+attack_speed = 75.0
+creep_damage = 25.0
+leader_damage = 25.0
+tower_damage = 25.0
 
 [sub_resource type="Resource" id=15]
 resource_local_to_scene = true
@@ -153,7 +151,7 @@ radius = 7.0
 
 [sub_resource type="CircleShape2D" id=12]
 resource_local_to_scene = true
-radius = 20
+radius = 20.0
 
 [node name="Sami" instance=ExtResource( 1 )]
 collision_mask = 1

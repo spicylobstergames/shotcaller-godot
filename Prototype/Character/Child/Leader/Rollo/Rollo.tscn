@@ -1,11 +1,10 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Character/Child/Leader/Leader.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Character/Leader/Rollo/Rollo_Blue.png" type="Texture" id=2]
 [ext_resource path="res://Character/Child/Leader/Rollo/Rollo.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Character/Leader/Rollo/Rollo_Red.png" type="Texture" id=4]
-[ext_resource path="res://Character/Child/Leader/Rollo/res/Rollo_Walk_AnimPlayer.tres" type="Animation" id=5]
-[ext_resource path="res://Character/Child/Leader/Rollo/res/Rollo_Idle_AnimPlayer.tres" type="Animation" id=6]
+[ext_resource path="res://Character/Skills/Shared/BasicMeleeAttack.gd" type="Script" id=5]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=9]
@@ -20,27 +19,27 @@ mirror_mode = false
 [sub_resource type="Resource" id=14]
 resource_local_to_scene = true
 script = ExtResource( 8 )
-health = 0.0
-max_health = 0.0
-health_regeneration_rate = 0.0
-health_regeneration_step = 0.0
-mana = 0.0
-max_mana = 0.0
-mana_regeneration_rate = 0.0
-mana_regeneration_step = 0.0
-move_speed = 0.0
-move_acceleration = 0.0
-attack_speed = 0.0
-creep_damage = 0.0
-leader_damage = 0.0
-tower_damage = 0.0
+health = 200.0
+max_health = 200.0
+health_regeneration_rate = 1.0
+health_regeneration_step = 1.0
+mana = 100.0
+max_mana = 100.0
+mana_regeneration_rate = 1.0
+mana_regeneration_step = 1.0
+move_speed = 50.0
+move_acceleration = 2000.0
+attack_speed = 75.0
+creep_damage = 30.0
+leader_damage = 30.0
+tower_damage = 30.0
 
 [sub_resource type="Resource" id=15]
 resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
 attack_range = 0.0
-unit_detection = 1000.0
+unit_detection = 300.0
 area_selection = 10.0
 hurt_area = {
 "height": 0.0,
@@ -153,7 +152,7 @@ radius = 7.0
 
 [sub_resource type="CircleShape2D" id=12]
 resource_local_to_scene = true
-radius = 20
+radius = 20.0
 
 [node name="Rollo" instance=ExtResource( 1 )]
 collision_mask = 1
@@ -165,6 +164,11 @@ red_team_texture = ExtResource( 4 )
 primary = SubResource( 13 )
 stats = SubResource( 14 )
 radius = SubResource( 15 )
+
+[node name="BasicAttack" type="Node" parent="Skills" index="0"]
+script = ExtResource( 5 )
+damage = 500.0
+attack_range = 50.0
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
 anims/Idle = SubResource( 3 )

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Arrow.png-da43454562345fea3ff4d77801d94472.stex"
+path="res://.import/Arrow.png-c669e3f13788f839fbbbfdbcce770945.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Character/Creep/RangeCreep/Arrow.png"
-dest_files=[ "res://.import/Arrow.png-da43454562345fea3ff4d77801d94472.stex" ]
+source_file="res://Assets/Character/Creep/RangeCreep/Weapon/Arrow.png"
+dest_files=[ "res://.import/Arrow.png-c669e3f13788f839fbbbfdbcce770945.stex" ]
 
 [params]
 
