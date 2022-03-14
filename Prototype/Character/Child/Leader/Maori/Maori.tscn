@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://Character/Child/Leader/Leader.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Character/Leader/Maori/Maori_Blue.png" type="Texture" id=2]
@@ -107,10 +107,10 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.5, 0.7 ),
-"transitions": PoolRealArray( 2, 0.5, 0.5 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.7 ),
+"transitions": PoolRealArray( 2, 1, 1, 0.5, 0.5 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( -3, 10 ), Vector2( -3, 10 ) ]
+"values": [ Vector2( 1, -5 ), Vector2( 2, 0 ), Vector2( 1, 7 ), Vector2( -2, 8 ), Vector2( -2, 8 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Position2D/Weapon:rotation_degrees")
@@ -119,10 +119,10 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 0.5, 0.7 ),
+"times": PoolRealArray( 0, 0.3, 0.7 ),
 "transitions": PoolRealArray( 2, 0.5, 0.5 ),
 "update": 0,
-"values": [ -17.5235, 65.4846, 65.4846 ]
+"values": [ -17.5235, 90.0, 90.0 ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("TextureContainer/AnimatedSprite:rotation_degrees")
@@ -169,10 +169,10 @@ tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
+"times": PoolRealArray( 0, 0.3, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 1, 1 ), Vector2( 1.2, 1 ), Vector2( 1, 1 ) ]
 }
 tracks/10/type = "value"
 tracks/10/path = NodePath("HUD:modulate")
@@ -231,7 +231,7 @@ tracks/14/loop_wrap = true
 tracks/14/imported = false
 tracks/14/enabled = true
 tracks/14/keys = {
-"times": PoolRealArray( 0, 0.1, 0.3, 0.6, 0.7 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0.396078 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
@@ -985,14 +985,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=46]
-atlas = ExtResource( 2 )
-region = Rect2( 40, 0, 40, 32 )
-
-[sub_resource type="AtlasTexture" id=47]
-atlas = ExtResource( 4 )
-region = Rect2( 40, 0, 40, 32 )
-
 [sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 2 )
 region = Rect2( 80, 0, 40, 32 )
@@ -1001,9 +993,25 @@ region = Rect2( 80, 0, 40, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 80, 0, 40, 32 )
 
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 2 )
+region = Rect2( 40, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 4 )
+region = Rect2( 40, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 40, 32 )
+
 [sub_resource type="SpriteFrames" id=42]
 animations = [ {
-"frames": [ SubResource( 46 ), SubResource( 47 ) ],
+"frames": [ SubResource( 48 ), SubResource( 49 ) ],
 "loop": false,
 "name": "Idle",
 "speed": 5.0
@@ -1013,7 +1021,7 @@ animations = [ {
 "name": "Attack",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"frames": [ SubResource( 51 ), SubResource( 52 ) ],
 "loop": false,
 "name": "Walk",
 "speed": 5.0

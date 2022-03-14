@@ -105,10 +105,10 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
-"transitions": PoolRealArray( 2, 0.5, 0.5 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 2, 0.5, 0.5, 0.5, 1, 1 ),
 "update": 0,
-"values": [ Vector2( -9, -10 ), Vector2( 5, -6 ), Vector2( -4.76837e-07, -5 ) ]
+"values": [ Vector2( 0, 2 ), Vector2( -4, 1 ), Vector2( 2, -9 ), Vector2( -4, -10 ), Vector2( -5, -1 ), Vector2( -1, 1 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Weapon:rotation_degrees")
@@ -120,7 +120,7 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.2, 0.4 ),
 "transitions": PoolRealArray( 2, 0.5, 0.5 ),
 "update": 0,
-"values": [ -64.866, 77.5164, 39.9516 ]
+"values": [ -90.0, 77.5164, 39.9516 ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("TextureContainer/Weapon:scale")
