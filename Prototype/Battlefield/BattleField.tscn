@@ -524,7 +524,7 @@ points = PoolVector2Array( 194, 1353, 182, 217, 1327, 177 )
 
 [node name="Mid" parent="." instance=ExtResource( 7 )]
 visible = false
-points = PoolVector2Array( 670, 1127, 893, 880, 1100, 664 )
+points = PoolVector2Array( 380, 1407, 893, 880, 1410, 363 )
 
 [node name="Bottom" parent="." instance=ExtResource( 7 )]
 visible = false
