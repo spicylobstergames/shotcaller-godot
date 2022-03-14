@@ -38,7 +38,7 @@ tower_damage = 25.0
 resource_local_to_scene = true
 script = ExtResource( 7 )
 collision_size = 5.0
-attack_range = 10.0
+attack_range = 20.0
 unit_detection = 80.0
 area_selection = 20.0
 hurt_area = {
@@ -105,10 +105,10 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 2, 0.5, 0.5, 0.5, 1, 1 ),
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 2, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 2 ), Vector2( -4, 1 ), Vector2( 2, -9 ), Vector2( -4, -10 ), Vector2( -5, -1 ), Vector2( -1, 1 ) ]
+"values": [ Vector2( 0, -5 ), Vector2( 2, -5 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Weapon:rotation_degrees")
@@ -120,7 +120,7 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.2, 0.4 ),
 "transitions": PoolRealArray( 2, 0.5, 0.5 ),
 "update": 0,
-"values": [ -90.0, 77.5164, 39.9516 ]
+"values": [ -60.0, 77.5164, 39.9516 ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("TextureContainer/Weapon:scale")
