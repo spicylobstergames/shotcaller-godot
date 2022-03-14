@@ -1,11 +1,11 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Character/Child/Creep/Creep.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Character/Creep/RangeCreep/RangeCreep_Blue.png" type="Texture" id=2]
 [ext_resource path="res://Character/Child/Creep/RangeCreep/RangeCreep.gd" type="Script" id=3]
 [ext_resource path="res://Assets/Character/Creep/RangeCreep/RangeCreep_Red.png" type="Texture" id=4]
-[ext_resource path="res://Assets/Character/Creep/RangeCreep/Arrow.png" type="Texture" id=5]
-[ext_resource path="res://Character/Child/Creep/RangeCreep/Arrow.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Assets/Character/Creep/RangeCreep/Weapon/Arrow.png" type="Texture" id=5]
+[ext_resource path="res://Character/Child/Creep/RangeCreep/Weapon/Arrow.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Primary/AttrResPrimary.gd" type="Script" id=7]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=8]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=9]
@@ -23,18 +23,18 @@ resource_local_to_scene = true
 script = ExtResource( 9 )
 health = 75.0
 max_health = 75.0
-health_regeneration_rate = 0.1
-health_regeneration_step = 0.01
+health_regeneration_rate = 0.0
+health_regeneration_step = 0.0
 mana = 0.0
 max_mana = 0.0
 mana_regeneration_rate = 0.0
 mana_regeneration_step = 0.0
-move_speed = 50.0
-move_acceleration = 2000.0
-attack_speed = 50.0
-creep_damage = 30.0
-leader_damage = 30.0
-tower_damage = 30.0
+move_speed = 60.0
+move_acceleration = 2500.0
+attack_speed = 75.0
+creep_damage = 20.0
+leader_damage = 20.0
+tower_damage = 20.0
 
 [sub_resource type="Resource" id=44]
 resource_local_to_scene = true
@@ -972,14 +972,26 @@ tracks/11/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
+tracks/12/type = "value"
+tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/AnimationPlayer/Arrow:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
 
-[sub_resource type="AtlasTexture" id=35]
+[sub_resource type="AtlasTexture" id=45]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 32 )
+region = Rect2( 128, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=41]
+[sub_resource type="AtlasTexture" id=46]
 atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 32, 32 )
+region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 2 )
@@ -989,9 +1001,17 @@ region = Rect2( 32, 0, 32, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 32, 0, 32, 32 )
 
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 32, 32 )
+
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 35 ), SubResource( 41 ) ],
+"frames": [ SubResource( 45 ), SubResource( 46 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 5.0
@@ -1007,17 +1027,17 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="AtlasTexture" id=37]
+[sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 2 )
 region = Rect2( 64, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=38]
+[sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 32, 32 )
 
-[sub_resource type="SpriteFrames" id=24]
+[sub_resource type="SpriteFrames" id=49]
 animations = [ {
-"frames": [ SubResource( 37 ), SubResource( 38 ) ],
+"frames": [ SubResource( 47 ), SubResource( 48 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -1106,9 +1126,9 @@ margin_bottom = -29.0
 
 [node name="StateDebug" parent="HUD" index="1"]
 margin_left = -30.0
-margin_top = -52.0
+margin_top = -38.0
 margin_right = 170.0
-margin_bottom = -38.0
+margin_bottom = -24.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="TextureContainer" index="0"]
 position = Vector2( -2, 0 )
@@ -1122,30 +1142,36 @@ position = Vector2( 0, -11 )
 [node name="Weapon" type="AnimatedSprite" parent="TextureContainer/Position2D" index="0"]
 visible = false
 position = Vector2( 6, -11 )
-frames = SubResource( 24 )
+frames = SubResource( 49 )
 
 [node name="Arrow" type="Sprite" parent="TextureContainer/Position2D/Weapon" index="0"]
 position = Vector2( 1.00386, 1.89644 )
 texture = ExtResource( 5 )
 
 [node name="ArrowInitPosition" type="Position2D" parent="TextureContainer/Position2D/Weapon" index="1"]
+visible = false
 position = Vector2( -6.21627, 0.305538 )
 
 [node name="Sprite" parent="TextureContainer" index="2"]
 material = SubResource( 10 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -15 )
+region_rect = Rect2( 128, 4, 28, 28 )
 
 [node name="CollisionShape2D" parent="." index="8"]
+visible = false
 shape = SubResource( 11 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
+visible = false
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
+visible = false
 position = Vector2( 0, -15.92 )
 
 [node name="AimPoint" parent="." index="12"]
+visible = false
 self_modulate = Color( 1, 1, 1, 1 )
 z_index = 0
 

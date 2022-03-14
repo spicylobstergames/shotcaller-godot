@@ -18,14 +18,15 @@ func get_polygon(shape: Shape2D) -> PoolVector2Array:
 		for i in range(segments):
 			out_array.append(Vector2(1.0, 1.0).rotated(float(i) / float(segments) * TAU))
 		for i in range(out_array.size()):
-			out_array[i] *= shape.radius
+			out_array[i] *= shape.radius*0.7
 		return out_array
 	if shape is RectangleShape2D:
+		var s = 0.9
 		return PoolVector2Array([
-			shape.extents * Vector2(-1.0, -1.0),
-			shape.extents * Vector2(1.0, -1.0),
-			shape.extents * Vector2(1.0, 1.0),
-			shape.extents * Vector2(-1.0, 1.0),
+			shape.extents * Vector2(-s, -s),
+			shape.extents * Vector2(s, -s),
+			shape.extents * Vector2(s, s),
+			shape.extents * Vector2(-s, s),
 		])
 	else:
 		push_error("Missing shape to polygon conversion for %s" % [shape])
@@ -107,14 +108,15 @@ func update_building_navpolygons(_unused = null):
 		inflated_polygons.append_array(Geometry.offset_polygon_2d(outline, grow_amount))
 	
 	var combined_polygons = []
-	for unit in get_tree().get_nodes_in_group("units"):
-		var shape:Shape2D = unit.get_node("CollisionShape2D").shape
-		var untransformed_polygon = get_polygon(shape)
-		
-		var transformed_polygon = PoolVector2Array([])
-		for point in untransformed_polygon:
-			transformed_polygon.append(unit.get_node("CollisionShape2D").global_transform.xform(point))
-		inflated_polygons.append_array(Geometry.offset_polygon_2d(transformed_polygon, grow_amount))
+	if (get_tree()):
+		for unit in get_tree().get_nodes_in_group("units"):
+			var shape:Shape2D = unit.get_node("CollisionShape2D").shape
+			var untransformed_polygon = get_polygon(shape)
+			
+			var transformed_polygon = PoolVector2Array([])
+			for point in untransformed_polygon:
+				transformed_polygon.append(unit.get_node("CollisionShape2D").global_transform.xform(point))
+			inflated_polygons.append_array(Geometry.offset_polygon_2d(transformed_polygon, grow_amount))
 	while true:
 		var merge_result: MergePolygonsResult = merge_polygons(inflated_polygons)
 		if merge_result.done:

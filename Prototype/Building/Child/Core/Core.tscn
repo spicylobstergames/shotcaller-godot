@@ -198,7 +198,7 @@ tracks/5/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 35.5, 38 )
+extents = Vector2( 41, 37 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 41, 46.5 )
@@ -240,7 +240,7 @@ anims/Dead = SubResource( 8 )
 anims/RESET = SubResource( 7 )
 
 [node name="CollisionShape2D" parent="." index="5"]
-position = Vector2( 0, -37 )
+position = Vector2( 0, -36 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]

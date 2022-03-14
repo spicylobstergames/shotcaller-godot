@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Assets/Character/Creep/RangeCreep/ArrowStuck.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Character/Creep/RangeCreep/Weapon/ArrowStuck.png" type="Texture" id=1]
 
 [sub_resource type="Animation" id=6]
 resource_name = "Blood"
