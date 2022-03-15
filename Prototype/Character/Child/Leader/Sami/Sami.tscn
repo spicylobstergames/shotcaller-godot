@@ -997,6 +997,14 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 4 )
+region = Rect2( 64, 0, 32, 32 )
+
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
@@ -1013,16 +1021,13 @@ region = Rect2( 0, 0, 32, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 2 )
-region = Rect2( 64, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 4 )
-region = Rect2( 64, 0, 32, 32 )
-
 [sub_resource type="SpriteFrames" id=38]
 animations = [ {
+"frames": [ SubResource( 36 ), SubResource( 37 ) ],
+"loop": false,
+"name": "Walk",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 16 ), SubResource( 17 ) ],
 "loop": false,
 "name": "Idle",
@@ -1031,11 +1036,6 @@ animations = [ {
 "frames": [ SubResource( 18 ), SubResource( 35 ) ],
 "loop": false,
 "name": "Attack",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 36 ), SubResource( 37 ) ],
-"loop": false,
-"name": "Walk",
 "speed": 5.0
 } ]
 
@@ -1154,7 +1154,7 @@ texture = ExtResource( 10 )
 offset = Vector2( 10, -5 )
 
 [node name="SpearInitPosition" type="Position2D" parent="TextureContainer/Position2D/Weapon" index="1"]
-position = Vector2( -10, -22 )
+position = Vector2( 0, 24 )
 z_index = 1
 z_as_relative = false
 
