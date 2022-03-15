@@ -40,7 +40,7 @@ tower_damage = 25.0
 resource_local_to_scene = true
 script = ExtResource( 8 )
 collision_size = 5.0
-attack_range = 40.0
+attack_range = 120.0
 unit_detection = 200.0
 area_selection = 10.0
 hurt_area = {
@@ -205,7 +205,7 @@ tracks/12/loop_wrap = true
 tracks/12/imported = false
 tracks/12/enabled = true
 tracks/12/keys = {
-"times": PoolRealArray( 0.5 ),
+"times": PoolRealArray( 0.3 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -231,7 +231,7 @@ tracks/14/loop_wrap = true
 tracks/14/imported = false
 tracks/14/enabled = true
 tracks/14/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.7 ),
+"times": PoolRealArray( 0, 0.1, 0.3, 0.4, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0.396078 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
@@ -1097,7 +1097,6 @@ radius = SubResource( 27 )
 
 [node name="Axe" type="Node" parent="Skills" index="0"]
 script = ExtResource( 6 )
-projectile_range = 200.0
 speed = 500.0
 projectile_scene = ExtResource( 5 )
 creep_damage = 20
@@ -1160,7 +1159,6 @@ modulate = Color( 1, 1, 1, 1 )
 texture = null
 
 [node name="CollisionShape2D" parent="." index="7"]
-visible = false
 position = Vector2( 0, -3 )
 shape = SubResource( 13 )
 
@@ -1173,12 +1171,6 @@ shape = SubResource( 43 )
 
 [node name="UnitDetector" parent="." index="9"]
 collision_mask = 257
-
-[node name="HitArea" parent="." index="10"]
-visible = false
-
-[node name="AimPoint" parent="." index="11"]
-visible = false
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
 

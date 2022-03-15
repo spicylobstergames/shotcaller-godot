@@ -61,11 +61,10 @@ func _unhandled_input(event):
 		update()
 
 
-func _draw():
-	if dragging:
-		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start),
-				Color.white, false, 2.0)
-		draw_circle(get_global_mouse_position(), 2, Color.green)
+#func _draw():
+#	if dragging:
+#		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start), Color.white, false, 2.0)
+#		draw_circle(get_global_mouse_position(), 2, Color.green)
 
 
 

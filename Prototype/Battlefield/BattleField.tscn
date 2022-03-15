@@ -520,15 +520,15 @@ __meta__ = {
 
 [node name="Top" parent="." instance=ExtResource( 7 )]
 visible = false
-points = PoolVector2Array( 194, 1353, 182, 217, 1327, 177 )
+points = PoolVector2Array( 174, 1327, 210, 213, 1350, 170 )
 
 [node name="Mid" parent="." instance=ExtResource( 7 )]
 visible = false
-points = PoolVector2Array( 380, 1407, 893, 880, 1410, 363 )
+points = PoolVector2Array( 763, 1045, 893, 880, 994, 764 )
 
 [node name="Bottom" parent="." instance=ExtResource( 7 )]
 visible = false
-points = PoolVector2Array( 451, 1596, 1599, 1596, 1595, 452 )
+points = PoolVector2Array( 452, 1603, 1590, 1587, 1615, 453 )
 
 [editable path="BlueTeamBuilding"]
 [editable path="RedTeamBuilding"]

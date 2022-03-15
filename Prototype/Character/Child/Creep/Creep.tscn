@@ -11,7 +11,7 @@
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Radius/AttrResRadius.gd" type="Script" id=9]
 [ext_resource path="res://Character/BT/Leaves/MoveTowardsEnemyBaseTower.gd" type="Script" id=10]
 [ext_resource path="res://Utils/Attributes/Scripts/Res/Stats/AttrResStats.gd" type="Script" id=11]
-[ext_resource path="res://Character/BT/Leaves/FIndClosestEnemy.gd" type="Script" id=12]
+[ext_resource path="res://Character/BT/Leaves/FindClosestEnemy.gd" type="Script" id=12]
 [ext_resource path="res://BT/BTSelector.gd" type="Script" id=13]
 [ext_resource path="res://Character/BT/Leaves/IsFormationLeader.gd" type="Script" id=14]
 [ext_resource path="res://Character/BT/Leaves/FormUp.gd" type="Script" id=15]
@@ -162,12 +162,14 @@ region_enabled = true
 modulate = Color( 1, 1, 1, 0.223529 )
 
 [node name="CollisionShape2D" parent="." index="8"]
+visible = false
 shape = SubResource( 14 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 18 )
 
 [node name="HitArea" parent="." index="11"]
+visible = false
 collision_mask = 0
 
 [node name="AimPoint" parent="." index="12"]

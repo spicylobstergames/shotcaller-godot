@@ -39,8 +39,8 @@ tower_damage = 20.0
 [sub_resource type="Resource" id=44]
 resource_local_to_scene = true
 script = ExtResource( 8 )
-collision_size = 5.0
-attack_range = 60.0
+collision_size = 8.0
+attack_range = 200.0
 unit_detection = 160.0
 area_selection = 20.0
 hurt_area = {
@@ -1104,7 +1104,6 @@ radius = SubResource( 44 )
 
 [node name="Bow" type="Node" parent="Skills" index="0"]
 script = ExtResource( 10 )
-projectile_range = 200.0
 speed = 500.0
 projectile_scene = ExtResource( 6 )
 creep_damage = 20
@@ -1121,14 +1120,14 @@ anims/Setup = SubResource( 20 )
 anims/Walk = SubResource( 22 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -29.0
-margin_bottom = -29.0
+margin_top = -31.0
+margin_bottom = -31.0
 
 [node name="StateDebug" parent="HUD" index="1"]
 margin_left = -30.0
-margin_top = -38.0
+margin_top = -43.0
 margin_right = 170.0
-margin_bottom = -24.0
+margin_bottom = -29.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="TextureContainer" index="0"]
 position = Vector2( -2, 0 )
@@ -1172,6 +1171,7 @@ position = Vector2( 0, -15.92 )
 
 [node name="AimPoint" parent="." index="12"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 self_modulate = Color( 1, 1, 1, 1 )
 z_index = 0
 

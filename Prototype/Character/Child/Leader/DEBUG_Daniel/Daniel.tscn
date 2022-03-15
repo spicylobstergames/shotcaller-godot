@@ -308,13 +308,11 @@ radius = SubResource( 11 )
 [node name="BasicAttack" type="Node" parent="Skills" index="0"]
 script = ExtResource( 4 )
 damage = 500.0
-attack_range = 50.0
 
 [node name="RockToss" type="Node" parent="Skills" index="1"]
 script = ExtResource( 11 )
 cooldown_length = 5.0
 slot = 1
-projectile_range = 400.0
 speed = 20.0
 projectile_scene = ExtResource( 10 )
 
@@ -341,6 +339,7 @@ modulate = Color( 1, 1, 1, 1 )
 texture = null
 
 [node name="CollisionShape2D" parent="." index="7"]
+visible = false
 position = Vector2( 0, -3 )
 shape = SubResource( 8 )
 
@@ -354,11 +353,16 @@ shape = SubResource( 9 )
 collision_mask = 257
 
 [node name="HitArea" parent="." index="10"]
+visible = false
 position = Vector2( 0, -15.92 )
 
 [node name="Node" type="Node" parent="." index="11"]
 
 [node name="Line2D" type="Line2D" parent="Node" index="0"]
 width = 2.0
+
+[node name="AimPoint" parent="." index="12"]
+modulate = Color( 1, 1, 1, 0 )
+self_modulate = Color( 1, 1, 1, 1 )
 
 [editable path="UnitSelector"]

@@ -131,12 +131,14 @@ func _physics_process(delta: float) -> void:
 		$AimPoint.global_position = targeted_enemy.get_node("HitArea").global_position
 	else:
 		$AimPoint.visible = false
-func _draw() -> void:
-	
-	if false:#ProjectSettings.get("global/debug"):
-		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color(0,0,1,0.5))
-		Utils.draw_line_circle(self, attributes.radius.collision_size, 1.0, Color.orangered)
-		Utils.draw_line_circle(self, attributes.radius.unit_detection, 1.0, Color.goldenrod)
+		
+		
+#func _draw() -> void:
+#
+#	if ProjectSettings.get("global/debug"):
+#		Utils.draw_line_circle(self, attributes.radius.attack_range, 1.0, Color(0,0,1,0.5))
+#		Utils.draw_line_circle(self, attributes.radius.collision_size, 1.0, Color.orangered)
+#		Utils.draw_line_circle(self, attributes.radius.unit_detection, 1.0, Color.goldenrod)
 
 
 func _setup_state_debug(text: String) -> void:

@@ -2,7 +2,6 @@ extends Skill
 
 var queued_casts = 0
 export var damage: float
-export var attack_range: float
 	
 func cast() -> bool:
 	var super_result = .cast()
@@ -19,4 +18,8 @@ func cast() -> bool:
 
 
 func get_range():
-	return attack_range
+	var skill = get_parent()
+	var unit = skill.get_parent()
+	var attributes = unit.get_node("Attributes")
+	return attributes.radius.attack_range 
+	#attack_range

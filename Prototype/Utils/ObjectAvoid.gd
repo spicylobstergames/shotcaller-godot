@@ -115,16 +115,16 @@ func _setup_avoid_direction() -> void:
 		avoid_angle_directions[i] = 1.0 if query else 0.0
 	
 	
-func _draw() -> void:
-	if false:#ProjectSettings.get("global/debug"):
-		if target and _is_ready and enabled:
-			for i in ray_count:
-				draw_line(Vector2.ZERO, ray_directions[i] * radius * interest_angle_directions[i], Color.purple, 1.0)
-			
-			for i in ray_count:
-				draw_line(Vector2.ZERO, ray_directions[i] * avoid_distances[i] * avoid_angle_directions[i], Color.crimson, 1.0)
-			
-			draw_line(Vector2.ZERO, target_direction * (radius + 50), Color.green, 1.0)
+#func _draw() -> void:
+#	if ProjectSettings.get("global/debug"):
+#		if target and _is_ready and enabled:
+#			for i in ray_count:
+#				draw_line(Vector2.ZERO, ray_directions[i] * radius * interest_angle_directions[i], Color.purple, 1.0)
+#
+#			for i in ray_count:
+#				draw_line(Vector2.ZERO, ray_directions[i] * avoid_distances[i] * avoid_angle_directions[i], Color.crimson, 1.0)
+#
+#			draw_line(Vector2.ZERO, target_direction * (radius + 50), Color.green, 1.0)
 
 
 func _setup_ai_move_to_path(agent: GSAISteeringAgent) -> void:

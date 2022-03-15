@@ -8,15 +8,15 @@
 script = ExtResource( 4 )
 
 [node name="MeleeCreep" parent="." instance=ExtResource( 2 )]
-position = Vector2( 74.1197, -0.396851 )
+position = Vector2( 37.1197, -0.396851 )
 collision_mask = 256
 
 [node name="MeleeCreep2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 63.811, 23.0646 )
+position = Vector2( 21.811, 21.0646 )
 collision_mask = 256
 
 [node name="MeleeCreep3" parent="." instance=ExtResource( 2 )]
-position = Vector2( 63.2409, -25.0409 )
+position = Vector2( 22.2409, -20.0409 )
 collision_mask = 256
 
 [node name="RangeCreep" parent="." instance=ExtResource( 3 )]

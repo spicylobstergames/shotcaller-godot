@@ -198,6 +198,7 @@ frames = SubResource( 22 )
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource( 12 )
 
 [node name="UnitSelector" parent="." instance=ExtResource( 10 )]
@@ -211,11 +212,13 @@ shape = SubResource( 13 )
 visible = false
 
 [node name="HitArea" parent="." instance=ExtResource( 3 )]
+visible = false
 position = Vector2( 0, -12 )
 collision_mask = 65536
 
 [node name="AimPoint" type="Sprite" parent="."]
-self_modulate = Color( 1, 1, 1, 0.286275 )
+visible = false
+modulate = Color( 1, 1, 1, 0 )
 z_index = 1
 texture = ExtResource( 11 )
 

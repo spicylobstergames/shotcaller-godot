@@ -38,7 +38,7 @@ tower_damage = 25.0
 resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
-attack_range = 0.0
+attack_range = 40.0
 unit_detection = 300.0
 area_selection = 10.0
 hurt_area = {
@@ -105,10 +105,10 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 2, 0.5, 0.5, 0.5, 1, 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.6 ),
+"transitions": PoolRealArray( 2, 0.5, 0.5, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 2 ), Vector2( -4, 1 ), Vector2( 2, -9 ), Vector2( -4, -10 ), Vector2( -5, -1 ), Vector2( -1, 1 ) ]
+"values": [ Vector2( 0, 2 ), Vector2( -6, 0 ), Vector2( -2, -8 ), Vector2( -4, -7 ), Vector2( -5, -1 ), Vector2( -1, 1 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Weapon:rotation_degrees")
@@ -117,10 +117,10 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
-"transitions": PoolRealArray( 2, 0.5, 0.5 ),
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 2, 0.5 ),
 "update": 0,
-"values": [ -90.0, 77.5164, 39.9516 ]
+"values": [ -95.0, 65.0 ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("TextureContainer/Weapon:scale")
@@ -623,24 +623,12 @@ tracks/9/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("TextureContainer/Weapon:frame")
+tracks/10/path = NodePath("TextureContainer:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
 tracks/10/enabled = true
 tracks/10/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
-tracks/11/type = "value"
-tracks/11/path = NodePath("TextureContainer:modulate")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
@@ -1030,10 +1018,9 @@ primary = SubResource( 13 )
 stats = SubResource( 14 )
 radius = SubResource( 15 )
 
-[node name="BasicAttack" type="Node" parent="Skills" index="0"]
+[node name="Sword" type="Node" parent="Skills" index="0"]
 script = ExtResource( 5 )
-damage = 500.0
-attack_range = 50.0
+damage = 25.0
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
 anims/Attack = SubResource( 39 )
@@ -1044,11 +1031,16 @@ anims/Setup = SubResource( 20 )
 anims/Walk = SubResource( 22 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -34.0
-margin_bottom = -34.0
+margin_top = -31.0
+margin_bottom = -31.0
+
+[node name="StateDebug" parent="HUD" index="1"]
+margin_top = -41.0
+margin_bottom = -27.0
 
 [node name="TextureContainer" parent="." index="6"]
 self_modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 4, -3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="TextureContainer" index="0"]
 position = Vector2( -2, 0 )
@@ -1085,6 +1077,7 @@ collision_mask = 1
 [node name="Node" type="Node" parent="." index="11"]
 
 [node name="Line2D" type="Line2D" parent="Node" index="0"]
+visible = false
 width = 2.0
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
