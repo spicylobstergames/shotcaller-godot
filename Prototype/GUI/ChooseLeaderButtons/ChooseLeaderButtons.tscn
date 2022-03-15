@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Character/Selection/Leader.gd" type="Script" id=1]
+[ext_resource path="res://GUI/ChooseLeaderButtons/ChooseLeaderButtons.gd" type="Script" id=1]
 
 [sub_resource type="ButtonGroup" id=1]
 resource_local_to_scene = false
