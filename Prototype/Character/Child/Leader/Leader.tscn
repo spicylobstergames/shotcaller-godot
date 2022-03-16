@@ -134,18 +134,9 @@ script = ExtResource( 7 )
 material = SubResource( 5 )
 
 [node name="CollisionShape2D" parent="." index="7"]
-visible = false
 shape = SubResource( 8 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 7 )
-
-[node name="HitArea" parent="." index="10"]
-visible = false
-
-[node name="AimPoint" parent="." index="11"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-self_modulate = Color( 1, 1, 1, 1 )
 
 [editable path="UnitSelector"]
