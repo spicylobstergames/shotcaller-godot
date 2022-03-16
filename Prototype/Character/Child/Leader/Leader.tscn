@@ -34,9 +34,7 @@ mana_regeneration_step = 0.0
 move_speed = 0.0
 move_acceleration = 0.0
 attack_speed = 0.0
-creep_damage = 0.0
-leader_damage = 0.0
-tower_damage = 0.0
+damage = 0.0
 
 [sub_resource type="Resource" id=9]
 resource_local_to_scene = true

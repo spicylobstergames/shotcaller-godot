@@ -16,9 +16,7 @@ export(float) var move_speed = 0.0
 export(float) var move_acceleration = 0.0
 export(float) var attack_speed = 0.0
 
-export(float) var creep_damage = 0.0
-export(float) var leader_damage = 0.0
-export(float) var tower_damage = 0.0
+export(float) var damage = 0.0
 
 
 func on_ready() -> void:
@@ -33,9 +31,7 @@ func on_ready() -> void:
 	_saved_init_properties["move_speed"] = move_speed
 	_saved_init_properties["move_acceleration"] = move_acceleration
 	_saved_init_properties["attack_speed"] = attack_speed
-	_saved_init_properties["creep_damage"] = creep_damage
-	_saved_init_properties["leader_damage"] = leader_damage
-	_saved_init_properties["tower_damage"] = tower_damage
+	_saved_init_properties["damage"] = damage
 
 
 func on_update(attribute: Node, delta: float) -> void:

@@ -32,9 +32,7 @@ mana_regeneration_step = 0.0
 move_speed = 60.0
 move_acceleration = 2500.0
 attack_speed = 75.0
-creep_damage = 20.0
-leader_damage = 20.0
-tower_damage = 20.0
+damage = 20.0
 
 [sub_resource type="Resource" id=44]
 resource_local_to_scene = true
@@ -985,14 +983,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=46]
-atlas = ExtResource( 4 )
-region = Rect2( 128, 0, 32, 32 )
-
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
@@ -1000,6 +990,14 @@ region = Rect2( 32, 0, 32, 32 )
 [sub_resource type="AtlasTexture" id=40]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 4 )
+region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=35]
 atlas = ExtResource( 2 )
@@ -1011,14 +1009,14 @@ region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 45 ), SubResource( 46 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 36 ), SubResource( 40 ) ],
 "loop": true,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 45 ), SubResource( 46 ) ],
+"loop": true,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 35 ), SubResource( 41 ) ],
@@ -1106,9 +1104,6 @@ radius = SubResource( 44 )
 script = ExtResource( 10 )
 speed = 500.0
 projectile_scene = ExtResource( 6 )
-creep_damage = 20
-leader_damage = 20
-building_damage = 20
 spawn_position_node = NodePath("../../TextureContainer/Position2D/Weapon/ArrowInitPosition")
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
@@ -1158,7 +1153,6 @@ offset = Vector2( 0, -15 )
 region_rect = Rect2( 128, 4, 28, 28 )
 
 [node name="CollisionShape2D" parent="." index="8"]
-visible = false
 shape = SubResource( 11 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
@@ -1166,12 +1160,9 @@ visible = false
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
-visible = false
 position = Vector2( 0, -15.92 )
 
 [node name="AimPoint" parent="." index="12"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
 self_modulate = Color( 1, 1, 1, 1 )
 z_index = 0
 

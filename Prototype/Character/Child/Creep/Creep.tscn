@@ -37,9 +37,7 @@ mana_regeneration_step = 0.0
 move_speed = 35.0
 move_acceleration = 2000.0
 attack_speed = 50.0
-creep_damage = 0.0
-leader_damage = 0.0
-tower_damage = 0.0
+damage = 50.0
 
 [sub_resource type="Resource" id=17]
 resource_local_to_scene = true
@@ -162,14 +160,12 @@ region_enabled = true
 modulate = Color( 1, 1, 1, 0.223529 )
 
 [node name="CollisionShape2D" parent="." index="8"]
-visible = false
 shape = SubResource( 14 )
 
 [node name="CollisionShape2D" parent="UnitSelector" index="0"]
 shape = SubResource( 18 )
 
 [node name="HitArea" parent="." index="11"]
-visible = false
 collision_mask = 0
 
 [node name="AimPoint" parent="." index="12"]
