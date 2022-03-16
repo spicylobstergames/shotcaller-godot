@@ -1,4 +1,4 @@
-extends Button
+ extends Button
 
 var item = null
 
@@ -6,9 +6,9 @@ var item = null
 func setup(new_item):
 	if new_item == null:
 		self.item = null
-		self.name = "item name"
+		self.name = ""
 		self.icon = null
-		self.hint_tooltip = "hint tooltip"
+		self.hint_tooltip = ""
 		self.disabled = true
 		return
 	

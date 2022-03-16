@@ -4,7 +4,7 @@ var _item
 var _leader
 var _timer
 
-onready var _leaders_inventory = get_node("../LeadersInventory")
+onready var _leaders_inventories = get_node("../../LeadersInventories")
 
 
 func _ready():
@@ -20,7 +20,7 @@ func start(item):
 
 
 func _timer_timeout():
-	_leaders_inventory.add_item(_leader.name, _item)
+	_leaders_inventories.give_item(_leader, _item)
 	self._item = null
 
 
