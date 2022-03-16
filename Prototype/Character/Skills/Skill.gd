@@ -1,7 +1,6 @@
 class_name Skill
 extends Node
 
-
 enum AbilitySlot{
 	DefaultAttack
 	Slot1,

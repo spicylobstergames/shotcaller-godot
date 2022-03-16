@@ -1,8 +1,7 @@
 extends Skill
 
-export var projectile_range: float
 export var speed: float
-onready var lifetime = projectile_range/speed
+onready var lifetime = get_range()/speed
 
 export var projectile_scene: PackedScene
 export(int) var creep_damage: int = 0
@@ -33,4 +32,8 @@ func cast():
 	return super_result
 
 func get_range():
-	return projectile_range
+	var skill = get_parent()
+	var unit = skill.get_parent()
+	var attributes = unit.get_node("Attributes")
+	return attributes.radius.attack_range 
+

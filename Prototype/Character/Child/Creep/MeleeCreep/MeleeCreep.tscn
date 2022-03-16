@@ -37,8 +37,8 @@ tower_damage = 25.0
 [sub_resource type="Resource" id=37]
 resource_local_to_scene = true
 script = ExtResource( 7 )
-collision_size = 5.0
-attack_range = 20.0
+collision_size = 8.0
+attack_range = 40.0
 unit_detection = 80.0
 area_selection = 20.0
 hurt_area = {
@@ -1031,7 +1031,6 @@ radius = SubResource( 37 )
 [node name="Sword" type="Node" parent="Skills" index="0"]
 script = ExtResource( 5 )
 damage = 20.0
-attack_range = 25.0
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
 anims/Attack = SubResource( 39 )
@@ -1042,12 +1041,12 @@ anims/Setup = SubResource( 20 )
 anims/Walk = SubResource( 22 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -24.0
-margin_bottom = -24.0
+margin_top = -28.0
+margin_bottom = -28.0
 
 [node name="StateDebug" parent="HUD" index="1"]
-margin_top = -47.0
-margin_bottom = -33.0
+margin_top = -38.0
+margin_bottom = -24.0
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="TextureContainer" index="0"]
 position = Vector2( -2, 0 )
@@ -1069,6 +1068,7 @@ offset = Vector2( -2, -10 )
 region_rect = Rect2( 50, 2, 20, 21 )
 
 [node name="CollisionShape2D" parent="." index="8"]
+visible = false
 shape = SubResource( 30 )
 
 [node name="UnitSelector" parent="." index="9"]
@@ -1078,7 +1078,13 @@ monitoring = false
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
+visible = false
 position = Vector2( 0, -15.92 )
+
+[node name="AimPoint" parent="." index="12"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+self_modulate = Color( 1, 1, 1, 1 )
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
 

@@ -4,7 +4,6 @@
 
 [sub_resource type="Animation" id=6]
 resource_name = "Blood"
-length = 1.2
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -12,7 +11,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.9, 1.2, 10.1 ),
+"times": PoolRealArray( 0, 0.6, 1, 10.1 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
@@ -24,7 +23,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 1.2 ),
+"times": PoolRealArray( 1 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -38,10 +37,10 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, 8.0, -7.0, 5.0, -4.0, 3.0, -2.0, 1.0, -0.8, 0.5, -0.2, 0.0 ]
+"values": [ 0.0, 8.0, -7.0, 5.0, -4.0, 3.0, -2.0, 1.0, -0.8, 0.5, -0.3 ]
 }
 
 [sub_resource type="Animation" id=7]
@@ -71,7 +70,8 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[node name="ArrowStuck" type="Sprite"]
+[node name="SpearStuck" type="Sprite"]
+rotation = -0.00523599
 texture = ExtResource( 1 )
 offset = Vector2( -13, 0 )
 

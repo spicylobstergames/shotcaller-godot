@@ -1,7 +1,5 @@
 extends Node2D
 
-const LeaderClass := preload("res://Character/Child/Leader/Leader.gd")
-
 var dragging: bool = false
 var drag_start: Vector2 = Vector2.ZERO
 var select_rect: RectangleShape2D = RectangleShape2D.new()
@@ -16,7 +14,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT:
 		if Units.units_selected.size() != 0:
 			for u in Units.units_selected:
-				u.is_selected = false
+				_unselect(u)
 			Units.units_selected = []
 			
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
@@ -27,8 +25,8 @@ func _unhandled_input(event):
 				dragging = true
 				drag_start = get_global_mouse_position()
 			# If there is a selection, give it the target.
-			else:
-				Units.move(Units.units_selected, get_global_mouse_position())
+			#else:
+			#	Units.move(Units.units_selected, get_global_mouse_position())
 
 		# Button released while dragging.
 		elif dragging:
@@ -47,14 +45,14 @@ func _unhandled_input(event):
 			# Result is an array of dictionaries. Each has a "collider" key.
 			Units.units_selected = []
 			
-			""" ERROR invalid get stats
 			for q in space.intersect_shape(query):
-				if q.collider.owner is LeaderClass and q.collider.owner.team == Player.selected_team:
-					if q.collider.owner.stats.unit_type in [Units.TypeID.Leader]:
-						Units.units_selected.append(q.collider.owner)
-			"""
+				var u = q.collider.owner
+				var is_leader = u.get_node("Attributes").primary.unit_type in [Units.TypeID.Leader]
+				if u.team == Player.selected_team and is_leader: 
+					Units.units_selected.append(u)
+			
 			for u in Units.units_selected:
-				u.is_selected = true
+				_select(u)
 
 	if event is InputEventMouseMotion and dragging:
 		# Draw the box while dragging.
@@ -63,14 +61,22 @@ func _unhandled_input(event):
 
 func _draw():
 	if dragging:
-		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start),
-				Color.white, false, 2.0)
+		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start), Color.white, false, 2.0)
 		draw_circle(get_global_mouse_position(), 2, Color.green)
 
 
+func _select(u):
+	u.is_selected = true
+	u.get_node("HUD/Selection").visible = true
+	get_node("/root/TestScene/GUI/StatsWindow").update_window(u)
+
+func _unselect(u):
+	u.is_selected = false
+	u.get_node("HUD/Selection").visible = false
+	get_node("/root/TestScene/GUI/StatsWindow").update_window(false)
 
 func _on_Player_switch_team() -> void:
 	if Units.units_selected.size() != 0:
 		for u in Units.units_selected:
-			u.is_selected = false
+			_unselect(u)
 		Units.units_selected = []

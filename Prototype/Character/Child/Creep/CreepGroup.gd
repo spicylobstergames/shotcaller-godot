@@ -51,7 +51,7 @@ func _setup_formation() -> void:
 	
 	for c in get_children():
 		c.set_team(team)
-		var random_spread = 5.0
+		var random_spread = 4.0
 		c.position += Vector2(
 			rand_range(-random_spread, random_spread),
 			rand_range(-random_spread, random_spread))

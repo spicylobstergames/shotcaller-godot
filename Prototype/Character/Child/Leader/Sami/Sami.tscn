@@ -40,7 +40,7 @@ tower_damage = 25.0
 resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
-attack_range = 60.0
+attack_range = 180.0
 unit_detection = 200.0
 area_selection = 10.0
 hurt_area = {
@@ -1110,7 +1110,6 @@ radius = SubResource( 15 )
 
 [node name="Spear" type="Node" parent="Skills" index="0"]
 script = ExtResource( 6 )
-projectile_range = 200.0
 speed = 500.0
 projectile_scene = ExtResource( 5 )
 creep_damage = 20
@@ -1127,11 +1126,16 @@ anims/Setup = SubResource( 20 )
 anims/Walk = SubResource( 22 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -34.0
-margin_bottom = -34.0
+margin_top = -32.0
+margin_bottom = -32.0
+
+[node name="StateDebug" parent="HUD" index="1"]
+margin_top = -42.0
+margin_bottom = -28.0
 
 [node name="TextureContainer" parent="." index="6"]
 self_modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 5, 0 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="TextureContainer" index="0"]
 position = Vector2( -6, -3 )
@@ -1154,7 +1158,7 @@ texture = ExtResource( 10 )
 offset = Vector2( 10, -5 )
 
 [node name="SpearInitPosition" type="Position2D" parent="TextureContainer/Position2D/Weapon" index="1"]
-position = Vector2( -10, -22 )
+position = Vector2( 0, 24 )
 z_index = 1
 z_as_relative = false
 
@@ -1167,6 +1171,9 @@ texture = ExtResource( 2 )
 offset = Vector2( 3, -15 )
 region_enabled = true
 region_rect = Rect2( 64, 0, 30, 32 )
+
+[node name="Shadow" parent="TextureContainer" index="3"]
+position = Vector2( -6, 0 )
 
 [node name="CollisionShape2D" parent="." index="7"]
 position = Vector2( 0, -2 )
