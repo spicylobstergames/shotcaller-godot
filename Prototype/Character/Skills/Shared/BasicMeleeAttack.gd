@@ -1,7 +1,7 @@
 extends Skill
 
 var queued_casts = 0
-export var damage: float
+export onready var damage: int = get_damage()
 	
 func cast() -> bool:
 	var super_result = .cast()
@@ -15,11 +15,14 @@ func cast() -> bool:
 			target_attributes.stats.emit_signal("change_property", "health", target_attributes.stats.health - damage, funcref(target, "_on_attributes_stats_changed"))
 	return super_result
 	
-
+func get_damage():
+	var skill = get_parent()
+	var unit = skill.get_parent()
+	var attributes = unit.get_node("Attributes")
+	return attributes.stats.damage
 
 func get_range():
 	var skill = get_parent()
 	var unit = skill.get_parent()
 	var attributes = unit.get_node("Attributes")
 	return attributes.radius.attack_range 
-	#attack_range

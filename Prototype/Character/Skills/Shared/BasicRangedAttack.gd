@@ -1,12 +1,10 @@
 extends Skill
 
 export var speed: float
-onready var lifetime = get_range()/speed
+onready var lifetime: float = get_range()/speed
 
 export var projectile_scene: PackedScene
-export(int) var creep_damage: int = 0
-export(int) var leader_damage: int = 0
-export(int) var building_damage: int = 0
+export onready var damage: int = get_damage()
 export var spawn_position_node: NodePath
 
 func cast():
@@ -22,15 +20,19 @@ func cast():
 		
 
 		new_projectile.team = agent.attributes.primary.unit_team
-		new_projectile.creep_damage = creep_damage
-		new_projectile.leader_damage = leader_damage
-		new_projectile.building_damage = building_damage
+		new_projectile.damage = damage
 		new_projectile.velocity = speed
 		new_projectile.lifetime = lifetime
 		battlefield.add_child(new_projectile)
 		new_projectile.rotation = agent.get_node("AimPoint").global_position.angle_to_point(new_projectile.global_position)
 	return super_result
 
+func get_damage():
+	var skill = get_parent()
+	var unit = skill.get_parent()
+	var attributes = unit.get_node("Attributes")
+	return attributes.stats.damage
+	
 func get_range():
 	var skill = get_parent()
 	var unit = skill.get_parent()

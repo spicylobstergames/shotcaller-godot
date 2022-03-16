@@ -32,9 +32,7 @@ mana_regeneration_step = 1.0
 move_speed = 60.0
 move_acceleration = 2500.0
 attack_speed = 100.0
-creep_damage = 20.0
-leader_damage = 20.0
-tower_damage = 20.0
+damage = 30.0
 
 [sub_resource type="Resource" id=15]
 resource_local_to_scene = true
@@ -985,14 +983,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 4 )
-region = Rect2( 128, 0, 32, 32 )
-
 [sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
@@ -1000,6 +990,14 @@ region = Rect2( 32, 0, 32, 32 )
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 4 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 2 )
@@ -1011,14 +1009,14 @@ region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=45]
 animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 41 ), SubResource( 42 ), SubResource( 40 ) ],
 "loop": true,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+"loop": true,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 43 ), SubResource( 44 ) ],
@@ -1108,9 +1106,6 @@ radius = SubResource( 15 )
 script = ExtResource( 6 )
 speed = 600.0
 projectile_scene = ExtResource( 5 )
-creep_damage = 20
-leader_damage = 20
-building_damage = 20
 spawn_position_node = NodePath("../../TextureContainer/Position2D/Weapon/ArrowInitPosition")
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]

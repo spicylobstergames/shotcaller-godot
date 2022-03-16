@@ -32,9 +32,7 @@ mana_regeneration_step = 1.0
 move_speed = 60.0
 move_acceleration = 2500.0
 attack_speed = 75.0
-creep_damage = 25.0
-leader_damage = 25.0
-tower_damage = 25.0
+damage = 40.0
 
 [sub_resource type="Resource" id=27]
 resource_local_to_scene = true
@@ -985,13 +983,13 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=51]
+[sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 40, 32 )
+region = Rect2( 80, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=52]
+[sub_resource type="AtlasTexture" id=49]
 atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 40, 32 )
+region = Rect2( 80, 0, 40, 32 )
 
 [sub_resource type="AtlasTexture" id=46]
 atlas = ExtResource( 2 )
@@ -1001,19 +999,19 @@ region = Rect2( 40, 0, 40, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 40, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=48]
+[sub_resource type="AtlasTexture" id=51]
 atlas = ExtResource( 2 )
-region = Rect2( 80, 0, 40, 32 )
+region = Rect2( 0, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=49]
+[sub_resource type="AtlasTexture" id=52]
 atlas = ExtResource( 4 )
-region = Rect2( 80, 0, 40, 32 )
+region = Rect2( 0, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=42]
 animations = [ {
-"frames": [ SubResource( 51 ), SubResource( 52 ) ],
+"frames": [ SubResource( 48 ), SubResource( 49 ) ],
 "loop": false,
-"name": "Walk",
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 46 ), SubResource( 47 ) ],
@@ -1021,15 +1019,15 @@ animations = [ {
 "name": "Attack",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"frames": [ SubResource( 51 ), SubResource( 52 ) ],
 "loop": false,
-"name": "Idle",
+"name": "Walk",
 "speed": 5.0
 } ]
 
 [sub_resource type="SpriteFrames" id=50]
 animations = [ {
-"frames": [ null ],
+"frames": [ null, null ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -1099,9 +1097,6 @@ radius = SubResource( 27 )
 script = ExtResource( 6 )
 speed = 500.0
 projectile_scene = ExtResource( 5 )
-creep_damage = 20
-leader_damage = 20
-building_damage = 20
 spawn_position_node = NodePath("../../TextureContainer/Position2D/Weapon/AxeInitPosition")
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]

@@ -60,7 +60,7 @@ func _setup_formation() -> void:
 			c.get_node("TextureContainer").scale.x = -1
 		c.leader = leader
 		c.formation_target = leader.to_local(c.global_position)
-	leader.set_speed_multiplier(0.9)
+	#leader.set_speed_multiplier(0.9)
 
 
 func _on_Creep_dead(unit: PhysicsBody2D) -> void:

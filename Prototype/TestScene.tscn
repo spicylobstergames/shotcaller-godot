@@ -9,7 +9,7 @@
 [ext_resource path="res://Items/Shop/Shop.gd" type="Script" id=7]
 [ext_resource path="res://GUI/ChooseLeaderButtons/ChooseLeaderButtons.tscn" type="PackedScene" id=8]
 [ext_resource path="res://GUI/Play.tscn" type="PackedScene" id=9]
-[ext_resource path="res://GUI/Stats/StatsWindow.tscn" type="PackedScene" id=10]
+[ext_resource path="res://GUI/StatsWindow/StatsWindow.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ButtonGroup" id=2]
 
@@ -28,10 +28,13 @@ script = ExtResource( 4 )
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -41.0
-margin_bottom = -9.0
+margin_top = -232.0
+margin_bottom = -200.0
 mouse_filter = 2
 alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="BlueButton" parent="Menu/HBoxContainer" instance=ExtResource( 6 )]
 modulate = Color( 0, 0.666667, 1, 1 )
@@ -86,8 +89,9 @@ __meta__ = {
 }
 
 [node name="LeaderSelection" parent="Menu" instance=ExtResource( 8 )]
+margin_top = 126.0
 margin_right = -104.0
-margin_bottom = -308.0
+margin_bottom = -262.0
 
 [node name="Shop" type="Panel" parent="Menu"]
 visible = false
@@ -160,6 +164,9 @@ margin_top = -44.0
 margin_right = 512.0
 size_flags_vertical = 8
 script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
 anchor_left = 1.0
@@ -177,11 +184,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GUI" type="CanvasLayer" parent="."]
-
-[node name="StatsWindow" parent="GUI" instance=ExtResource( 10 )]
-position = Vector2( 220, 453 )
-
 [node name="GoldLabel" type="Label" parent="Menu/VBoxContainer"]
 margin_top = 24.0
 margin_right = 43.0
@@ -191,6 +193,12 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
 text = "1"
 align = 2
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="StatsWindow" parent="GUI" instance=ExtResource( 10 )]
+visible = false
+position = Vector2( 212, 415 )
 
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 

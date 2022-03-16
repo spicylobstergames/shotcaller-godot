@@ -32,9 +32,7 @@ mana_regeneration_step = 1.0
 move_speed = 50.0
 move_acceleration = 2000.0
 attack_speed = 75.0
-creep_damage = 25.0
-leader_damage = 25.0
-tower_damage = 25.0
+damage = 35.0
 
 [sub_resource type="Resource" id=15]
 resource_local_to_scene = true
@@ -107,10 +105,10 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.5, 0.7 ),
-"transitions": PoolRealArray( 2, 1, 0.5, 0.5, 0.5 ),
+"times": PoolRealArray( 0, 0.1, 0.7 ),
+"transitions": PoolRealArray( 0.5, 0.5, 0.5 ),
 "update": 0,
-"values": [ Vector2( -17, 14 ), Vector2( -19, 17 ), Vector2( -16, 10 ), Vector2( -2, 8 ), Vector2( -2, 8 ) ]
+"values": [ Vector2( -22, 12 ), Vector2( -25, 12 ), Vector2( 0, 12 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Position2D/Weapon:rotation_degrees")
@@ -119,10 +117,10 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.7 ),
-"transitions": PoolRealArray( 2, 1, 0.5, 0.5 ),
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 2, 0.5 ),
 "update": 0,
-"values": [ 65.0, 60.0, 90.0, 90.0 ]
+"values": [ 90.0, 90.0 ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("TextureContainer/AnimatedSprite:rotation_degrees")
@@ -163,31 +161,33 @@ tracks/8/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("TextureContainer/Position2D/Weapon/Axe:scale")
+tracks/9/path = NodePath("HUD:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 0.3, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1.2, 1 ), Vector2( 1, 1 ) ]
-}
-tracks/10/type = "value"
-tracks/10/path = NodePath("HUD:modulate")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
+tracks/10/type = "method"
+tracks/10/path = NodePath("Skills/Spear")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0.4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "cast"
+} ]
+}
 tracks/11/type = "value"
-tracks/11/path = NodePath("TextureContainer:modulate")
+tracks/11/path = NodePath("TextureContainer/Position2D/Weapon/Spear:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
@@ -195,54 +195,28 @@ tracks/11/enabled = true
 tracks/11/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ) ]
+"update": 1,
+"values": [ true ]
 }
-tracks/12/type = "method"
-tracks/12/path = NodePath("Skills/Spear")
+tracks/12/type = "value"
+tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/Spear:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/imported = false
 tracks/12/enabled = true
 tracks/12/keys = {
-"times": PoolRealArray( 0.5 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "cast"
-} ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("TextureContainer/Position2D/Weapon/Axe:visible")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
-}
-tracks/14/type = "value"
-tracks/14/path = NodePath("TextureContainer/Position2D/Weapon/Axe:modulate")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0.396078 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
 }
-tracks/15/type = "value"
-tracks/15/path = NodePath("TextureContainer/Position2D/Weapon:modulate")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/keys = {
+tracks/13/type = "value"
+tracks/13/path = NodePath("TextureContainer/Position2D/Weapon:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
 "times": PoolRealArray( 0, 0.3, 0.5, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
@@ -537,7 +511,7 @@ tracks/9/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("TextureContainer/Position2D/Weapon/Axe:visible")
+tracks/10/path = NodePath("TextureContainer/Position2D/Weapon/Spear:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
@@ -685,7 +659,7 @@ tracks/10/keys = {
 "values": [ 0 ]
 }
 tracks/11/type = "value"
-tracks/11/path = NodePath("TextureContainer/Position2D/Weapon/Axe:scale")
+tracks/11/path = NodePath("TextureContainer/Position2D/Weapon/Spear:scale")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
@@ -697,7 +671,7 @@ tracks/11/keys = {
 "values": [ Vector2( 1, 1 ) ]
 }
 tracks/12/type = "value"
-tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/Axe:modulate")
+tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/Spear:modulate")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/imported = false
@@ -985,7 +959,7 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/12/type = "value"
-tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/Axe:visible")
+tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/Spear:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/imported = false
@@ -997,14 +971,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 2 )
-region = Rect2( 32, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 4 )
-region = Rect2( 32, 0, 32, 32 )
-
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 32 )
@@ -1012,6 +978,14 @@ region = Rect2( 0, 0, 32, 32 )
 [sub_resource type="AtlasTexture" id=35]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 4 )
+region = Rect2( 32, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 2 )
@@ -1023,14 +997,14 @@ region = Rect2( 64, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=38]
 animations = [ {
-"frames": [ SubResource( 16 ), SubResource( 17 ) ],
-"loop": false,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 18 ), SubResource( 35 ) ],
 "loop": false,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 16 ), SubResource( 17 ) ],
+"loop": false,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 36 ), SubResource( 37 ) ],
@@ -1041,7 +1015,7 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=39]
 animations = [ {
-"frames": [ null ],
+"frames": [ null, null ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -1112,9 +1086,6 @@ radius = SubResource( 15 )
 script = ExtResource( 6 )
 speed = 500.0
 projectile_scene = ExtResource( 5 )
-creep_damage = 20
-leader_damage = 20
-building_damage = 20
 spawn_position_node = NodePath("../../TextureContainer/Position2D/Weapon/SpearInitPosition")
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
@@ -1126,12 +1097,12 @@ anims/Setup = SubResource( 20 )
 anims/Walk = SubResource( 22 )
 
 [node name="HealthBar" parent="HUD" index="0"]
-margin_top = -32.0
-margin_bottom = -32.0
+margin_top = -36.0
+margin_bottom = -36.0
 
 [node name="StateDebug" parent="HUD" index="1"]
-margin_top = -42.0
-margin_bottom = -28.0
+margin_top = -46.0
+margin_bottom = -32.0
 
 [node name="TextureContainer" parent="." index="6"]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -1148,17 +1119,19 @@ position = Vector2( 0, -11 )
 
 [node name="Weapon" type="AnimatedSprite" parent="TextureContainer/Position2D" index="0"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 6, -11 )
 frames = SubResource( 39 )
 
 [node name="Spear" type="Sprite" parent="TextureContainer/Position2D/Weapon" index="0"]
+visible = false
 position = Vector2( -8.37027, 2.37185 )
 rotation = 4.71239
 texture = ExtResource( 10 )
 offset = Vector2( 10, -5 )
 
 [node name="SpearInitPosition" type="Position2D" parent="TextureContainer/Position2D/Weapon" index="1"]
-position = Vector2( 0, 24 )
+position = Vector2( -16, -19 )
 z_index = 1
 z_as_relative = false
 

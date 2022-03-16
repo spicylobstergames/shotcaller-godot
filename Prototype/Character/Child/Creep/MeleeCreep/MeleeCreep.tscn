@@ -30,9 +30,7 @@ mana_regeneration_step = 0.0
 move_speed = 50.0
 move_acceleration = 2000.0
 attack_speed = 100.0
-creep_damage = 25.0
-leader_damage = 25.0
-tower_damage = 25.0
+damage = 25.0
 
 [sub_resource type="Resource" id=37]
 resource_local_to_scene = true
@@ -911,14 +909,6 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 4 )
-region = Rect2( 48, 0, 24, 24 )
-
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 24, 24 )
@@ -926,6 +916,14 @@ region = Rect2( 0, 0, 24, 24 )
 [sub_resource type="AtlasTexture" id=24]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 4 )
+region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 3 )
@@ -937,14 +935,14 @@ region = Rect2( 72, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 38 ), SubResource( 26 ) ],
-"loop": false,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 15 ), SubResource( 24 ) ],
 "loop": false,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 38 ), SubResource( 26 ) ],
+"loop": false,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 16 ), SubResource( 25 ) ],
@@ -1068,7 +1066,6 @@ offset = Vector2( -2, -10 )
 region_rect = Rect2( 50, 2, 20, 21 )
 
 [node name="CollisionShape2D" parent="." index="8"]
-visible = false
 shape = SubResource( 30 )
 
 [node name="UnitSelector" parent="." index="9"]
@@ -1078,12 +1075,9 @@ monitoring = false
 shape = SubResource( 12 )
 
 [node name="HitArea" parent="." index="11"]
-visible = false
 position = Vector2( 0, -15.92 )
 
 [node name="AimPoint" parent="." index="12"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
 self_modulate = Color( 1, 1, 1, 1 )
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
