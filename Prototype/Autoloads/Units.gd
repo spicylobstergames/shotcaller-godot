@@ -9,7 +9,7 @@ enum SortTypeID {Distance, Health}
 enum DetectionTypeID {Area, Global}
 enum StatusEffectID {Stun, Root, Silence, Slow}
 
-
+var selected_leader = null
 var units_selected: Array = []
 var _navmap: Navigation2D = null
 

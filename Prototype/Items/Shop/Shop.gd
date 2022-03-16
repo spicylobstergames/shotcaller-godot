@@ -2,13 +2,13 @@ extends Panel
 
 const Item = preload("res:///Items/Item.gd")
 
+var _deliveries = {}
 var _shop_item_button_preload = preload("res://Items/Shop/ShopItemButton.tscn")
 var _shop_delivery_preload = preload("res://Items/Shop/ShopDelivery.tscn")
+
 onready var _equip_items = $ScrollContainer/VBoxContainer/EquipItems
 onready var _consumable_items = $ScrollContainer/VBoxContainer/ConsumableItems
-onready var _leaders_inventory = get_node("../LeadersInventory")
-
-var _deliveries = {}
+onready var _leaders_inventories = get_node("../LeadersInventories")
 
 
 func _ready():
@@ -18,7 +18,7 @@ func _ready():
 	add_item(Item.new().build("Helmet", load("res://Assets/Items/Helm.png"), "Add 5 defense points to leader stats", 2, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
 	add_item(Item.new().build("Heal Potion", load("res://Assets/Items/Red Potion 3.png"), "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"health": 100}), _consumable_items)
 	
-	get_node("../ShopButton").connect("button_down", self, "_shop_button_down")
+	get_node("../VBoxContainer/ShopButton").connect("button_down", self, "_shop_button_down")
 
 
 func add_delivery(leader):
@@ -38,9 +38,7 @@ func _process(delta):
 	if !visible:
 		return
 	
-	# THERE SHOULD BE LEADER SELECTION CODE
-	var leader = null
-	#
+	var leader = Units.selected_leader
 	
 	if leader == null:
 		# Disable all buttons because leader is not selected
@@ -56,50 +54,36 @@ func _process(delta):
 	
 	# Disable all buttons on which leader don't have enough gold
 	for item_button in _equip_items.get_children() + _consumable_items.get_children():
-		if _leaders_inventory.inventories[leader.name].gold < item_button.get_price():
+		if _leaders_inventories.inventories[leader.name].gold < item_button.get_price():
 			item_button.disable()
 		else:
 			item_button.enable()
 	
 	# Disable buttons if leader don't have empty slots for item
-	if !_leaders_inventory.inventories[leader.name].is_equip_items_has_slots():
+	if !_leaders_inventories.inventories[leader.name].is_equip_items_has_slots():
 		for item_button in _equip_items.get_children():
 			item_button.disable()
-	if !_leaders_inventory.inventories[leader.name].is_consumable_items_has_slots():
+	if !_leaders_inventories.inventories[leader.name].is_consumable_items_has_slots():
 		for item_button in _consumable_items.get_children():
 			item_button.disable()
 
 
 func buy(item):
-	# THERE SHOULD BE LEADER SELECTION CODE
-	return
-	#var leader
-	#
-	#_leaders_inventory.inventories[leader.name].gold -= item.price
-	#_deliveries[leader.name].start(item)
+	var leader = Units.selected_leader
+	
+	_leaders_inventories.inventories[leader.name].gold -= item.price
+	_deliveries[leader.name].start(item)
 
 
 func sell(item_index):
-	# THERE SHOULD BE LEADER SELECTION CODE
-	return
-	var leader
-	#
+	var leader = Units.selected_leader
 	
-	var leader_items = _leaders_inventory.inventories[leader.name].equip_items + _leaders_inventory.inventories[leader.name].consumable_items
-	var item = leader_items[item_index]
+	var sold_item = _leaders_inventories.remove_item(leader, item_index)
 	
-	_leaders_inventory.inventories[leader.name].gold += floor(item.price / 2)
+	# Give the leader gold for half the cost of the item
+	_leaders_inventories.inventories[leader.name].gold += floor(sold_item.price / 2)
 	
-	# If the item sold was equipment - remove any attributes that were added
-	if item.type == item.ItemType.EQUIP:
-		_leaders_inventory.inventories[leader.name].equip_items[item_index] = null
-		for key in item.attributes.keys():
-			leader.attributes.stats[key] -= item.attributes[key]
-	
-	elif item.type == item.ItemType.CONSUMABLE:
-		_leaders_inventory.inventories[leader.name].consumable_items[item_index - _leaders_inventory.inventories[leader.name].EQUIP_ITEMS_MAX] = null
-	
-	_leaders_inventory.update_gui(leader.name)
+	_leaders_inventories.update_gui(leader.name)
 
 
 func _shop_button_down():
