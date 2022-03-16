@@ -15,6 +15,9 @@ func _ready():
 
 func setup(item):
 	_item_button.setup(item)
+	if item != null:
+		if item.type == item.ItemType.CONSUMABLE:
+			_item_button.disabled = false
 
 
 func set_item_type_to_equip():
@@ -28,13 +31,17 @@ func show_sell_button():
 		_sell_button.hide()
 
 
+func hide_sell_button():
+	_sell_button.hide()
+
+
 func _item_button_down():
-	# THERE SHOULD BE LEADER SELECTION CODE
-	return
-	var leader
+	var leader = Units.selected_leader
 	
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]
+	
+	get_node("/root/TestScene/Menu/LeadersInventories").remove_item(leader, index)
 
 
 func _sell_button_down():

@@ -21,6 +21,13 @@ func _on_Game_playing() -> void:
 		var leader_group = Leader_Group_Class.instance()
 		leader_group.add_child(leader);
 		
+		$Menu/HBoxContainer.hide()
+		
+		$Menu/LeadersInventories.add_inventory(leader)
+		$Menu/Shop.add_delivery(leader)
+		
+		Units.selected_leader = leader
+		
 		Units.call_deferred("try_spawn_creep_wave", $BattleField)
 		Units.call_deferred(
 			"spawn_one",
