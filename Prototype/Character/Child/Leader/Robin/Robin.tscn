@@ -988,7 +988,7 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 tracks/12/type = "value"
-tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/AnimationPlayer/Arrow:visible")
+tracks/12/path = NodePath("TextureContainer/Position2D/Weapon/Arrow:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/imported = false

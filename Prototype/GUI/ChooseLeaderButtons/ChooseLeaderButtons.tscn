@@ -96,6 +96,7 @@ margin_left = 244.0
 margin_top = 72.0
 margin_right = 297.0
 margin_bottom = 92.0
+disabled = true
 toggle_mode = true
 group = SubResource( 1 )
 text = "Debug"

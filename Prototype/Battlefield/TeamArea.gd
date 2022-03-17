@@ -9,7 +9,7 @@ export(bool) var mirror_mode = false
 var _is_ready: bool = false
 var top_creep_spawner_position: Vector2 = Vector2.ZERO
 var mid_creep_spawner_position: Vector2 = Vector2.ZERO
-var bottom_creep_spawner_position: Vector2 = Vector2.ZERO
+var bot_creep_spawner_position: Vector2 = Vector2.ZERO
 var buildings: Array = []
 
 onready var building_container: YSort = $BuildingContainer

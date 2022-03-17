@@ -46,18 +46,17 @@ func _unhandled_input(event):
 			query.set_shape(select_rect)
 			query.transform = Transform2D(0, (drag_end + drag_start) / 2)
 			# Result is an array of dictionaries. Each has a "collider" key.
-			Units.units_selected = []
 			
 			#for q in space.intersect_shape(query):
 			#	var u = q.collider.owner
 			if space.intersect_shape(query) and space.intersect_shape(query)[0] and space.intersect_shape(query)[0].collider.owner:
 				var u = space.intersect_shape(query)[0].collider.owner
-				var is_leader = u.get_node("Attributes").primary.unit_type in [Units.TypeID.Leader]
-				if u.team == Player.selected_team and is_leader: 
+				#var is_leader = u.get_node("Attributes").primary.unit_type in [Units.TypeID.Leader]
+				#if u.team == Player.selected_team and is_leader: 
 			#	Units.units_selected.append(u)
 		
 			#for u in Units.units_selected:
-					_select(u)
+				_select(u)
 			else:
 				_unselect()
 
@@ -73,20 +72,19 @@ func _unhandled_input(event):
 
 
 func _select(u):
-	u.is_selected = true
+	_unselect()
 	u.get_node("HUD/Selection").visible = true
 	get_node("/root/TestScene/GUI/StatsWindow").update_window(u)
 	Units.units_selected = [u]
 	selected_leader = u
 
 func _unselect():
-	if selected_leader:
-		selected_leader.is_selected = false
-		selected_leader.get_node("HUD/Selection").visible = false
-		get_node("/root/TestScene/GUI/StatsWindow").update_window(false)
-		Units.units_selected = []
-		selected_leader = false
-	
+	for u in Units.units_selected:
+		u.get_node("HUD/Selection").visible = false
+		
+	get_node("/root/TestScene/GUI/StatsWindow").update_window(false)
+	Units.units_selected = []
+	selected_leader = null
 
 func _on_Player_switch_team() -> void:
 	if Units.units_selected.size() != 0:

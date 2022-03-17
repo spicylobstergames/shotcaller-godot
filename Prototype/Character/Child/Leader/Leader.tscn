@@ -23,6 +23,18 @@ mirror_mode = false
 [sub_resource type="Resource" id=2]
 resource_local_to_scene = true
 script = ExtResource( 2 )
+health = 0.0
+max_health = 0.0
+health_regeneration_rate = 0.0
+health_regeneration_step = 0.0
+mana = 0.0
+max_mana = 0.0
+mana_regeneration_rate = 0.0
+mana_regeneration_step = 0.0
+move_speed = 0.0
+move_acceleration = 0.0
+attack_speed = 0.0
+damage = 0.0
 
 [sub_resource type="Resource" id=9]
 resource_local_to_scene = true
@@ -118,6 +130,10 @@ script = ExtResource( 7 )
 
 [node name="Sprite" parent="TextureContainer" index="0"]
 material = SubResource( 5 )
+
+[node name="Shadow" parent="TextureContainer" index="1"]
+visible = false
+modulate = Color( 1, 1, 1, 0.168627 )
 
 [node name="CollisionShape2D" parent="." index="7"]
 shape = SubResource( 8 )
