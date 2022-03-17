@@ -9,3 +9,11 @@ func _setup_team() -> void:
 			$TextureContainer/AnimatedSprite.frame = 1
 			$TextureContainer/Weapon.frame = 1
 	._setup_team()
+
+
+func _setup_ats() -> void:
+	$BehaviorAnimPlayer.playback_speed = $Attributes.stats.attack_speed/100
+
+
+func _reset_ats() -> void:
+	$BehaviorAnimPlayer.playback_speed = 1

@@ -30,8 +30,8 @@ max_mana = 100.0
 mana_regeneration_rate = 1.0
 mana_regeneration_step = 1.0
 move_speed = 50.0
-move_acceleration = 2000.0
-attack_speed = 75.0
+move_acceleration = 5000.0
+attack_speed = 100.0
 damage = 35.0
 
 [sub_resource type="Resource" id=15]
@@ -221,6 +221,23 @@ tracks/13/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/14/type = "method"
+tracks/14/path = NodePath(".")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "_setup_ats"
+}, {
+"args": [  ],
+"method": "_reset_ats"
+} ]
 }
 
 [sub_resource type="Animation" id=34]
@@ -1065,7 +1082,7 @@ shader_param/aura_width = 0.0
 shader_param/aura_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=11]
-radius = 7.0
+radius = 9.0
 
 [sub_resource type="CircleShape2D" id=12]
 resource_local_to_scene = true
@@ -1124,7 +1141,6 @@ position = Vector2( 6, -11 )
 frames = SubResource( 39 )
 
 [node name="Spear" type="Sprite" parent="TextureContainer/Position2D/Weapon" index="0"]
-visible = false
 position = Vector2( -8.37027, 2.37185 )
 rotation = 4.71239
 texture = ExtResource( 10 )

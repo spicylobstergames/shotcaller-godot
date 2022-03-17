@@ -30,8 +30,8 @@ max_mana = 1.0
 mana_regeneration_rate = 1.0
 mana_regeneration_step = 1.0
 move_speed = 60.0
-move_acceleration = 2500.0
-attack_speed = 100.0
+move_acceleration = 5000.0
+attack_speed = 90.0
 damage = 30.0
 
 [sub_resource type="Resource" id=15]
@@ -244,6 +244,23 @@ tracks/15/keys = {
 "values": [ {
 "args": [  ],
 "method": "cast"
+} ]
+}
+tracks/16/type = "method"
+tracks/16/path = NodePath(".")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "_setup_ats"
+}, {
+"args": [  ],
+"method": "_reset_ats"
 } ]
 }
 
@@ -1085,7 +1102,7 @@ shader_param/aura_width = 0.0
 shader_param/aura_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=11]
-radius = 7.0
+radius = 9.0
 
 [sub_resource type="CircleShape2D" id=12]
 resource_local_to_scene = true

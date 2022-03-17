@@ -29,9 +29,9 @@ mana = 100.0
 max_mana = 100.0
 mana_regeneration_rate = 1.0
 mana_regeneration_step = 1.0
-move_speed = 60.0
-move_acceleration = 2500.0
-attack_speed = 75.0
+move_speed = 50.0
+move_acceleration = 5000.0
+attack_speed = 80.0
 damage = 40.0
 
 [sub_resource type="Resource" id=27]
@@ -234,6 +234,23 @@ tracks/14/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 0.396078 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
 }
+tracks/15/type = "method"
+tracks/15/path = NodePath(".")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "_setup_ats"
+}, {
+"args": [  ],
+"method": "_reset_ats"
+} ]
+}
 
 [sub_resource type="Animation" id=34]
 resource_name = "Dead"
@@ -296,7 +313,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 6, -11 ) ]
+"values": [ Vector2( 2, 0 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Position2D/Weapon:rotation_degrees")
@@ -458,7 +475,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 6, -11 ) ]
+"values": [ Vector2( 2, 0 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Position2D/Weapon:rotation_degrees")
@@ -596,7 +613,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 6, -11 ) ]
+"values": [ Vector2( 2, 0 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Position2D/Weapon:rotation_degrees")
@@ -882,7 +899,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 6, -11 ) ]
+"values": [ Vector2( 2, 0 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("TextureContainer/Position2D/Weapon:rotation_degrees")
@@ -983,14 +1000,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 2 )
-region = Rect2( 80, 0, 40, 32 )
-
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 4 )
-region = Rect2( 80, 0, 40, 32 )
-
 [sub_resource type="AtlasTexture" id=46]
 atlas = ExtResource( 2 )
 region = Rect2( 40, 0, 40, 32 )
@@ -998,6 +1007,14 @@ region = Rect2( 40, 0, 40, 32 )
 [sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 4 )
 region = Rect2( 40, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 2 )
+region = Rect2( 80, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 4 )
+region = Rect2( 80, 0, 40, 32 )
 
 [sub_resource type="AtlasTexture" id=51]
 atlas = ExtResource( 2 )
@@ -1009,14 +1026,14 @@ region = Rect2( 0, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=42]
 animations = [ {
-"frames": [ SubResource( 48 ), SubResource( 49 ) ],
-"loop": false,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 46 ), SubResource( 47 ) ],
 "loop": false,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"loop": false,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 51 ), SubResource( 52 ) ],
@@ -1126,7 +1143,7 @@ position = Vector2( 0, -11 )
 
 [node name="Weapon" type="AnimatedSprite" parent="TextureContainer/Position2D" index="0"]
 visible = false
-position = Vector2( 6, -11 )
+position = Vector2( 2, 0 )
 frames = SubResource( 50 )
 
 [node name="Axe" type="Sprite" parent="TextureContainer/Position2D/Weapon" index="0"]
