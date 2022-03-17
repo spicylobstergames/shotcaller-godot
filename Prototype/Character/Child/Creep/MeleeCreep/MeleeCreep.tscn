@@ -28,7 +28,7 @@ max_mana = 0.0
 mana_regeneration_rate = 0.0
 mana_regeneration_step = 0.0
 move_speed = 50.0
-move_acceleration = 2000.0
+move_acceleration = 5000.0
 attack_speed = 100.0
 damage = 25.0
 
@@ -909,14 +909,6 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 24, 24 )
-
 [sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 24, 24 )
@@ -924,6 +916,14 @@ region = Rect2( 48, 0, 24, 24 )
 [sub_resource type="AtlasTexture" id=26]
 atlas = ExtResource( 4 )
 region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 24, 24 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 3 )
@@ -935,14 +935,14 @@ region = Rect2( 72, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
-"frames": [ SubResource( 15 ), SubResource( 24 ) ],
-"loop": false,
-"name": "Attack",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 38 ), SubResource( 26 ) ],
 "loop": false,
 "name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 15 ), SubResource( 24 ) ],
+"loop": false,
+"name": "Attack",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 16 ), SubResource( 25 ) ],
@@ -1012,6 +1012,7 @@ shader_param/aura_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="CircleShape2D" id=30]
 resource_local_to_scene = true
+radius = 9.05539
 
 [sub_resource type="CircleShape2D" id=12]
 resource_local_to_scene = true
@@ -1028,7 +1029,6 @@ radius = SubResource( 37 )
 
 [node name="Sword" type="Node" parent="Skills" index="0"]
 script = ExtResource( 5 )
-damage = 20.0
 
 [node name="BehaviorAnimPlayer" parent="." index="3"]
 anims/Attack = SubResource( 39 )

@@ -26,18 +26,6 @@ mirror_mode = false
 [sub_resource type="Resource" id=16]
 resource_local_to_scene = true
 script = ExtResource( 11 )
-health = 150.0
-max_health = 150.0
-health_regeneration_rate = 0.1
-health_regeneration_step = 0.01
-mana = 0.0
-max_mana = 0.0
-mana_regeneration_rate = 0.0
-mana_regeneration_step = 0.0
-move_speed = 35.0
-move_acceleration = 2000.0
-attack_speed = 50.0
-damage = 50.0
 
 [sub_resource type="Resource" id=17]
 resource_local_to_scene = true

@@ -131,6 +131,8 @@ func update_building_navpolygons(_unused = null):
 		$FinalNavigationPolygonInstance.navpoly.add_outline(polygon)
 
 	$FinalNavigationPolygonInstance.navpoly.make_polygons_from_outlines()
+	
+	
 # Use the base nav polygon to generate colliders for terrain
 func update_terrain_colliders(_unused = null):
 	if not Engine.editor_hint:
