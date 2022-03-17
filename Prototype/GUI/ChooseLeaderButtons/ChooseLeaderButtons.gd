@@ -5,7 +5,7 @@ export(ButtonGroup) var leader_group
 export(PackedScene) var curent_leader
 
 onready var leaders = {
-	"daniel": preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn"),	
+#	"daniel": preload("res://Character/Child/Leader/DEBUG_Daniel/Daniel.tscn"),	
 	"maori": preload("res://Character/Child/Leader/Maori/Maori.tscn"),
 	"raja": preload("res://Character/Child/Leader/Raja/Raja.tscn"),
 	"robin": preload("res://Character/Child/Leader/Robin/Robin.tscn"),

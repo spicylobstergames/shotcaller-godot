@@ -1000,14 +1000,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=46]
-atlas = ExtResource( 2 )
-region = Rect2( 40, 0, 40, 32 )
-
-[sub_resource type="AtlasTexture" id=47]
-atlas = ExtResource( 4 )
-region = Rect2( 40, 0, 40, 32 )
-
 [sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 2 )
 region = Rect2( 80, 0, 40, 32 )
@@ -1015,6 +1007,14 @@ region = Rect2( 80, 0, 40, 32 )
 [sub_resource type="AtlasTexture" id=49]
 atlas = ExtResource( 4 )
 region = Rect2( 80, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 2 )
+region = Rect2( 40, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 4 )
+region = Rect2( 40, 0, 40, 32 )
 
 [sub_resource type="AtlasTexture" id=51]
 atlas = ExtResource( 2 )
@@ -1026,14 +1026,14 @@ region = Rect2( 0, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=42]
 animations = [ {
-"frames": [ SubResource( 46 ), SubResource( 47 ) ],
-"loop": false,
-"name": "Attack",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 48 ), SubResource( 49 ) ],
 "loop": false,
 "name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 46 ), SubResource( 47 ) ],
+"loop": false,
+"name": "Attack",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 51 ), SubResource( 52 ) ],
@@ -1165,10 +1165,6 @@ texture = ExtResource( 2 )
 offset = Vector2( -7, -14 )
 region_enabled = true
 region_rect = Rect2( 80, 0, 40, 32 )
-
-[node name="Shadow" parent="TextureContainer" index="3"]
-modulate = Color( 1, 1, 1, 1 )
-texture = null
 
 [node name="CollisionShape2D" parent="." index="7"]
 position = Vector2( 0, -3 )

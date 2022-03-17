@@ -35,9 +35,7 @@ mana_regeneration_step = 0.0
 move_speed = 0.0
 move_acceleration = 0.0
 attack_speed = 0.0
-creep_damage = 0.0
-leader_damage = 0.0
-tower_damage = 0.0
+damage = 0.0
 
 [sub_resource type="Resource" id=5]
 resource_local_to_scene = true
@@ -86,6 +84,22 @@ margin_left = 0.0
 margin_top = 0.0
 margin_right = 0.0
 margin_bottom = 0.0
+
+[node name="Selection" type="Line2D" parent="HUD"]
+visible = false
+position = Vector2( -11.0526, -9 )
+scale = Vector2( 2.21052, 3 )
+z_index = -1
+z_as_relative = false
+points = PoolVector2Array( 0, 2, 0, 0, 3, 0, 3, -1, 7, -1, 7, 0, 10, 0, 10, 2, 14, 2, 14, 4, 10, 4, 10, 6, 7, 6, 7, 7, 3, 7, 3, 6, 0, 6, 0, 4, -4, 4, -4, 2, 0, 2 )
+width = 1.0
+default_color = Color( 0.00784314, 0.678431, 0.0666667, 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="HUD/Selection"]
+z_index = -1
+z_as_relative = false
+color = Color( 0, 1, 0, 0.235294 )
+polygon = PoolVector2Array( 0, 0, 3, 0, 3, -1, 7, -1, 7, 0, 10, 0, 10, 2, 14, 2, 14, 4, 10, 4, 10, 6, 7, 6, 7, 7, 3, 7, 3, 6, 0, 6, 0, 4, -4, 4, -4, 2, 0, 2 )
 
 [node name="TextureContainer" type="Position2D" parent="."]
 

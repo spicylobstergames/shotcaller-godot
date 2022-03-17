@@ -30,18 +30,15 @@ _lane = NodePath("../../../Mid")
 
 [node name="TopBarrack" parent="BlueTeamBuilding/BuildingContainer" index="1"]
 position = Vector2( 192, 1416 )
-team = 2
 _lane = NodePath("../../../Top")
 
 [node name="MidBarrack" parent="BlueTeamBuilding/BuildingContainer" index="2"]
 position = Vector2( 329, 1469 )
-team = 2
 _lane = NodePath("../../../Mid")
 
 [node name="BottomBarrack" parent="BlueTeamBuilding/BuildingContainer" index="3"]
 position = Vector2( 384, 1608 )
-team = 2
-_lane = NodePath("../../../Bottom")
+_lane = NodePath("../../../Bot")
 
 [node name="TopTower1" parent="BlueTeamBuilding/BuildingContainer" index="4"]
 position = Vector2( 160, 480 )
@@ -61,11 +58,11 @@ _lane = NodePath("../../../Mid")
 
 [node name="BottomTower1" parent="BlueTeamBuilding/BuildingContainer" index="8"]
 position = Vector2( 1312, 1632 )
-_lane = NodePath("../../../Bottom")
+_lane = NodePath("../../../Bot")
 
 [node name="BottomTower2" parent="BlueTeamBuilding/BuildingContainer" index="9"]
 position = Vector2( 864, 1568 )
-_lane = NodePath("../../../Bottom")
+_lane = NodePath("../../../Bot")
 
 [node name="RedTeamBuilding" parent="." instance=ExtResource( 1 )]
 team = 3
@@ -77,18 +74,15 @@ _lane = NodePath("../../../Mid")
 
 [node name="TopBarrack" parent="RedTeamBuilding/BuildingContainer" index="1"]
 position = Vector2( 1408, 200 )
-team = 2
 _lane = NodePath("../../../Top")
 
 [node name="MidBarrack" parent="RedTeamBuilding/BuildingContainer" index="2"]
 position = Vector2( 1464, 337 )
-team = 2
 _lane = NodePath("../../../Mid")
 
 [node name="BottomBarrack" parent="RedTeamBuilding/BuildingContainer" index="3"]
 position = Vector2( 1600, 392 )
-team = 2
-_lane = NodePath("../../../Bottom")
+_lane = NodePath("../../../Bot")
 
 [node name="TopTower1" parent="RedTeamBuilding/BuildingContainer" index="4"]
 position = Vector2( 480, 160 )
@@ -108,11 +102,11 @@ _lane = NodePath("../../../Mid")
 
 [node name="BottomTower1" parent="RedTeamBuilding/BuildingContainer" index="8"]
 position = Vector2( 1632, 1316 )
-_lane = NodePath("../../../Bottom")
+_lane = NodePath("../../../Bot")
 
 [node name="BottomTower2" parent="RedTeamBuilding/BuildingContainer" index="9"]
 position = Vector2( 1568, 864 )
-_lane = NodePath("../../../Bottom")
+_lane = NodePath("../../../Bot")
 
 [node name="AreaDecoration" type="YSort" parent="."]
 
@@ -531,7 +525,7 @@ points = PoolVector2Array( 185, 1282, 160, 925, 222, 501, 221, 207, 479, 206, 92
 visible = false
 points = PoolVector2Array( 328, 1393, 412, 1344, 792, 1027, 896, 897, 1007, 748, 1379.76, 445.135, 1459, 380 )
 
-[node name="Bottom" parent="." instance=ExtResource( 7 )]
+[node name="Bot" parent="." instance=ExtResource( 7 )]
 visible = false
 points = PoolVector2Array( 470, 1599, 865, 1612, 1309, 1571, 1575, 1579, 1572, 1310, 1636, 841, 1603, 454 )
 
