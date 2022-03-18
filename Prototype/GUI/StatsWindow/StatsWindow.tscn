@@ -1,13 +1,21 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://GUI/StatsWindow/StatsWindow.gd" type="Script" id=1]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
 
 [node name="StatsWindow" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-position = Vector2( -8, -7 )
-scale = Vector2( 1.34, 1 )
+position = Vector2( -127, -9 )
+scale = Vector2( 2.53, 1 )
 color = Color( 0, 0, 0, 0.443137 )
 polygon = PoolVector2Array( 0, 0, 100, 0, 100, 100, 0, 100 )
 
@@ -84,3 +92,22 @@ text = "0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Portrait" type="Control" parent="."]
+margin_left = -117.0
+margin_right = -8.0
+margin_bottom = 79.0
+rect_clip_content = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Portrait"]
+position = Vector2( 54, 42 )
+scale = Vector2( 4, 4 )
+frames = SubResource( 1 )
+animation = "Idle"
+
+[node name="Sprite" type="Sprite" parent="Portrait"]
+position = Vector2( 54, 42 )
+region_enabled = true

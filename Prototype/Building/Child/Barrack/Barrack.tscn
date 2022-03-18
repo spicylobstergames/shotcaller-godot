@@ -152,6 +152,7 @@ position = Vector2( -1, -76 )
 anims/Dead = SubResource( 8 )
 
 [node name="CollisionShape2D" parent="." index="5"]
+visible = false
 position = Vector2( -0.5, -19 )
 shape = SubResource( 9 )
 

@@ -57,8 +57,8 @@ func _unhandled_input(event):
 		
 			#for u in Units.units_selected:
 				_select(u)
-			else:
-				_unselect()
+			#else:
+			#	_unselect()
 
 	if event is InputEventMouseMotion and dragging:
 		# Draw the box while dragging.
@@ -80,7 +80,7 @@ func _select(u):
 
 func _unselect():
 	for u in Units.units_selected:
-		u.get_node("HUD/Selection").visible = false
+		if is_instance_valid(u): u.get_node("HUD/Selection").visible = false
 		
 	get_node("/root/TestScene/GUI/StatsWindow").update_window(false)
 	Units.units_selected = []
