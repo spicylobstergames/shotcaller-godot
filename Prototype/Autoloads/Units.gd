@@ -10,7 +10,9 @@ enum DetectionTypeID {Area, Global}
 enum StatusEffectID {Stun, Root, Silence, Slow}
 
 var selected_leader = null
+
 var units_selected: Array = []
+
 var _navmap: Navigation2D = null
 
 var arena_teams = {TeamID.Blue: null, TeamID.Red: null}
@@ -102,8 +104,7 @@ func get_closest_units_by(node: Node2D, sort_type: int, units: Array) -> Array:
 func get_move_points(node: Node2D, target_position: Vector2, type: int = TypeID.Leader) -> PoolVector2Array:
 	var navmap = get_navmap()
 	var move_points = []
-	if navmap:
-		move_points = navmap.get_simple_path(node.global_position, target_position, true)
+	if navmap: move_points = navmap.get_simple_path(node.global_position, target_position, true)
 	return move_points
 	
 	
@@ -133,22 +134,21 @@ func get_all_allies(current_team: int) -> Array:
 			output.append(unit)
 	return output
 
-func get_allies(node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
+func filter_allies(units: Array, node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
 	var allies: Array = []
-	
 	match current_team:
 		TeamID.Neutral:
 			match current_type:
 				TypeID.Creep:
-					allies = _get_all(node, [TeamID.Neutral], [TypeID.Creep], detection_type, radius)
+					allies = _filter_all(units, node, [TeamID.Neutral], [TypeID.Creep], radius)
 		TeamID.Blue:
 			match current_type:
 				TypeID.Creep, TypeID.Leader, TypeID.Building:
-					allies = _get_all(node, [TeamID.Blue], [TypeID.Leader, TypeID.Creep, TypeID.Building], detection_type, radius)
+					allies = _filter_all(units, node, [TeamID.Blue], [TypeID.Leader, TypeID.Creep, TypeID.Building], radius)
 		TeamID.Red:
 			match current_type:
 				TypeID.Creep, TypeID.Leader, TypeID.Building:
-					allies = _get_all(node, [TeamID.Red], [TypeID.Leader, TypeID.Creep, TypeID.Building], detection_type, radius)
+					allies = _filter_all(units, node, [TeamID.Red], [TypeID.Leader, TypeID.Creep, TypeID.Building], radius)
 	
 	var filtered_allies = []
 	if not target_types.empty():
@@ -160,30 +160,30 @@ func get_allies(node: Node2D, current_team: int, current_type: int, target_types
 	return allies
 	
 
-func get_enemies(node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
+func filter_enemies(units:Array, node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
 	var enemies: Array = []
 
 	match current_team:
 		TeamID.Neutral:
 			match current_type:
 				TypeID.Creep:
-					enemies = _get_all(node, [TeamID.Blue, TeamID.Red], [TypeID.Leader], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Blue, TeamID.Red], [TypeID.Leader], radius)
 		TeamID.Blue:
 			match current_type:
 				TypeID.Creep:
-					enemies = _get_all(node, [TeamID.Red], [TypeID.Leader, TypeID.Creep, TypeID.Building], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Red], [TypeID.Leader, TypeID.Creep, TypeID.Building], radius)
 				TypeID.Leader:
-					enemies = _get_all(node, [TeamID.Neutral, TeamID.Red], [TypeID.Leader, TypeID.Creep, TypeID.Building], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Neutral, TeamID.Red], [TypeID.Leader, TypeID.Creep, TypeID.Building], radius)
 				TypeID.Building:
-					enemies = _get_all(node, [TeamID.Red], [TypeID.Leader, TypeID.Creep], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Red], [TypeID.Leader, TypeID.Creep], radius)
 		TeamID.Red:
 			match current_type:
 				TypeID.Creep:
-					enemies = _get_all(node, [TeamID.Blue], [TypeID.Leader, TypeID.Creep, TypeID.Building], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Blue], [TypeID.Leader, TypeID.Creep, TypeID.Building], radius)
 				TypeID.Leader:
-					enemies = _get_all(node, [TeamID.Neutral, TeamID.Blue], [TypeID.Leader, TypeID.Creep, TypeID.Building], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Neutral, TeamID.Blue], [TypeID.Leader, TypeID.Creep, TypeID.Building], radius)
 				TypeID.Building:
-					enemies = _get_all(node, [TeamID.Blue], [TypeID.Leader, TypeID.Creep], detection_type, radius)
+					enemies = _filter_all(units, node, [TeamID.Blue], [TypeID.Leader, TypeID.Creep], radius)
 	
 	var filtered_enemies = []
 	if not target_types.empty():
@@ -194,24 +194,27 @@ func get_enemies(node: Node2D, current_team: int, current_type: int, target_type
 
 	return enemies
 
-
-func _get_all(node: Node2D, target_teams: PoolIntArray, target_types: PoolIntArray, detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
-	var units: Array = []
+func _filter_all(units: Array, node: Node2D, target_teams: PoolIntArray, target_types: PoolIntArray, radius: float = 1000) -> Array:
 	var filtered_units: Array = []
-	
-	match detection_type:
-		DetectionTypeID.Area:
-			if node.get_node_or_null("UnitDetector"):
-				units = node.get_node("UnitDetector").get_overlapping_bodies()
-		DetectionTypeID.Global:
-			units = get_tree().get_nodes_in_group("units")
 	
 	for u in units:
 		if u.attributes.primary.unit_team in target_teams and u.attributes.primary.unit_type in target_types:
 			if node.global_position.distance_to(u.global_position) < radius:
 				filtered_units.append(u)
-	
+
 	return filtered_units
+
+func get_all(node: Node2D, detection_type: int = DetectionTypeID.Area) -> Array:
+	var units: Array = []
+	
+	match detection_type:
+		DetectionTypeID.Area:
+			if node.has_node("UnitDetector"):
+				units = node.get_node("UnitDetector").get_overlapping_bodies()
+		DetectionTypeID.Global:
+			units = get_tree().get_nodes_in_group("units")
+	
+	return units
 
 func _get_position_list_arround(target_position: Vector2, units: Array) -> PoolVector2Array:
 	var positions: PoolVector2Array = PoolVector2Array()

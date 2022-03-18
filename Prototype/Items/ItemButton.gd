@@ -6,9 +6,9 @@ var item = null
 func setup(new_item):
 	if new_item == null:
 		self.item = null
-		self.name = ""
+		self.name = "item"
 		self.icon = null
-		self.hint_tooltip = ""
+		self.hint_tooltip = "hint"
 		self.disabled = true
 		return
 	

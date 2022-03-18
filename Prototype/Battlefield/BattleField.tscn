@@ -24,43 +24,43 @@ script = ExtResource( 2 )
 [node name="BlueTeamBuilding" parent="." instance=ExtResource( 1 )]
 team = 2
 
-[node name="Core" parent="BlueTeamBuilding/BuildingContainer" index="0"]
+[node name="Core" parent="BlueTeamBuilding/BuildingContainer" index="0" groups=["blue", "buildings"]]
 position = Vector2( 223, 1584 )
 _lane = NodePath("../../../Mid")
 
-[node name="TopBarrack" parent="BlueTeamBuilding/BuildingContainer" index="1"]
+[node name="TopBarrack" parent="BlueTeamBuilding/BuildingContainer" index="1" groups=["blue", "buildings"]]
 position = Vector2( 192, 1416 )
 _lane = NodePath("../../../Top")
 
-[node name="MidBarrack" parent="BlueTeamBuilding/BuildingContainer" index="2"]
+[node name="MidBarrack" parent="BlueTeamBuilding/BuildingContainer" index="2" groups=["blue", "buildings"]]
 position = Vector2( 329, 1469 )
 _lane = NodePath("../../../Mid")
 
-[node name="BottomBarrack" parent="BlueTeamBuilding/BuildingContainer" index="3"]
+[node name="BottomBarrack" parent="BlueTeamBuilding/BuildingContainer" index="3" groups=["blue", "buildings"]]
 position = Vector2( 384, 1608 )
 _lane = NodePath("../../../Bot")
 
-[node name="TopTower1" parent="BlueTeamBuilding/BuildingContainer" index="4"]
+[node name="TopTower1" parent="BlueTeamBuilding/BuildingContainer" index="4" groups=["blue", "buildings"]]
 position = Vector2( 160, 480 )
 _lane = NodePath("../../../Top")
 
-[node name="TopTower2" parent="BlueTeamBuilding/BuildingContainer" index="5"]
+[node name="TopTower2" parent="BlueTeamBuilding/BuildingContainer" index="5" groups=["blue", "buildings"]]
 position = Vector2( 223, 928 )
 _lane = NodePath("../../../Top")
 
-[node name="MidTower1" parent="BlueTeamBuilding/BuildingContainer" index="6"]
+[node name="MidTower1" parent="BlueTeamBuilding/BuildingContainer" index="6" groups=["blue", "buildings"]]
 position = Vector2( 736, 992 )
 _lane = NodePath("../../../Mid")
 
-[node name="MidTower2" parent="BlueTeamBuilding/BuildingContainer" index="7"]
+[node name="MidTower2" parent="BlueTeamBuilding/BuildingContainer" index="7" groups=["blue", "buildings"]]
 position = Vector2( 464, 1382 )
 _lane = NodePath("../../../Mid")
 
-[node name="BottomTower1" parent="BlueTeamBuilding/BuildingContainer" index="8"]
+[node name="BottomTower1" parent="BlueTeamBuilding/BuildingContainer" index="8" groups=["blue", "buildings"]]
 position = Vector2( 1312, 1632 )
 _lane = NodePath("../../../Bot")
 
-[node name="BottomTower2" parent="BlueTeamBuilding/BuildingContainer" index="9"]
+[node name="BottomTower2" parent="BlueTeamBuilding/BuildingContainer" index="9" groups=["blue", "buildings"]]
 position = Vector2( 864, 1568 )
 _lane = NodePath("../../../Bot")
 
@@ -68,43 +68,43 @@ _lane = NodePath("../../../Bot")
 team = 3
 mirror_mode = true
 
-[node name="Core" parent="RedTeamBuilding/BuildingContainer" index="0"]
+[node name="Core" parent="RedTeamBuilding/BuildingContainer" index="0" groups=["buildings", "red"]]
 position = Vector2( 1568, 257 )
 _lane = NodePath("../../../Mid")
 
-[node name="TopBarrack" parent="RedTeamBuilding/BuildingContainer" index="1"]
+[node name="TopBarrack" parent="RedTeamBuilding/BuildingContainer" index="1" groups=["buildings", "red"]]
 position = Vector2( 1408, 200 )
 _lane = NodePath("../../../Top")
 
-[node name="MidBarrack" parent="RedTeamBuilding/BuildingContainer" index="2"]
+[node name="MidBarrack" parent="RedTeamBuilding/BuildingContainer" index="2" groups=["buildings", "red"]]
 position = Vector2( 1464, 337 )
 _lane = NodePath("../../../Mid")
 
-[node name="BottomBarrack" parent="RedTeamBuilding/BuildingContainer" index="3"]
+[node name="BottomBarrack" parent="RedTeamBuilding/BuildingContainer" index="3" groups=["buildings", "red"]]
 position = Vector2( 1600, 392 )
 _lane = NodePath("../../../Bot")
 
-[node name="TopTower1" parent="RedTeamBuilding/BuildingContainer" index="4"]
+[node name="TopTower1" parent="RedTeamBuilding/BuildingContainer" index="4" groups=["buildings", "red"]]
 position = Vector2( 480, 160 )
 _lane = NodePath("../../../Top")
 
-[node name="TopTower2" parent="RedTeamBuilding/BuildingContainer" index="5"]
+[node name="TopTower2" parent="RedTeamBuilding/BuildingContainer" index="5" groups=["buildings", "red"]]
 position = Vector2( 928, 224 )
 _lane = NodePath("../../../Top")
 
-[node name="MidTower1" parent="RedTeamBuilding/BuildingContainer" index="6"]
+[node name="MidTower1" parent="RedTeamBuilding/BuildingContainer" index="6" groups=["buildings", "red"]]
 position = Vector2( 1056, 800 )
 _lane = NodePath("../../../Mid")
 
-[node name="MidTower2" parent="RedTeamBuilding/BuildingContainer" index="7"]
+[node name="MidTower2" parent="RedTeamBuilding/BuildingContainer" index="7" groups=["buildings", "red"]]
 position = Vector2( 1327, 406 )
 _lane = NodePath("../../../Mid")
 
-[node name="BottomTower1" parent="RedTeamBuilding/BuildingContainer" index="8"]
+[node name="BottomTower1" parent="RedTeamBuilding/BuildingContainer" index="8" groups=["buildings", "red"]]
 position = Vector2( 1632, 1316 )
 _lane = NodePath("../../../Bot")
 
-[node name="BottomTower2" parent="RedTeamBuilding/BuildingContainer" index="9"]
+[node name="BottomTower2" parent="RedTeamBuilding/BuildingContainer" index="9" groups=["buildings", "red"]]
 position = Vector2( 1568, 864 )
 _lane = NodePath("../../../Bot")
 

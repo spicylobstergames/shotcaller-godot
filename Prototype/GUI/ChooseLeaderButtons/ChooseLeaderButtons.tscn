@@ -31,9 +31,9 @@ __meta__ = {
 }
 
 [node name="maori" type="Button" parent="."]
-margin_left = 3.0
+margin_left = 25.0
 margin_top = 72.0
-margin_right = 51.0
+margin_right = 73.0
 margin_bottom = 92.0
 toggle_mode = true
 pressed = true
@@ -44,9 +44,9 @@ __meta__ = {
 }
 
 [node name="raja" type="Button" parent="."]
-margin_left = 55.0
+margin_left = 77.0
 margin_top = 72.0
-margin_right = 93.0
+margin_right = 115.0
 margin_bottom = 92.0
 toggle_mode = true
 group = SubResource( 1 )
@@ -56,9 +56,9 @@ __meta__ = {
 }
 
 [node name="rollo" type="Button" parent="."]
-margin_left = 97.0
+margin_left = 119.0
 margin_top = 72.0
-margin_right = 141.0
+margin_right = 163.0
 margin_bottom = 92.0
 toggle_mode = true
 group = SubResource( 1 )
@@ -68,9 +68,9 @@ __meta__ = {
 }
 
 [node name="robin" type="Button" parent="."]
-margin_left = 145.0
+margin_left = 167.0
 margin_top = 72.0
-margin_right = 193.0
+margin_right = 215.0
 margin_bottom = 92.0
 toggle_mode = true
 group = SubResource( 1 )
@@ -80,9 +80,9 @@ __meta__ = {
 }
 
 [node name="sami" type="Button" parent="."]
-margin_left = 197.0
+margin_left = 219.0
 margin_top = 72.0
-margin_right = 240.0
+margin_right = 262.0
 margin_bottom = 92.0
 toggle_mode = true
 group = SubResource( 1 )
@@ -91,19 +91,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="daniel" type="Button" parent="."]
-margin_left = 244.0
-margin_top = 72.0
-margin_right = 297.0
-margin_bottom = 92.0
-disabled = true
-toggle_mode = true
-group = SubResource( 1 )
-text = "Debug"
-
 [connection signal="toggled" from="maori" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="raja" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="rollo" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="robin" to="." method="_on_button_pressed"]
 [connection signal="toggled" from="sami" to="." method="_on_button_pressed"]
-[connection signal="toggled" from="daniel" to="." method="_on_button_pressed"]

@@ -48,25 +48,6 @@ func _physics_process(_delta: float) -> void:
 	if attributes.stats.health <= 0:
 		_setup_dead()
 	_setup_healthbar()
-	enemies = Units.get_enemies(
-			self,
-			team,
-			Units.TypeID.Creep,
-			[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
-			Units.DetectionTypeID.Area,
-			attributes.radius.unit_detection
-			)
-
-	
-	allies = Units.get_allies(
-			self,
-			team,
-			Units.TypeID.Creep,
-			[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
-			Units.DetectionTypeID.Area,
-			attributes.radius.unit_detection
-			)
-
 
 
 

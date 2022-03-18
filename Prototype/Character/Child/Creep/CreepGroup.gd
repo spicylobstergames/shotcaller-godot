@@ -27,7 +27,7 @@ func _setup_move_creep():
 	var buildings = Units.get_closest_units_by(
 		self,
 		Units.SortTypeID.Distance,
-		Units.get_enemies(self, team, Units.TypeID.Creep, [Units.TypeID.Building], Units.DetectionTypeID.Global)
+		Units.filter_enemies(self.get_children()[0].units, self, team, Units.TypeID.Creep, [Units.TypeID.Building], Units.DetectionTypeID.Global)
 	)
 	buildings.invert()
 	if buildings:
