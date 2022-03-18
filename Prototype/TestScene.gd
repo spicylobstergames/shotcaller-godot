@@ -34,50 +34,61 @@ onready var bot = $BattleField/Bot.points[3]
 
 
 func _spawn_leaders() -> void:
-	var p = 0
 	var last_leader
-	
-	for l in $Menu/ChooseLeader.leaders:
-		var timer = get_tree().create_timer(p)
-		timer.connect("timeout", self, "_spawn_leader"+str(p)) 
-		p += 1
+	_spawn_leader0()
+	_spawn_leader1()
+	_spawn_leader2()
+	_spawn_leader3()
+	_spawn_leader4()
+#	for p in 5:
+#		var timer = get_tree().create_timer(p)
+#		timer.connect("timeout", self, "_spawn_leader"+str(p)) 
+#		p += 1
 
-
+var leader_group0
+var leader0
 func _spawn_leader0() -> void:
 	var team = Player.selected_team
-	var leader = $Menu/ChooseLeader.leaders["maori"].instance()
-	var leader_group = Leader_Group_Class.instance()
-	leader_group.add_child(leader);
-	Units.call_deferred("spawn_one", team, leader_group, $BattleField, mid)
-	$Menu/LeadersInventories.add_inventory(leader)
-	$Menu/Shop.add_delivery(leader)
+	leader0 = $Menu/ChooseLeader.maori.instance()
+	leader_group0 = Leader_Group_Class.instance()
+	leader_group0.add_child(leader0);
+	Units.call_deferred("spawn_one", team, leader_group0, $BattleField, mid)
+	$Menu/LeadersInventories.add_inventory(leader0)
+	$Menu/Shop.add_delivery(leader0)
 
-
+var leader_group1
+var leader1
 func _spawn_leader1() -> void:
 	var team = Player.selected_team
-	var leader = $Menu/ChooseLeader.leaders["raja"].instance()
-	var leader_group = Leader_Group_Class.instance()
-	leader_group.add_child(leader);
-	Units.call_deferred("spawn_one", team, leader_group, $BattleField, top)
+	leader1 = $Menu/ChooseLeader.raja.instance()
+	leader_group1 = Leader_Group_Class.instance()
+	leader_group1.add_child(leader1);
+	Units.call_deferred("spawn_one", team, leader_group1, $BattleField, top)
 
+var leader_group2
+var leader2
 func _spawn_leader2() -> void:
 	var team = Player.selected_team
-	var leader = $Menu/ChooseLeader.leaders["robin"].instance()
-	var leader_group = Leader_Group_Class.instance()
-	leader_group.add_child(leader);
-	Units.call_deferred("spawn_one", team, leader_group, $BattleField, top)
+	leader2 = $Menu/ChooseLeader.robin.instance()
+	leader_group2 = Leader_Group_Class.instance()
+	leader_group2.add_child(leader2);
+	Units.call_deferred("spawn_one", team, leader_group2, $BattleField, top)
 
+var leader_group3
+var leader3
 func _spawn_leader3() -> void:
 	var team = Player.selected_team
-	var leader = $Menu/ChooseLeader.leaders["rollo"].instance()
-	var leader_group = Leader_Group_Class.instance()
-	leader_group.add_child(leader);
-	Units.call_deferred("spawn_one", team, leader_group, $BattleField, bot)
+	leader3 = $Menu/ChooseLeader.rollo.instance()
+	leader_group3 = Leader_Group_Class.instance()
+	leader_group3.add_child(leader3);
+	Units.call_deferred("spawn_one", team, leader_group3, $BattleField, bot)
 
+var leader_group4
+var leader4
 func _spawn_leader4() -> void:
 	var team = Player.selected_team
-	var leader = $Menu/ChooseLeader.leaders["sami"].instance()
-	var leader_group = Leader_Group_Class.instance()
-	leader_group.add_child(leader);
-	Units.call_deferred("spawn_one", team, leader_group, $BattleField, bot)
+	leader4 = $Menu/ChooseLeader.sami.instance()
+	leader_group4 = Leader_Group_Class.instance()
+	leader_group4.add_child(leader4);
+	Units.call_deferred("spawn_one", team, leader_group4, $BattleField, bot)
 

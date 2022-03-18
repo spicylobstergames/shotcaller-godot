@@ -206,6 +206,7 @@ show_behind_parent = true
 texture = ExtResource( 6 )
 
 [node name="Smoke" type="AnimatedSprite" parent="TextureContainer"]
+visible = false
 modulate = Color( 0, 0, 0, 0.313726 )
 position = Vector2( -17.9263, -4.5 )
 scale = Vector2( 0.838021, 0.844828 )

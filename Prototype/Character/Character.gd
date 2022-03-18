@@ -33,6 +33,7 @@ var ai_agent: GSAIKinematicBody2DAgent = GSAIKinematicBody2DAgent.new(self, GSAI
 var shape = Physics2DShapeQueryParameters.new()
 var circle_shape = CircleShape2D.new()
 
+var units = []
 var allies = []
 var enemies = []
 var buildings = []
@@ -75,7 +76,7 @@ func _ready() -> void:
 	set_physics_process(false)
 	set_team(team)
 	_setup_spawn()
-	_setup_smoke()
+	#_setup_smoke()
 
 # move to units
 var _resize_smoke: bool = true;
@@ -109,23 +110,26 @@ func _physics_process(delta: float) -> void:
 	if attributes.stats.health <= 0:
 		_setup_dead()
 	else:
-		enemies = Units.get_enemies(
-				self,
-				team,
-				attributes.primary.unit_type,
-				[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
-				Units.DetectionTypeID.Area,
-				attributes.radius.unit_detection
-				)
+		units = Units.get_all(self, Units.DetectionTypeID.Area);
 		
-		allies = Units.get_allies(
-				self,
-				team,
-				attributes.primary.unit_type,
-				[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
-				Units.DetectionTypeID.Area,
-				attributes.radius.unit_detection
-				)
+		enemies = Units.filter_enemies(
+			units,
+			self,
+			team,
+			attributes.primary.unit_type,
+			[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
+			attributes.radius.unit_detection
+		)
+
+		allies = Units.filter_allies(
+			units,
+			self,
+			team,
+			attributes.primary.unit_type,
+			[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
+			attributes.radius.unit_detection
+		)
+	
 	if is_instance_valid(targeted_enemy):
 		$AimPoint.visible = true
 		$AimPoint.global_position = targeted_enemy.get_node("HitArea").global_position
