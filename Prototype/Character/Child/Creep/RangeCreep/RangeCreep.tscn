@@ -1000,6 +1000,14 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 32, 32 )
+
 [sub_resource type="AtlasTexture" id=36]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
@@ -1016,16 +1024,13 @@ region = Rect2( 128, 0, 32, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 128, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 32, 32 )
-
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
+"frames": [ SubResource( 35 ), SubResource( 41 ) ],
+"loop": true,
+"name": "Walk",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 36 ), SubResource( 40 ) ],
 "loop": true,
 "name": "Attack",
@@ -1034,11 +1039,6 @@ animations = [ {
 "frames": [ SubResource( 45 ), SubResource( 46 ) ],
 "loop": true,
 "name": "Idle",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 35 ), SubResource( 41 ) ],
-"loop": true,
-"name": "Walk",
 "speed": 5.0
 } ]
 
@@ -1166,6 +1166,7 @@ position = Vector2( -6.21627, 0.305538 )
 
 [node name="Sprite" parent="TextureContainer" index="2"]
 material = SubResource( 10 )
+position = Vector2( -3, 3 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -15 )
 region_rect = Rect2( 128, 4, 28, 28 )

@@ -199,7 +199,7 @@ align = 2
 
 [node name="StatsWindow" parent="GUI" instance=ExtResource( 10 )]
 visible = false
-position = Vector2( 212, 415 )
+position = Vector2( 259, 421 )
 
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 
