@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://MainCamera.gd" type="Script" id=1]
 [ext_resource path="res://Utils/UnitController.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://GUI/ChooseLeaderButtons/ChooseLeaderButtons.tscn" type="PackedScene" id=8]
 [ext_resource path="res://GUI/Play.tscn" type="PackedScene" id=9]
 [ext_resource path="res://GUI/StatsWindow/StatsWindow.tscn" type="PackedScene" id=10]
+[ext_resource path="res://GUI/Minimap/Minimap.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ButtonGroup" id=2]
 
@@ -200,6 +201,8 @@ align = 2
 [node name="StatsWindow" parent="GUI" instance=ExtResource( 10 )]
 visible = false
 position = Vector2( 259, 421 )
+
+[node name="Minimap" parent="GUI" instance=ExtResource( 11 )]
 
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 
