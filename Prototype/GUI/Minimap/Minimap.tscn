@@ -5,16 +5,16 @@
 [node name="Minimap" type="Node2D"]
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
-position = Vector2( 2.99998, 399 )
+position = Vector2( -2.00272e-05, 402 )
 scale = Vector2( 1.1, 1.1 )
-color = Color( 0, 0, 0, 0.443137 )
+color = Color( 0, 0, 0, 0.607843 )
 polygon = PoolVector2Array( 0, 0, 100, 0, 100, 100, 0, 100 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
-margin_left = 8.0
-margin_top = 404.0
-margin_right = 108.0
-margin_bottom = 504.0
+margin_left = 5.0
+margin_top = 407.0
+margin_right = 105.0
+margin_bottom = 507.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

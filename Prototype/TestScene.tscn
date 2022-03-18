@@ -20,7 +20,6 @@
 bg_color = Color( 0.192157, 0.188235, 0.223529, 1 )
 
 [node name="TestScene" type="Node2D"]
-position = Vector2( 0, -1 )
 script = ExtResource( 4 )
 
 [node name="Menu" type="CanvasLayer" parent="."]
