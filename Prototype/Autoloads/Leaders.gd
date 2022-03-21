@@ -13,7 +13,10 @@ var rollo:PackedScene = preload("res://Character/Child/Leader/Rollo/Rollo.tscn")
 var sami:PackedScene =  preload("res://Character/Child/Leader/Sami/Sami.tscn")
 
 var packed_leaders:Array = [maori, raja, robin, rollo, sami]
-export var current_leaders:Array = []
+
+var current_leaders:Array = []
+
+var selected_leader:Node2D = null
 
 func spawn_leaders(parent_node: Node2D) -> void:
 	

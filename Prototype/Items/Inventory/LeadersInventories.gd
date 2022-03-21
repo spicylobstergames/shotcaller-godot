@@ -80,7 +80,7 @@ func update_gui(leader_name):
 
 
 func _process(delta):
-	if Units.selected_leader == null:
+	if Leaders.selected_leader == null:
 		hide()
 		_gold_label.hide()
 		return
@@ -88,7 +88,7 @@ func _process(delta):
 	show()
 	_gold_label.show()
 	
-	var leader_inventory = inventories[Units.selected_leader.name]
+	var leader_inventory = inventories[Leaders.selected_leader.name]
 	
 	# Updating gold label
 	_gold_label.text = str(leader_inventory.gold)

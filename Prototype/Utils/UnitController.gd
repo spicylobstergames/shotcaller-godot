@@ -69,7 +69,7 @@ func _select(u):
 	Units.selected_units.append(u)
 	var in_leaders = u.get_node("Attributes").primary.unit_type in [Units.TypeID.Leader]
 	if u.team == Player.selected_team and in_leaders:
-		Units.selected_leader = u
+		Leaders.selected_leader = u
 
 func _unselect():
 	for u in Units.selected_units:
@@ -77,7 +77,7 @@ func _unselect():
 		
 	get_node("/root/TestScene/GUI/StatsWindow").update_window(false)
 	Units.selected_units = []
-	Units.selected_leader = null
+	Leaders.selected_leader = null
 
 func _on_Player_switch_team() -> void:
 	if Units.selected_units.size() != 0:
