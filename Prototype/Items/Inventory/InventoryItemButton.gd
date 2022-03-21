@@ -37,12 +37,12 @@ func hide_sell_button():
 
 func _item_button_down():
 	var leader = Leaders.selected_leader
-	
+	print('ibd')
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]
 	
-	get_node("/root/TestScene/Menu/LeadersInventories").remove_item(leader, index)
+	get_node("/root/TestScene/GUI/LeadersInventories").remove_item(leader, index)
 
 
 func _sell_button_down():
-	get_node("/root/TestScene/Menu/Shop").sell(index)
+	get_node("/root/TestScene/GUI/Shop/ShopWindow").sell(index)

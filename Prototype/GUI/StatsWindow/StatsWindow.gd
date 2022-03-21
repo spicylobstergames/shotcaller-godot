@@ -4,7 +4,9 @@ extends Node2D
 func update_window(unit):
 	if unit:
 		show()
-		var dmg = unit.get_node("Attributes").stats.damage
+		var name = unit.name
+		get_node("NameLabel").text = name
+		var dmg = unit.get_node("Attributes").primary.unit_type
 		get_node("DamageValue").text = str(dmg)
 		var ats = unit.get_node("Attributes").stats.attack_speed
 		get_node("AttackSpeedValue").text = str(ats)
@@ -32,7 +34,3 @@ func update_window(unit):
 			get_node("Portrait/AnimatedSprite").scale.x *= -1
 	else:
 		hide()
-		get_node("DamageValue").text = "0"
-		get_node("AttackSpeedValue").text = "0"
-		get_node("MoveSpeedValue").text = "0"
-		get_node("RangeValue").text = "0"

@@ -14,11 +14,11 @@ onready var _leaders_inventories = get_node("../LeadersInventories")
 func _ready():
 	hide()
 	# Test items
-	add_item(Item.new().build("Axe", load("res://Assets/Items/Axe.png"), "Add 5 damage to the leader's attack", 1, Item.ItemType.EQUIP, {}), _equip_items)
-	add_item(Item.new().build("Helmet", load("res://Assets/Items/Helm.png"), "Add 5 defense points to leader stats", 2, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
+	add_item(Item.new().build("Axe", load("res://Assets/Items/Axe.png"), "Add 5 damage to the leader's attack", 10, Item.ItemType.EQUIP, {"damage": 5}), _equip_items)
+	add_item(Item.new().build("Helmet", load("res://Assets/Items/Helm.png"), "Add 5 defense points to leader stats", 25, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
 	add_item(Item.new().build("Heal Potion", load("res://Assets/Items/Red Potion 3.png"), "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"health": 100}), _consumable_items)
 	
-	get_node("../VBoxContainer/ShopButton").connect("button_down", self, "_shop_button_down")
+	get_node("/root/TestScene/GUI/Shop/ShopButton").connect("button_down", self, "_shop_button_down")
 
 
 func add_delivery(leader):
