@@ -38,7 +38,7 @@ func _process(delta):
 	if !visible:
 		return
 	
-	var leader = Units.selected_leader
+	var leader = Leaders.selected_leader
 	
 	if leader == null:
 		# Disable all buttons because leader is not selected
@@ -69,14 +69,14 @@ func _process(delta):
 
 
 func buy(item):
-	var leader = Units.selected_leader
+	var leader = Leaders.selected_leader
 	
 	_leaders_inventories.inventories[leader.name].gold -= item.price
 	_deliveries[leader.name].start(item)
 
 
 func sell(item_index):
-	var leader = Units.selected_leader
+	var leader = Leaders.selected_leader
 	
 	var sold_item = _leaders_inventories.remove_item(leader, item_index)
 	

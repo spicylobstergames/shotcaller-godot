@@ -40,7 +40,7 @@ script = ExtResource( 8 )
 collision_size = 5.0
 attack_range = 120.0
 unit_detection = 300.0
-area_selection = 10.0
+area_selection = 20.0
 hurt_area = {
 "height": 0.0,
 "radius": 0.0
@@ -1000,13 +1000,13 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=48]
+[sub_resource type="AtlasTexture" id=51]
 atlas = ExtResource( 2 )
-region = Rect2( 80, 0, 40, 32 )
+region = Rect2( 0, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=49]
+[sub_resource type="AtlasTexture" id=52]
 atlas = ExtResource( 4 )
-region = Rect2( 80, 0, 40, 32 )
+region = Rect2( 0, 0, 40, 32 )
 
 [sub_resource type="AtlasTexture" id=46]
 atlas = ExtResource( 2 )
@@ -1016,19 +1016,19 @@ region = Rect2( 40, 0, 40, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 40, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=51]
+[sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 40, 32 )
+region = Rect2( 80, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=52]
+[sub_resource type="AtlasTexture" id=49]
 atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 40, 32 )
+region = Rect2( 80, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=42]
 animations = [ {
-"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"frames": [ SubResource( 51 ), SubResource( 52 ) ],
 "loop": false,
-"name": "Idle",
+"name": "Walk",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 46 ), SubResource( 47 ) ],
@@ -1036,9 +1036,9 @@ animations = [ {
 "name": "Attack",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 51 ), SubResource( 52 ) ],
+"frames": [ SubResource( 48 ), SubResource( 49 ) ],
 "loop": false,
-"name": "Walk",
+"name": "Idle",
 "speed": 5.0
 } ]
 
@@ -1098,7 +1098,7 @@ radius = 9.0
 
 [sub_resource type="CircleShape2D" id=43]
 resource_local_to_scene = true
-radius = 19.3197
+radius = 20.0
 
 [node name="Maori" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -1167,7 +1167,6 @@ region_enabled = true
 region_rect = Rect2( 80, 0, 40, 32 )
 
 [node name="CollisionShape2D" parent="." index="7"]
-visible = true
 position = Vector2( 0, -3 )
 shape = SubResource( 13 )
 

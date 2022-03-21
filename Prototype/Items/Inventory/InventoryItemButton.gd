@@ -36,7 +36,7 @@ func hide_sell_button():
 
 
 func _item_button_down():
-	var leader = Units.selected_leader
+	var leader = Leaders.selected_leader
 	
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]

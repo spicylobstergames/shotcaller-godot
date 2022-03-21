@@ -94,8 +94,8 @@ __meta__ = {
 }
 
 [node name="Portrait" type="Control" parent="."]
-margin_left = -117.0
-margin_right = -8.0
+margin_left = -101.0
+margin_right = -24.0
 margin_bottom = 79.0
 rect_clip_content = true
 __meta__ = {
@@ -103,11 +103,12 @@ __meta__ = {
 }
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="Portrait"]
-position = Vector2( 54, 42 )
-scale = Vector2( 4, 4 )
+position = Vector2( 39, 42 )
+scale = Vector2( 3, 3 )
 frames = SubResource( 1 )
 animation = "Idle"
 
 [node name="Sprite" type="Sprite" parent="Portrait"]
-position = Vector2( 54, 42 )
+position = Vector2( 39, 42 )
+scale = Vector2( 0.8, 0.8 )
 region_enabled = true

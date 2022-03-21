@@ -128,12 +128,14 @@ animation = "Attack"
 [node name="Idle" type="Node" parent="BehaviorTree/Selector" index="1"]
 script = ExtResource( 7 )
 
+[node name="HealthBar" parent="HUD" index="0"]
+visible = true
+
 [node name="Sprite" parent="TextureContainer" index="0"]
 material = SubResource( 5 )
 
 [node name="Shadow" parent="TextureContainer" index="1"]
 visible = false
-modulate = Color( 1, 1, 1, 0.168627 )
 
 [node name="CollisionShape2D" parent="." index="7"]
 shape = SubResource( 8 )

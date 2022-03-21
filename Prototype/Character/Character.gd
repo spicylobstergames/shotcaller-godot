@@ -208,8 +208,8 @@ func _setup_dead() -> void:
 
 	yield(behavior_animplayer, "animation_finished")
 	
-	if Units.selected_leader == self:
-		Units.selected_leader = null
+	if Leaders.selected_leader == self:
+		Leaders.selected_leader = null
 	
 	queue_free()
 #	position.y = global_position.y - 1000

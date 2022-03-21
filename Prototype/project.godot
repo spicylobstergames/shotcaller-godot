@@ -318,6 +318,7 @@ Utils="*res://Autoloads/Utils.gd"
 Units="*res://Autoloads/Units.gd"
 Player="*res://Autoloads/Player.gd"
 Game="*res://Autoloads/Game.gd"
+Leaders="*res://Autoloads/Leaders.gd"
 
 [debug]
 
