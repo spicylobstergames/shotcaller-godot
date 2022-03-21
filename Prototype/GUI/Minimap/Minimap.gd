@@ -11,7 +11,7 @@ func _on_start() -> void:
 		var leader = Leaders.current_leaders[i]
 		var number = Label.new()
 		number.text = str(i)
-		number.set_global_position(leader.global_position/20)
+		if is_instance_valid(leader): number.set_global_position(leader.global_position/20)
 		$ViewportContainer/Viewport.add_child(number)
 		_numbers.append(number)
 
@@ -21,5 +21,5 @@ func _process(delta):
 			var leader = Leaders.current_leaders[i]
 			var number = _numbers[i]
 			if is_instance_valid(leader):
-				number.set_global_position(leader.global_position/20)
+				number.set_global_position((leader.global_position/17) - Vector2(5,10))
 			else: number.hide()

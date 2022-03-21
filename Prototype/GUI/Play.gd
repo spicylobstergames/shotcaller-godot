@@ -1,6 +1,7 @@
 extends Button
 
 func _on_Play_pressed() -> void:
-	if not Game.is_playing:
-		Game.emit_signal("playing")
-		disabled = true
+	Game.emit_signal("playing")
+	get_node("../BlueButton").disabled = true
+	get_node("../RedButton").disabled = true
+	#disabled = true

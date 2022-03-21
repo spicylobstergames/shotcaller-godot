@@ -4,6 +4,7 @@
 [ext_resource path="res://GUI/Minimap/Minimap.gd" type="Script" id=2]
 
 [node name="Minimap" type="Node2D"]
+position = Vector2( -5, -5 )
 script = ExtResource( 2 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]

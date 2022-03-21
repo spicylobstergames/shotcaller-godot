@@ -8,9 +8,9 @@ var _consumable_item_buttons = []
 var _inventory_preload = preload("res://Items/Inventory/Inventory.tscn")
 var _inventory_item_button_preload = preload("res://Items/Inventory/InventoryItemButton.tscn")
 
-onready var _shop = get_node("../Shop")
-onready var _gold_label = get_node("../VBoxContainer/GoldLabel")
-
+onready var _shop = get_node("../ShopWindow")
+onready var _gold_control = get_node("../GoldControl")
+onready var _gold_label = _gold_control.get_node("GoldLabel")
 
 func _ready():
 	hide()
@@ -82,11 +82,11 @@ func update_gui(leader_name):
 func _process(delta):
 	if Leaders.selected_leader == null:
 		hide()
-		_gold_label.hide()
+		_gold_control.hide()
 		return
 	
 	show()
-	_gold_label.show()
+	_gold_control.show()
 	
 	var leader_inventory = inventories[Leaders.selected_leader.name]
 	
