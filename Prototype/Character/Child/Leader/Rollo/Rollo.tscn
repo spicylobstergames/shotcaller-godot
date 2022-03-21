@@ -38,7 +38,7 @@ script = ExtResource( 9 )
 collision_size = 5.0
 attack_range = 50.0
 unit_detection = 300.0
-area_selection = 10.0
+area_selection = 20.0
 hurt_area = {
 "height": 0.0,
 "radius": 0.0
@@ -926,13 +926,13 @@ tracks/11/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=40]
+[sub_resource type="AtlasTexture" id=44]
 atlas = ExtResource( 2 )
-region = Rect2( 80, 0, 40, 32 )
+region = Rect2( 120, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=41]
+[sub_resource type="AtlasTexture" id=45]
 atlas = ExtResource( 4 )
-region = Rect2( 80, 0, 40, 32 )
+region = Rect2( 120, 0, 40, 32 )
 
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 2 )
@@ -942,19 +942,19 @@ region = Rect2( 0, 0, 40, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=44]
+[sub_resource type="AtlasTexture" id=40]
 atlas = ExtResource( 2 )
-region = Rect2( 120, 0, 40, 32 )
+region = Rect2( 80, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=45]
+[sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 4 )
-region = Rect2( 120, 0, 40, 32 )
+region = Rect2( 80, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=46]
 animations = [ {
-"frames": [ SubResource( 40 ), SubResource( 41 ) ],
+"frames": [ SubResource( 44 ), SubResource( 45 ) ],
 "loop": false,
-"name": "Idle",
+"name": "Walk",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 42 ), SubResource( 43 ) ],
@@ -962,9 +962,9 @@ animations = [ {
 "name": "Attack",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 44 ), SubResource( 45 ) ],
+"frames": [ SubResource( 40 ), SubResource( 41 ) ],
 "loop": false,
-"name": "Walk",
+"name": "Idle",
 "speed": 5.0
 } ]
 

@@ -39,8 +39,8 @@ resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
 attack_range = 220.0
-unit_detection = 300.0
-area_selection = 10.0
+unit_detection = 600.0
+area_selection = 20.0
 hurt_area = {
 "height": 0.0,
 "radius": 0.0

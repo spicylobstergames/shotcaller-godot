@@ -98,8 +98,14 @@ margin_bottom = -262.0
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 249.0
+margin_top = 22.0
+margin_bottom = -104.0
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Menu/Shop"]
 anchor_right = 1.0
@@ -113,50 +119,50 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menu/Shop/ScrollContainer"]
-margin_right = 492.0
-margin_bottom = 452.0
+margin_right = 243.0
+margin_bottom = 326.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 88.0
-margin_right = 492.0
-margin_bottom = 92.0
+margin_top = 131.0
+margin_right = 243.0
+margin_bottom = 135.0
 
 [node name="Label" type="Label" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 96.0
-margin_right = 492.0
-margin_bottom = 110.0
+margin_top = 139.0
+margin_right = 243.0
+margin_bottom = 153.0
 text = "Equip"
 
 [node name="EquipItems" type="HBoxContainer" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 114.0
-margin_right = 492.0
-margin_bottom = 114.0
+margin_top = 157.0
+margin_right = 243.0
+margin_bottom = 157.0
 size_flags_horizontal = 3
 
 [node name="HSeparator2" type="HSeparator" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 118.0
-margin_right = 492.0
-margin_bottom = 122.0
+margin_top = 161.0
+margin_right = 243.0
+margin_bottom = 165.0
 
 [node name="Label2" type="Label" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 126.0
-margin_right = 492.0
-margin_bottom = 140.0
+margin_top = 169.0
+margin_right = 243.0
+margin_bottom = 183.0
 text = "Consumable"
 
 [node name="ConsumableItems" type="HBoxContainer" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 144.0
-margin_right = 492.0
-margin_bottom = 144.0
+margin_top = 187.0
+margin_right = 243.0
+margin_bottom = 187.0
 size_flags_horizontal = 3
 
 [node name="HSeparator3" type="HSeparator" parent="Menu/Shop/ScrollContainer/VBoxContainer"]
-margin_top = 148.0
-margin_right = 492.0
-margin_bottom = 152.0
+margin_top = 191.0
+margin_right = 243.0
+margin_bottom = 195.0
 
 [node name="LeadersInventories" type="HBoxContainer" parent="Menu"]
 anchor_top = 1.0
@@ -202,6 +208,7 @@ visible = false
 position = Vector2( 259, 421 )
 
 [node name="Minimap" parent="GUI" instance=ExtResource( 11 )]
+position = Vector2( 0, 402 )
 
 [node name="CreepRespawnTimer" type="Timer" parent="."]
 
