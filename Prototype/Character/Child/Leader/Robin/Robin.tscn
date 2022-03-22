@@ -38,8 +38,8 @@ damage = 30.0
 resource_local_to_scene = true
 script = ExtResource( 9 )
 collision_size = 5.0
-attack_range = 220.0
-unit_detection = 600.0
+attack_range = 200.0
+unit_detection = 200.0
 area_selection = 20.0
 hurt_area = {
 "height": 0.0,
@@ -1000,14 +1000,6 @@ tracks/12/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 4 )
-region = Rect2( 128, 0, 32, 32 )
-
 [sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
@@ -1015,6 +1007,14 @@ region = Rect2( 32, 0, 32, 32 )
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 4 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 2 )
@@ -1026,14 +1026,14 @@ region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=45]
 animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "Idle",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 41 ), SubResource( 42 ), SubResource( 40 ) ],
 "loop": true,
 "name": "Attack",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+"loop": true,
+"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 43 ), SubResource( 44 ) ],
@@ -1187,6 +1187,9 @@ collision_mask = 1
 
 [node name="HitArea" parent="." index="10"]
 position = Vector2( 5, -15 )
+
+[node name="AimPoint" parent="." index="11"]
+modulate = Color( 0, 0, 0, 0 )
 
 [connection signal="animation_started" from="BehaviorAnimPlayer" to="." method="_on_BehaviorAnimPlayer_animation_started"]
 

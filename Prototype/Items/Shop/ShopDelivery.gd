@@ -4,7 +4,7 @@ var _item
 var _leader
 var _timer
 
-onready var _leaders_inventories = get_node("../../LeadersInventories")
+onready var _leaders_inventories = get_node("../../../../BotRightContainer/LeadersInventories")
 
 
 func _ready():

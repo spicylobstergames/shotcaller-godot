@@ -8,7 +8,7 @@ var _shop_delivery_preload = preload("res://Items/Shop/ShopDelivery.tscn")
 
 onready var _equip_items = $ScrollContainer/VBoxContainer/EquipItems
 onready var _consumable_items = $ScrollContainer/VBoxContainer/ConsumableItems
-onready var _leaders_inventories = get_node("../LeadersInventories")
+onready var _leaders_inventories = get_node("../../../BotRightContainer/LeadersInventories")
 
 
 func _ready():
@@ -18,7 +18,7 @@ func _ready():
 	add_item(Item.new().build("Helmet", load("res://Assets/Items/Helm.png"), "Add 5 defense points to leader stats", 25, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
 	add_item(Item.new().build("Heal Potion", load("res://Assets/Items/Red Potion 3.png"), "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"health": 100}), _consumable_items)
 	
-	get_node("/root/TestScene/GUI/Shop/ShopButton").connect("button_down", self, "_shop_button_down")
+	get_tree().get_current_scene().get_node("GUI/TopRightContainer/Shop/ShopButton").connect("button_down", self, "_shop_button_down")
 
 
 func add_delivery(leader):

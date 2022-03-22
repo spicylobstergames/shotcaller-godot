@@ -20,6 +20,7 @@ onready var healthbar: Control = $HUD/HealthBar
 onready var behavior_animplayer: AnimationPlayer = $BehaviorAnimPlayer
 onready var behavior_tree: BehaviorTree = $BehaviorTree
 
+var units = []
 var enemies = []
 var allies = []
 export var _lane: NodePath
@@ -42,13 +43,36 @@ func _ready() -> void:
 
 	_setup_ai_agent()
 	_setup_healthbar()
+	_setup_radius_collision()
+
 
 
 func _physics_process(_delta: float) -> void:
 	if attributes.stats.health <= 0:
 		_setup_dead()
+	else:
+		
+		enemies = Units.filter_enemies(
+			units,
+			self,
+			team,
+			attributes.primary.unit_type,
+			[Units.TypeID.Creep, Units.TypeID.Leader, Units.TypeID.Building],
+			attributes.radius.unit_detection
+		)
+		
+		units = Units.get_all(self, Units.DetectionTypeID.Area);
+		
+		if is_instance_valid(targeted_enemy):
+			var _hit_area = targeted_enemy.get_node("HitArea").global_position
+			$AimPoint.visible = true
+			$AimPoint.global_position = _hit_area
+			$TextureContainer/Position2D.look_at(_hit_area)
+		else:
+			$AimPoint.visible = false
+		
+	
 	_setup_healthbar()
-
 
 
 func _setup_team() -> void:
@@ -75,8 +99,8 @@ func _setup_ai_agent() -> void:
 
 
 func _setup_radius_collision() -> void:
-	$CollisionShape2D.shape.radius = attributes.radius.collision_size
-	$UnitSelector/CollisionShape2D.shape.radius = attributes.radius.area_selection
+	#$CollisionShape2D.shape.radius = attributes.radius.collision_size
+	#$UnitSelector/CollisionShape2D.shape.radius = attributes.radius.area_selection
 	$UnitDetector/CollisionShape2D.shape.radius = attributes.radius.unit_detection
 
 
@@ -106,7 +130,21 @@ func _setup_spawn() -> void:
 	behavior_tree.is_active = true
 	pass
 
+# warning-ignore:unused_argument
+func _on_BehaviorAnimPlayer_animation_started(anim_name: String) -> void:
+	pass#set_team(team)
+
+
+func _setup_ats() -> void:
+	$BehaviorAnimPlayer.playback_speed = $Attributes.stats.attack_speed/100
+
+
+func _reset_ats() -> void:
+	$BehaviorAnimPlayer.playback_speed = 1
+
+
 func _on_attributes_stats_changed(prop_name, prop_value) -> void:
 	match prop_name:
 		"health", "mana", "max_health", "max_mana":
 			_setup_healthbar()
+

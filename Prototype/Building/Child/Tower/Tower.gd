@@ -8,3 +8,4 @@ func _setup_team() -> void:
 		if t is FlagClass:
 			t.set_team(team)
 	._setup_team()
+

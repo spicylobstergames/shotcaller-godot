@@ -130,11 +130,11 @@ func _physics_process(delta: float) -> void:
 			attributes.radius.unit_detection
 		)
 	
-	if is_instance_valid(targeted_enemy):
-		$AimPoint.visible = true
-		$AimPoint.global_position = targeted_enemy.get_node("HitArea").global_position
-	else:
-		$AimPoint.visible = false
+		if is_instance_valid(targeted_enemy):
+			$AimPoint.visible = true
+			$AimPoint.global_position = targeted_enemy.get_node("HitArea").global_position
+		else:
+			$AimPoint.visible = false
 		
 		
 #func _draw() -> void:
@@ -212,7 +212,7 @@ func _setup_dead() -> void:
 		Leaders.selected_leader = null
 	
 	queue_free()
-#	position.y = global_position.y - 1000
+
 
 
 func _setup_spawn() -> void:

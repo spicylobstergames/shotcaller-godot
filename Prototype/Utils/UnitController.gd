@@ -65,7 +65,7 @@ func _unhandled_input(event):
 func _select(u):
 	_unselect()
 	u.get_node("HUD/Selection").visible = true
-	get_node("/root/TestScene/GUI/StatsWindow").update_window(u)
+	get_tree().get_current_scene().get_node("GUI/BotLeftContainer/StatsWindow").update_window(u)
 	Units.selected_units.append(u)
 	var in_leaders = u.get_node("Attributes").primary.unit_type in [Units.TypeID.Leader]
 	if u.team == Player.selected_team and in_leaders:
@@ -75,7 +75,7 @@ func _unselect():
 	for u in Units.selected_units:
 		if is_instance_valid(u): u.get_node("HUD/Selection").visible = false
 		
-	get_node("/root/TestScene/GUI/StatsWindow").update_window(false)
+	get_tree().get_current_scene().get_node("GUI/BotLeftContainer/StatsWindow").update_window(false)
 	Units.selected_units = []
 	Leaders.selected_leader = null
 

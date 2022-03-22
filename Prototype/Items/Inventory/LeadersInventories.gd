@@ -8,8 +8,8 @@ var _consumable_item_buttons = []
 var _inventory_preload = preload("res://Items/Inventory/Inventory.tscn")
 var _inventory_item_button_preload = preload("res://Items/Inventory/InventoryItemButton.tscn")
 
-onready var _shop = get_node("../ShopWindow")
-onready var _gold_control = get_node("../GoldControl")
+onready var _shop = get_node("../../TopRightContainer/Shop/ShopWindow")
+onready var _gold_control = get_node("../../TopRightContainer/Shop/GoldControl")
 onready var _gold_label = _gold_control.get_node("GoldLabel")
 
 func _ready():
