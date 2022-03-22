@@ -74,7 +74,7 @@ margin_top = -243.0
 margin_right = -206.0
 margin_bottom = -229.0
 size_flags_horizontal = 3
-text = "Shotcaller"
+text = "Shotcaller alpha"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -98,37 +98,67 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="StatsWindow" parent="GUI" instance=ExtResource( 10 )]
+[node name="MenuButton" type="Button" parent="GUI"]
 visible = false
-position = Vector2( 203, 421 )
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 79.0
+margin_bottom = 42.0
+text = "menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Minimap" parent="GUI" instance=ExtResource( 11 )]
+[node name="BotLeftContainer" type="MarginContainer" parent="GUI"]
 visible = false
-position = Vector2( 0, 402 )
-
-[node name="Shop" type="Control" parent="GUI"]
-visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ShopWindow" type="Panel" parent="GUI/Shop"]
+[node name="Minimap" parent="GUI/BotLeftContainer" instance=ExtResource( 11 )]
+position = Vector2( 0, -110 )
+
+[node name="StatsWindow" parent="GUI/BotLeftContainer" instance=ExtResource( 10 )]
+visible = false
+position = Vector2( 203, -92 )
+
+[node name="TopRightContainer" type="MarginContainer" parent="GUI"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -270.0
+margin_bottom = 273.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Shop" type="Control" parent="GUI/TopRightContainer"]
+margin_right = 270.0
+margin_bottom = 273.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShopWindow" type="Panel" parent="GUI/TopRightContainer/Shop"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 249.0
+margin_left = 5.0
 margin_top = 43.0
-margin_right = 470.0
-margin_bottom = 371.0
+margin_right = -2.0
+margin_bottom = -4.0
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="GUI/Shop/ShopWindow"]
+[node name="ScrollContainer" type="ScrollContainer" parent="GUI/TopRightContainer/Shop/ShopWindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
@@ -139,69 +169,56 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GUI/Shop/ShopWindow/ScrollContainer"]
-margin_right = 241.0
-margin_bottom = 308.0
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer"]
+margin_right = 243.0
+margin_bottom = 166.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 122.0
-margin_right = 241.0
-margin_bottom = 126.0
+[node name="HSeparator" type="HSeparator" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 51.0
+margin_right = 243.0
+margin_bottom = 55.0
 
-[node name="Label" type="Label" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 130.0
-margin_right = 241.0
-margin_bottom = 144.0
+[node name="Label" type="Label" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 59.0
+margin_right = 243.0
+margin_bottom = 73.0
 text = "Equip"
 
-[node name="EquipItems" type="HBoxContainer" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 148.0
-margin_right = 241.0
-margin_bottom = 148.0
+[node name="EquipItems" type="HBoxContainer" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 77.0
+margin_right = 243.0
+margin_bottom = 77.0
 size_flags_horizontal = 3
 
-[node name="HSeparator2" type="HSeparator" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 152.0
-margin_right = 241.0
-margin_bottom = 156.0
+[node name="HSeparator2" type="HSeparator" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 81.0
+margin_right = 243.0
+margin_bottom = 85.0
 
-[node name="Label2" type="Label" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 160.0
-margin_right = 241.0
-margin_bottom = 174.0
+[node name="Label2" type="Label" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 89.0
+margin_right = 243.0
+margin_bottom = 103.0
 text = "Consumable"
 
-[node name="ConsumableItems" type="HBoxContainer" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 178.0
-margin_right = 241.0
-margin_bottom = 178.0
+[node name="ConsumableItems" type="HBoxContainer" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 107.0
+margin_right = 243.0
+margin_bottom = 107.0
 size_flags_horizontal = 3
 
-[node name="HSeparator3" type="HSeparator" parent="GUI/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
-margin_top = 182.0
-margin_right = 241.0
-margin_bottom = 186.0
+[node name="HSeparator3" type="HSeparator" parent="GUI/TopRightContainer/Shop/ShopWindow/ScrollContainer/VBoxContainer"]
+margin_top = 111.0
+margin_right = 243.0
+margin_bottom = 115.0
 
-[node name="LeadersInventories" type="HBoxContainer" parent="GUI/Shop"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 352.0
-margin_top = 420.0
-margin_right = 495.0
-margin_bottom = 464.0
-size_flags_vertical = 8
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ShopButton" type="Button" parent="GUI/Shop"]
-margin_left = 410.0
+[node name="ShopButton" type="Button" parent="GUI/TopRightContainer/Shop"]
+margin_left = 168.0
 margin_top = 2.0
-margin_right = 510.0
+margin_right = 268.0
 margin_bottom = 42.0
 size_flags_horizontal = 11
 text = "shop"
@@ -209,19 +226,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GoldControl" type="Control" parent="GUI/Shop"]
-margin_right = 40.0
+[node name="GoldControl" type="Control" parent="GUI/TopRightContainer/Shop"]
+visible = false
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -150.0
+margin_right = -106.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GoldLabel" type="Label" parent="GUI/Shop/GoldControl"]
-anchor_left = -3.7
-anchor_right = -3.7
-margin_left = 504.0
+[node name="GoldLabel" type="Label" parent="GUI/TopRightContainer/Shop/GoldControl"]
+margin_left = 10.0
 margin_top = 13.0
-margin_right = 544.0
+margin_right = 50.0
 margin_bottom = 27.0
 custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
@@ -231,12 +250,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GoldLabel2" type="Label" parent="GUI/Shop/GoldControl"]
+[node name="GoldLabel2" type="Label" parent="GUI/TopRightContainer/Shop/GoldControl"]
 anchor_left = -3.95
 anchor_right = -3.95
-margin_left = 504.0
+margin_left = 173.8
 margin_top = 13.0
-margin_right = 512.0
+margin_right = 181.8
 margin_bottom = 27.0
 custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
@@ -247,13 +266,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MenuButton" type="Button" parent="GUI"]
-visible = false
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 79.0
-margin_bottom = 42.0
-text = "menu"
+[node name="BotRightContainer" type="MarginContainer" parent="GUI"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -160.0
+margin_top = -64.0
+margin_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LeadersInventories" type="HBoxContainer" parent="GUI/BotRightContainer"]
+margin_right = 160.0
+margin_bottom = 60.0
+size_flags_vertical = 8
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -134,9 +134,6 @@ visible = true
 [node name="Sprite" parent="TextureContainer" index="0"]
 material = SubResource( 5 )
 
-[node name="Shadow" parent="TextureContainer" index="1"]
-visible = false
-
 [node name="CollisionShape2D" parent="." index="7"]
 shape = SubResource( 8 )
 

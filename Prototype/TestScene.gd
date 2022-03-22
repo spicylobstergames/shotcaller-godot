@@ -2,9 +2,6 @@ extends Node2D
 
 var _game_start:bool = true
 
-var _stats_state:bool
-
-
 func _ready() -> void:
 	Game.connect("playing", self, "_on_Game_playing")
 
@@ -21,8 +18,8 @@ func _on_Game_playing() -> void:
 		
 		if _game_start:
 		
-			#Units.call_deferred("try_spawn_creep_wave", $BattleField)
-			#$CreepRespawnTimer.start(Game.creep_respawn_time)
+			Units.call_deferred("try_spawn_creep_wave", $BattleField)
+			$CreepRespawnTimer.start(Game.creep_respawn_time)
 			
 			Leaders.call_deferred("spawn_leaders", self)
 			
@@ -48,17 +45,16 @@ func _on_MenuButton_pressed():
 
 func _hide_GUI():
 	$GUI/FPS.hide()
-	_stats_state = $GUI/StatsWindow.visible
-	$GUI/StatsWindow.hide()
-	$GUI/Minimap.hide()
-	$GUI/Shop.hide()
+	$GUI/BotLeftContainer.hide()
+	$GUI/BotRightContainer.hide()
+	$GUI/TopRightContainer.hide()
 	$GUI/MenuButton.hide()
 
 func _show_GUI():
 	$GUI/FPS.show()
-	$GUI/StatsWindow.visible = _stats_state
-	$GUI/Minimap.show()
-	$GUI/Shop.show()
+	$GUI/BotLeftContainer.show()
+	$GUI/BotRightContainer.show()
+	$GUI/TopRightContainer.show()
 	$GUI/MenuButton.show()
 
 

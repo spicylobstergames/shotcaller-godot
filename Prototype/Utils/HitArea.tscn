@@ -2,6 +2,7 @@
 
 [sub_resource type="CircleShape2D" id=14]
 resource_local_to_scene = true
+radius = 5.0
 
 [node name="HitArea" type="Area2D" groups=["hit_area"]]
 collision_layer = 65536

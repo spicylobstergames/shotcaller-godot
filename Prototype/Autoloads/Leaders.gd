@@ -25,7 +25,7 @@ func spawn_leaders(parent_node: Node2D) -> void:
 	var bot_blue:Vector2 = parent_node.get_node("BattleField/Bot").points[2]
 
 	var top_red:Vector2 = parent_node.get_node("BattleField/Top").points[4]
-	var mid_red:Vector2 = parent_node.get_node("BattleField/Mid").points[5]
+	var mid_red:Vector2 = parent_node.get_node("BattleField/Mid").points[4]
 	var bot_red:Vector2 = parent_node.get_node("BattleField/Bot").points[4]
 
 	var spawn_points:Array = Array(Units.TeamID.values())
@@ -45,8 +45,8 @@ func spawn_leaders(parent_node: Node2D) -> void:
 			spawn_point.y += randf() - 0.5
 			var battlefield = parent_node.get_node("BattleField")
 			Units.call("spawn_one", team, leader_group, battlefield, spawn_point)
-			parent_node.get_node("GUI/Shop/LeadersInventories").add_inventory(leader)
-			parent_node.get_node("GUI/Shop/ShopWindow").add_delivery(leader)
+			parent_node.get_node("GUI/BotRightContainer/LeadersInventories").add_inventory(leader)
+			parent_node.get_node("GUI/TopRightContainer/Shop/ShopWindow").add_delivery(leader)
 
 	self.emit_signal("leaders_spawned")
 

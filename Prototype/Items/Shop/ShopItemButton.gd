@@ -4,7 +4,7 @@ extends Control
 onready var _item_button = $ItemButton
 onready var _name_label = _item_button.get_node("Name")
 onready var _price_label = _item_button.get_node("Price")
-onready var _shop = get_node("/root/TestScene/GUI/Shop/ShopWindow")
+onready var _shop = get_tree().get_current_scene().get_node("GUI/TopRightContainer/Shop/ShopWindow")
 
 
 func setup(item):

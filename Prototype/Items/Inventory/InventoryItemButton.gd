@@ -41,8 +41,8 @@ func _item_button_down():
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]
 	
-	get_node("/root/TestScene/GUI/LeadersInventories").remove_item(leader, index)
+	get_tree().get_current_scene().get_node("GUI/BotRightContainer/LeadersInventories").remove_item(leader, index)
 
 
 func _sell_button_down():
-	get_node("/root/TestScene/GUI/Shop/ShopWindow").sell(index)
+	get_tree().get_current_scene().get_node("GUI/TopRightContainer/Shop/ShopWindow").sell(index)
