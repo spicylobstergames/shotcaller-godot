@@ -21,8 +21,8 @@ func _on_Game_playing() -> void:
 		
 		if _game_start:
 		
-			Units.call_deferred("try_spawn_creep_wave", $BattleField)
-			$CreepRespawnTimer.start(Game.creep_respawn_time)
+			#Units.call_deferred("try_spawn_creep_wave", $BattleField)
+			#$CreepRespawnTimer.start(Game.creep_respawn_time)
 			
 			Leaders.call_deferred("spawn_leaders", self)
 			

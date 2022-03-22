@@ -132,7 +132,7 @@ func get_all_allies(current_team: int) -> Array:
 			output.append(unit)
 	return output
 
-func filter_allies(units: Array, node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
+func filter_allies(units: Array, node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], radius: float = 1000) -> Array:
 	var allies: Array = []
 	match current_team:
 		TeamID.Neutral:
@@ -158,9 +158,9 @@ func filter_allies(units: Array, node: Node2D, current_team: int, current_type: 
 	return allies
 	
 
-func filter_enemies(units:Array, node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], detection_type: int = DetectionTypeID.Area, radius: float = 1000) -> Array:
+func filter_enemies(units:Array, node: Node2D, current_team: int, current_type: int, target_types: PoolIntArray = [], radius: float = 1000) -> Array:
 	var enemies: Array = []
-
+	
 	match current_team:
 		TeamID.Neutral:
 			match current_type:
