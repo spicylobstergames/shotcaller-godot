@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/axe.png-7caf0d39d10e28a54c35f3a0c6e08f16.stex"
+path="res://.import/arrow.png-4a924505555734698bf25f90f72bb637.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/items/axe.png"
-dest_files=[ "res://.import/axe.png-7caf0d39d10e28a54c35f3a0c6e08f16.stex" ]
+source_file="res://assets/units/leaders/robin/arrow.png"
+dest_files=[ "res://.import/arrow.png-4a924505555734698bf25f90f72bb637.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=false
+detect_3d=true
 svg/scale=1.0

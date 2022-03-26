@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/axe.png-7caf0d39d10e28a54c35f3a0c6e08f16.stex"
+path="res://.import/melee.png-3b99cec99f2a34347abd6b07b258c2d4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/items/axe.png"
-dest_files=[ "res://.import/axe.png-7caf0d39d10e28a54c35f3a0c6e08f16.stex" ]
+source_file="res://assets/units/creeps/melee/melee.png"
+dest_files=[ "res://.import/melee.png-3b99cec99f2a34347abd6b07b258c2d4.stex" ]
 
 [params]
 
