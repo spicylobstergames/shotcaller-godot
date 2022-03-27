@@ -10,11 +10,10 @@ __meta__ = {
 }
 
 [node name="fps" type="Label" parent="top_left"]
-margin_left = 50.0
-margin_top = 28.0
-margin_right = 100.0
-margin_bottom = 59.0
-rect_scale = Vector2( 2, 2 )
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 62.0
+margin_bottom = 34.0
 text = "fps
 "
 __meta__ = {
@@ -68,6 +67,7 @@ __meta__ = {
 }
 
 [node name="minimap" type="Node2D" parent="bot_left"]
+scale = Vector2( 0.5, 0.5 )
 
 [node name="map" type="Sprite" parent="bot_left/minimap"]
 position = Vector2( 100, -100 )
@@ -87,10 +87,9 @@ __meta__ = {
 visible = false
 
 [node name="name" type="Label" parent="bot_mid/stats"]
-margin_left = -100.0
-margin_top = -60.0
-margin_bottom = -40.0
-rect_scale = Vector2( 2, 2 )
+margin_left = -50.0
+margin_top = -20.0
+margin_right = 50.0
 text = "stats"
 align = 1
 valign = 1

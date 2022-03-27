@@ -2,9 +2,10 @@ extends Camera2D
 
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
-var zoom_limit:Vector2 = Vector2(0.3,3.34)
+var zoom_default = Vector2(1.69, 1.69)
+var zoom_limit:Vector2 = Vector2(0.69,6.69)
 var margin:int = limit_right;
-var position_limit:int = 690
+var position_limit:int = 720
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
 
@@ -13,6 +14,7 @@ var ui:Node
 func _ready():
 	game = get_tree().get_current_scene()
 	ui = game.get_node("ui")
+	zoom = zoom_default
 
 
 func _unhandled_input(event):
@@ -55,11 +57,11 @@ func _unhandled_input(event):
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
-		if event.button_index == BUTTON_RIGHT: unselect()
-		elif event.button_index == BUTTON_LEFT: select()
+		if event.button_index == BUTTON_RIGHT: ui.unselect(null)
+		elif event.button_index == BUTTON_LEFT: ui.select(get_global_mouse_position())
 	
 	# TOUCH SELECTION
-	if event is InputEventScreenTouch and event.pressed: select()
+	if event is InputEventScreenTouch and event.pressed: ui.select(get_global_mouse_position())
 		
 	# TOUCH PAN
 	if event is InputEventScreenTouch:
@@ -70,22 +72,25 @@ func _unhandled_input(event):
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
 		if zoom.x == zoom_limit.y: zoom_reset()
-		elif zoom.x == 1: zoom_in()
+		elif zoom == zoom_default: zoom_in()
 	if event.is_action_pressed("zoom_out"):
 		if zoom.x == zoom_limit.x: zoom_reset()
-		elif zoom.x == 1: zoom_out()
+		elif zoom == zoom_default: zoom_out()
 
 func zoom_reset(): 
-	zoom = Vector2.ONE
+	zoom = zoom_default
 	ui.minimap_default()
+	ui.hide_hpbar()
 	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	ui.minimap_default()
+	ui.show_hpbar()
 	
 func zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 	ui.minimap_cover()
+
 
 func _process(delta):
 	var ratio = get_viewport().size.x / get_viewport().size.y
@@ -118,30 +123,5 @@ func _process(delta):
 		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.65)
 
 
-func get_selected_unit(point):
-	var p = Vector2(point)
-	for unit in game.selectable_units:
-		var u = unit.global_position
-		var s = unit.shape.extents
-		if p.x>=u.x-s.x and p.y>=u.y-s.x and p.x<=u.x+s.x and p.y<=u.y+s.y:
-			return unit.get_parent().get_parent()
 
 
-func select():
-	var point = get_global_mouse_position()
-	var unit = get_selected_unit(point)
-	if unit:
-		unselect()
-		game.selected_unit = unit
-		if unit.team == game.player_team and unit.type == "unit":
-			game.selected_leader = unit
-		unit.get_node("hud/selection").visible = true
-		ui.update_stats()
-
-
-func unselect():
-	if game.selected_unit:
-		game.selected_unit.get_node("hud/selection").visible = false
-	game.selected_unit = null
-	game.selected_leader = null
-	ui.update_stats()
