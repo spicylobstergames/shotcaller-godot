@@ -126,7 +126,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 10, 8 )
+extents = Vector2( 12, 10 )
 
 [sub_resource type="RectangleShape2D" id=19]
 extents = Vector2( 16, 16 )
@@ -171,8 +171,9 @@ modulate = Color( 0, 0, 0, 0.294118 )
 texture = ExtResource( 2 )
 
 [node name="sprites" type="AnimatedSprite" parent="."]
+position = Vector2( 1, 0 )
 frames = SubResource( 15 )
-frame = 2
+frame = 3
 offset = Vector2( -3, -10 )
 
 [node name="animations" type="AnimationPlayer" parent="."]

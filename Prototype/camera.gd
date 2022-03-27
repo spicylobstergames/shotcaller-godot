@@ -2,8 +2,8 @@ extends Camera2D
 
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
-var zoom_default = Vector2(1.69, 1.69)
-var zoom_limit:Vector2 = Vector2(0.69,6.69)
+var zoom_default = Vector2(0.66,0.66)
+var zoom_limit:Vector2 = Vector2(0.32,3.34)
 var margin:int = limit_right;
 var position_limit:int = 720
 var arrow_keys_speed:int = 4
@@ -115,12 +115,12 @@ func _process(delta):
 	limit_right = margin
 	
 	if ratio >= 1 and zoom.x > 1:
-		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit[0]) * 0.65)
-		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit[0]) * 0.65)
+		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * 0.65)
+		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * 0.65)
 
 	if ratio <= 1 and zoom.x > 1:
-		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.65)
-		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit[0]) * 0.65)
+		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * 0.65)
+		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* 0.65)
 
 
 

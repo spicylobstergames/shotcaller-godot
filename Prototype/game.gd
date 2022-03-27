@@ -14,13 +14,13 @@ func _ready():
 #	spawn(Vector2(1060,1000))
 	for x in range(20):
 		for y in range(20):
-			spawn(Vector2(200+x*80,200+y*80))
+			spawn(Vector2(200+x*60,200+y*60))
 
 func _process(delta: float) -> void:
 	get_node("ui/top_left/fps").set_text((str(Engine.get_frames_per_second())))
 
 var even = 0
-var steps = 14
+var steps = 16
 func _physics_process(delta):
 	for i in range(all_units.size()):
 		var unit = all_units[i]
@@ -32,8 +32,8 @@ func _physics_process(delta):
 					unit.stop()
 				elif unit.collide:
 					for block2 in collision_blocks:
-						if block1 != block2 and rect_collision(block1, block2):
-							unit.stop()
+							if block1 != block2 and rect_collision(block1, block2):
+								unit.stop()
 	even = (even+1)%steps
 
 
