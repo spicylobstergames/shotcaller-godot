@@ -5,25 +5,25 @@
 [ext_resource path="res://assets/units/creeps/melee/melee.png" type="Texture" id=3]
 [ext_resource path="res://assets/units/hpbar.png" type="Texture" id=4]
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=21]
 atlas = ExtResource( 3 )
 region = Rect2( 24, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=23]
 atlas = ExtResource( 3 )
 region = Rect2( 72, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=15]
 animations = [ {
-"frames": [ SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"frames": [ SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -55,7 +55,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 2 ]
+"values": [ 0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("sprites:rotation_degrees")
@@ -122,22 +122,23 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 3 ]
+"values": [ 1 ]
 }
 
-[sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 12, 10 )
+[sub_resource type="CircleShape2D" id=18]
+radius = 15.0
 
-[sub_resource type="RectangleShape2D" id=19]
-extents = Vector2( 16, 16 )
+[sub_resource type="CircleShape2D" id=19]
+radius = 24.0
 
 [node name="unit" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="symbol" type="Sprite" parent="."]
 visible = false
-modulate = Color( 0.117647, 0.831373, 0.211765, 1 )
-scale = Vector2( 1.15385, 5 )
+modulate = Color( 0.117647, 0.513726, 0.831373, 1 )
+position = Vector2( 0, -2.38419e-07 )
+scale = Vector2( 1, 4 )
 z_index = 1
 texture = ExtResource( 2 )
 
@@ -146,11 +147,13 @@ texture = ExtResource( 2 )
 [node name="selection" type="Sprite" parent="hud"]
 visible = false
 modulate = Color( 0.117647, 1, 0.211765, 0.588235 )
+position = Vector2( 0, 7 )
 scale = Vector2( 1.6, 1.6 )
 texture = ExtResource( 2 )
 
 [node name="hpbar" type="Node2D" parent="hud"]
 visible = false
+position = Vector2( 0, 7 )
 
 [node name="bar" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.168627, 0.160784, 0.227451, 0.862745 )
@@ -168,13 +171,13 @@ region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="shadow" type="Sprite" parent="."]
 modulate = Color( 0, 0, 0, 0.294118 )
+position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 
 [node name="sprites" type="AnimatedSprite" parent="."]
-position = Vector2( 1, 0 )
+position = Vector2( 0, 9 )
 frames = SubResource( 15 )
-frame = 3
-offset = Vector2( -3, -10 )
+offset = Vector2( -2, -11 )
 
 [node name="animations" type="AnimationPlayer" parent="."]
 anims/idle = SubResource( 16 )
@@ -188,11 +191,9 @@ monitoring = false
 monitorable = false
 
 [node name="block" type="CollisionShape2D" parent="collisions"]
-position = Vector2( 0, -8 )
 shape = SubResource( 18 )
 disabled = true
 
 [node name="select" type="CollisionShape2D" parent="collisions"]
-position = Vector2( 0, -12 )
 shape = SubResource( 19 )
 disabled = true

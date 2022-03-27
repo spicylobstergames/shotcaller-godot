@@ -2,8 +2,8 @@ extends Camera2D
 
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
-var zoom_default = Vector2(0.66,0.66)
-var zoom_limit:Vector2 = Vector2(0.32,3.34)
+var zoom_default = Vector2(0.6,0.6)
+var zoom_limit:Vector2 = Vector2(0.3,3.33333)
 var margin:int = limit_right;
 var position_limit:int = 720
 var arrow_keys_speed:int = 4
@@ -21,7 +21,7 @@ func _unhandled_input(event):
 	# KEYBOARD
 	if event is InputEventKey:
 		# move test
-		if game.selected_unit and event.scancode == KEY_SPACE:
+		if game.selected_unit and event.scancode == KEY_SPACE and not event.is_pressed():
 			game.selected_unit.move(get_global_mouse_position())
 		
 		# ARROW KEYS
@@ -57,7 +57,7 @@ func _unhandled_input(event):
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
-		if event.button_index == BUTTON_RIGHT: ui.unselect(null)
+		if event.button_index == BUTTON_RIGHT: ui.unselect()
 		elif event.button_index == BUTTON_LEFT: ui.select(get_global_mouse_position())
 	
 	# TOUCH SELECTION

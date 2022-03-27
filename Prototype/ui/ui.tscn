@@ -68,10 +68,13 @@ __meta__ = {
 
 [node name="minimap" type="Node2D" parent="bot_left"]
 
-[node name="map" type="Sprite" parent="bot_left/minimap"]
-position = Vector2( 84, -84 )
-scale = Vector2( 0.3, 0.3 )
+[node name="sprite" type="Sprite" parent="bot_left/minimap"]
+position = Vector2( 87.475, -87.475 )
+scale = Vector2( 0.255547, 0.255547 )
 texture = ExtResource( 1 )
+
+[node name="symbols" type="Node2D" parent="bot_left/minimap"]
+position = Vector2( 0, -6.10352e-05 )
 
 [node name="bot_mid" type="Control" parent="."]
 anchor_left = 0.5
