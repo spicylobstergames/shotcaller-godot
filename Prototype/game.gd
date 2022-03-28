@@ -8,8 +8,12 @@ var player_team:String = "blue"
 
 var unit_template:PackedScene = load("res://units/unit.tscn")
 
+var quad
 var two = 0
+
 func _ready():
+	var map = get_node("map")
+	quad = map.create_quadtree(Rect2(Vector2.ZERO, Vector2(2000,2000)), 16, 8)
 	if two:
 		#spawn(Vector2(1000,1020))
 		spawn(Vector2(1000,1000))
@@ -28,31 +32,36 @@ func _process(delta: float) -> void:
 		symbol.position = Vector2(0,-175) + all_units[i].global_position/11.4
 	
 var even = 0
-var steps = 10
-
+#var steps = 8
 var rng = RandomNumberGenerator.new()
 func _physics_process(delta):
 	rng.randomize()
-	for i in range(all_units.size()):
-		var unit = all_units[i]
+	quad.clear();
+	
+	for unit in all_units:
+		if unit.collide: 
+			quad.add_body(unit)
 		if unit.moves and unit.state == "move":
-			var action = "move"
-			if i%steps == even: 
-				if circle_point_collision(unit.global_position, unit.current_destiny, unit.collision_rad_sq):
-					action = "arrive"
-				elif unit.collide:
-					for unit2 in all_units:
-						if unit2.collide and unit != unit2:
-								var next_position = unit.global_position + unit.current_speed
-								if circle_collision(next_position, unit.collision_rad_sq, unit2.global_position, unit2.collision_rad_sq):
-									action = "wait"
-									break
-			match action:
-				"move": unit.step()
-				"arrive": unit.stop()
-				"wait": unit.wait()
-
-	even = (even+1)%steps
+			if circle_point_collision(unit.global_position, unit.current_destiny, unit.collision_rad_sq):
+				unit.stop()
+	
+	for i in range(all_units.size()):
+		var action = "move"
+		var unit = all_units[i]
+		#if i%steps == even:
+		if unit.collide and unit.moves and unit.state == "move":
+			var neighbors = quad.get_bodies_in_radius(unit.global_position, unit.collision_rad_sq)
+			for unit2 in neighbors:
+				if unit2.collide and unit != unit2:
+					var next_position = unit.global_position + unit.current_speed
+					if circle_collision(next_position, unit.collision_rad_sq, unit2.global_position, unit2.collision_rad_sq):
+						action = "wait"
+						break
+		
+		if action == "wait": unit.wait()
+		elif unit.state == "move": unit.step()
+		
+		#even = (even+1)%steps
 
 
 func spawn(point):
