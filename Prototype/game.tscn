@@ -1,26 +1,35 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://map/map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game.gd" type="Script" id=2]
 [ext_resource path="res://camera.gd" type="Script" id=3]
 [ext_resource path="res://ui/ui.tscn" type="PackedScene" id=4]
-[ext_resource path="res://map/map.gd" type="Script" id=5]
-[ext_resource path="res://ui/ui.gd" type="Script" id=6]
+[ext_resource path="res://units/unit.tscn" type="PackedScene" id=5]
 
 [node name="game" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="map" parent="." instance=ExtResource( 1 )]
-script = ExtResource( 5 )
+
+[node name="unit" parent="map" instance=ExtResource( 5 )]
+visible = false
 
 [node name="camera" type="Camera2D" parent="."]
 offset = Vector2( 1056, 1056 )
-current = true
 limit_left = -1056
 limit_top = -1056
 limit_right = 1056
 limit_bottom = 1056
 script = ExtResource( 3 )
 
-[node name="ui" parent="." instance=ExtResource( 4 )]
-script = ExtResource( 6 )
+[node name="map_camera" type="Camera2D" parent="."]
+offset = Vector2( 1056, 1056 )
+current = true
+zoom = Vector2( 3.52, 3.52 )
+
+[node name="canvas" type="CanvasLayer" parent="."]
+__meta__ = {
+"_editor_description_": "Prevents ui panning"
+}
+
+[node name="ui" parent="canvas" instance=ExtResource( 4 )]

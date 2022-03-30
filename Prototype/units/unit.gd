@@ -1,4 +1,5 @@
 extends Node
+var game:Node
 
 export var hp:int = 100
 export var vision:int = 150
@@ -33,8 +34,8 @@ var state:String = "idle"
 var action:String = "wait"
 var lane:String = "mid"
 
+var unit_template:PackedScene = load("res://units/creeps/melee.tscn")
 
-var game:Node
 func _ready():
 	game = get_tree().get_current_scene()
 	
@@ -45,6 +46,21 @@ func _ready():
 		self.attack_hit_position = self.get_node("collisions/attack").position
 		self.attack_hit_radius = self.get_node("collisions/attack").shape.radius
 
+
+func spawn(lane, team, point):
+	var unit = unit_template.instance()
+	unit.lane = lane
+	unit.team = team
+	unit.global_position = point
+	if unit.selectable: game.selectable_units.append(unit)
+	game.all_units.append(unit)
+	unit.get_node("animations").current_animation = "idle"
+	var symbol = unit.get_node("symbol").duplicate()
+	symbol.visible = true
+	symbol.scale *= 0.25
+	game.ui.map_symbols.add_child(symbol)
+	game.get_node("map").add_child(unit)
+	return unit
 
 
 func set_state(s):

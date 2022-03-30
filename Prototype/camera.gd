@@ -1,4 +1,5 @@
 extends Camera2D
+var game:Node
 
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
@@ -9,12 +10,10 @@ var position_limit:int = 756
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
 
-var game:Node
-var ui:Node
 func _ready():
 	game = get_tree().get_current_scene()
-	ui = game.get_node("ui")
 	zoom = zoom_default
+	zoom_limit.y = game.get_node("map_camera").zoom.y
 
 
 func _unhandled_input(event):
@@ -59,6 +58,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and not event.pressed: 
 		if event.button_index == BUTTON_RIGHT: game.unselect()
 		elif event.button_index == BUTTON_LEFT: game.select(get_global_mouse_position())
+		
 	
 	# TOUCH SELECTION
 	if event is InputEventScreenTouch and event.pressed: game.select(event.position)
@@ -79,19 +79,19 @@ func _unhandled_input(event):
 
 func zoom_reset(): 
 	zoom = zoom_default
-	ui.minimap_default()
-	ui.hide_hpbar()
-	ui.hide_state()
+	game.ui.minimap_default()
+	game.ui.hide_hpbar()
+	game.ui.hide_state()
 	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
-	ui.minimap_default()
-	ui.show_hpbar()
-	ui.show_state()
+	game.ui.minimap_default()
+	game.ui.show_hpbar()
+	game.ui.show_state()
 	
 func zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
-	ui.minimap_cover()
+	game.ui.minimap_cover()
 
 
 func _process(delta):

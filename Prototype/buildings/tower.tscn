@@ -53,23 +53,19 @@ moves = false
 speed = 0.0
 damage = 50
 
-[node name="state" parent="." index="0"]
-margin_top = -77.0
-margin_bottom = -59.0
-
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="0"]
 scale = Vector2( 3.25, 13 )
 
-[node name="selection" parent="hud" index="0"]
-position = Vector2( 0, 22 )
-scale = Vector2( 4.07692, 7.33333 )
+[node name="state" parent="hud" index="0"]
+margin_top = -75.0
+margin_bottom = -57.0
 
-[node name="hpbar" parent="hud" index="1"]
+[node name="selection" parent="hud" index="1"]
+position = Vector2( 0, 9 )
+scale = Vector2( 1.92308, 4.33333 )
+
+[node name="hpbar" parent="hud" index="2"]
 position = Vector2( 0, -64 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/idle = SubResource( 25 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
@@ -87,8 +83,9 @@ offset = Vector2( 0, -30 )
 region_enabled = true
 region_rect = Rect2( 96, 40, 32, 80 )
 
-[node name="collisions" parent="." index="5"]
-visible = false
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/idle = SubResource( 25 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
