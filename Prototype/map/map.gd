@@ -74,27 +74,24 @@ class _QuadTreeClass:
 
 
 	func _contains_circle(center, radius):
-		var bc = (_bounds.position + _bounds.end) / 2
-		var dx = abs(center.x - bc.x)
-		var dy = abs(center.y - bc.y)
-		if(dx > (_bounds.size.x / 2 + radius)): return false
-		if(dy > (_bounds.size.y / 2 + radius)): return false
-		if(dx <= (_bounds.size.x / 2)): return true
-		if(dy <= (_bounds.size.y / 2)): return true
-		var cornerDist = pow((dx - _bounds.size.x / 2), 2) + pow((dy - _bounds.size.y / 2), 2);
-		return cornerDist <= (radius * radius);
+		var bound_center = (_bounds.position + _bounds.end) / 2
+		var bound_half = _bounds.size / 2
+		var d = (center - bound_center).abs()
+		if d.x > bound_half.x + radius: return false
+		if d.y > bound_half.y + radius: return false
+		if d.x <= bound_half.x: return true
+		if d.y <= bound_half.y: return true
+		return (d - bound_half).length() <= radius;
 
 
 	func _split():
 		# Splits the QuadTree into 4 quadrants and disperses its bodies
-		var hx = _bounds.size.x / 2
-		var hy = _bounds.size.y / 2
-		var sz = Vector2(hx, hy)
+		var sz =  _bounds.size / 2
 
 		var aBounds = Rect2(_bounds.position, sz)
-		var bBounds = Rect2(Vector2(_bounds.position.x + hx, _bounds.position.y), sz)
-		var cBounds = Rect2(Vector2(_bounds.position.x + hx, _bounds.position.y + hy), sz)
-		var dBounds = Rect2(Vector2(_bounds.position.x, _bounds.position.y + hy), sz)
+		var bBounds = Rect2(Vector2(_bounds.position.x + sz.x, _bounds.position.y), sz)
+		var cBounds = Rect2(Vector2(_bounds.position.x + sz.x, _bounds.position.y + sz.y), sz)
+		var dBounds = Rect2(Vector2(_bounds.position.x, _bounds.position.y + sz.y), sz)
 		
 		var splitNum = _curSplit + 1
 		

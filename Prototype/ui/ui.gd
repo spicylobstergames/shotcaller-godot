@@ -11,31 +11,6 @@ func _ready():
 	map_sprite = game.get_node("map/sprite")
 	minimap = get_node("bot_left/minimap")
 	
-func select(point):
-	var unit = get_selected_unit(Vector2(point))
-	if unit:
-		unselect()
-		game.selected_unit = unit
-		if unit.team == game.player_team and unit.type == "unit":
-			game.selected_leader = unit
-		unit.get_node("hud/selection").visible = true
-		unit.get_node("hud/hpbar").visible = true
-		update_stats()
-
-
-func unselect():
-	if game.selected_unit:
-		game.selected_unit.get_node("hud/selection").visible = false
-		game.selected_unit.get_node("hud/hpbar").visible = false
-	game.selected_unit = null
-	game.selected_leader = null
-	update_stats()
-
-
-func get_selected_unit(point):
-	for unit in game.selectable_units:
-		if game.circle_point_collision(point, unit.global_position + unit.selection_offset,  unit.selection_rad_sq):
-			return unit
 
 
 func update_stats():
@@ -56,7 +31,6 @@ func minimap_default():
 	for unit in game.all_units:
 		unit.get_node("symbol").visible = false
 		unit.get_node("hud").visible = true
-		unit.get_node("shadow").visible = true
 		unit.get_node("sprites").visible = true
 		unit.get_node("animations").current_animation = unit.state
 
@@ -68,7 +42,6 @@ func minimap_cover():
 	for unit in game.all_units:
 		unit.get_node("symbol").visible = true
 		unit.get_node("hud").visible = false
-		unit.get_node("shadow").visible = false
 		unit.get_node("sprites").visible = false
 		unit.get_node("animations").current_animation = ""
 
@@ -80,5 +53,15 @@ func hide_hpbar():
 
 func show_hpbar():
 	for unit in game.all_units:
+		unit.get_node("hud/state").visible = true
+
+
+func hide_state():
+	for unit in game.all_units:
 		if unit != game.selected_unit:
-			unit.get_node("hud/hpbar").visible = true
+			unit.get_node("hud/state").visible = false
+
+
+func show_state():
+	for unit in game.all_units:
+		unit.get_node("hud/hpbar").visible = true

@@ -10,14 +10,14 @@ func set_cell(x: int, y: int, tile: int, flip_x = false, flip_y = false, transpo
 		
 	.set_cell(x, y, tile, false, false, transpose, autotile_coord)
 	
-	if map_to_world(mirrored_cell_point) >= Vector2(y, y) and tile != -1:
-		is_flip = tile_set.tile_get_tile_mode(tile) == TileSet.AUTO_TILE
+#	if map_to_world(mirrored_cell_point) >= Vector2(y, y) and tile != -1:
+#		is_flip = tile_set.tile_get_tile_mode(tile) == TileSet.AUTO_TILE
 
 	.set_cell(
 		mirrored_cell_point.x,
 		mirrored_cell_point.y,
 		tile,
 		is_flip,
-		is_flip,
+		false,
 		transpose,
 		get_cell_autotile_coord(x, y))

@@ -1,11 +1,11 @@
 tool
 extends TileMap
 
-var map_size = Vector2(2008, 2008)
+var map_size = Vector2(2112,2112)
 
 func set_cell(x: int, y: int, tile: int, flip_x = false, flip_y = false, transpose = false, autotile_coord = Vector2.ZERO) -> void:
 	var cell_pos = map_to_world(Vector2(x, y))
-	var mirrored_cell_point = world_to_map(Vector2( (map_size.x - cell_pos.x) - 8, (map_size.x - (cell_pos.y)) - 8))
+	var mirrored_cell_point = world_to_map(Vector2( (map_size.x - cell_pos.x) - cell_size.y, (map_size.x - (cell_pos.y)) - cell_size.y))
 		
 	.set_cell(x, y, tile, false, false, transpose, autotile_coord)
 

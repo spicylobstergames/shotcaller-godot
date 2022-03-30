@@ -2,10 +2,10 @@ extends Camera2D
 
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
-var zoom_default = Vector2(0.6,0.6)
-var zoom_limit:Vector2 = Vector2(0.3,3.33333)
+var zoom_default = Vector2.ONE
+var zoom_limit:Vector2 = Vector2(0.3,3.52)
 var margin:int = limit_right;
-var position_limit:int = 720
+var position_limit:int = 756
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
 
@@ -22,7 +22,7 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		# move test
 		if game.selected_unit and event.scancode == KEY_SPACE and not event.is_pressed():
-			game.selected_unit.move(get_global_mouse_position())
+			game.selected_unit.move_and_attack(get_global_mouse_position())
 		
 		# ARROW KEYS
 		match event.scancode:
@@ -57,11 +57,11 @@ func _unhandled_input(event):
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
-		if event.button_index == BUTTON_RIGHT: ui.unselect()
-		elif event.button_index == BUTTON_LEFT: ui.select(get_global_mouse_position())
+		if event.button_index == BUTTON_RIGHT: game.unselect()
+		elif event.button_index == BUTTON_LEFT: game.select(get_global_mouse_position())
 	
 	# TOUCH SELECTION
-	if event is InputEventScreenTouch and event.pressed: ui.select(get_global_mouse_position())
+	if event is InputEventScreenTouch and event.pressed: game.select(event.position)
 		
 	# TOUCH PAN
 	if event is InputEventScreenTouch:
@@ -81,11 +81,13 @@ func zoom_reset():
 	zoom = zoom_default
 	ui.minimap_default()
 	ui.hide_hpbar()
+	ui.hide_state()
 	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	ui.minimap_default()
 	ui.show_hpbar()
+	ui.show_state()
 	
 func zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
@@ -114,14 +116,14 @@ func _process(delta):
 	limit_left = -margin
 	limit_right = margin
 	
+	var s = 0.65
 	if ratio >= 1 and zoom.x > 1:
-		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * 0.65)
-		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * 0.65)
+		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
 
-	if ratio <= 1 and zoom.x > 1:
-		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * 0.65)
-		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* 0.65)
-
+	if ratio < 1 and zoom.x > 1:
+		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
+		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
 
 
 
