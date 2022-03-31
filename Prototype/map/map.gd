@@ -20,7 +20,7 @@ func spawn(l, t, point):
 	setup_unit(unit)
 	setup_selection(unit)
 	setup_collisions(unit)
-	game.ui.setup_symbol(unit)
+	game.minimap.setup_symbol(unit)
 	unit.get_node("animations").current_animation = "idle"
 	game.get_node("map").add_child(unit)
 	return unit
@@ -53,6 +53,10 @@ func setup_buildings():
 			setup_unit(building)
 			setup_selection(building)
 			setup_collisions(building)
+
+
+
+# QUADTREE
 
 
 func create_quadtree(bounds, splitThreshold, splitLimit, currentSplit = 0):

@@ -6,23 +6,29 @@ var selectable_units:Array = []
 var all_units:Array = []
 var player_team:String = "blue"
 
-var size := 2112
-var map
-var ui
-var unit
+var size:int = 2112
+
+var game:Node = self
+var map:Node
+var unit:Node
+var camera:Node
+var ui:Node
+var minimap:Node
 
 func _ready():
 	map = get_node("map")
-	ui = get_node("ui")
 	unit = get_node("map/unit")
+	camera = get_node("camera")
+	ui = get_node("ui")
+	minimap = get_node("map_camera")
 
 
 func start():
-	map.setup_buildings()	
+	map.setup_buildings()
 	spawn()
 
 
-var two := 1
+var two = 1
 
 func spawn():
 	if two:
@@ -40,9 +46,10 @@ func spawn():
 
 func _process(delta: float) -> void:
 	ui.fps.set_text((str(Engine.get_frames_per_second())))
-	ui.move_symbols()
 
-	if (ui.update_map_texture): ui.get_map_texture()
+	if minimap:
+		if minimap.update_map_texture: minimap.get_map_texture()
+		minimap.move_symbols()
 
 
 var rng = RandomNumberGenerator.new()
@@ -51,59 +58,31 @@ func _physics_process(delta):
 	
 	map.quad.clear()
 	
-	for unit in all_units:
-		if unit.collide: map.quad.add_body(unit)
-		if unit.moves and unit.state == "move":
-			if circle_point_collision(unit.global_position, unit.current_destiny, unit.collision_rad):
-				unit.action = "stop"
+	for unit1 in all_units:
+		if unit1.collide: map.quad.add_body(unit1)
+		# BEHAVIOUR
+		unit1.next_event  = ""
+		if unit1.moves and unit1.state == "move":
+			if circle_point_collision(unit1.global_position, unit1.current_destiny, unit1.collision_rad):
+				unit1.next_event = "arrive"
 	
-	for unit in all_units:
-		if unit.collide and unit.moves and unit.action != "stop" and unit.state == "move":
-			unit.action = "step"
-			var neighbors = map.quad.get_bodies_in_radius(unit.global_position, unit.collision_rad+unit.speed)
+	for unit1 in all_units:
+		# COLLISION
+		if unit1.collide and unit1.moves and unit1.next_event != "arrive" and unit1.state == "move":
+			unit1.next_event = "move"
+			var neighbors = map.quad.get_bodies_in_radius(unit1.global_position, unit1.collision_rad+unit1.speed)
 			for unit2 in neighbors:
-				if unit2.collide and unit != unit2 and unit.lane == unit2.lane:
-					var next_position = unit.global_position + unit.current_step
-					if circle_collision(next_position, unit.collision_rad, unit2.global_position, unit2.collision_rad):
-						unit.action = "wait"
+				if unit2.collide and unit1 != unit2: # and unit.lane == unit2.lane:
+					var next_position = unit1.global_position + unit1.current_step
+					if circle_collision(next_position, unit1.collision_rad, unit2.global_position, unit2.collision_rad):
+						unit1.next_event = "collision"
 						break
 		
-		match unit.action:
-			"stop": unit.stop()
-			"step": unit.step()
-			"wait": unit.wait()
-			
+		match unit1.next_event:
+			"arrive": unit1.on_arrive()
+			"move": unit1.on_move()
+			"collision": unit1.on_collision()
 
-
-
-func select(point):
-	var unit = get_selected_unit(Vector2(point))
-	if unit:
-		unselect()
-		selected_unit = unit
-		if unit.team == player_team and unit.type == "leader":
-			selected_leader = unit
-		unit.get_node("hud/state").visible = true
-		unit.get_node("hud/selection").visible = true
-		unit.get_node("hud/hpbar").visible = true
-		ui.update_stats()
-	
-
-func unselect():
-	if selected_unit:
-		selected_unit.get_node("hud/state").visible = false
-		selected_unit.get_node("hud/selection").visible = false
-		selected_unit.get_node("hud/hpbar").visible = false
-	selected_unit = null
-	selected_leader = null
-	ui.update_stats()
-
-
-
-func get_selected_unit(point):
-	for unit in selectable_units:
-		if circle_point_collision(point, unit.global_position,  unit.selection_rad):
-			return unit
 
 
 func circle_point_collision(u1, u2, r):

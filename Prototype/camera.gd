@@ -10,6 +10,7 @@ var position_limit:int = 756
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
 
+
 func _ready():
 	game = get_tree().get_current_scene()
 	zoom = zoom_default
@@ -19,9 +20,6 @@ func _ready():
 func _unhandled_input(event):
 	# KEYBOARD
 	if event is InputEventKey:
-		# move test
-		if game.selected_unit and event.scancode == KEY_SPACE and not event.is_pressed():
-			game.selected_unit.move(get_global_mouse_position())
 		
 		# ARROW KEYS
 		match event.scancode:
@@ -47,27 +45,21 @@ func _unhandled_input(event):
 			if cam_move: 
 				zoom_reset()
 				global_position = Vector2(cam_move[0], cam_move[1])
-
+	
+	
 	# MOUSE PAN
 	if event.is_action("pan"):
 		is_panning = event.is_action_pressed("pan")
 	elif event is InputEventMouseMotion:
 		if is_panning: pan_position = Vector2(-1 * event.relative)
 	
-	# CLICK SELECTION
-	if event is InputEventMouseButton and not event.pressed: 
-		if event.button_index == BUTTON_RIGHT: game.unselect()
-		elif event.button_index == BUTTON_LEFT: game.select(get_global_mouse_position())
-		
 	
-	# TOUCH SELECTION
-	if event is InputEventScreenTouch and event.pressed: game.select(event.position)
-		
 	# TOUCH PAN
 	if event is InputEventScreenTouch:
 		is_panning = event.is_pressed()
 	elif event is InputEventScreenDrag:
 		if is_panning: pan_position = Vector2(-1 * event.relative)
+	
 	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
@@ -77,21 +69,24 @@ func _unhandled_input(event):
 		if zoom.x == zoom_limit.x: zoom_reset()
 		elif zoom == zoom_default: zoom_out()
 
+
 func zoom_reset(): 
 	zoom = zoom_default
-	game.ui.minimap_default()
+	game.minimap.corner_view()
 	game.ui.hide_hpbar()
 	game.ui.hide_state()
 	
+	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
-	game.ui.minimap_default()
+	game.minimap.corner_view()
 	game.ui.show_hpbar()
 	game.ui.show_state()
 	
+	
 func zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
-	game.ui.minimap_cover()
+	game.minimap.hide_view()
 
 
 func _process(delta):
