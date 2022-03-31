@@ -1,13 +1,64 @@
 extends YSort
+var game:Node
 
-#func _ready():
-#	pass
+var unit_template:PackedScene = load("res://units/creeps/melee.tscn")
 
-#func _process(delta):
-#	pass
+var quad:_QuadTreeClass
+
+func _ready():
+	game = get_tree().get_current_scene()
+	var bound = Rect2(Vector2.ZERO, Vector2(game.size,game.size))
+	quad = create_quadtree(bound, 16, 8)
+
+
+func spawn(l, t, point):
+	var unit = unit_template.instance()
+	unit.subtype = unit.name
+	unit.lane = l
+	unit.team = t
+	unit.global_position = point
+	setup_unit(unit)
+	setup_selection(unit)
+	setup_collisions(unit)
+	game.ui.setup_symbol(unit)
+	unit.get_node("animations").current_animation = "idle"
+	game.get_node("map").add_child(unit)
+	return unit
+
+
+func setup_unit(unit):
+	unit.current_hp = unit.hp
+	unit.current_vision = unit.vision
+	unit.current_speed = unit.speed
+	unit.current_damage = unit.damage
+	game.all_units.append(unit)
+
+
+
+func setup_collisions(unit):
+	unit.selection_rad = unit.get_node("collisions/select").shape.radius
+	unit.collision_rad = unit.get_node("collisions/block").shape.radius
+	if unit.has_node("collisions/attack"):
+		unit.attack_hit_position = unit.get_node("collisions/attack").position
+		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
+	
+
+func setup_selection(unit):
+	if unit.selectable: game.selectable_units.append(unit)
+
+
+func setup_buildings():
+	for team in get_node("buildings").get_children():
+		for building in team.get_children():
+			setup_unit(building)
+			setup_selection(building)
+			setup_collisions(building)
+
 
 func create_quadtree(bounds, splitThreshold, splitLimit, currentSplit = 0):
 	return _QuadTreeClass.new(self, bounds, splitThreshold, splitLimit, currentSplit)
+
+
 
 class _QuadTreeClass:
 	

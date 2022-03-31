@@ -2,8 +2,11 @@ extends Node
 var game:Node
 
 export var hp:int = 100
+var current_hp:int = 100
 export var vision:int = 150
-export var type:String = "unit"
+var current_vision:int = 150
+export var type:String = "creep"
+export var subtype:String = "melee"
 var team:String = "blue"
 var mirror:bool = true
 # SELECTION
@@ -13,16 +16,20 @@ var selection_rad_sq = 36*36
 # MOVEMENT
 export var moves:bool = true
 export var speed:float = 1
+var current_speed:float = 1
 var angle:float = 0
-var current_speed:Vector2 = Vector2.ZERO
+var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 # COLLISION
 export var collide:bool = true
 var collision_rad = 10
 # ATTACK
 export var damage:int = 25
+var current_damage:int = 25
 export var attack_range:int = 1
+var current_attack_range:int = 1
 export var attack_speed:int = 1
+var current_attack_speed:int = 1
 var aim_angle:float = 0
 var target:Node2D
 var attack_hit_position:Vector2 = Vector2.ONE
@@ -34,33 +41,9 @@ var state:String = "idle"
 var action:String = "wait"
 var lane:String = "mid"
 
-var unit_template:PackedScene = load("res://units/creeps/melee.tscn")
-
 func _ready():
 	game = get_tree().get_current_scene()
-	
-	self.selection_rad = self.get_node("collisions/select").shape.radius
-	self.collision_rad = self.get_node("collisions/block").shape.radius
-	
-	if self.has_node("collisions/attack"):
-		self.attack_hit_position = self.get_node("collisions/attack").position
-		self.attack_hit_radius = self.get_node("collisions/attack").shape.radius
 
-
-func spawn(lane, team, point):
-	var unit = unit_template.instance()
-	unit.lane = lane
-	unit.team = team
-	unit.global_position = point
-	if unit.selectable: game.selectable_units.append(unit)
-	game.all_units.append(unit)
-	unit.get_node("animations").current_animation = "idle"
-	var symbol = unit.get_node("symbol").duplicate()
-	symbol.visible = true
-	symbol.scale *= 0.25
-	game.ui.map_symbols.add_child(symbol)
-	game.get_node("map").add_child(unit)
-	return unit
 
 
 func set_state(s):
@@ -99,10 +82,10 @@ func move_and_attack(point):
 
 
 func calc_step():
-	if self.speed > 0:
+	if self.current_speed > 0:
 		var distance = self.current_destiny - self.global_position
 		self.angle = distance.angle()
-		self.current_speed = Vector2(self.speed * cos(self.angle), self.speed * sin(self.angle))
+		self.current_step = Vector2(self.current_speed * cos(self.angle), self.current_speed * sin(self.angle))
 
 
 func look_at(point):
@@ -111,11 +94,11 @@ func look_at(point):
 
 
 func step():
-	self.global_position += self.current_speed
+	self.global_position += self.current_step
 
 
 func stop():
-	self.current_speed = Vector2.ZERO
+	self.current_step = Vector2.ZERO
 	self.current_destiny = Vector2.ZERO
 	if self.objective: self.move_and_attack(self.objective)
 	else: self.set_state("idle")
@@ -136,10 +119,10 @@ func on_idle_end():
 
 
 func get_units_on_sight():
-	var neighbors = game.quad[self.lane].get_bodies_in_radius(self.global_position, self.vision)
+	var neighbors = game.quad[self.lane].get_bodies_in_radius(self.global_position, self.current_vision)
 	var targets = []
 	for unit2 in neighbors:
-		if self != unit2 and (self.global_position - unit2.global_position).length() < self.vision:
+		if self != unit2 and (self.global_position - unit2.global_position).length() < self.current_vision:
 			targets.append(unit2)
 	return targets
 
@@ -155,15 +138,38 @@ func on_attack_end():
 
 func hits(unit2):
 	var attack_position = self.global_position + self.attack_hit_position
-	var attack_radius = self.attack_hit_radius * self.attack_range
+	var attack_radius = self.attack_hit_radius * self.current_attack_range
 	return game.circle_collision(attack_position, attack_radius, unit2.global_position, unit2.collision_rad)
 
 
 func take_hit(dmg):
 	print("hit")
-	self.hp -= dmg
-	if self.hp <= 0: self.die()
+	self.current_hp -= dmg
+	if self.current_hp <= 0: self.die()
 
+
+func get_texture():
+	var body = get_node("sprites/body")
+	var texture
+	var region
+	var scale
+	if body is Sprite: 
+		texture = body.texture 
+		region = body.region_rect
+		match self.subtype:
+			"tower": scale = Vector2(0.9,0.9)
+			"barrack": scale = Vector2(0.7,0.7)
+			"core": scale = Vector2(0.55,0.55)
+	else:
+		texture = body.frames.get_frame('default', 0)
+		region = texture.region
+		scale = Vector2(3,3)
+		
+	return {
+		"data": texture,
+		"region": region,
+		"scale": scale
+	}
 
 func die():
 	self.set_state("dead")

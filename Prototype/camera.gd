@@ -21,7 +21,7 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		# move test
 		if game.selected_unit and event.scancode == KEY_SPACE and not event.is_pressed():
-			game.selected_unit.move_and_attack(get_global_mouse_position())
+			game.selected_unit.move(get_global_mouse_position())
 		
 		# ARROW KEYS
 		match event.scancode:

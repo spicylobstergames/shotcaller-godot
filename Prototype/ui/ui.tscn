@@ -2,8 +2,11 @@
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 
-[node name="ui" type="Node2D"]
+[node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "Prevents ui panning"
+}
 
 [node name="top_left" type="Control" parent="."]
 __meta__ = {
@@ -24,8 +27,6 @@ __meta__ = {
 [node name="top_mid" type="Control" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = 300.0
-margin_right = 300.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -33,8 +34,6 @@ __meta__ = {
 [node name="top_right" type="Control" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = 600.0
-margin_right = 600.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -42,8 +41,6 @@ __meta__ = {
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
 anchor_bottom = 0.5
-margin_top = 300.0
-margin_bottom = 300.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -53,10 +50,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 300.0
-margin_top = 300.0
-margin_right = 300.0
-margin_bottom = 300.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -66,10 +59,6 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = 600.0
-margin_top = 300.0
-margin_right = 600.0
-margin_bottom = 300.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -77,13 +66,19 @@ __meta__ = {
 [node name="bot_left" type="Control" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = 600.0
-margin_bottom = 600.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="minimap" type="Node2D" parent="bot_left"]
+visible = false
+
+[node name="panel" type="ItemList" parent="bot_left/minimap"]
+margin_top = -150.0
+margin_right = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sprite" type="Sprite" parent="bot_left/minimap"]
 position = Vector2( 75, -75 )
@@ -97,21 +92,25 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 300.0
-margin_top = 600.0
-margin_right = 300.0
-margin_bottom = 600.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="stats" type="Node2D" parent="bot_mid"]
+[node name="stats" type="ItemList" parent="bot_mid"]
 visible = false
+margin_left = -120.0
+margin_top = -80.0
+margin_right = 120.0
+max_columns = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="name" type="Label" parent="bot_mid/stats"]
-margin_left = -50.0
-margin_top = -20.0
-margin_right = 50.0
+margin_left = 88.0
+margin_top = 8.0
+margin_right = 119.0
+margin_bottom = 22.0
 text = "stats"
 align = 1
 valign = 1
@@ -119,15 +118,62 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="vision" type="Label" parent="bot_mid/stats"]
+margin_left = 88.0
+margin_top = 24.0
+margin_right = 119.0
+margin_bottom = 38.0
+text = "stats"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="damage" type="Label" parent="bot_mid/stats"]
+margin_left = 88.0
+margin_top = 40.0
+margin_right = 119.0
+margin_bottom = 54.0
+text = "stats"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="speed" type="Label" parent="bot_mid/stats"]
+margin_left = 88.0
+margin_top = 56.0
+margin_right = 119.0
+margin_bottom = 70.0
+text = "stats"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="portrait" type="Control" parent="bot_mid/stats"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 72.0
+margin_bottom = 72.0
+rect_clip_content = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sprite" type="Sprite" parent="bot_mid/stats/portrait"]
+position = Vector2( 32, 32 )
+scale = Vector2( 2, 2 )
+region_enabled = true
+
 [node name="bot_right" type="Control" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 600.0
-margin_top = 600.0
-margin_right = 600.0
-margin_bottom = 600.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
