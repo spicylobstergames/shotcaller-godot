@@ -25,19 +25,22 @@ func _ready():
 
 func start():
 	map.setup_buildings()
+	#yield(get_tree(), "idle_frame")
+	#yield(get_tree().create_timer(2.0), "timeout")
 	spawn()
 
 
-var two = 1
+var stress_test = 0
 
 func spawn():
-	if two:
+	if not stress_test:
 		#map.spawn("top", "blue", Vector2(0,0))
 		map.spawn("mid", "red", Vector2(1100,1000))
 		map.spawn("mid", "blue", Vector2(1000, 980))
 		#map.spawn("mid", "blue", Vector2(size,size))
 	else:
-		for x in range(1, 101):
+		for x in range(1, 151):
+			yield(get_tree().create_timer(x/150), "timeout")
 			map.spawn("top", "blue", Vector2(randf()*size,randf()*size*0.2))
 			map.spawn("mid", "blue", Vector2((size*0.3)+randf()*size*0.4,(size*0.3)+randf()*size*0.4))
 			map.spawn("bot", "blue", Vector2(randf()*size,(size*0.8)+randf()*size*0.2))
@@ -63,18 +66,23 @@ func _physics_process(delta):
 		# BEHAVIOUR
 		unit1.next_event  = ""
 		if unit1.moves and unit1.state == "move":
-			if circle_point_collision(unit1.global_position, unit1.current_destiny, unit1.collision_rad):
+			var unit1_pos = unit1.global_position + unit1.collision_position
+			if circle_point_collision(unit1_pos, unit1.current_destiny, unit1.collision_radius):
 				unit1.next_event = "arrive"
 	
 	for unit1 in all_units:
 		# COLLISION
 		if unit1.collide and unit1.moves and unit1.next_event != "arrive" and unit1.state == "move":
 			unit1.next_event = "move"
-			var neighbors = map.quad.get_bodies_in_radius(unit1.global_position, unit1.collision_rad+unit1.speed)
+			var unit1_pos = unit1.global_position + unit1.collision_position
+			var neighbors = map.quad.get_units_in_radius(unit1_pos, unit1.collision_radius+unit1.speed)
 			for unit2 in neighbors:
-				if unit2.collide and unit1 != unit2: # and unit.lane == unit2.lane:
-					var next_position = unit1.global_position + unit1.current_step
-					if circle_collision(next_position, unit1.collision_rad, unit2.global_position, unit2.collision_rad):
+				if unit2.collide and unit1 != unit2:
+					var next_position = unit1_pos + unit1.current_step
+					var unit1_rad = unit1.collision_radius
+					var unit2_pos = unit2.global_position + unit2.collision_position
+					var unit2_rad = unit2.collision_radius
+					if circle_collision(next_position, unit1_rad, unit2_pos, unit2_rad):
 						unit1.next_event = "collision"
 						break
 		
@@ -85,9 +93,40 @@ func _physics_process(delta):
 
 
 
-func circle_point_collision(u1, u2, r):
-	return Vector2(u1 - u2).length() < r
+func circle_point_collision(p, c, r):
+	return Vector2(p - c).length() < r
 	
 	
-func circle_collision(u1, r1, u2, r2):
-	return Vector2(u1 - u2).length() < (r1 + r2)
+func circle_collision(c1, r1, c2, r2):
+	return Vector2(c1 - c2).length() < (r1 + r2)
+	
+	
+	
+func sort_by_hp(array):
+	var sorted = []
+	for neighbor in array:
+		sorted.append({
+			"unit": neighbor,
+			"hp": neighbor.current_hp
+		})
+	sorted.sort_custom(self, "compare_hp")
+	return sorted
+
+
+func compare_hp(a: Dictionary, b: Dictionary) -> bool:
+	return a.hp < b.hp
+
+
+func sort_by_distance(unit1, array):
+	var sorted = []
+	for unit2 in array:
+		sorted.append({
+			"unit": unit2,
+			"distance": unit1.global_position.distance_to(unit2.global_position)
+		})
+	sorted.sort_custom(self, "compare_distance")
+	return sorted
+	
+
+func compare_distance(a: Dictionary, b: Dictionary) -> bool:
+	return a.distance < b.distance

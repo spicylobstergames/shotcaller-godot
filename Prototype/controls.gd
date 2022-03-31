@@ -62,5 +62,7 @@ func unselect():
 
 func get_sel_unit_at_point(point):
 	for unit in game.selectable_units:
-		if game.circle_point_collision(point, unit.global_position,  unit.selection_rad):
+		var select_rad =  unit.selection_radius
+		var select_pos = unit.global_position + unit.selection_position
+		if game.circle_point_collision(point, select_pos, select_rad):
 			return unit

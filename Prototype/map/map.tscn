@@ -304,73 +304,72 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 1
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
-[node name="buildings" type="Node2D" parent="."]
-z_index = 1
+[node name="buildings" type="YSort" parent="."]
 
-[node name="blue" type="Node2D" parent="buildings"]
+[node name="blue" type="YSort" parent="buildings"]
 
 [node name="core" parent="buildings/blue" instance=ExtResource( 11 )]
-position = Vector2( 160, 1954 )
+position = Vector2( 160, 1977 )
 
 [node name="barrack_top" parent="buildings/blue" instance=ExtResource( 10 )]
-position = Vector2( 160, 1758 )
+position = Vector2( 160, 1777 )
 
 [node name="barrack_mid" parent="buildings/blue" instance=ExtResource( 10 )]
-position = Vector2( 288, 1823 )
+position = Vector2( 288, 1841 )
 
 [node name="barrack_bot" parent="buildings/blue" instance=ExtResource( 10 )]
-position = Vector2( 352, 1950 )
+position = Vector2( 352, 1969 )
 
 [node name="tower_top_1" parent="buildings/blue" instance=ExtResource( 12 )]
-position = Vector2( 96, 352 )
+position = Vector2( 96, 360 )
 
 [node name="tower_top_2" parent="buildings/blue" instance=ExtResource( 12 )]
-position = Vector2( 96, 1055 )
+position = Vector2( 96, 1063 )
 
 [node name="tower_mid_1" parent="buildings/blue" instance=ExtResource( 12 )]
-position = Vector2( 928, 1120 )
+position = Vector2( 928, 1128 )
 
 [node name="tower_mid_2" parent="buildings/blue" instance=ExtResource( 12 )]
-position = Vector2( 480, 1633 )
+position = Vector2( 480, 1641 )
 
 [node name="tower_bot_1" parent="buildings/blue" instance=ExtResource( 12 )]
-position = Vector2( 1760, 2008 )
+position = Vector2( 1760, 2016 )
 
 [node name="tower_bot_2" parent="buildings/blue" instance=ExtResource( 12 )]
-position = Vector2( 1056, 2008 )
+position = Vector2( 1056, 2016 )
 
-[node name="red" type="Node2D" parent="buildings"]
+[node name="red" type="YSort" parent="buildings"]
 
 [node name="core" parent="buildings/red" instance=ExtResource( 11 )]
-position = Vector2( 1952, 146 )
+position = Vector2( 1952, 169 )
 
 [node name="barrack_top" parent="buildings/red" instance=ExtResource( 10 )]
-position = Vector2( 1760, 142 )
+position = Vector2( 1760, 161 )
 
 [node name="barrack_mid" parent="buildings/red" instance=ExtResource( 10 )]
-position = Vector2( 1824, 270 )
+position = Vector2( 1824, 289 )
 
 [node name="barrack_bot" parent="buildings/red" instance=ExtResource( 10 )]
-position = Vector2( 1952, 334 )
+position = Vector2( 1952, 353 )
 
 [node name="tower_bot_1" parent="buildings/red" instance=ExtResource( 12 )]
-position = Vector2( 2016, 1752 )
+position = Vector2( 2016, 1760 )
 
 [node name="tower_bot_2" parent="buildings/red" instance=ExtResource( 12 )]
-position = Vector2( 2016, 1048 )
+position = Vector2( 2016, 1056 )
 
 [node name="tower_mid_1" parent="buildings/red" instance=ExtResource( 12 )]
-position = Vector2( 1184, 984 )
+position = Vector2( 1184, 992 )
 
 [node name="tower_mid_2" parent="buildings/red" instance=ExtResource( 12 )]
-position = Vector2( 1632, 472 )
+position = Vector2( 1632, 480 )
 
 [node name="tower_top_1" parent="buildings/red" instance=ExtResource( 12 )]
-position = Vector2( 352, 97 )
+position = Vector2( 352, 105 )
 
 [node name="tower_top_2" parent="buildings/red" instance=ExtResource( 12 )]
-position = Vector2( 1056, 96 )
+position = Vector2( 1056, 104 )

@@ -8,7 +8,7 @@ var quad:_QuadTreeClass
 func _ready():
 	game = get_tree().get_current_scene()
 	var bound = Rect2(Vector2.ZERO, Vector2(game.size,game.size))
-	quad = create_quadtree(bound, 16, 8)
+	quad = create_quadtree(bound, 16, 16)
 
 
 func spawn(l, t, point):
@@ -36,8 +36,14 @@ func setup_unit(unit):
 
 
 func setup_collisions(unit):
-	unit.selection_rad = unit.get_node("collisions/select").shape.radius
-	unit.collision_rad = unit.get_node("collisions/block").shape.radius
+	if unit.has_node("collisions/select"):
+		unit.selection_position = unit.get_node("collisions/select").position
+		unit.selection_radius = unit.get_node("collisions/select").shape.radius
+	
+	if unit.has_node("collisions/block"):
+		unit.collision_position = unit.get_node("collisions/block").position
+		unit.collision_radius = unit.get_node("collisions/block").shape.radius
+	
 	if unit.has_node("collisions/attack"):
 		unit.attack_hit_position = unit.get_node("collisions/attack").position
 		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
@@ -103,7 +109,7 @@ class _QuadTreeClass:
 				_split()
 
 
-	func get_bodies_in_radius(center, radius):
+	func get_units_in_radius(center, radius):
 		var result = []
 		_get_bodies_in_radius(center, radius, result)
 		return result

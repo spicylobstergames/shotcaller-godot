@@ -64,15 +64,15 @@ damage = 50
 scale = Vector2( 3.25, 13 )
 
 [node name="state" parent="hud" index="0"]
-margin_top = -86.0
-margin_bottom = -68.0
+margin_top = -106.0
+margin_bottom = -88.0
 
 [node name="selection" parent="hud" index="1"]
-position = Vector2( 0, 17 )
+position = Vector2( 0, 0 )
 scale = Vector2( 3.46154, 5.66667 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -74 )
+position = Vector2( 0, -93 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
@@ -81,12 +81,11 @@ visible = false
 visible = false
 
 [node name="flag" parent="sprites" index="2" instance=ExtResource( 2 )]
-position = Vector2( 1, -61 )
+position = Vector2( 1, -80 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
-position = Vector2( 0, 9 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -30 )
+offset = Vector2( 0, -40 )
 region_enabled = true
 region_rect = Rect2( 128, 16, 64, 104 )
 
@@ -95,10 +94,13 @@ anims/attack = SubResource( 24 )
 anims/idle = SubResource( 25 )
 
 [node name="block" parent="collisions" index="0"]
+position = Vector2( 0, -20 )
 shape = SubResource( 28 )
 
 [node name="select" parent="collisions" index="1"]
+position = Vector2( 0, -20 )
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+position = Vector2( 0, -20 )
 shape = SubResource( 30 )

@@ -13,8 +13,8 @@ var mirror:bool = true
 
 # SELECTION
 export var selectable:bool = true
-var selection_rad = 36
-var selection_rad_sq = 36*36
+var selection_radius = 36
+var selection_position:Vector2 = Vector2.ZERO
 
 # MOVEMENT
 export var moves:bool = true
@@ -26,7 +26,8 @@ var current_destiny:Vector2 = Vector2.ZERO
 
 # COLLISION
 export var collide:bool = true
-var collision_rad = 10
+var collision_radius = 10
+var collision_position:Vector2 = Vector2.ZERO
 
 # ATTACK
 export var damage:int = 25
@@ -71,7 +72,7 @@ func look_at(point):
 
 
 func get_units_on_sight():
-	var neighbors = game.map.quad.get_bodies_in_radius(self.global_position, self.current_vision)
+	var neighbors = game.map.quad.get_units_in_radius(self.global_position, self.current_vision)
 	var targets = []
 	for unit2 in neighbors:
 		if self != unit2 and (self.global_position - unit2.global_position).length() < self.current_vision:
@@ -80,29 +81,33 @@ func get_units_on_sight():
 
 
 func wait():
-	#if not game.two: self.wait_time = game.rng.randi_range(1,4)
+	#if not game.stress_test: self.wait_time = game.rng.randi_range(1,4)
 	self.set_state("idle")
 
 
 func on_move():
 	game.unit.move.step(self)
+	
+	
+func on_move_end():
+	game.unit.ai.on_move_end(self)
 
 
 func on_collision():
-		self.wait()
+	game.unit.ai.on_collision(self)
 
 
 func on_idle_end():
 	if self.wait_time > 0: self.wait_time -= 1
-	elif not game.two:
+	elif game.stress_test:
 		var o = 2000
 		var d = Vector2(randf()*o,randf()*o)
 		game.unit.move.start(self, d)
 
 
 func on_arrive():
+	game.unit.ai.on_arrive(self)
 	game.unit.move.end(self)
-
 
 
 func on_attack_end():
@@ -110,16 +115,8 @@ func on_attack_end():
 
 
 
-func take_hit(unit, attacker):
-	print("hit ",str(attacker.damage))
-	unit.current_hp -= attacker.damage
-	if unit.current_hp <= 0: unit.die()
-	if unit == game.selected_unit: game.ui.update_stats()
-
-
 func die():
 	self.set_state("dead")
-
 
 
 func get_texture():

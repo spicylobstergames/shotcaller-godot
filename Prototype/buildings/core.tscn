@@ -64,15 +64,15 @@ damage = 50
 scale = Vector2( 3.25, 13 )
 
 [node name="state" parent="hud" index="0"]
-margin_top = -96.0
-margin_bottom = -78.0
+margin_top = -118.0
+margin_bottom = -100.0
 
 [node name="selection" parent="hud" index="1"]
-position = Vector2( 0, 22 )
-scale = Vector2( 4.07692, 7.33333 )
+position = Vector2( 0, 0 )
+scale = Vector2( 4.69231, 8 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -84 )
+position = Vector2( 0, -106 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
@@ -83,23 +83,24 @@ visible = false
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 
 [node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 2 )]
-position = Vector2( -33, -40.5 )
+position = Vector2( -33, -63.5 )
 z_index = 1
 
 [node name="flag2" parent="sprites/flags" index="1" instance=ExtResource( 2 )]
-position = Vector2( 35, -40.5 )
+position = Vector2( 35, -63.5 )
 z_index = 1
 
 [node name="flag3" parent="sprites/flags" index="2" instance=ExtResource( 2 )]
-position = Vector2( -23, -74.5 )
+position = Vector2( -23, -97.5 )
+scale = Vector2( 0.8, 0.8 )
 
 [node name="flag4" parent="sprites/flags" index="3" instance=ExtResource( 2 )]
-position = Vector2( 24, -74.5 )
+position = Vector2( 24, -97.5 )
+scale = Vector2( 0.8, 0.8 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
-position = Vector2( 0, 9 )
 texture = ExtResource( 3 )
-offset = Vector2( 0, -30 )
+offset = Vector2( 0, -44 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 96, 120 )
 
@@ -108,10 +109,13 @@ anims/attack = SubResource( 24 )
 anims/idle = SubResource( 25 )
 
 [node name="block" parent="collisions" index="0"]
+position = Vector2( 0, -30 )
 shape = SubResource( 28 )
 
 [node name="select" parent="collisions" index="1"]
+position = Vector2( 0, -30 )
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+position = Vector2( 0, -30 )
 shape = SubResource( 27 )

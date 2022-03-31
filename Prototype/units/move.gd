@@ -23,6 +23,4 @@ func step(unit):
 func end(unit):
 	unit.current_step = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
-	#if unit.objective: unit.move_and_attack(unit.objective)
-	#else: 
 	unit.set_state("idle")

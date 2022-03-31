@@ -19,7 +19,7 @@ func update_stats():
 	var unit = game.selected_unit
 	if unit:
 		stats.show()
-		stats.get_node("name").text = "%s (%s)" % [unit.subtype, unit.type]
+		stats.get_node("name").text = "%s (%s) %s" % [unit.subtype, unit.type, unit.current_hp]
 		stats.get_node("damage").text = "Damage: %s" % unit.current_damage
 		stats.get_node("vision").text = "Vision: %s" % unit.current_vision
 		if unit.moves: stats.get_node("speed").text = "Speed: %s" % unit.current_speed

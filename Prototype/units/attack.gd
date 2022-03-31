@@ -11,15 +11,26 @@ func start(unit, point):
 	unit.set_state("attack")
 
 
-func hits(unit1, unit2):
-	var attack_position = unit1.global_position + unit1.attack_hit_position
-	var attack_radius = unit1.attack_hit_radius * unit1.current_attack_range
-	return game.circle_collision(attack_position, attack_radius, unit2.global_position, unit2.collision_rad)
+func in_range(attacker, target):
+	var att_pos = attacker.global_position + attacker.attack_hit_position
+	var att_rad = attacker.attack_hit_radius * attacker.current_attack_range
+	var tar_pos = target.global_position + target.collision_position
+	var tar_rad = target.collision_radius
+	return game.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
 func end(unit1):
-	var neighbors = game.map.quad.get_bodies_in_radius(unit1.attack_hit_position, unit1.attack_hit_radius)
+	var att_pos = unit1.global_position + unit1.attack_hit_position
+	var arr_rad = unit1.attack_hit_radius
+	var neighbors = game.map.quad.get_units_in_radius(att_pos, arr_rad)
 	for unit2 in neighbors:
-		if unit1 != unit2 and hits(unit1, unit2):
-			unit2.take_hit(unit1)
+		if unit1 != unit2 and in_range(unit1, unit2):
+			take_hit(unit1, unit2)
 	unit1.set_state("idle")
+
+
+func take_hit(attacker, target):
+	print("hit ",str(attacker.damage))
+	target.current_hp -= attacker.damage
+	if target.current_hp <= 0: target.die()
+	if target == game.selected_unit: game.ui.update_stats()
