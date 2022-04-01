@@ -11,17 +11,19 @@ uniform float amplitude_y = 0.0;
 uniform float distortion_x = 0.0;
 uniform float distortion_y = 0.0;
 
+
 void vertex() {
 	VERTEX.y += sin((UV.x * distortion_y - TIME * speed) * frequency_y) * amplitude_y * UV.x;
 	VERTEX.x += cos((UV.y * distortion_x - TIME * speed) * frequency_x) * amplitude_x * UV.x;
 }"
 
 [resource]
+resource_name = "flag"
 shader = SubResource( 2 )
 shader_param/speed = 1.0
 shader_param/frequency_x = 0.0
-shader_param/frequency_y = 8.0
+shader_param/frequency_y = 7.0
 shader_param/amplitude_x = 0.0
-shader_param/amplitude_y = 2.0
+shader_param/amplitude_y = 3.0
 shader_param/distortion_x = 0.0
-shader_param/distortion_y = 6.0
+shader_param/distortion_y = 11.0

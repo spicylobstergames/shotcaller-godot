@@ -1,5 +1,10 @@
 extends Node
 
+func move_behavior(unit, destiny):
+	if unit.moves:
+		unit.set_behavior("move")
+		start(unit, destiny)
+
 
 func start(unit, destiny):
 	if (unit.moves):
@@ -20,7 +25,20 @@ func step(unit):
 	unit.global_position += unit.current_step
 
 
+func on_collision(unit):
+	if unit.state == "move":
+		unit.wait()
+
+
+func resume(unit):
+	if unit.behavior == "move":
+		start(unit, unit.current_destiny)
+
+
 func end(unit):
 	unit.current_step = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
+	if unit.behavior == "move": 
+		unit.set_behavior("stand")
+

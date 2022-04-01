@@ -45,6 +45,16 @@ func show_hpbar():
 	for unit in game.all_units:
 		unit.get_node("hud/state").visible = true
 
+func update_hpbar(unit):
+	if unit.current_hp <= 0:
+		unit.get_node("hud/hpbar/green").region_rect.size.x = 0
+	else:
+		var scale = float(unit.current_hp) / float(unit.hp)
+		if scale < 0: scale = 0
+		if scale > 1: scale = 1
+		var size = unit.get_node("hud/hpbar/red").region_rect.size.x 
+		unit.get_node("hud/hpbar/green").region_rect.size.x = scale * size
+
 
 # STATE LABEL
 

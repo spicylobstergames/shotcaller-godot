@@ -5,8 +5,11 @@ var selected_leader:Node2D
 var selectable_units:Array = []
 var all_units:Array = []
 var player_team:String = "blue"
+var enemy_team:String = "red"
 
 var size:int = 2112
+
+var rng = RandomNumberGenerator.new()
 
 var game:Node = self
 var map:Node
@@ -24,6 +27,7 @@ func _ready():
 
 
 func start():
+	
 	map.setup_buildings()
 	#yield(get_tree(), "idle_frame")
 	#yield(get_tree().create_timer(2.0), "timeout")
@@ -35,15 +39,18 @@ var stress_test = 0
 func spawn():
 	if not stress_test:
 		#map.spawn("top", "blue", Vector2(0,0))
-		map.spawn("mid", "red", Vector2(1100,1000))
-		map.spawn("mid", "blue", Vector2(1000, 980))
+		map.spawn("mid", player_team, Vector2(1000, 980))
+		map.spawn("mid", enemy_team, Vector2(1100,1000))
 		#map.spawn("mid", "blue", Vector2(size,size))
 	else:
-		for x in range(1, 151):
-			yield(get_tree().create_timer(x/150), "timeout")
-			map.spawn("top", "blue", Vector2(randf()*size,randf()*size*0.2))
-			map.spawn("mid", "blue", Vector2((size*0.3)+randf()*size*0.4,(size*0.3)+randf()*size*0.4))
-			map.spawn("bot", "blue", Vector2(randf()*size,(size*0.8)+randf()*size*0.2))
+		rng.randomize()
+		var n = 200
+		for x in range(1, n+1):
+			yield(get_tree().create_timer(x/n), "timeout")
+			var t = player_team if randf() > 0.5 else enemy_team
+			map.spawn("top", t, Vector2(randf()*size,randf()*size*0.2))
+			map.spawn("mid", t, Vector2((size*0.3)+randf()*size*0.4,(size*0.3)+randf()*size*0.4))
+			map.spawn("bot", t, Vector2(randf()*size,(size*0.8)+randf()*size*0.2))
 
 
 
@@ -55,7 +62,7 @@ func _process(delta: float) -> void:
 		minimap.move_symbols()
 
 
-var rng = RandomNumberGenerator.new()
+
 func _physics_process(delta):
 	rng.randomize()
 	
@@ -91,6 +98,8 @@ func _physics_process(delta):
 			"move": unit1.on_move()
 			"collision": unit1.on_collision()
 
+
+# UTILS
 
 
 func circle_point_collision(p, c, r):

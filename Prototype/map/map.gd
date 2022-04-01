@@ -1,7 +1,7 @@
 extends YSort
 var game:Node
 
-var unit_template:PackedScene = load("res://units/creeps/melee.tscn")
+var unit_template:PackedScene = load("res://creeps/melee.tscn")
 
 var quad:_QuadTreeClass
 
@@ -11,11 +11,40 @@ func _ready():
 	quad = create_quadtree(bound, 16, 16)
 
 
+func setup_team(unit):
+	var is_red = unit.team == "red"
+	if unit.type == "building":
+		var flags = unit.get_node("sprites/flags/blue")
+		for flag in flags.get_children():
+			flag.visible = !is_red
+		var red_flags = unit.get_node("sprites/flags/red")
+		for flag in red_flags.get_children():
+			flag.visible = is_red
+			
+	if unit.type == "creep":
+		unit.mirror_toggle(is_red)
+		
+	if not is_red:
+			var texture = unit.get_texture()
+			texture.sprite.material = null
+		
+
+
+func setup_buildings():
+	for team in get_node("buildings").get_children():
+		for building in team.get_children():
+			setup_unit(building)
+			setup_selection(building)
+			setup_collisions(building)
+			setup_team(building)
+
+
 func spawn(l, t, point):
 	var unit = unit_template.instance()
 	unit.subtype = unit.name
 	unit.lane = l
 	unit.team = t
+	setup_team(unit)
 	unit.global_position = point
 	setup_unit(unit)
 	setup_selection(unit)
@@ -24,6 +53,7 @@ func spawn(l, t, point):
 	unit.get_node("animations").current_animation = "idle"
 	game.get_node("map").add_child(unit)
 	return unit
+
 
 
 func setup_unit(unit):
@@ -52,13 +82,6 @@ func setup_collisions(unit):
 func setup_selection(unit):
 	if unit.selectable: game.selectable_units.append(unit)
 
-
-func setup_buildings():
-	for team in get_node("buildings").get_children():
-		for building in team.get_children():
-			setup_unit(building)
-			setup_selection(building)
-			setup_collisions(building)
 
 
 

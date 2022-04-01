@@ -13,10 +13,10 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		if game.selected_unit and not event.is_pressed():
 			if event.scancode == KEY_SPACE: 
-				game.unit.move.start(game.selected_unit, point)
-			if event.scancode == KEY_Z:
+				game.unit.move.move_behavior(game.selected_unit, point)
+			if event.scancode == KEY_A:
 				game.unit.attack.start(game.selected_unit, point)
-			if event.scancode == KEY_X:
+			if event.scancode == KEY_Z:
 				game.unit.ai.move_and_attack(game.selected_unit, point)
 
 
@@ -30,7 +30,6 @@ func _unhandled_input(event):
 	# TOUCH SELECTION
 	if event is InputEventScreenTouch and event.pressed: 
 		select(event.position)
-
 
 
 
@@ -57,7 +56,6 @@ func unselect():
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.update_stats()
-
 
 
 func get_sel_unit_at_point(point):

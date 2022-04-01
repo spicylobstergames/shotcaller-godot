@@ -7,8 +7,9 @@ func _ready():
 
 
 func start(unit, point):
-	unit.look_at(point)
-	unit.set_state("attack")
+	if (unit.attacks):
+		unit.look_at(point)
+		unit.set_state("attack")
 
 
 func in_range(attacker, target):
@@ -26,11 +27,13 @@ func end(unit1):
 	for unit2 in neighbors:
 		if unit1 != unit2 and in_range(unit1, unit2):
 			take_hit(unit1, unit2)
-	unit1.set_state("idle")
 
 
 func take_hit(attacker, target):
-	print("hit ",str(attacker.damage))
 	target.current_hp -= attacker.damage
-	if target.current_hp <= 0: target.die()
+	game.ui.update_hpbar(target)
 	if target == game.selected_unit: game.ui.update_stats()
+	if target.current_hp <= 0: 
+		target.current_hp = 0
+		target.die()
+
