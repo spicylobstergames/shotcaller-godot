@@ -1,11 +1,33 @@
 extends YSort
 var game:Node
 
+
+const _GridGD = preload("pathfind/grid.gd")
+const _JumpPointFinderGD = preload("pathfind/jump_point_finder.gd")
+
+var Grid = _GridGD.new().Grid
+var grid = Grid.new(6, 6)
+
+
+var Jpf = _JumpPointFinderGD.new().JumpPointFinder
+var jpf = Jpf.new()
+
 var unit_template:PackedScene = load("res://creeps/melee.tscn")
 
 var quad:_QuadTreeClass
 
 func _ready():
+	
+	
+	
+	grid.setWalkableAt(3,3, false)
+	
+	print(jpf.findPath(1,1,5,5,grid))
+	
+	
+	
+	
+	
 	game = get_tree().get_current_scene()
 	var bound = Rect2(Vector2.ZERO, Vector2(game.size,game.size))
 	quad = create_quadtree(bound, 16, 16)
@@ -85,7 +107,11 @@ func setup_selection(unit):
 
 
 
-# QUADTREE
+
+# * QUADTREE CLASS
+#
+# @author https://github.com/AggressiveGaming/Godot-QuadTree
+
 
 
 func create_quadtree(bounds, splitThreshold, splitLimit, currentSplit = 0):
@@ -103,23 +129,23 @@ class _QuadTreeClass:
 	var _quadrants = []
 	var _drawMat = null
 	var _node = null
-
-
+	
+	
 	func _init(node, bounds, splitThreshold, maxSplits, currentSplit = 0):
 		_node = node
 		_bounds = bounds
 		_splitThreshold = splitThreshold
 		_maxSplits = maxSplits
 		_curSplit = currentSplit
-
-
+	
+	
 	func clear():
 		for quadrant in _quadrants:
 			quadrant.clear()
 		_bodies.clear()
 		_quadrants.clear()
-
-
+	
+	
 	func add_body(body):
 		# Adds a body to the QuadTree
 			
@@ -130,14 +156,14 @@ class _QuadTreeClass:
 			_bodies.append(body)
 			if(_bodies.size() > _splitThreshold && _curSplit < _maxSplits):
 				_split()
-
-
+	
+	
 	func get_units_in_radius(center, radius):
 		var result = []
 		_get_bodies_in_radius(center, radius, result)
 		return result
-
-
+	
+	
 	func _get_bodies_in_radius(center, radius, result):
 		if(_quadrants.size() == 0):
 			for body in _bodies:
@@ -146,8 +172,8 @@ class _QuadTreeClass:
 			for quadrant in _quadrants:
 				if(quadrant._contains_circle(center, radius)):
 					quadrant._get_bodies_in_radius(center, radius, result)
-
-
+	
+	
 	func _contains_circle(center, radius):
 		var bound_center = (_bounds.position + _bounds.end) / 2
 		var bound_half = _bounds.size / 2
@@ -157,12 +183,12 @@ class _QuadTreeClass:
 		if d.x <= bound_half.x: return true
 		if d.y <= bound_half.y: return true
 		return (d - bound_half).length() <= radius;
-
-
+	
+	
 	func _split():
 		# Splits the QuadTree into 4 quadrants and disperses its bodies
 		var sz =  _bounds.size / 2
-
+		
 		var aBounds = Rect2(_bounds.position, sz)
 		var bBounds = Rect2(Vector2(_bounds.position.x + sz.x, _bounds.position.y), sz)
 		var cBounds = Rect2(Vector2(_bounds.position.x + sz.x, _bounds.position.y + sz.y), sz)
@@ -174,13 +200,13 @@ class _QuadTreeClass:
 		_quadrants.append(_node.create_quadtree(bBounds, _splitThreshold, _maxSplits, splitNum))
 		_quadrants.append(_node.create_quadtree(cBounds, _splitThreshold, _maxSplits, splitNum))
 		_quadrants.append(_node.create_quadtree(dBounds, _splitThreshold, _maxSplits, splitNum))
-
+		
 		for body in _bodies:
 			var quadrant = _get_quadrant(body.global_position)
 			quadrant.add_body(body)
 		_bodies.clear()
-
-
+	
+	
 	func _get_quadrant(location):
 		# Gets the quadrant a Vector2 location lies in
 		if(location.x > _bounds.position.x + _bounds.size.x / 2):
@@ -200,8 +226,8 @@ class _QuadTreeClass:
 		var points = []
 		_get_rect_lines(points)
 		return points
-
-
+	
+	
 	func _get_rect_lines(points):
 		for quadrant in _quadrants:
 			quadrant._get_rect_lines(points)
