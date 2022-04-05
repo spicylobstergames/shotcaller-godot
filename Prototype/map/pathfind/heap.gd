@@ -150,7 +150,7 @@ class Heap:
 	#This function should be called every time the item is being modified.
 	###
 	func _updateItem(array, item, cmp):
-		var pos = array.indexOf(item)
+		var pos = array.find(item)
 		if pos == -1: return 
 		_siftdown(array, 0, pos, cmp)
 		_siftup(array, pos, cmp)

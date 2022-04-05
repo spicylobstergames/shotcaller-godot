@@ -33,6 +33,7 @@ func get_map_texture():
 	game.get_node("map_camera").current = false
 	game.get_node("camera").current = true
 	minimap.show()
+	game.ui.fps.show()
 	update_map_texture = false
 	game.start()
 
@@ -44,9 +45,10 @@ func corner_view():
 	for unit in map_symbols_map:
 		unit.get_node("symbol").visible = false
 	for unit in game.all_units:
-		unit.get_node("hud").visible = true
-		unit.get_node("sprites").visible = true
-		unit.get_node("animations").current_animation = unit.state
+		if unit.has_node("hud"):
+			unit.get_node("hud").visible = true
+			unit.get_node("sprites").visible = true
+			unit.get_node("animations").current_animation = unit.state
 
 
 func hide_view():
@@ -56,9 +58,10 @@ func hide_view():
 	for unit in map_symbols_map:
 		unit.get_node("symbol").visible = true
 	for unit in game.all_units:
-		unit.get_node("hud").visible = false
-		unit.get_node("sprites").visible = false
-		unit.get_node("animations").current_animation = ""
+		if unit.has_node("hud"):
+			unit.get_node("hud").visible = false
+			unit.get_node("sprites").visible = false
+			unit.get_node("animations").current_animation = ""
 
 
 func setup_symbol(unit):

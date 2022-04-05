@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://units/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/units/buildings/buildings.png" type="Texture" id=3]
-[ext_resource path="res://buildings/decoration/flag_red.tscn" type="PackedScene" id=4]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=5]
+[ext_resource path="res://buildings/decoration/flag_red.tscn" type="PackedScene" id=2]
+[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=3]
+[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=4]
+[ext_resource path="res://assets/units/buildings/buildings.png" type="Texture" id=5]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -135,7 +135,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 5 )
+shader = ExtResource( 4 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
@@ -145,19 +145,19 @@ shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
 shader_param/tolerance = 0.1
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 32.0
+radius = 48.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 40.0
+radius = 64.0
 
-[sub_resource type="CircleShape2D" id=32]
-radius = 112.0
+[sub_resource type="CircleShape2D" id=27]
+radius = 120.0
 
-[node name="barrack" instance=ExtResource( 1 )]
+[node name="castle" instance=ExtResource( 1 )]
 hp = 1000
 vision = 250
 type = "building"
-subtype = "barrack"
+subtype = "castle"
 moves = false
 speed = 0.0
 damage = 50
@@ -166,15 +166,15 @@ damage = 50
 scale = Vector2( 3.25, 13 )
 
 [node name="state" parent="hud" index="0"]
-margin_top = -106.0
-margin_bottom = -88.0
+margin_top = -118.0
+margin_bottom = -100.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2( 0, 0 )
-scale = Vector2( 3.46154, 5.66667 )
+scale = Vector2( 4.69231, 8 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -93 )
+position = Vector2( 0, -106 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
@@ -192,38 +192,64 @@ visible = false
 [node name="blue" type="Node2D" parent="sprites/flags" index="0"]
 visible = false
 
-[node name="flag" parent="sprites/flags/blue" index="0" instance=ExtResource( 2 )]
-position = Vector2( 1, -80 )
+[node name="flag" parent="sprites/flags/blue" index="0" instance=ExtResource( 3 )]
+position = Vector2( -33, -63.5 )
+z_index = 1
+
+[node name="flag2" parent="sprites/flags/blue" index="1" instance=ExtResource( 3 )]
+position = Vector2( 35, -63.5 )
+z_index = 1
+
+[node name="flag3" parent="sprites/flags/blue" index="2" instance=ExtResource( 3 )]
+position = Vector2( -23, -97.5 )
+scale = Vector2( 0.8, 0.8 )
+
+[node name="flag4" parent="sprites/flags/blue" index="3" instance=ExtResource( 3 )]
+position = Vector2( 24, -97.5 )
+scale = Vector2( 0.8, 0.8 )
 
 [node name="red" type="Node2D" parent="sprites/flags" index="1"]
 
-[node name="flag" parent="sprites/flags/red" index="0" instance=ExtResource( 4 )]
-position = Vector2( 1, -80 )
+[node name="flag" parent="sprites/flags/red" index="0" instance=ExtResource( 2 )]
+position = Vector2( -33, -63.5 )
+z_index = 1
+
+[node name="flag2" parent="sprites/flags/red" index="1" instance=ExtResource( 2 )]
+position = Vector2( 35, -63.5 )
+z_index = 1
+
+[node name="flag3" parent="sprites/flags/red" index="2" instance=ExtResource( 2 )]
+position = Vector2( -23, -97.5 )
+scale = Vector2( 0.8, 0.8 )
+
+[node name="flag4" parent="sprites/flags/red" index="3" instance=ExtResource( 2 )]
+position = Vector2( 24, -97.5 )
+scale = Vector2( 0.8, 0.8 )
 
 [node name="bodies" type="Node2D" parent="sprites" index="3"]
 
 [node name="body_blue" type="Sprite" parent="sprites/bodies" index="0"]
 visible = false
-texture = ExtResource( 3 )
-offset = Vector2( 0, -40 )
+texture = ExtResource( 5 )
+offset = Vector2( 0, -44 )
 region_enabled = true
-region_rect = Rect2( 128, 16, 64, 104 )
+region_rect = Rect2( 0, 0, 96, 120 )
 
 [node name="body_red" type="Sprite" parent="sprites/bodies" index="1"]
 material = SubResource( 30 )
-texture = ExtResource( 3 )
-offset = Vector2( 0, -40 )
+texture = ExtResource( 5 )
+offset = Vector2( 0, -44 )
 region_enabled = true
-region_rect = Rect2( 128, 16, 64, 104 )
+region_rect = Rect2( 0, 0, 96, 120 )
 
 [node name="block" parent="collisions" index="0"]
-position = Vector2( 0, -20 )
+position = Vector2( 0, -30 )
 shape = SubResource( 28 )
 
 [node name="select" parent="collisions" index="1"]
-position = Vector2( 0, -20 )
+position = Vector2( 0, -30 )
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
-position = Vector2( 0, -20 )
-shape = SubResource( 32 )
+position = Vector2( 0, -30 )
+shape = SubResource( 27 )

@@ -6,9 +6,10 @@ export var hp:int = 100
 var current_hp:int = 100
 export var vision:int = 150
 var current_vision:int = 150
-export var type:String = "creep"
-export var subtype:String = "melee"
+export var type:String = "pawn"
+export var subtype:String = "infantry"
 export var team:String = "blue"
+var dead:bool = false
 var mirror:bool = false
 
 # SELECTION
@@ -23,11 +24,16 @@ var current_speed:float = 1
 var angle:float = 0
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
+var last_position:Vector2 = Vector2.ZERO
+var last_position2:Vector2 = Vector2.ZERO
+var path:Array = []
 
 # COLLISION
 export var collide:bool = true
 var collision_radius = 10
 var collision_position:Vector2 = Vector2.ZERO
+var collide_target:Node2D
+var collision_timer
 
 # ATTACK
 export var attacks:bool = true
@@ -56,14 +62,18 @@ var ai
 
 func _ready():
 	game = get_tree().get_current_scene()
-	move = get_node("behavior/move")
-	attack = get_node("behavior/attack")
-	ai = get_node("behavior/ai")
+	if self.moves:
+		move = get_node("behavior/move")
+	if self.attacks:
+		attack = get_node("behavior/attack")
+	if self.moves and self.attacks:
+		ai = get_node("behavior/ai")
 
 
 func set_state(s):
-	self.state = s
-	self.get_node("animations").current_animation = s
+	if not self.dead:
+		self.state = s
+		self.get_node("animations").current_animation = s
 
 
 func set_behavior(s):
@@ -91,18 +101,19 @@ func get_units_on_sight(filters):
 	var neighbors = game.map.quad.get_units_in_radius(self.global_position, self.current_vision)
 	var targets = []
 	for unit2 in neighbors:
-		var distance = self.global_position.distance_to(unit2.global_position)
-		if self != unit2 and distance < self.current_vision:
-			if not filters: targets.append(unit2)
-			else:
-				for filter in filters:
-					if unit2[filter] == filters[filter]:
-						targets.append(unit2)
+		if unit2.hp:
+			var distance = self.global_position.distance_to(unit2.global_position)
+			if self != unit2 and distance < self.current_vision:
+				if not filters: targets.append(unit2)
+				else:
+					for filter in filters:
+						if unit2[filter] == filters[filter]:
+							targets.append(unit2)
 	return targets
 
 
 func wait():
-	#self.wait_time = game.rng.randi_range(0.6,3)
+	self.wait_time = game.rng.randi_range(0.6,3)
 	self.set_state("idle")
 
 
@@ -115,7 +126,13 @@ func on_idle_end():
 		if game.stress_test:
 			var o = 2000
 			var d = Vector2(randf()*o,randf()*o)
-			game.unit.ai.move_and_attack(self, d)
+			game.unit.move.start(self, d)
+		else:
+			if self.team == 'red':
+				var d = Vector2(1100,1000)
+				if (self.global_position.x > 1000):
+					d = Vector2(900,1000)
+				game.unit.move.start(self, d)
 
 
 
@@ -125,6 +142,7 @@ func on_move():
 
 func on_collision():
 	game.unit.move.on_collision(self)
+	game.unit.ai.on_collision(self)
 
 
 func on_move_end():
@@ -145,16 +163,24 @@ func on_attack_end():
 func die():
 	self.set_state("death")
 	self.set_behavior("stop")
-	game.all_units.erase(self)
+	self.dead = true
 
 
 func on_death_end():
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
+	if self.type != "building" and game.stress_test:
+		yield(get_tree().create_timer(1), "timeout")
+		game.map.spawn(self, self.lane, self.team, game.random_no_coll())
+
 
 
 func get_texture():
-	var body = get_node("sprites/body")
+	var body
+	if self.type == "building":
+		body = get_node("sprites/bodies/body_"+self.team)
+	else:
+		 body = get_node("sprites/body")
 	var texture
 	var region
 	var scale
@@ -164,15 +190,17 @@ func get_texture():
 		match self.subtype:
 			"tower": scale = Vector2(0.9,0.9)
 			"barrack": scale = Vector2(0.7,0.7)
-			"core": scale = Vector2(0.55,0.55)
+			"castle": scale = Vector2(0.55,0.55)
 	else:
 		texture = body.frames.get_frame('default', 0)
 		region = texture.region
-		scale = Vector2(3,3)
+		scale = Vector2(2,2)
 		
 	return {
 		"sprite": body,
 		"data": texture,
+		"mirror": self.mirror,
+		"material": body.material,
 		"region": region,
 		"scale": scale
 	}

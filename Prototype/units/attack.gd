@@ -25,7 +25,7 @@ func end(unit1):
 	var arr_rad = unit1.attack_hit_radius
 	var neighbors = game.map.quad.get_units_in_radius(att_pos, arr_rad)
 	for unit2 in neighbors:
-		if unit1 != unit2 and in_range(unit1, unit2):
+		if unit1 != unit2 and unit2.hp and in_range(unit1, unit2):
 			take_hit(unit1, unit2)
 
 

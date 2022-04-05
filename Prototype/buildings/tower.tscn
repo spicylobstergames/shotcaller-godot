@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://units/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=2]
@@ -24,6 +24,72 @@ tracks/0/keys = {
 "method": "on_attack_end"
 } ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("sprites:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=31]
+resource_name = "death"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 0.2 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.147264, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "on_death_end"
+} ]
+}
 
 [sub_resource type="Animation" id=25]
 resource_name = "idle"
@@ -42,6 +108,30 @@ tracks/0/keys = {
 "args": [  ],
 "method": "on_idle_end"
 } ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("sprites:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
 [sub_resource type="ShaderMaterial" id=30]
@@ -89,6 +179,7 @@ position = Vector2( 0, -70 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 
 [node name="shadow" parent="sprites" index="0"]
@@ -101,6 +192,7 @@ position = Vector2( 0, 0 )
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 
 [node name="blue" type="Node2D" parent="sprites/flags" index="0"]
+visible = false
 
 [node name="flag" parent="sprites/flags/blue" index="0" instance=ExtResource( 2 )]
 position = Vector2( 1, -58 )
@@ -110,7 +202,16 @@ position = Vector2( 1, -58 )
 [node name="flag_red" parent="sprites/flags/red" index="0" instance=ExtResource( 5 )]
 position = Vector2( 1, -58 )
 
-[node name="body" type="Sprite" parent="sprites" index="3"]
+[node name="bodies" type="Node2D" parent="sprites" index="3"]
+
+[node name="body_blue" type="Sprite" parent="sprites/bodies" index="0"]
+visible = false
+texture = ExtResource( 3 )
+offset = Vector2( 0, -27 )
+region_enabled = true
+region_rect = Rect2( 96, 40, 32, 80 )
+
+[node name="body_red" type="Sprite" parent="sprites/bodies" index="1"]
 material = SubResource( 30 )
 texture = ExtResource( 3 )
 offset = Vector2( 0, -27 )

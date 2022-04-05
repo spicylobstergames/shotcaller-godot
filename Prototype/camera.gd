@@ -4,7 +4,7 @@ var game:Node
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 var zoom_default = Vector2.ONE
-var zoom_limit:Vector2 = Vector2(0.3,3.52)
+var zoom_limit:Vector2 = Vector2(0.4,3.52)
 var margin:int = limit_right;
 var position_limit:int = 756
 var arrow_keys_speed:int = 4

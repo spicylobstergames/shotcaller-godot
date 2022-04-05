@@ -25,11 +25,18 @@ func update_stats():
 		if unit.moves: stats.get_node("speed").text = "Speed: %s" % unit.current_speed
 		else: stats.get_node("speed").text = ""
 		var texture = unit.get_texture()
-		stats.get_node("portrait/sprite").texture = texture.data
-		stats.get_node("portrait/sprite").region_rect = texture.region
-		stats.get_node("portrait/sprite").scale = texture.scale
+		var portrait = stats.get_node("portrait/sprite")
+		set_texture(portrait, texture)
 	else:
 		stats.hide()
+
+func set_texture(portrait, texture):
+	portrait.texture = texture.data
+	portrait.region_rect = texture.region
+	portrait.material = texture.material
+	portrait.scale = texture.scale
+	var sx = abs(portrait.scale.x)
+	portrait.scale.x = -1 * sx if texture.mirror else sx
 
 
 # HPBAR
@@ -37,13 +44,14 @@ func update_stats():
 
 func hide_hpbar():
 	for unit in game.all_units:
-		if unit != game.selected_unit:
+		if unit != game.selected_unit and unit.has_node("hud"):
 			unit.get_node("hud/hpbar").visible = false
 
 
 func show_hpbar():
 	for unit in game.all_units:
-		unit.get_node("hud/state").visible = true
+		if unit.has_node("hud"):
+			unit.get_node("hud/state").visible = true
 
 func update_hpbar(unit):
 	if unit.current_hp <= 0:
@@ -61,11 +69,12 @@ func update_hpbar(unit):
 
 func hide_state():
 	for unit in game.all_units:
-		if unit != game.selected_unit:
+		if unit != game.selected_unit and unit.has_node("hud"):
 			unit.get_node("hud/state").visible = false
 
 
 func show_state():
 	for unit in game.all_units:
-		unit.get_node("hud/hpbar").visible = true
+		if unit.has_node("hud"):
+			unit.get_node("hud/hpbar").visible = true
 

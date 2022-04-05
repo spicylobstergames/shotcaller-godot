@@ -28,6 +28,11 @@ func closest_unit(unit, enemies):
 	return sorted[0].unit
 
 
+func on_collision(unit):
+	if unit.behavior == "move_and_attack" and unit.collide_target == unit.target:
+		 game.unit.attack.start(unit, unit.target.global_position)
+
+
 func resume(unit):
 	if unit.behavior == "move_and_attack":
 		move_and_attack(unit, unit.objective)
