@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://units/unit.gd" type="Script" id=1]
 [ext_resource path="res://assets/units/shadow.png" type="Texture" id=2]
@@ -7,7 +7,9 @@
 [ext_resource path="res://assets/theme/kenneyUI.tres" type="Theme" id=5]
 [ext_resource path="res://units/move.gd" type="Script" id=6]
 [ext_resource path="res://units/attack.gd" type="Script" id=7]
-[ext_resource path="res://units/ai.gd" type="Script" id=8]
+[ext_resource path="res://units/advance.gd" type="Script" id=8]
+[ext_resource path="res://units/path.gd" type="Script" id=9]
+[ext_resource path="res://buildings/spawn.gd" type="Script" id=10]
 
 [sub_resource type="CircleShape2D" id=18]
 radius = 30.0
@@ -26,8 +28,14 @@ script = ExtResource( 6 )
 [node name="attack" type="Node" parent="behavior"]
 script = ExtResource( 7 )
 
-[node name="ai" type="Node" parent="behavior"]
+[node name="advance" type="Node" parent="behavior"]
 script = ExtResource( 8 )
+
+[node name="path" type="Node" parent="behavior"]
+script = ExtResource( 9 )
+
+[node name="spawn" type="Node" parent="behavior"]
+script = ExtResource( 10 )
 
 [node name="symbol" type="Sprite" parent="."]
 visible = false

@@ -13,12 +13,15 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		if game.selected_unit and not event.is_pressed():
 			if event.scancode == KEY_SPACE: 
-				game.unit.move.move_behavior(game.selected_unit, point)
+				game.unit.move.start(game.selected_unit, point)
 			if event.scancode == KEY_A:
 				game.unit.attack.start(game.selected_unit, point)
 			if event.scancode == KEY_Z:
-				game.unit.ai.move_and_attack(game.selected_unit, point)
-
+				game.unit.advance.start(game.selected_unit, point)
+			if event.scancode == KEY_X:
+				game.unit.path.follow(game.selected_unit, [point], "move")
+			if event.scancode == KEY_C:
+				game.selected_unit.current_path.append(point)
 
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
@@ -62,5 +65,5 @@ func get_sel_unit_at_point(point):
 	for unit in game.selectable_units:
 		var select_rad =  unit.selection_radius
 		var select_pos = unit.global_position + unit.selection_position
-		if game.circle_point_collision(point, select_pos, select_rad):
+		if game.utils.circle_point_collision(point, select_pos, select_rad):
 			return unit

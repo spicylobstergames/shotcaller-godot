@@ -3,7 +3,7 @@
 [ext_resource path="res://units/unit.gd" type="Script" id=1]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 32.0
+radius = 34.0
 
 [node name="unit" type="Node2D"]
 script = ExtResource( 1 )
@@ -12,15 +12,12 @@ vision = 0
 type = "block"
 subtype = ""
 team = ""
-selectable = false
-moves = false
-speed = 0.0
-attacks = false
-damage = 0
+collide = true
 attack_range = 0
 attack_speed = 0
 
 [node name="collisions" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 0
 input_pickable = false

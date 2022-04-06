@@ -6,17 +6,24 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func move_behavior(unit, destiny):
+func setup_timer(unit):
+	unit.collision_timer = Timer.new()
+	unit.collision_timer.one_shot = true
+	unit.add_child(unit.collision_timer)
+
+
+func start(unit, destiny):
 	if unit.moves:
 		unit.set_behavior("move")
-		start(unit, destiny)
+		move(unit, destiny)
 
 
 func in_bounds(p):
 	var l = 32
 	return p.x > l and p.y > l and p.x < game.size - l and p.y < game.size - l
 
-func start(unit, destiny):
+
+func move(unit, destiny):
 	if unit.moves and in_bounds(destiny):
 		#if !unit.lane:
 		#	unit.path = game.map.find_path(unit.global_position, destiny)
@@ -46,7 +53,7 @@ func on_collision(unit):
 		var p2 = target.global_position + target.collision_position
 		var pr = p2 - p1 # relative position
 		var a2 = pr.angle() # angle between units
-		var rda = game.limit_angle(a1 - a2) # angle relative to new direction
+		var rda = game.utils.limit_angle(a1 - a2) # angle relative to new direction
 		# new direction: rotates pr +-90 deg (tangent direction)
 		if (rda > 0): nd = Vector2(-pr.y, pr.x)
 		else: nd = Vector2(pr.y, -pr.x)
@@ -61,23 +68,26 @@ func on_collision(unit):
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
 			unit.collision_timer.stop() # stops previous timers
-		# different times for each direction and inverse proportional to speed
-		unit.collision_timer.wait_time = 0.5+(da/(4*PI*unit.current_speed))
+		# time inverse proportional to speed
+		unit.collision_timer.wait_time = (0.2 + (randf() * 0.4)) / unit.current_speed
 		unit.collision_timer.start()
 		yield(unit.collision_timer, "timeout")
-		start(unit, unit.current_destiny)
-				
+		move(unit, unit.current_destiny)
 
 
 func resume(unit):
 	if unit.behavior == "move":
-		start(unit, unit.current_destiny)
+		move(unit, unit.current_destiny)
 
 
 func end(unit):
+	if unit.behavior == "move": 
+		stop(unit)
+		unit.set_behavior("stand")
+
+
+func stop(unit):
 	unit.current_step = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
-	if unit.behavior == "move": 
-		unit.set_behavior("stand")
 

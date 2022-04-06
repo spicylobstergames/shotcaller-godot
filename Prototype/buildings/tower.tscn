@@ -154,12 +154,13 @@ radius = 32.0
 radius = 96.0
 
 [node name="tower" instance=ExtResource( 1 )]
-hp = 1000
+hp = 800
 vision = 250
 type = "building"
 subtype = "tower"
-moves = false
-speed = 0.0
+selectable = true
+collide = true
+attacks = true
 damage = 30
 
 [node name="symbol" parent="." index="1"]

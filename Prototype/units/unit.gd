@@ -13,32 +13,32 @@ var dead:bool = false
 var mirror:bool = false
 
 # SELECTION
-export var selectable:bool = true
+export var selectable:bool = false
 var selection_radius = 36
 var selection_position:Vector2 = Vector2.ZERO
 
 # MOVEMENT
-export var moves:bool = true
-export var speed:float = 1
-var current_speed:float = 1
+export var moves:bool = false
+export var speed:float = 0
+var current_speed:float = 0
 var angle:float = 0
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
 var last_position2:Vector2 = Vector2.ZERO
-var path:Array = []
+var current_path:Array = []
 
 # COLLISION
-export var collide:bool = true
-var collision_radius = 10
+export var collide:bool = false
+var collision_radius = 0
 var collision_position:Vector2 = Vector2.ZERO
 var collide_target:Node2D
 var collision_timer
 
 # ATTACK
-export var attacks:bool = true
-export var damage:int = 25
-var current_damage:int = 25
+export var attacks:bool = false
+export var damage:int = 0
+var current_damage:int = 0
 export var attack_range:int = 1
 var current_attack_range:int = 1
 export var attack_speed:int = 1
@@ -48,26 +48,36 @@ var target:Node2D
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
-# AI
+# ADVANCE
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
 var lane:String = "mid"
-var behavior:String = "stand" # "stop", "move", "attack", "move_and_attack"
+var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 
+# BEHAVIORS
 var move
 var attack
-var ai
+var advance
+var path
+var spawn
 
 func _ready():
 	game = get_tree().get_current_scene()
-	if self.moves:
-		move = get_node("behavior/move")
-	if self.attacks:
-		attack = get_node("behavior/attack")
-	if self.moves and self.attacks:
-		ai = get_node("behavior/ai")
+	if has_node("behavior/move"):    move = get_node("behavior/move")
+	if has_node("behavior/attack"):  attack = get_node("behavior/attack")
+	if has_node("behavior/advance"): advance = get_node("behavior/advance")
+	if has_node("behavior/path"):    path = get_node("behavior/path")
+	if has_node("behavior/spawn"):    spawn = get_node("behavior/spawn")
+
+
+
+func reset_unit(unit):
+	unit.current_hp = unit.hp
+	unit.current_vision = unit.vision
+	unit.current_speed = unit.speed
+	unit.current_damage = unit.damage
 
 
 func set_state(s):
@@ -81,6 +91,30 @@ func set_behavior(s):
 	self.get_node("hud/state").text = s
 
 
+func setup_selection(unit):
+	if unit.selectable: game.selectable_units.append(unit)
+
+
+func setup_team(unit):
+	var is_red = unit.team == "red"
+	
+	if unit.type == "pawn":
+		unit.mirror_toggle(is_red)
+		if not is_red:
+				var texture = unit.get_texture()
+				texture.sprite.material = null
+
+
+func oponent_team():
+	var t = "blue"
+	if self.team == t: t = "red"
+	return t
+
+
+func look_at(point):
+	self.mirror_toggle(point.x - self.global_position.x < 0)
+
+
 func mirror_toggle(on):
 	self.mirror = on
 	if on:
@@ -91,88 +125,6 @@ func mirror_toggle(on):
 		self.get_node("sprites").scale.x = 1
 		if self.has_node("collisions/attack"):
 			self.get_node("collisions/attack").position.x = abs(self.get_node("collisions/attack").position.x)
-
-
-func look_at(point):
-	self.mirror_toggle(point.x - self.global_position.x < 0)
-
-
-func get_units_on_sight(filters):
-	var neighbors = game.map.quad.get_units_in_radius(self.global_position, self.current_vision)
-	var targets = []
-	for unit2 in neighbors:
-		if unit2.hp:
-			var distance = self.global_position.distance_to(unit2.global_position)
-			if self != unit2 and distance < self.current_vision:
-				if not filters: targets.append(unit2)
-				else:
-					for filter in filters:
-						if unit2[filter] == filters[filter]:
-							targets.append(unit2)
-	return targets
-
-
-func wait():
-	self.wait_time = game.rng.randi_range(0.6,3)
-	self.set_state("idle")
-
-
-func on_idle_end():
-	if self.wait_time > 0: self.wait_time -= 1
-	else:
-		game.unit.move.resume(self)
-		game.unit.ai.resume(self)
-	
-		if game.stress_test:
-			var o = 2000
-			var d = Vector2(randf()*o,randf()*o)
-			game.unit.move.start(self, d)
-		else:
-			if self.team == 'red':
-				var d = Vector2(1100,1000)
-				if (self.global_position.x > 1000):
-					d = Vector2(900,1000)
-				game.unit.move.start(self, d)
-
-
-
-func on_move():
-	game.unit.move.step(self)
-
-
-func on_collision():
-	game.unit.move.on_collision(self)
-	game.unit.ai.on_collision(self)
-
-
-func on_move_end():
-	game.unit.ai.resume(self)
-
-
-func on_arrive():
-	game.unit.ai.end(self)
-	game.unit.move.end(self)
-
-
-
-func on_attack_end():
-	game.unit.attack.end(self)
-	game.unit.ai.resume(self)
-
-
-func die():
-	self.set_state("death")
-	self.set_behavior("stop")
-	self.dead = true
-
-
-func on_death_end():
-	self.global_position = Vector2(-1000, -1000)
-	self.visible = false
-	if self.type != "building" and game.stress_test:
-		yield(get_tree().create_timer(1), "timeout")
-		game.map.spawn(self, self.lane, self.team, game.random_no_coll())
-
 
 
 func get_texture():
@@ -204,3 +156,78 @@ func get_texture():
 		"region": region,
 		"scale": scale
 	}
+
+
+func get_units_on_sight(filters):
+	var neighbors = game.unit.path.quad.get_units_in_radius(self.global_position, self.current_vision)
+	var targets = []
+	for unit2 in neighbors:
+		if unit2.hp:
+			var distance = self.global_position.distance_to(unit2.global_position)
+			if self != unit2 and distance < self.current_vision:
+				if not filters: targets.append(unit2)
+				else:
+					for filter in filters:
+						if unit2[filter] == filters[filter]:
+							targets.append(unit2)
+	return targets
+
+
+func wait():
+	self.wait_time = game.rng.randi_range(1,4)
+	self.set_state("idle")
+
+
+func on_idle_end(): # every idle animation end (0.6s)
+	if self.wait_time > 0: self.wait_time -= 1
+	else: game.test.unit_wait_end(self)
+#		if self.team == 'red':
+#			var d = Vector2(1100,1000)
+#			if (self.global_position.x > 1000):
+#				d = Vector2(900,1000)
+#			move.start(self, d)
+#			advance.start(self)
+
+
+func on_move(): # every frame if there's no collision
+	move.step(self)
+
+
+func on_collision():
+	if self.moves: 
+		move.on_collision(self)
+		if self.attacks: 
+			advance.on_collision(self)
+
+
+func on_move_end(): # every move animation end (0.6s for speed = 1)
+	if self.moves and self.attacks: 
+		advance.resume(self)
+
+
+func on_arrive(): # when collides with destiny
+	if self.current_path.size() > 0:
+		path.follow_next(self)
+	elif self.moves:
+		move.end(self)
+		if self.attacks: 
+			advance.end(self)
+
+
+func on_attack_hit():  # every attack animation end (0.6s for ats = 1)
+	if self.attacks: 
+		attack.hit(self)
+		if self.moves:
+			advance.resume(self)
+
+
+func die():  # hp <= 0
+	self.set_state("death")
+	self.set_behavior("stand")
+	self.dead = true
+
+
+func on_death_end():  # death animation end
+	self.global_position = Vector2(-1000, -1000)
+	self.visible = false
+	game.test.respawn(self)

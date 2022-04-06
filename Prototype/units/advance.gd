@@ -1,0 +1,58 @@
+extends Node
+var game:Node
+
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+
+func start(unit, objective): # move_and_attack
+	if unit.moves:
+		if not unit.attacks: game.unit.move.move(unit, objective)
+		else:
+			unit.set_behavior("advance")
+			unit.objective = objective
+			var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
+			if not enemies: game.unit.move.move(unit, objective) 
+			else:
+				unit.target = closest_unit(unit, enemies)
+				if not game.unit.attack.in_range(unit, unit.target):
+					game.unit.move.move(unit, unit.target.global_position)
+				else: game.unit.attack.start(unit, unit.target.global_position)
+
+
+func closest_unit(unit, enemies):
+	var sorted = game.utils.sort_by_distance(unit, enemies)
+	return sorted[0].unit
+
+
+func on_collision(unit):
+	if unit.behavior == "advance" and unit.collide_target == unit.target:
+		 game.unit.attack.start(unit, unit.target.global_position)
+
+
+func resume(unit):
+	if unit.behavior == "advance":
+		start(unit, unit.objective)
+
+
+func end(unit):
+	if unit.behavior == "advance":
+		if unit.current_destiny != unit.objective:
+			start(unit, unit.objective)
+		else: stop(unit)
+
+
+func ally_attacked(target):
+	var allies = target.get_units_on_sight({"team": target.team})
+	for ally in allies:
+		if(target == ally): print('self')
+		if ally.behavior == "stop":
+			start(ally, target.global_position)
+
+
+func stop(unit):
+	if unit.behavior == "advance":
+		unit.set_behavior("stop")
+	

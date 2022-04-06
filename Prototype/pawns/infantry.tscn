@@ -79,7 +79,7 @@ tracks/5/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "on_attack_end"
+"method": "on_attack_hit"
 } ]
 }
 tracks/6/type = "value"
@@ -456,8 +456,12 @@ radius = 20.0
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 120
 vision = 100
+selectable = true
+moves = true
 speed = 1.5
-damage = 50
+collide = true
+attacks = true
+damage = 20
 
 [node name="hpbar" parent="hud" index="2"]
 visible = false
@@ -472,11 +476,10 @@ anims/move = SubResource( 26 )
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
 frames = SubResource( 22 )
-frame = 1
+frame = 2
 offset = Vector2( -2, -11 )
 
 [node name="sword" type="Sprite" parent="sprites" index="2"]
-visible = false
 material = SubResource( 30 )
 position = Vector2( 6, 2 )
 texture = ExtResource( 3 )
