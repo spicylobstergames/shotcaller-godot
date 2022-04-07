@@ -12,7 +12,7 @@ var map_symbols_map = []
 
 func _ready():
 	game = get_tree().get_current_scene()
-	map_sprite = game.get_node("map/sprite")
+	map_sprite = game.get_node("map/zoom_out_sprite")
 	map_tiles = game.get_node("map/tiles")
 	minimap = game.get_node("ui/bot_left/minimap")
 	map_symbols = minimap.get_node("symbols")

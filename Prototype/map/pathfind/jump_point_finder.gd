@@ -47,7 +47,7 @@ class JumpPointFinder:
 				node.closed = true
 				
 				if (node == endNode):
-					return _expandPath(_backtrace(endNode))
+					return expandPath(_backtrace(endNode))
 				
 				_identifySuccessors(node)
 		
@@ -260,7 +260,7 @@ class JumpPointFinder:
 #		* @param {Array<Array<number>>} path The path
 #		* @return {Array<Array<number>>} expanded path
 #		*/
-	func _expandPath(path):
+	func expandPath(path):
 		var expanded = []
 		var size = path.size()
 		var coord0

@@ -9,7 +9,7 @@
 [ext_resource path="res://units/attack.gd" type="Script" id=7]
 [ext_resource path="res://units/advance.gd" type="Script" id=8]
 [ext_resource path="res://units/path.gd" type="Script" id=9]
-[ext_resource path="res://buildings/spawn.gd" type="Script" id=10]
+[ext_resource path="res://units/spawn.gd" type="Script" id=10]
 
 [sub_resource type="CircleShape2D" id=18]
 radius = 30.0

@@ -28,33 +28,23 @@ func _ready():
 	utils = get_node("utils")
 	test = get_node("test")
 	
-	unit.path.setup_quadtree()
+	map.blocks.setup_quadtree()
 	unit.path.setup_pathfind()
 
 
 func start():
 	rng.randomize()
 	map.setup_buildings()
-	
-	#yield(get_tree(), "idle_frame")
-	
-	
-	#map.spawn("top", "blue", Vector2(0,0))
-	map.create("mid", player_team, "Vector2", Vector2(1000, 980))
-	map.create("mid", enemy_team, "Vector2", Vector2(1100,1030))
-	map.create("mid", enemy_team, "Vector2", Vector2(1100,1000))
-	map.create("mid", enemy_team, "Vector2", Vector2(1100,970))
-	#map.spawn("mid", "blue", Vector2(size,size))	
-	
+	map.fog.cover_map()
 	spawn_start()
+	unit.spawn.test()
 
 
 func spawn_start():
 	if not test.stress:
 		yield(get_tree().create_timer(2.0), "timeout")
-		unit.spawn.start()
+		#unit.spawn.start()
 	else: test.spawn_units()
-
 
 
 func _process(delta: float) -> void:
@@ -67,14 +57,16 @@ func _process(delta: float) -> void:
 		minimap.move_symbols()
 
 
-
 func _physics_process(delta):
+	
+	map.fog.skip_start()
 	#if test.stress: unit.path.find_path(utils.random_point(), utils.random_point())
 
-	unit.path.quad.clear()
+	map.blocks.quad.clear()
 	
 	for unit1 in all_units:
-		if unit1.collide: unit.path.quad.add_body(unit1)
+		if unit1.collide: map.blocks.quad.add_body(unit1)
+		if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
 		unit1.next_event  = ""
 		if unit1.moves and unit1.state == "move":
 			var unit1_pos = unit1.global_position + unit1.collision_position
@@ -87,7 +79,7 @@ func _physics_process(delta):
 			unit1.next_event = "move"
 			var unit1_pos = unit1.global_position + unit1.collision_position + unit1.current_step
 			var unit1_rad = unit1.collision_radius
-			var neighbors = unit.path.quad.get_units_in_radius(unit1_pos, unit1_rad)
+			var neighbors = map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
 			for unit2 in neighbors:
 				if unit2.collide and unit1 != unit2:
 					var unit2_pos = unit2.global_position + unit2.collision_position + unit2.current_step

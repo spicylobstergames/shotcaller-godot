@@ -4,8 +4,8 @@ var game:Node
 
 export var hp:int = 100
 var current_hp:int = 100
-export var vision:int = 150
-var current_vision:int = 150
+export var vision:int = 100
+var current_vision:int = 100
 export var type:String = "pawn"
 export var subtype:String = "infantry"
 export var team:String = "blue"
@@ -159,7 +159,7 @@ func get_texture():
 
 
 func get_units_on_sight(filters):
-	var neighbors = game.unit.path.quad.get_units_in_radius(self.global_position, self.current_vision)
+	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, self.current_vision)
 	var targets = []
 	for unit2 in neighbors:
 		if unit2.hp:
@@ -171,6 +171,21 @@ func get_units_on_sight(filters):
 						if unit2[filter] == filters[filter]:
 							targets.append(unit2)
 	return targets
+
+
+func setup_collisions(unit):
+	if unit.has_node("collisions/select"):
+		unit.selection_position = unit.get_node("collisions/select").position
+		unit.selection_radius = unit.get_node("collisions/select").shape.radius
+	
+	if unit.has_node("collisions/block"):
+		unit.collision_position = unit.get_node("collisions/block").position
+		unit.collision_radius = unit.get_node("collisions/block").shape.radius
+	
+	if unit.has_node("collisions/attack"):
+		unit.attack_hit_position = unit.get_node("collisions/attack").position
+		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
+
 
 
 func wait():
