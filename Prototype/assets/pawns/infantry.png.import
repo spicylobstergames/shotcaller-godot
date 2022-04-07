@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/infantry.png-ea02492355079e6c93faf423c1e43a74.stex"
+path="res://.import/infantry.png-ecf2aab91e9af0217886187ea7ecd9d7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/pawns/infantry.png"
-dest_files=[ "res://.import/infantry.png-ea02492355079e6c93faf423c1e43a74.stex" ]
+source_file="res://Assets/pawns/infantry.png"
+dest_files=[ "res://.import/infantry.png-ecf2aab91e9af0217886187ea7ecd9d7.stex" ]
 
 [params]
 

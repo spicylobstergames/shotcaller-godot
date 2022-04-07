@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/raja.png-f77f3b80903ebb4fb2bdb889569aa741.stex"
+path="res://.import/raja.png-3e8a9c04396a6fba81bb60fb12118332.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/leaders/raja/raja.png"
-dest_files=[ "res://.import/raja.png-f77f3b80903ebb4fb2bdb889569aa741.stex" ]
+source_file="res://Assets/leaders/raja/raja.png"
+dest_files=[ "res://.import/raja.png-3e8a9c04396a6fba81bb60fb12118332.stex" ]
 
 [params]
 
