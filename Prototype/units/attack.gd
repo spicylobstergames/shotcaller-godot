@@ -65,11 +65,11 @@ func take_hit(attacker, target):
 func projectile_stuck(attacker, target):
 	var pos = attacker.projectile.global_position - target.global_position
 	var stuck = attacker.projectile.duplicate()
-	var a = 15
-	stuck.rotation_degrees = attacker.weapon.rotation_degrees + ((randf()*a*2)-a)
-	stuck.position = pos * 0.5
+	var a = 0.2 # adjust
+	var r = attacker.weapon.global_rotation
+	stuck.global_rotation = r + ((randf()*a*2)-a) # some angle variation
+	stuck.position = pos * a # goes a bit deeper
 	stuck.frame = 1
-	if attacker.mirror: stuck.scale.x *= -1
-	target.add_child(stuck)
-	yield(get_tree().create_timer(2.0), "timeout")
+	target.get_node("sprites").add_child(stuck)
+	yield(get_tree().create_timer(12.0), "timeout")
 	stuck.queue_free()

@@ -20,9 +20,9 @@ func test():
 	
 	#map.spawn("top", "blue", Vector2(0,0))
 	game.map.create(archer, "mid", game.player_team, "Vector2", Vector2(1000,1000))
-	game.map.create(infantry, "mid", game.player_team, "Vector2", Vector2(1000,1030))
+	#game.map.create(infantry, "mid", game.player_team, "Vector2", Vector2(1000,1030))
 	game.map.create(archer, "mid", game.enemy_team, "Vector2", Vector2(1100,1000))
-	game.map.create(infantry, "mid", game.enemy_team, "Vector2", Vector2(1100,970))
+	#game.map.create(infantry, "mid", game.enemy_team, "Vector2", Vector2(1100,970))
 	#map.spawn("mid", "blue", Vector2(size,size))
 
 
