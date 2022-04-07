@@ -4,12 +4,24 @@ var game:Node
 
 var fps:Node
 var stats:Node
-
+var minimap:Camera2D
 
 func _ready():
 	game = get_tree().get_current_scene()
 	fps = get_node("top_left/fps")
 	stats = get_node("bot_mid/stats")
+	minimap = game.get_node("map_camera")
+
+
+func process():
+	# if opt.show.fps:
+	var f = Engine.get_frames_per_second()
+	var n = game.all_units.size()
+	fps.set_text('fps: '+str(f)+' u:'+str(n))
+	
+	if minimap and game.camera.zoom.x <= 1:
+		if minimap.update_map_texture: minimap.get_map_texture()
+		minimap.move_symbols()
 
 
 # STATS

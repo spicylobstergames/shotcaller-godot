@@ -37,6 +37,7 @@ var collision_timer
 
 # ATTACK
 export var attacks:bool = false
+export var ranged:bool = false
 export var damage:int = 0
 var current_damage:int = 0
 export var attack_range:int = 1
@@ -97,13 +98,22 @@ func setup_selection(unit):
 
 func setup_team(unit):
 	var is_red = unit.team == "red"
-	
+	# MIRROR
 	if unit.type == "pawn":
 		unit.mirror_toggle(is_red)
+	# COLORS
+	if not is_red:
+		var texture = unit.get_texture()
+		texture.sprite.material = null
+	# FLAGS
+	if unit.type == "building":
 		if not is_red:
-				var texture = unit.get_texture()
-				texture.sprite.material = null
-
+			var flags = unit.get_node("sprites/flags").get_children()
+			for flag in flags:
+				var flag_sprite = flag.get_node("sprite")
+				var material = flag_sprite.material.duplicate()
+				material.set_shader_param("change_color", false)
+				flag_sprite.material = material
 
 func oponent_team():
 	var t = "blue"
@@ -128,11 +138,7 @@ func mirror_toggle(on):
 
 
 func get_texture():
-	var body
-	if self.type == "building":
-		body = get_node("sprites/bodies/body_"+self.team)
-	else:
-		 body = get_node("sprites/body")
+	var body = get_node("sprites/body")
 	var texture
 	var region
 	var scale

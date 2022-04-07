@@ -1,22 +1,22 @@
 [gd_scene load_steps=31 format=2]
 
-[ext_resource path="res://assets/ground/grass.png" type="Texture" id=1]
-[ext_resource path="res://assets/ground/brick.png" type="Texture" id=2]
-[ext_resource path="res://assets/ground/water.png" type="Texture" id=3]
-[ext_resource path="res://assets/units/buildings/buildings.png" type="Texture" id=4]
-[ext_resource path="res://assets/ground/trees.png" type="Texture" id=5]
+[ext_resource path="res://assets/map/grass.png" type="Texture" id=1]
+[ext_resource path="res://assets/map/brick.png" type="Texture" id=2]
+[ext_resource path="res://assets/map/water.png" type="Texture" id=3]
+[ext_resource path="res://assets/buildings/buildings.png" type="Texture" id=4]
+[ext_resource path="res://assets/map/trees.png" type="Texture" id=5]
 [ext_resource path="res://map/tool/mirror_trees.gd" type="Script" id=6]
 [ext_resource path="res://map/tool/mirror_tiles.gd" type="Script" id=7]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=8]
-[ext_resource path="res://assets/ground/waterfall.png" type="Texture" id=9]
+[ext_resource path="res://assets/map/waterfall.png" type="Texture" id=9]
 [ext_resource path="res://buildings/barrack.tscn" type="PackedScene" id=10]
 [ext_resource path="res://buildings/castle.tscn" type="PackedScene" id=11]
 [ext_resource path="res://buildings/tower.tscn" type="PackedScene" id=12]
 [ext_resource path="res://map/map.gd" type="Script" id=13]
 [ext_resource path="res://units/block.tscn" type="PackedScene" id=14]
-[ext_resource path="res://assets/ground/fog.png" type="Texture" id=15]
-[ext_resource path="res://map/fog.gd" type="Script" id=16]
-[ext_resource path="res://map/blocks/blocks.gd" type="Script" id=17]
+[ext_resource path="res://assets/map/fog.png" type="Texture" id=18]
+[ext_resource path="res://map/fog.gd" type="Script" id=19]
+[ext_resource path="res://map/blocks/blocks.gd" type="Script" id=20]
 
 [sub_resource type="TileSet" id=1]
 resource_local_to_scene = true
@@ -207,7 +207,7 @@ shader_param/tolerance = 0.1
 
 [sub_resource type="TileSet" id=31]
 0/name = "fog"
-0/texture = ExtResource( 15 )
+0/texture = ExtResource( 18 )
 0/tex_offset = Vector2( -8, -8 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 24, 24 )
@@ -358,19 +358,20 @@ __meta__ = {
 }
 
 [node name="fog" type="TileMap" parent="tiles"]
+visible = false
 modulate = Color( 1, 1, 1, 0.27451 )
 z_index = 2
 tile_set = SubResource( 31 )
 cell_size = Vector2( 8, 8 )
 format = 1
 tile_data = PoolIntArray( 327711, 0, 0 )
-script = ExtResource( 16 )
+script = ExtResource( 19 )
 
 [node name="waterfall" type="AnimatedSprite" parent="."]
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -381,152 +382,32 @@ offset = Vector2( 0, -12 )
 [node name="castle" parent="buildings/blue" instance=ExtResource( 11 )]
 position = Vector2( 160, 1977 )
 
-[node name="blue" parent="buildings/blue/castle/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/castle/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/castle/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/castle/sprites/bodies" index="1"]
-visible = false
-
 [node name="barrack_top" parent="buildings/blue" instance=ExtResource( 10 )]
 position = Vector2( 160, 1777 )
-
-[node name="blue" parent="buildings/blue/barrack_top/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/barrack_top/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/barrack_top/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/barrack_top/sprites/bodies" index="1"]
-visible = false
 
 [node name="barrack_mid" parent="buildings/blue" instance=ExtResource( 10 )]
 position = Vector2( 288, 1841 )
 
-[node name="blue" parent="buildings/blue/barrack_mid/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/barrack_mid/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/barrack_mid/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/barrack_mid/sprites/bodies" index="1"]
-visible = false
-
 [node name="barrack_bot" parent="buildings/blue" instance=ExtResource( 10 )]
 position = Vector2( 352, 1969 )
-
-[node name="blue" parent="buildings/blue/barrack_bot/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/barrack_bot/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/barrack_bot/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/barrack_bot/sprites/bodies" index="1"]
-visible = false
 
 [node name="tower_top_1" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 96, 357 )
 
-[node name="blue" parent="buildings/blue/tower_top_1/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/tower_top_1/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/tower_top_1/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/tower_top_1/sprites/bodies" index="1"]
-visible = false
-
 [node name="tower_top_2" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 96, 1060 )
-
-[node name="blue" parent="buildings/blue/tower_top_2/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/tower_top_2/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/tower_top_2/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/tower_top_2/sprites/bodies" index="1"]
-visible = false
 
 [node name="tower_mid_1" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 928, 1125 )
 
-[node name="blue" parent="buildings/blue/tower_mid_1/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/tower_mid_1/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/tower_mid_1/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/tower_mid_1/sprites/bodies" index="1"]
-visible = false
-
 [node name="tower_mid_2" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 480, 1638 )
-
-[node name="blue" parent="buildings/blue/tower_mid_2/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/tower_mid_2/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/tower_mid_2/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/tower_mid_2/sprites/bodies" index="1"]
-visible = false
 
 [node name="tower_bot_1" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 1760, 2013 )
 
-[node name="blue" parent="buildings/blue/tower_bot_1/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/tower_bot_1/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/tower_bot_1/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/tower_bot_1/sprites/bodies" index="1"]
-visible = false
-
 [node name="tower_bot_2" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 1056, 2013 )
-
-[node name="blue" parent="buildings/blue/tower_bot_2/sprites/flags" index="0"]
-visible = true
-
-[node name="red" parent="buildings/blue/tower_bot_2/sprites/flags" index="1"]
-visible = false
-
-[node name="body_blue" parent="buildings/blue/tower_bot_2/sprites/bodies" index="0"]
-visible = true
-
-[node name="body_red" parent="buildings/blue/tower_bot_2/sprites/bodies" index="1"]
-visible = false
 
 [node name="red" type="YSort" parent="buildings"]
 
@@ -571,8 +452,7 @@ position = Vector2( 1056, 101 )
 team = "red"
 
 [node name="blocks" type="Node2D" parent="."]
-visible = false
-script = ExtResource( 17 )
+script = ExtResource( 20 )
 
 [node name="unit" parent="blocks" instance=ExtResource( 14 )]
 scale = Vector2( 1, 1.01239 )
@@ -588,14 +468,3 @@ points = PoolVector2Array( 352, 1829, 398, 1718, 502, 1668, 610, 1498, 925, 1178
 
 [node name="bot" type="Line2D" parent="lanes"]
 points = PoolVector2Array( 440, 1950, 771, 1985, 1056, 1966, 1401, 2015, 1756, 1966, 1914, 1984, 1983, 1932, 1973, 1744, 2006, 1559, 1964, 1372, 1978, 1058, 2010, 798, 1948, 409 )
-
-[editable path="buildings/blue/castle"]
-[editable path="buildings/blue/barrack_top"]
-[editable path="buildings/blue/barrack_mid"]
-[editable path="buildings/blue/barrack_bot"]
-[editable path="buildings/blue/tower_top_1"]
-[editable path="buildings/blue/tower_top_2"]
-[editable path="buildings/blue/tower_mid_1"]
-[editable path="buildings/blue/tower_mid_2"]
-[editable path="buildings/blue/tower_bot_1"]
-[editable path="buildings/blue/tower_bot_2"]

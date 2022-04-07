@@ -29,13 +29,13 @@ func _ready():
 	test = get_node("test")
 	
 	map.blocks.setup_quadtree()
+	map.setup_buildings()
 	unit.path.setup_pathfind()
 
 
 func start():
 	rng.randomize()
-	map.setup_buildings()
-	map.fog.cover_map()
+	#map.fog.cover_map()
 	spawn_start()
 	unit.spawn.test()
 
@@ -48,31 +48,28 @@ func spawn_start():
 
 
 func _process(delta: float) -> void:
-	var fps = Engine.get_frames_per_second()
-	var n = all_units.size()
-	ui.fps.set_text('fps: '+str(fps)+' u:'+str(n))
-
-	if minimap:
-		if minimap.update_map_texture: minimap.get_map_texture()
-		minimap.move_symbols()
+	ui.process()
+	camera.process()
 
 
 func _physics_process(delta):
 	
-	map.fog.skip_start()
+	#map.fog.skip_start()
 	#if test.stress: unit.path.find_path(utils.random_point(), utils.random_point())
 
 	map.blocks.quad.clear()
 	
+	# loop 1: adds units to quad and check for arrival
 	for unit1 in all_units:
 		if unit1.collide: map.blocks.quad.add_body(unit1)
-		if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
+		#if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
 		unit1.next_event  = ""
 		if unit1.moves and unit1.state == "move":
 			var unit1_pos = unit1.global_position + unit1.collision_position
 			if utils.circle_point_collision(unit1_pos, unit1.current_destiny, unit1.collision_radius):
 				unit1.next_event = "arrive"
 	
+	# loop 2: checks for collision
 	for unit1 in all_units:
 		# COLLISION
 		if unit1.collide and unit1.moves and unit1.next_event != "arrive" and unit1.state == "move":
@@ -89,11 +86,13 @@ func _physics_process(delta):
 						unit1.collide_target = unit2
 						break
 		
+		# move or collide or stop
 		match unit1.next_event:
-			"arrive": unit1.on_arrive()
 			"move": unit1.on_move()
 			"collision": unit1.on_collision()
+			"arrive": unit1.on_arrive()
 		
+		# save last positions
 		unit1.last_position2 = unit1.last_position
 		unit1.last_position = unit1.global_position
 

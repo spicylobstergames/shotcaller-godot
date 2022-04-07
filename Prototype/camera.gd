@@ -89,7 +89,7 @@ func zoom_out():
 	game.minimap.hide_view()
 
 
-func _process(delta):
+func process():
 	var ratio = get_viewport().size.x / get_viewport().size.y
 	
 	# APPLY MOUSE PAN
