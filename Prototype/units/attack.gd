@@ -67,6 +67,7 @@ func projectile_stuck(attacker, target):
 	var stuck = attacker.projectile.duplicate()
 	var a = 0.2 # adjust
 	var r = attacker.weapon.global_rotation
+	if target.mirror: r = Vector2(-cos(r),sin(r)).angle()
 	stuck.global_rotation = r + ((randf()*a*2)-a) # some angle variation
 	stuck.position = pos * a # goes a bit deeper
 	stuck.frame = 1

@@ -36,14 +36,12 @@ func _ready():
 func start():
 	rng.randomize()
 	#map.fog.cover_map()
-	spawn_start()
-	unit.spawn.test()
-
-
-func spawn_start():
+	
 	if not test.stress:
+		unit.spawn.test()
 		yield(get_tree().create_timer(2.0), "timeout")
-		#unit.spawn.start()
+		unit.spawn.start()
+		
 	else: test.spawn_units()
 
 
