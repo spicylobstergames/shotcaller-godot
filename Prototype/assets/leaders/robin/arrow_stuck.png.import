@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/arrow_stuck.png-912d29d4fbbe7e9599174151f237489f.stex"
+path="res://.import/arrow_stuck.png-5cbdc90e5c6f998f8f080b48ae644798.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/leaders/robin/arrow_stuck.png"
-dest_files=[ "res://.import/arrow_stuck.png-912d29d4fbbe7e9599174151f237489f.stex" ]
+source_file="res://Assets/leaders/robin/arrow_stuck.png"
+dest_files=[ "res://.import/arrow_stuck.png-5cbdc90e5c6f998f8f080b48ae644798.stex" ]
 
 [params]
 

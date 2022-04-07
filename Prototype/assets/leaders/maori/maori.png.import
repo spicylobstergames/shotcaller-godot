@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/maori.png-5af8b079fbd55fe099ff3e99a24ca9ed.stex"
+path="res://.import/maori.png-0ff1398cce9fffa3f737dabd780ea8e0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/leaders/maori/maori.png"
-dest_files=[ "res://.import/maori.png-5af8b079fbd55fe099ff3e99a24ca9ed.stex" ]
+source_file="res://Assets/leaders/maori/maori.png"
+dest_files=[ "res://.import/maori.png-0ff1398cce9fffa3f737dabd780ea8e0.stex" ]
 
 [params]
 
