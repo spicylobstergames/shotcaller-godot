@@ -44,15 +44,19 @@ func end(unit):
 		else: stop(unit)
 
 
-func ally_attacked(target):
+func react(target, attacker):
+	if target.behavior == "stop" or target.behavior == "advance":
+		start(target, attacker.global_position)
+
+
+func ally_attacked(target, attacker):
 	var allies = target.get_units_on_sight({"team": target.team})
-	for ally in allies:
-		if(target == ally): print('self')
-		if ally.behavior == "stop":
-			start(ally, target.global_position)
+	for ally in allies: react(ally, attacker)
 
 
 func stop(unit):
 	if unit.behavior == "advance":
+		unit.current_destiny = Vector2.ZERO
+		unit.objective = Vector2.ZERO
 		unit.set_behavior("stop")
 	

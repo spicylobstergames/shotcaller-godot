@@ -9,16 +9,33 @@ func _ready():
 func start(unit, point):
 	if (unit.attacks):
 		unit.look_at(point)
+		unit.aim_point = point
 		unit.set_state("attack")
+		if unit.ranged and unit.weapon:
+			unit.weapon.look_at(unit.aim_point)
+		if !unit.target:
+			unit.target = get_first_target(point)
+
+
+func get_first_target(point):
+	var neighbors = game.map.blocks.get_units_in_radius(point, 1)
+	for unit in neighbors:
+		return unit
 
 
 func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
-	var arr_rad = unit1.attack_hit_radius
-	var neighbors = game.map.blocks.get_units_in_radius(att_pos, arr_rad)
+	var att_rad = unit1.attack_hit_radius
+	var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
 	for unit2 in neighbors:
-		if unit1 != unit2 and unit2.hp and in_range(unit1, unit2):
+		
+		if (unit1 != unit2 and 
+				unit2.hp and 
+				unit2 == unit1.target and  # or unit1 has cleave
+				in_range(unit1, unit2)):
+			
 			take_hit(unit1, unit2)
+			return # if no cleave
 
 
 func in_range(attacker, target):
@@ -30,11 +47,29 @@ func in_range(attacker, target):
 
 
 func take_hit(attacker, target):
+	if attacker.projectile: 
+		projectile_stuck(attacker, target)
+		attacker.projectile.visible = false
 	target.current_hp -= attacker.damage
-	game.unit.advance.ally_attacked(target)
+	game.unit.advance.react(target, attacker)
+	game.unit.advance.ally_attacked(target, attacker)
 	game.ui.update_hpbar(target)
 	if target == game.selected_unit: game.ui.update_stats()
 	if target.current_hp <= 0: 
 		target.current_hp = 0
 		target.die()
+		yield(get_tree().create_timer(0.6), "timeout")
+		game.unit.advance.resume(attacker)
 
+
+func projectile_stuck(attacker, target):
+	var pos = attacker.projectile.global_position - target.global_position
+	var stuck = attacker.projectile.duplicate()
+	var a = 15
+	stuck.rotation_degrees = attacker.weapon.rotation_degrees + ((randf()*a*2)-a)
+	stuck.position = pos * 0.5
+	stuck.frame = 1
+	if attacker.mirror: stuck.scale.x *= -1
+	target.add_child(stuck)
+	yield(get_tree().create_timer(2.0), "timeout")
+	stuck.queue_free()

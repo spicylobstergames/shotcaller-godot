@@ -29,6 +29,7 @@ func create(template, lane, team, mode, point):
 	game.all_units.append(unit)
 	return unit
 
+
 func spawn(unit, l, t, mode, point):
 	unit.lane = l
 	unit.team = t

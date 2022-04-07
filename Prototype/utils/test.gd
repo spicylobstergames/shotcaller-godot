@@ -2,7 +2,8 @@ extends Node
 var game:Node
 
 
-var unit_template:PackedScene = load("res://pawns/infantry.tscn")
+var infantry:PackedScene = load("res://pawns/infantry.tscn")
+var archer:PackedScene = load("res://pawns/archer.tscn")
 
 
 var stress = 0
@@ -17,9 +18,9 @@ func spawn_units():
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
-		game.map.create(unit_template, "top", t, "random_no_coll", Vector2.ZERO)
-		game.map.create(unit_template, "mid", t, "random_no_coll", Vector2.ZERO)
-		game.map.create(unit_template, "bot", t, "random_no_coll", Vector2.ZERO)
+		game.map.create(infantry, "top", t, "random_no_coll", Vector2.ZERO)
+		game.map.create(infantry, "mid", t, "random_no_coll", Vector2.ZERO)
+		game.map.create(archer, "bot", t, "random_no_coll", Vector2.ZERO)
 
 
 func unit_wait_end(unit):

@@ -56,7 +56,9 @@ func set_texture(portrait, texture):
 
 func hide_hpbar():
 	for unit in game.all_units:
-		if unit != game.selected_unit and unit.has_node("hud"):
+		if (unit != game.selected_unit and 
+				unit.has_node("hud") and 
+				unit.current_hp == unit.hp):
 			unit.get_node("hud/hpbar").visible = false
 
 
@@ -69,6 +71,8 @@ func update_hpbar(unit):
 	if unit.current_hp <= 0:
 		unit.get_node("hud/hpbar/green").region_rect.size.x = 0
 	else:
+		if unit.has_node("hud") and game.camera.zoom.x >= 1:
+			unit.get_node("hud/hpbar").visible = true
 		var scale = float(unit.current_hp) / float(unit.hp)
 		if scale < 0: scale = 0
 		if scale > 1: scale = 1

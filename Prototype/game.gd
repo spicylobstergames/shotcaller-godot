@@ -62,7 +62,10 @@ func _physics_process(delta):
 	# loop 1: adds units to quad and check for arrival
 	for unit1 in all_units:
 		if unit1.collide: map.blocks.quad.add_body(unit1)
+
 		#if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
+		
+		# arrival
 		unit1.next_event  = ""
 		if unit1.moves and unit1.state == "move":
 			var unit1_pos = unit1.global_position + unit1.collision_position
@@ -72,6 +75,16 @@ func _physics_process(delta):
 	# loop 2: checks for collision
 	for unit1 in all_units:
 		# COLLISION
+		
+		# projectile
+		if unit1.state == "attack" and unit1.projectile and unit1.projectile.visible and unit1.target:
+			var projectile_pos = unit1.projectile.global_position
+			var target = unit1.target
+			var target_pos = target.global_position + target.collision_position
+			if utils.circle_point_collision(target_pos, projectile_pos, target.collision_radius):
+				unit.attack.take_hit(unit1, target)
+		
+		# units
 		if unit1.collide and unit1.moves and unit1.next_event != "arrive" and unit1.state == "move":
 			unit1.next_event = "move"
 			var unit1_pos = unit1.global_position + unit1.collision_position + unit1.current_step

@@ -1,11 +1,11 @@
 extends TileMap
 var game:Node
 
-var tile_map_size
-var trees
+var tile_map_size:int
+var trees:TileMap
 
-var clear_skip = 30
-var clear_frame = 0
+var clear_skip:int = 30
+var clear_frame:int = 0
 
 
 func _ready():
@@ -13,7 +13,7 @@ func _ready():
 	
 	trees = get_node("../trees")
 	
-	tile_map_size = game.size / 8
+	tile_map_size = floor(game.size / 8)
 
 
 func skip_start():
@@ -28,7 +28,7 @@ func cover_map():
 
 
 
-var sight_mem = {}
+var sight_mem:Dictionary = {}
 
 func compute_sight(unit):
 	var id = unit.current_vision

@@ -1,13 +1,13 @@
 extends Node2D
 var game:Node
 
-
-var block_template:PackedScene = load("res://units/block.tscn")
-
-
 # COLLISION QUADTREES
 const _QuadtreeGD = preload("quadtree.gd")
 var quad
+
+
+
+var block_template:PackedScene = load("res://units/block.tscn")
 
 
 func _ready():

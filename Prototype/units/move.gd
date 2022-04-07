@@ -82,8 +82,7 @@ func resume(unit):
 
 func end(unit):
 	if unit.behavior == "move": 
-		stop(unit)
-		unit.set_behavior("stand")
+		stand(unit)
 
 
 func stop(unit):
@@ -91,3 +90,8 @@ func stop(unit):
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
 
+
+func stand(unit):
+	unit.current_path = []
+	stop(unit)
+	unit.set_behavior("stand")

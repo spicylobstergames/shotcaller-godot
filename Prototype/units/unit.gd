@@ -44,8 +44,10 @@ export var attack_range:int = 1
 var current_attack_range:int = 1
 export var attack_speed:int = 1
 var current_attack_speed:int = 1
-var aim_angle:float = 0
+var aim_point:Vector2
 var target:Node2D
+var weapon:Node2D
+var projectile:Node2D
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
@@ -66,11 +68,14 @@ var spawn
 
 func _ready():
 	game = get_tree().get_current_scene()
-	if has_node("behavior/move"):    move = get_node("behavior/move")
-	if has_node("behavior/attack"):  attack = get_node("behavior/attack")
+	
+	if has_node("behavior/move"): move = get_node("behavior/move")
+	if has_node("behavior/attack"): attack = get_node("behavior/attack")
 	if has_node("behavior/advance"): advance = get_node("behavior/advance")
-	if has_node("behavior/path"):    path = get_node("behavior/path")
-	if has_node("behavior/spawn"):    spawn = get_node("behavior/spawn")
+	if has_node("behavior/path"): path = get_node("behavior/path")
+	if has_node("behavior/spawn"): spawn = get_node("behavior/spawn")
+	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
+	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
 
 

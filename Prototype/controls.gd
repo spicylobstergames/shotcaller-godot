@@ -15,13 +15,11 @@ func _unhandled_input(event):
 			if event.scancode == KEY_SPACE: 
 				game.unit.move.start(game.selected_unit, point)
 			if event.scancode == KEY_A:
-				game.unit.attack.start(game.selected_unit, point)
-			if event.scancode == KEY_Z:
 				game.unit.advance.start(game.selected_unit, point)
-			if event.scancode == KEY_X:
-				game.unit.path.follow(game.selected_unit, [point], "move")
-			if event.scancode == KEY_C:
-				game.selected_unit.current_path.append(point)
+			if event.scancode == KEY_Z:
+				game.unit.attack.start(game.selected_unit, point)
+			if event.scancode == KEY_S:
+				game.unit.move.stand(game.selected_unit)
 
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
