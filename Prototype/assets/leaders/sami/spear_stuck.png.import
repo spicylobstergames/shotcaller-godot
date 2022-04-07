@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/spear_stuck.png-18ade6223737946ed4cf32b6a28784ff.stex"
+path="res://.import/spear_stuck.png-93eb4fddda5267c3d14f25696daa8373.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/leaders/sami/spear_stuck.png"
-dest_files=[ "res://.import/spear_stuck.png-18ade6223737946ed4cf32b6a28784ff.stex" ]
+source_file="res://Assets/leaders/sami/spear_stuck.png"
+dest_files=[ "res://.import/spear_stuck.png-93eb4fddda5267c3d14f25696daa8373.stex" ]
 
 [params]
 

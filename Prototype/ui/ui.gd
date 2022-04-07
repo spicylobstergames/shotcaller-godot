@@ -6,6 +6,10 @@ var fps:Node
 var stats:Node
 var minimap:Camera2D
 
+onready var shop_button = $top_right/VBoxContainer/ShopButton
+onready var gold_label = $top_right/VBoxContainer/GoldLabel
+
+
 func _ready():
 	game = get_tree().get_current_scene()
 	fps = get_node("top_left/fps")
