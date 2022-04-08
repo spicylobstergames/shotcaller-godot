@@ -1,25 +1,31 @@
 extends Panel
+var game:Node
 
-const Item = preload("res:///Items/Item.gd")
+const Item = preload("res:///items/item.gd")
 
 var _deliveries = {}
-var _shop_item_button_preload = preload("res://Items/Shop/ShopItemButton.tscn")
-var _shop_delivery_preload = preload("res://Items/Shop/ShopDelivery.tscn")
+var _shop_item_button_preload = preload("res://items/shop/shop_item_button.tscn")
+var _shop_delivery_preload = preload("res://items/shop/shop_delivery.tscn")
 
-onready var _equip_items = $ScrollContainer/VBoxContainer/EquipItems
-onready var _consumable_items = $ScrollContainer/VBoxContainer/ConsumableItems
-onready var _leaders_inventories = get_node("../bot_right/LeadersInventories")
-onready var _game = get_node("/root/game")
+
+onready var _equip_items = get_node("scroll_container/container/equip_items")
+onready var _consumable_items = get_node("scroll_container/container/consumable_items")
+onready var _leaders_inventories = get_node("../../bot_right/leaders_inventories")
+#onready var shop_button = get_node("../../top_right/container/shop_button")
+var shop_button
 
 
 func _ready():
+	yield(get_tree(), "idle_frame")
+	game = get_tree().get_current_scene()
+
 	hide()
 	# Test items
-	add_item(Item.new().build("Axe", load("res://Assets/Items/Axe.png"), "Add 5 damage to the leader's attack", 1, Item.ItemType.EQUIP, {}), _equip_items)
-	add_item(Item.new().build("Helmet", load("res://Assets/Items/Helm.png"), "Add 5 defense points to leader stats", 2, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
-	add_item(Item.new().build("Heal Potion", load("res://Assets/Items/red_potion.png"), "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"health": 100}), _consumable_items)
+	add_item(Item.new().build("Axe", load("res://assets/items/axe.png"), "Add 5 damage to the leader's attack", 1, Item.ItemType.EQUIP, {}), _equip_items)
+	add_item(Item.new().build("Helmet", load("res://assets/items/helm.png"), "Add 5 defense points to leader stats", 2, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
+	add_item(Item.new().build("Heal Potion", load("res://assets/items/red_potion.png"), "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"health": 100}), _consumable_items)
 	
-	get_node("../top_right/VBoxContainer/ShopButton").connect("button_down", self, "_shop_button_down")
+	get_node("../shop_button").connect("button_down", self, "_shop_button_down")
 
 
 func add_delivery(leader):
@@ -39,7 +45,7 @@ func _process(delta):
 	if !visible:
 		return
 	
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	
 	if leader == null:
 		# Disable all buttons because leader is not selected
@@ -70,14 +76,14 @@ func _process(delta):
 
 
 func buy(item):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	
 	_leaders_inventories.inventories[leader.name].gold -= item.price
 	_deliveries[leader.name].start(item)
 
 
 func sell(item_index):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	
 	var sold_item = _leaders_inventories.remove_item(leader, item_index)
 	

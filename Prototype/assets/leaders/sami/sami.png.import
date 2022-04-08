@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sami.png-a7610096a05ac1cf2ec63c78c519506a.stex"
+path="res://.import/sami.png-6c468cb62c11729cb2856fdb71872a7b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/leaders/sami/sami.png"
-dest_files=[ "res://.import/sami.png-a7610096a05ac1cf2ec63c78c519506a.stex" ]
+source_file="res://assets/leaders/sami/sami.png"
+dest_files=[ "res://.import/sami.png-6c468cb62c11729cb2856fdb71872a7b.stex" ]
 
 [params]
 

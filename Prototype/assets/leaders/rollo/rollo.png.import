@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/rollo.png-8fc9b938ba4f9c913dddfe8cc459a374.stex"
+path="res://.import/rollo.png-499e1a42653708de8d6d6e76e617d82e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/leaders/rollo/rollo.png"
-dest_files=[ "res://.import/rollo.png-8fc9b938ba4f9c913dddfe8cc459a374.stex" ]
+source_file="res://assets/leaders/rollo/rollo.png"
+dest_files=[ "res://.import/rollo.png-499e1a42653708de8d6d6e76e617d82e.stex" ]
 
 [params]
 

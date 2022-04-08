@@ -1,13 +1,16 @@
 extends Control
+var game:Node
+
 
 var index = 0
 
-onready var _sell_button = $SellButton
-onready var _item_button = $ItemButton
-onready var _game = get_node("/root/game")
+onready var _sell_button = get_node("sell_button")
+onready var _item_button = get_node("item_button")
 
 
 func _ready():
+	game = get_tree().get_current_scene()
+	
 	_sell_button.hide()
 	
 	_sell_button.connect("button_down", self, "_sell_button_down")
@@ -15,6 +18,7 @@ func _ready():
 
 
 func setup(item):
+	game = get_tree().get_current_scene()
 	_item_button.setup(item)
 	if item != null:
 		if item.type == item.ItemType.CONSUMABLE:
@@ -37,13 +41,13 @@ func hide_sell_button():
 
 
 func _item_button_down():
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]
 	
-	get_node("/root/TestScene/Menu/LeadersInventories").remove_item(leader, index)
+	game.ui.get_node("bot_right/leaders_inventories").remove_item(leader, index)
 
 
 func _sell_button_down():
-	get_node("/root/TestScene/Menu/Shop").sell(index)
+	game.ui.shop.sell(index)

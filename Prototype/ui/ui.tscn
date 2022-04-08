@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
-[ext_resource path="res://Items/Inventory/LeadersInventories.gd" type="Script" id=2]
-[ext_resource path="res://Items/Shop/Shop.gd" type="Script" id=3]
+[ext_resource path="res://items/inventory/leaders_inventories.gd" type="Script" id=2]
+[ext_resource path="res://items/shop/shop.gd" type="Script" id=3]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.192157, 0.188235, 0.223529, 1 )
@@ -34,67 +34,6 @@ __meta__ = {
 anchor_left = 0.5
 anchor_right = 0.5
 
-[node name="Shop" type="Panel" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_styles/panel = SubResource( 4 )
-script = ExtResource( 3 )
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Shop"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -50.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Shop/ScrollContainer"]
-margin_right = 580.0
-margin_bottom = 540.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 238.0
-margin_right = 580.0
-margin_bottom = 242.0
-
-[node name="Label" type="Label" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 246.0
-margin_right = 580.0
-margin_bottom = 260.0
-text = "Equip"
-
-[node name="EquipItems" type="HBoxContainer" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 264.0
-margin_right = 580.0
-margin_bottom = 264.0
-size_flags_horizontal = 3
-
-[node name="HSeparator2" type="HSeparator" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 268.0
-margin_right = 580.0
-margin_bottom = 272.0
-
-[node name="Label2" type="Label" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 276.0
-margin_right = 580.0
-margin_bottom = 290.0
-text = "Consumable"
-
-[node name="ConsumableItems" type="HBoxContainer" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 294.0
-margin_right = 580.0
-margin_bottom = 294.0
-size_flags_horizontal = 3
-
-[node name="HSeparator3" type="HSeparator" parent="Shop/ScrollContainer/VBoxContainer"]
-margin_top = 298.0
-margin_right = 580.0
-margin_bottom = 302.0
-
 [node name="top_right" type="Control" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
@@ -102,16 +41,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="top_right"]
-anchor_right = 1.0
-margin_left = -55.0
+[node name="shop_button" type="Button" parent="top_right"]
+margin_left = -120.0
 margin_bottom = 40.0
-alignment = 2
-
-[node name="ShopButton" type="Button" parent="top_right/VBoxContainer"]
-margin_top = 2.0
-margin_right = 55.0
-margin_bottom = 22.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 11
 text = "shop"
@@ -119,15 +51,87 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GoldLabel" type="Label" parent="top_right/VBoxContainer"]
-margin_top = 26.0
-margin_right = 55.0
-margin_bottom = 40.0
+[node name="gold_label" type="Label" parent="top_right"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -172.0
+margin_top = 13.0
+margin_right = -132.0
+margin_bottom = 27.0
 custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
-text = "1"
+text = "gold"
 align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="shop" type="Panel" parent="top_right"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -300.0
+margin_top = 40.0
+margin_bottom = 440.0
+custom_styles/panel = SubResource( 4 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scroll_container" type="ScrollContainer" parent="top_right/shop"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -50.0
+
+[node name="container" type="VBoxContainer" parent="top_right/shop/scroll_container"]
+margin_right = 280.0
+margin_bottom = 340.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="separator" type="HSeparator" parent="top_right/shop/scroll_container/container"]
+margin_top = 138.0
+margin_right = 280.0
+margin_bottom = 142.0
+
+[node name="label" type="Label" parent="top_right/shop/scroll_container/container"]
+margin_top = 146.0
+margin_right = 280.0
+margin_bottom = 160.0
+text = "Equip"
+
+[node name="equip_items" type="HBoxContainer" parent="top_right/shop/scroll_container/container"]
+margin_top = 164.0
+margin_right = 280.0
+margin_bottom = 164.0
+size_flags_horizontal = 3
+
+[node name="separator2" type="HSeparator" parent="top_right/shop/scroll_container/container"]
+margin_top = 168.0
+margin_right = 280.0
+margin_bottom = 172.0
+
+[node name="label2" type="Label" parent="top_right/shop/scroll_container/container"]
+margin_top = 176.0
+margin_right = 280.0
+margin_bottom = 190.0
+text = "Consumable"
+
+[node name="consumable_items" type="HBoxContainer" parent="top_right/shop/scroll_container/container"]
+margin_top = 194.0
+margin_right = 280.0
+margin_bottom = 194.0
+size_flags_horizontal = 3
+
+[node name="separator3" type="HSeparator" parent="top_right/shop/scroll_container/container"]
+margin_top = 198.0
+margin_right = 280.0
+margin_bottom = 202.0
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
@@ -263,7 +267,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="LeadersInventories" type="HBoxContainer" parent="bot_right"]
+[node name="leaders_inventories" type="HBoxContainer" parent="bot_right"]
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0

@@ -1,13 +1,17 @@
 extends Node
+var game:Node
+
 
 var _item
 var _leader
 var _timer
 
-onready var _leaders_inventories = get_node("../../LeadersInventories")
+var _leaders_inventories:Node
 
 
 func _ready():
+	game = get_tree().get_current_scene()
+	_leaders_inventories = game.ui.get_node("bot_right/leaders_inventories")
 	_timer = Timer.new()
 	_timer.one_shot = true
 	_timer.connect("timeout", self, "_timer_timeout")

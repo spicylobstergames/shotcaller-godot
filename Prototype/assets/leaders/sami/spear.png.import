@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/spear.png-99d9a3b3a0707cfa97c6361b9f2af25d.stex"
+path="res://.import/spear.png-3029ac77117f53b4a0330a1f91c6108a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/leaders/sami/spear.png"
-dest_files=[ "res://.import/spear.png-99d9a3b3a0707cfa97c6361b9f2af25d.stex" ]
+source_file="res://assets/leaders/sami/spear.png"
+dest_files=[ "res://.import/spear.png-3029ac77117f53b4a0330a1f91c6108a.stex" ]
 
 [params]
 

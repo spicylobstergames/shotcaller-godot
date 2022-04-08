@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/arthur.png-18e0448443492562d526edb8a4b9d272.stex"
+path="res://.import/arthur.png-dfa584cbb928001467dd34a50342195b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/leaders/arthur/arthur.png"
-dest_files=[ "res://.import/arthur.png-18e0448443492562d526edb8a4b9d272.stex" ]
+source_file="res://assets/leaders/arthur/arthur.png"
+dest_files=[ "res://.import/arthur.png-dfa584cbb928001467dd34a50342195b.stex" ]
 
 [params]
 

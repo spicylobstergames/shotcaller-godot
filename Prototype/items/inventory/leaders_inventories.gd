@@ -1,21 +1,26 @@
 extends HBoxContainer
+var game:Node
 
-const Item = preload("res:///Items/Item.gd")
+const Item = preload("res:///items/item.gd")
 
 # Dictionary of all leaders inventories
 var inventories = {}
 
 var _equip_item_buttons = []
 var _consumable_item_buttons = []
-var _inventory_preload = preload("res://Items/Inventory/Inventory.tscn")
-var _inventory_item_button_preload = preload("res://Items/Inventory/InventoryItemButton.tscn")
+var _inventory_preload = preload("res://items/inventory/inventory.tscn")
+var _inventory_item_button_preload = preload("res://items/inventory/inventory_item_button.tscn")
 
-onready var _shop = get_node("../../top_right/VBoxContainer/ShopButton")
-onready var _gold_label = get_node("../../top_right/VBoxContainer/GoldLabel")
-onready var _game = get_node("/root/game")
+var shop:Node
+var gold_label:Node
+
 
 
 func _ready():
+	yield(get_tree(), "idle_frame")
+	game = get_tree().get_current_scene()
+	shop = game.ui.get_node("top_right/shop_button")
+	gold_label = game.ui.get_node("top_right/gold_label")
 	hide()
 	# Setup GUI for inventory
 	var inventory = _inventory_preload.instance()
@@ -83,21 +88,21 @@ func update_gui(leader_name):
 
 
 func _process(delta):
-	if _game.selected_leader == null:
+	if game.selected_leader == null:
 		hide()
-		_gold_label.hide()
+		gold_label.hide()
 		return
 	
 	show()
-	_gold_label.show()
+	gold_label.show()
 	
-	var leader_inventory = inventories[_game.selected_leader.name]
+	var leader_inventory = inventories[game.selected_leader.name]
 	
 	# Updating gold label
-	_gold_label.text = str(leader_inventory.gold)
+	gold_label.text = str(leader_inventory.gold)
 	
 	# Hide or show sell buttons
-	if _shop.visible:
+	if shop.visible:
 		var counter = 0
 		for item in leader_inventory.equip_items:
 			_equip_item_buttons[counter].show_sell_button()

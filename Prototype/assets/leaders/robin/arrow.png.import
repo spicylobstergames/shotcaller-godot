@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/arrow.png-bd10f730d047fbfd255bb291491c6dde.stex"
+path="res://.import/arrow.png-b6c9bf6a56e5353cfb9370e03942acd8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/leaders/robin/arrow.png"
-dest_files=[ "res://.import/arrow.png-bd10f730d047fbfd255bb291491c6dde.stex" ]
+source_file="res://assets/leaders/robin/arrow.png"
+dest_files=[ "res://.import/arrow.png-b6c9bf6a56e5353cfb9370e03942acd8.stex" ]
 
 [params]
 

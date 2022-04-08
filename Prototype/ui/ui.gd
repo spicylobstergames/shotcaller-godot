@@ -5,9 +5,9 @@ var game:Node
 var fps:Node
 var stats:Node
 var minimap:Camera2D
-
-onready var shop_button = $top_right/VBoxContainer/ShopButton
-onready var gold_label = $top_right/VBoxContainer/GoldLabel
+var shop:Node
+var shop_button:Node
+var gold_label:Node
 
 
 func _ready():
@@ -15,6 +15,9 @@ func _ready():
 	fps = get_node("top_left/fps")
 	stats = get_node("bot_mid/stats")
 	minimap = game.get_node("map_camera")
+	shop = get_node("top_right/shop")
+	shop_button = get_node("top_right/shop_button")
+	gold_label = get_node("top_right/gold_label")
 
 
 func process():
