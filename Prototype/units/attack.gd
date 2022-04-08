@@ -72,5 +72,5 @@ func projectile_stuck(attacker, target):
 	stuck.position = pos * a # goes a bit deeper
 	stuck.frame = 1
 	target.get_node("sprites").add_child(stuck)
-	yield(get_tree().create_timer(12.0), "timeout")
+	yield(get_tree().create_timer(2.0), "timeout")
 	stuck.queue_free()

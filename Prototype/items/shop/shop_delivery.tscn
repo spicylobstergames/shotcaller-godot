@@ -4,3 +4,4 @@
 
 [node name="shop_delivery" type="Node"]
 script = ExtResource( 1 )
+

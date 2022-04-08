@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://items/item_button.gd" type="Script" id=1]
-[ext_resource path="res://Assets/Items/Helm.png" type="Texture" id=2]
+[ext_resource path="res://assets/items/helm.png" type="Texture" id=2]
 
 [node name="item_button" type="Button"]
 anchor_right = 1.0
