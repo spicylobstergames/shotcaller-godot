@@ -46,6 +46,7 @@ func select(point):
 		unit.get_node("hud/selection").visible = true
 		unit.get_node("hud/hpbar").visible = true
 		game.ui.update_stats()
+		#game.ui.shop.update_buttons()
 	
 
 func unselect():
@@ -57,6 +58,7 @@ func unselect():
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.update_stats()
+	game.ui.shop.disable_all()
 
 
 func get_sel_unit_at_point(point):

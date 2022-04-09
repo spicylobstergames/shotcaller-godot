@@ -56,30 +56,13 @@ func random_point():
 	return Vector2(o+randf()*(game.size-o*2), o+randf()*(game.size-o*2))
 
 
-func point_collides(p):
-	for unit1 in game.all_units:
-		if unit1.collide:
-			var c = unit1.global_position + unit1.collision_position
-			var r = unit1.collision_radius
-			if circle_point_collision(p, c, r):
-				return true
-	return false
-
-
-func random_point_no_coll():
-	var p = random_point()
-	while point_collides(p):
-		p = random_point()
-	return p
-
-
 func unit_collides(unit1, p):
 	var c1 = p + unit1.collision_position
-	var r1 = unit1.collision_radius + unit1.current_speed 
+	var r1 = unit1.collision_radius
 	for unit2 in game.all_units:
 		if unit2.collide:
 			var c2 = unit2.global_position + unit2.collision_position
-			var r2 = unit2.collision_radius + unit2.current_speed 
+			var r2 = unit2.collision_radius
 			if circle_collision(c1, r1, c2, r2):
 				return true
 	return false

@@ -34,7 +34,7 @@ func hit(unit1):
 				unit2 == unit1.target and  # or unit1 has cleave
 				in_range(unit1, unit2)):
 			
-			take_hit(unit1, unit2)
+			take_hit(unit1, unit2, null)
 			return # if no cleave
 
 
@@ -46,10 +46,9 @@ func in_range(attacker, target):
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
-func take_hit(attacker, target):
-	if attacker.projectile: 
-		projectile_stuck(attacker, target)
-		attacker.projectile.visible = false
+func take_hit(attacker, target, projectile):
+	if projectile: 
+		projectile_stuck(attacker, target, projectile)
 	target.current_hp -= attacker.damage
 	game.unit.advance.react(target, attacker)
 	game.unit.advance.ally_attacked(target, attacker)
@@ -62,15 +61,50 @@ func take_hit(attacker, target):
 		game.unit.advance.resume(attacker)
 
 
-func projectile_stuck(attacker, target):
-	var pos = attacker.projectile.global_position - target.global_position
-	var stuck = attacker.projectile.duplicate()
-	var a = 0.2 # adjust
-	var r = attacker.weapon.global_rotation
-	if target.mirror: r = Vector2(-cos(r),sin(r)).angle()
-	stuck.global_rotation = r + ((randf()*a*2)-a) # some angle variation
-	stuck.position = pos * a # goes a bit deeper
+func projectile_start(attacker):
+	var projectile_node = attacker.projectile.duplicate()
+	var a = attacker.weapon.global_rotation
+	var speed = attacker.projectile_speed
+	var projectile_speed = Vector2(cos(a)*speed, sin(a)*speed)
+	var lifetime = (attacker.attack_hit_radius/2) / attacker.projectile_speed
+	projectile_node.global_position = attacker.projectile.global_position
+	projectile_node.global_rotation = a
+	projectile_node.visible = true
+	game.map.add_child(projectile_node)
+	var projectile = {
+		"node": projectile_node,
+		"speed": projectile_speed,
+		"lifetime": lifetime
+	}
+	attacker.projectiles.append(projectile)
+
+
+func projectile_stuck(attacker, target, projectile):
+	var stuck = projectile.node
+	
+	if target: 
+		stuck = attacker.projectile.duplicate()
+		stuck.global_position = target.global_position - (projectile.speed/5)
+		var a = 0.2 # angle variation
+		var r = projectile.node.global_rotation
+		if target and target.mirror: r = Vector2(-cos(r),sin(r)).angle()
+		stuck.global_rotation = r + ((randf()*a*2)-a) # some angle variation
+		stuck.modulate = Color(1,1,1)
+		stuck.visible = true
+		target.get_node("sprites").add_child(stuck)
+		game.map.remove_child(projectile.node)
+		projectile.node.queue_free()
+	
 	stuck.frame = 1
-	target.get_node("sprites").add_child(stuck)
+	
+	var d = stuck.global_position - attacker.global_position
+	print(d.length())
+	
+	attacker.projectiles.erase(projectile)
+	
 	yield(get_tree().create_timer(2.0), "timeout")
+	
+	if target: target.get_node("sprites").remove_child(stuck)
+	else: game.map.remove_child(stuck)
+	
 	stuck.queue_free()

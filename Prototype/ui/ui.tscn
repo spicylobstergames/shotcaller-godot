@@ -61,7 +61,7 @@ margin_bottom = 27.0
 custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
-text = "gold"
+text = "1"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false

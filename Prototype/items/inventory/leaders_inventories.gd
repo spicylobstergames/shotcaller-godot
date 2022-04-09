@@ -96,21 +96,22 @@ func _process(delta):
 	show()
 	gold_label.show()
 	
-	var leader_inventory = inventories[game.selected_leader.name]
-	
-	# Updating gold label
-	gold_label.text = str(leader_inventory.gold)
-	
-	# Hide or show sell buttons
-	if shop.visible:
-		var counter = 0
-		for item in leader_inventory.equip_items:
-			_equip_item_buttons[counter].show_sell_button()
-			counter += 1
-		counter = 0
-		for item in leader_inventory.consumable_items:
-			_consumable_item_buttons[counter].show_sell_button()
-			counter += 1
-	else:
-		for item_button in _equip_item_buttons + _consumable_item_buttons:
-			item_button.hide_sell_button()
+	if game.selected_leader.name in inventories:
+		var leader_inventory = inventories[game.selected_leader.name]
+		
+		# Updating gold label
+		gold_label.text = str(leader_inventory.gold)
+		
+		# Hide or show sell buttons
+		if shop.visible:
+			var counter = 0
+			for item in leader_inventory.equip_items:
+				_equip_item_buttons[counter].show_sell_button()
+				counter += 1
+			counter = 0
+			for item in leader_inventory.consumable_items:
+				_consumable_item_buttons[counter].show_sell_button()
+				counter += 1
+		else:
+			for item_button in _equip_item_buttons + _consumable_item_buttons:
+				item_button.hide_sell_button()

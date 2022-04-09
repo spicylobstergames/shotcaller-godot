@@ -6,8 +6,8 @@ export var hp:int = 100
 var current_hp:int = 100
 export var vision:int = 100
 var current_vision:int = 100
-export var type:String = "pawn"
-export var subtype:String = "infantry"
+export var type:String = "pawn" # building leader
+export var subtype:String = "infantry" # archer mounted
 export var team:String = "blue"
 var dead:bool = false
 var mirror:bool = false
@@ -48,6 +48,8 @@ var aim_point:Vector2
 var target:Node2D
 var weapon:Node2D
 var projectile:Node2D
+var projectiles:Array = []
+export var projectile_speed:float = 3
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
@@ -215,13 +217,13 @@ func on_idle_end(): # every idle animation end (0.6s)
 #			advance.start(self)
 
 
-func on_move(): # every frame if there's no collision
-	move.step(self)
+func on_move(delta): # every frame if there's no collision
+	move.step(self, delta)
 
 
-func on_collision():
+func on_collision(delta):
 	if self.moves: 
-		move.on_collision(self)
+		move.on_collision(self, delta)
 		if self.attacks: 
 			advance.on_collision(self)
 
@@ -240,7 +242,11 @@ func on_arrive(): # when collides with destiny
 			advance.end(self)
 
 
-func on_attack_hit():  # every attack animation end (0.6s for ats = 1)
+func on_attack_release(): # every ranged projectile start
+	attack.projectile_start(self)
+	advance.resume(self)
+
+func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
 		attack.hit(self)
 		if self.moves:

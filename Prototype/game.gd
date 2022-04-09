@@ -63,34 +63,41 @@ func _physics_process(delta):
 
 		#if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
 		
-		# arrival
+		# move arrival
 		unit1.next_event  = ""
 		if unit1.moves and unit1.state == "move":
 			var unit1_pos = unit1.global_position + unit1.collision_position
 			if utils.circle_point_collision(unit1_pos, unit1.current_destiny, unit1.collision_radius):
 				unit1.next_event = "arrive"
 	
-	# loop 2: checks for collision
+	# loop 2: checks for collisions
 	for unit1 in all_units:
-		# COLLISION
 		
-		# projectile
-		if unit1.state == "attack" and unit1.projectile and unit1.projectile.visible and unit1.target:
-			var projectile_pos = unit1.projectile.global_position
-			var target = unit1.target
-			var target_pos = target.global_position + target.collision_position
-			if utils.circle_point_collision(target_pos, projectile_pos, target.collision_radius):
-				unit.attack.take_hit(unit1, target)
+		# projectiles collision
+		if unit1.projectiles.size():
+			for projectile in unit1.projectiles:
+				if is_instance_valid(projectile.node) and projectile.speed:
+					projectile.lifetime -= delta
+					if (projectile.lifetime < 0):
+						unit.attack.projectile_stuck(unit1, null, projectile)
+					else: 
+						projectile.node.global_position += projectile.speed * delta
+						var target = unit1.target
+						if target:
+							var projectile_pos = projectile.node.global_position
+							var target_pos = target.global_position + target.collision_position
+							if utils.circle_point_collision(target_pos, projectile_pos, target.collision_radius):
+								unit.attack.take_hit(unit1, target, projectile)
 		
-		# units
+		# units collision
 		if unit1.collide and unit1.moves and unit1.next_event != "arrive" and unit1.state == "move":
 			unit1.next_event = "move"
-			var unit1_pos = unit1.global_position + unit1.collision_position + unit1.current_step
+			var unit1_pos = unit1.global_position + unit1.collision_position + (unit1.current_step * delta)
 			var unit1_rad = unit1.collision_radius
 			var neighbors = map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
 			for unit2 in neighbors:
 				if unit2.collide and unit1 != unit2:
-					var unit2_pos = unit2.global_position + unit2.collision_position + unit2.current_step
+					var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
 					var unit2_rad = unit2.collision_radius
 					if utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad):
 						unit1.next_event = "collision"
@@ -99,8 +106,8 @@ func _physics_process(delta):
 		
 		# move or collide or stop
 		match unit1.next_event:
-			"move": unit1.on_move()
-			"collision": unit1.on_collision()
+			"move": unit1.on_move(delta)
+			"collision": unit1.on_collision(delta)
 			"arrive": unit1.on_arrive()
 		
 		# save last positions

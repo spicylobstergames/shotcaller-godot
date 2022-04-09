@@ -40,11 +40,11 @@ func calc_step(unit):
 		unit.look_at(unit.current_destiny)
 
 
-func step(unit):
-	unit.global_position += unit.current_step
+func step(unit, delta):
+	unit.global_position += unit.current_step * delta
 
 
-func on_collision(unit):
+func on_collision(unit, delta):
 	var target = unit.collide_target
 	if target and target != unit.target:
 		var nd # new direction
@@ -59,9 +59,8 @@ func on_collision(unit):
 		else: nd = Vector2(pr.y, -pr.x)
 		var da = nd.angle()
 		if unit.global_position == unit.last_position2: 
-				# force back move to unstuck
-			unit.global_position -= pr.normalized()
-			da = -PI + (randf()*2*PI) # and try random direction
+			da = -PI + (randf()*2*PI) # just try random direction
+			unit.global_position -= pr.normalized() * (unit.current_step)
 		# change directioin
 		unit.angle = da
 		unit.current_step = Vector2(unit.current_speed * cos(unit.angle), unit.current_speed * sin(unit.angle))
@@ -69,7 +68,7 @@ func on_collision(unit):
 		if unit.collision_timer.time_left > 0: 
 			unit.collision_timer.stop() # stops previous timers
 		# time inverse proportional to speed
-		unit.collision_timer.wait_time = (0.2 + (randf() * 0.4)) / unit.current_speed
+		unit.collision_timer.wait_time = (0.2 + (randf() * 0.4)) / (unit.current_speed * delta)
 		unit.collision_timer.start()
 		yield(unit.collision_timer, "timeout")
 		move(unit, unit.current_destiny)
