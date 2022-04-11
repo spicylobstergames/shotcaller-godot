@@ -83,7 +83,6 @@ func end(unit):
 	if unit.behavior == "move": 
 		stand(unit)
 
-
 func stop(unit):
 	unit.current_step = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO

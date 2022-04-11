@@ -159,6 +159,8 @@ func get_texture():
 		texture = body.frames.get_frame('default', 0)
 		region = texture.region
 		scale = Vector2(2,2)
+		match self.name:
+			"tomyris": scale = Vector2(1.5,1.5)
 		
 	return {
 		"sprite": body,

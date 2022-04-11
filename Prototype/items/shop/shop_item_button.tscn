@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 10
+size = 11
 font_data = ExtResource( 3 )
 
 [node name="shop_item_button" type="Control"]

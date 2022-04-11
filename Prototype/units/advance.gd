@@ -60,4 +60,5 @@ func stop(unit):
 		unit.objective = Vector2.ZERO
 		unit.current_step = Vector2.ZERO
 		unit.set_behavior("stop")
+		unit.set_state("idle")
 	

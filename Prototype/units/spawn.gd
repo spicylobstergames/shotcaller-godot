@@ -3,10 +3,11 @@ var game:Node
 
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
-var maori:PackedScene = load("res://leaders/maori.tscn")
+var maori:PackedScene = load("res://leaders/hongi.tscn")
 var raja:PackedScene = load("res://leaders/raja.tscn")
 var robin:PackedScene = load("res://leaders/robin.tscn")
 var rollo:PackedScene = load("res://leaders/rollo.tscn")
+var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
 
 
 var infantry:PackedScene = load("res://pawns/infantry.tscn")
@@ -25,7 +26,7 @@ func test():
 	
 	yield(get_tree(), "idle_frame")
 	game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(800,1000))
-	game.map.create(robin, "mid", game.player_team, "Vector2", Vector2(1000,1000))
+	game.map.create(tomyris, "mid", game.player_team, "Vector2", Vector2(1000,1000))
 	#game.map.create(rollo, "mid", game.enemy_team, "Vector2", Vector2(900,1000))
 	#game.map.create(archer, "mid", game.player_team, "Vector2", Vector2(1000,1000))
 	#game.map.create(infantry, "mid", game.player_team, "Vector2", Vector2(1000,1030))

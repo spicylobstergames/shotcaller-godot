@@ -46,7 +46,8 @@ func _item_button_down():
 	var leader = game.selected_leader
 	
 	for key in _item_button.item.attributes.keys():
-		leader.attributes.stats[key] += _item_button.item.attributes[key]
+		if key in leader:
+			leader[key] += _item_button.item.attributes[key]
 	
 	game.ui.leaders_inventories.remove_item(leader, index)
 
