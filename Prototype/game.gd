@@ -21,6 +21,8 @@ var collision:Node
 var utils:Node
 var test:Node
 
+var started:bool = false
+
 
 func _ready():
 	map = get_node("map")
@@ -28,7 +30,7 @@ func _ready():
 	camera = get_node("camera")
 	map_camera = get_node("map_camera")
 	ui = get_node("ui")
-	controls = get_node("collision")
+	controls = get_node("controls")
 	collision = get_node("collision")
 	utils = get_node("utils")
 	test = get_node("test")
@@ -36,7 +38,6 @@ func _ready():
 	# must run on first call to color minimap texture
 	map.setup_buildings()
 
-var started:bool = false
 
 func start():
 	started = true
@@ -46,13 +47,10 @@ func start():
 	unit.path.setup_pathfind()
 	#map.fog.cover_map()
 	
-	map.setup_leaders()
-	
 	if not test.stress:
 		unit.spawn.test()
 		yield(get_tree().create_timer(2.0), "timeout")
 		unit.spawn.start()
-		
 	else: test.spawn_units()
 
 

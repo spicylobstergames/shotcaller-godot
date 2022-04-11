@@ -3,6 +3,7 @@ extends Reference
 
 enum ItemType { EQUIP, CONSUMABLE }
 
+var icon
 var sprite
 var name
 var description

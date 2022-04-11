@@ -20,14 +20,14 @@ func _ready():
 	hide()
 	
 	# Test items
-	add_item(Item.new().build("Axe", load("res://assets/items/axe.png"), "Add 5 damage to the leader's attack", 1, Item.ItemType.EQUIP, {}), _equip_items)
-	add_item(Item.new().build("Helmet", load("res://assets/items/helm.png"), "Add 5 defense points to leader stats", 2, Item.ItemType.EQUIP, {"max_health": 10000}), _equip_items)
-	add_item(Item.new().build("Heal Potion", load("res://assets/items/red_potion.png"), "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"health": 100}), _consumable_items)
+	add_item(Item.new().build("Axe", 0, "Add 5 damage to the leader's attack", 2, Item.ItemType.EQUIP, {}), _equip_items)
+	add_item(Item.new().build("Helmet", 1, "Add 5 defense points to leader stats", 2, Item.ItemType.EQUIP, {"hp": 1000}), _equip_items)
+	add_item(Item.new().build("Heal Potion", 2, "Restore 50 HP", 5, Item.ItemType.CONSUMABLE, {"current_hp": 200}), _consumable_items)
 	
 # warning-ignore:return_value_discarded
-	game.ui.shop_button.connect("button_down", self, "_shop_button_down")
+	game.ui.shop_button.connect("pressed", self, "_shop_button_down")
 # warning-ignore:return_value_discarded
-	game.ui.shop_button.get_node("shop_touch_button").connect("button_down", self, "_shop_button_down")
+	game.ui.shop_button.get_node("shop_touch_button").connect("pressed", self, "_shop_button_down")
 	
 	game.ui.shop_window.disable_all()
 
@@ -51,24 +51,30 @@ func disable_all():
 		item_button.disable()
 	return
 
+
 func update_buttons():
-	var leader = game.selected_leader
-	# Disable all buttons on which leader don't have enough golds
-	for item_button in _equip_items.get_children() + _consumable_items.get_children():
-		if leader.name in leaders_inventories.inventories:
-			if leaders_inventories.inventories[leader.name].gold < item_button.get_price():
-				item_button.disable()
-			else:
-				item_button.enable()
-	
-	# Disable buttons if leader don't have empty slots for item
-	if leader.name in leaders_inventories.inventories:
-		if !leaders_inventories.inventories[leader.name].is_equip_items_has_slots():
-			for item_button in _equip_items.get_children():
-				item_button.disable()
-		if !leaders_inventories.inventories[leader.name].is_consumable_items_has_slots():
-			for item_button in _consumable_items.get_children():
-				item_button.disable()
+	if visible:
+		var leader = game.selected_leader
+		if not leader or deliveries[leader.name].is_working(): 
+			disable_all()
+			return
+
+		# Disable all buttons on which leader don't have enough golds
+		for item_button in _equip_items.get_children() + _consumable_items.get_children():
+			if leader and leader.name in leaders_inventories.inventories:
+				if leaders_inventories.inventories[leader.name].gold < item_button.get_price():
+					item_button.disable()
+				else:
+					item_button.enable()
+		
+		# Disable buttons if leader don't have empty slots for item
+		if leader and leader.name in leaders_inventories.inventories:
+			if !leaders_inventories.inventories[leader.name].is_equip_items_has_slots():
+				for item_button in _equip_items.get_children():
+					item_button.disable()
+			if !leaders_inventories.inventories[leader.name].is_consumable_items_has_slots():
+				for item_button in _consumable_items.get_children():
+					item_button.disable()
 
 
 func buy(item):
@@ -93,4 +99,8 @@ func sell(item_index):
 
 func _shop_button_down():
 	self.visible = !self.visible
+	game.ui.leaders_inventories.update_buttons()
+	if self.visible:
+		game.ui.shop_window.update_buttons()
+		
 

@@ -74,15 +74,15 @@ func _unhandled_input(event):
 func zoom_reset(): 
 	zoom = zoom_default
 	game.ui.minimap.corner_view()
-	game.ui.hide_hpbar()
-	game.ui.hide_state()
+	game.unit.hud.hide_hpbars()
+	game.unit.hud.hide_states()
 	
 	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	game.ui.minimap.corner_view()
-	game.ui.show_hpbar()
-	game.ui.show_state()
+	game.unit.hud.show_hpbars()
+	game.unit.hud.show_states()
 	
 	
 func zoom_out(): 

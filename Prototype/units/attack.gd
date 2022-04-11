@@ -52,8 +52,8 @@ func take_hit(attacker, target, projectile):
 	target.current_hp -= attacker.damage
 	game.unit.advance.react(target, attacker)
 	game.unit.advance.ally_attacked(target, attacker)
-	game.ui.update_hpbar(target)
-	if target == game.selected_unit: game.ui.update_stats()
+	game.unit.hud.update_hpbar(target)
+	if target == game.selected_unit: game.ui.stats.update()
 	if target.current_hp <= 0: 
 		target.current_hp = 0
 		target.die()

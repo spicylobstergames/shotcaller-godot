@@ -14,5 +14,14 @@ func setup(new_item):
 	
 	self.item = new_item
 	self.name = new_item.name
-	self.icon = new_item.sprite
+
+	var icon = new_item.icon
+	if not new_item.icon:
+		icon = self.icon.duplicate()
+		icon.region.position.x = 8 + new_item.sprite * 60
+		icon.region.position.y = 6
+		new_item.icon = icon
+		
+	self.icon = icon
+	
 	self.hint_tooltip = new_item.description

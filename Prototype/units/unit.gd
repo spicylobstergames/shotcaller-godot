@@ -1,5 +1,4 @@
 extends Node
-
 var game:Node
 
 export var hp:int = 100
@@ -60,16 +59,18 @@ var lane:String = "mid"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 
-# BEHAVIORS
-var move
-var attack
-var advance
-var path
-var spawn
+
+var hud:Node
+var move:Node
+var attack:Node
+var advance:Node
+var path:Node
+var spawn:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
 	
+	if has_node("hud"): hud = get_node("hud")
 	if has_node("behavior/move"): move = get_node("behavior/move")
 	if has_node("behavior/attack"): attack = get_node("behavior/attack")
 	if has_node("behavior/advance"): advance = get_node("behavior/advance")
@@ -99,10 +100,6 @@ func set_state(s):
 func set_behavior(s):
 	self.behavior = s
 	#self.get_node("hud/state").text = s
-
-
-func setup_selection(unit):
-	if unit.selectable: game.selectable_units.append(unit)
 
 
 func setup_team(unit):

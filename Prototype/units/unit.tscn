@@ -1,15 +1,20 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://units/unit.gd" type="Script" id=1]
 [ext_resource path="res://assets/units/shadow.png" type="Texture" id=2]
 [ext_resource path="res://assets/pawns/infantry.png" type="Texture" id=3]
 [ext_resource path="res://assets/units/hpbar.png" type="Texture" id=4]
-[ext_resource path="res://assets/theme/kenneyUI.tres" type="Theme" id=5]
+[ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://units/move.gd" type="Script" id=6]
 [ext_resource path="res://units/attack.gd" type="Script" id=7]
 [ext_resource path="res://units/advance.gd" type="Script" id=8]
 [ext_resource path="res://units/path.gd" type="Script" id=9]
 [ext_resource path="res://units/spawn.gd" type="Script" id=10]
+[ext_resource path="res://units/hud.gd" type="Script" id=11]
+
+[sub_resource type="DynamicFont" id=20]
+size = 12
+font_data = ExtResource( 5 )
 
 [sub_resource type="CircleShape2D" id=18]
 radius = 30.0
@@ -55,15 +60,15 @@ z_as_relative = false
 texture = ExtResource( 2 )
 
 [node name="hud" type="Node2D" parent="."]
+script = ExtResource( 11 )
 
 [node name="state" type="Label" parent="hud"]
 visible = false
-margin_left = -16.0
-margin_top = -30.0
-margin_right = 49.0
-margin_bottom = -12.0
-rect_scale = Vector2( 0.5, 0.5 )
-theme = ExtResource( 5 )
+margin_left = -37.0
+margin_top = -37.0
+margin_right = 38.0
+margin_bottom = -21.0
+custom_fonts/font = SubResource( 20 )
 text = "stand"
 align = 1
 __meta__ = {

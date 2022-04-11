@@ -1,15 +1,24 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventory/leaders_inventories.gd" type="Script" id=2]
-[ext_resource path="res://items/shop/shop.gd" type="Script" id=3]
+[ext_resource path="res://items/shop/shop_window.gd" type="Script" id=3]
 [ext_resource path="res://ui/minimap.gd" type="Script" id=4]
+[ext_resource path="res://ui/stats.gd" type="Script" id=5]
+[ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 6 )
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( -115, 25 )
+extents = Vector2( -100, 32 )
 
 [sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0.192157, 0.188235, 0.223529, 1 )
+bg_color = Color( 0.192157, 0.188235, 0.223529, 0.784314 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 11
+font_data = ExtResource( 6 )
 
 [node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -46,42 +55,28 @@ __meta__ = {
 }
 
 [node name="shop_button" type="Button" parent="top_right"]
-margin_left = -120.0
-margin_bottom = 40.0
+margin_left = -122.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = 62.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 11
+custom_fonts/font = SubResource( 2 )
 text = "shop"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="shop_touch_button" type="TouchScreenButton" parent="top_right/shop_button"]
-position = Vector2( 120, 0 )
+position = Vector2( 122, -2 )
 shape = SubResource( 5 )
 
-[node name="gold_label" type="Label" parent="top_right"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -210.0
-margin_top = 13.0
-margin_right = -132.0
-margin_bottom = 27.0
-custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_as_outline = 1
-text = "1"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="shop_window" type="Panel" parent="top_right"]
-visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -300.0
-margin_top = 40.0
-margin_bottom = 440.0
+margin_top = 64.0
+margin_bottom = 364.0
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -95,56 +90,64 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = -50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="container" type="VBoxContainer" parent="top_right/shop_window/scroll_container"]
 margin_right = 280.0
-margin_bottom = 340.0
+margin_bottom = 240.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
 [node name="separator" type="HSeparator" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 138.0
+margin_top = 84.0
 margin_right = 280.0
-margin_bottom = 142.0
+margin_bottom = 88.0
 
 [node name="label" type="Label" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 146.0
+margin_top = 92.0
 margin_right = 280.0
-margin_bottom = 160.0
+margin_bottom = 110.0
+custom_fonts/font = SubResource( 2 )
 text = "Equip"
 
 [node name="equip_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 164.0
+margin_top = 114.0
 margin_right = 280.0
-margin_bottom = 164.0
+margin_bottom = 114.0
 size_flags_horizontal = 3
 
 [node name="separator2" type="HSeparator" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 168.0
+margin_top = 118.0
 margin_right = 280.0
-margin_bottom = 172.0
+margin_bottom = 122.0
 
 [node name="label2" type="Label" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 176.0
+margin_top = 126.0
 margin_right = 280.0
-margin_bottom = 190.0
+margin_bottom = 144.0
+custom_fonts/font = SubResource( 2 )
 text = "Consumable"
 
 [node name="consumable_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 194.0
+margin_top = 148.0
 margin_right = 280.0
-margin_bottom = 194.0
+margin_bottom = 148.0
 size_flags_horizontal = 3
 
 [node name="separator3" type="HSeparator" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 198.0
+margin_top = 152.0
 margin_right = 280.0
-margin_bottom = 202.0
+margin_bottom = 156.0
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
 anchor_bottom = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="mid" type="Control" parent="."]
 anchor_left = 0.5
@@ -172,7 +175,6 @@ __meta__ = {
 }
 
 [node name="minimap" type="Node2D" parent="bot_left"]
-visible = false
 script = ExtResource( 4 )
 
 [node name="panel" type="ItemList" parent="bot_left/minimap"]
@@ -199,21 +201,22 @@ __meta__ = {
 }
 
 [node name="stats" type="ItemList" parent="bot_mid"]
-visible = false
-margin_left = -120.0
-margin_top = -80.0
-margin_right = 120.0
+margin_left = -148.0
+margin_top = -100.0
+margin_right = 106.0
 max_columns = 0
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="name" type="Label" parent="bot_mid/stats"]
-margin_left = 88.0
-margin_top = 8.0
-margin_right = 119.0
-margin_bottom = 22.0
-text = "stats"
+margin_left = 82.0
+margin_top = 30.0
+margin_right = 120.0
+margin_bottom = 44.0
+custom_fonts/font = SubResource( 6 )
+text = "name"
 align = 1
 valign = 1
 __meta__ = {
@@ -221,11 +224,12 @@ __meta__ = {
 }
 
 [node name="vision" type="Label" parent="bot_mid/stats"]
-margin_left = 88.0
-margin_top = 24.0
-margin_right = 119.0
-margin_bottom = 38.0
-text = "stats"
+margin_left = 82.0
+margin_top = 46.0
+margin_right = 124.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 6 )
+text = "vision"
 align = 1
 valign = 1
 __meta__ = {
@@ -233,11 +237,12 @@ __meta__ = {
 }
 
 [node name="damage" type="Label" parent="bot_mid/stats"]
-margin_left = 88.0
-margin_top = 40.0
-margin_right = 119.0
-margin_bottom = 54.0
-text = "stats"
+margin_left = 82.0
+margin_top = 62.0
+margin_right = 138.0
+margin_bottom = 76.0
+custom_fonts/font = SubResource( 6 )
+text = "damage"
 align = 1
 valign = 1
 __meta__ = {
@@ -245,11 +250,40 @@ __meta__ = {
 }
 
 [node name="speed" type="Label" parent="bot_mid/stats"]
-margin_left = 88.0
-margin_top = 56.0
-margin_right = 119.0
-margin_bottom = 70.0
-text = "stats"
+margin_left = 82.0
+margin_top = 78.0
+margin_right = 127.0
+margin_bottom = 92.0
+custom_fonts/font = SubResource( 6 )
+text = "speed"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hp" type="Label" parent="bot_mid/stats"]
+margin_left = 82.0
+margin_top = 10.0
+margin_right = 118.0
+margin_bottom = 24.0
+custom_colors/font_color = Color( 0.109804, 0.819608, 0.223529, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "hp"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="gold" type="Label" parent="bot_mid/stats"]
+margin_left = 180.0
+margin_top = 10.0
+margin_right = 216.0
+margin_bottom = 24.0
+custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "gold"
 align = 1
 valign = 1
 __meta__ = {
@@ -258,9 +292,9 @@ __meta__ = {
 
 [node name="portrait" type="Control" parent="bot_mid/stats"]
 margin_left = 8.0
-margin_top = 8.0
+margin_top = 18.0
 margin_right = 72.0
-margin_bottom = 72.0
+margin_bottom = 82.0
 rect_clip_content = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -277,11 +311,10 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="leaders_inventories" type="HBoxContainer" parent="bot_right"]
-visible = false
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = -144.0
-margin_top = -44.0
-size_flags_vertical = 8
+[node name="leaders_inventories" type="Control" parent="bot_right"]
+margin_left = -192.0
+margin_top = -64.0
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -464,6 +464,10 @@ attacks = true
 damage = 25
 projectile_speed = 0.0
 
+[node name="state" parent="hud" index="0"]
+margin_top = -34.0
+margin_bottom = -18.0
+
 [node name="hpbar" parent="hud" index="2"]
 visible = false
 

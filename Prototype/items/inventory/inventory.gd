@@ -1,4 +1,5 @@
-extends Node
+extends HBoxContainer
+var game:Node
 
 const EQUIP_ITEMS_MAX = 2
 const CONSUMABLE_ITEMS_MAX = 1
@@ -6,12 +7,16 @@ const CONSUMABLE_ITEMS_MAX = 1
 var leader
 var equip_items = []
 var consumable_items = []
-var gold = 0
+var _equip_item_buttons = []
+var _consumable_item_buttons = []
 
+var gold = 0
 var _gold_timer
 
 
 func _ready():
+	game = get_tree().get_current_scene()
+	
 	_gold_timer = Timer.new()
 	add_child(_gold_timer)
 	_gold_timer.connect("timeout", self, "_gold_timer_timeout")
@@ -26,8 +31,11 @@ func _ready():
 
 
 func _gold_timer_timeout():
+		# Updating gold label
 	gold += 1
 	_gold_timer.start(1)
+	if game.selected_leader: game.ui.stats.update()
+	game.ui.shop_window.update_buttons()
 
 
 func add_item(new_item):

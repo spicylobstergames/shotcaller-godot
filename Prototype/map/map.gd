@@ -19,14 +19,14 @@ func setup_leaders():
 	for leader in game.player_leaders:
 		if not leader.name in game.ui.leaders_inventories.inventories:
 			game.ui.leaders_inventories.add_inventory(leader)
-			game.ui.show_window.add_delivery(leader)
+			game.ui.shop_window.add_delivery(leader)
 
 
 func setup_buildings():
 	for team in get_node("buildings").get_children():
 		for building in team.get_children():
 			game.unit.reset_unit(building)
-			game.unit.setup_selection(building)
+			game.controls.setup_selection(building)
 			game.unit.setup_collisions(building)
 			game.unit.setup_team(building)
 			game.all_units.append(building)
@@ -54,7 +54,7 @@ func spawn(unit, l, t, mode, point):
 	unit.global_position = point
 	game.unit.reset_unit(unit)
 	game.unit.setup_team(unit)
-	game.unit.setup_selection(unit)
+	game.controls.setup_selection(unit)
 	game.unit.setup_collisions(unit)
 	game.unit.move.setup_timer(unit)
 	game.ui.minimap.setup_symbol(unit)

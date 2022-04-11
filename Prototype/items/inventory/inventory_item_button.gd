@@ -13,14 +13,14 @@ func _ready():
 	
 	_sell_button.hide()
 	
-	_sell_button.connect("button_down", self, "_sell_button_down")
-	_sell_button.get_node("item_touch_button").connect("button_down", self, "_sell_button_down")
-	_item_button.connect("button_down", self, "_item_button_down")
-	_item_button.get_node("item_touch_button").connect("button_down", self, "_item_button_down")
+	_sell_button.connect("pressed", self, "_sell_button_down")
+	_sell_button.get_node("item_touch_button").connect("pressed", self, "_sell_button_down")
+	
+	_item_button.connect("pressed", self, "_item_button_down")
+	_item_button.get_node("item_touch_button").connect("pressed", self, "_item_button_down")
 
 
 func setup(item):
-	game = get_tree().get_current_scene()
 	_item_button.setup(item)
 	if item != null:
 		if item.type == item.ItemType.CONSUMABLE:
@@ -52,4 +52,4 @@ func _item_button_down():
 
 
 func _sell_button_down():
-	game.ui.shop.sell(index)
+	game.ui.shop_window.sell(index)

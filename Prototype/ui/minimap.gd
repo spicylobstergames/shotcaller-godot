@@ -16,13 +16,14 @@ func _ready():
 	map_tiles = game.get_node("map/tiles")
 	minimap = game.get_node("ui/bot_left/minimap")
 	map_symbols = minimap.get_node("symbols")
+	
+	hide()
 	update_map_texture = true
 
 
 
 func get_map_texture():
 	game.ui.shop_button.hide()
-	game.ui.gold_label.hide()
 	yield(get_tree(), "idle_frame")
 	var data = game.get_viewport().get_texture().get_data()
 	data.flip_y()
@@ -38,7 +39,6 @@ func get_map_texture():
 	game.ui.fps.show()
 	update_map_texture = false
 	game.ui.shop_button.show()
-	game.ui.gold_label.show()
 	if not game.started:
 		game.start()
 

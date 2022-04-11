@@ -20,7 +20,8 @@ func _ready():
 
 func start(item):
 	self._item = item
-	_timer.start(5)
+	_leaders_inventories.add_timer(_leader, _item)
+	_timer.start(2)
 
 
 func _timer_timeout():

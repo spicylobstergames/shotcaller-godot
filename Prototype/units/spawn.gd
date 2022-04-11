@@ -24,13 +24,15 @@ func _ready():
 func test():
 	
 	yield(get_tree(), "idle_frame")
+	game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(800,1000))
 	game.map.create(robin, "mid", game.player_team, "Vector2", Vector2(1000,1000))
 	#game.map.create(rollo, "mid", game.enemy_team, "Vector2", Vector2(900,1000))
 	#game.map.create(archer, "mid", game.player_team, "Vector2", Vector2(1000,1000))
 	#game.map.create(infantry, "mid", game.player_team, "Vector2", Vector2(1000,1030))
 	#game.map.create(archer, "mid", game.enemy_team, "Vector2", Vector2(1100,1000))
 	#game.map.create(infantry, "mid", game.enemy_team, "Vector2", Vector2(1100,970))
-
+	
+	game.map.setup_leaders()
 
 
 func start():

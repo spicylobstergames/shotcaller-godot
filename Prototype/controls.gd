@@ -34,6 +34,11 @@ func _unhandled_input(event):
 
 
 
+func setup_selection(unit):
+	if unit.selectable: game.selectable_units.append(unit)
+
+
+
 func select(point):
 	var unit_at_point = get_sel_unit_at_point(Vector2(point))
 	if unit_at_point:
@@ -43,13 +48,14 @@ func select(point):
 		if unit.team == game.player_team and unit.type == "leader":
 			game.selected_leader = unit
 			game.ui.shop_window.update_buttons()
+			game.ui.leaders_inventories.update_buttons()
 		else:
 			game.selected_leader = null
 			game.ui.shop_window.disable_all()
 		unit.get_node("hud/state").visible = true
 		unit.get_node("hud/selection").visible = true
 		unit.get_node("hud/hpbar").visible = true
-		game.ui.update_stats()
+		game.ui.stats.update()
 
 
 func unselect():
@@ -60,8 +66,9 @@ func unselect():
 		unit.get_node("hud/hpbar").visible = false
 	game.selected_unit = null
 	game.selected_leader = null
-	game.ui.update_stats()
+	game.ui.stats.update()
 	game.ui.shop_window.disable_all()
+	game.ui.leaders_inventories.hide()
 
 
 func get_sel_unit_at_point(point):
@@ -70,3 +77,4 @@ func get_sel_unit_at_point(point):
 		var select_pos = unit.global_position + unit.selection_position
 		if game.utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
+
