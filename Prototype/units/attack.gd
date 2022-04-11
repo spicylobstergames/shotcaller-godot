@@ -9,10 +9,10 @@ func _ready():
 func start(unit, point):
 	if (unit.attacks):
 		unit.look_at(point)
-		unit.aim_point = point
 		unit.set_state("attack")
+		unit.get_node("animations").playback_speed = unit.current_attack_speed
 		if unit.ranged and unit.weapon:
-			unit.weapon.look_at(unit.aim_point)
+			unit.weapon.look_at(point)
 		if !unit.target:
 			unit.target = get_first_target(point)
 
@@ -66,7 +66,7 @@ func projectile_start(attacker):
 	var a = attacker.weapon.global_rotation
 	var speed = attacker.projectile_speed
 	var projectile_speed = Vector2(cos(a)*speed, sin(a)*speed)
-	var lifetime = (attacker.attack_hit_radius/2) / attacker.projectile_speed
+	var lifetime = attacker.attack_hit_radius / attacker.projectile_speed
 	projectile_node.global_position = attacker.projectile.global_position
 	projectile_node.global_rotation = a
 	projectile_node.visible = true
@@ -81,24 +81,18 @@ func projectile_start(attacker):
 
 func projectile_stuck(attacker, target, projectile):
 	var stuck = projectile.node
-	
+	var r = projectile.node.global_rotation
 	if target: 
-		stuck = attacker.projectile.duplicate()
-		stuck.global_position = target.global_position - (projectile.speed/5)
-		var a = 0.2 # angle variation
-		var r = projectile.node.global_rotation
-		if target and target.mirror: r = Vector2(-cos(r),sin(r)).angle()
-		stuck.global_rotation = r + ((randf()*a*2)-a) # some angle variation
-		stuck.modulate = Color(1,1,1)
-		stuck.visible = true
+		stuck = projectile.node.duplicate()
+		stuck.global_position = Vector2.ZERO
+		if target and target.mirror: r = Vector2(cos(r),-sin(r)).angle()
 		target.get_node("sprites").add_child(stuck)
 		game.map.remove_child(projectile.node)
 		projectile.node.queue_free()
-	
-	stuck.frame = 1
-	
-	var d = stuck.global_position - attacker.global_position
-	print(d.length())
+		
+	var a = 0.2 # angle variation
+	stuck.global_rotation = r + ((randf()*a*2)-a) # some angle variation
+	stuck.frame = 1 # stuck sprite
 	
 	attacker.projectiles.erase(projectile)
 	

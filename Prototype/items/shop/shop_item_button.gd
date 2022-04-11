@@ -23,7 +23,7 @@ func setup(item):
 
 
 func _button_down():
-	game.ui.shop.buy(_item_button.item)
+	game.ui.shop_window.buy(_item_button.item)
 
 
 func disable():

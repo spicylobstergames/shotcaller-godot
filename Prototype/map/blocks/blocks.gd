@@ -17,7 +17,7 @@ func _ready():
 
 func setup_quadtree():
 	var Quad = _QuadtreeGD.new()
-	var bound = Rect2(Vector2.ZERO, Vector2(game.size,game.size))
+	var bound = Rect2(Vector2.ZERO, Vector2(game.map.size,game.map.size))
 	quad = Quad.create_quadtree(bound, 16, 16)
 
 

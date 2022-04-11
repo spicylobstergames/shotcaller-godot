@@ -554,17 +554,18 @@ radius = 20.0
 radius = 100.005
 
 [node name="maori" instance=ExtResource( 1 )]
-hp = 120
-vision = 140
+hp = 500
+vision = 150
 type = "leader"
 subtype = "archer"
 selectable = true
 moves = true
-speed = 2.0
+speed = 50.0
 collide = true
 attacks = true
 ranged = true
-damage = 20
+damage = 30
+projectile_speed = 160.0
 
 [node name="state" parent="hud" index="0"]
 margin_top = -32.0

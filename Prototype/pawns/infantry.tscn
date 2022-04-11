@@ -454,14 +454,15 @@ radius = 20.0
 radius = 20.0
 
 [node name="infantry" instance=ExtResource( 1 )]
-hp = 120
-vision = 140
+hp = 200
+vision = 120
 selectable = true
 moves = true
-speed = 40.0
+speed = 50.0
 collide = true
 attacks = true
-damage = 20
+damage = 25
+projectile_speed = 0.0
 
 [node name="hpbar" parent="hud" index="2"]
 visible = false

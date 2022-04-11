@@ -454,15 +454,16 @@ radius = 20.0
 radius = 23.0
 
 [node name="arthur" instance=ExtResource( 1 )]
-hp = 120
+hp = 400
 vision = 140
 type = "leader"
 selectable = true
 moves = true
-speed = 2.0
+speed = 50.0
 collide = true
 attacks = true
-damage = 20
+damage = 30
+projectile_speed = 0.0
 
 [node name="hpbar" parent="hud" index="2"]
 visible = false

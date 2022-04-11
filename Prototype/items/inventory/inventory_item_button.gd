@@ -14,7 +14,9 @@ func _ready():
 	_sell_button.hide()
 	
 	_sell_button.connect("button_down", self, "_sell_button_down")
+	_sell_button.get_node("item_touch_button").connect("button_down", self, "_sell_button_down")
 	_item_button.connect("button_down", self, "_item_button_down")
+	_item_button.get_node("item_touch_button").connect("button_down", self, "_item_button_down")
 
 
 func setup(item):
@@ -46,7 +48,7 @@ func _item_button_down():
 	for key in _item_button.item.attributes.keys():
 		leader.attributes.stats[key] += _item_button.item.attributes[key]
 	
-	game.ui.get_node("bot_right/leaders_inventories").remove_item(leader, index)
+	game.ui.leaders_inventories.remove_item(leader, index)
 
 
 func _sell_button_down():

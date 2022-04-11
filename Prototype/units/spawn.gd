@@ -2,7 +2,10 @@ extends Node
 var game:Node
 
 
+var arthur:PackedScene = load("res://leaders/arthur.tscn")
+var maori:PackedScene = load("res://leaders/maori.tscn")
 var raja:PackedScene = load("res://leaders/raja.tscn")
+var robin:PackedScene = load("res://leaders/robin.tscn")
 var rollo:PackedScene = load("res://leaders/rollo.tscn")
 
 
@@ -20,10 +23,10 @@ func _ready():
 
 func test():
 	
-	#yield(get_tree(), "idle_frame")
-	#game.map.create(raja, "mid", game.player_team, "Vector2", Vector2(1000,1000))
-	#game.map.create(rollo, "mid", game.player_team, "Vector2", Vector2(900,1000))
-	game.map.create(archer, "mid", game.player_team, "Vector2", Vector2(1000,1000))
+	yield(get_tree(), "idle_frame")
+	game.map.create(robin, "mid", game.player_team, "Vector2", Vector2(1000,1000))
+	#game.map.create(rollo, "mid", game.enemy_team, "Vector2", Vector2(900,1000))
+	#game.map.create(archer, "mid", game.player_team, "Vector2", Vector2(1000,1000))
 	#game.map.create(infantry, "mid", game.player_team, "Vector2", Vector2(1000,1030))
 	#game.map.create(archer, "mid", game.enemy_team, "Vector2", Vector2(1100,1000))
 	#game.map.create(infantry, "mid", game.enemy_team, "Vector2", Vector2(1100,970))
@@ -43,7 +46,7 @@ func start():
 	for team in ["red", "blue"]:
 		for lane in ["top", "mid", "bot"]:
 			send_pawn("archer", lane, team)
-			for n in range(1,4):
+			for n in 3:
 				send_pawn("infantry", lane, team)
 
 

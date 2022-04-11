@@ -53,7 +53,7 @@ func limit_angle(a):
 
 func random_point():
 	var o = 50
-	return Vector2(o+randf()*(game.size-o*2), o+randf()*(game.size-o*2))
+	return Vector2(o+randf()*(game.map.size-o*2), o+randf()*(game.map.size-o*2))
 
 
 func unit_collides(unit1, p):
@@ -81,3 +81,22 @@ func point_random_no_coll(unit, point, offset):
 	while unit_collides(unit, p):
 		p = point_random_no_coll(unit, point, offset)
 	return p
+
+
+func point_collision(unit1, point):
+	var unit1_pos = unit1.global_position + unit1.collision_position
+	return circle_point_collision(point, unit1_pos, unit1.collision_radius)
+
+
+func unit_collision(unit1, unit2, delta):
+	var unit1_pos = unit1.global_position + unit1.collision_position + (unit1.current_step * delta)
+	var unit1_rad = unit1.collision_radius
+	var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
+	var unit2_rad = unit2.collision_radius
+	return circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
+
+
+func get_units_around(unit1, delta):
+	var unit1_pos = unit1.global_position + unit1.collision_position + (unit1.current_step * delta)
+	var unit1_rad = unit1.collision_radius
+	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)

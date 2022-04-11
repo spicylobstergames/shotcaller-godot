@@ -1,4 +1,4 @@
-extends Camera2D
+extends Node2D
 var game:Node
 
 var update_map_texture:bool = true
@@ -31,15 +31,16 @@ func get_map_texture():
 	var minimap_sprite = minimap.get_node("sprite")
 	minimap_sprite.set_texture(texture)
 	map_sprite.set_texture(texture)
-	map_sprite.scale = game.get_node("map_camera").zoom
-	game.get_node("map_camera").current = false
+	map_sprite.scale = game.map_camera.zoom
+	game.map_camera.current = false
 	game.get_node("camera").current = true
 	minimap.show()
 	game.ui.fps.show()
 	update_map_texture = false
-	game.start()
 	game.ui.shop_button.show()
 	game.ui.gold_label.show()
+	if not game.started:
+		game.start()
 
 
 func corner_view():

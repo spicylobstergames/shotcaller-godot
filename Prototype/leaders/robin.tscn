@@ -49,13 +49,13 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
-tracks/3/enabled = false
+tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.7 ),
+"times": PoolRealArray( 0.3 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "on_attack_hit"
+"method": "on_attack_release"
 } ]
 }
 tracks/4/type = "value"
@@ -113,10 +113,10 @@ tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.3, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
-"values": [ true, true ]
+"values": [ true, false, false ]
 }
 tracks/9/type = "value"
 tracks/9/path = NodePath("sprites/weapon/projectile:modulate")
@@ -125,10 +125,10 @@ tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 0.2, 0.7, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/10/type = "value"
 tracks/10/path = NodePath("sprites/weapon/projectile:position")
@@ -567,28 +567,29 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.005
+radius = 140.0
 
 [node name="robin" instance=ExtResource( 1 )]
-hp = 120
-vision = 140
+hp = 360
+vision = 160
 type = "leader"
 subtype = "archer"
 selectable = true
 moves = true
-speed = 2.0
+speed = 50.0
 collide = true
 attacks = true
 ranged = true
 damage = 20
+projectile_speed = 250.0
 
 [node name="state" parent="hud" index="0"]
-margin_top = -32.0
-margin_bottom = -14.0
+visible = true
+margin_top = -35.0
+margin_bottom = -17.0
 
 [node name="hpbar" parent="hud" index="2"]
-visible = false
-position = Vector2( 0, -21 )
+position = Vector2( 0, -23 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
@@ -599,8 +600,6 @@ anims/move = SubResource( 26 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = 0.038756
-scale = Vector2( 1, 0.944486 )
 frames = SubResource( 36 )
 frame = 2
 offset = Vector2( 0, -15 )
@@ -610,14 +609,15 @@ position = Vector2( 0, -4 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="AnimatedSprite" parent="sprites/weapon" index="0"]
-position = Vector2( 97.6038, 3 )
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 17, 7 )
+rotation = 0.174533
 frames = SubResource( 39 )
 offset = Vector2( -10, -1 )
 
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
 position = Vector2( 0, 1 )
-rotation = 0.195685
-scale = Vector2( 0.888972, 1 )
+rotation = 0.349066
 frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
 

@@ -11,7 +11,7 @@ var _leaders_inventories:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
-	_leaders_inventories = game.ui.get_node("bot_right/leaders_inventories")
+	_leaders_inventories = game.ui.leaders_inventories
 	_timer = Timer.new()
 	_timer.one_shot = true
 	_timer.connect("timeout", self, "_timer_timeout")

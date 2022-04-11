@@ -58,5 +58,6 @@ func stop(unit):
 	if unit.behavior == "advance":
 		unit.current_destiny = Vector2.ZERO
 		unit.objective = Vector2.ZERO
+		unit.current_step = Vector2.ZERO
 		unit.set_behavior("stop")
 	

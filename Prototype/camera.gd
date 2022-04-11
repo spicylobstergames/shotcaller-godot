@@ -12,9 +12,10 @@ var arrow_keys_move:Vector2 = Vector2.ZERO
 
 
 func _ready():
+	yield(get_tree(), "idle_frame")
 	game = get_tree().get_current_scene()
 	zoom = zoom_default
-	zoom_limit.y = game.get_node("map_camera").zoom.y
+	zoom_limit.y = game.map_camera.zoom.y
 
 
 func _unhandled_input(event):
@@ -72,21 +73,21 @@ func _unhandled_input(event):
 
 func zoom_reset(): 
 	zoom = zoom_default
-	game.minimap.corner_view()
+	game.ui.minimap.corner_view()
 	game.ui.hide_hpbar()
 	game.ui.hide_state()
 	
 	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
-	game.minimap.corner_view()
+	game.ui.minimap.corner_view()
 	game.ui.show_hpbar()
 	game.ui.show_state()
 	
 	
 func zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
-	game.minimap.hide_view()
+	game.ui.minimap.hide_view()
 
 
 func process():

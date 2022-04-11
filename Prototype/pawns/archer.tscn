@@ -567,19 +567,19 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.0
+radius = 120.0
 
 [node name="archer" instance=ExtResource( 1 )]
-hp = 120
-vision = 140
+hp = 180
+vision = 150
 subtype = "archer"
 selectable = true
 moves = true
-speed = 40.0
+speed = 50.0
 collide = true
 attacks = true
 ranged = true
-damage = 20
+damage = 30
 projectile_speed = 200.0
 
 [node name="state" parent="hud" index="0"]
@@ -622,9 +622,6 @@ offset = Vector2( 10, 0 )
 
 [node name="sprite" parent="sprites" index="3"]
 visible = false
-
-[node name="collisions" parent="." index="5"]
-visible = true
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

@@ -17,8 +17,10 @@ func _ready():
 	_gold_timer.connect("timeout", self, "_gold_timer_timeout")
 	_gold_timer.start(1)
 	
+# warning-ignore:unused_variable
 	for index in range(EQUIP_ITEMS_MAX):
 		equip_items.append(null)
+# warning-ignore:unused_variable
 	for index in range(CONSUMABLE_ITEMS_MAX):
 		consumable_items.append(null)
 

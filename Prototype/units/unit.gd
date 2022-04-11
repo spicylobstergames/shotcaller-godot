@@ -42,9 +42,8 @@ export var damage:int = 0
 var current_damage:int = 0
 export var attack_range:int = 1
 var current_attack_range:int = 1
-export var attack_speed:int = 1
-var current_attack_speed:int = 1
-var aim_point:Vector2
+export var attack_speed:float = 1
+var current_attack_speed:float = 1
 var target:Node2D
 var weapon:Node2D
 var projectile:Node2D
@@ -82,10 +81,13 @@ func _ready():
 
 
 func reset_unit(unit):
+	if unit.type == "leader": unit.get_node("hud/state").text = unit.name
+	else: unit.get_node("hud/state").text = unit.subtype
 	unit.current_hp = unit.hp
 	unit.current_vision = unit.vision
 	unit.current_speed = unit.speed
 	unit.current_damage = unit.damage
+	unit.current_attack_speed = unit.attack_speed
 
 
 func set_state(s):
@@ -96,7 +98,7 @@ func set_state(s):
 
 func set_behavior(s):
 	self.behavior = s
-	self.get_node("hud/state").text = s
+	#self.get_node("hud/state").text = s
 
 
 func setup_selection(unit):

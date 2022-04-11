@@ -4,20 +4,22 @@ var game:Node
 
 var fps:Node
 var stats:Node
-var minimap:Camera2D
-var shop:Node
+var minimap:Node
 var shop_button:Node
+var shop_window:Node
 var gold_label:Node
+var leaders_inventories:Node
 
 
 func _ready():
 	game = get_tree().get_current_scene()
 	fps = get_node("top_left/fps")
 	stats = get_node("bot_mid/stats")
-	minimap = game.get_node("map_camera")
-	shop = get_node("top_right/shop")
+	minimap = get_node("bot_left/minimap")
 	shop_button = get_node("top_right/shop_button")
+	shop_window = get_node("top_right/shop_window")
 	gold_label = get_node("top_right/gold_label")
+	leaders_inventories = get_node("bot_right/leaders_inventories")
 
 
 func process():

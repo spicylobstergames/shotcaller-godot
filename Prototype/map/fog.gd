@@ -9,11 +9,13 @@ var clear_frame:int = 0
 
 
 func _ready():
+	yield(get_tree(), "idle_frame")
 	game = get_tree().get_current_scene()
 	
 	trees = get_node("../trees")
 	
-	tile_map_size = floor(game.size / 8)
+	var tile_size = game.map.get_node("tiles/ground").cell_size.x
+	tile_map_size = floor(game.map.size / tile_size)
 
 
 func skip_start():

@@ -1,41 +1,52 @@
 extends Node2D
 
+var all_units:Array = []
+var selectable_units:Array = []
 var selected_unit:Node2D
 var selected_leader:Node2D
-var selectable_units:Array = []
-var all_units:Array = []
+var player_leaders:Array = []
+
 var player_team:String = "blue"
 var enemy_team:String = "red"
-
-var size:int = 2112
 
 var rng = RandomNumberGenerator.new()
 
 var map:Node
 var unit:Node
 var camera:Node
+var map_camera:Node
 var ui:Node
-var minimap:Node
+var controls:Node
+var collision:Node
 var utils:Node
 var test:Node
+
 
 func _ready():
 	map = get_node("map")
 	unit = get_node("map/unit")
 	camera = get_node("camera")
+	map_camera = get_node("map_camera")
 	ui = get_node("ui")
-	minimap = get_node("map_camera")
+	controls = get_node("collision")
+	collision = get_node("collision")
 	utils = get_node("utils")
 	test = get_node("test")
 	
-	map.blocks.setup_quadtree()
+	# must run on first call to color minimap texture
 	map.setup_buildings()
-	unit.path.setup_pathfind()
 
+var started:bool = false
 
 func start():
+	started = true
+	
 	rng.randomize()
+	map.blocks.setup_quadtree()
+	unit.path.setup_pathfind()
 	#map.fog.cover_map()
+	
+	map.setup_leaders()
 	
 	if not test.stress:
 		unit.spawn.test()
@@ -51,66 +62,10 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta):
+	if started: collision.process(delta)
 	
-	#map.fog.skip_start()
 	#if test.stress: unit.path.find_path(utils.random_point(), utils.random_point())
 
-	map.blocks.quad.clear()
-	
-	# loop 1: adds units to quad and check for arrival
-	for unit1 in all_units:
-		if unit1.collide: map.blocks.quad.add_body(unit1)
-
+	#map.fog.skip_start()
 		#if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
-		
-		# move arrival
-		unit1.next_event  = ""
-		if unit1.moves and unit1.state == "move":
-			var unit1_pos = unit1.global_position + unit1.collision_position
-			if utils.circle_point_collision(unit1_pos, unit1.current_destiny, unit1.collision_radius):
-				unit1.next_event = "arrive"
 	
-	# loop 2: checks for collisions
-	for unit1 in all_units:
-		
-		# projectiles collision
-		if unit1.projectiles.size():
-			for projectile in unit1.projectiles:
-				if is_instance_valid(projectile.node) and projectile.speed:
-					projectile.lifetime -= delta
-					if (projectile.lifetime < 0):
-						unit.attack.projectile_stuck(unit1, null, projectile)
-					else: 
-						projectile.node.global_position += projectile.speed * delta
-						var target = unit1.target
-						if target:
-							var projectile_pos = projectile.node.global_position
-							var target_pos = target.global_position + target.collision_position
-							if utils.circle_point_collision(target_pos, projectile_pos, target.collision_radius):
-								unit.attack.take_hit(unit1, target, projectile)
-		
-		# units collision
-		if unit1.collide and unit1.moves and unit1.next_event != "arrive" and unit1.state == "move":
-			unit1.next_event = "move"
-			var unit1_pos = unit1.global_position + unit1.collision_position + (unit1.current_step * delta)
-			var unit1_rad = unit1.collision_radius
-			var neighbors = map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
-			for unit2 in neighbors:
-				if unit2.collide and unit1 != unit2:
-					var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
-					var unit2_rad = unit2.collision_radius
-					if utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad):
-						unit1.next_event = "collision"
-						unit1.collide_target = unit2
-						break
-		
-		# move or collide or stop
-		match unit1.next_event:
-			"move": unit1.on_move(delta)
-			"collision": unit1.on_collision(delta)
-			"arrive": unit1.on_arrive()
-		
-		# save last positions
-		unit1.last_position2 = unit1.last_position
-		unit1.last_position = unit1.global_position
-

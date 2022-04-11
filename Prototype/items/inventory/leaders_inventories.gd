@@ -19,12 +19,13 @@ var gold_label:Node
 func _ready():
 	yield(get_tree(), "idle_frame")
 	game = get_tree().get_current_scene()
-	shop = game.ui.get_node("top_right/shop_button")
-	gold_label = game.ui.get_node("top_right/gold_label")
+	shop = game.ui.shop_button
+	gold_label = game.ui.gold_label
 	hide()
 	# Setup GUI for inventory
 	var inventory = _inventory_preload.instance()
 	var counter = 0
+# warning-ignore:unused_variable
 	for i in range(inventory.EQUIP_ITEMS_MAX):
 		var item_button = _inventory_item_button_preload.instance()
 		_equip_item_buttons.append(item_button)
@@ -33,6 +34,7 @@ func _ready():
 		counter += 1
 		item_button.set_item_type_to_equip()
 		item_button.setup(null)
+# warning-ignore:unused_variable
 	for i in range(inventory.CONSUMABLE_ITEMS_MAX):
 		var item_button = _inventory_item_button_preload.instance()
 		_consumable_item_buttons.append(item_button)

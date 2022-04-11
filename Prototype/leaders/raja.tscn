@@ -454,15 +454,17 @@ radius = 20.0
 radius = 20.0
 
 [node name="raja" instance=ExtResource( 1 )]
-hp = 120
+hp = 380
 vision = 140
 type = "leader"
 selectable = true
 moves = true
-speed = 2.0
+speed = 50.0
 collide = true
 attacks = true
-damage = 20
+damage = 25
+attack_speed = 1.2
+projectile_speed = 0.0
 
 [node name="hpbar" parent="hud" index="2"]
 visible = false
@@ -476,8 +478,6 @@ anims/move = SubResource( 26 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = 0.0232711
-scale = Vector2( 1, 0.95 )
 frames = SubResource( 36 )
 frame = 2
 offset = Vector2( 2, -15 )
@@ -485,7 +485,6 @@ offset = Vector2( 2, -15 )
 [node name="wepon" type="Sprite" parent="sprites" index="2"]
 material = SubResource( 30 )
 position = Vector2( 6, 2 )
-rotation = 1.5708
 texture = ExtResource( 3 )
 offset = Vector2( 6, -6 )
 region_enabled = true

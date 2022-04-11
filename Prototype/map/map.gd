@@ -5,12 +5,21 @@ var blocks
 var walls
 var fog
 
+var size:int = 2112
+
 func _ready():
 	game = get_tree().get_current_scene()
 	
 	walls = get_node("tiles/walls")
 	fog = get_node("tiles/fog")
 	blocks = get_node("blocks")
+
+
+func setup_leaders():
+	for leader in game.player_leaders:
+		if not leader.name in game.ui.leaders_inventories.inventories:
+			game.ui.leaders_inventories.add_inventory(leader)
+			game.ui.show_window.add_delivery(leader)
 
 
 func setup_buildings():
@@ -27,6 +36,8 @@ func create(template, lane, team, mode, point):
 	var unit = spawn(template.instance(), lane, team, mode, point)
 	game.get_node("map").add_child(unit)
 	game.all_units.append(unit)
+	if unit.type == "leader" and unit.team == game.player_team:
+		game.player_leaders.append(unit)
 	return unit
 
 
@@ -46,7 +57,7 @@ func spawn(unit, l, t, mode, point):
 	game.unit.setup_selection(unit)
 	game.unit.setup_collisions(unit)
 	game.unit.move.setup_timer(unit)
-	game.minimap.setup_symbol(unit)
+	game.ui.minimap.setup_symbol(unit)
 	unit.set_state("idle")
 	unit.set_behavior("stop")
 	return unit
