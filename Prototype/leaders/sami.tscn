@@ -556,7 +556,7 @@ attacks = true
 ranged = true
 damage = 30
 attack_speed = 0.9
-projectile_speed = 200.0
+projectile_speed = 220.0
 
 [node name="state" parent="hud" index="0"]
 margin_bottom = -19.0

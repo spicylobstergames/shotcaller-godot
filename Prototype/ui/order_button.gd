@@ -1,5 +1,6 @@
 extends Button
 
+var orders
 
 func _ready():
 # warning-ignore:return_value_discarded
@@ -10,6 +11,12 @@ func _ready():
 
 
 func _button_down():
-	print(self)
-	print()
+	
+	print(self.orders.type, ' ',self.orders.order.type)
+	match self.orders.type:
+		"tactic":
+			print(self.orders.tactic)
+		"priority":
+			print(self.orders.priority)
+			
 	pass

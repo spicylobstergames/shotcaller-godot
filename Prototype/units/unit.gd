@@ -158,16 +158,16 @@ func get_texture():
 		texture = body.texture 
 		region = body.region_rect
 		match self.subtype:
-			"tower": scale = Vector2(0.9,0.9)
-			"barrack": scale = Vector2(0.7,0.7)
-			"castle": scale = Vector2(0.55,0.55)
+			"tower": scale = Vector2(1,1)
+			"barrack": scale = Vector2(0.8,0.8)
+			"castle": scale = Vector2(0.6,0.6)
 	else:
 		texture = body.frames.get_frame('default', 0)
 		region = texture.region
-		scale = Vector2(2,2)
+		scale = Vector2(2.5,2.5)
 		match self.name:
-			"takoda": scale = Vector2(1.5,1.5)
-			"tomyris": scale = Vector2(1.5,1.5)
+			"takoda": scale = Vector2(1.8,1.8)
+			"tomyris": scale = Vector2(1.8,1.8)
 		
 	return {
 		"sprite": body,

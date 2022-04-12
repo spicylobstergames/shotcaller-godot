@@ -68,6 +68,11 @@ func setup_tactics(orders, tactics):
 	for tactic in tactics:
 		var button = button_template.instance()
 		button.text = tactic
+		button.orders = {
+			"order": orders,
+			"type": "tactic",
+			"tactic": tactic
+		}
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
 
@@ -75,9 +80,14 @@ func setup_tactics(orders, tactics):
 
 func setup_priority(orders):
 	var buttons_container = HBoxContainer.new()
-	for type in order_types.priority:
+	for priority in order_types.priority:
 		var button = button_template.instance()
-		button.text = type
+		button.text = priority
+		button.orders =  {
+			"order": orders,
+			"type": "priority",
+			"priority": priority
+		}
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
 		# add submenu buttons

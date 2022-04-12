@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://units/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -409,10 +409,10 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 1 ]
+"values": [ 0, 1, 0, 1, 0 ]
 }
 tracks/3/type = "method"
 tracks/3/path = NodePath(".")
@@ -489,13 +489,29 @@ shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
 shader_param/new4 = Color( 0.411765, 0.231373, 0.298039, 1 )
 shader_param/tolerance = 0.1
 
-[sub_resource type="AtlasTexture" id=43]
+[sub_resource type="AtlasTexture" id=48]
 atlas = ExtResource( 5 )
 region = Rect2( 0, 0, 48, 48 )
 
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 5 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 5 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 5 )
+region = Rect2( 192, 0, 48, 48 )
+
 [sub_resource type="SpriteFrames" id=36]
 animations = [ {
-"frames": [ SubResource( 43 ), SubResource( 43 ), SubResource( 43 ) ],
+"frames": [ SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -583,14 +599,13 @@ material = SubResource( 30 )
 position = Vector2( 2, 9 )
 scale = Vector2( 1, 0.95 )
 frames = SubResource( 36 )
-frame = 1
 offset = Vector2( 2, -24 )
 
 [node name="sprite" parent="sprites" index="3"]
 visible = false
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
-position = Vector2( -1, -20 )
+position = Vector2( -8, -17 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
@@ -598,8 +613,8 @@ position = Vector2( 22.4593, 1 )
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 frames = SubResource( 44 )
-frame = 1
 offset = Vector2( -13, -1 )
 
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]

@@ -16,6 +16,7 @@ func update():
 		get_node("hp").text = "HP: %s" % [unit.hp]
 		get_node("damage").text = "Damage: %s" % unit.current_damage
 		get_node("vision").text = "Vision: %s" % unit.current_vision
+		get_node("range").text = "Range: %s" % unit.attack_hit_radius
 		if unit.moves: get_node("speed").text = "Speed: %s" % unit.current_speed
 		else: get_node("speed").text = ""
 		var texture = unit.get_texture()

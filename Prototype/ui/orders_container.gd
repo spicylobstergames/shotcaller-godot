@@ -6,7 +6,7 @@ var pawn_orders
 var building_orders = {}
 
 var enemy_leader_orders = {}
-var enemy_unit_orders = {}
+var enemy_pawn_orders = {}
 var enemy_building_orders = {}
 
 func _ready():
@@ -72,7 +72,8 @@ func setup_buildings():
 	for unit_type in ["castle", "barrack", "tower"]:
 		var orders = {
 			"node": VBoxContainer.new(),
-			"type": unit_type
+			"type": "building",
+			"building": unit_type
 		}
 		building_orders[unit_type] = orders
 		game.unit.orders.setup_building_buttons(orders)
@@ -84,27 +85,28 @@ func setup_enemy_leaders():
 	for leader in game.player_leaders:
 		var orders = {
 			"node": Node2D.new(),
+			"type": "leader",
 			"leader": leader
 		}
 		enemy_leader_orders[leader.name] = orders
 		self.add_child(orders.node)
 
 
-func setup_enemy_units():
-	for unit_type in ["infantary", "archer"]:
-		var orders = {
-			"node": Node2D.new(),
-			"type": unit_type
-		}
-		enemy_unit_orders[unit_type] = orders
-		self.add_child(orders.node)
+func setup_enemy_pawns():
+	var orders = {
+		"node": Node2D.new(),
+		"type": "pawn"
+	}
+	enemy_pawn_orders = orders
+	self.add_child(orders.node)
 
 
 func setup_enemy_buildings():
 	for unit_type in ["castle", "barrack", "tower"]:
 		var orders = {
 			"node": Node2D.new(),
-			"type": unit_type
+			"type": "building",
+			"building": unit_type
 		}
 		enemy_building_orders[unit_type] = orders
 		self.add_child(orders.node)
