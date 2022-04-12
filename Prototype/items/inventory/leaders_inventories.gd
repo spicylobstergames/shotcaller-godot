@@ -96,12 +96,12 @@ func update_gui(leader_name):
 	update_buttons()
 
 func update_buttons():
-	show()
 	for leader in inventories:
 		inventories[leader].hide()
 	
 	if game.selected_leader and game.selected_leader.name in inventories:
 		var inventory = inventories[game.selected_leader.name]
+		show()
 		inventory.show()
 		# Hide or show sell buttons
 		if shop_window.visible:

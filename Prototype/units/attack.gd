@@ -140,7 +140,7 @@ func projectile_stuck(attacker, target, projectile):
 	
 	attacker.projectiles.erase(projectile)
 	
-	yield(get_tree().create_timer(2.0), "timeout")
+	yield(get_tree().create_timer(1.2), "timeout")
 	
 	if target: target.get_node("sprites").remove_child(stuck)
 	else: game.map.remove_child(stuck)

@@ -100,3 +100,11 @@ func get_units_around(unit1, delta):
 	var unit1_pos = unit1.global_position + unit1.collision_position + (unit1.current_step * delta)
 	var unit1_rad = unit1.collision_radius
 	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+
+
+func label(string):
+	var label_node = Label.new()
+	label_node.text = string
+	var font = game.unit.hud.get_node("state").get_font("font")
+	label_node.add_font_override("font", font)
+	return label_node

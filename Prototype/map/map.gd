@@ -29,37 +29,22 @@ func setup_buildings():
 			game.controls.setup_selection(building)
 			game.unit.setup_collisions(building)
 			game.unit.setup_team(building)
+			if building.team == game.player_team:
+				game.player_buildings.append(building)
+			else:
+				game.enemy_buildings.append(building)
 			game.all_units.append(building)
 
 
 func create(template, lane, team, mode, point):
-	var unit = spawn(template.instance(), lane, team, mode, point)
-	game.get_node("map").add_child(unit)
+	var unit = game.unit.spawn.spawn_unit(template.instance(), lane, team, mode, point)
+	game.map.add_child(unit)
 	game.all_units.append(unit)
-	if unit.type == "leader" and unit.team == game.player_team:
-		game.player_leaders.append(unit)
-	return unit
-
-
-func spawn(unit, l, t, mode, point):
-	unit.lane = l
-	unit.team = t
-	unit.subtype = unit.name
-	unit.dead = false
-	unit.visible = true
-	if mode == "point_random_no_coll":
-		point = game.utils.point_random_no_coll(unit, point, 25)
-	if mode == "random_no_coll":
-		point = game.utils.random_no_coll(unit)
-	unit.global_position = point
-	game.unit.reset_unit(unit)
-	game.unit.setup_team(unit)
-	game.controls.setup_selection(unit)
-	game.unit.setup_collisions(unit)
-	game.unit.move.setup_timer(unit)
-	game.ui.minimap.setup_symbol(unit)
-	unit.set_state("idle")
-	unit.set_behavior("stop")
+	if unit.type == "leader":
+		if unit.team == game.player_team:
+			game.player_leaders.append(unit)
+		else:
+			game.enemy_leaders.append(unit)
 	return unit
 
 

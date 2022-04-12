@@ -64,21 +64,23 @@ var state:String = "idle" # "move", "attack", "death"
 
 
 var hud:Node
+var spawn:Node
 var move:Node
 var attack:Node
 var advance:Node
 var path:Node
-var spawn:Node
+var orders:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
 	
 	if has_node("hud"): hud = get_node("hud")
+	if has_node("behavior/spawn"): spawn = get_node("behavior/spawn")
 	if has_node("behavior/move"): move = get_node("behavior/move")
 	if has_node("behavior/attack"): attack = get_node("behavior/attack")
 	if has_node("behavior/advance"): advance = get_node("behavior/advance")
 	if has_node("behavior/path"): path = get_node("behavior/path")
-	if has_node("behavior/spawn"): spawn = get_node("behavior/spawn")
+	if has_node("behavior/orders"): orders = get_node("behavior/orders")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
@@ -88,6 +90,7 @@ func reset_unit(unit):
 	if unit.type == "leader": unit.get_node("hud/state").text = unit.name
 	else: unit.get_node("hud/state").text = unit.subtype
 	unit.current_hp = unit.hp
+	unit.current_attack_range = unit.attack_range
 	unit.current_vision = unit.vision
 	unit.current_speed = unit.speed
 	unit.current_damage = unit.damage
@@ -163,6 +166,7 @@ func get_texture():
 		region = texture.region
 		scale = Vector2(2,2)
 		match self.name:
+			"takoda": scale = Vector2(1.5,1.5)
 			"tomyris": scale = Vector2(1.5,1.5)
 		
 	return {

@@ -8,6 +8,7 @@ var minimap:Node
 var shop_button:Node
 var shop_window:Node
 var leaders_inventories:Node
+var orders_container:Node
 
 
 func _ready():
@@ -18,6 +19,7 @@ func _ready():
 	shop_button = get_node("top_right/shop_button")
 	shop_window = get_node("top_right/shop_window")
 	leaders_inventories = get_node("bot_right/leaders_inventories")
+	orders_container = get_node("bot_right/orders_container")
 
 
 func process():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventory/leaders_inventories.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/minimap.gd" type="Script" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://ui/orders_container.gd" type="Script" id=7]
 
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 6 )
@@ -81,7 +82,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -300.0
 margin_top = 64.0
-margin_bottom = 322.0
+margin_bottom = 344.0
 custom_styles/panel = SubResource( 4 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -101,51 +102,51 @@ __meta__ = {
 
 [node name="container" type="VBoxContainer" parent="top_right/shop_window/scroll_container"]
 margin_right = 280.0
-margin_bottom = 198.0
+margin_bottom = 220.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
 [node name="separator" type="HSeparator" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 64.0
+margin_top = 75.0
 margin_right = 280.0
-margin_bottom = 68.0
+margin_bottom = 79.0
 
 [node name="label" type="Label" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 72.0
+margin_top = 83.0
 margin_right = 280.0
-margin_bottom = 89.0
+margin_bottom = 100.0
 custom_fonts/font = SubResource( 7 )
 text = "Equip"
 
 [node name="equip_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 93.0
+margin_top = 104.0
 margin_right = 280.0
-margin_bottom = 93.0
+margin_bottom = 104.0
 size_flags_horizontal = 3
 
 [node name="separator2" type="HSeparator" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 97.0
+margin_top = 108.0
 margin_right = 280.0
-margin_bottom = 101.0
+margin_bottom = 112.0
 
 [node name="label2" type="Label" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 105.0
+margin_top = 116.0
 margin_right = 280.0
-margin_bottom = 122.0
+margin_bottom = 133.0
 custom_fonts/font = SubResource( 7 )
 text = "Consumable"
 
 [node name="consumable_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 126.0
+margin_top = 137.0
 margin_right = 280.0
-margin_bottom = 126.0
+margin_bottom = 137.0
 size_flags_horizontal = 3
 
 [node name="separator3" type="HSeparator" parent="top_right/shop_window/scroll_container/container"]
-margin_top = 130.0
+margin_top = 141.0
 margin_right = 280.0
-margin_bottom = 134.0
+margin_bottom = 145.0
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
@@ -162,6 +163,11 @@ anchor_bottom = 0.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="main_menu" type="ItemList" parent="mid"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
 
 [node name="mid_right" type="Control" parent="."]
 anchor_left = 1.0
@@ -185,6 +191,7 @@ script = ExtResource( 4 )
 [node name="panel" type="ItemList" parent="bot_left/minimap"]
 margin_top = -150.0
 margin_right = 150.0
+custom_styles/bg = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -209,6 +216,7 @@ __meta__ = {
 margin_left = -148.0
 margin_top = -100.0
 margin_right = 106.0
+custom_styles/bg = SubResource( 4 )
 max_columns = 0
 script = ExtResource( 5 )
 __meta__ = {
@@ -315,11 +323,25 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="leaders_inventories" type="ItemList" parent="bot_right"]
 margin_left = -192.0
 margin_top = -64.0
+custom_styles/bg = SubResource( 4 )
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="orders_container" type="ItemList" parent="bot_right"]
+margin_left = -300.0
+margin_top = -247.0
+margin_bottom = -108.0
+custom_styles/bg = SubResource( 4 )
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

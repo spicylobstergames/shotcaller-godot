@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://units/unit.gd" type="Script" id=1]
 [ext_resource path="res://assets/units/shadow.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://units/path.gd" type="Script" id=9]
 [ext_resource path="res://units/spawn.gd" type="Script" id=10]
 [ext_resource path="res://units/hud.gd" type="Script" id=11]
+[ext_resource path="res://units/orders.gd" type="Script" id=12]
 
 [sub_resource type="DynamicFont" id=20]
 size = 12
@@ -27,6 +28,9 @@ script = ExtResource( 1 )
 
 [node name="behavior" type="Node" parent="."]
 
+[node name="spawn" type="Node" parent="behavior"]
+script = ExtResource( 10 )
+
 [node name="move" type="Node" parent="behavior"]
 script = ExtResource( 6 )
 
@@ -39,8 +43,8 @@ script = ExtResource( 8 )
 [node name="path" type="Node" parent="behavior"]
 script = ExtResource( 9 )
 
-[node name="spawn" type="Node" parent="behavior"]
-script = ExtResource( 10 )
+[node name="orders" type="Node" parent="behavior"]
+script = ExtResource( 12 )
 
 [node name="symbol" type="Sprite" parent="."]
 visible = false

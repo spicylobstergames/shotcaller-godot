@@ -1,10 +1,16 @@
 extends Node2D
 
+var player_leaders:Array = []
+var player_units:Array = []
+var player_buildings:Array = []
+var enemy_leaders:Array = []
+var enemy_units:Array = []
+var enemy_buildings:Array = []
 var all_units:Array = []
 var selectable_units:Array = []
+
 var selected_unit:Node2D
 var selected_leader:Node2D
-var player_leaders:Array = []
 
 var player_team:String = "blue"
 var enemy_team:String = "red"
@@ -47,11 +53,14 @@ func start():
 	unit.path.setup_pathfind()
 	#map.fog.cover_map()
 	
-	if not test.stress:
+	if test.stress:
+		test.spawn_units()
+	else: 
 		unit.spawn.test()
+		ui.orders_container.setup()
 		yield(get_tree().create_timer(2.0), "timeout")
 		unit.spawn.start()
-	else: test.spawn_units()
+	
 
 
 func _process(delta: float) -> void:
