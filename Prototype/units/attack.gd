@@ -129,10 +129,10 @@ func projectile_stuck(attacker, target, projectile):
 	# rotating axe
 	if projectile.rotation:
 		if (target and target.mirror):
-			stuck.global_rotation = 0
+			stuck.global_rotation = 0 + ra
 			stuck.scale.x *= -1
 		else: 
-			stuck.global_rotation = PI
+			stuck.global_rotation = PI + ra
 		var o = projectile.speed*-0.08
 		stuck.global_position += o
 		

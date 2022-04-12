@@ -468,9 +468,6 @@ damage = 25
 attack_speed = 1.2
 projectile_speed = 0.0
 
-[node name="hpbar" parent="hud" index="2"]
-visible = false
-
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )

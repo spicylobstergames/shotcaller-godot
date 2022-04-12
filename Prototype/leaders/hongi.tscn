@@ -566,17 +566,16 @@ speed = 50.0
 collide = true
 attacks = true
 ranged = true
-damage = 30
-attack_speed = 0.9
-projectile_speed = 160.0
+damage = 35
+attack_speed = 0.7
+projectile_speed = 180.0
 projectile_rotation = 15.0
 
 [node name="state" parent="hud" index="0"]
-margin_top = -32.0
-margin_bottom = -14.0
+margin_top = -39.0
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -21 )
+position = Vector2( 0, -22 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
@@ -603,6 +602,7 @@ offset = Vector2( 6, -4 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 visible = false

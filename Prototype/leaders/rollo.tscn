@@ -420,9 +420,11 @@ shader = ExtResource( 2 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = null
 shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
 shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
 shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/new4 = null
 shader_param/tolerance = 0.1
 
 [sub_resource type="AtlasTexture" id=33]
@@ -463,11 +465,12 @@ speed = 50.0
 collide = true
 attacks = true
 damage = 35
-attack_speed = 0.9
+attack_speed = 0.8
 projectile_speed = 0.0
 
-[node name="hpbar" parent="hud" index="2"]
-visible = false
+[node name="state" parent="hud" index="0"]
+margin_top = -35.0
+margin_bottom = -19.0
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
