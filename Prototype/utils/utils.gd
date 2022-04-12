@@ -83,9 +83,9 @@ func point_random_no_coll(unit, point, offset):
 	return p
 
 
-func point_collision(unit1, point):
+func point_collision(unit1, point, s=1):
 	var unit1_pos = unit1.global_position + unit1.collision_position
-	return circle_point_collision(point, unit1_pos, unit1.collision_radius)
+	return circle_point_collision(point, unit1_pos, unit1.collision_radius * s)
 
 
 func unit_collision(unit1, unit2, delta):

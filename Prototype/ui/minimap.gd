@@ -81,4 +81,4 @@ func move_symbols():
 	var symbols = map_symbols.get_children()
 	for i in range(symbols.size()):
 		var symbol = symbols[i]
-		symbol.position = Vector2(-18,-152) + map_symbols_map[i].global_position/15
+		symbol.position = Vector2(2,-148) + map_symbols_map[i].global_position/14.5

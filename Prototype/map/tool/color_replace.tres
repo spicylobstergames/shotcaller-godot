@@ -6,9 +6,11 @@ code = "shader_type canvas_item;
 uniform vec4 origin:hint_color;
 uniform vec4 origin2:hint_color;
 uniform vec4 origin3:hint_color;
+uniform vec4 origin4:hint_color;
 uniform vec4 new:hint_color;
 uniform vec4 new2:hint_color;
 uniform vec4 new3:hint_color;
+uniform vec4 new4:hint_color;
 
 uniform float tolerance;
 
@@ -21,5 +23,7 @@ void fragment() {
 		new_pixel = new2;
 	if (length(current_pixel - origin3) < tolerance)
 		new_pixel = new3;
+	if (length(current_pixel - origin4) < tolerance)
+		new_pixel = new4;
 	COLOR = new_pixel;
 }"

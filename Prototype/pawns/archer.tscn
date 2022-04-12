@@ -107,7 +107,7 @@ tracks/7/keys = {
 "values": [ 0, 1, 0 ]
 }
 tracks/8/type = "value"
-tracks/8/path = NodePath("sprites/weapon/projectile:visible")
+tracks/8/path = NodePath("sprites/weapon/projectile/sprites:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
@@ -119,7 +119,7 @@ tracks/8/keys = {
 "values": [ true, false, false ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("sprites/weapon/projectile:modulate")
+tracks/9/path = NodePath("sprites/weapon/projectile/sprites:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
@@ -131,7 +131,7 @@ tracks/9/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("sprites/weapon/projectile:position")
+tracks/10/path = NodePath("sprites/weapon/projectile/sprites:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
@@ -143,7 +143,7 @@ tracks/10/keys = {
 "values": [ Vector2( 17, 7 ), Vector2( 20, 3 ), Vector2( 17, 3 ), Vector2( 104, 3 ), Vector2( 104, 3 ) ]
 }
 tracks/11/type = "value"
-tracks/11/path = NodePath("sprites/weapon/projectile:frame")
+tracks/11/path = NodePath("sprites/weapon/projectile/sprites:frame")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
@@ -179,7 +179,7 @@ tracks/13/keys = {
 "values": [ Vector2( 1, 1 ), Vector2( 0.8, 1 ), Vector2( 1.05, 1 ), Vector2( 0.8, 1 ), Vector2( 1, 1 ) ]
 }
 tracks/14/type = "value"
-tracks/14/path = NodePath("sprites/weapon/projectile:rotation_degrees")
+tracks/14/path = NodePath("sprites/weapon/projectile/sprites:rotation_degrees")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/imported = false
@@ -281,7 +281,7 @@ tracks/6/keys = {
 "values": [ false, false ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon/projectile:visible")
+tracks/7/path = NodePath("sprites/weapon/projectile/sprites:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -384,7 +384,7 @@ tracks/6/keys = {
 "values": [ false, false ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon/projectile:visible")
+tracks/7/path = NodePath("sprites/weapon/projectile/sprites:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -487,7 +487,7 @@ tracks/6/keys = {
 "values": [ false, false ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon/projectile:visible")
+tracks/7/path = NodePath("sprites/weapon/projectile/sprites:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -504,9 +504,11 @@ shader = ExtResource( 2 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = null
 shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
 shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
 shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/new4 = null
 shader_param/tolerance = 0.1
 
 [sub_resource type="AtlasTexture" id=33]
@@ -586,7 +588,6 @@ projectile_speed = 200.0
 margin_bottom = -19.0
 
 [node name="hpbar" parent="hud" index="2"]
-visible = false
 position = Vector2( 0, -21 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
@@ -606,10 +607,13 @@ offset = Vector2( 0, -15 )
 position = Vector2( 0, -4 )
 scale = Vector2( 1.0686, 1 )
 
-[node name="projectile" type="AnimatedSprite" parent="sprites/weapon" index="0"]
+[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+
+[node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 17, 7 )
 rotation = 0.174533
+scale = Vector2( 1, 1 )
 frames = SubResource( 41 )
 offset = Vector2( -10, 0 )
 

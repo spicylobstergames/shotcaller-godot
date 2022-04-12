@@ -151,9 +151,11 @@ shader = ExtResource( 8 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = null
 shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
 shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
 shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/new4 = null
 shader_param/tolerance = 0.1
 
 [sub_resource type="TileSet" id=11]
@@ -371,7 +373,7 @@ script = ExtResource( 19 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 2
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 

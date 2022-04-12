@@ -15,6 +15,7 @@ func _ready():
 	trees = get_node("../trees")
 	
 	var tile_size = game.map.get_node("tiles/ground").cell_size.x
+# warning-ignore:narrowing_conversion
 	tile_map_size = floor(game.map.size / tile_size)
 
 

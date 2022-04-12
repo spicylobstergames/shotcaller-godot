@@ -45,19 +45,20 @@ script = ExtResource( 10 )
 [node name="symbol" type="Sprite" parent="."]
 visible = false
 modulate = Color( 0.117647, 0.513726, 0.831373, 1 )
-position = Vector2( -88.4616, -26.25 )
-scale = Vector2( 0.769231, 3 )
+scale = Vector2( 20, 20 )
 z_index = 2
 texture = ExtResource( 2 )
-offset = Vector2( 115, 8.75 )
+region_enabled = true
+region_rect = Rect2( 1, 1, 1, 1 )
 
-[node name="symbol2" type="Sprite" parent="symbol"]
+[node name="symbol_border" type="Sprite" parent="symbol"]
 modulate = Color( 0, 0, 0, 1 )
-position = Vector2( 115, 8.75 )
 scale = Vector2( 1.30769, 1.30769 )
 z_index = 1
 z_as_relative = false
 texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 10, 3, 1, 1 )
 
 [node name="hud" type="Node2D" parent="."]
 script = ExtResource( 11 )
@@ -83,6 +84,7 @@ scale = Vector2( 1.6, 1.6 )
 texture = ExtResource( 2 )
 
 [node name="hpbar" type="Node2D" parent="hud"]
+visible = false
 position = Vector2( 0, -19 )
 
 [node name="bar" type="Sprite" parent="hud/hpbar"]

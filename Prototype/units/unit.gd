@@ -45,9 +45,12 @@ export var attack_speed:float = 1
 var current_attack_speed:float = 1
 var target:Node2D
 var weapon:Node2D
-var projectile:Node2D
+
+# PROJECTILES
+var projectile:Node2D # template
 var projectiles:Array = []
 export var projectile_speed:float = 3
+export var projectile_rotation:float = 0
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 

@@ -18,18 +18,21 @@ func process(delta):
 		
 		# move arrival
 		if unit1.moves and unit1.state == "move":
-			if game.utils.point_collision(unit1, unit1.current_destiny):
-				
-				unit1.next_event = "arrive"
+			if !unit1.target:
+			# scale up the collision radius * 4 top avoid point chasing
+				if game.utils.point_collision(unit1, unit1.current_destiny, 4):
+					unit1.next_event = "arrive"
+			else:
+				if game.utils.point_collision(unit1, unit1.current_destiny):
+					unit1.next_event = "arrive"
 		
-
 		# projectiles collision
 		if unit1.projectiles.size():
 			for projectile in unit1.projectiles:
 				if is_instance_valid(projectile.node) and projectile.speed:
 					projectile.lifetime -= delta
 					if projectile.lifetime > 0:
-						projectile.node.global_position += projectile.speed * delta
+						game.unit.attack.projectile_step(delta, projectile)
 						if unit1.target:
 							if game.utils.point_collision(unit1.target, projectile.node.global_position):
 								game.unit.attack.take_hit(unit1, unit1.target, projectile)
