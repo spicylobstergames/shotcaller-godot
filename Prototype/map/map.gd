@@ -21,7 +21,6 @@ func setup_leaders():
 			game.ui.leaders_inventories.add_inventory(leader)
 			game.ui.shop_window.add_delivery(leader)
 
-
 func setup_buildings():
 	for team in get_node("buildings").get_children():
 		for building in team.get_children():
@@ -48,7 +47,6 @@ func create(template, lane, team, mode, point):
 	game.unit.setup_collisions(unit)
 	game.unit.move.setup_timer(unit)
 	game.ui.minimap.setup_symbol(unit)
-	
 	if unit.type == "leader":
 		if unit.team == game.player_team:
 			game.player_leaders.append(unit)

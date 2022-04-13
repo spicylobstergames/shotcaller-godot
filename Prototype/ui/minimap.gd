@@ -48,7 +48,7 @@ func over_minimap(event):
 
 
 func get_map_texture():
-	game.ui.shop_button.hide()
+	game.ui.hide_all()
 	for unit in game.all_units: unit.hide()
 	yield(get_tree(), "idle_frame")
 	var data = game.get_viewport().get_texture().get_data()
@@ -61,13 +61,11 @@ func get_map_texture():
 	map_sprite.scale = game.map_camera.zoom
 	game.map_camera.current = false
 	game.get_node("camera").current = true
-	game.camera.zoom_reset()
-	game.ui.fps.show()
 	update_map_texture = false
-	game.ui.shop_button.show()
+	game.camera.zoom_reset()
+	game.ui.show_all()
 	for unit in game.all_units: unit.show()
-	if not game.started:
-		game.start()
+	if not game.started: game.start()
 
 
 func corner_view():
@@ -97,19 +95,30 @@ func hide_view():
 
 
 func setup_symbol(unit):
-	var symbol = unit.get_node("symbol").duplicate()
-	symbol.visible = true
-	symbol.scale *= 0.25
-	map_symbols_map.append(unit)
-	map_symbols.add_child(symbol)
-	
+	if unit.has_node("symbol"):
+		var symbol = unit.get_node("symbol")
+		setup_unit_symbol(unit, symbol)
+		copy_symbol(unit, symbol)
+
+func setup_unit_symbol(unit, symbol):
+	setup_leader_icon(unit, symbol)
 	if unit.type != "leader" and unit.team == "red":
 		symbol.modulate = Color(0.85,0.4,0.4)
-	
+
+
+func setup_leader_icon(unit, symbol):
 	if symbol.has_node("icon") and unit.type == "leader":
 		var icon = symbol.get_node("icon")
 		if unit.team == "blue": icon.material = null
-		else: icon.scale.x *= -1
+		else: icon.scale.x = -1 * abs(icon.scale.x)
+
+
+func copy_symbol(unit, symbol):
+	var copy = symbol.duplicate()
+	copy.visible = true
+	copy.scale *= 0.25
+	map_symbols_map.append(unit)
+	map_symbols.add_child(copy)
 
 
 func follow_camera():

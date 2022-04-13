@@ -543,11 +543,13 @@ radius = 20.0
 [sub_resource type="CircleShape2D" id=27]
 radius = 120.0
 
-[node name="sami" instance=ExtResource( 1 )]
+[node name="sida" instance=ExtResource( 1 )]
 hp = 360
 vision = 160
 type = "leader"
 subtype = "archer"
+display_name = "sida"
+title = "sami warrior"
 selectable = true
 moves = true
 speed = 50.0

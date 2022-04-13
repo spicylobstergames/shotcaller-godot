@@ -12,7 +12,8 @@ func update():
 	var unit = game.selected_unit
 	if unit:
 		show()
-		get_node("name").text = "%s (%s)" % [unit.subtype, unit.type]
+		
+		get_node("name").text = unit.get_name()
 		get_node("hp").text = "HP: %s" % [unit.hp]
 		get_node("damage").text = "Damage: %s" % unit.current_damage
 		get_node("vision").text = "Vision: %s" % unit.current_vision

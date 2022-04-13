@@ -47,21 +47,40 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="fps" type="Label" parent="top_left"]
-visible = false
+[node name="menu_button" type="Button" parent="top_left"]
 margin_left = 2.0
 margin_top = 2.0
-margin_right = 62.0
-margin_bottom = 34.0
-text = "fps
-"
+margin_right = 122.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 2 )
+text = "menu"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="menu_touch_button" type="TouchScreenButton" parent="top_left/menu_button"]
+visible = false
+position = Vector2( 122, -2 )
+shape = SubResource( 5 )
+
 [node name="top_mid" type="Control" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
+
+[node name="fps" type="Label" parent="top_mid"]
+margin_left = -55.0
+margin_top = 5.0
+margin_right = 55.0
+margin_bottom = 44.0
+custom_fonts/font = SubResource( 2 )
+text = "fps
+"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="top_right" type="Control" parent="."]
 anchor_left = 1.0
@@ -166,6 +185,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="leaders_icons" type="ItemList" parent="mid_left"]
+margin_top = -172.0
+margin_right = 64.0
+margin_bottom = 148.0
+custom_styles/bg = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="mid" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -185,6 +213,16 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="orders_container" type="ItemList" parent="mid_right"]
+margin_left = -441.0
+margin_top = 51.0
+margin_bottom = 192.0
+custom_styles/bg = SubResource( 4 )
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -365,16 +403,6 @@ margin_left = -192.0
 margin_top = -99.0
 custom_styles/bg = SubResource( 10 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="orders_container" type="ItemList" parent="bot_right"]
-margin_left = -441.0
-margin_top = -249.0
-margin_bottom = -108.0
-custom_styles/bg = SubResource( 4 )
-script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

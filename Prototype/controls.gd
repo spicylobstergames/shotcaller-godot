@@ -45,6 +45,9 @@ func select(point):
 	if unit_at_point:
 		var unit = unit_at_point
 		game.selected_unit = unit
+		
+		print(unit.priority)
+		
 		if unit.team == game.player_team and unit.type == "leader":
 			game.selected_leader = unit
 			game.ui.shop_window.update_buttons()

@@ -7,19 +7,19 @@ var stats:Node
 var minimap:Node
 var shop_button:Node
 var shop_window:Node
-var leaders_inventories:Node
 var orders_container:Node
+var leaders_inventories:Node
 
 
 func _ready():
 	game = get_tree().get_current_scene()
-	fps = get_node("top_left/fps")
+	fps = get_node("top_mid/fps")
 	stats = get_node("bot_mid/stats")
 	minimap = get_node("bot_left/minimap")
 	shop_button = get_node("top_right/shop_button")
 	shop_window = get_node("top_right/shop_window")
+	orders_container = get_node("mid_right/orders_container")
 	leaders_inventories = get_node("bot_right/leaders_inventories")
-	orders_container = get_node("bot_right/orders_container")
 
 
 
@@ -34,3 +34,15 @@ func process():
 		minimap.move_symbols()
 		minimap.follow_camera()
 
+
+func hide_all():
+	for panel in self.get_children():
+		panel.hide()
+
+
+
+func show_all():
+	game.ui.fps.show()
+	game.ui.shop_button.show()
+	for panel in self.get_children():
+		panel.show()

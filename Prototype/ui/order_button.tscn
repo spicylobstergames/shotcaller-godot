@@ -14,6 +14,7 @@ extents = Vector2( 34, 14 )
 margin_right = 40.0
 margin_bottom = 24.0
 custom_fonts/font = SubResource( 2 )
+toggle_mode = true
 text = "order"
 script = ExtResource( 1 )
 __meta__ = {

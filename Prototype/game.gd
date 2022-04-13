@@ -57,8 +57,9 @@ func start():
 	else: 
 		yield(get_tree(), "idle_frame")
 		unit.spawn.test()
+		map.setup_leaders()
 		ui.orders_container.setup()
-		yield(get_tree().create_timer(2.0), "timeout")
+		yield(get_tree().create_timer(5.0), "timeout")
 		unit.spawn.start()
 	
 

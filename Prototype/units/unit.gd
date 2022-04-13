@@ -7,6 +7,8 @@ export var vision:int = 100
 var current_vision:int = 100
 export var type:String = "pawn" # building leader
 export var subtype:String = "infantry" # archer mounted
+export var display_name:String
+export var title:String
 export var team:String = "blue"
 var dead:bool = false
 var mirror:bool = false
@@ -58,10 +60,10 @@ var attack_hit_radius = 24
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
-var lane:String = "mid"
+export var lane:String = "mid"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
-
+var priority = ["leader", "pawn", "building"]
 
 var hud:Node
 var spawn:Node
@@ -114,7 +116,7 @@ func set_behavior(s):
 func setup_team():
 	var is_red = self.team == "red"
 	# MIRROR
-	if self.type == "pawn":
+	if self.type != "building":
 		self.mirror_toggle(is_red)
 	# COLORS
 	var texture = self.get_texture()
@@ -137,6 +139,13 @@ func oponent_team():
 	var t = "blue"
 	if self.team == t: t = "red"
 	return t
+
+
+
+func get_name():
+	if self.type == "leader":
+		return "%s %s" % [self.display_name, self.title]
+	else: return "%s (%s)" % [self.subtype, self.type]
 
 
 func look_at(point):

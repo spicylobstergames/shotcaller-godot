@@ -15,16 +15,11 @@ func start(unit, objective): # move_and_attack
 		if unit.moves: game.unit.move.move(unit, objective) 
 		else: stop(unit)
 	else:
-		unit.target = closest_unit(unit, enemies)
+		unit.target = game.unit.orders.select_target(unit, enemies)
 		if not game.unit.attack.in_range(unit, unit.target):
 			if unit.moves: game.unit.move.move(unit, unit.target.global_position)
 			else: stop(unit)
 		else: game.unit.attack.start(unit, unit.target.global_position)
-
-
-func closest_unit(unit, enemies):
-	var sorted = game.utils.sort_by_distance(unit, enemies)
-	return sorted[0].unit
 
 
 func on_collision(unit):

@@ -6,6 +6,7 @@ var spawn_time = 15
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
 var hongi:PackedScene = load("res://leaders/hongi.tscn")
+var lorne:PackedScene = load("res://leaders/lorne.tscn")
 var raja:PackedScene = load("res://leaders/raja.tscn")
 var robin:PackedScene = load("res://leaders/robin.tscn")
 var rollo:PackedScene = load("res://leaders/rollo.tscn")
@@ -36,26 +37,30 @@ func _ready():
 
 
 func test():
-	var spawn_heores = 0;
-	game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(900,1000))
-	game.map.create(arthur, "mid", game.enemy_team, "Vector2", Vector2(1100,1000))
-	if spawn_heores:
-		game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(900,600))
-		game.map.create(bokuden, "mid", game.player_team, "Vector2", Vector2(900,650))
-		game.map.create(hongi, "mid", game.player_team, "Vector2", Vector2(900,700))
-		game.map.create(raja, "mid", game.player_team, "Vector2", Vector2(900,750))
-		game.map.create(robin, "mid", game.player_team, "Vector2", Vector2(900,800))
-		game.map.create(rollo, "mid", game.player_team, "Vector2", Vector2(900,850))
-		game.map.create(sami, "mid", game.player_team, "Vector2", Vector2(900,900))
-		game.map.create(takoda, "mid", game.player_team, "Vector2", Vector2(900,950))
-		game.map.create(tomyris, "mid", game.player_team, "Vector2", Vector2(900,1000))
-		#game.map.create(rollo, "mid", game.enemy_team, "Vector2", Vector2(900,1000))
-		game.map.create(archer, "mid", game.player_team, "Vector2", Vector2(1000,1000))
-		#game.map.create(infantry, "mid", game.player_team, "Vector2", Vector2(1000,1030))
-		#game.map.create(archer, "mid", game.enemy_team, "Vector2", Vector2(1100,1000))
-		game.map.create(infantry, "mid", game.enemy_team, "Vector2", Vector2(1100,750))
+	var test_heores = 1;
+	var test_pawns = 0;
+	var t1 = game.player_team
+	var t2 = game.enemy_team
 	
-	game.map.setup_leaders()
+	game.map.create(arthur, "mid", t1, "Vector2", Vector2(1000,1100))
+	game.map.create(arthur, "mid", t2, "Vector2", Vector2(1150,1000))
+	
+	if test_heores:
+		game.map.create(arthur, "mid", t1, "Vector2", Vector2(80,550))
+		game.map.create(bokuden, "mid", t1, "Vector2", Vector2(900,600))
+		game.map.create(hongi, "mid", t1, "Vector2", Vector2(900,650))
+		game.map.create(lorne, "mid", t1, "Vector2", Vector2(900,700))
+		game.map.create(raja, "mid", t1, "Vector2", Vector2(900,750))
+		game.map.create(robin, "mid", t1, "Vector2", Vector2(900,800))
+		game.map.create(rollo, "mid", t1, "Vector2", Vector2(900,850))
+		game.map.create(sami, "mid", t1, "Vector2", Vector2(900,900))
+		game.map.create(takoda, "mid", t1, "Vector2", Vector2(900,950))
+		game.map.create(tomyris, "mid", t1, "Vector2", Vector2(900,1000))
+	if test_pawns:
+		game.map.create(archer, "mid", t1, "Vector2", Vector2(1000,1000))
+		game.map.create(infantry, "mid", t2, "Vector2", Vector2(1100,750))
+	
+
 
 
 func start():
@@ -72,12 +77,12 @@ func start():
 
 
 func spawn_group():
+	game.unit.orders.setup_lanes_priority()
 	for team in ["red", "blue"]:
 		for lane in ["top", "mid", "bot"]:
 			send_pawn("archer", lane, team)
 			for n in 3:
 				send_pawn("infantry", lane, team)
-	
 	yield(get_tree().create_timer(spawn_time), "timeout")
 	spawn_group()
 
@@ -100,6 +105,7 @@ func send_pawn(template, lane, team):
 		var unit_template = infantry
 		if template == "archer": unit_template = archer
 		pawn = game.map.create(unit_template, lane, team, "point_random_no_coll", start)
+	game.unit.orders.setup_pawn(pawn, lane)
 	game.unit.path.follow(pawn, path, "advance")
 
 

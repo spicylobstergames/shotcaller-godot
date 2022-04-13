@@ -373,7 +373,7 @@ script = ExtResource( 19 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 3
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -386,18 +386,22 @@ position = Vector2( 160, 1977 )
 
 [node name="barrack_top" parent="buildings/blue" instance=ExtResource( 10 )]
 position = Vector2( 160, 1777 )
+lane = "top"
 
 [node name="barrack_mid" parent="buildings/blue" instance=ExtResource( 10 )]
 position = Vector2( 288, 1841 )
 
 [node name="barrack_bot" parent="buildings/blue" instance=ExtResource( 10 )]
 position = Vector2( 352, 1969 )
+lane = "bot"
 
 [node name="tower_top_1" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 96, 357 )
+lane = "top"
 
 [node name="tower_top_2" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 96, 1060 )
+lane = "top"
 
 [node name="tower_mid_1" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 928, 1125 )
@@ -407,9 +411,11 @@ position = Vector2( 480, 1638 )
 
 [node name="tower_bot_1" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 1760, 2013 )
+lane = "bot"
 
 [node name="tower_bot_2" parent="buildings/blue" instance=ExtResource( 12 )]
 position = Vector2( 1056, 2013 )
+lane = "bot"
 
 [node name="red" type="YSort" parent="buildings"]
 
@@ -420,6 +426,7 @@ team = "red"
 [node name="barrack_top" parent="buildings/red" instance=ExtResource( 10 )]
 position = Vector2( 1760, 161 )
 team = "red"
+lane = "top"
 
 [node name="barrack_mid" parent="buildings/red" instance=ExtResource( 10 )]
 position = Vector2( 1824, 289 )
@@ -428,14 +435,17 @@ team = "red"
 [node name="barrack_bot" parent="buildings/red" instance=ExtResource( 10 )]
 position = Vector2( 1952, 353 )
 team = "red"
+lane = "bot"
 
 [node name="tower_bot_1" parent="buildings/red" instance=ExtResource( 12 )]
 position = Vector2( 2016, 1757 )
 team = "red"
+lane = "bot"
 
 [node name="tower_bot_2" parent="buildings/red" instance=ExtResource( 12 )]
 position = Vector2( 2016, 1053 )
 team = "red"
+lane = "bot"
 
 [node name="tower_mid_1" parent="buildings/red" instance=ExtResource( 12 )]
 position = Vector2( 1184, 989 )
@@ -448,16 +458,19 @@ team = "red"
 [node name="tower_top_1" parent="buildings/red" instance=ExtResource( 12 )]
 position = Vector2( 352, 102 )
 team = "red"
+lane = "top"
 
 [node name="tower_top_2" parent="buildings/red" instance=ExtResource( 12 )]
 position = Vector2( 1056, 101 )
 team = "red"
+lane = "top"
 
 [node name="blocks" type="Node2D" parent="."]
 script = ExtResource( 20 )
 
 [node name="unit" parent="blocks" instance=ExtResource( 14 )]
 scale = Vector2( 1, 1.01239 )
+attack_speed = 1.0
 
 [node name="lanes" type="Node2D" parent="."]
 visible = false
