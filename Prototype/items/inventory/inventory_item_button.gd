@@ -37,7 +37,6 @@ func show_sell_button():
 	else:
 		_sell_button.hide()
 
-
 func hide_sell_button():
 	_sell_button.hide()
 

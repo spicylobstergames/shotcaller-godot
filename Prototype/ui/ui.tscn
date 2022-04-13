@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventory/leaders_inventories.gd" type="Script" id=2]
@@ -32,6 +32,9 @@ font_data = ExtResource( 6 )
 [sub_resource type="DynamicFont" id=9]
 size = 13
 font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+bg_color = Color( 0.192157, 0.188235, 0.223529, 0 )
 
 [node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -359,8 +362,8 @@ __meta__ = {
 
 [node name="leaders_inventories" type="ItemList" parent="bot_right"]
 margin_left = -192.0
-margin_top = -64.0
-custom_styles/bg = SubResource( 4 )
+margin_top = -99.0
+custom_styles/bg = SubResource( 10 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
