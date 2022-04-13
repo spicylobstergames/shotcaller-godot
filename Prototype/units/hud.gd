@@ -22,7 +22,10 @@ func show_hpbars():
 		if unit.has_node("hud"):
 			unit.get_node("hud/state").visible = true
 
+
 func update_hpbar(unit):
+	if unit.current_hp >= unit.hp:
+		unit.get_node("hud/hpbar").hide()
 	if unit.current_hp <= 0:
 		unit.get_node("hud/hpbar/green").region_rect.size.x = 0
 	else:

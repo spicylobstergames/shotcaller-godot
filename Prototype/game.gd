@@ -56,10 +56,11 @@ func start():
 	if test.stress:
 		test.spawn_units()
 	else: 
+		yield(get_tree(), "idle_frame")
 		unit.spawn.test()
 		ui.orders_container.setup()
 		yield(get_tree().create_timer(2.0), "timeout")
-		unit.spawn.start()
+		#unit.spawn.start()
 	
 
 

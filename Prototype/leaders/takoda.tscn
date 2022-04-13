@@ -453,7 +453,7 @@ tracks/4/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("sprites/weapon/bow:visible")
+tracks/5/path = NodePath("sprites/weapon/projectile/sprites:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -465,24 +465,12 @@ tracks/5/keys = {
 "values": [ false, false ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/weapon/projectile/sprites:visible")
+tracks/6/path = NodePath("sprites/body:frame")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, false ]
-}
-tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/body:frame")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
 "times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
@@ -558,6 +546,7 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=32]
+radius = 12.0
 
 [sub_resource type="CircleShape2D" id=29]
 radius = 20.0
@@ -606,16 +595,14 @@ texture = ExtResource( 4 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = 0.0311109
-scale = Vector2( 1, 0.910874 )
+scale = Vector2( 1, 0.95 )
 frames = SubResource( 36 )
-frame = 2
 offset = Vector2( 5, -24 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="3"]
-visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( -7.1407, -19.9412 )
-rotation = 0.29586
+rotation = -1.5708
 scale = Vector2( 0.813831, 1.0686 )
 frames = SubResource( 41 )
 offset = Vector2( 6, -4 )
@@ -624,13 +611,12 @@ offset = Vector2( 6, -4 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-position = Vector2( 0, -14 )
+position = Vector2( 2.20537e-06, 0 )
 z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 visible = false
-position = Vector2( 0.56083, -0.0223792 )
-rotation = 3.4832
+position = Vector2( 0.249676, 9.06544 )
 frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="5"]

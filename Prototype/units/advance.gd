@@ -8,18 +8,16 @@ func _ready():
 
 
 func start(unit, objective): # move_and_attack
-	if unit.moves:
-		if not unit.attacks: game.unit.move.move(unit, objective)
-		else:
-			unit.set_behavior("advance")
-			unit.objective = objective
-			var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
-			if not enemies: game.unit.move.move(unit, objective) 
-			else:
-				unit.target = closest_unit(unit, enemies)
-				if not game.unit.attack.in_range(unit, unit.target):
-					game.unit.move.move(unit, unit.target.global_position)
-				else: game.unit.attack.start(unit, unit.target.global_position)
+	unit.set_behavior("advance")
+	unit.objective = objective
+	var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
+	if not enemies: game.unit.move.move(unit, objective) 
+	else:
+		unit.target = closest_unit(unit, enemies)
+		if not game.unit.attack.in_range(unit, unit.target):
+			if unit.moves: game.unit.move.move(unit, unit.target.global_position)
+			else: stop(unit)
+		else: game.unit.attack.start(unit, unit.target.global_position)
 
 
 func closest_unit(unit, enemies):
@@ -62,3 +60,6 @@ func stop(unit):
 		unit.set_behavior("stop")
 		unit.set_state("idle")
 	
+func on_idle_end(unit):
+	if unit.behavior == "advance" or unit.behavior == "stop":
+		start(unit, unit.objective)

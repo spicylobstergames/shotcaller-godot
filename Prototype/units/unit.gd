@@ -86,15 +86,18 @@ func _ready():
 
 
 
-func reset_unit(unit):
-	if unit.type == "leader": unit.get_node("hud/state").text = unit.name
-	else: unit.get_node("hud/state").text = unit.subtype
-	unit.current_hp = unit.hp
-	unit.current_attack_range = unit.attack_range
-	unit.current_vision = unit.vision
-	unit.current_speed = unit.speed
-	unit.current_damage = unit.damage
-	unit.current_attack_speed = unit.attack_speed
+func reset_unit():
+	self.setup_team()
+	if self.type == "leader": self.get_node("hud/state").text = self.name
+	else: self.get_node("hud/state").text = self.subtype
+	self.current_hp = self.hp
+	self.current_attack_range = self.attack_range
+	self.current_vision = self.vision
+	self.current_speed = self.speed
+	self.current_damage = self.damage
+	self.current_attack_speed = self.attack_speed
+	self.visible = true
+	self.get_node("hud").update_hpbar(self)
 
 
 func set_state(s):
@@ -108,24 +111,27 @@ func set_behavior(s):
 	#self.get_node("hud/state").text = s
 
 
-func setup_team(unit):
-	var is_red = unit.team == "red"
+func setup_team():
+	var is_red = self.team == "red"
 	# MIRROR
-	if unit.type == "pawn":
-		unit.mirror_toggle(is_red)
+	if self.type == "pawn":
+		self.mirror_toggle(is_red)
 	# COLORS
-	if not is_red:
-		var texture = unit.get_texture()
+	var texture = self.get_texture()
+	if not is_red and texture.sprite.material:
 		texture.sprite.material = null
+	else:
+		texture.sprite.material = get_node("sprites/sprite").material
 	# FLAGS
-	if unit.type == "building":
+	if self.type == "building":
 		if not is_red:
-			var flags = unit.get_node("sprites/flags").get_children()
+			var flags = self.get_node("sprites/flags").get_children()
 			for flag in flags:
 				var flag_sprite = flag.get_node("sprite")
 				var material = flag_sprite.material.duplicate()
 				material.set_shader_param("change_color", false)
 				flag_sprite.material = material
+
 
 func oponent_team():
 	var t = "blue"
@@ -140,13 +146,19 @@ func look_at(point):
 func mirror_toggle(on):
 	self.mirror = on
 	if on:
+		if self.type == "building":
+			self.get_node("sprites/body").scale.x = -1
+			self.get_node("sprites/flags").scale.x = -1
 		self.get_node("sprites").scale.x = -1
-		if self.has_node("collisions/attack"):
-			self.get_node("collisions/attack").position.x = -1 * abs(self.get_node("collisions/attack").position.x)
+		if self.attack_hit_position:
+			self.attack_hit_position.x = -1 * abs(self.attack_hit_position.x)
 	else:
+		if self.type == "building":
+			self.get_node("sprites/body").scale.x = 1
+			self.get_node("sprites/flags").scale.x = 1
 		self.get_node("sprites").scale.x = 1
-		if self.has_node("collisions/attack"):
-			self.get_node("collisions/attack").position.x = abs(self.get_node("collisions/attack").position.x)
+		if self.attack_hit_position:
+			self.attack_hit_position.x = abs(self.attack_hit_position.x)
 
 
 func get_texture():
@@ -215,14 +227,9 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
+	advance.on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
-#		if self.team == 'red':
-#			var d = Vector2(1100,1000)
-#			if (self.global_position.x > 1000):
-#				d = Vector2(900,1000)
-#			move.start(self, d)
-#			advance.start(self)
 
 
 func on_move(delta): # every frame if there's no collision
@@ -254,6 +261,7 @@ func on_attack_release(): # every ranged projectile start
 	attack.projectile_start(self)
 	advance.resume(self)
 
+
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
 		attack.hit(self)
@@ -270,4 +278,15 @@ func die():  # hp <= 0
 func on_death_end():  # death animation end
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
-	game.test.respawn(self)
+	if not game.test.stress:
+		match self.type:
+			"pawn":
+				game.unit.spawn.cemitery[self.subtype].append(self)
+			"leader":
+				match self.team:
+					game.player_team:
+						game.unit.spawn.cemitery.player_leaders.append(self)
+					game.enemy_team:
+						game.unit.spawn.cemitery.enemy_leaders.append(self)
+						
+	else: game.test.respawn(self)
