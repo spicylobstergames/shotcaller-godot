@@ -47,20 +47,21 @@ func _unhandled_input(event):
 				zoom_reset()
 				global_position = Vector2(cam_move[0], cam_move[1])
 	
-	
-	# MOUSE PAN
-	if event.is_action("pan"):
-		is_panning = event.is_action_pressed("pan")
-	elif event is InputEventMouseMotion:
-		if is_panning: pan_position = Vector2(-1 * event.relative)
-	
-	
-	# TOUCH PAN
-	if event is InputEventScreenTouch:
-		is_panning = event.is_pressed()
-	elif event is InputEventScreenDrag:
-		if is_panning: pan_position = Vector2(-1 * event.relative)
-	
+	if game:
+		var over_minimap = game.ui.minimap.over_minimap(event)
+		# MOUSE PAN
+		if event.is_action("pan") and not over_minimap:
+			is_panning = event.is_action_pressed("pan")
+		elif event is InputEventMouseMotion:
+			if is_panning: pan_position = Vector2(-1 * event.relative)
+		
+		
+		# TOUCH PAN
+		if event is InputEventScreenTouch and not over_minimap:
+			is_panning = event.is_pressed()
+		elif event is InputEventScreenDrag:
+			if is_panning: pan_position = Vector2(-1 * event.relative)
+		
 	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):

@@ -1,11 +1,14 @@
-extends Node2D
+extends Control
 var game:Node
 
 var update_map_texture:bool = true
+var is_panning:bool = false
+var pan_position:Vector2 = Vector2.ZERO
 
 var map_sprite:Node
 var map_tiles:Node
 var minimap:Node
+var cam_rect:Node
 var map_symbols:Node
 var map_symbols_map = []
 
@@ -15,11 +18,33 @@ func _ready():
 	map_sprite = game.get_node("map/zoom_out_sprite")
 	map_tiles = game.get_node("map/tiles")
 	minimap = game.get_node("ui/bot_left/minimap")
+	cam_rect = minimap.get_node("cam_rect")
 	map_symbols = minimap.get_node("symbols")
 	
 	hide()
 	update_map_texture = true
 
+
+func _input(event):
+	if over_minimap(event):
+		# MOUSE PAN
+		if event.is_action("pan"):
+			is_panning = event.is_action_pressed("pan")
+		elif event is InputEventMouseMotion:
+			if is_panning: pan_position = event.position
+		
+		
+		# TOUCH PAN
+		if event is InputEventScreenTouch:
+			is_panning = event.is_pressed()
+		elif event is InputEventScreenDrag:
+			if is_panning: pan_position = event.position
+
+
+func over_minimap(event):
+	return ("position" in event and 
+				event.position.x < 150 and 
+				event.position.y > get_viewport().size.y - 150)
 
 
 func get_map_texture():
@@ -75,6 +100,18 @@ func setup_symbol(unit):
 	symbol.scale *= 0.25
 	map_symbols_map.append(unit)
 	map_symbols.add_child(symbol)
+
+
+func follow_camera():
+	var half = game.map.size / 2
+	var window_height = get_viewport().size.y
+	var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
+	if is_panning: game.camera.position = pos
+	cam_rect.rect_position = Vector2(50,50) + game.camera.position /15.2
+	if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
+	if cam_rect.rect_position.x > 100: cam_rect.rect_position.x = 100
+	if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0
+	if cam_rect.rect_position.y > 100: cam_rect.rect_position.y = 100
 
 
 func move_symbols():

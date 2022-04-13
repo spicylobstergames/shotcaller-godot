@@ -193,23 +193,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="minimap" type="Node2D" parent="bot_left"]
-script = ExtResource( 4 )
-
-[node name="panel" type="ItemList" parent="bot_left/minimap"]
+[node name="minimap" type="ItemList" parent="bot_left"]
 margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 4 )
+script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="sprite" type="Sprite" parent="bot_left/minimap"]
-position = Vector2( 75, -75 )
+position = Vector2( 75, 75 )
 scale = Vector2( 0.24, 0.24 )
 
 [node name="symbols" type="Node2D" parent="bot_left/minimap"]
-position = Vector2( 0, -6.10352e-05 )
+position = Vector2( 0, 150 )
+
+[node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 100.0
+margin_bottom = 100.0
+border_color = Color( 1, 1, 1, 0.666667 )
+border_width = 2.0
+editor_only = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="bot_mid" type="Control" parent="."]
 anchor_left = 0.5

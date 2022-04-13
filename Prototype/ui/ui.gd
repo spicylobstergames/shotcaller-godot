@@ -22,6 +22,7 @@ func _ready():
 	orders_container = get_node("bot_right/orders_container")
 
 
+
 func process():
 	# if opt.show.fps:
 	var f = Engine.get_frames_per_second()
@@ -31,4 +32,5 @@ func process():
 	if minimap and game.camera.zoom.x <= 1:
 		if minimap.update_map_texture: minimap.get_map_texture()
 		minimap.move_symbols()
+		minimap.follow_camera()
 
