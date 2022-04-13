@@ -41,7 +41,6 @@ func _ready():
 	utils = get_node("utils")
 	test = get_node("test")
 	
-	# must run on first call to color minimap texture
 	map.setup_buildings()
 
 
@@ -60,7 +59,7 @@ func start():
 		unit.spawn.test()
 		ui.orders_container.setup()
 		yield(get_tree().create_timer(2.0), "timeout")
-		#unit.spawn.start()
+		unit.spawn.start()
 	
 
 

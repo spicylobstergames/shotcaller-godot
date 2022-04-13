@@ -4,6 +4,18 @@
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/robin.png" type="Texture" id=3]
 
+[sub_resource type="ShaderMaterial" id=30]
+shader = ExtResource( 2 )
+shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
+shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
+shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = Color( 0.290196, 0.572549, 0.427451, 1 )
+shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
+shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
+shader_param/new3 = Color( 0.92549, 0.741176, 0.705882, 1 )
+shader_param/new4 = Color( 0.513726, 0.647059, 0.380392, 1 )
+shader_param/tolerance = 0.1
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.8
@@ -475,18 +487,6 @@ tracks/7/keys = {
 "values": [ false, false ]
 }
 
-[sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 2 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.290196, 0.572549, 0.427451, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.92549, 0.741176, 0.705882, 1 )
-shader_param/new4 = Color( 0.513726, 0.647059, 0.380392, 1 )
-shader_param/tolerance = 0.1
-
 [sub_resource type="AtlasTexture" id=33]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 32, 32 )
@@ -561,6 +561,18 @@ ranged = true
 damage = 20
 attack_speed = 1.1
 projectile_speed = 220.0
+
+[node name="symbol" parent="." index="1"]
+modulate = Color( 1, 1, 1, 1 )
+scale = Vector2( 10, 10 )
+
+[node name="icon" type="Sprite" parent="symbol" index="1"]
+material = SubResource( 30 )
+position = Vector2( 0, -1 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 69, 3, 19, 17 )
 
 [node name="state" parent="hud" index="0"]
 margin_top = -40.0

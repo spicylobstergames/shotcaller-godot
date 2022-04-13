@@ -560,6 +560,12 @@ ranged = true
 damage = 30
 projectile_speed = 220.0
 
+[node name="symbol" parent="." index="1"]
+scale = Vector2( 10, 10 )
+
+[node name="symbol_border" parent="symbol" index="0"]
+scale = Vector2( 1.6, 1.6 )
+
 [node name="state" parent="hud" index="0"]
 margin_bottom = -19.0
 

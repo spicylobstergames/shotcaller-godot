@@ -36,8 +36,9 @@ func _ready():
 
 
 func test():
-	var spawn_heores = false;
-	game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(1000,1000))
+	var spawn_heores = 0;
+	game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(900,1000))
+	game.map.create(arthur, "mid", game.enemy_team, "Vector2", Vector2(1100,1000))
 	if spawn_heores:
 		game.map.create(arthur, "mid", game.player_team, "Vector2", Vector2(900,600))
 		game.map.create(bokuden, "mid", game.player_team, "Vector2", Vector2(900,650))

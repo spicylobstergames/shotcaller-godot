@@ -15,7 +15,7 @@
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=13]
 
 [sub_resource type="DynamicFont" id=20]
-size = 12
+size = 10
 font_data = ExtResource( 5 )
 
 [sub_resource type="ShaderMaterial" id=30]

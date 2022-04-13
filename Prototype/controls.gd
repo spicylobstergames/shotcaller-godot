@@ -54,6 +54,7 @@ func select(point):
 			game.ui.shop_window.disable_all()
 		unit.get_node("hud/state").visible = true
 		unit.get_node("hud/selection").visible = true
+		unit.get_node("hud").update_hpbar(unit)
 		unit.get_node("hud/hpbar").visible = true
 		game.ui.stats.update()
 		game.ui.orders_container.update()
@@ -63,7 +64,7 @@ func unselect():
 		var unit = game.selected_unit
 		unit.get_node("hud/state").visible = false
 		unit.get_node("hud/selection").visible = false
-		unit.get_node("hud/hpbar").visible = false
+		unit.get_node("hud").update_hpbar(unit)
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.stats.update()

@@ -176,7 +176,11 @@ damage = 80
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]
-scale = Vector2( 3.25, 13 )
+position = Vector2( 0, -1.90735e-06 )
+scale = Vector2( 24, 24 )
+
+[node name="symbol_border" parent="symbol" index="0"]
+scale = Vector2( 1.33333, 1.33333 )
 
 [node name="state" parent="hud" index="0"]
 margin_top = -118.0

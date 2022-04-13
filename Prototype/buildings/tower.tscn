@@ -177,7 +177,10 @@ attack_speed = 1.4
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]
-scale = Vector2( 3.25, 13 )
+scale = Vector2( 16, 16 )
+
+[node name="symbol_border" parent="symbol" index="0"]
+scale = Vector2( 1.5, 1.5 )
 
 [node name="state" parent="hud" index="0"]
 margin_top = -85.0

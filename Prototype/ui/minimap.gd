@@ -49,6 +49,7 @@ func over_minimap(event):
 
 func get_map_texture():
 	game.ui.shop_button.hide()
+	for unit in game.all_units: unit.hide()
 	yield(get_tree(), "idle_frame")
 	var data = game.get_viewport().get_texture().get_data()
 	data.flip_y()
@@ -60,10 +61,11 @@ func get_map_texture():
 	map_sprite.scale = game.map_camera.zoom
 	game.map_camera.current = false
 	game.get_node("camera").current = true
-	minimap.show()
+	game.camera.zoom_reset()
 	game.ui.fps.show()
 	update_map_texture = false
 	game.ui.shop_button.show()
+	for unit in game.all_units: unit.show()
 	if not game.started:
 		game.start()
 
@@ -100,6 +102,14 @@ func setup_symbol(unit):
 	symbol.scale *= 0.25
 	map_symbols_map.append(unit)
 	map_symbols.add_child(symbol)
+	
+	if unit.type != "leader" and unit.team == "red":
+		symbol.modulate = Color(0.85,0.4,0.4)
+	
+	if symbol.has_node("icon") and unit.type == "leader":
+		var icon = symbol.get_node("icon")
+		if unit.team == "blue": icon.material = null
+		else: icon.scale.x *= -1
 
 
 func follow_camera():

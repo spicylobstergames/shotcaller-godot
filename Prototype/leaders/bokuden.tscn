@@ -4,6 +4,18 @@
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/bokuden.png" type="Texture" id=4]
 
+[sub_resource type="ShaderMaterial" id=40]
+shader = ExtResource( 2 )
+shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
+shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
+shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = Color( 0.235294, 0.27451, 0.376471, 1 )
+shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
+shader_param/new2 = Color( 0.756863, 0.360784, 0.360784, 1 )
+shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/new4 = Color( 0.796078, 0.286275, 0.360784, 1 )
+shader_param/tolerance = 0.1
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.8
@@ -415,18 +427,6 @@ tracks/7/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="ShaderMaterial" id=40]
-shader = ExtResource( 2 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.235294, 0.27451, 0.376471, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.756863, 0.360784, 0.360784, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = Color( 0.796078, 0.286275, 0.360784, 1 )
-shader_param/tolerance = 0.1
-
 [sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 38, 38 )
@@ -479,6 +479,21 @@ attacks = true
 damage = 20
 attack_speed = 1.2
 projectile_speed = 0.0
+
+[node name="symbol" parent="." index="1"]
+modulate = Color( 1, 1, 1, 1 )
+scale = Vector2( 10, 10 )
+
+[node name="symbol_border" parent="symbol" index="0"]
+visible = false
+
+[node name="icon" type="Sprite" parent="symbol" index="1"]
+material = SubResource( 40 )
+position = Vector2( 0, -1 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 7, 5, 30, 19 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )

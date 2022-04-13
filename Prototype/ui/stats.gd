@@ -22,7 +22,7 @@ func update():
 		var texture = unit.get_texture()
 		var portrait = get_node("portrait/sprite")
 		set_texture(portrait, texture)
-		if unit.type == "leader":
+		if unit.type == "leader" and unit.team == game.player_team:
 			var gold = str(game.ui.leaders_inventories.inventories[unit.name].gold)
 			get_node("gold").text = "Gold: %s" % gold
 		else:

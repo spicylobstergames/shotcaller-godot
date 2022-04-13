@@ -11,7 +11,9 @@ func start(unit, objective): # move_and_attack
 	unit.set_behavior("advance")
 	unit.objective = objective
 	var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
-	if not enemies: game.unit.move.move(unit, objective) 
+	if not enemies: 
+		if unit.moves: game.unit.move.move(unit, objective) 
+		else: stop(unit)
 	else:
 		unit.target = closest_unit(unit, enemies)
 		if not game.unit.attack.in_range(unit, unit.target):

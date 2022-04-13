@@ -26,6 +26,7 @@ func setup_buildings():
 	for team in get_node("buildings").get_children():
 		for building in team.get_children():
 			building.reset_unit()
+			game.ui.minimap.setup_symbol(building)
 			building.set_state("idle")
 			building.set_behavior("stop")
 			game.controls.setup_selection(building)
