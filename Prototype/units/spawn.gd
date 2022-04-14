@@ -37,7 +37,7 @@ func _ready():
 
 
 func test():
-	var test_heores = 1;
+	var test_heores = 0;
 	var test_pawns = 0;
 	var t1 = game.player_team
 	var t2 = game.enemy_team

@@ -11,7 +11,7 @@
 [ext_resource path="res://units/path.gd" type="Script" id=9]
 [ext_resource path="res://units/spawn.gd" type="Script" id=10]
 [ext_resource path="res://units/hud.gd" type="Script" id=11]
-[ext_resource path="res://units/orders.gd" type="Script" id=12]
+[ext_resource path="res://orders/unit_orders.gd" type="Script" id=12]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=13]
 
 [sub_resource type="DynamicFont" id=20]

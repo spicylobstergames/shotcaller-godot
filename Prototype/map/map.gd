@@ -17,9 +17,7 @@ func _ready():
 
 func setup_leaders():
 	for leader in game.player_leaders:
-		if not leader.name in game.ui.leaders_inventories.inventories:
-			game.ui.leaders_inventories.add_inventory(leader)
-			game.ui.shop_window.add_delivery(leader)
+		game.ui.inventories.add_inventory(leader)
 
 func setup_buildings():
 	for team in get_node("buildings").get_children():

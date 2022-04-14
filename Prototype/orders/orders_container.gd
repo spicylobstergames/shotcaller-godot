@@ -1,6 +1,8 @@
 extends ItemList
 var game:Node
 
+var clear = false
+
 var leader_orders = {}
 var pawn_orders
 var building_orders = {}
@@ -10,8 +12,9 @@ var enemy_pawn_orders = {}
 var enemy_building_orders = {}
 
 
-var button_template:PackedScene = load("res://ui/order_button.tscn")
+var button_template:PackedScene = load("res://orders/button/order_button.tscn")
 
+onready var container = get_node("scroll_container/container")
 
 var order_types = {
 		# speed:     fast        slow   default"     fast 
@@ -33,7 +36,15 @@ var order_types = {
 
 func _ready():
 	game = get_tree().get_current_scene()
+	
 	hide()
+	
+	if not clear:
+		for placeholder in container.get_children():
+			container.remove_child(placeholder)
+			placeholder.queue_free()
+		
+		clear = true
 
 
 func setup():
@@ -50,8 +61,8 @@ func setup_leaders():
 			"leader": leader
 		}
 		leader_orders[leader.name] = orders
-		game.ui.orders_container.setup_leader_buttons(orders)
-		self.add_child(orders.node)
+		setup_leader_buttons(orders)
+		container.add_child(orders.node)
 
 
 func setup_pawns():
@@ -60,8 +71,8 @@ func setup_pawns():
 		"type": "pawn"
 	}
 	pawn_orders = orders
-	game.ui.orders_container.setup_pawn_buttons(orders)
-	self.add_child(orders.node)
+	setup_pawn_buttons(orders)
+	container.add_child(orders.node)
 
 
 func setup_buildings():
@@ -72,8 +83,8 @@ func setup_buildings():
 			"building": unit_type
 		}
 		building_orders[unit_type] = orders
-		game.ui.orders_container.setup_building_buttons(orders)
-		self.add_child(orders.node)
+		setup_building_buttons(orders)
+		container.add_child(orders.node)
 
 
 
@@ -85,7 +96,7 @@ func setup_enemy_leaders():
 			"leader": leader
 		}
 		enemy_leader_orders[leader.name] = orders
-		self.add_child(orders.node)
+		container.add_child(orders.node)
 
 
 func setup_enemy_pawns():
@@ -94,7 +105,7 @@ func setup_enemy_pawns():
 		"type": "pawn"
 	}
 	enemy_pawn_orders = orders
-	self.add_child(orders.node)
+	container.add_child(orders.node)
 
 
 
@@ -106,7 +117,8 @@ func setup_enemy_buildings():
 			"building": unit_type
 		}
 		enemy_building_orders[unit_type] = orders
-		self.add_child(orders.node)
+		container.add_child(orders.node)
+		
 
 
 
@@ -124,6 +136,7 @@ func setup_tactics(orders, tactics):
 			button.pressed = true
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
+	
 
 
 
@@ -190,7 +203,7 @@ func update():
 
 
 func hide_all():
-	for child in self.get_children():
+	for child in container.get_children():
 		child.hide()
 	for leader in leader_orders:
 		leader_orders[leader].node.hide()

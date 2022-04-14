@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://ui/order_button.gd" type="Script" id=1]
+[ext_resource path="res://orders/button/order_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=2]
@@ -8,11 +8,12 @@ size = 11
 font_data = ExtResource( 2 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 34, 14 )
+extents = Vector2( 32, 32 )
 
 [node name="order_button" type="Button"]
-margin_right = 40.0
-margin_bottom = 24.0
+margin_right = 64.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 64, 64 )
 custom_fonts/font = SubResource( 2 )
 toggle_mode = true
 text = "order"
@@ -22,5 +23,5 @@ __meta__ = {
 }
 
 [node name="touch_button" type="TouchScreenButton" parent="."]
-position = Vector2( -2, -2 )
+visible = false
 shape = SubResource( 1 )

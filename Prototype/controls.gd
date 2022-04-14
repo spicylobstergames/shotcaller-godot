@@ -40,18 +40,18 @@ func setup_selection(unit):
 
 
 func select(point):
-	unselect()
 	var unit_at_point = get_sel_unit_at_point(Vector2(point))
 	if unit_at_point:
+		unselect()
 		var unit = unit_at_point
 		game.selected_unit = unit
 		
-		print(unit.priority)
+		#print(unit.priority)
 		
 		if unit.team == game.player_team and unit.type == "leader":
 			game.selected_leader = unit
 			game.ui.shop_window.update_buttons()
-			game.ui.leaders_inventories.update_buttons()
+			game.ui.inventories.update_buttons()
 		else:
 			game.selected_leader = null
 			game.ui.shop_window.disable_all()
@@ -73,7 +73,7 @@ func unselect():
 	game.ui.stats.update()
 	game.ui.shop_window.disable_all()
 	game.ui.orders_container.hide()
-	game.ui.leaders_inventories.hide()
+	game.ui.inventories.hide()
 
 
 func get_sel_unit_at_point(point):

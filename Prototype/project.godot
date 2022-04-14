@@ -8,16 +8,6 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Reference",
-"class": "Item",
-"language": "GDScript",
-"path": "res://items/item.gd"
-} ]
-_global_script_class_icons={
-"Item": ""
-}
-
 [application]
 
 config/name="Shotcall"

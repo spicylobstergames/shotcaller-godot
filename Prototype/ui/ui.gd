@@ -8,7 +8,7 @@ var minimap:Node
 var shop_button:Node
 var shop_window:Node
 var orders_container:Node
-var leaders_inventories:Node
+var inventories:Node
 
 
 func _ready():
@@ -19,7 +19,7 @@ func _ready():
 	shop_button = get_node("top_right/shop_button")
 	shop_window = get_node("top_right/shop_window")
 	orders_container = get_node("mid_right/orders_container")
-	leaders_inventories = get_node("bot_right/leaders_inventories")
+	inventories = get_node("bot_right/inventories")
 
 
 
@@ -35,6 +35,7 @@ func process():
 		minimap.follow_camera()
 
 
+
 func hide_all():
 	for panel in self.get_children():
 		panel.hide()
@@ -46,3 +47,4 @@ func show_all():
 	game.ui.shop_button.show()
 	for panel in self.get_children():
 		panel.show()
+

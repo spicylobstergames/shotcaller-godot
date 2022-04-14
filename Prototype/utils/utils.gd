@@ -101,10 +101,11 @@ func get_units_around(unit1, delta):
 	var unit1_rad = unit1.collision_radius
 	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
 
-
+var font
 func label(string):
 	var label_node = Label.new()
 	label_node.text = string
-	var font = game.unit.hud.get_node("state").get_font("font")
+	if not font:
+		font = game.ui.shop_window.get_node("scroll_container/container/equip").get_font("font")
 	label_node.add_font_override("font", font)
 	return label_node

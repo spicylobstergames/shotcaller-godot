@@ -34,7 +34,7 @@ func update_hpbar(unit):
 		if scale > 1: scale = 1
 		var size = unit.get_node("hud/hpbar/red").region_rect.size.x 
 		unit.get_node("hud/hpbar/green").region_rect.size.x = scale * size
-		if unit.current_hp >= unit.hp:
+		if unit.current_hp >= unit.hp and unit != game.selected_unit:
 			unit.get_node("hud/hpbar").hide()
 
 # STATE LABEL
