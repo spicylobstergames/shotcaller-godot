@@ -329,55 +329,58 @@ __meta__ = {
 }
 
 [node name="container" type="VBoxContainer" parent="mid_right/orders_container/scroll_container"]
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 260.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="mid_right/orders_container/scroll_container/container"]
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 84.0
 
 [node name="orders" type="Label" parent="mid_right/orders_container/scroll_container/container/VBoxContainer"]
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_container/scroll_container/container/VBoxContainer"]
 margin_top = 20.0
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 84.0
 
 [node name="order_button" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
 
 [node name="order_button2" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 68.0
-margin_right = 132.0
+margin_right = 133.0
+text = "order 1"
 
 [node name="order_button3" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
-margin_left = 136.0
-margin_right = 200.0
+margin_left = 137.0
+margin_right = 206.0
+text = "order 2"
 
 [node name="order_button4" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
-margin_left = 204.0
-margin_right = 268.0
+margin_left = 210.0
+margin_right = 302.0
+text = "order 1234"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="mid_right/orders_container/scroll_container/container"]
 margin_top = 88.0
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 172.0
 
 [node name="orders" type="Label" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2"]
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2"]
 margin_top = 20.0
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 84.0
 
 [node name="order_button" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
@@ -396,18 +399,18 @@ margin_right = 268.0
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="mid_right/orders_container/scroll_container/container"]
 margin_top = 176.0
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 260.0
 
 [node name="orders" type="Label" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3"]
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3"]
 margin_top = 20.0
-margin_right = 268.0
+margin_right = 302.0
 margin_bottom = 84.0
 
 [node name="order_button" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3/HBoxContainer" instance=ExtResource( 9 )]
@@ -472,6 +475,7 @@ __meta__ = {
 margin_left = -148.0
 margin_top = -106.0
 margin_right = 96.0
+custom_styles/bg = SubResource( 4 )
 max_columns = 0
 script = ExtResource( 5 )
 __meta__ = {

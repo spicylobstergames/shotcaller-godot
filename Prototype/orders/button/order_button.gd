@@ -17,15 +17,16 @@ func _button_down():
 		"tactic":
 			clear_siblings(self)
 			
-			if game.selected_unit.type != "leader":
-				game.unit.orders.lane_tactic(self.orders.tactic)
-		
+			if game.selected_unit.type == "leader":
+				game.unit.orders.set_leader_tactic(self.orders.tactic)
+			else: game.unit.orders.set_lane_tactic(self.orders.tactic)
 		
 		"priority":
 			if not is_first_child(self):
 				move_to_front(self)
-				if game.selected_unit.type != "leader":
-					game.unit.orders.lane_priority(self.orders.priority)
+				if game.selected_unit.type == "leader":
+					game.unit.orders.set_leader_priority(self.orders.tactic)
+				else: game.unit.orders.set_lane_priority(self.orders.priority)
 			
 
 

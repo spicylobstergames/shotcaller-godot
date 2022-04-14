@@ -17,7 +17,6 @@ var button_template:PackedScene = load("res://orders/button/order_button.tscn")
 onready var container = get_node("scroll_container/container")
 
 var order_types = {
-		# speed:     fast        slow   default"     fast 
 		# behavior   move      advance  advance    advance
 		# tower     never  only full hp    yes      always
 	"tactics": ["escape","defensive","default","aggressive"],

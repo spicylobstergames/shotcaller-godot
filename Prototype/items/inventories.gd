@@ -51,6 +51,11 @@ func new_inventory():
 	return inventory
 
 
+func build_leaders():
+	for leader in game.player_leaders:
+		add_inventory(leader)
+
+
 func add_inventory(leader):
 	# Setup GUI for inventory
 	var inventory = new_inventory()

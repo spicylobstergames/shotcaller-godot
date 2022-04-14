@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-var spawn_time = 15
+var spawn_time = 16
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
@@ -78,14 +78,19 @@ func start():
 
 func spawn_group():
 	game.unit.orders.setup_lanes_priority()
+	game.unit.orders.setup_leaders()
+	
 	for team in ["red", "blue"]:
 		for lane in ["top", "mid", "bot"]:
 			send_pawn("archer", lane, team)
 			for n in 3:
 				send_pawn("infantry", lane, team)
-	yield(get_tree().create_timer(spawn_time), "timeout")
+				
+	yield(get_tree().create_timer(spawn_time/2), "timeout")
+	game.unit.orders.setup_leaders()
+	
+	yield(get_tree().create_timer(spawn_time/2), "timeout")
 	spawn_group()
-
 
 
 func recycle(template, lane, team, point):

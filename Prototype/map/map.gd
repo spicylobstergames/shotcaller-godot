@@ -16,8 +16,9 @@ func _ready():
 
 
 func setup_leaders():
-	for leader in game.player_leaders:
-		game.ui.inventories.add_inventory(leader)
+	game.ui.inventories.build_leaders()
+	game.unit.orders.build_leaders()
+
 
 func setup_buildings():
 	for team in get_node("buildings").get_children():
