@@ -1,8 +1,10 @@
 extends Node2D
 
+var player_choose_leaders:Array = []
 var player_leaders:Array = []
 var player_units:Array = []
 var player_buildings:Array = []
+var enemy_choose_leaders:Array = []
 var enemy_leaders:Array = []
 var enemy_units:Array = []
 var enemy_buildings:Array = []
@@ -54,9 +56,10 @@ func start():
 	
 	if test.stress:
 		test.spawn_units()
+		test.spawn_leaders()
 	else: 
 		yield(get_tree(), "idle_frame")
-		unit.spawn.test()
+		unit.spawn.leaders()
 		map.setup_leaders()
 		ui.orders_container.setup()
 		yield(get_tree().create_timer(5.0), "timeout")

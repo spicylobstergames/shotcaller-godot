@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-var spawn_time = 16
+var order_time = 8
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
@@ -10,7 +10,7 @@ var lorne:PackedScene = load("res://leaders/lorne.tscn")
 var raja:PackedScene = load("res://leaders/raja.tscn")
 var robin:PackedScene = load("res://leaders/robin.tscn")
 var rollo:PackedScene = load("res://leaders/rollo.tscn")
-var sami:PackedScene = load("res://leaders/sami.tscn")
+var sida:PackedScene = load("res://leaders/sida.tscn")
 var takoda:PackedScene = load("res://leaders/takoda.tscn")
 var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
 
@@ -31,40 +31,37 @@ var cemitery = {
 	"enemy_leaders": []
 }
 
+const leader_list = ["arthur", "bokuden", "hongi", "lorne", "raja", "robin", "rollo", "sida", "takoda", "tomyris"]
+
+var team_random_list = {"red": [], "blue": []}
 
 func _ready():
 	game = get_tree().get_current_scene()
 
 
-func test():
-	var test_heores = 0;
-	var test_pawns = 0;
-	var t1 = game.player_team
-	var t2 = game.enemy_team
+func leaders():
+	setup_lanes()
 	
-	game.map.create(arthur, "mid", t1, "Vector2", Vector2(1000,1100))
-	game.map.create(arthur, "mid", t2, "Vector2", Vector2(1150,1000))
+	team_random_list.blue = leader_list.duplicate()
+	team_random_list.red = leader_list.duplicate()
 	
-	if test_heores:
-		game.map.create(arthur, "mid", t1, "Vector2", Vector2(80,550))
-		game.map.create(bokuden, "mid", t1, "Vector2", Vector2(900,600))
-		game.map.create(hongi, "mid", t1, "Vector2", Vector2(900,650))
-		game.map.create(lorne, "mid", t1, "Vector2", Vector2(900,700))
-		game.map.create(raja, "mid", t1, "Vector2", Vector2(900,750))
-		game.map.create(robin, "mid", t1, "Vector2", Vector2(900,800))
-		game.map.create(rollo, "mid", t1, "Vector2", Vector2(900,850))
-		game.map.create(sami, "mid", t1, "Vector2", Vector2(900,900))
-		game.map.create(takoda, "mid", t1, "Vector2", Vector2(900,950))
-		game.map.create(tomyris, "mid", t1, "Vector2", Vector2(900,1000))
-	if test_pawns:
-		game.map.create(archer, "mid", t1, "Vector2", Vector2(1000,1000))
-		game.map.create(infantry, "mid", t2, "Vector2", Vector2(1100,750))
-	
+	game.player_choose_leaders = []
+	game.enemy_choose_leaders = []
+	for n in 5:
+		game.player_choose_leaders.append(random_leader(game.player_team))
+		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
+	spawn_leaders()
 
 
+func random_leader(team):
+	var team_list = team_random_list[team]
+	var index = floor(randf() * team_list.size())
+	var leader = team_list[index]
+	team_list.remove(index)
+	return leader
 
-func start():
 
+func setup_lanes():
 	var top_line = game.map.get_node("lanes/top")
 	var mid_line = game.map.get_node("lanes/mid")
 	var bot_line = game.map.get_node("lanes/bot")
@@ -72,11 +69,33 @@ func start():
 	top = line_to_array(top_line)
 	mid = line_to_array(mid_line)
 	bot = line_to_array(bot_line)
-	
-	spawn_group()
 
 
-func spawn_group():
+func spawn_leaders():
+	for team  in ["blue", "red"]:
+		var counter = 0
+		var leaders = game.player_choose_leaders
+		if team != game.player_team: leaders = game.enemy_choose_leaders
+		for leader in leaders:
+			var lane = "top"
+			if counter == 2: lane = "mid"
+			if counter > 2: lane = "bot"
+			
+			var path = self[lane].duplicate()
+			if team == "red": path.invert()
+			var start = path.pop_front()
+			
+			var leader_node = game.map.create(self[leader], lane, team, "point_random_no_coll", start)
+			game.unit.path.follow(leader_node, path, "advance")
+			counter += 1
+
+
+
+func start():
+	spawn_group_cycle()
+
+
+func spawn_group_cycle():
 	game.unit.orders.setup_lanes_priority()
 	game.unit.orders.setup_leaders()
 	
@@ -85,12 +104,12 @@ func spawn_group():
 			send_pawn("archer", lane, team)
 			for n in 3:
 				send_pawn("infantry", lane, team)
-				
-	yield(get_tree().create_timer(spawn_time/2), "timeout")
+	
+	yield(get_tree().create_timer(order_time), "timeout")
 	game.unit.orders.setup_leaders()
 	
-	yield(get_tree().create_timer(spawn_time/2), "timeout")
-	spawn_group()
+	yield(get_tree().create_timer(order_time), "timeout")
+	spawn_group_cycle()
 
 
 func recycle(template, lane, team, point):
