@@ -33,6 +33,7 @@ func move(unit, destiny):
 		unit.set_state("move")
 
 
+
 func calc_step(unit):
 	if unit.current_speed > 0:
 		var distance = unit.current_destiny - unit.global_position
@@ -81,7 +82,10 @@ func resume(unit):
 
 func end(unit):
 	if unit.behavior == "move": 
+		if unit.retreating and unit.current_destiny == unit.origin:
+			unit.retreating = false
 		stand(unit)
+
 
 func stop(unit):
 	unit.current_step = Vector2.ZERO

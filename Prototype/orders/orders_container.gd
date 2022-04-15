@@ -19,7 +19,7 @@ onready var container = get_node("scroll_container/container")
 var order_types = {
 		# behavior   move      advance  advance    advance
 		# tower     never  only full hp    yes      always
-	"tactics": ["escape","defensive","default","aggressive"],
+	"tactics": ["retreat","defensive","default","aggressive"],
 	"lane_tactics": ["defensive","default","aggressive"],
 	"priority": {
 		"leader": [],
@@ -31,7 +31,12 @@ var order_types = {
 	"buiding_defense": ["alarm bell", "teleport", "fortification"]
 }
 
-
+var hint_tooltips_tactics = {
+	"retreat": "Go straight to base (retreat regen 10 HP/s)",
+	"defensive": "Retreat if less than half HP",
+	"default": "Retreat if less than third HP",
+	"aggressive": "Never retreat"
+}
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -126,6 +131,7 @@ func setup_tactics(orders, tactics):
 	for tactic in tactics:
 		var button = button_template.instance()
 		button.text = tactic
+		button.hint_tooltip = hint_tooltips_tactics[tactic]
 		button.orders = {
 			"order": orders,
 			"type": "tactic",

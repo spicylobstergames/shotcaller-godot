@@ -23,6 +23,7 @@ export var moves:bool = false
 export var speed:float = 0
 var current_speed:float = 0
 var angle:float = 0
+var origin:Vector2 = Vector2.ZERO
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
@@ -64,6 +65,9 @@ export var lane:String = "mid"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
+var tactics:String = "default" # aggresive defensive retreat 
+var retreating = false
+
 
 var hud:Node
 var spawn:Node
@@ -99,7 +103,8 @@ func reset_unit():
 	self.current_damage = self.damage
 	self.current_attack_speed = self.attack_speed
 	self.visible = true
-	self.get_node("hud").update_hpbar(self)
+	self.hud.update_hpbar(self)
+	game.ui.minimap.setup_symbol(self)
 
 
 func set_state(s):
@@ -114,7 +119,7 @@ func set_behavior(s):
 
 
 func setup_team():
-	var is_red = self.team == "red"
+	var is_red = (self.team == "red")
 	# MIRROR
 	if self.type != "building":
 		self.mirror_toggle(is_red)

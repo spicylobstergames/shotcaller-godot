@@ -86,6 +86,7 @@ func spawn_leaders():
 			var start = path.pop_front()
 			
 			var leader_node = game.map.create(self[leader], lane, team, "point_random_no_coll", start)
+			leader_node.origin = start
 			game.unit.path.follow(leader_node, path, "advance")
 			counter += 1
 

@@ -64,16 +64,18 @@ func in_range(attacker, target):
 func take_hit(attacker, target, projectile):
 	if projectile: 
 		projectile_stuck(attacker, target, projectile)
-	target.current_hp -= attacker.damage
-	game.unit.advance.react(target, attacker)
-	game.unit.advance.ally_attacked(target, attacker)
-	game.unit.hud.update_hpbar(target)
-	if target == game.selected_unit: game.ui.stats.update()
-	if target.current_hp <= 0: 
-		target.current_hp = 0
-		target.die()
-		yield(get_tree().create_timer(0.6), "timeout")
-		game.unit.advance.resume(attacker)
+	if target:
+		target.current_hp -= attacker.damage
+		game.unit.advance.react(target, attacker)
+		game.unit.advance.ally_attacked(target, attacker)
+		game.unit.orders.take_hit(attacker, target)
+		game.unit.hud.update_hpbar(target)
+		if target == game.selected_unit: game.ui.stats.update()
+		if target.current_hp <= 0: 
+			target.current_hp = 0
+			target.die()
+			yield(get_tree().create_timer(0.6), "timeout")
+			game.unit.advance.resume(attacker)
 
 
 func projectile_start(attacker):
