@@ -137,7 +137,8 @@ func setup_tactics(orders, tactics):
 		}
 		setup_order_button(button)
 		if tactic == "default":
-			button.pressed = true
+			button.set_pressed(true)
+			button.set_disabled(true)
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
 
@@ -152,10 +153,13 @@ func setup_priority(orders):
 			"priority": priority
 		}
 		setup_order_button(button)
-		button.toggle_mode = false
+		button.set_toggle_mode(false)
+		button.set_action_mode(true)
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
-
+	var first = buttons_container.get_child(0)
+	first.set_pressed(true)
+	first.set_disabled(true)
 
 func setup_order_button(button):
 	yield(get_tree(), "idle_frame")
@@ -230,3 +234,4 @@ func orders_button_down():
 	self.visible = !self.visible
 	if self.visible:
 		game.ui.shop_window.hide()
+		game.ui.inventories.update_buttons()

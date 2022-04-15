@@ -216,7 +216,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 0 ]
+"values": [ 1 ]
 }
 tracks/3/type = "method"
 tracks/3/path = NodePath(".")
@@ -319,7 +319,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 0 ]
+"values": [ 1 ]
 }
 tracks/3/type = "method"
 tracks/3/path = NodePath(".")
@@ -422,7 +422,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 1 ]
+"values": [ 0 ]
 }
 tracks/3/type = "method"
 tracks/3/path = NodePath(".")
@@ -593,7 +593,7 @@ anims/move = SubResource( 26 )
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
 frames = SubResource( 36 )
-frame = 2
+frame = 1
 offset = Vector2( 0, -15 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="2"]
@@ -611,8 +611,10 @@ frame = 1
 offset = Vector2( -33, -3 )
 
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
+visible = false
 position = Vector2( 0, 1 )
-rotation = 0.349066
+rotation = 0.286346
+scale = Vector2( 0.954599, 1 )
 frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
 

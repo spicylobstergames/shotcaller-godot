@@ -15,6 +15,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
+	game.ui.shop_button.hide()
 	
 	if not clear:
 		for placeholder_item in equip_items.get_children():

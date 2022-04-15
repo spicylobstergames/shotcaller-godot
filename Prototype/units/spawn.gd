@@ -151,3 +151,16 @@ func cemitery_add_leader(leader):
 			game.unit.spawn.cemitery.player_leaders.append(leader)
 		game.enemy_team:
 			game.unit.spawn.cemitery.enemy_leaders.append(leader)
+	
+	yield(get_tree().create_timer(order_time), "timeout")
+	
+	# respawn leader
+	var team = leader.team
+	var lane = leader.lane
+	var path = game.map[leader.lane].duplicate()
+	if leader.team == "red": path.invert()
+	var start = path.pop_front()
+	leader = spawn_unit(leader, lane, team, "point_random", start)
+	leader.reset_unit()
+	game.unit.orders.setup_pawn(leader, lane)
+	game.unit.path.follow(leader, path, "advance")

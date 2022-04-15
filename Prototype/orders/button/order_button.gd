@@ -28,11 +28,11 @@ func setup_order_button():
 		"leader": sprite = 2
 		
 		"retreat": sprite = 3
-		"defend": sprite = 3
-		"default": sprite = 3
-		"attack": sprite = 3
+		"defend": sprite = 4
+		"default": sprite = 5
+		"attack": sprite = 6
 		
-	icon.region.position.x = sprite * 64
+	icon.region.position.x = sprite * 62
 	icon.region.position.y = -2
 	self.icon = icon
 
@@ -45,6 +45,8 @@ func _button_down():
 			if game.selected_unit.type == "leader":
 				game.unit.orders.set_leader_tactic(self.orders.tactic)
 			else: game.unit.orders.set_lane_tactic(self.orders.tactic)
+			
+			self.set_disabled(true)
 		
 		"priority":
 			if not is_first_child(self):
@@ -57,12 +59,18 @@ func _button_down():
 
 func clear_siblings(button):
 	for child in button.get_parent().get_children():
-		if child != button: child.pressed = false
-
+		if child != button: 
+			child.set_pressed(false)
+			child.set_disabled(false)
+		
 
 func is_first_child(button):
 	return button.get_parent().get_children()[0] == button
 
 
 func move_to_front(button):
+	var buttons = button.get_parent().get_children()
+	for sibling_button in buttons:
+		sibling_button.set_disabled(false)
 	button.get_parent().move_child(button, 0)
+	button.set_disabled(true)
