@@ -4,7 +4,7 @@ var game:Node
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 var zoom_default = Vector2.ONE
-var zoom_limit:Vector2 = Vector2(0.4,3.52)
+var zoom_limit:Vector2 = Vector2(0.33,3.52)
 var margin:int = limit_right;
 var position_limit:int = 756
 var arrow_keys_speed:int = 4
@@ -87,7 +87,7 @@ func zoom_in():
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	game.ui.hide_all()
 	game.unit.hud.show_hpbars()
-	game.unit.hud.show_states()
+	game.unit.hud.hide_states()
 	
 	
 func zoom_out(): 
