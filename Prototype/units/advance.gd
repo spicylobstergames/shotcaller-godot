@@ -56,7 +56,8 @@ func stop(unit):
 		unit.current_step = Vector2.ZERO
 		unit.set_behavior("stop")
 		unit.set_state("idle")
-	
+
+
 func on_idle_end(unit):
 	if unit.behavior == "advance" or unit.behavior == "stop":
 		start(unit, unit.objective)

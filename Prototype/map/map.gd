@@ -7,6 +7,12 @@ var fog
 
 var size:int = 2112
 
+
+var top:Array
+var mid:Array
+var bot:Array
+
+
 func _ready():
 	game = get_tree().get_current_scene()
 	
@@ -15,9 +21,38 @@ func _ready():
 	blocks = get_node("blocks")
 
 
+func setup_lanes():
+	var top_line = game.map.get_node("lanes/top")
+	var mid_line = game.map.get_node("lanes/mid")
+	var bot_line = game.map.get_node("lanes/bot")
+	
+	top = line_to_array(top_line)
+	mid = line_to_array(mid_line)
+	bot = line_to_array(bot_line)
+
+
+func new_path(lane, team):
+	var path = game.map[lane].duplicate()
+	if team == "red": path.invert()
+	var start = path.pop_front()
+	return {
+		"start": start,
+		"follow": path
+	}
+
+
 func setup_leaders():
+	game.unit.spawn.choose_leaders()
 	game.ui.inventories.build_leaders()
-	game.unit.orders.build_leaders()
+	game.ui.orders_container.setup()
+
+
+func line_to_array(line):
+	var array = []
+	for point in line.points:
+		array.append(point)
+	return array
+
 
 
 func setup_buildings():
@@ -47,7 +82,7 @@ func create(template, lane, team, mode, point):
 	game.unit.move.setup_timer(unit)
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
-		if unit.team == game.player_team:
+		if team == game.player_team:
 			game.player_leaders.append(unit)
 		else:
 			game.enemy_leaders.append(unit)

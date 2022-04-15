@@ -265,8 +265,8 @@ func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
 		path.follow_next(self)
 	elif self.moves:
-		move.end(self)
-		if self.attacks: 
+		var retreat_end = move.end(self)
+		if not retreat_end and self.attacks: 
 			advance.end(self)
 
 

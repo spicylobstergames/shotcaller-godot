@@ -19,10 +19,6 @@ var infantry:PackedScene = load("res://pawns/infantry.tscn")
 var archer:PackedScene = load("res://pawns/archer.tscn")
 
 
-var top:Array
-var mid:Array
-var bot:Array
-
 
 var cemitery = {
 	"infantry": [],
@@ -39,18 +35,16 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func leaders():
-	setup_lanes()
-	
+func choose_leaders():
 	team_random_list.blue = leader_list.duplicate()
 	team_random_list.red = leader_list.duplicate()
 	
 	game.player_choose_leaders = []
 	game.enemy_choose_leaders = []
+	
 	for n in 5:
 		game.player_choose_leaders.append(random_leader(game.player_team))
 		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
-	spawn_leaders()
 
 
 func random_leader(team):
@@ -61,17 +55,7 @@ func random_leader(team):
 	return leader
 
 
-func setup_lanes():
-	var top_line = game.map.get_node("lanes/top")
-	var mid_line = game.map.get_node("lanes/mid")
-	var bot_line = game.map.get_node("lanes/bot")
-	
-	top = line_to_array(top_line)
-	mid = line_to_array(mid_line)
-	bot = line_to_array(bot_line)
-
-
-func spawn_leaders():
+func leaders():
 	for team  in ["blue", "red"]:
 		var counter = 0
 		var leaders = game.player_choose_leaders
@@ -81,14 +65,14 @@ func spawn_leaders():
 			if counter == 2: lane = "mid"
 			if counter > 2: lane = "bot"
 			
-			var path = self[lane].duplicate()
-			if team == "red": path.invert()
-			var start = path.pop_front()
+			var path = game.map.new_path(lane, team)
 			
-			var leader_node = game.map.create(self[leader], lane, team, "point_random_no_coll", start)
-			leader_node.origin = start
-			game.unit.path.follow(leader_node, path, "advance")
+			var leader_node = game.map.create(self[leader], lane, team, "point_random_no_coll", path.start)
+			leader_node.origin = path.start
+			game.unit.path.follow(leader_node, path.follow, "advance")
 			counter += 1
+	
+	game.unit.orders.build_leaders()
 
 
 
@@ -122,7 +106,7 @@ func recycle(template, lane, team, point):
 
 
 func send_pawn(template, lane, team):
-	var path = self[lane].duplicate()
+	var path = game.map[lane].duplicate()
 	if team == "red": path.invert()
 	var start = path.pop_front()
 	var pawn = recycle(template, lane, team, start)
@@ -132,13 +116,6 @@ func send_pawn(template, lane, team):
 		pawn = game.map.create(unit_template, lane, team, "point_random_no_coll", start)
 	game.unit.orders.setup_pawn(pawn, lane)
 	game.unit.path.follow(pawn, path, "advance")
-
-
-func line_to_array(line):
-	var array = []
-	for point in line.points:
-		array.append(point)
-	return array
 
 
 

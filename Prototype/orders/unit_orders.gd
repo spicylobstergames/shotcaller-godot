@@ -2,7 +2,8 @@ extends Node
 var game:Node
 
 
-var leaders = {}
+var player_orders = {}
+var enemy_orders = {}
 var leaders_priority = ["building", "leader", "pawn"]
 
 var lanes = {
@@ -40,9 +41,9 @@ func new_orders():
 
 func build_leaders():
 	for leader in game.player_leaders:
-		leaders[leader.name] = new_orders()
+		player_orders[leader.name] = new_orders()
 	for leader in game.enemy_leaders:
-		leaders[leader.name] = new_orders()
+		enemy_orders[leader.name] = new_orders()
 	
 	hp_regen_cycle()
 
@@ -72,12 +73,18 @@ func setup_pawn(unit, lane):
 
 func setup_leaders():
 	for leader in game.player_leaders:
-		var leader_orders = leaders[leader.name]
+		var leader_orders = player_orders[leader.name]
 		var tactics = leader_orders.tactics
 		leader.priority = leader_orders.priority.duplicate()
 		leader.current_speed = tactics.speed * leader.speed
 		leader.tactics = tactics.tactic
 
+	for leader in game.enemy_leaders:
+		var leader_orders = enemy_orders[leader.name]
+		var tactics = leader_orders.tactics
+		leader.priority = leader_orders.priority.duplicate()
+		leader.current_speed = tactics.speed * leader.speed
+		leader.tactics = tactics.tactic
 
 func setup_lanes_priority():
 	for building in game.player_buildings:
@@ -100,7 +107,7 @@ func set_lane_tactic(tactic):
 
 func set_leader_tactic(tactic):
 	var leader = game.selected_leader
-	var leader_tactics = leaders[leader.name].tactics
+	var leader_tactics = player_orders[leader.name].tactics
 	leader_tactics.tactic = tactic
 	match tactic:
 		"retreat":
@@ -122,7 +129,7 @@ func set_lane_priority(priority):
 
 
 func set_leader_priority(priority):
-	var leader = leaders[game.selected_leader.name]
+	var leader = player_orders[game.selected_leader.name]
 	var lane_priority = leader.priority
 	lane_priority.erase(priority)
 	lane_priority.push_front(priority)
@@ -160,15 +167,26 @@ func take_hit(attacker, target):
 		"leader":
 			match target.tactics:
 				"escape":
-					target.retreating = true
-					game.unit.move.start(target, target.origin)
+					retreat(target)
 				"defensive":
 					if target.current_hp < target.hp / 2:
-						target.retreating = true
-						game.unit.move.start(target, target.origin)
+						retreat(target)
 				"default":
 					if target.current_hp < target.hp / 3:
-						target.retreating = true
-						game.unit.move.start(target, target.origin)
+						retreat(target)
 
 
+func retreat(unit):
+	unit.retreating = true
+	unit.current_path = []
+	game.unit.move.start(unit, unit.origin)
+
+
+func retreat_end(unit):
+	if unit.retreating and unit.current_destiny == unit.origin:
+		unit.retreating = false
+		var path = game.map.new_path(unit.lane, unit.team)
+		game.unit.path.follow(unit, path.follow, "advance")
+		print("follow")
+		return true
+	return false

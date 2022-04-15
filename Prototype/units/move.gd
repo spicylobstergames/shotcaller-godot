@@ -82,10 +82,10 @@ func resume(unit):
 
 func end(unit):
 	if unit.behavior == "move": 
-		if unit.retreating and unit.current_destiny == unit.origin:
-			unit.retreating = false
-		stand(unit)
-
+		var retreat_end = game.unit.orders.retreat_end(unit)
+		if not retreat_end: stand(unit)
+		return retreat_end
+	
 
 func stop(unit):
 	unit.current_step = Vector2.ZERO

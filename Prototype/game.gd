@@ -57,14 +57,16 @@ func start():
 	if test.stress:
 		test.spawn_units()
 		test.spawn_leaders()
+		
 	else: 
 		yield(get_tree(), "idle_frame")
-		unit.spawn.leaders()
+		map.setup_lanes()
 		map.setup_leaders()
-		ui.orders_container.setup()
-		yield(get_tree().create_timer(5.0), "timeout")
+		
+		yield(get_tree().create_timer(4.0), "timeout")
 		unit.spawn.start()
-	
+		yield(get_tree().create_timer(4.0), "timeout")
+		unit.spawn.leaders()
 
 
 func _process(delta: float) -> void:
