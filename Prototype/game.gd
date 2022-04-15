@@ -60,8 +60,11 @@ func start():
 		
 	else: 
 		yield(get_tree(), "idle_frame")
+		unit.spawn.choose_leaders()
 		map.setup_lanes()
-		map.setup_leaders()
+		ui.orders_container.setup_pawns()
+		ui.orders_container.setup_buildings()
+
 		
 		yield(get_tree().create_timer(4.0), "timeout")
 		unit.spawn.start()

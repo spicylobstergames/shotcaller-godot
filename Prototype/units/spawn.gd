@@ -72,8 +72,7 @@ func leaders():
 			game.unit.path.follow(leader_node, path.follow, "advance")
 			counter += 1
 	
-	game.unit.orders.build_leaders()
-
+	game.map.setup_leaders()
 
 
 func start():

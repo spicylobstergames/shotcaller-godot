@@ -42,9 +42,9 @@ func new_path(lane, team):
 
 
 func setup_leaders():
-	game.unit.spawn.choose_leaders()
 	game.ui.inventories.build_leaders()
-	game.ui.orders_container.setup()
+	game.ui.orders_container.setup_leaders()
+	game.unit.orders.build_leaders()
 
 
 func line_to_array(line):

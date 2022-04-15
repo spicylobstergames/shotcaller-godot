@@ -1,10 +1,36 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://orders/button/order_button.gd" type="Script" id=1]
-[ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/ui/ui_artwork.png" type="Texture" id=3]
+[ext_resource path="res://assets/ui/units.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=2]
 size = 11
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 3 )
+region_rect = Rect2( 109, 37, 33, 33 )
+margin_left = 2.0
+margin_right = 2.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id=12]
+texture = ExtResource( 3 )
+region_rect = Rect2( 145, 37, 33, 33 )
+margin_left = 2.0
+margin_right = 2.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 4 )
+region = Rect2( 2, 2, 60, 60 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 10
 font_data = ExtResource( 2 )
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -15,9 +41,26 @@ margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
 custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/disabled = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
 toggle_mode = true
-text = "order"
+icon = SubResource( 14 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="Label" parent="."]
+margin_left = 5.0
+margin_top = 1.0
+margin_right = 61.0
+margin_bottom = 44.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 15 )
+text = "Name"
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

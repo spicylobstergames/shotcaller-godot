@@ -27,6 +27,12 @@ func _ready():
 
 func _input(event):
 	if over_minimap(event):
+		# MOUSE CLICK
+		if event is InputEventMouseButton:
+			is_panning = true
+			pan_position = event.position
+		
+		
 		# MOUSE PAN
 		if event.is_action("pan"):
 			is_panning = event.is_action_pressed("pan")

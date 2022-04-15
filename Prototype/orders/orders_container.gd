@@ -51,12 +51,6 @@ func _ready():
 		clear = true
 
 
-func setup():
-	setup_leaders()
-	setup_pawns()
-	setup_buildings()
-
-
 
 func setup_leaders():
 	for leader in game.player_leaders:
@@ -130,35 +124,37 @@ func setup_tactics(orders, tactics):
 	var buttons_container = HBoxContainer.new()
 	for tactic in tactics:
 		var button = button_template.instance()
-		button.text = tactic
 		button.hint_tooltip = hint_tooltips_tactics[tactic]
 		button.orders = {
 			"order": orders,
 			"type": "tactic",
 			"tactic": tactic
 		}
+		setup_order_button(button)
 		if tactic == "default":
 			button.pressed = true
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
-	
-
 
 
 func setup_priority(orders):
 	var buttons_container = HBoxContainer.new()
 	for priority in order_types.priority:
 		var button = button_template.instance()
-		button.text = priority
 		button.orders =  {
 			"order": orders,
 			"type": "priority",
 			"priority": priority
 		}
+		setup_order_button(button)
 		button.toggle_mode = false
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
-		# add submenu buttons
+
+
+func setup_order_button(button):
+	yield(get_tree(), "idle_frame")
+	button.setup_order_button()
 
 
 func setup_pawn_buttons(orders):

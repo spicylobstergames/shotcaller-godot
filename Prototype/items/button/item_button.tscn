@@ -1,12 +1,22 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://assets/theme/kenvector_future.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/items/items.png" type="Texture" id=2]
 [ext_resource path="res://items/button/item_button.gd" type="Script" id=3]
+[ext_resource path="res://assets/ui/ui_artwork.png" type="Texture" id=4]
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 4 )
+region_rect = Rect2( 109, 37, 33, 33 )
+margin_left = 2.0
+margin_right = 2.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 2 )
-region = Rect2( 130, 8, 48, 48 )
+region = Rect2( 128, 8, 56, 48 )
+margin = Rect2( 2, 0, 0, 0 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 11
@@ -19,23 +29,43 @@ extents = Vector2( 32, 32 )
 size = 12
 font_data = ExtResource( 1 )
 
+[sub_resource type="StyleBoxTexture" id=16]
+texture = ExtResource( 4 )
+region_rect = Rect2( 108, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id=15]
+texture = ExtResource( 4 )
+region_rect = Rect2( 144, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 32, 18 )
 
 [node name="item_button" type="Button"]
-margin_right = -536.0
-margin_bottom = -536.0
+margin_right = 64.0
+margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
-icon = SubResource( 2 )
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 13 )
+custom_styles/disabled = SubResource( 13 )
+custom_styles/normal = SubResource( 13 )
+icon = SubResource( 14 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="name" type="Label" parent="."]
-margin_left = 4.0
+margin_left = 5.0
 margin_top = 1.0
-margin_right = 60.0
+margin_right = 61.0
 margin_bottom = 15.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -50,9 +80,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -42.0
+margin_left = -43.0
 margin_top = -15.0
-margin_right = -2.0
+margin_right = -3.0
 margin_bottom = -1.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -73,6 +103,10 @@ anchor_bottom = 1.0
 margin_top = -104.0
 margin_bottom = -68.0
 custom_fonts/font = SubResource( 4 )
+custom_styles/hover = SubResource( 16 )
+custom_styles/pressed = SubResource( 15 )
+custom_styles/disabled = SubResource( 15 )
+custom_styles/normal = SubResource( 16 )
 text = "sell"
 __meta__ = {
 "_edit_use_anchors_": false
