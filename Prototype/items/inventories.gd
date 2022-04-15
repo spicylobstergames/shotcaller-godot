@@ -41,6 +41,7 @@ func new_inventory():
 		"equip_item_buttons": [],
 		"consumable_item_buttons": []
 	}
+	inventory.container.set("custom_constants/separation", 0)
 	inventory.container.margin_top = sell_button_margin
 # warning-ignore:unused_variable
 	for index in range(equip_items_max):

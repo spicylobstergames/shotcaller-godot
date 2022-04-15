@@ -556,7 +556,7 @@ radius = 12.0
 radius = 24.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 170.0
+radius = 100.0
 
 [node name="tomyris" instance=ExtResource( 1 )]
 hp = 400

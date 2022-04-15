@@ -552,7 +552,7 @@ radius = 12.0
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 120.0
+radius = 90.0
 
 [node name="takoda" instance=ExtResource( 1 )]
 hp = 480

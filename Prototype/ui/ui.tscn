@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -6,7 +6,7 @@
 [ext_resource path="res://ui/minimap.gd" type="Script" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://orders/orders_container.gd" type="Script" id=7]
+[ext_resource path="res://orders/orders_window.gd" type="Script" id=7]
 [ext_resource path="res://items/button/item_button.tscn" type="PackedScene" id=8]
 [ext_resource path="res://orders/button/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/ui_artwork.png" type="Texture" id=10]
@@ -48,12 +48,21 @@ font_data = ExtResource( 6 )
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.192157, 0.188235, 0.223529, 0.784314 )
 
-[sub_resource type="DynamicFont" id=6]
-size = 11
-font_data = ExtResource( 6 )
+[sub_resource type="StyleBoxTexture" id=14]
+texture = ExtResource( 10 )
+region_rect = Rect2( 0, 72, 180, 86 )
+margin_top = 3.0
+margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+modulate_color = Color( 1, 1, 1, 0.941176 )
 
 [sub_resource type="DynamicFont" id=8]
 size = 13
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 11
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=9]
@@ -75,10 +84,8 @@ __meta__ = {
 }
 
 [node name="menu_button" type="Button" parent="top_left"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 122.0
-margin_bottom = 62.0
+margin_right = 120.0
+margin_bottom = 60.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 11
 custom_fonts/font = SubResource( 2 )
@@ -122,10 +129,8 @@ __meta__ = {
 }
 
 [node name="shop_button" type="Button" parent="top_right"]
-margin_left = -122.0
-margin_top = 2.0
-margin_right = -2.0
-margin_bottom = 62.0
+margin_left = -120.0
+margin_bottom = 60.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 11
 custom_fonts/font = SubResource( 2 )
@@ -133,7 +138,6 @@ custom_styles/hover = SubResource( 13 )
 custom_styles/pressed = SubResource( 12 )
 custom_styles/disabled = SubResource( 12 )
 custom_styles/normal = SubResource( 13 )
-toggle_mode = true
 text = "shop"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -147,10 +151,9 @@ shape = SubResource( 5 )
 [node name="shop_window" type="Panel" parent="top_right"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -311.0
-margin_top = 64.0
-margin_right = 9.0
-margin_bottom = 264.0
+margin_left = -312.0
+margin_top = 60.0
+margin_bottom = 260.0
 custom_styles/panel = SubResource( 11 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -164,26 +167,27 @@ margin_left = 16.0
 margin_top = 12.0
 margin_right = -14.0
 margin_bottom = -12.0
+rect_pivot_offset = Vector2( 290, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="container" type="VBoxContainer" parent="top_right/shop_window/scroll_container"]
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 260.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
 [node name="equip" type="Label" parent="top_right/shop_window/scroll_container/container"]
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "Equip"
 
 [node name="equip_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
 margin_top = 20.0
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 84.0
 size_flags_horizontal = 3
 
@@ -215,14 +219,14 @@ visible = false
 
 [node name="consumable" type="Label" parent="top_right/shop_window/scroll_container/container"]
 margin_top = 88.0
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 104.0
 custom_fonts/font = SubResource( 7 )
 text = "Consumable"
 
 [node name="consumable_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
 margin_top = 108.0
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 172.0
 size_flags_horizontal = 3
 
@@ -254,14 +258,14 @@ visible = false
 
 [node name="placeholder" type="Label" parent="top_right/shop_window/scroll_container/container"]
 margin_top = 176.0
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 192.0
 custom_fonts/font = SubResource( 7 )
 text = "Consumable"
 
 [node name="placeholder_items" type="HBoxContainer" parent="top_right/shop_window/scroll_container/container"]
 margin_top = 196.0
-margin_right = 278.0
+margin_right = 270.0
 margin_bottom = 260.0
 size_flags_horizontal = 3
 
@@ -330,121 +334,133 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="orders_container" type="ItemList" parent="mid_right"]
-margin_left = -311.0
-margin_top = -20.0
-margin_right = 9.0
-margin_bottom = 180.0
+[node name="orders_button" type="Button" parent="mid_right"]
+margin_left = -120.0
+margin_top = 134.0
+margin_bottom = 194.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/disabled = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+text = "orders"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="orders_touch_button" type="TouchScreenButton" parent="mid_right/orders_button"]
+visible = false
+position = Vector2( 122, -2 )
+shape = SubResource( 5 )
+
+[node name="orders_window" type="ItemList" parent="mid_right"]
+margin_left = -312.0
+margin_top = -66.0
+margin_bottom = 134.0
 custom_styles/bg = SubResource( 11 )
 script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scroll_container" type="ScrollContainer" parent="mid_right/orders_container"]
+[node name="scroll_container" type="ScrollContainer" parent="mid_right/orders_window"]
 margin_left = 16.0
 margin_top = 12.0
 margin_right = 306.0
-margin_bottom = 188.0
+margin_bottom = 186.0
+rect_pivot_offset = Vector2( 290, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="container" type="VBoxContainer" parent="mid_right/orders_container/scroll_container"]
+[node name="container" type="VBoxContainer" parent="mid_right/orders_window/scroll_container"]
 margin_right = 268.0
-margin_bottom = 260.0
+margin_bottom = 172.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="mid_right/orders_container/scroll_container/container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="mid_right/orders_window/scroll_container/container"]
 margin_right = 268.0
 margin_bottom = 84.0
 
-[node name="orders" type="Label" parent="mid_right/orders_container/scroll_container/container/VBoxContainer"]
+[node name="orders" type="Label" parent="mid_right/orders_window/scroll_container/container/VBoxContainer"]
 margin_right = 268.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_container/scroll_container/container/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_window/scroll_container/container/VBoxContainer"]
 margin_top = 20.0
 margin_right = 268.0
 margin_bottom = 84.0
 
-[node name="order_button" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button" parent="mid_right/orders_window/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
 
-[node name="order_button2" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button2" parent="mid_right/orders_window/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 68.0
 margin_right = 132.0
 
-[node name="order_button3" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button3" parent="mid_right/orders_window/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 136.0
 margin_right = 200.0
 
-[node name="order_button4" parent="mid_right/orders_container/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button4" parent="mid_right/orders_window/scroll_container/container/VBoxContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 204.0
 margin_right = 268.0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="mid_right/orders_container/scroll_container/container"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="mid_right/orders_window/scroll_container/container"]
 margin_top = 88.0
 margin_right = 268.0
 margin_bottom = 172.0
 
-[node name="orders" type="Label" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2"]
+[node name="orders" type="Label" parent="mid_right/orders_window/scroll_container/container/VBoxContainer2"]
 margin_right = 268.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_window/scroll_container/container/VBoxContainer2"]
 margin_top = 20.0
 margin_right = 268.0
 margin_bottom = 84.0
 
-[node name="order_button" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button" parent="mid_right/orders_window/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
 
-[node name="order_button2" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button2" parent="mid_right/orders_window/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 68.0
 margin_right = 132.0
 
-[node name="order_button3" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button3" parent="mid_right/orders_window/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 136.0
 margin_right = 200.0
 
-[node name="order_button4" parent="mid_right/orders_container/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
+[node name="order_button4" parent="mid_right/orders_window/scroll_container/container/VBoxContainer2/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 204.0
 margin_right = 268.0
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="mid_right/orders_container/scroll_container/container"]
-margin_top = 176.0
-margin_right = 268.0
-margin_bottom = 260.0
+[node name="shop_button" type="Button" parent="mid_right/orders_window"]
+margin_left = -120.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/disabled = SubResource( 12 )
+custom_styles/normal = SubResource( 13 )
+toggle_mode = true
+text = "shop"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="orders" type="Label" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3"]
-margin_right = 268.0
-margin_bottom = 16.0
-custom_fonts/font = SubResource( 7 )
-text = "orders"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3"]
-margin_top = 20.0
-margin_right = 268.0
-margin_bottom = 84.0
-
-[node name="order_button" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3/HBoxContainer" instance=ExtResource( 9 )]
-
-[node name="order_button2" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3/HBoxContainer" instance=ExtResource( 9 )]
-margin_left = 68.0
-margin_right = 132.0
-
-[node name="order_button3" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3/HBoxContainer" instance=ExtResource( 9 )]
-margin_left = 136.0
-margin_right = 200.0
-
-[node name="order_button4" parent="mid_right/orders_container/scroll_container/container/VBoxContainer3/HBoxContainer" instance=ExtResource( 9 )]
-margin_left = 204.0
-margin_right = 268.0
+[node name="shop_touch_button" type="TouchScreenButton" parent="mid_right/orders_window/shop_button"]
+visible = false
+position = Vector2( 122, -2 )
+shape = SubResource( 5 )
 
 [node name="bot_left" type="Control" parent="."]
 anchor_top = 1.0
@@ -491,112 +507,62 @@ __meta__ = {
 }
 
 [node name="stats" type="ItemList" parent="bot_mid"]
-margin_left = -148.0
+margin_left = -150.0
 margin_top = -106.0
-margin_right = 96.0
-margin_bottom = 5.0
-custom_styles/bg = SubResource( 11 )
+margin_right = 108.0
+custom_styles/bg = SubResource( 14 )
 max_columns = 0
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="hpbar" type="Control" parent="bot_mid/stats"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 20.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="current_hp" type="Label" parent="bot_mid/stats"]
+margin_left = 14.0
+margin_top = 11.0
+margin_right = 58.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 8 )
+text = "9999"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="name" type="Label" parent="bot_mid/stats"]
-margin_left = 84.0
-margin_top = 9.0
-margin_right = 127.0
-margin_bottom = 23.0
+margin_left = 12.0
+margin_top = 13.0
+margin_right = 244.0
+margin_bottom = 27.0
 custom_fonts/font = SubResource( 6 )
 text = "name"
 align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="vision" type="Label" parent="bot_mid/stats"]
-margin_left = 92.0
-margin_top = 33.0
-margin_right = 140.0
-margin_bottom = 47.0
-custom_fonts/font = SubResource( 6 )
-text = "vision"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="damage" type="Label" parent="bot_mid/stats"]
-margin_left = 92.0
-margin_top = 47.0
-margin_right = 155.0
-margin_bottom = 61.0
-custom_fonts/font = SubResource( 6 )
-text = "damage"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="range" type="Label" parent="bot_mid/stats"]
-margin_left = 92.0
-margin_top = 61.0
-margin_right = 142.0
-margin_bottom = 75.0
-custom_fonts/font = SubResource( 6 )
-text = "range"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="speed" type="Label" parent="bot_mid/stats"]
-margin_left = 92.0
-margin_top = 75.0
-margin_right = 142.0
-margin_bottom = 89.0
-custom_fonts/font = SubResource( 6 )
-text = "speed"
-align = 1
-valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="hp" type="Label" parent="bot_mid/stats"]
-margin_left = 14.0
-margin_top = 7.0
-margin_right = 77.0
-margin_bottom = 24.0
+margin_left = 200.0
+margin_top = 11.0
+margin_right = 244.0
+margin_bottom = 29.0
 custom_colors/font_color = Color( 0.109804, 0.819608, 0.223529, 1 )
 custom_fonts/font = SubResource( 8 )
-text = "hp"
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="gold" type="Label" parent="bot_mid/stats"]
-margin_left = 134.0
-margin_top = 83.0
-margin_right = 210.0
-margin_bottom = 100.0
-custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
-custom_fonts/font = SubResource( 9 )
-text = "gold"
+text = "9999"
 align = 2
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="gold_sprite" type="Sprite" parent="bot_mid/stats"]
-position = Vector2( 223, 91 )
-texture = ExtResource( 11 )
 
 [node name="portrait" type="Control" parent="bot_mid/stats"]
 margin_left = 15.0
@@ -613,6 +579,77 @@ position = Vector2( 34, 34 )
 scale = Vector2( 2, 2 )
 region_enabled = true
 
+[node name="vision" type="Label" parent="bot_mid/stats"]
+margin_left = 94.0
+margin_top = 35.0
+margin_right = 142.0
+margin_bottom = 49.0
+custom_fonts/font = SubResource( 6 )
+text = "vision"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="damage" type="Label" parent="bot_mid/stats"]
+margin_left = 94.0
+margin_top = 49.0
+margin_right = 157.0
+margin_bottom = 63.0
+custom_fonts/font = SubResource( 6 )
+text = "damage"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="range" type="Label" parent="bot_mid/stats"]
+margin_left = 94.0
+margin_top = 63.0
+margin_right = 144.0
+margin_bottom = 77.0
+custom_fonts/font = SubResource( 6 )
+text = "range"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="speed" type="Label" parent="bot_mid/stats"]
+margin_left = 94.0
+margin_top = 77.0
+margin_right = 144.0
+margin_bottom = 91.0
+custom_fonts/font = SubResource( 6 )
+text = "speed"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="gold" type="Label" parent="bot_mid/stats"]
+margin_left = 148.0
+margin_top = 80.0
+margin_right = 224.0
+margin_bottom = 97.0
+custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "gold"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="gold_sprite" type="Sprite" parent="bot_mid/stats"]
+position = Vector2( 237, 87 )
+scale = Vector2( 0.833333, 0.833333 )
+texture = ExtResource( 11 )
+
 [node name="bot_right" type="Control" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
@@ -623,8 +660,8 @@ __meta__ = {
 }
 
 [node name="inventories" type="ItemList" parent="bot_right"]
-margin_left = -202.0
-margin_top = -106.0
+margin_left = -192.0
+margin_top = -104.0
 custom_styles/bg = SubResource( 10 )
 script = ExtResource( 2 )
 __meta__ = {
@@ -635,6 +672,7 @@ __meta__ = {
 margin_top = 40.0
 margin_right = 40.0
 margin_bottom = 40.0
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -642,15 +680,19 @@ __meta__ = {
 [node name="item_button" parent="bot_right/inventories/placeholder" instance=ExtResource( 8 )]
 
 [node name="item_button2" parent="bot_right/inventories/placeholder" instance=ExtResource( 8 )]
-margin_left = 68.0
-margin_right = 132.0
+margin_left = 64.0
+margin_right = 128.0
 
 [node name="item_button3" parent="bot_right/inventories/placeholder" instance=ExtResource( 8 )]
-margin_left = 136.0
-margin_right = 200.0
+margin_left = 128.0
+margin_right = 192.0
 
 [connection signal="pressed" from="top_right/shop_button" to="top_right/shop_window" method="shop_button_down"]
 [connection signal="pressed" from="top_right/shop_button/shop_touch_button" to="top_right/shop_window" method="shop_button_down"]
+[connection signal="pressed" from="mid_right/orders_button" to="mid_right/orders_window" method="orders_button_down"]
+[connection signal="pressed" from="mid_right/orders_button/orders_touch_button" to="mid_right/orders_window" method="orders_button_down"]
+[connection signal="pressed" from="mid_right/orders_window/shop_button" to="top_right/shop_window" method="shop_button_down"]
+[connection signal="pressed" from="mid_right/orders_window/shop_button/shop_touch_button" to="top_right/shop_window" method="shop_button_down"]
 [connection signal="gui_input" from="bot_mid/stats" to="bot_mid/stats" method="_on_stats_gui_input"]
 
 [editable path="top_right/shop_window/scroll_container/container/equip_items/item_button"]

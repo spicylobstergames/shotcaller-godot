@@ -161,7 +161,7 @@ radius = 32.0
 radius = 40.0
 
 [sub_resource type="CircleShape2D" id=32]
-radius = 110.0
+radius = 140.0
 
 [node name="barrack" instance=ExtResource( 1 )]
 hp = 900

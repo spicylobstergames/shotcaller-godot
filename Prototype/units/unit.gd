@@ -150,7 +150,7 @@ func oponent_team():
 func get_name():
 	if self.type == "leader":
 		return "%s %s" % [self.display_name, self.title]
-	else: return "%s (%s)" % [self.subtype, self.type]
+	else: return "%s" % [self.subtype]
 
 
 func look_at(point):

@@ -29,9 +29,11 @@ func _input(event):
 	if over_minimap(event):
 		# MOUSE CLICK
 		if event is InputEventMouseButton:
-			is_panning = true
-			pan_position = event.position
-			game.camera.is_panning = false
+			match event.button_index:
+				BUTTON_LEFT: 
+					is_panning = true
+					pan_position = event.position
+					game.camera.is_panning = false
 		
 		# MOUSE PAN
 		if event.is_action("pan"):
@@ -48,7 +50,8 @@ func _input(event):
 
 
 func over_minimap(event):
-	return ("position" in event and 
+	return (self.visible and 
+				"position" in event and 
 				event.position.x < 150 and 
 				event.position.y > get_viewport().size.y - 150)
 
@@ -76,11 +79,12 @@ func get_map_texture():
 
 func corner_view():
 	map_tiles.visible = true
-	minimap.visible = true
 	map_sprite.visible = false
 	for unit in game.all_units:
 		if unit.has_node("hud"):
 			unit.get_node("hud").visible = true
+	yield(get_tree(), "idle_frame")
+	minimap.visible = true
 
 
 func hide_view():

@@ -65,6 +65,9 @@ func _unhandled_input(event):
 	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
+		var point = game.camera.get_global_mouse_position()
+		var h = game.map.size / 2
+		game.camera.global_position = point - Vector2(h,h)
 		if zoom.x == zoom_limit.y: zoom_reset()
 		elif zoom == zoom_default: zoom_in()
 	if event.is_action_pressed("zoom_out"):
@@ -91,6 +94,7 @@ func zoom_out():
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 	game.ui.hide_all()
 	game.ui.minimap.hide_view()
+	game.ui.get_node("top_mid").show()
 
 
 func process():

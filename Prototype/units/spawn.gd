@@ -69,7 +69,7 @@ func leaders():
 			
 			var path = game.map.new_path(lane, team)
 			
-			var leader_node = game.map.create(self[leader], lane, team, "point_random_no_coll", path.start)
+			var leader_node = game.map.create(self[leader], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
 			game.unit.path.follow(leader_node, path.follow, "advance")
 			counter += 1
@@ -104,7 +104,7 @@ func recycle(template, lane, team, point):
 	var index = side+template
 	if cemitery[index].size():
 		var unit = cemitery[index].pop_back()
-		unit = spawn_unit(unit, lane, team, "point_random_no_coll", point)
+		unit = spawn_unit(unit, lane, team, "point_random", point)
 		unit.reset_unit()
 		return unit
 
@@ -117,7 +117,7 @@ func send_pawn(template, lane, team):
 	if not pawn:
 		var unit_template = infantry
 		if template == "archer": unit_template = archer
-		pawn = game.map.create(unit_template, lane, team, "point_random_no_coll", start)
+		pawn = game.map.create(unit_template, lane, team, "point_random", start)
 	game.unit.orders.setup_pawn(pawn, lane)
 	game.unit.path.follow(pawn, path, "advance")
 
@@ -128,10 +128,10 @@ func spawn_unit(unit, l, t, mode, point):
 	unit.team = t
 	unit.dead = false
 	unit.visible = true
-	if mode == "point_random_no_coll":
-		point = game.utils.point_random_no_coll(unit, point, 25)
-	if mode == "random_no_coll":
-		point = game.utils.random_no_coll(unit)
+	if mode == "point_random":
+		point = game.utils.offset_point_random(unit, point, 25)
+	if mode == "random_map":
+		point = game.utils.random_point()
 	unit.global_position = point
 	unit.set_state("idle")
 	unit.set_behavior("stop")

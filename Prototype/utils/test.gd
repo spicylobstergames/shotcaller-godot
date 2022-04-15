@@ -14,13 +14,13 @@ func _ready():
 
 func spawn_units():
 	game.rng.randomize()
-	var n = 20
+	var n = 80
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
-		game.map.create(infantry, "top", t, "random_no_coll", Vector2.ZERO)
-		game.map.create(infantry, "mid", t, "random_no_coll", Vector2.ZERO)
-		game.map.create(archer, "bot", t, "random_no_coll", Vector2.ZERO)
+		game.map.create(infantry, "top", t, "random_map", Vector2.ZERO)
+		game.map.create(infantry, "mid", t, "random_map", Vector2.ZERO)
+		game.map.create(archer, "bot", t, "random_map", Vector2.ZERO)
 
 
 func unit_wait_end(unit):
@@ -33,12 +33,12 @@ func unit_wait_end(unit):
 func respawn(unit):
 	if stress and unit.type != "building":
 		yield(get_tree().create_timer(1), "timeout")
-		game.map.spawn(unit, unit.lane, unit.team, "random_no_coll", Vector2.ZERO)
+		game.unit.spawn.spawn_unit(unit, unit.lane, unit.team, "random_map", Vector2.ZERO)
 
 
 func spawn_leaders():
-	var test_leaders = 1;
-	var test_pawns = 1;
+	var test_leaders = 0; # must build inventory and orders 
+	var test_pawns = 0;
 	var t1 = game.player_team
 	var t2 = game.enemy_team
 	var s = game.unit.spawn
@@ -50,7 +50,7 @@ func spawn_leaders():
 		game.map.create(s.raja, "mid", t1, "Vector2", Vector2(900,750))
 		game.map.create(s.robin, "mid", t1, "Vector2", Vector2(900,800))
 		game.map.create(s.rollo, "mid", t1, "Vector2", Vector2(900,850))
-		game.map.create(s.sami, "mid", t1, "Vector2", Vector2(900,900))
+		game.map.create(s.sida, "mid", t1, "Vector2", Vector2(900,900))
 		game.map.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
 		game.map.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
 	if test_pawns:
@@ -58,4 +58,4 @@ func spawn_leaders():
 		game.map.create(s.infantry, "mid", t1, "Vector2", Vector2(900,1050))
 		game.map.create(s.archer, "mid", t2, "Vector2", Vector2(1000,1000))
 		game.map.create(s.infantry, "mid", t2, "Vector2", Vector2(1000,1050))
-	
+

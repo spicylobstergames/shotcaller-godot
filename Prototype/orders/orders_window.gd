@@ -14,7 +14,9 @@ var enemy_building_orders = {}
 
 var button_template:PackedScene = load("res://orders/button/order_button.tscn")
 
+
 onready var container = get_node("scroll_container/container")
+
 
 var order_types = {
 		# behavior   move      advance  advance    advance
@@ -49,7 +51,10 @@ func _ready():
 			placeholder.queue_free()
 		
 		clear = true
-
+		
+	yield(get_tree(), "idle_frame")
+	game.ui.orders_button.hide()
+	update()
 
 
 func setup_leaders():
@@ -173,7 +178,7 @@ func setup_leader_buttons(orders):
 	var label2 = game.utils.label("set priority")
 	orders.node.add_child(label2)
 	setup_priority(orders)
-
+	update()
 
 func setup_building_buttons(orders):
 	if orders.building in ["barrack", "tower"]:
@@ -186,21 +191,29 @@ func setup_building_buttons(orders):
 
 
 func update():
-	hide()
 	hide_all()
-	if game.selected_unit and game.selected_unit.team == game.player_team:
+	if (game.selected_unit and 
+			game.selected_unit.team == game.player_team):
+		var small = 232
+		var large = 302
 		match game.selected_unit.type:
 			"pawn":
-				show()
-				pawn_orders.node.show()
+				game.ui.orders_button.show()
+				game.ui.orders_window.margin_left = -small
+				if not game.test.stress:
+					pawn_orders.node.show()
 			
 			"leader":
-				show()
-				leader_orders[game.selected_unit.name].node.show()
+				game.ui.orders_button.show()
+				game.ui.orders_window.margin_left = -large
+				if not game.test.stress:
+					leader_orders[game.selected_unit.name].node.show()
 			
 			"building":
-				show()
-				building_orders[game.selected_unit.subtype].node.show()
+				game.ui.orders_button.show()
+				game.ui.orders_window.margin_left = -small
+				if not game.test.stress:
+					building_orders[game.selected_unit.subtype].node.show()
 
 
 func hide_all():
@@ -212,3 +225,8 @@ func hide_all():
 		building_orders[building].node.hide()
 
 
+
+func orders_button_down():
+	self.visible = !self.visible
+	if self.visible:
+		game.ui.shop_window.hide()

@@ -68,21 +68,17 @@ func unit_collides(unit1, p):
 	return false
 
 
-func random_no_coll(unit):
-	var p = random_point()
-	while unit_collides(unit, p):
-		p = random_point()
-	return p
-
-func point_random_no_coll(unit, point, offset):
+func offset_point_random(unit, point, offset):
 	var x = (-offset) + (randf()*offset*2)
 	var y = (-offset) + (randf()*offset*2)
 	var p = point + Vector2(x, y)
-	var counter = 8
-	while unit_collides(unit, p) and counter > 0:
-		counter -= 1
-		p = point_random_no_coll(unit, point, offset)
 	return p
+# _no_coll
+#	var counter = 8
+#	while unit_collides(unit, p) and counter > 0:
+#		counter -= 1
+#		p = point_random_no_coll(unit, point, offset)
+#	return p
 
 
 func point_collision(unit1, point, s=1):

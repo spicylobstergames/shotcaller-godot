@@ -545,7 +545,7 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 150.0
+radius = 110.0
 
 [node name="robin" instance=ExtResource( 1 )]
 hp = 360

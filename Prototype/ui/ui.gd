@@ -7,7 +7,8 @@ var stats:Node
 var minimap:Node
 var shop_button:Node
 var shop_window:Node
-var orders_container:Node
+var orders_button:Node
+var orders_window:Node
 var inventories:Node
 
 
@@ -18,7 +19,8 @@ func _ready():
 	minimap = get_node("bot_left/minimap")
 	shop_button = get_node("top_right/shop_button")
 	shop_window = get_node("top_right/shop_window")
-	orders_container = get_node("mid_right/orders_container")
+	orders_button = get_node("mid_right/orders_button")
+	orders_window = get_node("mid_right/orders_window")
 	inventories = get_node("bot_right/inventories")
 
 

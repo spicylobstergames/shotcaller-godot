@@ -98,4 +98,4 @@ func shop_button_down():
 	game.ui.inventories.update_buttons()
 	if self.visible:
 		game.ui.shop_window.update_buttons()
-		
+		game.ui.orders_window.hide()
