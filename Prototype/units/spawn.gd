@@ -21,8 +21,10 @@ var archer:PackedScene = load("res://pawns/archer.tscn")
 
 
 var cemitery = {
-	"infantry": [],
-	"archer": [],
+	"player_infantry": [],
+	"enemy_infantry": [],
+	"player_archer": [],
+	"enemy_archer": [],
 	"player_leaders": [],
 	"enemy_leaders": []
 }
@@ -97,8 +99,11 @@ func spawn_group_cycle():
 
 
 func recycle(template, lane, team, point):
-	if cemitery[template].size():
-		var unit = cemitery[template].pop_back()
+	var side = "player_"
+	if team != game.player_team: side = "enemy_"
+	var index = side+template
+	if cemitery[index].size():
+		var unit = cemitery[index].pop_back()
 		unit = spawn_unit(unit, lane, team, "point_random_no_coll", point)
 		unit.reset_unit()
 		return unit
@@ -131,3 +136,18 @@ func spawn_unit(unit, l, t, mode, point):
 	unit.set_state("idle")
 	unit.set_behavior("stop")
 	return unit
+
+
+func cemitery_add_pawn(unit):
+	var side = "player_"
+	if unit.team != game.player_team: side = "enemy_"
+	var index = side+unit.subtype
+	cemitery[index].append(unit)
+
+
+func cemitery_add_leader(leader):
+	match leader.team:
+		game.player_team:
+			game.unit.spawn.cemitery.player_leaders.append(leader)
+		game.enemy_team:
+			game.unit.spawn.cemitery.enemy_leaders.append(leader)

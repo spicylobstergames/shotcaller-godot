@@ -22,16 +22,15 @@ func setup_order_button():
 	if not icon_ref: icon_ref = self.saved_icon
 	var icon = icon_ref.duplicate()
 	var sprite
-	print(name)
 	match name:
 		"building": sprite = 0
 		"pawn": sprite = 1
 		"leader": sprite = 2
 		
 		"retreat": sprite = 3
-		"defensive": sprite = 3
+		"defend": sprite = 3
 		"default": sprite = 3
-		"aggressive": sprite = 3
+		"attack": sprite = 3
 		
 	icon.region.position.x = sprite * 64
 	icon.region.position.y = -2

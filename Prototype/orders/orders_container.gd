@@ -19,8 +19,8 @@ onready var container = get_node("scroll_container/container")
 var order_types = {
 		# behavior   move      advance  advance    advance
 		# tower     never  only full hp    yes      always
-	"tactics": ["retreat","defensive","default","aggressive"],
-	"lane_tactics": ["defensive","default","aggressive"],
+	"tactics": ["retreat","defend","default","attack"],
+	"lane_tactics": ["defend","default","attack"],
 	"priority": {
 		"leader": [],
 		"pawn": ["archer", "infantary", "mounted"],
@@ -32,10 +32,10 @@ var order_types = {
 }
 
 var hint_tooltips_tactics = {
-	"retreat": "Go straight to base (retreat regen 10 HP/s)",
-	"defensive": "Retreat if less than half HP",
+	"retreat": "Retreat on first hit",
+	"defend": "Retreat if less than half HP",
 	"default": "Retreat if less than third HP",
-	"aggressive": "Never retreat"
+	"attack": "Never retreats"
 }
 
 func _ready():

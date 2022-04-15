@@ -78,7 +78,9 @@ func point_random_no_coll(unit, point, offset):
 	var x = (-offset) + (randf()*offset*2)
 	var y = (-offset) + (randf()*offset*2)
 	var p = point + Vector2(x, y)
-	while unit_collides(unit, p):
+	var counter = 8
+	while unit_collides(unit, p) and counter > 0:
+		counter -= 1
 		p = point_random_no_coll(unit, point, offset)
 	return p
 

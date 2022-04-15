@@ -23,15 +23,30 @@ func _unhandled_input(event):
 
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
-		match event.button_index:
-			BUTTON_LEFT: select(point)
-			BUTTON_RIGHT: unselect()
+		if game.camera.zoom.x <= 1:
+			match event.button_index:
+				BUTTON_LEFT: select(point)
+				BUTTON_RIGHT: unselect()
+		
+		# MAP CLICK ZOOM IN
+		else: 
+			match event.button_index:
+				BUTTON_LEFT: 
+					game.camera.zoom_reset()
+					var h = game.map.size / 2
+					game.camera.global_position = point - Vector2(h,h)
 	
 	
 	# TOUCH SELECTION
 	if event is InputEventScreenTouch and event.pressed: 
-		select(event.position)
-
+		if game.camera.zoom.x <= 1:
+			select(event.position)
+		
+		# MAP TOUCH ZOOM IN
+		else: 
+			game.camera.zoom_reset()
+			var h = game.map.size / 2
+			game.camera.global_position = point - Vector2(h,h)
 
 
 func setup_selection(unit):

@@ -31,7 +31,7 @@ func _input(event):
 		if event is InputEventMouseButton:
 			is_panning = true
 			pan_position = event.position
-		
+			game.camera.is_panning = false
 		
 		# MOUSE PAN
 		if event.is_action("pan"):
@@ -78,26 +78,18 @@ func corner_view():
 	map_tiles.visible = true
 	minimap.visible = true
 	map_sprite.visible = false
-	for unit in map_symbols_map:
-		unit.get_node("symbol").visible = false
 	for unit in game.all_units:
 		if unit.has_node("hud"):
 			unit.get_node("hud").visible = true
-			unit.get_node("sprites").visible = true
-			unit.get_node("animations").current_animation = unit.state
 
 
 func hide_view():
 	map_tiles.visible = false
 	minimap.visible = false
 	map_sprite.visible = true
-	for unit in map_symbols_map:
-		unit.get_node("symbol").visible = true
 	for unit in game.all_units:
 		if unit.has_node("hud"):
 			unit.get_node("hud").visible = false
-			unit.get_node("sprites").visible = false
-			unit.get_node("animations").current_animation = ""
 
 
 func setup_symbol(unit):

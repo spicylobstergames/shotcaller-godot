@@ -25,9 +25,11 @@ func update():
 		set_texture(portrait, texture)
 		if unit.type == "leader" and unit.team == game.player_team:
 			var gold = str(game.ui.inventories.leaders[unit.name].gold)
-			get_node("gold").text = "Gold: %s" % gold
+			get_node("gold").text = "%s" % gold
+			get_node("gold_sprite").visible = true
 		else:
 			get_node("gold").text = ""
+			get_node("gold_sprite").visible = false
 	else:
 		hide()
 

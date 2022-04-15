@@ -24,6 +24,7 @@ var lanes = {
 	}
 }
 
+var retreat_speed = 1.1
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -73,18 +74,20 @@ func setup_pawn(unit, lane):
 
 func setup_leaders():
 	for leader in game.player_leaders:
-		var leader_orders = player_orders[leader.name]
-		var tactics = leader_orders.tactics
-		leader.priority = leader_orders.priority.duplicate()
-		leader.current_speed = tactics.speed * leader.speed
-		leader.tactics = tactics.tactic
-
+		set_leader(leader, player_orders[leader.name])
+	
 	for leader in game.enemy_leaders:
-		var leader_orders = enemy_orders[leader.name]
-		var tactics = leader_orders.tactics
-		leader.priority = leader_orders.priority.duplicate()
-		leader.current_speed = tactics.speed * leader.speed
-		leader.tactics = tactics.tactic
+		set_leader(leader, enemy_orders[leader.name])
+
+
+func set_leader(leader, orders):
+	var tactics = orders.tactics
+	if leader.retreating: leader.current_speed = 1.1 * leader.speed
+	else: leader.current_speed = tactics.speed * leader.speed
+	leader.tactics = tactics.tactic
+	leader.priority = orders.priority.duplicate()
+
+
 
 func setup_lanes_priority():
 	for building in game.player_buildings:
@@ -97,11 +100,11 @@ func set_lane_tactic(tactic):
 	var lane_tactics = lanes[lane]
 	lane_tactics.tactic = tactic
 	match tactic:
-		"defensive":
+		"defend":
 			lane_tactics.speed = 0.9
 		"default":
 			lane_tactics.speed = 1
-		"aggressive":
+		"attack":
 			lane_tactics.speed = 1.1
 
 
@@ -111,12 +114,12 @@ func set_leader_tactic(tactic):
 	leader_tactics.tactic = tactic
 	match tactic:
 		"retreat":
-			leader_tactics.speed = 1.1
-		"defensive":
+			leader_tactics.speed = 1
+		"defend":
 			leader_tactics.speed = 0.9
 		"default":
 			leader_tactics.speed = 1
-		"aggressive":
+		"attack":
 			leader_tactics.speed = 1
 
 
@@ -187,6 +190,5 @@ func retreat_end(unit):
 		unit.retreating = false
 		var path = game.map.new_path(unit.lane, unit.team)
 		game.unit.path.follow(unit, path.follow, "advance")
-		print("follow")
 		return true
 	return false

@@ -43,8 +43,6 @@ func hide_all():
 
 
 func show_all():
-	game.ui.fps.show()
-	game.ui.shop_button.show()
 	for panel in self.get_children():
 		panel.show()
 

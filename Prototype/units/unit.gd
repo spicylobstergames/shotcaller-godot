@@ -125,7 +125,7 @@ func setup_team():
 		self.mirror_toggle(is_red)
 	# COLORS
 	var texture = self.get_texture()
-	if not is_red and texture.sprite.material:
+	if not is_red:
 		texture.sprite.material = null
 	else:
 		texture.sprite.material = get_node("sprites/sprite").material
@@ -294,12 +294,9 @@ func on_death_end():  # death animation end
 	if not game.test.stress:
 		match self.type:
 			"pawn":
-				game.unit.spawn.cemitery[self.subtype].append(self)
+				game.unit.spawn.cemitery_add_pawn(self)
 			"leader":
-				match self.team:
-					game.player_team:
-						game.unit.spawn.cemitery.player_leaders.append(self)
-					game.enemy_team:
-						game.unit.spawn.cemitery.enemy_leaders.append(self)
+				game.unit.spawn.cemitery_add_leader(self)
+
 						
 	else: game.test.respawn(self)
