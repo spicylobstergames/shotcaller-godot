@@ -15,7 +15,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
-	game.ui.shop_button.hide()
+	game.ui.shop_button.disabled = true
 	
 	if not clear:
 		for placeholder_item in equip_items.get_children():
@@ -25,9 +25,6 @@ func _ready():
 		for placeholder_item in consumable_items.get_children():
 			consumable_items.remove_child(placeholder_item)
 			placeholder_item.queue_free()
-		
-		container.get_node("placeholder").hide()
-		container.get_node("placeholder_items").hide()
 		
 		clear = true
 
@@ -100,3 +97,5 @@ func shop_button_down():
 	if self.visible:
 		game.ui.shop_window.update_buttons()
 		game.ui.orders_window.hide()
+		game.ui.inventories.move_down()
+	else: game.ui.inventories.move_up()

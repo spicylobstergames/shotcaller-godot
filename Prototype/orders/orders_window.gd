@@ -53,7 +53,7 @@ func _ready():
 		clear = true
 		
 	yield(get_tree(), "idle_frame")
-	game.ui.orders_button.hide()
+	game.ui.orders_button.disabled = true
 	update()
 
 
@@ -202,19 +202,19 @@ func update():
 		var large = 302
 		match game.selected_unit.type:
 			"pawn":
-				game.ui.orders_button.show()
+				game.ui.orders_button.disabled = false
 				game.ui.orders_window.margin_left = -small
 				if not game.test.stress:
 					pawn_orders.node.show()
 			
 			"leader":
-				game.ui.orders_button.show()
+				game.ui.orders_button.disabled = false
 				game.ui.orders_window.margin_left = -large
 				if not game.test.stress:
 					leader_orders[game.selected_unit.name].node.show()
 			
 			"building":
-				game.ui.orders_button.show()
+				game.ui.orders_button.disabled = false
 				game.ui.orders_window.margin_left = -small
 				if not game.test.stress:
 					building_orders[game.selected_unit.subtype].node.show()
@@ -233,5 +233,6 @@ func hide_all():
 func orders_button_down():
 	self.visible = !self.visible
 	if self.visible:
+		game.ui.inventories.move_up()
 		game.ui.shop_window.hide()
 		game.ui.inventories.update_buttons()

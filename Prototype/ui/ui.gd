@@ -5,10 +5,14 @@ var game:Node
 var fps:Node
 var stats:Node
 var minimap:Node
-var shop_button:Node
 var shop_window:Node
-var orders_button:Node
 var orders_window:Node
+var control_window:Node
+var main_menu:Node
+var orders_button:Node
+var shop_button:Node
+var control_button:Node
+var menu_button:Node
 var inventories:Node
 
 
@@ -17,11 +21,13 @@ func _ready():
 	fps = get_node("top_mid/fps")
 	stats = get_node("bot_mid/stats")
 	minimap = get_node("bot_left/minimap")
-	shop_button = get_node("top_right/shop_button")
-	shop_window = get_node("top_right/shop_window")
-	orders_button = get_node("mid_right/orders_button")
-	orders_window = get_node("mid_right/orders_window")
-	inventories = get_node("bot_right/inventories")
+	main_menu = get_node("mid/main_menu")
+	control_button = get_node("bot_right/buttons/control_button")
+	shop_button = get_node("bot_right/buttons/shop_button")
+	orders_button = get_node("bot_right/buttons/orders_button")
+	shop_window = get_node("top_right/shop")
+	orders_window = get_node("bot_right/orders")
+	inventories = get_node("top_right/inventory/inventories")
 
 
 

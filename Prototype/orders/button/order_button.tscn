@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://orders/button/order_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=2]
@@ -25,6 +25,8 @@ margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
 
+[sub_resource type="StyleBoxEmpty" id=21]
+
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 4 )
 region = Rect2( 0, -2, 60, 60 )
@@ -43,6 +45,7 @@ rect_min_size = Vector2( 64, 64 )
 custom_fonts/font = SubResource( 2 )
 custom_styles/hover = SubResource( 13 )
 custom_styles/pressed = SubResource( 16 )
+custom_styles/focus = SubResource( 21 )
 custom_styles/disabled = SubResource( 16 )
 custom_styles/normal = SubResource( 13 )
 toggle_mode = true

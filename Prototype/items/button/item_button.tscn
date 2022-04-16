@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/items/items.png" type="Texture" id=2]
@@ -12,6 +12,16 @@ margin_left = 2.0
 margin_right = 2.0
 margin_top = 2.0
 margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id=17]
+texture = ExtResource( 4 )
+region_rect = Rect2( 109, 37, 33, 33 )
+margin_left = 2.0
+margin_right = 2.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id=21]
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 2 )
@@ -53,7 +63,8 @@ margin_right = 64.0
 margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
 custom_styles/hover = SubResource( 13 )
-custom_styles/pressed = SubResource( 13 )
+custom_styles/pressed = SubResource( 17 )
+custom_styles/focus = SubResource( 21 )
 custom_styles/disabled = SubResource( 13 )
 custom_styles/normal = SubResource( 13 )
 icon = SubResource( 14 )
@@ -105,6 +116,7 @@ margin_bottom = -68.0
 custom_fonts/font = SubResource( 4 )
 custom_styles/hover = SubResource( 16 )
 custom_styles/pressed = SubResource( 15 )
+custom_styles/focus = SubResource( 21 )
 custom_styles/disabled = SubResource( 15 )
 custom_styles/normal = SubResource( 16 )
 text = "sell"

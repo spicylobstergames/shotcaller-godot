@@ -41,7 +41,7 @@ func new_inventory():
 		"equip_item_buttons": [],
 		"consumable_item_buttons": []
 	}
-	inventory.container.set("custom_constants/separation", 0)
+	#inventory.container.set("custom_constants/separation", 0)
 	inventory.container.margin_top = sell_button_margin
 # warning-ignore:unused_variable
 	for index in range(equip_items_max):
@@ -245,3 +245,12 @@ func update_buttons():
 		else:
 			for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
 				item_button.sell_button.hide()
+
+
+func move_down():
+	get_parent().remove_child(self)
+	game.ui.get_node("bot_right/inventory").add_child(self)
+
+func move_up():
+	get_parent().remove_child(self)
+	game.ui.get_node("top_right/inventory").add_child(self)
