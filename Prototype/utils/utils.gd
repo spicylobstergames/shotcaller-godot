@@ -104,6 +104,6 @@ func label(string):
 	var label_node = Label.new()
 	label_node.text = string
 	if not font:
-		font = game.ui.shop_window.get_node("scroll_container/container/equip").get_font("font")
+		font = game.ui.shop.get_node("scroll_container/container/equip").get_font("font")
 	label_node.add_font_override("font", font)
 	return label_node

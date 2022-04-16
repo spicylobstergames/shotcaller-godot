@@ -2,6 +2,8 @@ extends Node
 var game:Node
 
 
+var retreat_regen = 10
+
 var player_orders = {}
 var enemy_orders = {}
 var leaders_priority = ["building", "leader", "pawn"]
@@ -50,22 +52,23 @@ func build_leaders():
 
 
 func hp_regen_cycle():
-	for leader in game.player_leaders:
-		if leader.retreating: leader.current_hp += 10
-		else: leader.current_hp += 1
-		if leader.current_hp >= leader.hp: leader.current_hp = leader.hp
-		game.unit.hud.update_hpbar(leader)
-		if leader == game.selected_unit: game.ui.stats.update()
 	
+	for leader in game.player_leaders:
+		set_regen(leader)
 	for leader in game.enemy_leaders:
-		if leader.retreating: leader.current_hp += 10
-		else: leader.current_hp += 1
-		if leader.current_hp >= leader.hp: leader.current_hp = leader.hp
-		game.unit.hud.update_hpbar(leader)
-		if leader == game.selected_unit: game.ui.stats.update()
+		set_regen(leader)
 		
 	yield(get_tree().create_timer(1), "timeout")
 	hp_regen_cycle()
+
+
+func set_regen(leader):
+	if leader.retreating: leader.regen = retreat_regen
+	else: leader.regen = 1
+	leader.current_hp += leader.regen
+	leader.current_hp = min(leader.current_hp, leader.hp)
+	game.unit.hud.update_hpbar(leader)
+	if leader == game.selected_unit: game.ui.stats.update()
 
 
 func setup_pawn(unit, lane):

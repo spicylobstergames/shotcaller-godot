@@ -233,6 +233,6 @@ func hide_all():
 func orders_button_down():
 	self.visible = !self.visible
 	if self.visible:
-		game.ui.inventories.move_up()
-		game.ui.shop_window.hide()
+		game.ui.shop.hide()
 		game.ui.inventories.update_buttons()
+	game.ui.buttons.update()

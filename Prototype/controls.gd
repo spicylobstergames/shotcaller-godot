@@ -64,11 +64,11 @@ func select(point):
 		if unit.team == game.player_team and unit.type == "leader":
 			game.selected_leader = unit
 			game.ui.shop_button.disabled = false
-			game.ui.shop_window.update_buttons()
+			game.ui.shop.update_buttons()
 			game.ui.inventories.update_buttons()
 		else:
 			game.selected_leader = null
-			game.ui.shop_window.disable_all()
+			game.ui.shop.disable_all()
 		unit.get_node("hud/state").visible = true
 		unit.get_node("hud/selection").visible = true
 		unit.get_node("hud").update_hpbar(unit)
@@ -86,12 +86,12 @@ func unselect():
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.stats.update()
-	game.ui.shop_window.hide()
+	game.ui.shop.hide()
 	game.ui.orders_window.hide()
 	game.ui.shop_button.disabled = true
 	game.ui.orders_button.disabled = true
 	game.ui.inventories.hide()
-
+	game.ui.buttons.update()
 
 func get_sel_unit_at_point(point):
 	for unit in game.selectable_units:

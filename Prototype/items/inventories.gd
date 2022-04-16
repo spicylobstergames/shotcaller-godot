@@ -88,7 +88,7 @@ func gold_timer_timeout(inventory):
 		# Updating gold label
 	inventory.gold += 10
 	if game.selected_leader: game.ui.stats.update()
-	game.ui.shop_window.update_buttons()
+	game.ui.shop.update_buttons()
 	yield(get_tree().create_timer(1), "timeout")
 	gold_timer_timeout(inventory)
 
@@ -233,7 +233,7 @@ func update_buttons():
 		inventory.container.show()
 		
 		# Hide or show sell buttons
-		if game.ui.shop_window.visible:
+		if game.ui.shop.visible:
 			var counter = 0
 			for item in inventory.equip_items:
 				inventory.equip_item_buttons[counter].show_sell_button()
@@ -246,11 +246,3 @@ func update_buttons():
 			for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
 				item_button.sell_button.hide()
 
-
-func move_down():
-	get_parent().remove_child(self)
-	game.ui.get_node("bot_right/inventory").add_child(self)
-
-func move_up():
-	get_parent().remove_child(self)
-	game.ui.get_node("top_right/inventory").add_child(self)

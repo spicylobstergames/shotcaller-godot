@@ -2,8 +2,18 @@ extends ItemList
 var game:Node
 
 
-onready var hpbar = get_node("hpbar")
-
+onready var panel = get_node("panel")
+onready var hpbar = panel.get_node("hpbar")
+onready var unit_name = panel.get_node("name")
+onready var hp = panel.get_node("hp")
+onready var regen = panel.get_node("regen")
+onready var vision = panel.get_node("vision")
+onready var damage = panel.get_node("damage")
+onready var att_range = panel.get_node("range")
+onready var speed = panel.get_node("speed")
+onready var gold = panel.get_node("gold")
+onready var gold_sprite = panel.get_node("gold_sprite")
+onready var portrait_sprite = panel.get_node("portrait/sprite")
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -16,25 +26,24 @@ func update():
 	clear_old_hpbar()
 	if unit:
 		show()
-		get_node("name").text = unit.get_name()
-		get_node("current_hp").text = "%s" % [max(unit.current_hp,0)]
-		get_node("hp").text = "%s" % [unit.hp]
+		unit_name.text = unit.get_name()
+		hp.text = "%s / %s" % [max(unit.current_hp,0), unit.hp]
+		if unit.regen: regen.text = "+%s" % [unit.regen]
+		else: regen.text = ""
 		add_new_hpbar(unit)
-		get_node("damage").text = "Damage: %s" % unit.current_damage
-		get_node("vision").text = "Vision: %s" % unit.current_vision
-		get_node("range").text = "Range: %s" % unit.attack_hit_radius
-		if unit.moves: get_node("speed").text = "Speed: %s" % unit.current_speed
-		else: get_node("speed").text = ""
+		damage.text = "Damage: %s" % unit.current_damage
+		vision.text = "Vision: %s" % unit.current_vision
+		att_range.text = "Range: %s" % unit.attack_hit_radius
+		if unit.moves: speed.text = "Speed: %s" % unit.current_speed
+		else: speed.text = ""
 		var texture = unit.get_texture()
-		var portrait = get_node("portrait/sprite")
-		set_texture(portrait, texture)
+		set_texture(portrait_sprite, texture)
 		if unit.type == "leader" and unit.team == game.player_team:
-			var gold = str(game.ui.inventories.leaders[unit.name].gold)
-			get_node("gold").text = "%s" % gold
-			get_node("gold_sprite").visible = true
+			gold.text = "%s" % unit.get_gold()
+			gold_sprite.visible = true
 		else:
-			get_node("gold").text = ""
-			get_node("gold_sprite").visible = false
+			gold.text = ""
+			gold_sprite.visible = false
 	else:
 		hide()
 
@@ -62,7 +71,7 @@ func clear_old_hpbar():
 func add_new_hpbar(unit):
 	var red = unit.hud.get_node("hpbar/red").duplicate()
 	var green = unit.hud.get_node("hpbar/green").duplicate()
-	red.scale *= Vector2(13,10)
-	green.scale *= Vector2(13,10)
+	red.scale *= Vector2(11,11)
+	green.scale *= Vector2(11,11)
 	hpbar.add_child(red)
 	hpbar.add_child(green)

@@ -38,8 +38,7 @@ func setup(new_item):
 		var icon_ref = self.icon
 		if not icon_ref: icon_ref = self.saved_icon
 		var icon = icon_ref.duplicate()
-		icon.region.position.x = 8 + new_item.sprite * 60
-		icon.region.position.y = 6
+		icon.region.position.x = new_item.sprite * 46
 		self.icon = icon
 		name_label.text = self.name
 		var price = new_item.price
@@ -54,7 +53,7 @@ func on_button_down():
 		# BUY ITEM
 		game.ui.inventories.leaders[leader.name].gold -= item.price
 		game.ui.inventories.add_delivery(leader, item)
-		game.ui.shop_window.disable_all()
+		game.ui.shop.disable_all()
 
 	else: # inventory item
 		# USE ITEM

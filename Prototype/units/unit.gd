@@ -3,6 +3,7 @@ var game:Node
 
 export var hp:int = 100
 var current_hp:int = 100
+var regen:int = 0
 export var vision:int = 100
 var current_vision:int = 100
 export var type:String = "pawn" # building leader
@@ -149,7 +150,7 @@ func oponent_team():
 
 func get_name():
 	if self.type == "leader":
-		return "%s %s" % [self.display_name, self.title]
+		return "%s" % [self.display_name]
 	else: return "%s" % [self.subtype]
 
 
@@ -232,6 +233,10 @@ func setup_collisions(unit):
 		unit.attack_hit_position = unit.get_node("collisions/attack").position
 		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
 
+
+func get_gold():
+	if self.name in game.ui.inventories.leaders:
+		return game.ui.inventories.leaders[self.name].gold
 
 
 func wait():

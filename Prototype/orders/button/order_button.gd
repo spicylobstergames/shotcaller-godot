@@ -32,8 +32,8 @@ func setup_order_button():
 		"default": sprite = 5
 		"attack": sprite = 6
 		
-	icon.region.position.x = sprite * 62
-	icon.region.position.y = -2
+	icon.region.position.x = sprite * 46
+	
 	self.icon = icon
 
 

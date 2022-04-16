@@ -34,7 +34,7 @@ func _ready():
 	add_item(build_item("Helmet", 1, "Add 50 HP to leader stats", 20, "equip", {"hp": 50}))
 	add_item(build_item("Potion", 2, "Restore 50 HP", 5, "consumable", {"current_hp": 50}))
 	
-	game.ui.shop_window.disable_all()
+	game.ui.shop.disable_all()
 
 
 func build_item(name, sprite, description, price, type, attributes):
@@ -95,7 +95,6 @@ func shop_button_down():
 	self.visible = !self.visible
 	game.ui.inventories.update_buttons()
 	if self.visible:
-		game.ui.shop_window.update_buttons()
+		game.ui.shop.update_buttons()
 		game.ui.orders_window.hide()
-		game.ui.inventories.move_down()
-	else: game.ui.inventories.move_up()
+	game.ui.buttons.update()

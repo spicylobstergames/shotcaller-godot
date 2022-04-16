@@ -3,31 +3,33 @@ var game:Node
 
 
 var fps:Node
+var buttons:Node
 var stats:Node
 var minimap:Node
-var shop_window:Node
-var orders_window:Node
-var control_window:Node
+var shop:Node
 var main_menu:Node
 var orders_button:Node
 var shop_button:Node
 var control_button:Node
 var menu_button:Node
 var inventories:Node
+var orders_window:Node
+var control_window:Node
 
 
 func _ready():
 	game = get_tree().get_current_scene()
 	fps = get_node("top_mid/fps")
+	buttons = get_node("bot_right/buttons")
+	shop = get_node("top_right/shop")
 	stats = get_node("bot_mid/stats")
 	minimap = get_node("bot_left/minimap")
 	main_menu = get_node("mid/main_menu")
 	control_button = get_node("bot_right/buttons/control_button")
 	shop_button = get_node("bot_right/buttons/shop_button")
 	orders_button = get_node("bot_right/buttons/orders_button")
-	shop_window = get_node("top_right/shop")
 	orders_window = get_node("bot_right/orders")
-	inventories = get_node("top_right/inventory/inventories")
+	inventories = stats.get_node("inventories")
 
 
 
