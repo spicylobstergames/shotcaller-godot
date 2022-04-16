@@ -3,7 +3,7 @@
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/items/items.png" type="Texture" id=2]
 [ext_resource path="res://items/button/item_button.gd" type="Script" id=3]
-[ext_resource path="res://assets/ui/ui_artwork.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=4]
 
 [sub_resource type="StyleBoxTexture" id=13]
 texture = ExtResource( 4 )

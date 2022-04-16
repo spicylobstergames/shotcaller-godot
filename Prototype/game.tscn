@@ -5,7 +5,7 @@
 [ext_resource path="res://camera.gd" type="Script" id=3]
 [ext_resource path="res://ui/ui.tscn" type="PackedScene" id=4]
 [ext_resource path="res://units/unit.tscn" type="PackedScene" id=5]
-[ext_resource path="res://controls.gd" type="Script" id=7]
+[ext_resource path="res://selection.gd" type="Script" id=7]
 [ext_resource path="res://utils/utils.gd" type="Script" id=8]
 [ext_resource path="res://utils/test.gd" type="Script" id=9]
 [ext_resource path="res://collision.gd" type="Script" id=10]
@@ -37,7 +37,7 @@ zoom = Vector2( 3.52, 3.52 )
 
 [node name="ui" parent="." instance=ExtResource( 4 )]
 
-[node name="controls" type="Node" parent="."]
+[node name="selection" type="Node" parent="."]
 script = ExtResource( 7 )
 
 [node name="collision" type="Node" parent="."]

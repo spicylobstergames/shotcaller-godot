@@ -19,7 +19,6 @@ var sell_button_margin = 40
 
 
 func _ready():
-	yield(get_tree(), "idle_frame")
 	game = get_tree().get_current_scene()
 	
 	hide()

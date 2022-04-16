@@ -12,9 +12,9 @@ var arrow_keys_move:Vector2 = Vector2.ZERO
 
 
 func _ready():
-	yield(get_tree(), "idle_frame")
 	game = get_tree().get_current_scene()
 	zoom = zoom_default
+	yield(get_tree(), "idle_frame")
 	zoom_limit.y = game.map_camera.zoom.y
 
 

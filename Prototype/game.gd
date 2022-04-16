@@ -1,5 +1,7 @@
 extends Node2D
 
+#yield(get_tree(), "idle_frame")
+	
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
 var player_units:Array = []
@@ -19,38 +21,36 @@ var enemy_team:String = "red"
 
 var rng = RandomNumberGenerator.new()
 
-var map:Node
+onready var map = get_node("map")
+onready var camera = get_node("camera")
+onready var ui = get_node("ui")
+onready var selection = get_node("selection")
+onready var collision = get_node("collision")
+
 var unit:Node
-var camera:Node
-var map_camera:Node
-var ui:Node
-var controls:Node
-var collision:Node
 var utils:Node
 var test:Node
+var map_camera:Node
 
 var started:bool = false
 
 
 func _ready():
-	map = get_node("map")
 	unit = get_node("map/unit")
-	camera = get_node("camera")
 	map_camera = get_node("map_camera")
-	ui = get_node("ui")
-	controls = get_node("controls")
-	collision = get_node("collision")
 	utils = get_node("utils")
 	test = get_node("test")
 	
 	map.setup_buildings()
+	map.blocks.setup_quadtree()
 
 
 func start():
 	started = true
 	
+	yield(get_tree(), "idle_frame")
+	print(unit)
 	rng.randomize()
-	map.blocks.setup_quadtree()
 	unit.path.setup_pathfind()
 	#map.fog.cover_map()
 	
@@ -59,7 +59,7 @@ func start():
 		#test.spawn_leaders()
 		
 	else: 
-		yield(get_tree(), "idle_frame")
+		#yield(get_tree(), "idle_frame")
 		unit.spawn.choose_leaders()
 		map.setup_lanes()
 		ui.orders_window.setup_pawns()

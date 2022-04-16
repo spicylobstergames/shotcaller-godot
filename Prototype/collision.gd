@@ -6,6 +6,21 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
+func setup(unit):
+	if unit.has_node("collisions/select"):
+		unit.selection_position = unit.get_node("collisions/select").position
+		unit.selection_radius = unit.get_node("collisions/select").shape.radius
+	
+	if unit.has_node("collisions/block"):
+		unit.collision_position = unit.get_node("collisions/block").position
+		unit.collision_radius = unit.get_node("collisions/block").shape.radius
+	
+	if unit.has_node("collisions/attack"):
+		unit.attack_hit_position = unit.get_node("collisions/attack").position
+		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
+
+
+
 func process(delta):
 	game.map.blocks.quad.clear()
 	for unit1 in game.all_units:
@@ -59,3 +74,4 @@ func process(delta):
 		# save last positions
 		unit1.last_position2 = unit1.last_position
 		unit1.last_position = unit1.global_position
+

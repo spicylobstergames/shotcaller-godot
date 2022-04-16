@@ -52,8 +52,6 @@ func _ready():
 		
 		clear = true
 		
-	yield(get_tree(), "idle_frame")
-	game.ui.orders_button.disabled = true
 	update()
 
 
@@ -161,6 +159,7 @@ func setup_priority(orders):
 	first.set_pressed(true)
 	first.set_disabled(true)
 
+
 func setup_order_button(button):
 	yield(get_tree(), "idle_frame")
 	button.setup_order_button()
@@ -228,11 +227,3 @@ func hide_all():
 	for building in building_orders:
 		building_orders[building].node.hide()
 
-
-
-func orders_button_down():
-	self.visible = !self.visible
-	if self.visible:
-		game.ui.shop.hide()
-		game.ui.inventories.update_buttons()
-	game.ui.buttons.update()

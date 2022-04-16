@@ -220,19 +220,6 @@ func get_units_on_sight(filters):
 	return targets
 
 
-func setup_collisions(unit):
-	if unit.has_node("collisions/select"):
-		unit.selection_position = unit.get_node("collisions/select").position
-		unit.selection_radius = unit.get_node("collisions/select").shape.radius
-	
-	if unit.has_node("collisions/block"):
-		unit.collision_position = unit.get_node("collisions/block").position
-		unit.collision_radius = unit.get_node("collisions/block").shape.radius
-	
-	if unit.has_node("collisions/attack"):
-		unit.attack_hit_position = unit.get_node("collisions/attack").position
-		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
-
 
 func get_gold():
 	if self.name in game.ui.inventories.leaders:

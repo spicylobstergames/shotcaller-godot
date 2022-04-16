@@ -4,8 +4,8 @@ var game:Node
 
 
 # PATHFIND GRID
-const _GridGD = preload("../map/pathfind/grid.gd")
-const _JumpPointFinderGD = preload("../map/pathfind/jump_point_finder.gd")
+const _GridGD = preload("../../map/pathfind/grid.gd")
+const _JumpPointFinderGD = preload("../../map/pathfind/jump_point_finder.gd")
 var path_grid
 var path_finder
 

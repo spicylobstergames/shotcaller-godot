@@ -62,8 +62,8 @@ func setup_buildings():
 			game.ui.minimap.setup_symbol(building)
 			building.set_state("idle")
 			building.set_behavior("stop")
-			game.controls.setup_selection(building)
-			game.unit.setup_collisions(building)
+			game.selection.setup_selection(building)
+			game.collision.setup(building)
 			if building.team == game.player_team:
 				game.player_buildings.append(building)
 			else:
@@ -77,8 +77,8 @@ func create(template, lane, team, mode, point):
 	unit.reset_unit()
 	game.all_units.append(unit)
 	
-	game.controls.setup_selection(unit)
-	game.unit.setup_collisions(unit)
+	game.selection.setup_selection(unit)
+	game.collision.setup(unit)
 	game.unit.move.setup_timer(unit)
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":

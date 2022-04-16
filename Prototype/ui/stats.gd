@@ -59,7 +59,7 @@ func set_texture(portrait, texture):
 
 func _on_stats_gui_input(event):
 	if event is InputEventMouseButton and not event.pressed: 
-		game.controls.unselect()
+		game.selection.unselect()
 
 
 func clear_old_hpbar():

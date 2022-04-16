@@ -11,11 +11,9 @@ onready var consumable_items = container.get_node("consumable_items")
 
 
 func _ready():
-	yield(get_tree(), "idle_frame")
 	game = get_tree().get_current_scene()
 	
 	hide()
-	game.ui.shop_button.disabled = true
 	
 	if not clear:
 		for placeholder_item in equip_items.get_children():
@@ -34,7 +32,8 @@ func _ready():
 	add_item(build_item("Helmet", 1, "Add 50 HP to leader stats", 20, "equip", {"hp": 50}))
 	add_item(build_item("Potion", 2, "Restore 50 HP", 5, "consumable", {"current_hp": 50}))
 	
-	game.ui.shop.disable_all()
+
+	disable_all()
 
 
 func build_item(name, sprite, description, price, type, attributes):
@@ -89,12 +88,3 @@ func update_buttons():
 				for item_button in consumable_items.get_children():
 					item_button.disabled = true
 
-
-
-func shop_button_down():
-	self.visible = !self.visible
-	game.ui.inventories.update_buttons()
-	if self.visible:
-		game.ui.shop.update_buttons()
-		game.ui.orders_window.hide()
-	game.ui.buttons.update()
