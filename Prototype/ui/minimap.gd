@@ -22,7 +22,6 @@ func _ready():
 	map_symbols = minimap.get_node("symbols")
 	
 	hide()
-	update_map_texture = true
 
 
 func _input(event):

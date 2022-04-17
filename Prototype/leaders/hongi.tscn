@@ -622,6 +622,7 @@ z_index = 1
 visible = false
 position = Vector2( 0.56083, -0.0223792 )
 frames = SubResource( 39 )
+offset = Vector2( 0, -4 )
 
 [node name="sprite" parent="sprites" index="4"]
 visible = false

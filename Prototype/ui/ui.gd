@@ -7,14 +7,14 @@ var buttons:Node
 var stats:Node
 var minimap:Node
 var shop:Node
+var controls:Node
+var orders:Node
 var main_menu:Node
 var orders_button:Node
 var shop_button:Node
-var move_button:Node
+var controls_button:Node
 var menu_button:Node
 var inventories:Node
-var orders_window:Node
-var move_window:Node
 
 
 func _ready():
@@ -26,11 +26,12 @@ func _ready():
 	minimap = get_node("bot_left/minimap")
 	main_menu = get_node("mid/main_menu")
 	buttons = get_node("bot_right/buttons")
-	orders_window = get_node("bot_right/orders")
-	move_window = get_node("bot_right/move_control")
+	orders = get_node("bot_right/orders")
+	controls = get_node("bot_right/controls")
 	
 	inventories = stats.get_node("inventories")
-	move_button = buttons.get_node("move_button")
+	
+	controls_button = buttons.get_node("controls_button")
 	shop_button = buttons.get_node("shop_button")
 	orders_button = buttons.get_node("orders_button")
 
@@ -43,7 +44,8 @@ func process():
 	fps.set_text('fps: '+str(f)+' u:'+str(n))
 	
 	if minimap and game.camera.zoom.x <= 1:
-		if minimap.update_map_texture: minimap.get_map_texture()
+		if minimap.update_map_texture: 
+			minimap.get_map_texture()
 		minimap.move_symbols()
 		minimap.follow_camera()
 
@@ -69,27 +71,28 @@ func shop_button_down():
 	inventories.update_buttons()
 	if shop.visible:
 		shop.update_buttons()
-		move_window.hide()
-		orders_window.hide()
+		controls.hide()
+		orders.hide()
 	buttons_update()
 
 
 func orders_button_down():
-	orders_window.visible = !orders_window.visible
-	if orders_window.visible:
+	orders.visible = !orders.visible
+	if orders.visible:
 		shop.hide()
-		move_window.hide()
+		controls.hide()
 		inventories.update_buttons() # hide sell bt
 	buttons_update()
 
 
 
-func move_button_down():
-	move_window.visible = !move_window.visible
-	if move_window.visible:
+func controls_button_down():
+	controls.visible = !controls.visible
+	if controls.visible:
 		shop.hide()
-		orders_window.hide()
+		orders.hide()
 		inventories.update_buttons() # hide sell bt
+	else: game.control_state = "selection"
 	buttons_update()
 
 
@@ -97,14 +100,14 @@ func move_button_down():
 func show_select():
 	stats.update()
 	orders_button.disabled = false
-	orders_window.update()
+	orders.update()
 
 
 func hide_unselect():
 	stats.update()
-	move_window.hide()
-	orders_window.hide()
-	move_button.disabled = true
+	controls.hide()
+	orders.hide()
+	controls_button.disabled = true
 	orders_button.disabled = true
 	inventories.hide()
 	shop.update_buttons()
@@ -113,6 +116,6 @@ func hide_unselect():
 
 
 func buttons_update():
-	orders_button.set_pressed(orders_window.visible)
+	orders_button.set_pressed(orders.visible)
 	shop_button.set_pressed(shop.visible)
-	move_button.set_pressed(move_window.visible)
+	controls_button.set_pressed(controls.visible)

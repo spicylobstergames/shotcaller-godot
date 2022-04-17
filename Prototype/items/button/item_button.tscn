@@ -28,7 +28,7 @@ atlas = ExtResource( 2 )
 region = Rect2( 92, 0, 46, 46 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 10
+size = 9
 font_data = ExtResource( 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -58,8 +58,8 @@ margin_bottom = 3.0
 extents = Vector2( 32, 18 )
 
 [node name="item_button" type="Button"]
-margin_right = 50.0
-margin_bottom = 50.0
+margin_right = 52.0
+margin_bottom = 52.0
 rect_min_size = Vector2( 50, 50 )
 custom_styles/hover = SubResource( 13 )
 custom_styles/pressed = SubResource( 17 )
@@ -73,9 +73,9 @@ __meta__ = {
 }
 
 [node name="name" type="Label" parent="."]
-margin_left = 5.0
+margin_left = 3.0
 margin_top = 1.0
-margin_right = 61.0
+margin_right = 52.0
 margin_bottom = 15.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 3 )
@@ -90,9 +90,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -43.0
-margin_top = -14.0
-margin_right = -3.0
+margin_left = -42.0
+margin_top = -12.0
+margin_right = -2.0
+margin_bottom = 2.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "100"

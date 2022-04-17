@@ -1,7 +1,6 @@
 extends Node2D
 
-#yield(get_tree(), "idle_frame")
-	
+
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
 var player_units:Array = []
@@ -32,6 +31,8 @@ var utils:Node
 var test:Node
 var map_camera:Node
 
+var control_state = "selection"
+
 var started:bool = false
 
 
@@ -48,8 +49,7 @@ func _ready():
 func start():
 	started = true
 	
-	yield(get_tree(), "idle_frame")
-	print(unit)
+	#yield(get_tree(), "idle_frame")
 	rng.randomize()
 	unit.path.setup_pathfind()
 	#map.fog.cover_map()
@@ -59,16 +59,14 @@ func start():
 		#test.spawn_leaders()
 		
 	else: 
-		#yield(get_tree(), "idle_frame")
 		unit.spawn.choose_leaders()
 		map.setup_lanes()
-		ui.orders_window.setup_pawns()
-		ui.orders_window.setup_buildings()
+		ui.orders.setup_lanes()
 
 		
-		yield(get_tree().create_timer(4.0), "timeout")
+		yield(get_tree().create_timer(1.0), "timeout")
 		unit.spawn.start()
-		yield(get_tree().create_timer(4.0), "timeout")
+		yield(get_tree().create_timer(1.0), "timeout")
 		unit.spawn.leaders()
 
 

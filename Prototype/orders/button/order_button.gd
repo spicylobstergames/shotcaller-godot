@@ -46,13 +46,13 @@ func _button_down():
 				game.unit.orders.set_leader_tactic(self.orders.tactic)
 			else: game.unit.orders.set_lane_tactic(self.orders.tactic)
 			
-			self.set_disabled(true)
+			self.disabled = true
 		
 		"priority":
 			if not is_first_child(self):
 				move_to_front(self)
 				if game.selected_unit.type == "leader":
-					game.unit.orders.set_leader_priority(self.orders.tactic)
+					game.unit.orders.set_leader_priority(self.orders.priority)
 				else: game.unit.orders.set_lane_priority(self.orders.priority)
 
 
@@ -60,8 +60,8 @@ func _button_down():
 func clear_siblings(button):
 	for child in button.get_parent().get_children():
 		if child != button: 
-			child.set_pressed(false)
-			child.set_disabled(false)
+			child.pressed = false
+			child.disabled = false
 		
 
 func is_first_child(button):
@@ -71,6 +71,6 @@ func is_first_child(button):
 func move_to_front(button):
 	var buttons = button.get_parent().get_children()
 	for sibling_button in buttons:
-		sibling_button.set_disabled(false)
+		sibling_button.disabled = false
 	button.get_parent().move_child(button, 0)
-	button.set_disabled(true)
+	button.disabled = true

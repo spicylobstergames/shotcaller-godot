@@ -57,10 +57,6 @@ func set_texture(portrait, texture):
 	portrait.scale.x = -1 * sx if texture.mirror else sx
 
 
-func _on_stats_gui_input(event):
-	if event is InputEventMouseButton and not event.pressed: 
-		game.selection.unselect()
-
 
 func clear_old_hpbar():
 	for old_bar in hpbar.get_children():
@@ -75,3 +71,8 @@ func add_new_hpbar(unit):
 	green.scale *= Vector2(11,11)
 	hpbar.add_child(red)
 	hpbar.add_child(green)
+
+
+func stats_down(event):
+	if event is InputEventMouseButton and not event.pressed: 
+		game.selection.unselect()

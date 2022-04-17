@@ -19,12 +19,12 @@ func hide_hpbars():
 	for unit in game.all_units:
 		if (unit != game.selected_unit and 
 				unit.current_hp == unit.hp):
-			unit.hud.hpbar.visible = false
+			if unit.hud: unit.hud.hpbar.visible = false
 
 
 func show_hpbars():
 	for unit in game.all_units:
-		unit.hud.state.visible = true
+		if unit.hud: unit.hud.state.visible = true
 
 
 func update_hpbar(unit):
@@ -47,12 +47,12 @@ func update_hpbar(unit):
 func hide_states():
 	for unit in game.all_units:
 		if unit != game.selected_unit:
-			unit.hud.state.visible = false
+			if unit.hud: unit.hud.state.visible = false
 
 
 func show_states():
 	for unit in game.all_units:
-			unit.hud.hpbar.visible = true
+			if unit.hud: unit.hud.hpbar.visible = true
 
 
 

@@ -9,6 +9,33 @@ onready var equip_items = container.get_node("equip_items")
 onready var consumable_items = container.get_node("consumable_items")
 
 
+const items = {
+	"axe": {
+		"name" :"Axe", 
+		"sprite": 0, 
+		"tooltip": "Adds 20 damage", 
+		"price": 10,  
+		"type": "equip", 
+		"attributes": {"damage": 20}
+	},
+	"helmet": {
+		"name": "Helmet", 
+		"sprite": 1, 
+		"tooltip": "Adds 50 HP", 
+		"price": 20, 
+		"type": "equip", 
+		"attributes": {"hp": 50}
+	},
+	"potion": {
+		"name": "Potion", 
+		"sprite": 2, 
+		"tooltip": "Restore 50 HP",
+		"price": 5, 
+		"type": "consumable", 
+		"attributes": {"current_hp": 50}
+	}
+}
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -27,29 +54,15 @@ func _ready():
 		clear = true
 
 
-	# Test items
-	add_item(build_item("Axe", 0, "Add 20 damage to the leader's attack", 10,  "equip", {"damage": 20}))
-	add_item(build_item("Helmet", 1, "Add 50 HP to leader stats", 20, "equip", {"hp": 50}))
-	add_item(build_item("Potion", 2, "Restore 50 HP", 5, "consumable", {"current_hp": 50}))
+	for item in items:
+		add_item(items[item].duplicate(1))
 	
-
 	disable_all()
 
 
-func build_item(name, sprite, description, price, type, attributes):
-	var item = {
-		"name": name,
-		"sprite": sprite,
-		"description": description,
-		"price": price,
-		"sell_price": floor(price / 2),
-		"type": type,
-		"attributes": attributes
-	}
-	return item
-
 
 func add_item(item):
+	item.sell_price = floor(item.price / 2)
 	var new_item_button = item_button_preload.instance()
 	new_item_button.shop_item = true
 	if item.type == "consumable": consumable_items.add_child(new_item_button)

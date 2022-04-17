@@ -25,8 +25,26 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and not event.pressed: 
 		if game.camera.zoom.x <= 1:
 			match event.button_index:
-				BUTTON_LEFT: select(point)
+				
 				BUTTON_RIGHT: unselect()
+				
+				BUTTON_LEFT: 
+					match game.control_state:
+						"selection":
+							select(point)
+						
+						"teleport":
+							game.unit.move.teleport(game.selected_unit, point)
+						
+						"advance":
+							game.unit.advance.start(game.selected_unit, point)
+						
+						"move":
+							game.unit.move.start(game.selected_unit, point)
+						
+						"lane":
+							game.unit.move.change_lane(game.selected_unit, point)
+		
 		
 		# MAP CLICK ZOOM IN
 		else: 
@@ -65,7 +83,7 @@ func select(point):
 			game.selected_leader = unit
 			game.ui.shop.update_buttons()
 			game.ui.inventories.update_buttons()
-			game.ui.move_button.disabled = false
+			game.ui.controls_button.disabled = false
 		else:
 			game.selected_leader = null
 			game.ui.shop.disable_all()
@@ -75,6 +93,8 @@ func select(point):
 
 
 func unselect():
+	game.control_state = "selection"
+	
 	if game.selected_unit:
 		var unit = game.selected_unit
 		game.unit.hud.hide_unselect(unit)
@@ -82,6 +102,7 @@ func unselect():
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.hide_unselect()
+	
 
 
 func get_sel_unit_at_point(point):

@@ -4,12 +4,7 @@ var game:Node
 var clear = false
 
 var leader_orders = {}
-var pawn_orders
-var building_orders = {}
-
-var enemy_leader_orders = {}
-var enemy_pawn_orders = {}
-var enemy_building_orders = {}
+var lane_orders = {}
 
 
 var button_template:PackedScene = load("res://orders/button/order_button.tscn")
@@ -19,24 +14,14 @@ onready var container = get_node("scroll_container/container")
 
 
 var order_types = {
-		# behavior   move      advance  advance    advance
-		# tower     never  only full hp    yes      always
 	"tactics": ["retreat","defend","default","attack"],
-	"lane_tactics": ["defend","default","attack"],
-	"priority": {
-		"leader": [],
-		"pawn": ["archer", "infantary", "mounted"],
-		"building": ["tower", "barrack", "core"]
-	},
-	"combos": [],
-	"leader_movement": ["retreat", "teleport", "lane", "ambush"],
-	"buiding_defense": ["alarm bell", "teleport", "fortification"]
+	"priority": ["pawn", "leader", "building"]
 }
 
 var hint_tooltips_tactics = {
-	"retreat": "Retreat on first hit",
-	"defend": "Retreat if less than half HP",
-	"default": "Retreat if less than third HP",
+	"retreat": "Retreats on first hit",
+	"defend": "Retreats if less than half HP",
+	"default": "Retreats if less than third HP",
 	"attack": "Never retreats"
 }
 
@@ -66,60 +51,17 @@ func setup_leaders():
 		container.add_child(orders.node)
 
 
-func setup_pawns():
-	var orders = {
-		"node": VBoxContainer.new(),
-		"type": "pawn"
-	}
-	pawn_orders = orders
-	setup_pawn_buttons(orders)
-	container.add_child(orders.node)
-
-
-func setup_buildings():
-	for unit_type in ["castle", "barrack", "tower"]:
+func setup_lanes():
+	for lane in game.map.lanes:
 		var orders = {
 			"node": VBoxContainer.new(),
-			"type": "building",
-			"building": unit_type
+			"type": "lane",
+			"lane": lane
 		}
-		building_orders[unit_type] = orders
-		setup_building_buttons(orders)
+		lane_orders[lane] = orders
+		setup_lane_buttons(orders)
 		container.add_child(orders.node)
 
-
-
-func setup_enemy_leaders():
-	for leader in game.player_leaders:
-		var orders = {
-			"node": Node2D.new(),
-			"type": "leader",
-			"leader": leader
-		}
-		enemy_leader_orders[leader.name] = orders
-		container.add_child(orders.node)
-
-
-func setup_enemy_pawns():
-	var orders = {
-		"node": Node2D.new(),
-		"type": "pawn"
-	}
-	enemy_pawn_orders = orders
-	container.add_child(orders.node)
-
-
-
-func setup_enemy_buildings():
-	for unit_type in ["castle", "barrack", "tower"]:
-		var orders = {
-			"node": Node2D.new(),
-			"type": "building",
-			"building": unit_type
-		}
-		enemy_building_orders[unit_type] = orders
-		container.add_child(orders.node)
-		
 
 
 
@@ -135,10 +77,11 @@ func setup_tactics(orders, tactics):
 		}
 		setup_order_button(button)
 		if tactic == "default":
-			button.set_pressed(true)
-			button.set_disabled(true)
+			button.pressed = true
+			button.disabled = true
 		buttons_container.add_child(button)
 	orders.node.add_child(buttons_container)
+	orders.node.add_child(HSeparator.new())
 
 
 func setup_priority(orders):
@@ -165,11 +108,8 @@ func setup_order_button(button):
 	button.setup_order_button()
 
 
-func setup_pawn_buttons(orders):
-	var label = game.utils.label("lane tactics")
-	orders.node.add_child(label)
-	setup_tactics(orders, order_types.lane_tactics)
-	var label2 = game.utils.label("pawn priority")
+func setup_lane_buttons(orders):
+	var label2 = game.utils.label(orders.lane +" priority")
 	orders.node.add_child(label2)
 	setup_priority(orders)
 
@@ -183,40 +123,24 @@ func setup_leader_buttons(orders):
 	setup_priority(orders)
 	update()
 
-func setup_building_buttons(orders):
-	if orders.building in ["barrack", "tower"]:
-		var label = game.utils.label("lane tactics")
-		orders.node.add_child(label)
-		setup_tactics(orders, order_types.lane_tactics)
-	var label2 = game.utils.label(orders.type+" priority")
-	orders.node.add_child(label2)
-	setup_priority(orders)
 
 
 func update():
 	hide_all()
 	if (game.selected_unit and 
 			game.selected_unit.team == game.player_team):
-		var small = 232
-		var large = 302
+		
 		match game.selected_unit.type:
-			"pawn":
-				game.ui.orders_button.disabled = false
-				game.ui.orders_window.margin_left = -small
-				if not game.test.stress:
-					pawn_orders.node.show()
-			
-			"leader":
-				game.ui.orders_button.disabled = false
-				game.ui.orders_window.margin_left = -large
-				if not game.test.stress:
-					leader_orders[game.selected_unit.name].node.show()
-			
-			"building":
-				game.ui.orders_button.disabled = false
-				game.ui.orders_window.margin_left = -small
-				if not game.test.stress:
-					building_orders[game.selected_unit.subtype].node.show()
+			"pawn", "building": 
+				show_orders()
+				lane_orders[game.selected_unit.lane].node.show()
+			"leader": 
+				show_orders()
+				leader_orders[game.selected_unit.name].node.show()
+
+
+func show_orders():
+	game.ui.orders_button.disabled = false
 
 
 func hide_all():
@@ -224,6 +148,6 @@ func hide_all():
 		child.hide()
 	for leader in leader_orders:
 		leader_orders[leader].node.hide()
-	for building in building_orders:
-		building_orders[building].node.hide()
+	for lane in lane_orders:
+		lane_orders[lane].node.hide()
 

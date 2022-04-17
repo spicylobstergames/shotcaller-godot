@@ -7,6 +7,7 @@ var fog
 
 var size:int = 2112
 
+var lanes:Array = ["bot", "mid", "top"]
 
 var top:Array
 var mid:Array
@@ -29,6 +30,8 @@ func setup_lanes():
 	top = line_to_array(top_line)
 	mid = line_to_array(mid_line)
 	bot = line_to_array(bot_line)
+	
+	game.unit.orders.build_lanes()
 
 
 func new_path(lane, team):
@@ -43,7 +46,7 @@ func new_path(lane, team):
 
 func setup_leaders():
 	game.ui.inventories.build_leaders()
-	game.ui.orders_window.setup_leaders()
+	game.ui.orders.setup_leaders()
 	game.unit.orders.build_leaders()
 
 

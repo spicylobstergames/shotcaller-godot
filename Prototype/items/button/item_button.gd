@@ -32,7 +32,7 @@ func setup(new_item):
 	else:
 		self.item = new_item
 		self.name = new_item.name
-		self.hint_tooltip = new_item.description
+		self.hint_tooltip = new_item.tooltip
 		if not self.shop_item:
 			self.disabled = (new_item.type != "consumable")
 		var icon_ref = self.icon
