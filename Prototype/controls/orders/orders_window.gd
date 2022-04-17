@@ -7,7 +7,7 @@ var leader_orders = {}
 var lane_orders = {}
 
 
-var button_template:PackedScene = load("res://orders/button/order_button.tscn")
+var button_template:PackedScene = load("res://controls/orders/button/order_button.tscn")
 
 
 onready var container = get_node("scroll_container/container")

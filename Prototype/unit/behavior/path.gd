@@ -45,7 +45,6 @@ func find_path(g1, g2):
 		for i in range(1, solved_path.size()):
 			var item = solved_path[i]
 			path.append(Vector2(half + (item[0] * cell_size), half + (item[1] * cell_size)))
-		print(path)
 		return path
 
 

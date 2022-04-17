@@ -38,6 +38,7 @@ func _ready():
 
 
 func choose_leaders():
+	
 	team_random_list.blue = leader_list.duplicate()
 	team_random_list.red = leader_list.duplicate()
 	
@@ -73,6 +74,7 @@ func leaders():
 			leader_node.origin = path.start
 			game.unit.path.follow(leader_node, path.follow, "advance")
 			counter += 1
+	
 	
 	game.map.setup_leaders()
 

@@ -3,6 +3,7 @@ var game:Node
 
 
 onready var name_label = get_node("name")
+onready var hint_label = get_node("hint")
 
 var orders
 var saved_icon
@@ -39,6 +40,9 @@ func setup_order_button():
 
 func _button_down():
 	match self.orders.type:
+		"leader":
+			game.ui.leaders_icons.button_down(self.orders.leader)
+		
 		"tactic":
 			clear_siblings(self)
 			

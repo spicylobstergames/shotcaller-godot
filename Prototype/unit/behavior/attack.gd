@@ -64,7 +64,7 @@ func in_range(attacker, target):
 func take_hit(attacker, target, projectile):
 	if projectile: 
 		projectile_stuck(attacker, target, projectile)
-	if target:
+	if target and target.current_hp > 0:
 		target.current_hp -= attacker.damage
 		game.unit.advance.react(target, attacker)
 		game.unit.advance.ally_attacked(target, attacker)
@@ -74,6 +74,11 @@ func take_hit(attacker, target, projectile):
 		if target.current_hp <= 0: 
 			target.current_hp = 0
 			target.die()
+			if target.type == "leader":
+				if target.team == game.player_team: game.player_deaths += 1
+				else: game.enemy_deaths += 1
+				if attacker.team == game.player_team: game.player_kills += 1
+				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
 			game.unit.advance.resume(attacker)
 

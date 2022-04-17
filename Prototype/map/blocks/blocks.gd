@@ -6,7 +6,7 @@ const _QuadtreeGD = preload("quadtree.gd")
 var quad
 
 
-var block_template:PackedScene = load("res://units/block.tscn")
+var block_template:PackedScene = load("res://map/blocks/block_template.tscn")
 
 
 func _ready():

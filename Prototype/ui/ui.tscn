@@ -2,17 +2,18 @@
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
-[ext_resource path="res://items/shop_window.gd" type="Script" id=3]
+[ext_resource path="res://items/shop.gd" type="Script" id=3]
 [ext_resource path="res://ui/minimap.gd" type="Script" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://orders/orders_window.gd" type="Script" id=7]
+[ext_resource path="res://controls/orders/orders_window.gd" type="Script" id=7]
 [ext_resource path="res://items/button/item_button.tscn" type="PackedScene" id=8]
-[ext_resource path="res://orders/button/order_button.tscn" type="PackedScene" id=9]
+[ext_resource path="res://controls/orders/button/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=10]
 [ext_resource path="res://assets/ui/gold.png" type="Texture" id=11]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=12]
-[ext_resource path="res://ui/controls.gd" type="Script" id=14]
+[ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
+[ext_resource path="res://controls/controls.gd" type="Script" id=14]
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
@@ -43,9 +44,6 @@ margin_right = 5.0
 margin_top = 5.0
 margin_bottom = 5.0
 modulate_color = Color( 1, 1, 1, 0.941176 )
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0.192157, 0.188235, 0.223529, 0.784314 )
 
 [sub_resource type="StyleBoxEmpty" id=22]
 
@@ -156,17 +154,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="fps" type="Label" parent="top_left"]
+margin_left = 4.0
+margin_top = 2.0
+margin_right = 124.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 17 )
+text = "fps
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="top_mid" type="Control" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
 
-[node name="fps" type="Label" parent="top_mid"]
-margin_left = -55.0
-margin_top = 5.0
-margin_right = 55.0
-margin_bottom = 44.0
+[node name="label" type="Label" parent="top_mid"]
+margin_left = -150.0
+margin_top = 2.0
+margin_right = 150.0
+margin_bottom = 32.0
 custom_fonts/font = SubResource( 17 )
-text = "fps
+text = "shotcaller
 "
 align = 1
 __meta__ = {
@@ -317,6 +327,41 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="mid_left" type="Control" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="leaders_icons" type="VBoxContainer" parent="mid_left"]
+margin_top = -224.0
+margin_right = 40.0
+margin_bottom = 110.0
+custom_constants/separation = 2
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="order_button" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+
+[node name="order_button2" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+margin_top = 62.0
+margin_bottom = 122.0
+
+[node name="order_button3" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+margin_top = 124.0
+margin_bottom = 184.0
+
+[node name="order_button4" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+margin_top = 186.0
+margin_bottom = 246.0
+
+[node name="order_button5" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+margin_top = 248.0
+margin_bottom = 308.0
+
 [node name="bot_left" type="Control" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -348,24 +393,6 @@ margin_bottom = 100.0
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0
 editor_only = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="mid_left" type="Control" parent="bot_left"]
-anchor_top = 0.5
-anchor_bottom = 0.5
-margin_top = -300.0
-margin_bottom = -300.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="leaders_icons" type="ItemList" parent="bot_left/mid_left"]
-margin_top = -204.0
-margin_right = 64.0
-margin_bottom = 116.0
-custom_styles/bg = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

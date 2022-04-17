@@ -1,0 +1,1149 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
+[ext_resource path="res://assets/pawns/infantry.png" type="Texture" id=3]
+[ext_resource path="res://assets/unit/hpbar.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://controls/orders/unit_orders.gd" type="Script" id=12]
+[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=13]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Node
+var game:Node
+
+export var hp:int = 100
+var current_hp:int = 100
+var regen:int = 0
+export var vision:int = 100
+var current_vision:int = 100
+export var type:String = \"pawn\" # building leader
+export var subtype:String = \"infantry\" # archer mounted
+export var display_name:String
+export var title:String
+export var team:String = \"blue\"
+var dead:bool = false
+var mirror:bool = false
+
+# SELECTION
+export var selectable:bool = false
+var selection_radius = 36
+var selection_position:Vector2 = Vector2.ZERO
+
+# MOVEMENT
+export var moves:bool = false
+export var speed:float = 0
+var current_speed:float = 0
+var angle:float = 0
+var origin:Vector2 = Vector2.ZERO
+var current_step:Vector2 = Vector2.ZERO
+var current_destiny:Vector2 = Vector2.ZERO
+var last_position:Vector2 = Vector2.ZERO
+var last_position2:Vector2 = Vector2.ZERO
+var current_path:Array = []
+
+# COLLISION
+export var collide:bool = false
+var collision_radius = 0
+var collision_position:Vector2 = Vector2.ZERO
+var collide_target:Node2D
+var collision_timer
+
+# ATTACK
+export var attacks:bool = false
+export var ranged:bool = false
+export var damage:int = 0
+var current_damage:int = 0
+export var attack_range:int = 1
+var current_attack_range:int = 1
+export var attack_speed:float = 1
+var current_attack_speed:float = 1
+var target:Node2D
+var weapon:Node2D
+
+# PROJECTILES
+var projectile:Node2D # template
+var projectiles:Array = []
+export var projectile_speed:float = 3
+export var projectile_rotation:float = 0
+var attack_hit_position:Vector2 = Vector2.ONE
+var attack_hit_radius = 24
+
+# ADVANCE
+var next_event:String = \"\" # \"on_arive\" \"on_move\" \"on_collision\"
+var objective:Vector2 = Vector2.ZERO
+var wait_time:int = 0
+export var lane:String = \"mid\"
+var behavior:String = \"stand\" # \"move\", \"attack\", \"advance\", \"stop\"
+var state:String = \"idle\" # \"move\", \"attack\", \"death\"
+var priority = [\"leader\", \"pawn\", \"building\"]
+var tactics:String = \"default\" # aggresive defensive retreat 
+var retreating = false
+
+
+var hud:Node
+var spawn:Node
+var move:Node
+var attack:Node
+var advance:Node
+var path:Node
+var orders:Node
+
+func _ready():
+	game = get_tree().get_current_scene()
+	
+	if has_node(\"hud\"): hud = get_node(\"hud\")
+	if has_node(\"behavior/spawn\"): spawn = get_node(\"behavior/spawn\")
+	if has_node(\"behavior/move\"): move = get_node(\"behavior/move\")
+	if has_node(\"behavior/attack\"): attack = get_node(\"behavior/attack\")
+	if has_node(\"behavior/advance\"): advance = get_node(\"behavior/advance\")
+	if has_node(\"behavior/path\"): path = get_node(\"behavior/path\")
+	if has_node(\"behavior/orders\"): orders = get_node(\"behavior/orders\")
+	if has_node(\"sprites/weapon\"): weapon = get_node(\"sprites/weapon\")
+	if has_node(\"sprites/weapon/projectile\"): projectile = get_node(\"sprites/weapon/projectile\")
+
+
+
+func reset_unit():
+	self.setup_team()
+	
+	if self.type == \"leader\": 
+		self.hud.state.visible = true
+		self.hud.hpbar.visible = true
+		
+	self.hud.state.text = self.display_name
+	self.current_hp = self.hp
+	self.current_attack_range = self.attack_range
+	self.current_vision = self.vision
+	self.current_speed = self.speed
+	self.current_damage = self.damage
+	self.current_attack_speed = self.attack_speed
+	self.visible = true
+	self.hud.update_hpbar(self)
+	game.ui.minimap.setup_symbol(self)
+
+
+func set_state(s):
+	if not self.dead:
+		self.state = s
+		self.get_node(\"animations\").current_animation = s
+
+
+func set_behavior(s):
+	self.behavior = s
+	#self.get_node(\"hud/state\").text = s
+
+
+func setup_team():
+	var is_red = (self.team == \"red\")
+	# MIRROR
+	if self.type != \"building\":
+		self.mirror_toggle(is_red)
+	# COLORS
+	var texture = self.get_texture()
+	if not is_red:
+		texture.sprite.material = null
+	else:
+		texture.sprite.material = get_node(\"sprites/sprite\").material
+	# FLAGS
+	if self.type == \"building\":
+		if not is_red:
+			var flags = self.get_node(\"sprites/flags\").get_children()
+			for flag in flags:
+				var flag_sprite = flag.get_node(\"sprite\")
+				var material = flag_sprite.material.duplicate()
+				material.set_shader_param(\"change_color\", false)
+				flag_sprite.material = material
+
+
+func oponent_team():
+	var t = \"blue\"
+	if self.team == t: t = \"red\"
+	return t
+
+
+func look_at(point):
+	self.mirror_toggle(point.x - self.global_position.x < 0)
+
+
+func mirror_toggle(on):
+	self.mirror = on
+	if on:
+		if self.type == \"building\":
+			self.get_node(\"sprites/body\").scale.x = -1
+			self.get_node(\"sprites/flags\").scale.x = -1
+		self.get_node(\"sprites\").scale.x = -1
+		if self.attack_hit_position:
+			self.attack_hit_position.x = -1 * abs(self.attack_hit_position.x)
+	else:
+		if self.type == \"building\":
+			self.get_node(\"sprites/body\").scale.x = 1
+			self.get_node(\"sprites/flags\").scale.x = 1
+		self.get_node(\"sprites\").scale.x = 1
+		if self.attack_hit_position:
+			self.attack_hit_position.x = abs(self.attack_hit_position.x)
+
+
+func get_texture():
+	var body = get_node(\"sprites/body\")
+	var texture
+	var region
+	var scale
+	if body is Sprite: 
+		texture = body.texture 
+		region = body.region_rect
+		match self.subtype:
+			\"tower\": scale = Vector2(1,1)
+			\"barrack\": scale = Vector2(0.9,0.9)
+			\"castle\": scale = Vector2(0.8,0.8)
+	else:
+		texture = body.frames.get_frame('default', 0)
+		region = texture.region
+		scale = Vector2(2.5,2.5)
+		match self.subtype:
+			\"mounted\": scale = Vector2(1.8,1.8)
+		
+	return {
+		\"sprite\": body,
+		\"data\": texture,
+		\"mirror\": self.mirror,
+		\"material\": body.material,
+		\"region\": region,
+		\"scale\": scale
+	}
+
+
+func get_units_on_sight(filters):
+	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, self.current_vision)
+	var targets = []
+	for unit2 in neighbors:
+		if unit2.hp:
+			var distance = self.global_position.distance_to(unit2.global_position)
+			if self != unit2 and distance < self.current_vision:
+				if not filters: targets.append(unit2)
+				else:
+					for filter in filters:
+						if unit2[filter] == filters[filter]:
+							targets.append(unit2)
+	return targets
+
+
+
+func get_gold():
+	if self.name in game.ui.inventories.leaders:
+		return game.ui.inventories.leaders[self.name].gold
+
+
+func wait():
+	self.wait_time = game.rng.randi_range(1,4)
+	self.set_state(\"idle\")
+
+
+func on_idle_end(): # every idle animation end (0.6s)
+	advance.on_idle_end(self)
+	if self.wait_time > 0: self.wait_time -= 1
+	else: game.test.unit_wait_end(self)
+
+
+func on_move(delta): # every frame if there's no collision
+	move.step(self, delta)
+
+
+func on_collision(delta):
+	if self.moves: 
+		move.on_collision(self, delta)
+		if self.attacks: 
+			advance.on_collision(self)
+
+
+func on_move_end(): # every move animation end (0.6s for speed = 1)
+	if self.moves and self.attacks: 
+		advance.resume(self)
+
+
+func on_arrive(): # when collides with destiny
+	if self.current_path.size() > 0:
+		path.follow_next(self)
+	elif self.moves:
+		var retreat_end = move.end(self)
+		if not retreat_end and self.attacks: 
+			advance.end(self)
+
+
+func on_attack_release(): # every ranged projectile start
+	attack.projectile_start(self)
+	advance.resume(self)
+
+
+func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
+	if self.attacks: 
+		attack.hit(self)
+		if self.moves:
+			advance.resume(self)
+
+
+func die():  # hp <= 0
+	self.set_state(\"death\")
+	self.set_behavior(\"stand\")
+	self.dead = true
+
+
+func on_death_end():  # death animation end
+	self.global_position = Vector2(-1000, -1000)
+	self.visible = false
+	if not game.test.stress:
+		match self.type:
+			\"pawn\":
+				game.unit.spawn.cemitery_add_pawn(self)
+			\"leader\":
+				game.unit.spawn.cemitery_add_leader(self)
+
+						
+	else: game.test.respawn(self)
+"
+
+[sub_resource type="GDScript" id=31]
+script/source = "extends Node
+var game:Node
+
+var order_time = 8
+
+var arthur:PackedScene = load(\"res://leaders/arthur.tscn\")
+var bokuden:PackedScene = load(\"res://leaders/bokuden.tscn\")
+var hongi:PackedScene = load(\"res://leaders/hongi.tscn\")
+var lorne:PackedScene = load(\"res://leaders/lorne.tscn\")
+var raja:PackedScene = load(\"res://leaders/raja.tscn\")
+var robin:PackedScene = load(\"res://leaders/robin.tscn\")
+var rollo:PackedScene = load(\"res://leaders/rollo.tscn\")
+var sida:PackedScene = load(\"res://leaders/sida.tscn\")
+var takoda:PackedScene = load(\"res://leaders/takoda.tscn\")
+var tomyris:PackedScene = load(\"res://leaders/tomyris.tscn\")
+
+
+var infantry:PackedScene = load(\"res://pawns/infantry.tscn\")
+var archer:PackedScene = load(\"res://pawns/archer.tscn\")
+
+
+
+var cemitery = {
+	\"player_infantry\": [],
+	\"enemy_infantry\": [],
+	\"player_archer\": [],
+	\"enemy_archer\": [],
+	\"player_leaders\": [],
+	\"enemy_leaders\": []
+}
+
+const leader_list = [\"arthur\", \"bokuden\", \"hongi\", \"lorne\", \"raja\", \"robin\", \"rollo\", \"sida\", \"takoda\", \"tomyris\"]
+
+var team_random_list = {\"red\": [], \"blue\": []}
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+func choose_leaders():
+	team_random_list.blue = leader_list.duplicate()
+	team_random_list.red = leader_list.duplicate()
+	
+	game.player_choose_leaders = []
+	game.enemy_choose_leaders = []
+	
+	for n in 5:
+		game.player_choose_leaders.append(random_leader(game.player_team))
+		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
+
+
+func random_leader(team):
+	var team_list = team_random_list[team]
+	var index = floor(randf() * team_list.size())
+	var leader = team_list[index]
+	team_list.remove(index)
+	return leader
+
+
+func leaders():
+	for team  in [\"blue\", \"red\"]:
+		var counter = 0
+		var leaders = game.player_choose_leaders
+		if team != game.player_team: leaders = game.enemy_choose_leaders
+		for leader in leaders:
+			var lane = \"top\"
+			if counter == 2: lane = \"mid\"
+			if counter > 2: lane = \"bot\"
+			
+			var path = game.map.new_path(lane, team)
+			
+			var leader_node = game.map.create(self[leader], lane, team, \"point_random\", path.start)
+			leader_node.origin = path.start
+			game.unit.path.follow(leader_node, path.follow, \"advance\")
+			counter += 1
+	
+	game.map.setup_leaders()
+
+
+func start():
+	spawn_group_cycle()
+
+
+func spawn_group_cycle():
+	game.unit.orders.setup_lanes_priority()
+	game.unit.orders.setup_leaders()
+	
+	for team in [\"red\", \"blue\"]:
+		for lane in [\"top\", \"mid\", \"bot\"]:
+			send_pawn(\"archer\", lane, team)
+			for n in 3:
+				send_pawn(\"infantry\", lane, team)
+	
+	yield(get_tree().create_timer(order_time), \"timeout\")
+	game.unit.orders.setup_leaders()
+	
+	yield(get_tree().create_timer(order_time), \"timeout\")
+	spawn_group_cycle()
+
+
+func recycle(template, lane, team, point):
+	var side = \"player_\"
+	if team != game.player_team: side = \"enemy_\"
+	var index = side+template
+	if cemitery[index].size():
+		var unit = cemitery[index].pop_back()
+		unit = spawn_unit(unit, lane, team, \"point_random\", point)
+		unit.reset_unit()
+		return unit
+
+
+func send_pawn(template, lane, team):
+	var path = game.map[lane].duplicate()
+	if team == \"red\": path.invert()
+	var start = path.pop_front()
+	var pawn = recycle(template, lane, team, start)
+	if not pawn:
+		var unit_template = infantry
+		if template == \"archer\": unit_template = archer
+		pawn = game.map.create(unit_template, lane, team, \"point_random\", start)
+	game.unit.orders.setup_pawn(pawn, lane)
+	game.unit.path.follow(pawn, path, \"advance\")
+
+
+
+func spawn_unit(unit, l, t, mode, point):
+	unit.lane = l
+	unit.team = t
+	unit.dead = false
+	unit.visible = true
+	if mode == \"point_random\":
+		point = game.utils.offset_point_random(unit, point, 25)
+	if mode == \"random_map\":
+		point = game.utils.random_point()
+	unit.global_position = point
+	unit.set_state(\"idle\")
+	unit.set_behavior(\"stop\")
+	return unit
+
+
+func cemitery_add_pawn(unit):
+	var side = \"player_\"
+	if unit.team != game.player_team: side = \"enemy_\"
+	var index = side+unit.subtype
+	cemitery[index].append(unit)
+
+
+func cemitery_add_leader(leader):
+	match leader.team:
+		game.player_team:
+			game.unit.spawn.cemitery.player_leaders.append(leader)
+		game.enemy_team:
+			game.unit.spawn.cemitery.enemy_leaders.append(leader)
+	
+	yield(get_tree().create_timer(order_time), \"timeout\")
+	
+	# respawn leader
+	var team = leader.team
+	var lane = leader.lane
+	var path = game.map[leader.lane].duplicate()
+	if leader.team == \"red\": path.invert()
+	var start = path.pop_front()
+	leader = spawn_unit(leader, lane, team, \"point_random\", start)
+	leader.reset_unit()
+	game.unit.orders.setup_pawn(leader, lane)
+	game.unit.path.follow(leader, path, \"advance\")
+"
+
+[sub_resource type="GDScript" id=32]
+script/source = "extends Node
+var game:Node
+
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+func setup_timer(unit):
+	unit.collision_timer = Timer.new()
+	unit.collision_timer.one_shot = true
+	unit.add_child(unit.collision_timer)
+
+
+func start(unit, destiny):
+	if unit.moves:
+		unit.set_behavior(\"move\")
+		move(unit, destiny)
+		unit.get_node(\"animations\").playback_speed = unit.current_speed / unit.speed
+
+
+func in_bounds(p):
+	var l = game.map.tile_size / 2
+	return p.x > l and p.y > l and p.x < game.map.size - l and p.y < game.map.size - l
+
+
+
+func move(unit, destiny):
+	if unit.moves and in_bounds(destiny):
+		# all units path find (heavy on stress)
+		#if !unit.lane:
+		#	unit.current_path = game.map.find_path(unit.global_position, destiny)
+		unit.current_destiny = destiny
+		calc_step(unit)
+		unit.set_state(\"move\")
+
+
+
+func calc_step(unit):
+	if unit.current_speed > 0:
+		var distance = unit.current_destiny - unit.global_position
+		unit.angle = distance.angle()
+		unit.current_step = Vector2(unit.current_speed * cos(unit.angle), unit.current_speed * sin(unit.angle))
+		unit.look_at(unit.current_destiny)
+
+
+func step(unit, delta):
+	unit.global_position += unit.current_step * delta
+
+
+func on_collision(unit, delta):
+	var target = unit.collide_target
+	if target and target != unit.target:
+		var a # new direction
+		var p1 = unit.global_position + unit.collision_position
+		var p2 = target.global_position + target.collision_position
+		var pr = p2 - p1 # relative target position
+		var ang_to_target = pr.angle() # target relative angle
+		# angle between direction and target
+		var rda = game.utils.limit_angle(unit.angle - ang_to_target) 
+		# new direction: rotates pr +-90 deg (tangent direction)
+		if (rda > 0): a = Vector2(-pr.y, pr.x).angle()
+		else: a = Vector2(pr.y, -pr.x).angle()
+		# if stuck slide away and try new direction
+		if unit.global_position == unit.last_position2:
+			unit.global_position -= pr.normalized()
+			a = randf()*2*PI # just try a random direction
+		unit.angle = a # change directioin
+		var s = unit.current_speed
+		unit.current_step = Vector2(s * cos(a), s * sin(a))
+		# send back to original destiny after some time
+		if unit.collision_timer.time_left > 0: 
+			unit.collision_timer.stop() # first stops previous timers
+		unit.collision_timer.wait_time = 0.1 + randf() * 0.2
+		unit.collision_timer.start()
+		yield(unit.collision_timer, \"timeout\")
+		move(unit, unit.current_destiny)
+
+
+func resume(unit):
+	if unit.behavior == \"move\":
+		move(unit, unit.current_destiny)
+
+
+func end(unit):
+	if unit.behavior == \"move\": 
+		var retreat_end = game.unit.orders.retreat_end(unit)
+		if not retreat_end: stand(unit)
+		return retreat_end
+	
+
+func stop(unit):
+	unit.current_step = Vector2.ZERO
+	unit.current_destiny = Vector2.ZERO
+	unit.set_state(\"idle\")
+
+
+func stand(unit):
+	unit.current_path = []
+	stop(unit)
+	unit.set_behavior(\"stand\")
+
+
+
+func smart_move(unit, point):
+	var path = game.unit.path.find_path(unit.global_position, point)
+	if path: game.unit.path.follow(unit, path, \"move\")
+
+"
+
+[sub_resource type="GDScript" id=33]
+script/source = "extends Node
+var game:Node
+
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+func start(unit, point):
+	if unit.attacks:
+		unit.look_at(point)
+		unit.set_state(\"attack\")
+		unit.get_node(\"animations\").playback_speed = unit.current_attack_speed
+		if unit.ranged and unit.weapon:
+			unit.weapon.look_at(point)
+		if !unit.target:
+			var neighbors = game.map.blocks.get_units_in_radius(point, 1)
+			if neighbors:
+				var target = closest_enemy_unit(unit, neighbors)
+				if target and (target.global_position - point).length() <= target.collision_radius:
+					unit.target = target
+
+
+func closest_enemy_unit(unit, enemies):
+	var sorted = game.utils.sort_by_distance(unit, enemies)
+	var filtered = []
+	for enemy in sorted:
+		if enemy.unit.team != game.player_team:
+			filtered.append(enemy.unit)
+	if filtered:
+		return filtered[0]
+
+
+func hit(unit1):
+	var att_pos = unit1.global_position + unit1.attack_hit_position
+	var att_rad = unit1.attack_hit_radius
+	
+	var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
+	var target_hit = false
+	for unit2 in neighbors:
+		if (unit1 != unit2 and 
+				unit2.hp and 
+				unit2 == unit1.target and  # or unit1 has cleave
+				in_range(unit1, unit2)):
+			take_hit(unit1, unit2, null)
+			target_hit = true
+			break # if no cleave
+			
+	if not target_hit and neighbors.size():
+		var target = closest_enemy_unit(unit1, neighbors)
+		if target and (target.global_position - att_pos).length() <= target.collision_radius:
+			take_hit(unit1, target, null)
+		
+		
+
+func in_range(attacker, target):
+	var att_pos = attacker.global_position + attacker.attack_hit_position
+	var att_rad = attacker.attack_hit_radius * attacker.current_attack_range
+	var tar_pos = target.global_position + target.collision_position
+	var tar_rad = target.collision_radius
+	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
+
+
+func take_hit(attacker, target, projectile):
+	if projectile: 
+		projectile_stuck(attacker, target, projectile)
+	if target and target.current_hp > 0:
+		target.current_hp -= attacker.damage
+		game.unit.advance.react(target, attacker)
+		game.unit.advance.ally_attacked(target, attacker)
+		game.unit.orders.take_hit(attacker, target)
+		game.unit.hud.update_hpbar(target)
+		if target == game.selected_unit: game.ui.stats.update()
+		if target.current_hp <= 0: 
+			target.current_hp = 0
+			target.die()
+			if target.type == \"leader\":
+				if target.team == game.player_team: game.player_deaths += 1
+				else: game.enemy_deaths += 1
+				if attacker.team == game.player_team: game.player_kills += 1
+				else: game.enemy_kills += 1
+			yield(get_tree().create_timer(0.6), \"timeout\")
+			game.unit.advance.resume(attacker)
+
+
+func projectile_start(attacker):
+	var projectile = attacker.projectile.duplicate()
+	var projectile_sprite = projectile.get_node(\"sprites\")
+	var a = attacker.weapon.global_rotation
+	var speed = attacker.projectile_speed
+	var projectile_speed = Vector2(cos(a)*speed, sin(a)*speed)
+	var lifetime = attacker.attack_hit_radius / attacker.projectile_speed
+	projectile.global_position = attacker.projectile.global_position
+	var projectile_rotation
+	if attacker.projectile_rotation:
+		projectile_rotation = attacker.projectile_rotation
+		if attacker.mirror:
+			a -= PI
+			projectile_rotation *= -1
+			projectile_sprite.scale.x *= -1
+	projectile.global_rotation = a
+	projectile_sprite.visible = true
+	game.map.add_child(projectile)
+	attacker.projectiles.append({
+		\"node\": projectile,
+		\"sprite\": projectile_sprite,
+		\"speed\": projectile_speed,
+		\"rotation\": projectile_rotation,
+		\"lifetime\": lifetime
+	})
+
+
+func projectile_step(delta, projectile):
+	if projectile.speed:
+		projectile.node.global_position += projectile.speed * delta
+	
+	if projectile.rotation:
+		projectile.node.global_rotation += projectile.rotation * delta
+
+
+func projectile_stuck(attacker, target, projectile):
+	var stuck = projectile.node
+	var r = projectile.node.global_rotation
+	if target: 
+		stuck = projectile.node.duplicate()
+		stuck.global_position = Vector2.ZERO
+		if target and target.mirror: r = Vector2(cos(r),-sin(r)).angle()
+		target.get_node(\"sprites\").add_child(stuck)
+		game.map.remove_child(projectile.node)
+		projectile.node.queue_free()
+		
+	var a = 0.2 # angle variation
+	var ra = (randf()*a*2) - a
+	stuck.global_rotation = r + ra # some angle variation
+	
+	# rotating axe
+	if projectile.rotation:
+		if (target and target.mirror):
+			stuck.global_rotation = 0 + ra
+			stuck.scale.x *= -1
+		else: 
+			stuck.global_rotation = PI + ra
+		var o = projectile.speed*-0.08
+		stuck.global_position += o
+		
+	stuck.get_node(\"sprites\").frame = 1 # stuck sprite
+	attacker.projectiles.erase(projectile)
+	
+	yield(get_tree().create_timer(1.2), \"timeout\")
+	
+	if target: target.get_node(\"sprites\").remove_child(stuck)
+	else: game.map.remove_child(stuck)
+	stuck.queue_free()
+"
+
+[sub_resource type="GDScript" id=34]
+script/source = "extends Node
+var game:Node
+
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+
+func start(unit, objective): # move_and_attack
+	unit.set_behavior(\"advance\")
+	unit.objective = objective
+	var enemies = unit.get_units_on_sight({\"team\": unit.oponent_team()})
+	if not enemies: 
+		if unit.moves: game.unit.move.move(unit, objective) 
+		else: stop(unit)
+	else:
+		unit.target = game.unit.orders.select_target(unit, enemies)
+		if not game.unit.attack.in_range(unit, unit.target):
+			if unit.moves: game.unit.move.move(unit, unit.target.global_position)
+			else: stop(unit)
+		else: game.unit.attack.start(unit, unit.target.global_position)
+
+
+func on_collision(unit):
+	if unit.behavior == \"advance\" and unit.collide_target == unit.target:
+		 game.unit.attack.start(unit, unit.target.global_position)
+
+
+func resume(unit):
+	if unit.behavior == \"advance\":
+		start(unit, unit.objective)
+
+
+func end(unit):
+	if unit.behavior == \"advance\":
+		if unit.current_destiny != unit.objective:
+			start(unit, unit.objective)
+		else: stop(unit)
+
+
+func react(target, attacker):
+	if target.behavior == \"stop\" or target.behavior == \"advance\":
+		start(target, attacker.global_position)
+
+
+func ally_attacked(target, attacker):
+	var allies = target.get_units_on_sight({\"team\": target.team})
+	for ally in allies: react(ally, attacker)
+
+
+func stop(unit):
+	if unit.behavior == \"advance\":
+		unit.current_destiny = Vector2.ZERO
+		unit.objective = Vector2.ZERO
+		unit.current_step = Vector2.ZERO
+		unit.set_behavior(\"stop\")
+		unit.set_state(\"idle\")
+
+
+func on_idle_end(unit):
+	if unit.behavior == \"advance\" or unit.behavior == \"stop\":
+		start(unit, unit.objective)
+"
+
+[sub_resource type="GDScript" id=35]
+script/source = "extends Node
+var game:Node
+
+
+const teleport_time = 3
+const teleport_max_distance = 100
+
+
+# PATHFIND GRID
+const _GridGD = preload(\"../../map/pathfind/grid.gd\")
+const _JumpPointFinderGD = preload(\"../../map/pathfind/jump_point_finder.gd\")
+var path_grid
+var path_finder
+
+
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+func setup_pathfind():
+	# get tiles
+	var walls_rect = game.map.walls.get_used_rect()
+	var walls_size =  walls_rect.size
+	#setup grid
+	var Grid = _GridGD.new().Grid
+	path_grid = Grid.new(walls_size.x, walls_size.y)
+	# add blocked tiles
+	for cell in game.map.walls.get_used_cells():
+		game.map.blocks.create_block(cell.x, cell.y)
+		path_grid.setWalkableAt(cell.x, cell.y, false)
+	# setup finder
+	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
+	path_finder = Jpf.new()
+
+
+func find_path(g1, g2):
+	var cell_size = game.map.tile_size
+	var half = game.map.half_tile_size
+	var p1 = Vector2(floor(g1.x / cell_size), floor(g1.y / cell_size))
+	var p2 = Vector2(floor(g2.x / cell_size), floor(g2.y / cell_size))
+	if in_limits(p1) and in_limits(p2):
+		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
+		var path = []
+		for i in range(1, solved_path.size()):
+			var item = solved_path[i]
+			path.append(Vector2(half + (item[0] * cell_size), half + (item[1] * cell_size)))
+		print(path)
+		return path
+
+
+func in_limits(p):
+	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
+
+
+func follow(unit, path, cb):
+	if path and path.size():
+		var next_point = path.pop_front()
+		unit.current_path = path
+		game.unit[cb].start(unit, next_point)
+
+
+func follow_next(unit):
+	follow(unit, unit.current_path, unit.behavior)
+
+
+func change_lane(unit, point):
+	var lane = game.utils.closer_lane(point)
+	var lane_start = lane.pop_front()
+	unit.lane = lane
+	game.unit.move.start(unit, lane_start)
+
+
+
+func follow_lane(unit):
+	if !unit.current_path:
+		var lane = unit.lane
+		var path = game.map[lane].duplicate()
+		if unit.team == \"red\": path.invert()
+		if unit.type != 'leader': 
+			game.unit.orders.setup_pawn(unit, lane)
+			follow(unit, path, \"advance\")
+		else: smart_follow(unit, path, \"advance\")
+
+
+
+func smart_follow(unit, path, cb):
+	if path and path.size():
+		var new_path = game.utils.cut_path(unit, path)
+		var next_point = new_path.pop_front()
+		unit.current_path = new_path
+		game.unit[cb].start(unit, next_point)
+
+
+
+func teleport(unit, point):
+	game.ui.controls.teleport_button.disabled = true
+	var building = game.utils.closer_building(point, unit.team)
+	var distance = building.global_position.distance_to(point)
+	game.control_state = \"selection\"
+	game.ui.controls.teleport_button.disabled = false
+	game.ui.controls.teleport_button.pressed = false
+	game.unit.move.stand(unit)
+	
+	yield(get_tree().create_timer(teleport_time), \"timeout\")
+	var new_position = point
+	# prevent teleport into buildings
+	var min_distance = 2 * building.collision_radius + unit.collision_radius
+	if distance <= min_distance:
+		var offset = (point - building.global_position).normalized()
+		new_position = building.global_position + (offset * min_distance)
+	# limit teleport range
+	if distance > teleport_max_distance:
+		var offset = (point - building.global_position).normalized()
+		new_position = building.global_position + (offset * teleport_max_distance)
+
+	unit.global_position = new_position
+	unit.lane = building.lane
+	unit.current_path = []
+"
+
+[sub_resource type="GDScript" id=36]
+script/source = "extends Node
+var game:Node
+
+
+
+onready var state = get_node(\"state\")
+onready var hpbar = get_node(\"hpbar\")
+onready var selection = get_node(\"selection\")
+
+
+func _ready():
+	game = get_tree().get_current_scene()
+
+
+# HPBAR
+
+
+func hide_hpbars():
+	for unit in game.all_units:
+		if (unit != game.selected_unit and 
+				unit.current_hp == unit.hp and
+				unit.hud and
+				unit.type != \"leader\"):
+					unit.hud.hpbar.visible = false
+
+
+func show_hpbars():
+	for unit in game.all_units:
+		if unit.hud: unit.hud.hpbar.visible = true
+
+
+func update_hpbar(unit):
+	if unit.current_hp <= 0:
+		unit.hud.hpbar.get_node(\"green\").region_rect.size.x = 0
+	else:
+		if game.camera.zoom.x >= 1:
+			unit.hud.hpbar.visible = true
+		var scale = float(unit.current_hp) / float(unit.hp)
+		if scale < 0: scale = 0
+		if scale > 1: scale = 1
+		var size = unit.hud.hpbar.get_node(\"red\").region_rect.size.x 
+		unit.hud.hpbar.get_node(\"green\").region_rect.size.x = scale * size
+		if (unit.current_hp >= unit.hp and 
+				unit != game.selected_unit and
+				unit.type != \"leader\"):
+			unit.hud.hpbar.hide()
+
+# STATE LABEL
+
+
+func hide_states():
+	for unit in game.all_units:
+		if unit != game.selected_unit:
+			if unit.hud: unit.hud.state.visible = false
+
+
+func show_states():
+	for unit in game.all_units:
+		if unit.hud and unit.type == \"leader\": 
+			unit.hud.hpbar.visible = true
+
+
+
+func show_selected(unit):
+	unit.hud.state.visible = true
+	unit.hud.selection.visible = true
+	unit.hud.update_hpbar(unit)
+	unit.hud.hpbar.visible = true
+
+
+func hide_unselect(unit):
+	if unit.type != \"leader\": unit.hud.state.visible = false
+	unit.hud.selection.visible = false
+	unit.hud.update_hpbar(unit)
+"
+
+[sub_resource type="DynamicFont" id=20]
+size = 10
+font_data = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=30]
+shader = ExtResource( 13 )
+shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
+shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
+shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = null
+shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
+shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
+shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/new4 = null
+shader_param/tolerance = 0.1
+
+[sub_resource type="CircleShape2D" id=18]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id=19]
+radius = 50.04
+
+[node name="unit" type="Node2D"]
+script = SubResource( 2 )
+display_name = "infantry"
+
+[node name="behavior" type="Node" parent="."]
+
+[node name="spawn" type="Node" parent="behavior"]
+script = SubResource( 31 )
+
+[node name="move" type="Node" parent="behavior"]
+script = SubResource( 32 )
+
+[node name="attack" type="Node" parent="behavior"]
+script = SubResource( 33 )
+
+[node name="advance" type="Node" parent="behavior"]
+script = SubResource( 34 )
+
+[node name="path" type="Node" parent="behavior"]
+script = SubResource( 35 )
+
+[node name="orders" type="Node" parent="behavior"]
+script = ExtResource( 12 )
+
+[node name="symbol" type="Sprite" parent="."]
+visible = false
+modulate = Color( 0.32549, 0.584314, 0.709804, 1 )
+scale = Vector2( 20, 20 )
+z_index = 2
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 1, 1, 1, 1 )
+
+[node name="symbol_border" type="Sprite" parent="symbol"]
+modulate = Color( 0, 0, 0, 1 )
+scale = Vector2( 1.30769, 1.30769 )
+z_index = 1
+z_as_relative = false
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 10, 3, 1, 1 )
+
+[node name="hud" type="Node2D" parent="."]
+script = SubResource( 36 )
+
+[node name="state" type="Label" parent="hud"]
+visible = false
+margin_left = -37.0
+margin_top = -37.0
+margin_right = 38.0
+margin_bottom = -21.0
+custom_fonts/font = SubResource( 20 )
+text = "stand"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="selection" type="Sprite" parent="hud"]
+visible = false
+modulate = Color( 0.117647, 1, 0.211765, 0.588235 )
+position = Vector2( 0, 8 )
+scale = Vector2( 1.6, 1.6 )
+texture = ExtResource( 2 )
+
+[node name="hpbar" type="Node2D" parent="hud"]
+visible = false
+position = Vector2( 0, -19 )
+
+[node name="bar" type="Sprite" parent="hud/hpbar"]
+modulate = Color( 0.168627, 0.160784, 0.227451, 0.862745 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 2, 2, 22, 4 )
+
+[node name="red" type="Sprite" parent="hud/hpbar"]
+modulate = Color( 0.682353, 0.172549, 0.172549, 1 )
+position = Vector2( -9, 0 )
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( 0, -1 )
+region_enabled = true
+region_rect = Rect2( 4, 7, 18, 2 )
+
+[node name="green" type="Sprite" parent="hud/hpbar"]
+modulate = Color( 0.0392157, 0.643137, 0.117647, 1 )
+position = Vector2( -9, 0 )
+texture = ExtResource( 4 )
+centered = false
+offset = Vector2( 0, -1 )
+region_enabled = true
+region_rect = Rect2( 4, 7, 18, 2 )
+
+[node name="sprites" type="Node2D" parent="."]
+
+[node name="shadow" type="Sprite" parent="sprites"]
+modulate = Color( 0, 0, 0, 0.294118 )
+position = Vector2( 0, 8 )
+texture = ExtResource( 2 )
+
+[node name="sprite" type="Sprite" parent="sprites"]
+material = SubResource( 30 )
+position = Vector2( 0, 9 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -11 )
+region_enabled = true
+region_rect = Rect2( 4, 0, 20, 24 )
+
+[node name="collisions" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 0
+input_pickable = false
+monitoring = false
+monitorable = false
+
+[node name="block" type="CollisionShape2D" parent="collisions"]
+shape = SubResource( 18 )
+disabled = true
+
+[node name="select" type="CollisionShape2D" parent="collisions"]
+shape = SubResource( 19 )
+disabled = true

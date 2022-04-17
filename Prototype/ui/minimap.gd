@@ -126,7 +126,7 @@ func follow_camera():
 		var window_height = get_viewport().size.y
 		var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
 		if is_panning: game.camera.position = pos
-		cam_rect.rect_position = Vector2(50,50) + game.camera.position /15.2
+		cam_rect.rect_position = Vector2(50,50) + game.camera.position / 15.2
 		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
 		if cam_rect.rect_position.x > 100: cam_rect.rect_position.x = 100
 		if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0

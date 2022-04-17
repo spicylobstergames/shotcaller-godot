@@ -12,6 +12,7 @@ config_version=4
 
 config/name="Shotcall"
 run/main_scene="res://game.tscn"
+run/delta_smoothing=false
 config/icon="res://assets/icon.png"
 
 [debug]

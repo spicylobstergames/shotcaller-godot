@@ -51,6 +51,7 @@ func setup_leaders():
 	game.ui.inventories.build_leaders()
 	game.ui.orders.setup_leaders()
 	game.unit.orders.build_leaders()
+	game.ui.leaders_icons.textures()
 
 
 

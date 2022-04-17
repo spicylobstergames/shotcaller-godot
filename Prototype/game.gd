@@ -1,10 +1,14 @@
 extends Node2D
 
-
+var time = 0
+var player_kills = 0
+var player_deaths = 0
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
 var player_units:Array = []
 var player_buildings:Array = []
+var enemy_kills = 0
+var enemy_deaths = 0
 var enemy_choose_leaders:Array = []
 var enemy_leaders:Array = []
 var enemy_units:Array = []
@@ -53,8 +57,9 @@ func start():
 	rng.randomize()
 	map.setup_lanes()
 	unit.path.setup_pathfind()
-	unit.spawn.choose_leaders()
 	ui.orders.setup_lanes()
+	unit.spawn.choose_leaders()
+	ui.leaders_icons.build()
 
 	#map.fog.cover_map()
 	
