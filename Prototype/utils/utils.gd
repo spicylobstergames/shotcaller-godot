@@ -70,6 +70,26 @@ func closer_building(point, team):
 	return distances[0].building
 
 
+func cut_path(unit, path):
+	var distances = []
+	var path_size = path.size()
+	var first_point = path[0]
+	for index in path_size:
+		var point = path[index]
+		var d1 = unit.global_position.distance_to(point)
+		var d2 = first_point.distance_to(point)
+		distances.append({
+			"distance": d1 - (d2 / 10),
+			"point": point,
+			"index": index
+		})
+	distances.sort_custom(self, "compare_distance")
+	var next_first_point = distances[0]
+	
+	var new_path = path.slice(next_first_point.index, path_size)
+	return new_path
+
+
 func limit_angle(a):
 	if (a > PI): a -= PI*2
 	if (a < -PI): a += PI*2
@@ -106,9 +126,9 @@ func offset_point_random(unit, point, offset):
 #	return p
 
 
-func point_collision(unit1, point, s=1):
+func point_collision(unit1, point, s=0):
 	var unit1_pos = unit1.global_position + unit1.collision_position
-	return circle_point_collision(point, unit1_pos, unit1.collision_radius * s)
+	return circle_point_collision(point, unit1_pos, unit1.collision_radius + s)
 
 
 func unit_collision(unit1, unit2, delta):
@@ -123,6 +143,7 @@ func get_units_around(unit1, delta):
 	var unit1_pos = unit1.global_position + unit1.collision_position + (unit1.current_step * delta)
 	var unit1_rad = unit1.collision_radius
 	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+
 
 var font
 func label(string):

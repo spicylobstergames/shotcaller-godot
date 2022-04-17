@@ -65,7 +65,7 @@ func setup_pawn(unit, lane):
 func setup_leaders():
 	for leader in game.player_leaders:
 		set_leader(leader, leaders_orders[leader.name])
-	
+
 
 
 func set_leader(leader, orders):
@@ -75,6 +75,7 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 
+	if not leader.retreating: game.unit.path.follow_lane(leader)
 
 
 func setup_lanes_priority():
@@ -130,13 +131,12 @@ func set_leader_priority(priority):
 
 func select_target(unit, enemies):
 	var n = enemies.size()
-	var target
 	if n == 1:
-		target = enemies[0]
-		return target
+		return enemies[0]
 	
 	var sorted = game.utils.sort_by_distance(unit, enemies)
 	var closest_unit = sorted[0].unit
+	
 	
 	if n == 2:
 		var further_unit = sorted[1].unit
@@ -146,8 +146,15 @@ func select_target(unit, enemies):
 			return further_unit
 			
 	# n > 2
-	target = closest_unit
-	return target
+	if not unit.ranged: # melee
+		return closest_unit
+		
+	else: # ranged
+		for priority_type in unit.priority:
+			for enemy in sorted:
+				if enemy.unit.type == priority_type:
+					return enemy.unit
+
 
 
 func closest_unit(unit, enemies):

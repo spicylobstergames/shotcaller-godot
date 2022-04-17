@@ -26,7 +26,7 @@ func update():
 	clear_old_hpbar()
 	if unit:
 		show()
-		unit_name.text = unit.get_name()
+		unit_name.text = "%s" % [unit.display_name]
 		hp.text = "%s / %s" % [max(unit.current_hp,0), unit.hp]
 		if unit.regen: regen.text = "+%s" % [unit.regen]
 		else: regen.text = ""

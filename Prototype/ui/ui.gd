@@ -60,6 +60,10 @@ func show_all():
 		panel.show()
 
 
+func hide_all_keep_stats():
+	hide_all()
+	get_node("bot_mid").show()
+
 
 func menu_button_down():
 	pass

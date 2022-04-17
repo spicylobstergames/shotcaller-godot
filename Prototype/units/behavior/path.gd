@@ -2,6 +2,9 @@ extends Node
 var game:Node
 
 
+const teleport_time = 3
+const teleport_max_distance = 100
+
 
 # PATHFIND GRID
 const _GridGD = preload("../../map/pathfind/grid.gd")
@@ -32,8 +35,8 @@ func setup_pathfind():
 
 
 func find_path(g1, g2):
-	var cell_size = 64
-	var half = cell_size / 2
+	var cell_size = game.map.tile_size
+	var half = game.map.half_tile_size
 	var p1 = Vector2(floor(g1.x / cell_size), floor(g1.y / cell_size))
 	var p2 = Vector2(floor(g2.x / cell_size), floor(g2.y / cell_size))
 	if in_limits(p1) and in_limits(p2):
@@ -59,3 +62,58 @@ func follow(unit, path, cb):
 
 func follow_next(unit):
 	follow(unit, unit.current_path, unit.behavior)
+
+
+func change_lane(unit, point):
+	var lane = game.utils.closer_lane(point)
+	var lane_start = lane.pop_front()
+	unit.lane = lane
+	game.unit.move.start(unit, lane_start)
+
+
+
+func follow_lane(unit):
+	if !unit.current_path:
+		var lane = unit.lane
+		var path = game.map[lane].duplicate()
+		if unit.team == "red": path.invert()
+		if unit.type != 'leader': 
+			game.unit.orders.setup_pawn(unit, lane)
+			follow(unit, path, "advance")
+		else: smart_follow(unit, path, "advance")
+
+
+
+func smart_follow(unit, path, cb):
+	if path and path.size():
+		var new_path = game.utils.cut_path(unit, path)
+		var next_point = new_path.pop_front()
+		unit.current_path = new_path
+		game.unit[cb].start(unit, next_point)
+
+
+
+func teleport(unit, point):
+	game.ui.controls.teleport_button.disabled = true
+	var building = game.utils.closer_building(point, unit.team)
+	var distance = building.global_position.distance_to(point)
+	game.control_state = "selection"
+	game.ui.controls.teleport_button.disabled = false
+	game.ui.controls.teleport_button.pressed = false
+	game.unit.move.stand(unit)
+	
+	yield(get_tree().create_timer(teleport_time), "timeout")
+	var new_position = point
+	# prevent teleport into buildings
+	var min_distance = 2 * building.collision_radius + unit.collision_radius
+	if distance <= min_distance:
+		var offset = (point - building.global_position).normalized()
+		new_position = building.global_position + (offset * min_distance)
+	# limit teleport range
+	if distance > teleport_max_distance:
+		var offset = (point - building.global_position).normalized()
+		new_position = building.global_position + (offset * teleport_max_distance)
+
+	unit.global_position = new_position
+	unit.lane = building.lane
+	unit.current_path = []

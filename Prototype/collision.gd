@@ -34,8 +34,7 @@ func process(delta):
 		# move arrival
 		if unit1.moves and unit1.state == "move":
 			if !unit1.target:
-			# scale up the collision radius * 4 top avoid point chasing
-				if game.utils.point_collision(unit1, unit1.current_destiny, 4):
+				if game.utils.point_collision(unit1, unit1.current_destiny, game.map.half_tile_size):
 					unit1.next_event = "arrive"
 			else:
 				if game.utils.point_collision(unit1, unit1.current_destiny):

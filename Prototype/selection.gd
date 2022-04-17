@@ -11,15 +11,27 @@ func _unhandled_input(event):
 	
 	# KEYBOARD
 	if event is InputEventKey:
-		if game.selected_unit and not event.is_pressed():
-			if event.scancode == KEY_SPACE: 
-				game.unit.move.smart_move(game.selected_unit, point)
-			if event.scancode == KEY_A:
-				game.unit.advance.start(game.selected_unit, point)
-			if event.scancode == KEY_Z:
-				game.unit.attack.start(game.selected_unit, point)
-			if event.scancode == KEY_S:
-				game.unit.move.stand(game.selected_unit)
+		if not event.is_pressed():
+			if game.selected_unit and game.selected_unit.type == "leader":
+				
+				if event.scancode == KEY_SPACE: 
+					game.unit.move.smart_move(game.selected_unit, point)
+				
+				if event.scancode == KEY_A:
+					game.unit.advance.start(game.selected_unit, point)
+				
+				if event.scancode == KEY_T:
+					game.unit.path.teleport(game.selected_unit, point)
+					
+				if event.scancode == KEY_L:
+					game.unit.path.change_lane(game.selected_unit, point)
+				
+				#if event.scancode == KEY_Z: attack test
+				#	game.unit.attack.start(game.selected_unit, point)
+				
+				#if event.scancode == KEY_S: stop test
+					#game.unit.move.stand(game.selected_unit)
+				
 
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
@@ -34,7 +46,7 @@ func _unhandled_input(event):
 							select(point)
 						
 						"teleport":
-							game.unit.move.teleport(game.selected_unit, point)
+							game.unit.path.teleport(game.selected_unit, point)
 						
 						"advance":
 							game.unit.advance.start(game.selected_unit, point)
@@ -43,7 +55,7 @@ func _unhandled_input(event):
 							game.unit.move.smart_move(game.selected_unit, point)
 						
 						"lane":
-							game.unit.move.change_lane(game.selected_unit, point)
+							game.unit.path.change_lane(game.selected_unit, point)
 		
 		
 		# MAP CLICK ZOOM IN

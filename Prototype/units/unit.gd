@@ -95,8 +95,12 @@ func _ready():
 
 func reset_unit():
 	self.setup_team()
-	if self.type == "leader": self.get_node("hud/state").text = self.name
-	else: self.get_node("hud/state").text = self.subtype
+	
+	if self.type == "leader": 
+		self.hud.state.visible = true
+		self.hud.hpbar.visible = true
+		
+	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_attack_range = self.attack_range
 	self.current_vision = self.vision
@@ -145,13 +149,6 @@ func oponent_team():
 	var t = "blue"
 	if self.team == t: t = "red"
 	return t
-
-
-
-func get_name():
-	if self.type == "leader":
-		return "%s" % [self.display_name]
-	else: return "%s" % [self.subtype]
 
 
 func look_at(point):

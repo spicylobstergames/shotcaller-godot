@@ -2,9 +2,6 @@ extends Node
 var game:Node
 
 
-const teleport_time = 3
-const teleport_max_distance = 100
-
 func _ready():
 	game = get_tree().get_current_scene()
 
@@ -23,15 +20,16 @@ func start(unit, destiny):
 
 
 func in_bounds(p):
-	var l = 32
+	var l = game.map.tile_size / 2
 	return p.x > l and p.y > l and p.x < game.map.size - l and p.y < game.map.size - l
 
 
 
 func move(unit, destiny):
 	if unit.moves and in_bounds(destiny):
+		# all units path find (heavy on stress)
 		#if !unit.lane:
-		#	unit.path = game.map.find_path(unit.global_position, destiny)
+		#	unit.current_path = game.map.find_path(unit.global_position, destiny)
 		unit.current_destiny = destiny
 		calc_step(unit)
 		unit.set_state("move")
@@ -108,41 +106,3 @@ func smart_move(unit, point):
 	var path = game.unit.path.find_path(unit.global_position, point)
 	if path: game.unit.path.follow(unit, path, "move")
 
-
-func teleport(unit, point):
-	game.ui.controls.teleport_button.disabled = true
-	var building = game.utils.closer_building(point, unit.team)
-	var distance = building.global_position.distance_to(point)
-	game.control_state = "selection"
-	game.ui.controls.teleport_button.disabled = false
-	game.ui.controls.teleport_button.pressed = false
-	game.unit.move.stand(unit)
-	
-	yield(get_tree().create_timer(teleport_time), "timeout")
-	var new_position = point
-	# prevent teleport into buildings
-	var min_distance = 2 * building.collision_radius + unit.collision_radius
-	if distance <= min_distance:
-		var offset = (point - building.global_position).normalized()
-		new_position = building.global_position + (offset * min_distance)
-	# limit teleport range
-	if distance > teleport_max_distance:
-		var offset = (point - building.global_position).normalized()
-		new_position = building.global_position + (offset * teleport_max_distance)
-
-	unit.global_position = new_position
-	follow_lane(unit)
-
-
-func change_lane(unit, point):
-	var lane = game.utils.closer_lane(point)
-	unit.lane = lane
-	follow_lane(unit)
-
-
-func follow_lane(unit):
-	var lane = unit.lane
-	var path = game.map[lane].duplicate()
-	if unit.team == "red": path.invert()
-	game.unit.orders.setup_pawn(unit, lane)
-	game.unit.path.follow(unit, path, "advance")

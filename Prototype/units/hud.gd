@@ -18,13 +18,15 @@ func _ready():
 func hide_hpbars():
 	for unit in game.all_units:
 		if (unit != game.selected_unit and 
-				unit.current_hp == unit.hp):
-			if unit.hud: unit.hud.hpbar.visible = false
+				unit.current_hp == unit.hp and
+				unit.hud and
+				unit.type != "leader"):
+					unit.hud.hpbar.visible = false
 
 
 func show_hpbars():
 	for unit in game.all_units:
-		if unit.hud: unit.hud.state.visible = true
+		if unit.hud: unit.hud.hpbar.visible = true
 
 
 func update_hpbar(unit):
@@ -38,8 +40,10 @@ func update_hpbar(unit):
 		if scale > 1: scale = 1
 		var size = unit.hud.hpbar.get_node("red").region_rect.size.x 
 		unit.hud.hpbar.get_node("green").region_rect.size.x = scale * size
-		if unit.current_hp >= unit.hp and unit != game.selected_unit:
-			unit.get_node("hud/hpbar").hide()
+		if (unit.current_hp >= unit.hp and 
+				unit != game.selected_unit and
+				unit.type != "leader"):
+			unit.hud.hpbar.hide()
 
 # STATE LABEL
 
@@ -52,7 +56,8 @@ func hide_states():
 
 func show_states():
 	for unit in game.all_units:
-			if unit.hud: unit.hud.hpbar.visible = true
+		if unit.hud and unit.type == "leader": 
+			unit.hud.hpbar.visible = true
 
 
 
@@ -64,6 +69,6 @@ func show_selected(unit):
 
 
 func hide_unselect(unit):
-	unit.hud.state.visible = false
+	if unit.type != "leader": unit.hud.state.visible = false
 	unit.hud.selection.visible = false
 	unit.hud.update_hpbar(unit)

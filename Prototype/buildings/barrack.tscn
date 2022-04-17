@@ -168,6 +168,7 @@ hp = 900
 vision = 240
 type = "building"
 subtype = "barrack"
+display_name = "barrack"
 selectable = true
 collide = true
 attacks = true

@@ -26,11 +26,13 @@ func get_units_in_radius(pos, rad):
 
 func create_block(x, y):
 	var block = block_template.instance()
+	var size = game.map.tile_size
+	var half = game.map.half_tile_size
 	block.selectable = false
 	block.moves = false
 	block.attacks = true
 	block.collide = true
-	block.global_position = Vector2(32 + x * 64, 32 + y * 64)
+	block.global_position = Vector2(half + x * size, half + y * size)
 	game.map.blocks.add_child(block)
 	game.collision.setup(block)
 	game.all_units.append(block)

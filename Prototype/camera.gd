@@ -80,14 +80,12 @@ func zoom_reset():
 	game.ui.show_all()
 	game.ui.minimap.corner_view()
 	game.unit.hud.hide_hpbars()
-	game.unit.hud.hide_states()
 	
 	
 func zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
-	game.ui.hide_all()
+	game.ui.hide_all_keep_stats()
 	game.unit.hud.show_hpbars()
-	game.unit.hud.hide_states()
 	
 	
 func zoom_out(): 

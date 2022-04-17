@@ -66,7 +66,7 @@ func start():
 		
 		yield(get_tree().create_timer(2.0), "timeout")
 		unit.spawn.start()
-		yield(get_tree().create_timer(2.0), "timeout")
+		yield(get_tree().create_timer(4.0), "timeout")
 		unit.spawn.leaders()
 
 

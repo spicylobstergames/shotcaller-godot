@@ -7,7 +7,6 @@ var pan_position:Vector2 = Vector2.ZERO
 
 var map_sprite:Node
 var map_tiles:Node
-var minimap:Node
 var cam_rect:Node
 var map_symbols:Node
 var map_symbols_map = []
@@ -15,11 +14,11 @@ var map_symbols_map = []
 
 func _ready():
 	game = get_tree().get_current_scene()
+	
 	map_sprite = game.get_node("map/zoom_out_sprite")
 	map_tiles = game.get_node("map/tiles")
-	minimap = game.get_node("ui/bot_left/minimap")
-	cam_rect = minimap.get_node("cam_rect")
-	map_symbols = minimap.get_node("symbols")
+	cam_rect = get_node("cam_rect")
+	map_symbols = get_node("symbols")
 	
 	hide()
 
@@ -49,10 +48,13 @@ func _input(event):
 
 
 func over_minimap(event):
-	return (self.visible and 
-				"position" in event and 
-				event.position.x < 150 and 
-				event.position.y > get_viewport().size.y - 150)
+	return (
+		self.get_parent().visible and
+		self.visible and 
+		"position" in event and 
+		event.position.x < 150 and 
+		event.position.y > get_viewport().size.y - 150
+	)
 
 
 func get_map_texture():
@@ -63,7 +65,7 @@ func get_map_texture():
 	data.flip_y()
 	var texture = ImageTexture.new()
 	texture.create_from_image(data, 1)
-	var minimap_sprite = minimap.get_node("sprite")
+	var minimap_sprite = self.get_node("sprite")
 	minimap_sprite.set_texture(texture)
 	map_sprite.set_texture(texture)
 	map_sprite.scale = game.map_camera.zoom
@@ -77,22 +79,18 @@ func get_map_texture():
 
 
 func corner_view():
-	map_tiles.visible = true
 	map_sprite.visible = false
-	for unit in game.all_units:
-		if unit.has_node("hud"):
-			unit.get_node("hud").visible = true
+	map_tiles.visible = true
 	yield(get_tree(), "idle_frame")
-	minimap.visible = true
+	self.visible = true
 
 
 func hide_view():
-	map_tiles.visible = false
-	minimap.visible = false
 	map_sprite.visible = true
-	for unit in game.all_units:
-		if unit.has_node("hud"):
-			unit.get_node("hud").visible = false
+	map_tiles.visible = false
+	# avoid input messing up
+	yield(get_tree(), "idle_frame")
+	self.visible = false
 
 
 func setup_symbol(unit):
@@ -123,15 +121,16 @@ func copy_symbol(unit, symbol):
 
 
 func follow_camera():
-	var half = game.map.size / 2
-	var window_height = get_viewport().size.y
-	var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
-	if is_panning: game.camera.position = pos
-	cam_rect.rect_position = Vector2(50,50) + game.camera.position /15.2
-	if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
-	if cam_rect.rect_position.x > 100: cam_rect.rect_position.x = 100
-	if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0
-	if cam_rect.rect_position.y > 100: cam_rect.rect_position.y = 100
+	if self.visible:
+		var half = game.map.size / 2
+		var window_height = get_viewport().size.y
+		var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
+		if is_panning: game.camera.position = pos
+		cam_rect.rect_position = Vector2(50,50) + game.camera.position /15.2
+		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
+		if cam_rect.rect_position.x > 100: cam_rect.rect_position.x = 100
+		if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0
+		if cam_rect.rect_position.y > 100: cam_rect.rect_position.y = 100
 
 
 func move_symbols():

@@ -168,6 +168,7 @@ hp = 1000
 vision = 260
 type = "building"
 subtype = "castle"
+display_name = "castle"
 selectable = true
 collide = true
 attacks = true

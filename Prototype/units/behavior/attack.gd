@@ -138,13 +138,11 @@ func projectile_stuck(attacker, target, projectile):
 		var o = projectile.speed*-0.08
 		stuck.global_position += o
 		
-	stuck.get_node("sprites").frame = 1 # stuzck sprite
-	
+	stuck.get_node("sprites").frame = 1 # stuck sprite
 	attacker.projectiles.erase(projectile)
 	
 	yield(get_tree().create_timer(1.2), "timeout")
 	
 	if target: target.get_node("sprites").remove_child(stuck)
 	else: game.map.remove_child(stuck)
-	
 	stuck.queue_free()
