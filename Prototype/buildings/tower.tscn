@@ -161,7 +161,7 @@ radius = 16.0
 radius = 32.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 120.0
+radius = 125.0
 
 [node name="tower" instance=ExtResource( 1 )]
 hp = 800

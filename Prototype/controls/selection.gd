@@ -87,11 +87,11 @@ func setup_selection(unit):
 func select(point):
 	var unit_at_point = get_sel_unit_at_point(Vector2(point))
 	if unit_at_point:
-		unselect()
 		select_unit(unit_at_point)
 
 
 func select_unit(unit):
+	unselect()
 	game.selected_unit = unit
 	
 	if unit.team == game.player_team and unit.type == "leader":

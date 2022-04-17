@@ -13,14 +13,14 @@ var button_template:PackedScene = load("res://controls/orders/button/order_butto
 onready var container = get_node("scroll_container/container")
 
 
-var order_types = {
+const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
 	"lane_tactics": ["defend","default","attack"],
 	"priority": ["pawn", "leader", "building"]
 	# subtype priority: melee ranged mounted
 }
 
-var hint_tooltips_tactics = {
+const hint_tooltips_tactics = {
 	"retreat": "Retreats on first hit",
 	"defend": "Retreats if less than half HP",
 	"default": "Retreats if less than third HP",
