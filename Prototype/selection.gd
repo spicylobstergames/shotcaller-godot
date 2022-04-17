@@ -13,7 +13,7 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		if game.selected_unit and not event.is_pressed():
 			if event.scancode == KEY_SPACE: 
-				game.unit.move.start(game.selected_unit, point)
+				game.unit.move.smart_move(game.selected_unit, point)
 			if event.scancode == KEY_A:
 				game.unit.advance.start(game.selected_unit, point)
 			if event.scancode == KEY_Z:
@@ -40,7 +40,7 @@ func _unhandled_input(event):
 							game.unit.advance.start(game.selected_unit, point)
 						
 						"move":
-							game.unit.move.start(game.selected_unit, point)
+							game.unit.move.smart_move(game.selected_unit, point)
 						
 						"lane":
 							game.unit.move.change_lane(game.selected_unit, point)

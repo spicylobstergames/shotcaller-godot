@@ -2,9 +2,7 @@ extends Node
 var game:Node
 
 
-var infantry:PackedScene = load("res://pawns/infantry.tscn")
-var archer:PackedScene = load("res://pawns/archer.tscn")
-
+var unit = 0
 
 var stress = 0
 
@@ -12,15 +10,24 @@ var stress = 0
 func _ready():
 	game = get_tree().get_current_scene()
 
-func spawn_units():
+
+func spawn_unit():
+	var s = game.unit.spawn
+	if unit: game.map.create(s.infantry, "mid", "blue", "Vector2", Vector2(96,96))
+
+	if stress: spawn_random_units()
+
+
+func spawn_random_units():
 	game.rng.randomize()
 	var n = 80
+	var s = game.unit.spawn
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
-		game.map.create(infantry, "top", t, "random_map", Vector2.ZERO)
-		game.map.create(infantry, "mid", t, "random_map", Vector2.ZERO)
-		game.map.create(archer, "bot", t, "random_map", Vector2.ZERO)
+		game.map.create(s.infantry, "top", t, "random_map", Vector2.ZERO)
+		game.map.create(s.infantry, "mid", t, "random_map", Vector2.ZERO)
+		game.map.create(s.archer, "bot", t, "random_map", Vector2.ZERO)
 
 
 func unit_wait_end(unit):
@@ -53,9 +60,4 @@ func spawn_leaders():
 		game.map.create(s.sida, "mid", t1, "Vector2", Vector2(900,900))
 		game.map.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
 		game.map.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
-	if test_pawns:
-		game.map.create(s.archer, "mid", t1, "Vector2", Vector2(900,1000))
-		game.map.create(s.infantry, "mid", t1, "Vector2", Vector2(900,1050))
-		game.map.create(s.archer, "mid", t2, "Vector2", Vector2(1000,1000))
-		game.map.create(s.infantry, "mid", t2, "Vector2", Vector2(1000,1050))
 

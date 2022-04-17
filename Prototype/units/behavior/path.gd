@@ -31,14 +31,19 @@ func setup_pathfind():
 	path_finder = Jpf.new()
 
 
-
 func find_path(g1, g2):
 	var cell_size = 64
+	var half = cell_size / 2
 	var p1 = Vector2(floor(g1.x / cell_size), floor(g1.y / cell_size))
 	var p2 = Vector2(floor(g2.x / cell_size), floor(g2.y / cell_size))
-	if in_limits(p1) and in_limits(p2): 
-		return path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid)
-	else: return []
+	if in_limits(p1) and in_limits(p2):
+		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
+		var path = []
+		for i in range(1, solved_path.size()):
+			var item = solved_path[i]
+			path.append(Vector2(half + (item[0] * cell_size), half + (item[1] * cell_size)))
+		print(path)
+		return path
 
 
 func in_limits(p):

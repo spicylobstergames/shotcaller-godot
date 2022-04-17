@@ -27,6 +27,7 @@ func in_bounds(p):
 	return p.x > l and p.y > l and p.x < game.map.size - l and p.y < game.map.size - l
 
 
+
 func move(unit, destiny):
 	if unit.moves and in_bounds(destiny):
 		#if !unit.lane:
@@ -72,7 +73,7 @@ func on_collision(unit, delta):
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
 			unit.collision_timer.stop() # first stops previous timers
-		unit.collision_timer.wait_time = 0.1 + randf() * 0.5
+		unit.collision_timer.wait_time = 0.1 + randf() * 0.2
 		unit.collision_timer.start()
 		yield(unit.collision_timer, "timeout")
 		move(unit, unit.current_destiny)
@@ -103,6 +104,11 @@ func stand(unit):
 
 
 
+func smart_move(unit, point):
+	var path = game.unit.path.find_path(unit.global_position, point)
+	if path: game.unit.path.follow(unit, path, "move")
+
+
 func teleport(unit, point):
 	game.ui.controls.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
@@ -125,14 +131,18 @@ func teleport(unit, point):
 		new_position = building.global_position + (offset * teleport_max_distance)
 
 	unit.global_position = new_position
+	follow_lane(unit)
 
 
 func change_lane(unit, point):
 	var lane = game.utils.closer_lane(point)
 	unit.lane = lane
+	follow_lane(unit)
+
+
+func follow_lane(unit):
+	var lane = unit.lane
 	var path = game.map[lane].duplicate()
 	if unit.team == "red": path.invert()
 	game.unit.orders.setup_pawn(unit, lane)
 	game.unit.path.follow(unit, path, "advance")
-
-

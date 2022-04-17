@@ -50,7 +50,9 @@ func setup_leaders():
 	game.unit.orders.build_leaders()
 
 
+
 func line_to_array(line):
+	# from PoolVector2Array to Array
 	var array = []
 	for point in line.points:
 		array.append(point)

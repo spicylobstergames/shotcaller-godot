@@ -51,22 +51,22 @@ func start():
 	
 	#yield(get_tree(), "idle_frame")
 	rng.randomize()
+	map.setup_lanes()
 	unit.path.setup_pathfind()
+	unit.spawn.choose_leaders()
+	ui.orders.setup_lanes()
+
 	#map.fog.cover_map()
 	
-	if test.stress:
-		test.spawn_units()
+	if test.unit:
+		test.spawn_unit()
 		#test.spawn_leaders()
-		
-	else: 
-		unit.spawn.choose_leaders()
-		map.setup_lanes()
-		ui.orders.setup_lanes()
 
+	else: 
 		
-		yield(get_tree().create_timer(1.0), "timeout")
+		yield(get_tree().create_timer(2.0), "timeout")
 		unit.spawn.start()
-		yield(get_tree().create_timer(1.0), "timeout")
+		yield(get_tree().create_timer(2.0), "timeout")
 		unit.spawn.leaders()
 
 
