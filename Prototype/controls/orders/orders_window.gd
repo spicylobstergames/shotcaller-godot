@@ -14,8 +14,10 @@ onready var container = get_node("scroll_container/container")
 
 
 var order_types = {
-	"tactics": ["retreat","defend","default","attack"],
+	"leader_tactics": ["retreat","defend","default","attack"],
+	"lane_tactics": ["defend","default","attack"],
 	"priority": ["pawn", "leader", "building"]
+	# subtype priority: melee ranged mounted
 }
 
 var hint_tooltips_tactics = {
@@ -109,7 +111,10 @@ func setup_order_button(button):
 
 
 func setup_lane_buttons(orders):
-	var label2 = game.utils.label(orders.lane +" priority")
+	var label = game.utils.label(orders.lane +"lane tactics")
+	orders.node.add_child(label)
+	setup_tactics(orders, order_types.lane_tactics)
+	var label2 = game.utils.label(orders.lane +" lane priority")
 	orders.node.add_child(label2)
 	setup_priority(orders)
 
@@ -117,7 +122,7 @@ func setup_lane_buttons(orders):
 func setup_leader_buttons(orders):
 	var label = game.utils.label("set tactics")
 	orders.node.add_child(label)
-	setup_tactics(orders, order_types.tactics)
+	setup_tactics(orders, order_types.leader_tactics)
 	var label2 = game.utils.label("set priority")
 	orders.node.add_child(label2)
 	setup_priority(orders)

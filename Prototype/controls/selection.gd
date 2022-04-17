@@ -88,20 +88,23 @@ func select(point):
 	var unit_at_point = get_sel_unit_at_point(Vector2(point))
 	if unit_at_point:
 		unselect()
-		var unit = unit_at_point
-		game.selected_unit = unit
+		select_unit(unit_at_point)
+
+
+func select_unit(unit):
+	game.selected_unit = unit
+	
+	if unit.team == game.player_team and unit.type == "leader":
+		game.selected_leader = unit
+		game.ui.shop.update_buttons()
+		game.ui.inventories.update_buttons()
+		game.ui.controls_button.disabled = false
+	else:
+		game.selected_leader = null
+		game.ui.shop.disable_all()
 		
-		if unit.team == game.player_team and unit.type == "leader":
-			game.selected_leader = unit
-			game.ui.shop.update_buttons()
-			game.ui.inventories.update_buttons()
-			game.ui.controls_button.disabled = false
-		else:
-			game.selected_leader = null
-			game.ui.shop.disable_all()
-			
-		game.unit.hud.show_selected(unit)
-		game.ui.show_select()
+	game.unit.hud.show_selected(unit)
+	game.ui.show_select()
 
 
 func unselect():

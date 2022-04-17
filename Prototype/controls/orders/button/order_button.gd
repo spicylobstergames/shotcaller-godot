@@ -48,6 +48,7 @@ func _button_down():
 			
 			if game.selected_unit.type == "leader":
 				game.unit.orders.set_leader_tactic(self.orders.tactic)
+			
 			else: game.unit.orders.set_lane_tactic(self.orders.tactic)
 			
 			self.disabled = true

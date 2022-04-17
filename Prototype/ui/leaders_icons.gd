@@ -46,3 +46,4 @@ func textures():
 
 func button_down(leader):
 	game.camera.global_position = leader.global_position - game.camera.offset
+	game.selection.select_unit(leader)
