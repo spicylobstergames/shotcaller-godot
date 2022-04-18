@@ -22,9 +22,10 @@ func setup(unit):
 
 
 func process(delta):
-	if game.test.fog: game.map.blocks.quad.clear()
+	game.map.blocks.quad.clear()
+	if game.test.fog: game.map.fog.skip_start()
 	
-	#game.map.fog.skip_start()
+	# loop 1: add to quad
 	for unit1 in game.all_units:
 		if unit1.collide: game.map.blocks.quad.add_body(unit1)
 		
