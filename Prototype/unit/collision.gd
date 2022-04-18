@@ -22,10 +22,14 @@ func setup(unit):
 
 
 func process(delta):
-	game.map.blocks.quad.clear()
+	if game.test.fog: game.map.blocks.quad.clear()
+	
+	#game.map.fog.skip_start()
 	for unit1 in game.all_units:
 		if unit1.collide: game.map.blocks.quad.add_body(unit1)
-	
+		
+		if game.test.fog: 
+			if unit1.team == game.player_team: game.map.fog.clear_sigh_skip(unit1)
 	
 	# loop 2: checks for collisions
 	for unit1 in game.all_units:

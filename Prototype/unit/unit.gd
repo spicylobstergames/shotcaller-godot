@@ -246,16 +246,17 @@ func on_collision(delta):
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves and self.attacks: 
-		advance.resume(self)
+	if self.moves:
+		if self.attacks: 
+			advance.resume(self)
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
 		path.follow_next(self)
 	elif self.moves:
-		var retreat_end = move.end(self)
-		if not retreat_end and self.attacks: 
+		move.end(self)
+		if self.attacks: 
 			advance.end(self)
 
 
@@ -263,12 +264,17 @@ func on_attack_release(): # every ranged projectile start
 	attack.projectile_start(self)
 	advance.resume(self)
 
-
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
 		attack.hit(self)
 		if self.moves:
 			advance.resume(self)
+
+
+func on_stun_end():
+	if self.moves:
+		move.resume(self)
+		advance.resume(self)
 
 
 func die():  # hp <= 0

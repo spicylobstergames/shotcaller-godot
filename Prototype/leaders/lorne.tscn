@@ -402,10 +402,10 @@ shader_param/new4 = Color( 0.521569, 0.721569, 0.305882, 1 )
 shader_param/tolerance = 0.1
 
 [sub_resource type="CircleShape2D" id=46]
-radius = 12.0
+radius = 14.0
 
 [sub_resource type="CircleShape2D" id=47]
-radius = 24.0
+radius = 28.0
 
 [sub_resource type="CircleShape2D" id=27]
 radius = 32.0
@@ -478,12 +478,17 @@ offset = Vector2( 1, -20 )
 region_enabled = true
 region_rect = Rect2( 308, 9, 16, 31 )
 
+[node name="collisions" parent="." index="5"]
+visible = true
+
 [node name="block" parent="collisions" index="0"]
+position = Vector2( 0, -10 )
 shape = SubResource( 46 )
 
 [node name="select" parent="collisions" index="1"]
+position = Vector2( 0, -10 )
 shape = SubResource( 47 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
-position = Vector2( 0, -6 )
+position = Vector2( 0, -8 )
 shape = SubResource( 27 )

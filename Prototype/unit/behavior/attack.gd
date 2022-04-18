@@ -17,7 +17,8 @@ func start(unit, point):
 			var neighbors = game.map.blocks.get_units_in_radius(point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
-				if target and (target.global_position - point).length() <= target.collision_radius:
+				var target_position = target.global_position + target.collision_position
+				if target and (target_position - point).length() <= target.collision_radius:
 					unit.target = target
 
 
@@ -123,23 +124,29 @@ func projectile_stuck(attacker, target, projectile):
 	var r = projectile.node.global_rotation
 	if target: 
 		stuck = projectile.node.duplicate()
-		stuck.global_position = Vector2.ZERO
-		if target and target.mirror: r = Vector2(cos(r),-sin(r)).angle()
+		stuck.global_position = target.collision_position
+		if target.mirror and !projectile.rotation: 
+			r = Vector2(cos(r),-sin(r)).angle()
 		target.get_node("sprites").add_child(stuck)
 		game.map.remove_child(projectile.node)
 		projectile.node.queue_free()
 		
 	var a = 0.2 # angle variation
 	var ra = (randf()*a*2) - a
-	stuck.global_rotation = r + ra # some angle variation
+	stuck.global_rotation = r + ra
 	
 	# rotating axe
 	if projectile.rotation:
-		if (target and target.mirror):
-			stuck.global_rotation = 0 + ra
-			stuck.scale.x *= -1
-		else: 
-			stuck.global_rotation = PI + ra
+		if target:
+			if target.mirror:
+				stuck.global_rotation = 0 + ra
+				stuck.scale.x *= -1
+				stuck.global_position += Vector2(0, projectile.speed.y * 0.033)
+				
+			else: 
+				stuck.global_rotation = PI + ra
+				#stuck.global_position += Vector2(0, -projectile.speed * 0.03)
+				
 		var o = projectile.speed*-0.08
 		stuck.global_position += o
 		

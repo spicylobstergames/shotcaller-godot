@@ -546,13 +546,13 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=32]
-radius = 12.0
+radius = 14.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 20.0
+radius = 28.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 90.0
+radius = 100.0
 
 [node name="takoda" instance=ExtResource( 1 )]
 hp = 480
@@ -570,7 +570,7 @@ ranged = true
 damage = 35
 attack_speed = 0.7
 projectile_speed = 200.0
-projectile_rotation = 15.0
+projectile_rotation = 20.0
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -622,7 +622,7 @@ frames = SubResource( 41 )
 offset = Vector2( 6, -4 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
-scale = Vector2( 1.0686, 1 )
+position = Vector2( 0, -20 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 position = Vector2( 2.20537e-06, 0 )
@@ -630,16 +630,20 @@ z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 visible = false
-position = Vector2( 0.249676, 9.06544 )
 frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="5"]
 visible = false
 
+[node name="collisions" parent="." index="5"]
+visible = true
+
 [node name="block" parent="collisions" index="0"]
+position = Vector2( 0, -10 )
 shape = SubResource( 32 )
 
 [node name="select" parent="collisions" index="1"]
+position = Vector2( 0, -10 )
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]

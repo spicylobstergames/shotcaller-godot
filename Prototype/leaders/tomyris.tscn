@@ -550,10 +550,10 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=46]
-radius = 12.0
+radius = 14.0
 
 [sub_resource type="CircleShape2D" id=47]
-radius = 24.0
+radius = 28.0
 
 [sub_resource type="CircleShape2D" id=27]
 radius = 120.0
@@ -638,10 +638,15 @@ rotation = 0.349066
 frames = SubResource( 45 )
 offset = Vector2( 10, 0 )
 
+[node name="collisions" parent="." index="5"]
+visible = true
+
 [node name="block" parent="collisions" index="0"]
+position = Vector2( 0, -10 )
 shape = SubResource( 46 )
 
 [node name="select" parent="collisions" index="1"]
+position = Vector2( 0, -10 )
 shape = SubResource( 47 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]

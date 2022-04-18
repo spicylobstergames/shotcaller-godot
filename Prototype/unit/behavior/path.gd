@@ -65,7 +65,9 @@ func follow_next(unit):
 
 func change_lane(unit, point):
 	var lane = game.utils.closer_lane(point)
-	var lane_start = lane.pop_front()
+	var path = game.map[lane].duplicate()
+	if unit.team == "red": path.invert()
+	var lane_start = path.pop_front()
 	unit.lane = lane
 	game.unit.move.start(unit, lane_start)
 

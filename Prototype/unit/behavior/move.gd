@@ -84,9 +84,8 @@ func resume(unit):
 
 func end(unit):
 	if unit.behavior == "move": 
-		var retreat_end = game.unit.orders.retreat_end(unit)
-		if not retreat_end: stand(unit)
-		return retreat_end
+		if unit.retreating: unit.retreating = false
+		stand(unit)
 	
 
 func stop(unit):

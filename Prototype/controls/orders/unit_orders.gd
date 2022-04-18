@@ -111,7 +111,10 @@ func set_leader_tactic(tactic):
 			leader_tactics.speed = 1
 		"attack":
 			leader_tactics.speed = 1
-
+			
+	if leader.state == 'idle':
+		var path = game.map.new_path(leader.lane, leader.team)
+		game.unit.path.follow(leader, path.follow, "advance")
 
 
 func set_lane_priority(priority):
@@ -181,11 +184,3 @@ func retreat(unit):
 	unit.current_path = []
 	game.unit.move.start(unit, unit.origin)
 
-
-func retreat_end(unit):
-	if unit.retreating and unit.current_destiny == unit.origin:
-		unit.retreating = false
-		var path = game.map.new_path(unit.lane, unit.team)
-		game.unit.path.follow(unit, path.follow, "advance")
-		return true
-	return false

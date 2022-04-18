@@ -553,7 +553,7 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 90.0
+radius = 100.0
 
 [node name="hongi" instance=ExtResource( 1 )]
 hp = 500
@@ -571,7 +571,7 @@ ranged = true
 damage = 35
 attack_speed = 0.7
 projectile_speed = 200.0
-projectile_rotation = 15.0
+projectile_rotation = 20.0
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -601,10 +601,10 @@ anims/move = SubResource( 26 )
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( -6, -15 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="2"]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
 position = Vector2( -11.1407, -4.94121 )
 rotation = -1.5708
@@ -613,6 +613,7 @@ frames = SubResource( 41 )
 offset = Vector2( 6, -4 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="3"]
+position = Vector2( 0, -6 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
@@ -620,9 +621,7 @@ z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 visible = false
-position = Vector2( 0.56083, -0.0223792 )
 frames = SubResource( 39 )
-offset = Vector2( 0, -4 )
 
 [node name="sprite" parent="sprites" index="4"]
 visible = false

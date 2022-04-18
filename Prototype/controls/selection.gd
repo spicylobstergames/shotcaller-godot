@@ -26,11 +26,12 @@ func _unhandled_input(event):
 				if event.scancode == KEY_L:
 					game.unit.path.change_lane(game.selected_unit, point)
 				
-				#if event.scancode == KEY_Z: attack test
-				#	game.unit.attack.start(game.selected_unit, point)
-				
-				#if event.scancode == KEY_S: stop test
-					#game.unit.move.stand(game.selected_unit)
+				if game.test.unit:
+					if event.scancode == KEY_Z: # attack test
+						game.unit.attack.start(game.selected_unit, point) 
+					
+					if event.scancode == KEY_S: #stop test
+						game.unit.move.stand(game.selected_unit)
 				
 
 	# CLICK SELECTION

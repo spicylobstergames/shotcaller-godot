@@ -60,8 +60,8 @@ func start():
 	ui.orders.setup_lanes()
 	unit.spawn.choose_leaders()
 	ui.leaders_icons.build()
-
-	#map.fog.cover_map()
+	
+	if test.fog: map.fog.cover_map()
 	
 	if test.unit:
 		test.spawn_unit()
@@ -82,9 +82,5 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta):
 	if started: collision.process(delta)
-	
-	#if test.stress: unit.path.find_path(utils.random_point(), utils.random_point())
 
-	#map.fog.skip_start()
-		#if unit1.team == player_team: map.fog.clear_sigh_skip(unit1)
-	
+

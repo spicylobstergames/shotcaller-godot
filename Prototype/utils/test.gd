@@ -6,6 +6,8 @@ var unit = 0
 
 var stress = 0
 
+var fog = 0
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -13,8 +15,19 @@ func _ready():
 
 func spawn_unit():
 	var s = game.unit.spawn
-	if unit: game.map.create(s.infantry, "mid", "blue", "Vector2", Vector2(96,96))
-
+	if unit: 
+		
+		var dummy = game.map.create(s.robin, "mid", "red", "Vector2", Vector2(900,900))
+		dummy.set_behavior("stand")
+		dummy.hp = 10000
+		dummy.current_hp = 10000
+		
+		var leader = game.map.create(s.tomyris, "mid", "blue", "Vector2", Vector2(800,900))
+		
+		game.player_choose_leaders=[leader.name]
+		game.player_leaders=[leader]
+		game.map.setup_leaders()
+	
 	if stress: spawn_random_units()
 
 
@@ -30,24 +43,22 @@ func spawn_random_units():
 		game.map.create(s.archer, "bot", t, "random_map", Vector2.ZERO)
 
 
-func unit_wait_end(unit):
+func unit_wait_end(unit1):
 	if stress:
 		var o = 2000
 		var d = Vector2(randf()*o,randf()*o)
-		if game.unit.moves: game.unit.advance.start(unit, d)
+		if game.unit.moves: game.unit.advance.start(unit1, d)
 
 
-func respawn(unit):
-	if stress and unit.type != "building":
+func respawn(unit1):
+	if stress and unit1.type != "building":
 		yield(get_tree().create_timer(1), "timeout")
-		game.unit.spawn.spawn_unit(unit, unit.lane, unit.team, "random_map", Vector2.ZERO)
+		game.unit.spawn.spawn_unit(unit1, unit1.lane, unit1.team, "random_map", Vector2.ZERO)
 
 
 func spawn_leaders():
 	var test_leaders = 0; # must build inventory and orders 
-	var test_pawns = 0;
 	var t1 = game.player_team
-	var t2 = game.enemy_team
 	var s = game.unit.spawn
 	if test_leaders:
 		game.map.create(s.arthur, "mid", t1, "Vector2", Vector2(900,550))
