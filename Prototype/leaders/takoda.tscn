@@ -133,60 +133,24 @@ tracks/8/keys = {
 "values": [ false ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("sprites/weapon/projectile/sprites:modulate")
+tracks/9/path = NodePath("sprites/axe:rotation_degrees")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+"values": [ -90.0, -150.0, 0.0, -90.0 ]
 }
 tracks/10/type = "value"
-tracks/10/path = NodePath("sprites/weapon/projectile/sprites:frame")
+tracks/10/path = NodePath("sprites/axe:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
 tracks/10/enabled = true
 tracks/10/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 0, 1 ]
-}
-tracks/11/type = "value"
-tracks/11/path = NodePath("sprites/axe:rotation_degrees")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 0,
-"values": [ -90.0, -150.0, 30.0, -90.0 ]
-}
-tracks/12/type = "value"
-tracks/12/path = NodePath("sprites/weapon/projectile/sprites:rotation_degrees")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 360.0 ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("sprites/axe:modulate")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
 "times": PoolRealArray( 0, 0.1, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
@@ -609,20 +573,20 @@ texture = ExtResource( 4 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-scale = Vector2( 1, 0.95 )
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( 5, -24 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="3"]
 modulate = Color( 1, 1, 1, 0 )
 position = Vector2( -7.1407, -19.9412 )
 rotation = -1.5708
-scale = Vector2( 0.813831, 1.0686 )
+scale = Vector2( 1, 1.069 )
 frames = SubResource( 41 )
 offset = Vector2( 6, -4 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
-position = Vector2( 0, -20 )
+position = Vector2( 0, -25 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 position = Vector2( 2.20537e-06, 0 )
@@ -634,9 +598,6 @@ frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="5"]
 visible = false
-
-[node name="collisions" parent="." index="5"]
-visible = true
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

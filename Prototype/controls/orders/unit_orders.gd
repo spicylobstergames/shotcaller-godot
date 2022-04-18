@@ -182,5 +182,5 @@ func take_hit(attacker, target):
 func retreat(unit):
 	unit.retreating = true
 	unit.current_path = []
-	game.unit.move.start(unit, unit.origin)
+	game.unit.move.smart_move(unit, unit.origin)
 

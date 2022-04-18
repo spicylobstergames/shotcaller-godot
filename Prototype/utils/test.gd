@@ -2,7 +2,7 @@ extends Node
 var game:Node
 
 
-var unit = 0
+var unit = 1
 var fog = 0
 var stress = 0
 
@@ -15,12 +15,12 @@ func spawn_unit():
 	var s = game.unit.spawn
 	if unit: 
 		
-		var dummy = game.map.create(s.robin, "mid", "red", "Vector2", Vector2(900,900))
+		var dummy = game.map.create(s.hongi, "mid", "red", "Vector2", Vector2(900,900))
 		dummy.set_behavior("stand")
 		dummy.hp = 10000
 		dummy.current_hp = 10000
 		
-		var leader = game.map.create(s.tomyris, "mid", "blue", "Vector2", Vector2(800,900))
+		var leader = game.map.create(s.takoda, "mid", "blue", "Vector2", Vector2(800,900))
 		
 		game.player_choose_leaders=[leader.name]
 		game.player_leaders=[leader]

@@ -11,17 +11,19 @@ func start(unit, objective): # move_and_attack
 	unit.set_behavior("advance")
 	unit.objective = objective
 	var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
-	if not enemies: 
-		if unit.moves: game.unit.move.move(unit, objective) 
-		else: stop(unit)
+	if not enemies: move(unit, objective) 
 	else:
 		unit.target = game.unit.orders.select_target(unit, enemies)
 		if not game.unit.attack.in_range(unit, unit.target):
-			if unit.moves: game.unit.move.move(unit, unit.target.global_position)
-			else: stop(unit)
+			 move(unit, unit.target.global_position) 
 		else: 
 			var target_position = unit.target.global_position + unit.target.collision_position
 			game.unit.attack.start(unit, target_position)
+
+
+func move(unit, objective):
+	if unit.moves: game.unit.move.move(unit, objective)
+	else: stop(unit)
 
 
 func on_collision(unit):

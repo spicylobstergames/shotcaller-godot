@@ -27,9 +27,6 @@ func in_bounds(p):
 
 func move(unit, destiny):
 	if unit.moves and in_bounds(destiny):
-		# all units path find (heavy on stress)
-		#if !unit.lane:
-		#	unit.current_path = game.map.find_path(unit.global_position, destiny)
 		unit.current_destiny = destiny
 		calc_step(unit)
 		unit.set_state("move")

@@ -125,7 +125,7 @@ func projectile_stuck(attacker, target, projectile):
 	if target: 
 		stuck = projectile.node.duplicate()
 		stuck.global_position = target.collision_position
-		if target.mirror and !projectile.rotation: 
+		if target.mirror:# and !projectile.rotation: 
 			r = Vector2(cos(r),-sin(r)).angle()
 		target.get_node("sprites").add_child(stuck)
 		game.map.remove_child(projectile.node)
@@ -137,16 +137,14 @@ func projectile_stuck(attacker, target, projectile):
 	
 	# rotating axe
 	if projectile.rotation:
+		stuck.global_rotation = 0 + ra
 		if target:
+			stuck.global_position += Vector2(0, projectile.speed.y * 0.033)
+			
 			if target.mirror:
-				stuck.global_rotation = 0 + ra
-				stuck.scale.x *= -1
-				stuck.global_position += Vector2(0, projectile.speed.y * 0.033)
-				
-			else: 
 				stuck.global_rotation = PI + ra
-				#stuck.global_position += Vector2(0, -projectile.speed * 0.03)
-				
+				stuck.scale.x *= -1
+		
 		var o = projectile.speed*-0.08
 		stuck.global_position += o
 		

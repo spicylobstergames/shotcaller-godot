@@ -25,10 +25,14 @@ func setup_pathfind():
 	#setup grid
 	var Grid = _GridGD.new().Grid
 	path_grid = Grid.new(walls_size.x, walls_size.y)
-	# add blocked tiles
+	# add tile walls
 	for cell in game.map.walls.get_used_cells():
 		game.map.blocks.create_block(cell.x, cell.y)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
+	# add building units
+	for building in game.player_buildings:
+		var pos = (building.global_position / game.map.tile_size).floor()
+		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
 	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
 	path_finder = Jpf.new()
@@ -37,8 +41,8 @@ func setup_pathfind():
 func find_path(g1, g2):
 	var cell_size = game.map.tile_size
 	var half = game.map.half_tile_size
-	var p1 = Vector2(floor(g1.x / cell_size), floor(g1.y / cell_size))
-	var p2 = Vector2(floor(g2.x / cell_size), floor(g2.y / cell_size))
+	var p1 = (g1 / cell_size).floor()
+	var p2 = (g2 / cell_size).floor()
 	if in_limits(p1) and in_limits(p2):
 		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
 		var path = []
@@ -69,7 +73,7 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
-	game.unit.move.start(unit, lane_start)
+	game.unit.move.smart_move(unit, lane_start)
 
 
 
