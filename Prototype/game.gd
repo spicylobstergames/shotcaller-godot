@@ -59,7 +59,6 @@ func start():
 	unit.path.setup_pathfind()
 	ui.orders.setup_lanes()
 	unit.spawn.choose_leaders()
-	ui.leaders_icons.build()
 	
 	if test.fog: map.fog.cover_map()
 	
@@ -73,6 +72,7 @@ func start():
 		unit.spawn.start()
 		yield(get_tree().create_timer(4.0), "timeout")
 		unit.spawn.leaders()
+		map.setup_leaders()
 
 
 func _process(delta: float) -> void:

@@ -165,7 +165,7 @@ radius = 125.0
 
 [node name="tower" instance=ExtResource( 1 )]
 hp = 800
-vision = 250
+vision = 280
 type = "building"
 subtype = "tower"
 display_name = "tower"

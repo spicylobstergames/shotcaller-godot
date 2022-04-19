@@ -8,17 +8,18 @@ func _ready():
 
 
 func start(unit, objective): # move_and_attack
-	unit.set_behavior("advance")
-	unit.objective = objective
-	var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
-	if not enemies: move(unit, objective) 
-	else:
-		unit.target = game.unit.orders.select_target(unit, enemies)
-		if not game.unit.attack.in_range(unit, unit.target):
-			 move(unit, unit.target.global_position) 
-		else: 
-			var target_position = unit.target.global_position + unit.target.collision_position
-			game.unit.attack.start(unit, target_position)
+	if not unit.stunned:
+		unit.set_behavior("advance")
+		unit.objective = objective
+		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
+		if not enemies: move(unit, objective) 
+		else:
+			var target = game.unit.orders.select_target(unit, enemies)
+			game.unit.attack.set_target(unit, target)
+			var target_position = target.global_position + target.collision_position
+			if not game.unit.attack.in_range(unit, target):
+				 move(unit, target_position) 
+			else: game.unit.attack.start(unit, target_position)
 
 
 func move(unit, objective):

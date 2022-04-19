@@ -24,18 +24,13 @@ func _ready():
 
 func build():
 	var index = 0
-	for leader in game.player_choose_leaders:
+	for leader in game.player_leaders:
 		index += 1
 		var button = button_template.instance()
-		buttons[leader] = button
+		buttons[leader.name] = button
 		self.add_child(button)
-		button.name_label.text = leader
+		button.name_label.text = leader.display_name
 		button.hint_label.text = str(index)
-
-
-func textures():
-	for leader in game.player_leaders:
-		var button = game.ui.leaders_icons.buttons[leader.name]
 		var texture = leader.get_texture().data
 		button.icon = texture
 		button.orders = {

@@ -161,11 +161,11 @@ radius = 48.0
 radius = 64.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 160.0
+radius = 250.0
 
 [node name="castle" instance=ExtResource( 1 )]
 hp = 1000
-vision = 260
+vision = 320
 type = "building"
 subtype = "castle"
 display_name = "castle"

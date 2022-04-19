@@ -46,8 +46,10 @@ func choose_leaders():
 	game.enemy_choose_leaders = []
 	
 	for n in 5:
-		game.player_choose_leaders.append(random_leader(game.player_team))
-		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
+		game.player_choose_leaders.append("arthur")
+		game.enemy_choose_leaders.append("arthur")
+		#game.player_choose_leaders.append(random_leader(game.player_team))
+		#game.enemy_choose_leaders.append(random_leader(game.enemy_team))
 
 
 func random_leader(team):
@@ -76,7 +78,6 @@ func leaders():
 			counter += 1
 	
 	
-	game.map.setup_leaders()
 
 
 func start():

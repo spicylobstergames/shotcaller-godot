@@ -165,7 +165,7 @@ func closest_unit(unit, enemies):
 	return sorted[0].unit
 
 
-func take_hit(attacker, target):
+func take_hit_retreat(attacker, target):
 	match target.type:
 		"leader":
 			match target.tactics:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -124,6 +124,7 @@ tracks/7/keys = {
 [sub_resource type="Animation" id=31]
 resource_name = "death"
 length = 0.6
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("sprites/body:scale")
 tracks/0/interp = 1
@@ -197,6 +198,18 @@ tracks/5/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 2, 9 ), Vector2( 2, 9 ), Vector2( 2, 5 ), Vector2( 1, 2 ), Vector2( 3, -3 ), Vector2( 2, -10 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("sprites/weapon:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
 }
 
 [sub_resource type="Animation" id=25]
@@ -277,6 +290,18 @@ tracks/5/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
+tracks/6/type = "value"
+tracks/6/path = NodePath("sprites/weapon:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
+}
 
 [sub_resource type="Animation" id=26]
 resource_name = "move"
@@ -352,6 +377,108 @@ tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
 "times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("sprites/weapon:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
+}
+
+[sub_resource type="Animation" id=33]
+resource_name = "stun"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/body:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites/body:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.7, 0.9, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -4.0, 5.0, -4.0, 3.0, -2.0, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("sprites/body:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("sprites/weapon:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "on_stun_end"
+} ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("sprites/body:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("sprites/body:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
@@ -450,6 +577,7 @@ anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
@@ -462,7 +590,9 @@ texture = ExtResource( 4 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
 material = SubResource( 30 )
-position = Vector2( 2, 9 )
+position = Vector2( 0, 9 )
+rotation = -0.069813
+scale = Vector2( 1, 0.944444 )
 frames = SubResource( 36 )
 offset = Vector2( 4, -22 )
 
@@ -470,16 +600,15 @@ offset = Vector2( 4, -22 )
 visible = false
 
 [node name="weapon" type="Sprite" parent="sprites" index="4"]
+visible = false
 material = SubResource( 54 )
 position = Vector2( -1, -16 )
+rotation = 2.16234
 texture = ExtResource( 3 )
 centered = false
 offset = Vector2( 1, -20 )
 region_enabled = true
 region_rect = Rect2( 308, 9, 16, 31 )
-
-[node name="collisions" parent="." index="5"]
-visible = true
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

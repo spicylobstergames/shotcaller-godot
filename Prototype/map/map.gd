@@ -48,10 +48,9 @@ func new_path(lane, team):
 
 
 func setup_leaders():
+	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
-	game.ui.orders.setup_leaders()
-	game.unit.orders.build_leaders()
-	game.ui.leaders_icons.textures()
+	game.ui.orders.build_leaders()
 
 
 

@@ -18,6 +18,7 @@ config/icon="res://assets/icon.png"
 [debug]
 
 gdscript/warnings/unused_argument=false
+gdscript/warnings/integer_division=false
 
 [display]
 

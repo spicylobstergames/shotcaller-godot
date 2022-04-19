@@ -42,7 +42,7 @@ func _ready():
 	update()
 
 
-func setup_leaders():
+func build_leaders():
 	for leader in game.player_leaders:
 		var orders = {
 			"node": VBoxContainer.new(),
@@ -51,6 +51,9 @@ func setup_leaders():
 		leader_orders[leader.name] = orders
 		setup_leader_buttons(orders)
 		container.add_child(orders.node)
+	
+	game.unit.orders.build_leaders()
+
 
 
 func setup_lanes():

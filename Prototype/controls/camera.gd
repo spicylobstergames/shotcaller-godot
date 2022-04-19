@@ -96,7 +96,7 @@ func zoom_in():
 	
 func zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
-	game.ui.hide_all()
+	game.ui.hide_all_keep_stats()
 	game.ui.minimap.hide_view()
 	game.ui.get_node("top_mid").show()
 

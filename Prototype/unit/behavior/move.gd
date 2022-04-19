@@ -13,7 +13,7 @@ func setup_timer(unit):
 
 
 func start(unit, destiny):
-	if unit.moves:
+	if unit.moves and not unit.stunned:
 		unit.set_behavior("move")
 		move(unit, destiny)
 		unit.get_node("animations").playback_speed = unit.current_speed / unit.speed
@@ -26,7 +26,7 @@ func in_bounds(p):
 
 
 func move(unit, destiny):
-	if unit.moves and in_bounds(destiny):
+	if unit.moves and in_bounds(destiny) and not unit.stunned:
 		unit.current_destiny = destiny
 		calc_step(unit)
 		unit.set_state("move")
@@ -75,7 +75,7 @@ func on_collision(unit, delta):
 
 
 func resume(unit):
-	if unit.behavior == "move":
+	if unit.behavior == "move" and not unit.stunned:
 		move(unit, unit.current_destiny)
 
 
@@ -99,6 +99,7 @@ func stand(unit):
 
 
 func smart_move(unit, point):
-	var path = game.unit.path.find_path(unit.global_position, point)
-	if path: game.unit.path.follow(unit, path, "move")
+	if not unit.stunned:
+		var path = game.unit.path.find_path(unit.global_position, point)
+		if path: game.unit.path.follow(unit, path, "move")
 

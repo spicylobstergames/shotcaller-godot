@@ -7,19 +7,32 @@ func _ready():
 
 
 func start(unit, point):
-	if unit.attacks:
-		unit.look_at(point)
-		unit.set_state("attack")
-		unit.get_node("animations").playback_speed = unit.current_attack_speed
+	if unit.attacks and not unit.stunned:
+		
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(point)
+		
 		if !unit.target:
 			var neighbors = game.map.blocks.get_units_in_radius(point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				var target_position = target.global_position + target.collision_position
 				if target and (target_position - point).length() <= target.collision_radius:
-					unit.target = target
+					game.unit.attack.set_target(unit, target)
+		
+		unit.look_at(point)
+		unit.get_node("animations").playback_speed = unit.current_attack_speed
+		unit.set_state("attack")
+
+
+func set_target(unit, target):
+	if not unit.target == target:
+		unit.current_attack_speed = unit.attack_speed
+		unit.attack_count = 0
+		unit.last_target = unit.target
+		unit.target = target
+		
+
 
 
 func closest_enemy_unit(unit, enemies):
@@ -62,14 +75,21 @@ func in_range(attacker, target):
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
-func take_hit(attacker, target, projectile):
+func take_hit(attacker, target, projectile, counter=false):
 	if projectile: 
 		projectile_stuck(attacker, target, projectile)
 	if target and target.current_hp > 0:
-		target.current_hp -= attacker.damage
-		game.unit.advance.react(target, attacker)
-		game.unit.advance.ally_attacked(target, attacker)
-		game.unit.orders.take_hit(attacker, target)
+		var modifiers = game.unit.skills.hit(attacker, target, projectile, counter)
+		if not counter and not modifiers.dodge:
+			
+			target.current_hp -= modifiers.damage
+			attacker.attack_count += 1
+			
+		if not counter:
+			game.unit.advance.react(target, attacker)
+			game.unit.advance.ally_attacked(target, attacker)
+			
+		game.unit.orders.take_hit_retreat(attacker, target)
 		game.unit.hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
 		if target.current_hp <= 0: 
@@ -100,6 +120,7 @@ func projectile_start(attacker):
 			projectile_rotation *= -1
 			projectile_sprite.scale.x *= -1
 	projectile.global_rotation = a
+	projectile.visible = true
 	projectile_sprite.visible = true
 	game.map.add_child(projectile)
 	attacker.projectiles.append({

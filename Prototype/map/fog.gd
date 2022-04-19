@@ -4,7 +4,7 @@ var game:Node
 var tile_map_size:int
 var trees:TileMap
 
-var clear_skip:int = 30
+var clear_skip:int = 10
 var clear_frame:int = 0
 
 
@@ -20,15 +20,34 @@ func _ready():
 
 
 func skip_start():
-	clear_frame += 1
-	if clear_frame%clear_skip == 0: cover_map()
+	clear_frame = (clear_frame + 1) % clear_skip
+	if clear_frame%(clear_skip*2) == 0: cover_map()
 
+
+var quarter = 0
 
 func cover_map():
-	for y in floor(tile_map_size):
-		for x in floor(tile_map_size):
-			game.map.fog.set_cell(x, y, 0)
-
+	if quarter == 0:
+		for y in floor(tile_map_size/2):
+			for x in floor(tile_map_size/2):
+				game.map.fog.set_cell(x, y, 0)
+	
+	if quarter == 1:
+		for y in range(floor(tile_map_size/2), tile_map_size):
+			for x in floor(tile_map_size/2):
+				game.map.fog.set_cell(x, y, 0)
+	
+	if quarter == 2:
+		for y in tile_map_size:
+			for x in range(floor(tile_map_size/2), tile_map_size):
+				game.map.fog.set_cell(x, y, 0)
+	
+	if quarter == 3:
+		for y in tile_map_size:
+			for x in range(floor(tile_map_size/2), tile_map_size):
+				game.map.fog.set_cell(x, y, 0)
+				
+	quarter = (quarter + 1) % 4
 
 
 var sight_mem:Dictionary = {}

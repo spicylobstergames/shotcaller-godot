@@ -41,6 +41,7 @@ var collision_timer
 # ATTACK
 export var attacks:bool = false
 export var ranged:bool = false
+var stunned:bool = false
 export var damage:int = 0
 var current_damage:int = 0
 export var attack_range:int = 1
@@ -48,6 +49,8 @@ var current_attack_range:int = 1
 export var attack_speed:float = 1
 var current_attack_speed:float = 1
 var target:Node2D
+var last_target:Node2D
+var attack_count = 0
 var weapon:Node2D
 
 # PROJECTILES
@@ -77,6 +80,7 @@ var attack:Node
 var advance:Node
 var path:Node
 var orders:Node
+var skills:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -88,6 +92,8 @@ func _ready():
 	if has_node("behavior/advance"): advance = get_node("behavior/advance")
 	if has_node("behavior/path"): path = get_node("behavior/path")
 	if has_node("behavior/orders"): orders = get_node("behavior/orders")
+	if has_node("behavior/skills"): skills = get_node("behavior/skills")
+	
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
@@ -99,7 +105,7 @@ func reset_unit():
 	if self.type == "leader": 
 		self.hud.state.visible = true
 		self.hud.hpbar.visible = true
-		
+	
 	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_attack_range = self.attack_range
@@ -108,6 +114,7 @@ func reset_unit():
 	self.current_damage = self.damage
 	self.current_attack_speed = self.attack_speed
 	self.visible = true
+	self.stunned = false
 	self.hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
 
@@ -271,10 +278,20 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 			advance.resume(self)
 
 
+func stun_start():
+	# disable controls?
+	self.stunned = true
+	self.set_state("stun")
+
+
 func on_stun_end():
-	if self.moves:
+	self.stunned = false
+	if self.behavior == "move":
 		move.resume(self)
+	if self.behavior == "advance":
 		advance.resume(self)
+	if self.behavior == "stand" or self.behavior == "stop":
+		self.set_state("idle")
 
 
 func die():  # hp <= 0

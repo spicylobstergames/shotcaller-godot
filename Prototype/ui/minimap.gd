@@ -7,6 +7,7 @@ var pan_position:Vector2 = Vector2.ZERO
 
 var map_sprite:Node
 var map_tiles:Node
+var map_fog:Node
 var cam_rect:Node
 var map_symbols:Node
 var map_symbols_map = []
@@ -17,6 +18,7 @@ func _ready():
 	
 	map_sprite = game.get_node("map/zoom_out_sprite")
 	map_tiles = game.get_node("map/tiles")
+	map_fog = game.get_node("map/tiles/fog")
 	cam_rect = get_node("cam_rect")
 	map_symbols = get_node("symbols")
 	
@@ -80,14 +82,19 @@ func get_map_texture():
 
 func corner_view():
 	map_sprite.visible = false
-	map_tiles.visible = true
+	#map_tiles.visible = true
+	for tile in map_tiles.get_children(): 
+		if not tile == map_fog: tile.show()
 	yield(get_tree(), "idle_frame")
 	self.visible = true
 
 
 func hide_view():
 	map_sprite.visible = true
-	map_tiles.visible = false
+	#map_tiles.visible = false
+	for tile in map_tiles.get_children(): 
+		if not tile == map_fog: tile.hide()
+	
 	# avoid input messing up
 	yield(get_tree(), "idle_frame")
 	self.visible = false

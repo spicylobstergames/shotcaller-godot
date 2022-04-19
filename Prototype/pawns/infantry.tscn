@@ -45,7 +45,7 @@ tracks/2/keys = {
 "values": [ 2 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("sprites/wepon:rotation_degrees")
+tracks/3/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -57,7 +57,7 @@ tracks/3/keys = {
 "values": [ 0.0, -70.0, 100.0, 0.0 ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("sprites/wepon:visible")
+tracks/4/path = NodePath("sprites/weapon:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -110,6 +110,7 @@ tracks/7/keys = {
 [sub_resource type="Animation" id=31]
 resource_name = "death"
 length = 0.6
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("sprites/body:scale")
 tracks/0/interp = 1
@@ -147,7 +148,7 @@ tracks/2/keys = {
 "values": [ 0 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("sprites/wepon:visible")
+tracks/3/path = NodePath("sprites/weapon:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -197,7 +198,7 @@ tracks/6/keys = {
 "values": [ Vector2( 0, 9 ), Vector2( 0, 9 ), Vector2( 0, 5 ), Vector2( -1, 2 ), Vector2( 1, -3 ), Vector2( 0, -10 ) ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/wepon:rotation_degrees")
+tracks/7/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -250,7 +251,7 @@ tracks/2/keys = {
 "values": [ 0 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("sprites/wepon:visible")
+tracks/3/path = NodePath("sprites/weapon:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -288,7 +289,7 @@ tracks/5/keys = {
 "values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/wepon:rotation_degrees")
+tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -353,7 +354,7 @@ tracks/2/keys = {
 "values": [ 1 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("sprites/wepon:visible")
+tracks/3/path = NodePath("sprites/weapon:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -391,7 +392,7 @@ tracks/5/keys = {
 "values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/wepon:rotation_degrees")
+tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -455,7 +456,7 @@ tracks/2/keys = {
 "values": [ 0 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("sprites/wepon:visible")
+tracks/3/path = NodePath("sprites/weapon:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -493,7 +494,7 @@ tracks/5/keys = {
 "values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/wepon:rotation_degrees")
+tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -559,7 +560,6 @@ radius = 20.0
 
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
-vision = 120
 selectable = true
 moves = true
 speed = 50.0
@@ -589,12 +589,12 @@ anims/stun = SubResource( 33 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = -0.0214782
-scale = Vector2( 1, 0.906838 )
+rotation = 0.00872665
+scale = Vector2( 1, 0.933333 )
 frames = SubResource( 22 )
 offset = Vector2( -2, -11 )
 
-[node name="wepon" type="Sprite" parent="sprites" index="2"]
+[node name="weapon" type="Sprite" parent="sprites" index="2"]
 visible = false
 material = SubResource( 30 )
 position = Vector2( 6, 2 )

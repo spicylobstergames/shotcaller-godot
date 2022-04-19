@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -101,7 +101,7 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.6, 0.8 ),
+"times": PoolRealArray( 0, 0.4, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
 "values": [ true, false, false ]
@@ -119,72 +119,24 @@ tracks/7/keys = {
 "values": [ 0, 1 ]
 }
 tracks/8/type = "value"
-tracks/8/path = NodePath("sprites/weapon/projectile/sprites:visible")
+tracks/8/path = NodePath("sprites/weapon/spear:rotation_degrees")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -40.0, 0.0 ]
 }
 tracks/9/type = "value"
-tracks/9/path = NodePath("sprites/weapon/projectile/sprites:modulate")
+tracks/9/path = NodePath("sprites/weapon/spear:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
 tracks/9/enabled = true
 tracks/9/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
-}
-tracks/10/type = "value"
-tracks/10/path = NodePath("sprites/weapon/projectile/sprites:frame")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 0, 1 ]
-}
-tracks/11/type = "value"
-tracks/11/path = NodePath("sprites/weapon/spear:rotation_degrees")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ 0.0, -30.0, 0.0 ]
-}
-tracks/12/type = "value"
-tracks/12/path = NodePath("sprites/weapon/projectile/sprites:rotation_degrees")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 0.0 ]
-}
-tracks/13/type = "value"
-tracks/13/path = NodePath("sprites/weapon/spear:modulate")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/keys = {
 "times": PoolRealArray( 0, 0.2, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
@@ -194,6 +146,7 @@ tracks/13/keys = {
 [sub_resource type="Animation" id=31]
 resource_name = "death"
 length = 0.6
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("sprites/body:scale")
 tracks/0/interp = 1
@@ -280,18 +233,6 @@ tracks/6/keys = {
 "update": 1,
 "values": [ false, false ]
 }
-tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon/projectile/sprites:visible")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, false ]
-}
 
 [sub_resource type="Animation" id=25]
 resource_name = "idle"
@@ -307,7 +248,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.4, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1, 1.05 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1.03 ), Vector2( 1, 0.97 ), Vector2( 1, 1 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("sprites/body:rotation_degrees")
@@ -378,18 +319,6 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, false ]
-}
-tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon/projectile/sprites:visible")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
@@ -486,14 +415,92 @@ tracks/6/keys = {
 "update": 1,
 "values": [ false, false ]
 }
-tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon/projectile/sprites:visible")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
-"times": PoolRealArray( 0, 0.6 ),
+
+[sub_resource type="Animation" id=33]
+resource_name = "stun"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/body:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites/body:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.7, 0.9, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -4.0, 5.0, -4.0, 3.0, -2.0, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("sprites/body:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("sprites/body:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("sprites/body:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "on_stun_end"
+} ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("sprites/weapon/spear:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ false, false ]
@@ -545,7 +552,7 @@ radius = 100.0
 
 [node name="sida" instance=ExtResource( 1 )]
 hp = 360
-vision = 160
+vision = 150
 type = "leader"
 subtype = "archer"
 display_name = "sida"
@@ -583,12 +590,13 @@ anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = 0.0698132
-scale = Vector2( 1, 0.9 )
+rotation = -0.0423532
+scale = Vector2( 1, 1.0205 )
 frames = SubResource( 36 )
 frame = 2
 offset = Vector2( 0, -15 )
@@ -597,6 +605,7 @@ offset = Vector2( 0, -15 )
 
 [node name="spear" type="AnimatedSprite" parent="sprites/weapon" index="0"]
 position = Vector2( -8.1407, 2.05879 )
+rotation = -0.280416
 scale = Vector2( 1, 1.1 )
 frames = SubResource( 39 )
 offset = Vector2( 0, -5 )
