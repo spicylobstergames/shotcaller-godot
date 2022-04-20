@@ -73,6 +73,7 @@ func start():
 		ui.orders.setup_lanes()
 		unit.spawn.choose_leaders()
 		
+		
 		if test.fog: map.fog.cover_map()
 		
 		if test.unit:
@@ -80,9 +81,9 @@ func start():
 			#test.spawn_leaders()
 		
 		else: 
-			yield(get_tree().create_timer(2.0), "timeout")
+			yield(get_tree().create_timer(1.0), "timeout")
 			unit.spawn.start()
-			yield(get_tree().create_timer(4.0), "timeout")
+			yield(get_tree().create_timer(1.0), "timeout")
 			unit.spawn.leaders()
 			map.setup_leaders()
 

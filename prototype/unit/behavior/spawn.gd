@@ -29,7 +29,7 @@ var cemitery = {
 	"enemy_leaders": []
 }
 
-const leader_list = ["arthur", "bokuden", "hongi", "lorne", "raja", "robin", "rollo", "sida", "takoda", "tomyris"]
+const leader_list = ["arthur","bokuden","hongi","lorne","raja","robin","rollo","sida","takoda","tomyris"]
 
 var team_random_list = {"red": [], "blue": []}
 
@@ -46,10 +46,10 @@ func choose_leaders():
 	game.enemy_choose_leaders = []
 	
 	for n in 5:
-		game.player_choose_leaders.append("arthur")
-		game.enemy_choose_leaders.append("arthur")
-		#game.player_choose_leaders.append(random_leader(game.player_team))
-		#game.enemy_choose_leaders.append(random_leader(game.enemy_team))
+		#game.player_choose_leaders.append("arthur")
+		#game.enemy_choose_leaders.append("arthur")
+		game.player_choose_leaders.append(random_leader(game.player_team))
+		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
 
 
 func random_leader(team):

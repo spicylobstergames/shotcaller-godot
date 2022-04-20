@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -11,10 +11,11 @@
 [ext_resource path="res://controls/orders/button/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=10]
 [ext_resource path="res://assets/ui/gold.png" type="Texture" id=11]
-[ext_resource path="res://assets/ui/icons.png" type="Texture" id=12]
+[ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
 [ext_resource path="res://controls/controls.gd" type="Script" id=14]
 [ext_resource path="res://ui/button/menu_button.tscn" type="PackedScene" id=15]
+[ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
@@ -37,6 +38,20 @@ font_data = ExtResource( 6 )
 size = 13
 font_data = ExtResource( 6 )
 
+[sub_resource type="StyleBoxEmpty" id=41]
+
+[sub_resource type="StyleBoxEmpty" id=42]
+
+[sub_resource type="StyleBoxTexture" id=26]
+texture = ExtResource( 10 )
+region_rect = Rect2( 70, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxEmpty" id=44]
+
 [sub_resource type="StyleBoxTexture" id=36]
 texture = ExtResource( 10 )
 region_rect = Rect2( 145, 37, 33, 33 )
@@ -45,7 +60,7 @@ margin_right = 2.0
 margin_top = 2.0
 margin_bottom = 2.0
 
-[sub_resource type="StyleBoxEmpty" id=22]
+[sub_resource type="StyleBoxEmpty" id=48]
 
 [sub_resource type="DynamicFont" id=8]
 size = 10
@@ -70,7 +85,7 @@ margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
 
-[sub_resource type="StyleBoxTexture" id=26]
+[sub_resource type="StyleBoxTexture" id=45]
 texture = ExtResource( 10 )
 region_rect = Rect2( 145, 37, 33, 33 )
 margin_left = 2.0
@@ -105,18 +120,20 @@ atlas = SubResource( 29 )
 region = Rect2( 276, 0, 46, 46 )
 margin = Rect2( 5, 2, 0, 0 )
 
+[sub_resource type="StyleBoxEmpty" id=43]
+
 [sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 12 )
+atlas = ExtResource( 16 )
 region = Rect2( 48, 0, 46, 46 )
 margin = Rect2( 5, 0, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 12 )
+atlas = ExtResource( 16 )
 region = Rect2( 322, 0, 46, 46 )
 margin = Rect2( 5, 0, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 12 )
+atlas = ExtResource( 16 )
 region = Rect2( 370, 0, 46, 46 )
 margin = Rect2( 5, 0, 0, 0 )
 
@@ -279,6 +296,15 @@ margin_right = 164.0
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button3" index="3"]
 visible = false
 
+[node name="mid_right" type="Control" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="mid" type="Control" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
@@ -354,6 +380,8 @@ modulate = Color( 0.545098, 0.729412, 1, 1 )
 margin_left = 14.0
 margin_right = 174.0
 rect_min_size = Vector2( 160, 60 )
+custom_styles/focus = SubResource( 41 )
+disabled = true
 pressed = true
 text = "blue"
 icon = null
@@ -372,6 +400,7 @@ modulate = Color( 1, 0.545098, 0.545098, 1 )
 margin_left = 194.0
 margin_right = 354.0
 rect_min_size = Vector2( 160, 60 )
+custom_styles/focus = SubResource( 42 )
 text = "red"
 icon = null
 value = "red"
@@ -398,7 +427,8 @@ margin_top = 182.0
 margin_right = 368.0
 margin_bottom = 242.0
 rect_min_size = Vector2( 360, 60 )
-custom_styles/pressed = SubResource( 36 )
+custom_styles/pressed = SubResource( 26 )
+custom_styles/focus = SubResource( 44 )
 custom_styles/disabled = SubResource( 36 )
 toggle_mode = false
 text = "play"
@@ -412,15 +442,6 @@ text = "red"
 [node name="hint" parent="mid/main_menu/container/play_button" index="2"]
 visible = false
 text = "space"
-
-[node name="mid_right" type="Control" parent="."]
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
@@ -439,22 +460,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="order_button" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
-custom_styles/disabled = SubResource( 36 )
+[node name="leader_button" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
 
-[node name="order_button2" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+[node name="leader_button2" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
 margin_top = 62.0
 margin_bottom = 122.0
 
-[node name="order_button3" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+[node name="leader_button3" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
 margin_top = 124.0
 margin_bottom = 184.0
 
-[node name="order_button4" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+[node name="leader_button4" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
 margin_top = 186.0
 margin_bottom = 246.0
 
-[node name="order_button5" parent="mid_left/leaders_icons" instance=ExtResource( 9 )]
+[node name="leader_button5" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
 margin_top = 248.0
 margin_bottom = 308.0
 
@@ -508,7 +528,7 @@ margin_top = -96.0
 margin_right = 150.0
 rect_pivot_offset = Vector2( -763, -347 )
 rect_clip_content = false
-custom_styles/bg = SubResource( 22 )
+custom_styles/bg = SubResource( 48 )
 max_columns = 0
 script = ExtResource( 5 )
 __meta__ = {
@@ -825,7 +845,7 @@ margin_bottom = 80.0
 
 [node name="teleport_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 custom_styles/pressed = SubResource( 27 )
-custom_styles/disabled = SubResource( 26 )
+custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 30 )
 script = null
 
@@ -840,7 +860,7 @@ text = "t"
 margin_left = 64.0
 margin_right = 124.0
 custom_styles/pressed = SubResource( 27 )
-custom_styles/disabled = SubResource( 26 )
+custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 32 )
 script = null
 
@@ -854,7 +874,7 @@ text = "l"
 margin_left = 128.0
 margin_right = 188.0
 custom_styles/pressed = SubResource( 27 )
-custom_styles/disabled = SubResource( 26 )
+custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 33 )
 script = null
 
@@ -868,7 +888,7 @@ text = "space"
 margin_left = 192.0
 margin_right = 252.0
 custom_styles/pressed = SubResource( 27 )
-custom_styles/disabled = SubResource( 26 )
+custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 34 )
 script = null
 
@@ -888,6 +908,7 @@ margin_left = 11.0
 margin_top = 11.0
 margin_right = 71.0
 margin_bottom = 71.0
+custom_styles/focus = SubResource( 43 )
 disabled = true
 icon = SubResource( 37 )
 value = "controls"
@@ -900,6 +921,7 @@ margin_left = 79.0
 margin_top = 11.0
 margin_right = 139.0
 margin_bottom = 71.0
+custom_styles/focus = SubResource( 43 )
 icon = SubResource( 38 )
 value = "shop"
 
@@ -911,6 +933,7 @@ margin_left = 11.0
 margin_top = 79.0
 margin_right = 71.0
 margin_bottom = 139.0
+custom_styles/focus = SubResource( 43 )
 disabled = true
 value = "orders"
 
@@ -925,6 +948,8 @@ margin_left = 79.0
 margin_top = 79.0
 margin_right = 139.0
 margin_bottom = 139.0
+custom_styles/focus = SubResource( 43 )
+toggle_mode = false
 icon = SubResource( 39 )
 value = "menu"
 

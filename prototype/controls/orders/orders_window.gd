@@ -38,7 +38,8 @@ func _ready():
 			placeholder.queue_free()
 		
 		clear = true
-		
+	
+	yield(get_tree(), "idle_frame")
 	update()
 
 
@@ -145,7 +146,8 @@ func update():
 			"leader": 
 				show_orders()
 				leader_orders[game.selected_unit.name].node.show()
-
+	else:
+		game.ui.orders_button.disabled = true
 
 func show_orders():
 	game.ui.orders_button.disabled = false

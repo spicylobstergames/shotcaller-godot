@@ -36,9 +36,6 @@ func setup_order_button():
 
 func button_down():
 	match self.orders.type:
-		"leader":
-			game.ui.leaders_icons.button_down(self.orders.leader)
-		
 		"tactic":
 			clear_siblings(self)
 			

@@ -24,20 +24,21 @@ func button_down():
 			get_tree().paused = false
 			game.ui.main_menu.hide()
 			game.ui.buttons.show()
-			game.ui.leaders_icons.show()
 			game.start()
 		
 		"blue":
 			game.player_team = "blue"
 			game.enemy_team = "red"
-			self.disabled = true
+			red_team_button.pressed = false
 			red_team_button.disabled = false
+			blue_team_button.disabled = true
 		
 		"red":
 			game.player_team = "red"
 			game.enemy_team = "blue"
-			self.disabled = true
+			blue_team_button.pressed = false
 			blue_team_button.disabled = false
+			red_team_button.disabled = true
 		
 		
 		"menu":
@@ -49,11 +50,11 @@ func button_down():
 		
 		"shop":
 			game.ui.shop.visible = !game.ui.shop.visible
-			game.uiinventories.update_buttons()
+			game.ui.inventories.update_buttons()
 			if game.ui.shop.visible:
-				game.uishop.update_buttons()
-				game.uicontrols.hide()
-				game.uiorders.hide()
+				game.ui.shop.update_buttons()
+				game.ui.controls.hide()
+				game.ui.orders.hide()
 			game.ui.buttons_update()
 		
 		
@@ -63,4 +64,13 @@ func button_down():
 				game.ui.shop.hide()
 				game.ui.controls.hide()
 				game.ui.inventories.update_buttons() # hide sell bt
+			game.ui.buttons_update()
+		
+		"controls":
+			game.ui.controls.visible = !game.ui.controls.visible
+			if game.ui.controls.visible:
+				game.ui.shop.hide()
+				game.ui.orders.hide()
+				game.ui.inventories.update_buttons() # hide sell bt
+			else: game.control_state = "selection"
 			game.ui.buttons_update()

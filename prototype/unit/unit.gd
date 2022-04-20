@@ -140,12 +140,12 @@ func setup_team():
 	if self.type != "building":
 		self.mirror_toggle(is_red)
 	# COLORS
-	var new_texture = self.get_texture()
+	get_texture()
 	if not is_red:
-		new_texture.sprite.material = null
+		self.texture.sprite.material = null
 	else:
-		new_texture.sprite.material = get_node("sprites/sprite").material
-	self.texture = new_texture
+		self.texture.sprite.material = get_node("sprites/sprite").material
+	
 	# FLAGS
 	if self.type == "building":
 		if not is_red:
@@ -191,6 +191,8 @@ func get_texture():
 		var texture_data
 		var region
 		var scale
+		var material
+		if self.team == "red": material = body.material
 		if body is Sprite: 
 			texture_data = body.texture 
 			region = body.region_rect
@@ -208,7 +210,7 @@ func get_texture():
 			"sprite": body,
 			"data": texture_data,
 			"mirror": self.mirror,
-			"material": body.material,
+			"material": material,
 			"region": region,
 			"scale": scale
 		}

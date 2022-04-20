@@ -88,22 +88,11 @@ func hide_all_keep_stats():
 
 
 
-
-func controls_button_down():
-	controls.visible = !controls.visible
-	if controls.visible:
-		shop.hide()
-		orders.hide()
-		inventories.update_buttons() # hide sell bt
-	else: game.control_state = "selection"
-	buttons_update()
-
-
-
 func show_select():
 	stats.update()
 	orders_button.disabled = false
 	orders.update()
+	controls.update()
 
 
 func hide_unselect():
