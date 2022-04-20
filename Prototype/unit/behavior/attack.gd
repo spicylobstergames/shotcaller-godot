@@ -17,7 +17,7 @@ func start(unit, point):
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				var target_position = target.global_position + target.collision_position
-				if target and (target_position - point).length() <= target.collision_radius:
+				if target and target_position.distance_to(point) < target.collision_radius:
 					game.unit.attack.set_target(unit, target)
 		
 		unit.look_at(point)
@@ -49,23 +49,38 @@ func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
 	var att_rad = unit1.attack_hit_radius
 	
-	var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
+	var hitted
 	var target_hit = false
+	var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
+	
 	for unit2 in neighbors:
 		if (unit1 != unit2 and 
-				unit2.hp and 
+				unit2.hp and
+				unit2.current_hp > 0 and 
 				unit2 == unit1.target and  # or unit1 has cleave
 				in_range(unit1, unit2)):
-			take_hit(unit1, unit2, null)
+					
+			hitted = unit2
+			take_hit(unit1, unit2)
 			target_hit = true
-			break # if no cleave
-			
+			break
+	
 	if not target_hit and neighbors.size():
 		var target = closest_enemy_unit(unit1, neighbors)
-		if target and (target.global_position - att_pos).length() <= target.collision_radius:
-			take_hit(unit1, target, null)
+		if target and in_range(unit1, target):
+			hitted = target
+			take_hit(unit1, target)
+	
+	if unit1.display_name in game.unit.skills.leader:
+		var attacker_skills = game.unit.skills.leader[unit1.display_name]
 		
-		
+		if "cleave" in attacker_skills:
+			for unit2 in neighbors:
+				if (unit2.team != unit1.team and 
+						hitted != unit2 and
+						in_range(unit1, unit2)):
+					take_hit(unit1, unit2, null, {"cleave": true})
+
 
 func in_range(attacker, target):
 	var att_pos = attacker.global_position + attacker.attack_hit_position
@@ -75,23 +90,30 @@ func in_range(attacker, target):
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
-func take_hit(attacker, target, projectile, counter=false):
-	if projectile: 
+func take_hit(attacker, target, projectile = null, modifiers = {}):
+	modifiers = game.unit.skills.hit_modifiers(attacker, target, projectile, modifiers)
+	
+		
+	if projectile and not modifiers.pierce: 
 		projectile_stuck(attacker, target, projectile)
+		if projectile.targets != null:
+			projectile.targets.append(target)
+	
 	if target and target.current_hp > 0:
-		var modifiers = game.unit.skills.hit(attacker, target, projectile, counter)
-		if not counter and not modifiers.dodge:
+		if not modifiers.dodge:
 			
+			print("damage ", modifiers.damage)
 			target.current_hp -= modifiers.damage
 			attacker.attack_count += 1
 			
-		if not counter:
+		if not modifiers.counter:
 			game.unit.advance.react(target, attacker)
 			game.unit.advance.ally_attacked(target, attacker)
 			
 		game.unit.orders.take_hit_retreat(attacker, target)
 		game.unit.hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
+		
 		if target.current_hp <= 0: 
 			target.current_hp = 0
 			target.die()
@@ -104,7 +126,16 @@ func take_hit(attacker, target, projectile, counter=false):
 			game.unit.advance.resume(attacker)
 
 
-func projectile_start(attacker):
+
+func projectile_release(attacker):
+	projectile_start(attacker, attacker.target)
+	game.unit.skills.projectile_release(attacker)
+
+
+func projectile_start(attacker, target):
+	var target_position = target.global_position + target.collision_position
+	attacker.weapon.look_at(target_position)
+	
 	var projectile = attacker.projectile.duplicate()
 	var projectile_sprite = projectile.get_node("sprites")
 	var a = attacker.weapon.global_rotation
@@ -122,8 +153,16 @@ func projectile_start(attacker):
 	projectile.global_rotation = a
 	projectile.visible = true
 	projectile_sprite.visible = true
+	var targets = null
+	if attacker.display_name in game.unit.skills.leader:
+		var attacker_skills = game.unit.skills.leader[attacker.display_name]
+		if "pierce" in attacker_skills: 
+			target = null
+			targets = []
 	game.map.add_child(projectile)
 	attacker.projectiles.append({
+		"target": target,
+		"targets": targets,
 		"node": projectile,
 		"sprite": projectile_sprite,
 		"speed": projectile_speed,

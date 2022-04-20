@@ -52,9 +52,15 @@ func process(delta):
 					projectile.lifetime -= delta
 					if projectile.lifetime > 0:
 						game.unit.attack.projectile_step(delta, projectile)
-						if unit1.target:
-							if game.utils.point_collision(unit1.target, projectile.node.global_position):
-								game.unit.attack.take_hit(unit1, unit1.target, projectile)
+						if projectile.target:
+							if game.utils.point_collision(projectile.target, projectile.node.global_position):
+								game.unit.attack.take_hit(unit1, projectile.target, projectile)
+						else: # pierces
+							var targets = game.map.blocks.get_units_in_radius(projectile.node.global_position, 1)
+							for target in targets:
+								if projectile.targets.find(target) < 0 and game.utils.point_collision(target, projectile.node.global_position):
+									game.unit.attack.take_hit(unit1, target, projectile)
+							
 					else: 
 						game.unit.attack.projectile_stuck(unit1, null, projectile)
 		

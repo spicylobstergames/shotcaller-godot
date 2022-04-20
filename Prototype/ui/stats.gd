@@ -24,7 +24,8 @@ func _ready():
 func update():
 	var unit = game.selected_unit
 	clear_old_hpbar()
-	if unit:
+	if not unit: hide()
+	else:
 		show()
 		unit_name.text = "%s" % [unit.display_name]
 		hp.text = "%s / %s" % [max(unit.current_hp,0), unit.hp]
@@ -36,16 +37,13 @@ func update():
 		att_range.text = "Range: %s" % unit.attack_hit_radius
 		if unit.moves: speed.text = "Speed: %s" % unit.current_speed
 		else: speed.text = ""
-		var texture = unit.get_texture()
-		set_texture(portrait_sprite, texture)
+		set_texture(portrait_sprite, unit.texture)
 		if unit.type == "leader" and unit.team == game.player_team:
 			gold.text = "%s" % unit.get_gold()
 			gold_sprite.visible = true
 		else:
 			gold.text = ""
 			gold_sprite.visible = false
-	else:
-		hide()
 
 
 func set_texture(portrait, texture):

@@ -13,6 +13,8 @@ export var title:String
 export var team:String = "blue"
 var dead:bool = false
 var mirror:bool = false
+var texture:Dictionary
+
 
 # SELECTION
 export var selectable:bool = false
@@ -136,11 +138,12 @@ func setup_team():
 	if self.type != "building":
 		self.mirror_toggle(is_red)
 	# COLORS
-	var texture = self.get_texture()
+	var new_texture = self.get_texture()
 	if not is_red:
-		texture.sprite.material = null
+		new_texture.sprite.material = null
 	else:
-		texture.sprite.material = get_node("sprites/sprite").material
+		new_texture.sprite.material = get_node("sprites/sprite").material
+	self.texture = new_texture
 	# FLAGS
 	if self.type == "building":
 		if not is_red:
@@ -181,32 +184,33 @@ func mirror_toggle(on):
 
 
 func get_texture():
-	var body = get_node("sprites/body")
-	var texture
-	var region
-	var scale
-	if body is Sprite: 
-		texture = body.texture 
-		region = body.region_rect
-		match self.subtype:
-			"tower": scale = Vector2(1,1)
-			"barrack": scale = Vector2(0.9,0.9)
-			"castle": scale = Vector2(0.8,0.8)
-	else:
-		texture = body.frames.get_frame('default', 0)
-		region = texture.region
-		scale = Vector2(2.5,2.5)
-		match self.subtype:
-			"mounted": scale = Vector2(1.8,1.8)
-		
-	return {
-		"sprite": body,
-		"data": texture,
-		"mirror": self.mirror,
-		"material": body.material,
-		"region": region,
-		"scale": scale
-	}
+	if not self.texture:
+		var body = get_node("sprites/body")
+		var texture_data
+		var region
+		var scale
+		if body is Sprite: 
+			texture_data = body.texture 
+			region = body.region_rect
+			match self.subtype:
+				"tower": scale = Vector2(1,1)
+				"barrack": scale = Vector2(0.9,0.9)
+				"castle": scale = Vector2(0.8,0.8)
+		else:
+			texture_data = body.frames.get_frame('default', 0)
+			region = texture_data.region
+			scale = Vector2(2.5,2.5)
+			match self.subtype:
+				"mounted": scale = Vector2(1.8,1.8)
+		self.texture = {
+			"sprite": body,
+			"data": texture_data,
+			"mirror": self.mirror,
+			"material": body.material,
+			"region": region,
+			"scale": scale
+		}
+	return self.texture
 
 
 func get_units_on_sight(filters):
@@ -268,7 +272,7 @@ func on_arrive(): # when collides with destiny
 
 
 func on_attack_release(): # every ranged projectile start
-	attack.projectile_start(self)
+	attack.projectile_release(self)
 	advance.resume(self)
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
@@ -279,19 +283,21 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 
 
 func stun_start():
-	# disable controls?
+	self.wait_time = 2
 	self.stunned = true
 	self.set_state("stun")
 
 
 func on_stun_end():
-	self.stunned = false
-	if self.behavior == "move":
-		move.resume(self)
-	if self.behavior == "advance":
-		advance.resume(self)
-	if self.behavior == "stand" or self.behavior == "stop":
-		self.set_state("idle")
+	if self.wait_time > 1: self.wait_time -= 1
+	else:
+		self.stunned = false
+		if self.behavior == "move":
+			move.resume(self)
+		if self.behavior == "advance":
+			advance.resume(self)
+		if self.behavior == "stand" or self.behavior == "stop":
+			self.set_state("idle")
 
 
 func die():  # hp <= 0

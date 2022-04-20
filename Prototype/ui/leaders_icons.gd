@@ -31,7 +31,7 @@ func build():
 		self.add_child(button)
 		button.name_label.text = leader.display_name
 		button.hint_label.text = str(index)
-		var texture = leader.get_texture().data
+		var texture = leader.texture.data
 		button.icon = texture
 		button.orders = {
 			"type": "leader",
