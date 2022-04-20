@@ -87,32 +87,6 @@ func hide_all_keep_stats():
 	get_node("bot_mid").show()
 
 
-func menu_button_down():
-	get_tree().paused = true
-	game.ui.main_menu.show()
-	game.ui.buttons.hide()
-	game.ui.leaders_icons.hide()
-
-
-
-func shop_button_down():
-	shop.visible = !shop.visible
-	inventories.update_buttons()
-	if shop.visible:
-		shop.update_buttons()
-		controls.hide()
-		orders.hide()
-	buttons_update()
-
-
-func orders_button_down():
-	orders.visible = !orders.visible
-	if orders.visible:
-		shop.hide()
-		controls.hide()
-		inventories.update_buttons() # hide sell bt
-	buttons_update()
-
 
 
 func controls_button_down():

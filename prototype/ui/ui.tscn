@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -105,25 +105,20 @@ atlas = SubResource( 29 )
 region = Rect2( 276, 0, 46, 46 )
 margin = Rect2( 5, 2, 0, 0 )
 
-[sub_resource type="AtlasTexture" id=25]
+[sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 12 )
-region = Rect2( 46, 0, 46, 46 )
-margin = Rect2( 4, 2, 0, 0 )
+region = Rect2( 48, 0, 46, 46 )
+margin = Rect2( 5, 0, 0, 0 )
 
-[sub_resource type="AtlasTexture" id=24]
+[sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 12 )
 region = Rect2( 322, 0, 46, 46 )
 margin = Rect2( 5, 0, 0, 0 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 12 )
-region = Rect2( 414, 0, 46, 46 )
-margin = Rect2( 4, 2, 0, 0 )
-
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 12 )
-region = Rect2( 368, 0, 46, 46 )
-margin = Rect2( 5, 2, 0, 0 )
+region = Rect2( 370, 0, 46, 46 )
+margin = Rect2( 5, 0, 0, 0 )
 
 [node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -308,7 +303,7 @@ __meta__ = {
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 384.0
-margin_bottom = 284.0
+margin_bottom = 264.0
 custom_constants/separation = 8
 __meta__ = {
 "_edit_use_anchors_": false
@@ -354,36 +349,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="menu_button" parent="mid/main_menu/container/menu_team_buttons" instance=ExtResource( 15 )]
+[node name="blue_team_button" parent="mid/main_menu/container/menu_team_buttons" instance=ExtResource( 15 )]
 modulate = Color( 0.545098, 0.729412, 1, 1 )
 margin_left = 14.0
 margin_right = 174.0
+rect_min_size = Vector2( 160, 60 )
 pressed = true
 text = "blue"
 icon = null
 value = "blue"
 
-[node name="name" parent="mid/main_menu/container/menu_team_buttons/menu_button" index="0"]
+[node name="name" parent="mid/main_menu/container/menu_team_buttons/blue_team_button" index="0"]
 visible = false
 text = "blue"
 
-[node name="hint" parent="mid/main_menu/container/menu_team_buttons/menu_button" index="2"]
+[node name="hint" parent="mid/main_menu/container/menu_team_buttons/blue_team_button" index="2"]
 visible = false
 text = "1"
 
-[node name="menu_button2" parent="mid/main_menu/container/menu_team_buttons" instance=ExtResource( 15 )]
+[node name="red_team_button" parent="mid/main_menu/container/menu_team_buttons" instance=ExtResource( 15 )]
 modulate = Color( 1, 0.545098, 0.545098, 1 )
 margin_left = 194.0
 margin_right = 354.0
+rect_min_size = Vector2( 160, 60 )
 text = "red"
 icon = null
 value = "red"
 
-[node name="name" parent="mid/main_menu/container/menu_team_buttons/menu_button2" index="0"]
+[node name="name" parent="mid/main_menu/container/menu_team_buttons/red_team_button" index="0"]
 visible = false
 text = "red"
 
-[node name="hint" parent="mid/main_menu/container/menu_team_buttons/menu_button2" index="2"]
+[node name="hint" parent="mid/main_menu/container/menu_team_buttons/red_team_button" index="2"]
 visible = false
 text = "2"
 
@@ -396,10 +393,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="menu_button2" parent="mid/main_menu/container" instance=ExtResource( 15 )]
+[node name="play_button" parent="mid/main_menu/container" instance=ExtResource( 15 )]
 margin_top = 182.0
 margin_right = 368.0
 margin_bottom = 242.0
+rect_min_size = Vector2( 360, 60 )
 custom_styles/pressed = SubResource( 36 )
 custom_styles/disabled = SubResource( 36 )
 toggle_mode = false
@@ -407,11 +405,11 @@ text = "play"
 icon = null
 value = "play"
 
-[node name="name" parent="mid/main_menu/container/menu_button2" index="0"]
+[node name="name" parent="mid/main_menu/container/play_button" index="0"]
 visible = false
 text = "red"
 
-[node name="hint" parent="mid/main_menu/container/menu_button2" index="2"]
+[node name="hint" parent="mid/main_menu/container/play_button" index="2"]
 visible = false
 text = "space"
 
@@ -885,42 +883,36 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="controls_button" parent="bot_right/buttons" instance=ExtResource( 9 )]
+[node name="controls_button" parent="bot_right/buttons" instance=ExtResource( 15 )]
 margin_left = 11.0
 margin_top = 11.0
 margin_right = 71.0
 margin_bottom = 71.0
 disabled = true
-icon = SubResource( 25 )
-script = null
+icon = SubResource( 37 )
+value = "controls"
 
 [node name="name" parent="bot_right/buttons/controls_button" index="0"]
-text = "controls"
+text = "control"
 
-[node name="shop_button" parent="bot_right/buttons" instance=ExtResource( 9 )]
+[node name="shop_button" parent="bot_right/buttons" instance=ExtResource( 15 )]
 margin_left = 79.0
 margin_top = 11.0
 margin_right = 139.0
 margin_bottom = 71.0
-custom_styles/pressed = SubResource( 27 )
-custom_styles/disabled = SubResource( 26 )
-icon = SubResource( 24 )
-script = null
+icon = SubResource( 38 )
+value = "shop"
 
 [node name="name" parent="bot_right/buttons/shop_button" index="0"]
 text = "shop"
 
-[node name="hint" parent="bot_right/buttons/shop_button" index="2"]
-text = "b"
-
-[node name="orders_button" parent="bot_right/buttons" instance=ExtResource( 9 )]
+[node name="orders_button" parent="bot_right/buttons" instance=ExtResource( 15 )]
 margin_left = 11.0
-margin_top = 80.0
+margin_top = 79.0
 margin_right = 71.0
-margin_bottom = 140.0
+margin_bottom = 139.0
 disabled = true
-icon = SubResource( 23 )
-script = null
+value = "orders"
 
 [node name="name" parent="bot_right/buttons/orders_button" index="0"]
 text = "orders"
@@ -928,13 +920,13 @@ text = "orders"
 [node name="hint" parent="bot_right/buttons/orders_button" index="2"]
 text = "x"
 
-[node name="menu_button" parent="bot_right/buttons" instance=ExtResource( 9 )]
+[node name="menu_button" parent="bot_right/buttons" instance=ExtResource( 15 )]
 margin_left = 79.0
 margin_top = 79.0
 margin_right = 139.0
 margin_bottom = 139.0
-icon = SubResource( 28 )
-script = null
+icon = SubResource( 39 )
+value = "menu"
 
 [node name="name" parent="bot_right/buttons/menu_button" index="0"]
 text = "menu"
@@ -947,10 +939,6 @@ text = "y"
 [connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/lane_button" to="bot_right/controls" method="lane_button_down"]
 [connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/move_button" to="bot_right/controls" method="move_button_down"]
 [connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/attack_button" to="bot_right/controls" method="attack_button_down"]
-[connection signal="pressed" from="bot_right/buttons/controls_button" to="." method="controls_button_down"]
-[connection signal="pressed" from="bot_right/buttons/shop_button" to="." method="shop_button_down"]
-[connection signal="pressed" from="bot_right/buttons/orders_button" to="." method="orders_button_down"]
-[connection signal="pressed" from="bot_right/buttons/menu_button" to="." method="menu_button_down"]
 
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button"]
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button2"]
@@ -958,9 +946,9 @@ text = "y"
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button"]
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button2"]
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button3"]
-[editable path="mid/main_menu/container/menu_team_buttons/menu_button"]
-[editable path="mid/main_menu/container/menu_team_buttons/menu_button2"]
-[editable path="mid/main_menu/container/menu_button2"]
+[editable path="mid/main_menu/container/menu_team_buttons/blue_team_button"]
+[editable path="mid/main_menu/container/menu_team_buttons/red_team_button"]
+[editable path="mid/main_menu/container/play_button"]
 [editable path="bot_right/controls/scroll_container/container/controls_buttons/teleport_button"]
 [editable path="bot_right/controls/scroll_container/container/controls_buttons/lane_button"]
 [editable path="bot_right/controls/scroll_container/container/controls_buttons/move_button"]
