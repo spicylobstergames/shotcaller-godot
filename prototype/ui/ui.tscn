@@ -50,7 +50,13 @@ margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
 
-[sub_resource type="StyleBoxEmpty" id=44]
+[sub_resource type="StyleBoxTexture" id=49]
+texture = ExtResource( 10 )
+region_rect = Rect2( 140, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=36]
 texture = ExtResource( 10 )
@@ -428,7 +434,7 @@ margin_right = 368.0
 margin_bottom = 242.0
 rect_min_size = Vector2( 360, 60 )
 custom_styles/pressed = SubResource( 26 )
-custom_styles/focus = SubResource( 44 )
+custom_styles/focus = SubResource( 49 )
 custom_styles/disabled = SubResource( 36 )
 toggle_mode = false
 text = "play"

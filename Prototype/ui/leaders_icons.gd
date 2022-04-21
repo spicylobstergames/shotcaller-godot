@@ -2,7 +2,9 @@ extends VBoxContainer
 var game:Node
 
 
+var built = false
 var buttons_name = {}
+
 
 var button_template:PackedScene = load("res://controls/orders/button/order_button.tscn")
 var sprites_order = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
@@ -28,12 +30,9 @@ func build():
 		hint_label.text = str(index)
 		var sprite = sprites_order.find(leader.display_name)
 		var icon = button.get_node("sprite")
+		if game.player_team == "blue": icon.material = null
 		icon.region_rect.position.x = sprite * 96
-		if game.player_team == "red":
-			var material = game.unit.get_node("sprites/sprite").material
-			print(material)
-			icon.material = material
 		button.leader =  leader
+	built = true
 	show()
-
 

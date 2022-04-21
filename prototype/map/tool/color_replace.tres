@@ -16,14 +16,9 @@ uniform float tolerance;
 
 void fragment() {
 	vec4 current_pixel = texture(TEXTURE, UV);
-	vec4 new_pixel = current_pixel;
-	if (length(current_pixel - origin) < tolerance)
-		new_pixel = new;
-	if (length(current_pixel - origin2) < tolerance)
-		new_pixel = new2;
-	if (length(current_pixel - origin3) < tolerance)
-		new_pixel = new3;
-	if (length(current_pixel - origin4) < tolerance)
-		new_pixel = new4;
-	COLOR = new_pixel;
+	if (length(current_pixel - origin) < tolerance) COLOR = new;
+	else if (length(current_pixel - origin2) < tolerance) COLOR = new2;
+	else if (length(current_pixel - origin3) < tolerance) COLOR = new3;
+	else if (length(current_pixel - origin4) < tolerance) COLOR = new4;
+	else COLOR = current_pixel;
 }"

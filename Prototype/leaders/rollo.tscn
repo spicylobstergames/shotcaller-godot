@@ -603,9 +603,6 @@ region_rect = Rect2( 126, 8, 33, 22 )
 [node name="sprite" parent="sprites" index="3"]
 visible = false
 
-[node name="collisions" parent="." index="5"]
-visible = true
-
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
 

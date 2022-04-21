@@ -30,17 +30,25 @@ func _ready():
 		clear = true
 
 
-func new_inventory():
+func new_inventory(leader):
+	
+	var extra_gold = 0
+	if leader.display_name in game.unit.skills.leader:
+		var leader_skills = game.unit.skills.leader[leader.display_name]
+		if "extra_gold" in leader_skills:
+				extra_gold = leader_skills.extra_gold
+	
 	var inventory = {
 		"container": HBoxContainer.new(),
 		"gold": 0,
+		"extra_gold": extra_gold,
 		"leader": null,
 		"equip_items": [],
 		"consumable_items":[],
 		"equip_item_buttons": [],
 		"consumable_item_buttons": []
 	}
-	#inventory.container.set("custom_constants/separation", 0)
+	
 	inventory.container.margin_top = sell_button_margin
 # warning-ignore:unused_variable
 	for index in range(equip_items_max):
@@ -58,7 +66,7 @@ func build_leaders():
 
 func add_inventory(leader):
 	# Setup GUI for inventory
-	var inventory = new_inventory()
+	var inventory = new_inventory(leader)
 	add_child(inventory.container)
 	leaders[leader.name] = inventory
 	inventory.leader = leader
@@ -85,7 +93,7 @@ func add_inventory(leader):
 
 func gold_timer_timeout(inventory):
 		# Updating gold label
-	inventory.gold += 10
+	inventory.gold += 1 + inventory.extra_gold
 	if game.selected_leader: game.ui.stats.update()
 	game.ui.shop.update_buttons()
 	yield(get_tree().create_timer(1), "timeout")

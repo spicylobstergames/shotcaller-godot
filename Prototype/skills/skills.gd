@@ -4,42 +4,62 @@ var game:Node
 
 const leader = {
 	"arthur": {
+		"bonus damage": 10,
 		"stun": 0.25,
 		"description": "25% chance to stun enemy"
 	},
 	"bokuden": {
+		"bonus attack speed": 0.2,
 		"critical": 0.2,
 		"description": "20% chance to double damage"
 	},
 	"lorne": {
+		"respawn reduction": 0.8,
 		"defense": 5,
 		"description": "Ignores 5 damage on hits"
 	},
 	"hongi": {
+		"bonus hp": 100,
 		"counter": 10,
 		"description": "Returns 10 damage on melee hits"
+	}, 
+	"nagato": {
+		"bonus retreat speed": 1.2,
+		"multi": 2,
+		"description": "Multiple units"
+		},
+	"osman": {
+		"bonus gold": 1,
+		"drinker": 1.2,
+		"description": "Extra 20% effect from potions"
 	},
 	"raja": {
+		"bonus speed": 1.1,
 		"dodge": 0.2,
 		"description": "20% chance to avoid hits"
 	},
 	"robin": {
+		"bonus projectile speed": 1.5,
 		"multishot": 2,
 		"description": "Can shoot 2 arrows at once"
 	},
 	"rollo": {
+		"bonus melee range": 1.5,
 		"cleave": 0.5,
 		"description": "Cleaves enemies by  50% damage"
 	},
 	"sida": {
+		"bonus vision": 1.5,
 		"pierce": 0.4,
 		"description": "40% spear piercing chance"
 	},
 	"takoda": {
+		"bonus hp regen": 2,
 		"bleed": 5,
 		"description": "Extra 5 stack damage max 10"
 	},
 	"tomyris": {
+		"bonus range": 1.4,
 		"agile": 0.1,
 		"description": "Extra 10% stack attack speed max 10"
 	}
