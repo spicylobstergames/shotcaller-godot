@@ -131,6 +131,4 @@ func process():
 	if ratio < 1 and zoom.x > 1:
 		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
 		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
-
-
-
+	

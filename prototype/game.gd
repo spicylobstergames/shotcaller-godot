@@ -58,7 +58,7 @@ func build():
 		if test.unit:
 			start()
 		else:
-			get_tree().paused = true
+			#get_tree().paused = true
 			ui.main_menu.visible = true
 
 

@@ -11,6 +11,7 @@ var shop:Node
 var controls:Node
 var orders:Node
 var main_menu:Node
+var main_menu_background:Node
 var leaders_icons:Node
 var orders_button:Node
 var shop_button:Node
@@ -28,6 +29,7 @@ func _ready():
 	stats = get_node("bot_mid/stats")
 	minimap = get_node("bot_left/minimap")
 	main_menu = get_node("mid/main_menu")
+	main_menu_background = get_node("background/main")
 	buttons = get_node("bot_right/buttons")
 	orders = get_node("bot_right/orders")
 	controls = get_node("bot_right/controls")
@@ -58,6 +60,16 @@ func process():
 			minimap.get_map_texture()
 		minimap.move_symbols()
 		minimap.follow_camera()
+	
+	var h = get_viewport().size.y
+	var ratio = get_viewport().size.x / h
+	if ratio < 1: 
+		var s = 1/ratio
+		main_menu_background.scale = Vector2(s*1.666,s*1.666)
+		main_menu_background.position = Vector2(-528,-300*s)
+	else: 
+		main_menu_background.scale = Vector2(1.666,1.666)
+		main_menu_background.position = Vector2(-528,-300)
 
 
 

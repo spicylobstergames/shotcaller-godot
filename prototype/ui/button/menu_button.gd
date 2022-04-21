@@ -25,8 +25,12 @@ func button_down():
 		
 		"play":
 			get_tree().paused = false
-			game.ui.main_menu.hide()
+			game.ui.show_all()
+			game.ui.minimap.show()
 			game.ui.buttons.show()
+			#game.ui.buttons.show()
+			game.ui.main_menu.hide()
+			game.ui.main_menu_background.hide()
 			if game.ui.leaders_icons.built: game.ui.leaders_icons.show()
 			
 			
@@ -61,7 +65,7 @@ func button_down():
 		
 		
 		"menu":
-			get_tree().paused = true
+			#get_tree().paused = true
 			game.ui.main_menu.show()
 			game.ui.buttons.hide()
 			game.ui.controls.hide()

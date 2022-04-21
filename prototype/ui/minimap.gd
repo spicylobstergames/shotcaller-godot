@@ -74,7 +74,6 @@ func get_map_texture():
 	game.map_camera.current = false
 	game.get_node("camera").current = true
 	update_map_texture = false
-	game.camera.zoom_reset()
 	game.ui.show_all()
 	for unit in game.all_units: unit.show()
 	if not game.built: game.build()
@@ -141,7 +140,8 @@ func follow_camera():
 
 
 func move_symbols():
-	var symbols = map_symbols.get_children()
-	for i in range(symbols.size()):
-		var symbol = symbols[i]
-		symbol.position = Vector2(2,-148) + map_symbols_map[i].global_position/14.5
+	if self.visible:
+		var symbols = map_symbols.get_children()
+		for i in range(symbols.size()):
+			var symbol = symbols[i]
+			symbol.position = Vector2(2,-148) + map_symbols_map[i].global_position/14.5
