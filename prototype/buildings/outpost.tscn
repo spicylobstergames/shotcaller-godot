@@ -1,10 +1,10 @@
 [gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/pawns/archer.png" type="Texture" id=3]
+[ext_resource path="res://assets/pawns/archer.png" type="Texture" id=2]
+[ext_resource path="res://assets/buildings/neutral.png" type="Texture" id=3]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=4]
-[ext_resource path="res://assets/buildings/buildings.png" type="Texture" id=5]
+[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -123,11 +123,11 @@ shader_param/new4 = null
 shader_param/tolerance = 0.1
 
 [sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 2 )
 region = Rect2( 160, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 2 )
 region = Rect2( 192, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=41]
@@ -139,11 +139,11 @@ animations = [ {
 } ]
 
 [sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 2 )
 region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=42]
@@ -155,44 +155,46 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 48.0
+radius = 16.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 64.0
+radius = 32.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 250.0
+radius = 125.0
 
-[node name="castle" instance=ExtResource( 1 )]
-hp = 1000
-vision = 320
+[node name="outpost" instance=ExtResource( 1 )]
+hp = 800
+vision = 280
 type = "building"
-subtype = "base"
-display_name = "castle"
+subtype = "backwood"
+display_name = "outpost"
+title = "outpost tower"
 selectable = true
 collide = true
 attacks = true
 ranged = true
-damage = 80
+damage = 50
+attack_speed = 1.2
 projectile_speed = 220.0
+lane = ""
 
 [node name="symbol" parent="." index="1"]
-position = Vector2( 0, -1.90735e-06 )
-scale = Vector2( 24, 24 )
+scale = Vector2( 16, 16 )
 
 [node name="symbol_border" parent="symbol" index="0"]
-scale = Vector2( 1.33333, 1.33333 )
+scale = Vector2( 1.5, 1.5 )
 
 [node name="state" parent="hud" index="0"]
-margin_top = -118.0
-margin_bottom = -100.0
+margin_top = -85.0
+margin_bottom = -67.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2( 0, 0 )
-scale = Vector2( 4.69231, 8 )
+scale = Vector2( 2.38462, 5.33333 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -106 )
+position = Vector2( 0, -70 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
@@ -204,34 +206,22 @@ visible = false
 
 [node name="sprite" parent="sprites" index="1"]
 visible = false
+position = Vector2( 0, 0 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 
-[node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 2 )]
-position = Vector2( -33, -63.5 )
-z_index = 1
-
-[node name="flag2" parent="sprites/flags" index="1" instance=ExtResource( 2 )]
-position = Vector2( 35, -63.5 )
-z_index = 1
-
-[node name="flag3" parent="sprites/flags" index="2" instance=ExtResource( 2 )]
-position = Vector2( -23, -97.5 )
-scale = Vector2( 0.8, 0.8 )
-
-[node name="flag4" parent="sprites/flags" index="3" instance=ExtResource( 2 )]
-position = Vector2( 24, -97.5 )
-scale = Vector2( 0.8, 0.8 )
+[node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 5 )]
+position = Vector2( 1, -71 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
 material = SubResource( 30 )
-texture = ExtResource( 5 )
-offset = Vector2( 0, -44 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -34 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 96, 120 )
+region_rect = Rect2( 203, 0, 34, 88 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
-position = Vector2( 0, -37 )
+position = Vector2( 0, -34 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
@@ -252,13 +242,13 @@ frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
 
 [node name="block" parent="collisions" index="0"]
-position = Vector2( 0, -30 )
+position = Vector2( 0, -6 )
 shape = SubResource( 28 )
 
 [node name="select" parent="collisions" index="1"]
-position = Vector2( 0, -30 )
+position = Vector2( 0, -20 )
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
-position = Vector2( 0, -30 )
+position = Vector2( 0, -20 )
 shape = SubResource( 27 )

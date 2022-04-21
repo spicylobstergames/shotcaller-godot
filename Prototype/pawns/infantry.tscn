@@ -572,6 +572,8 @@ radius = 20.0
 
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
+display_name = "infantry"
+title = "melee soldier"
 selectable = true
 moves = true
 speed = 50.0

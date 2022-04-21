@@ -1,10 +1,10 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/pawns/archer.png" type="Texture" id=3]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=4]
-[ext_resource path="res://assets/buildings/buildings.png" type="Texture" id=5]
+[ext_resource path="res://assets/pawns/archer.png" type="Texture" id=2]
+[ext_resource path="res://assets/buildings/neutral.png" type="Texture" id=3]
+[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=4]
+[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=5]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -111,44 +111,28 @@ tracks/1/keys = {
 }
 
 [sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 4 )
+shader = ExtResource( 5 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = null
+shader_param/origin4 = Color( 0.2, 0.266667, 0.380392, 1 )
 shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
 shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
 shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = null
+shader_param/new4 = Color( 0.462745, 0.219608, 0.294118, 1 )
 shader_param/tolerance = 0.1
 
 [sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 2 )
 region = Rect2( 160, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 3 )
+atlas = ExtResource( 2 )
 region = Rect2( 192, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=41]
 animations = [ {
 "frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 3 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 3 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=42]
-animations = [ {
-"frames": [ SubResource( 36 ), SubResource( 37 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -160,39 +144,36 @@ radius = 48.0
 [sub_resource type="CircleShape2D" id=29]
 radius = 64.0
 
-[sub_resource type="CircleShape2D" id=27]
-radius = 250.0
-
-[node name="castle" instance=ExtResource( 1 )]
-hp = 1000
-vision = 320
+[node name="camp" instance=ExtResource( 1 )]
+hp = 0
+regen = 0
+vision = 300
 type = "building"
-subtype = "base"
-display_name = "castle"
+subtype = "backwood"
+display_name = "camp"
+title = "mercenary camp"
+respawn = 0.0
 selectable = true
 collide = true
-attacks = true
-ranged = true
-damage = 80
-projectile_speed = 220.0
+projectile_speed = 0.0
+lane = ""
 
 [node name="symbol" parent="." index="1"]
-position = Vector2( 0, -1.90735e-06 )
-scale = Vector2( 24, 24 )
+position = Vector2( 0, -1.78814e-07 )
 
 [node name="symbol_border" parent="symbol" index="0"]
-scale = Vector2( 1.33333, 1.33333 )
+scale = Vector2( 1.4, 1.4 )
 
 [node name="state" parent="hud" index="0"]
-margin_top = -118.0
-margin_bottom = -100.0
+margin_top = -106.0
+margin_bottom = -88.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2( 0, 0 )
-scale = Vector2( 4.69231, 8 )
+scale = Vector2( 3.46154, 5.66667 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -106 )
+position = Vector2( 0, -93 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
@@ -206,32 +187,20 @@ visible = false
 visible = false
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
+visible = false
 
-[node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 2 )]
-position = Vector2( -33, -63.5 )
-z_index = 1
-
-[node name="flag2" parent="sprites/flags" index="1" instance=ExtResource( 2 )]
-position = Vector2( 35, -63.5 )
-z_index = 1
-
-[node name="flag3" parent="sprites/flags" index="2" instance=ExtResource( 2 )]
-position = Vector2( -23, -97.5 )
-scale = Vector2( 0.8, 0.8 )
-
-[node name="flag4" parent="sprites/flags" index="3" instance=ExtResource( 2 )]
-position = Vector2( 24, -97.5 )
-scale = Vector2( 0.8, 0.8 )
+[node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 4 )]
+position = Vector2( 1, -80 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
 material = SubResource( 30 )
-texture = ExtResource( 5 )
-offset = Vector2( 0, -44 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -22 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 96, 120 )
+region_rect = Rect2( 64, 23, 75, 65 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
-position = Vector2( 0, -37 )
+position = Vector2( 0, -43 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
@@ -243,22 +212,10 @@ position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
 
-[node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
-visible = false
-position = Vector2( -1.19209e-07, 0.999996 )
-rotation = 0.141846
-scale = Vector2( 0.85, 1 )
-frames = SubResource( 42 )
-offset = Vector2( 10, 0 )
-
 [node name="block" parent="collisions" index="0"]
-position = Vector2( 0, -30 )
+position = Vector2( 0, -20 )
 shape = SubResource( 28 )
 
 [node name="select" parent="collisions" index="1"]
-position = Vector2( 0, -30 )
+position = Vector2( 0, -20 )
 shape = SubResource( 29 )
-
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
-position = Vector2( 0, -30 )
-shape = SubResource( 27 )

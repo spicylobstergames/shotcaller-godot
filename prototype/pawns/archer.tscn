@@ -642,6 +642,7 @@ radius = 100.0
 hp = 180
 subtype = "archer"
 display_name = "archer"
+title = "ranged soldier"
 selectable = true
 moves = true
 speed = 50.0

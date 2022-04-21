@@ -137,7 +137,8 @@ func setup_leader_buttons(orders):
 func update():
 	hide_all()
 	if (game.selected_unit and 
-			game.selected_unit.team == game.player_team):
+			game.selected_unit.team == game.player_team and
+			game.selected_unit.subtype != "backwood"):
 		
 		match game.selected_unit.type:
 			"pawn", "building": 

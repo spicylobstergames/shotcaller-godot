@@ -80,8 +80,9 @@ func set_leader(leader, orders):
 
 func setup_lanes_priority():
 	for building in game.player_buildings:
-		var priority = lanes_orders[building.lane].priority.duplicate()
-		building.priority = priority
+		if building.lane:
+			var priority = lanes_orders[building.lane].priority.duplicate()
+			building.priority = priority
 
 
 

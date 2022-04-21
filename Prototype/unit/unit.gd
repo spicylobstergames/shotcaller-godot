@@ -190,7 +190,7 @@ func get_texture():
 		var body = get_node("sprites/body")
 		var texture_data
 		var region
-		var scale
+		var scale = Vector2(1,1)
 		var material
 		if self.team == "red": material = body.material
 		if body is Sprite: 
