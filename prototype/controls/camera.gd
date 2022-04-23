@@ -38,16 +38,17 @@ func _unhandled_input(event):
 		# NUMBER KEYPAD
 		if not event.is_pressed():
 			var cam_move = null;
+			var x = position_limit*0.92
 			match event.scancode:
-				KEY_KP_1: cam_move = [-position_limit, position_limit]
-				KEY_KP_2: cam_move = [0, position_limit]
-				KEY_KP_3: cam_move = [position_limit, position_limit]
-				KEY_KP_4: cam_move = [-position_limit, 0]
+				KEY_KP_1: cam_move = [-x, x]
+				KEY_KP_2: cam_move = [0, x]
+				KEY_KP_3: cam_move = [x, x]
+				KEY_KP_4: cam_move = [-x, 0]
 				KEY_KP_5: cam_move = [0, 0]
-				KEY_KP_6: cam_move = [position_limit, 0]
-				KEY_KP_7: cam_move = [-position_limit, -position_limit]
-				KEY_KP_8: cam_move = [0, -position_limit]
-				KEY_KP_9: cam_move = [position_limit, -position_limit]
+				KEY_KP_6: cam_move = [x, 0]
+				KEY_KP_7: cam_move = [-x, -x]
+				KEY_KP_8: cam_move = [0, -x]
+				KEY_KP_9: cam_move = [x, -x]
 			
 			if cam_move: 
 				zoom_reset()

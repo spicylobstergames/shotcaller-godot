@@ -8,7 +8,7 @@ var current_regen:int = 1
 export var vision:int = 100
 var current_vision:int = 100
 export var type:String = "pawn" # building leader
-export var subtype:String = "infantry" # archer mounted
+export var subtype:String = "melee" # ranged mounted base lane backwood
 export var display_name:String
 export var title:String
 export var team:String = "blue"

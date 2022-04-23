@@ -51,11 +51,21 @@ func _ready():
 	map.blocks.setup_quadtree()
 
 
+func _process(delta: float) -> void:
+	if started: camera.process()
+	ui.process()
+	# build called after ui.minimap get_texture
+	
+	
+func _physics_process(delta):
+	if started: collision.process(delta)
+	
+	
 func build():
 	if not built:
 		built = true
 		
-		if test.unit:
+		if test.unit: # debug units
 			ui.main_menu.get_node("container/play_button").play_down()
 			start()
 		else:
@@ -79,7 +89,6 @@ func start():
 		
 		if test.unit:
 			test.spawn_unit()
-			#test.spawn_leaders()
 		
 		else: 
 			yield(get_tree().create_timer(1.0), "timeout")
@@ -88,13 +97,5 @@ func start():
 			unit.spawn.leaders()
 			map.setup_leaders()
 
-
-func _process(delta: float) -> void:
-	ui.process()
-	camera.process()
-
-
-func _physics_process(delta):
-	if started: collision.process(delta)
 
 

@@ -165,15 +165,17 @@ position = Vector2( 0, -1.78814e-07 )
 scale = Vector2( 1.4, 1.4 )
 
 [node name="state" parent="hud" index="0"]
-margin_top = -106.0
-margin_bottom = -88.0
+margin_left = -27.0
+margin_top = -74.0
+margin_right = 48.0
+margin_bottom = -56.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2( 0, 0 )
 scale = Vector2( 3.46154, 5.66667 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -93 )
+position = Vector2( 10, -61 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )

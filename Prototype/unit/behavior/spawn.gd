@@ -144,7 +144,7 @@ func spawn_unit(unit, l, t, mode, point):
 func cemitery_add_pawn(unit):
 	var side = "player_"
 	if unit.team != game.player_team: side = "enemy_"
-	var index = side+unit.subtype
+	var index = side+unit.display_name
 	cemitery[index].append(unit)
 
 

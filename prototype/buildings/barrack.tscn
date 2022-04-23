@@ -169,6 +169,7 @@ vision = 300
 type = "building"
 subtype = "base"
 display_name = "barrack"
+title = "provides pawns"
 selectable = true
 collide = true
 attacks = true

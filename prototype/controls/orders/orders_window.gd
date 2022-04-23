@@ -16,8 +16,12 @@ onready var container = get_node("scroll_container/container")
 const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
 	"lane_tactics": ["defend","default","attack"],
-	"priority": ["pawn", "leader", "building"]
+	"priority": ["pawn", "leader", "building"],
 	# subtype priority: melee ranged mounted
+	"camp": ["melee","ranged","mounted"],
+	"taxes": ["up","down"],
+	"mine": ["collect", "explode"],
+	"lumbermill": ["hire", "dismiss"]
 }
 
 const hint_tooltips_tactics = {
