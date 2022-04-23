@@ -660,11 +660,11 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( -1, -3 )
 region_enabled = true
-region_rect = Rect2( 69, 3, 19, 17 )
+region_rect = Rect2( 68, 3, 20, 17 )
 
 [node name="state" parent="hud" index="0"]
 margin_top = -40.0

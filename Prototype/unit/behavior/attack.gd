@@ -50,38 +50,30 @@ func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
 	var att_rad = unit1.attack_hit_radius
 	
-	var hitted
-	var target_hit = false
-	var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
+	# hit target
+	if can_hit(unit1, unit1.target) and in_range(unit1, unit1.target):
+		take_hit(unit1, unit1.target)
 	
-	for unit2 in neighbors:
-		if (unit1 != unit2 and 
-				unit2.hp and
-				unit2.current_hp > 0 and 
-				unit2 == unit1.target and  # or unit1 has cleave
-				in_range(unit1, unit2)):
-					
-			hitted = unit2
-			take_hit(unit1, unit2)
-			target_hit = true
-			break
-	
-	if not target_hit and neighbors.size():
-		var target = closest_enemy_unit(unit1, neighbors)
-		if target and in_range(unit1, target):
-			hitted = target
-			take_hit(unit1, target)
-	
+	# melee cleave damage
 	if unit1.display_name in game.unit.skills.leader:
 		var attacker_skills = game.unit.skills.leader[unit1.display_name]
-		
 		if "cleave" in attacker_skills:
+			var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
 			for unit2 in neighbors:
-				if (is_instance_valid(unit2) and 
-						unit2.team != unit1.team and 
-						hitted != unit2 and
-						in_range(unit1, unit2)):
+				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})
+
+
+func can_hit(attacker, target):
+	return (
+		attacker != null and
+		target != null and
+		target != attacker and
+		target.team != attacker.team and
+		is_instance_valid(attacker) and
+		is_instance_valid(target) and
+		not target.dead
+	)
 
 
 func in_range(attacker, target):

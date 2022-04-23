@@ -573,9 +573,9 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( -3, -4 )
 region_enabled = true
 region_rect = Rect2( 2, 4, 21, 19 )
 
@@ -595,17 +595,15 @@ anims/stun = SubResource( 33 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = -0.0423532
-scale = Vector2( 1, 1.0205 )
 frames = SubResource( 36 )
-frame = 2
 offset = Vector2( 0, -15 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="2"]
 
 [node name="spear" type="AnimatedSprite" parent="sprites/weapon" index="0"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( -8.1407, 2.05879 )
-rotation = -0.280416
 scale = Vector2( 1, 1.1 )
 frames = SubResource( 39 )
 offset = Vector2( 0, -5 )

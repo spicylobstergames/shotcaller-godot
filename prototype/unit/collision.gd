@@ -50,11 +50,9 @@ func process(delta):
 						else: # pierces
 							var targets = game.map.blocks.get_units_in_radius(projectile.node.global_position, 1)
 							for target in targets:
-								if (target != unit1 and
-										target.dead == false and 
+								if (game.unit.attack.can_hit(unit1, target) and
 										projectile.targets.find(target) < 0 and
 										game.utils.point_collision(target, projectile.node.global_position) ):
-									#print(unit1, target, projectile)
 									game.unit.attack.take_hit(unit1, target, projectile)
 						
 						game.unit.attack.projectile_step(delta, projectile)

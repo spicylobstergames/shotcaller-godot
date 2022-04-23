@@ -13,6 +13,9 @@ config_version=4
 config/name="Shotcall"
 run/main_scene="res://game.tscn"
 run/delta_smoothing=false
+boot_splash/image="res://assets/waterfall/sword.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://assets/icon.png"
 
 [debug]
@@ -108,4 +111,5 @@ quality/reflections/high_quality_ggx=false
 quality/shading/force_vertex_shading.mobile=false
 quality/shading/force_lambert_over_burley.mobile=false
 quality/shading/force_blinn_over_ggx.mobile=false
+environment/default_clear_color=Color( 0.180392, 0.133333, 0.184314, 1 )
 environment/default_environment="res://default_env.tres"

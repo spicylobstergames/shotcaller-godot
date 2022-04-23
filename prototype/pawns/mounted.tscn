@@ -1,10 +1,11 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/tomyris.png" type="Texture" id=4]
-[ext_resource path="res://assets/leaders/lorne.png" type="Texture" id=5]
+[ext_resource path="res://assets/pawns/infantry.png" type="Texture" id=5]
+[ext_resource path="res://assets/pawns/mounted.png" type="Texture" id=6]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -106,7 +107,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, -50.0, 120.0, 130.0, 0.0 ]
+"values": [ 0.0, -90.0, 120.0, 100.0, 0.0 ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/weapon:visible")
@@ -308,48 +309,24 @@ resource_name = "move"
 length = 0.8
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/body:scale")
+tracks/0/path = NodePath("sprites/body:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 1, 0.95 ), Vector2( 1, 0.95 ), Vector2( 1, 1 ), Vector2( 1, 0.95 ), Vector2( 1, 0.95 ), Vector2( 1, 1 ), Vector2( 1, 0.95 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("sprites/body:rotation_degrees")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ 0.0, -2.0, 2.0, 0.0, 0.0, -2.0, 2.0, 0.0 ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("sprites/body:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
 "times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 0, 1, 0, 1, 0 ]
 }
-tracks/3/type = "method"
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
 "times": PoolRealArray( 0.8 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
@@ -357,41 +334,65 @@ tracks/3/keys = {
 "method": "on_move_end"
 } ]
 }
-tracks/4/type = "value"
-tracks/4/path = NodePath("sprites/body:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
+tracks/2/type = "value"
+tracks/2/path = NodePath("sprites/body:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
 "times": PoolRealArray( 0, 0.14772, 0.3, 0.4, 0.551537, 0.7, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 2, 9 ), Vector2( 2, 4 ), Vector2( 2, 9 ), Vector2( 2, 9 ), Vector2( 2, 4 ), Vector2( 2, 9 ), Vector2( 2, 9 ) ]
 }
-tracks/5/type = "value"
-tracks/5/path = NodePath("sprites/body:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
+tracks/3/type = "value"
+tracks/3/path = NodePath("sprites/body:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
 "times": PoolRealArray( 0, 0.8 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath("sprites/weapon:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("sprites/body:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+}
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/weapon:visible")
+tracks/6/path = NodePath("sprites/body:rotation_degrees")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.8 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, false ]
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -4.0, 3.0, 0.0, -4.0, 3.0, 0.0 ]
 }
 
 [sub_resource type="Animation" id=33]
@@ -469,7 +470,7 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
+"values": [ Vector2( 2, 9 ), Vector2( 2, 9 ) ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("sprites/body:modulate")
@@ -484,33 +485,33 @@ tracks/6/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 5 )
+[sub_resource type="AtlasTexture" id=55]
+atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 5 )
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 6 )
 region = Rect2( 48, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=50]
-atlas = ExtResource( 5 )
+[sub_resource type="AtlasTexture" id=57]
+atlas = ExtResource( 6 )
 region = Rect2( 96, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=51]
+[sub_resource type="AtlasTexture" id=58]
 atlas = ExtResource( 5 )
-region = Rect2( 144, 0, 48, 48 )
+region = Rect2( 0, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=52]
+[sub_resource type="AtlasTexture" id=59]
 atlas = ExtResource( 5 )
-region = Rect2( 192, 0, 48, 48 )
+region = Rect2( 24, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=53]
+[sub_resource type="AtlasTexture" id=60]
 atlas = ExtResource( 5 )
-region = Rect2( 240, 0, 48, 48 )
+region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=36]
 animations = [ {
-"frames": [ SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ) ],
+"frames": [ SubResource( 55 ), SubResource( 56 ), SubResource( 57 ), SubResource( 58 ), SubResource( 59 ), SubResource( 60 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -587,11 +588,10 @@ texture = ExtResource( 3 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
 material = SubResource( 30 )
-position = Vector2( 0, 9 )
-rotation = -0.069813
-scale = Vector2( 1, 0.944444 )
+position = Vector2( 2, 9 )
+scale = Vector2( 1, 1.02247 )
 frames = SubResource( 36 )
-offset = Vector2( 4, -22 )
+offset = Vector2( 4, -24 )
 
 [node name="sprite" parent="sprites" index="3"]
 visible = false
@@ -599,16 +599,13 @@ visible = false
 [node name="weapon" type="Sprite" parent="sprites" index="4"]
 visible = false
 material = SubResource( 54 )
-position = Vector2( -1, -16 )
-rotation = 2.16234
+position = Vector2( -2, -16 )
+rotation = 0.394008
 texture = ExtResource( 5 )
 centered = false
-offset = Vector2( 1, -20 )
+offset = Vector2( 2, -12 )
 region_enabled = true
-region_rect = Rect2( 308, 9, 16, 31 )
-
-[node name="collisions" parent="." index="5"]
-visible = true
+region_rect = Rect2( 83, 3, 11, 17 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )
