@@ -33,6 +33,9 @@ func setup_pathfind():
 	for building in game.player_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
+	for building in game.enemy_buildings:
+		var pos = (building.global_position / game.map.tile_size).floor()
+		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
 	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
 	path_finder = Jpf.new()

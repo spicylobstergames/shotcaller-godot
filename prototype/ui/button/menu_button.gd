@@ -20,32 +20,13 @@ func _ready():
 
 
 
+
 func button_down():
 	match self.value:
 		
 		"play":
-			get_tree().paused = false
-			game.ui.show_all()
-			game.ui.minimap.show()
-			game.ui.buttons.show()
-			#game.ui.buttons.show()
-			game.ui.main_menu.hide()
-			game.ui.main_menu_background.hide()
-			if game.ui.leaders_icons.built: game.ui.leaders_icons.show()
-			
-			
-			var highlight_button = play_button.get("custom_styles/focus")
-			
-			if blue_team_button.pressed: 
-				blue_team_button.set("custom_styles/disabled", highlight_button)
-			if red_team_button.pressed: 
-				red_team_button.set("custom_styles/disabled", highlight_button)
-			
-			blue_team_button.disabled = true
-			red_team_button.disabled = true
-			
-			game.ui.buttons_update()
-			
+			#get_tree().paused = false
+			play_down()
 			game.start()
 		
 		
@@ -101,3 +82,27 @@ func button_down():
 				game.ui.inventories.update_buttons() # hide sell bt
 			else: game.control_state = "selection"
 			game.ui.buttons_update()
+
+
+
+func play_down():
+	game.ui.show_all()
+	game.ui.minimap.show()
+	game.ui.buttons.show()
+	#game.ui.buttons.show()
+	game.ui.main_menu.hide()
+	game.ui.main_menu_background.hide()
+	if game.ui.leaders_icons.built: game.ui.leaders_icons.show()
+	
+	
+	var highlight_button = play_button.get("custom_styles/focus")
+	
+	if blue_team_button.pressed: 
+		blue_team_button.set("custom_styles/disabled", highlight_button)
+	if red_team_button.pressed: 
+		red_team_button.set("custom_styles/disabled", highlight_button)
+	
+	blue_team_button.disabled = true
+	red_team_button.disabled = true
+	
+	game.ui.buttons_update()

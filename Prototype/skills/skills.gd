@@ -116,7 +116,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 	if attacker.display_name in game.unit.skills.leader:
 		var attacker_skills = game.unit.skills.leader[attacker.display_name]
 		if not modifiers.counter:
-			if "stun" in attacker_skills:
+			if "stun" in attacker_skills and target.type != "building":
 				if randf() < attacker_skills.stun: 
 					target.stun_start()
 			

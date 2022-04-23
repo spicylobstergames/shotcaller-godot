@@ -56,6 +56,7 @@ func build():
 		built = true
 		
 		if test.unit:
+			ui.main_menu.get_node("container/play_button").play_down()
 			start()
 		else:
 			#get_tree().paused = true

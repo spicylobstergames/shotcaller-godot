@@ -580,6 +580,7 @@ speed = 50.0
 collide = true
 attacks = true
 damage = 25
+attack_speed = 1.2
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

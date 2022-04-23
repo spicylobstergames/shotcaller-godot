@@ -27,43 +27,51 @@ func process(delta):
 	
 	# loop 1: add to quad
 	for unit1 in game.all_units:
-		if unit1.collide: game.map.blocks.quad.add_body(unit1)
+		if unit1.collide and not unit1.dead:
+			game.map.blocks.quad.add_body(unit1)
 		
 		if game.test.fog: 
 			if unit1.team == game.player_team: game.map.fog.clear_sigh_skip(unit1)
 	
+	
 	# loop 2: checks for collisions
-	for unit1 in game.all_units:
-		unit1.next_event  = ""
-		
-		# move arrival
-		if unit1.moves and unit1.state == "move":
-			if !unit1.target:
-				if game.utils.point_collision(unit1, unit1.current_destiny, game.map.half_tile_size):
-					unit1.next_event = "arrive"
-			else:
-				if game.utils.point_collision(unit1, unit1.current_destiny):
-					unit1.next_event = "arrive"
-		
+	
 		# projectiles collision
 		if unit1.projectiles.size():
 			for projectile in unit1.projectiles:
-				if is_instance_valid(projectile.node) and projectile.speed:
+				if is_instance_valid(projectile.node) and projectile.speed and projectile.stuck == false:
 					projectile.lifetime -= delta
-					if projectile.lifetime > 0:
-						game.unit.attack.projectile_step(delta, projectile)
+					if projectile.lifetime < 0:
+						game.unit.attack.projectile_stuck(unit1, null, projectile)
+					else:
 						if projectile.target:
 							if game.utils.point_collision(projectile.target, projectile.node.global_position):
 								game.unit.attack.take_hit(unit1, projectile.target, projectile)
 						else: # pierces
 							var targets = game.map.blocks.get_units_in_radius(projectile.node.global_position, 1)
 							for target in targets:
-								if projectile.targets.find(target) < 0 and game.utils.point_collision(target, projectile.node.global_position):
+								if (target != unit1 and
+										target.dead == false and 
+										projectile.targets.find(target) < 0 and
+										game.utils.point_collision(target, projectile.node.global_position) ):
+									#print(unit1, target, projectile)
 									game.unit.attack.take_hit(unit1, target, projectile)
-							
-					else: 
-						game.unit.attack.projectile_stuck(unit1, null, projectile)
-		
+						
+						game.unit.attack.projectile_step(delta, projectile)
+	
+	
+	for unit1 in game.all_units:
+		unit1.next_event  = ""
+		if not unit1.dead:
+			# move arrival
+			if unit1.moves and unit1.state == "move":
+				if !unit1.target:
+					if game.utils.point_collision(unit1, unit1.current_destiny, game.map.half_tile_size):
+						unit1.next_event = "arrive"
+				else:
+					if game.utils.point_collision(unit1, unit1.current_destiny):
+						unit1.next_event = "arrive"
+			
 		# units collision
 		if (unit1.moves and unit1.collide and unit1.state == "move" 
 				and unit1.next_event != "arrive"):

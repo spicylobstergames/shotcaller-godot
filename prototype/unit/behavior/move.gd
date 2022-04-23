@@ -89,6 +89,7 @@ func stop(unit):
 	unit.current_step = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
+	unit.get_node("animations").playback_speed = 1
 
 
 func stand(unit):

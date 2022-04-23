@@ -564,6 +564,7 @@ collide = true
 attacks = true
 ranged = true
 damage = 30
+attack_speed = 3.0
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]

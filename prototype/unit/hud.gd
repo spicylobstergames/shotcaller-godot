@@ -33,13 +33,13 @@ func update_hpbar(unit):
 	if unit.current_hp <= 0:
 		unit.hud.hpbar.get_node("green").region_rect.size.x = 0
 	else:
-		if game.camera.zoom.x >= 1:
+		if game.camera.zoom.x >= 1 and unit.hud: 
 			unit.hud.hpbar.visible = true
-		var scale = float(unit.current_hp) / float(unit.hp)
-		if scale < 0: scale = 0
-		if scale > 1: scale = 1
-		var size = unit.hud.hpbar.get_node("red").region_rect.size.x 
-		unit.hud.hpbar.get_node("green").region_rect.size.x = scale * size
+			var scale = float(unit.current_hp) / float(unit.hp)
+			if scale < 0: scale = 0
+			if scale > 1: scale = 1
+			var size = unit.hud.hpbar.get_node("red").region_rect.size.x 
+			unit.hud.hpbar.get_node("green").region_rect.size.x = scale * size
 		if (unit.current_hp >= unit.hp and 
 				unit != game.selected_unit and
 				unit.type != "leader"):

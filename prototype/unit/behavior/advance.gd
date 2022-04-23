@@ -11,6 +11,7 @@ func start(unit, objective): # move_and_attack
 	if not unit.stunned:
 		unit.set_behavior("advance")
 		unit.objective = objective
+		game.unit.attack.set_target(unit, null)
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
 		if not enemies: move(unit, objective) 
 		else:
@@ -18,12 +19,14 @@ func start(unit, objective): # move_and_attack
 			game.unit.attack.set_target(unit, target)
 			var target_position = target.global_position + target.collision_position
 			if not game.unit.attack.in_range(unit, target):
-				 move(unit, target_position) 
-			else: game.unit.attack.start(unit, target_position)
+				move(unit, target_position) 
+			else: 
+				game.unit.attack.start(unit, target_position)
 
 
 func move(unit, objective):
-	if unit.moves: game.unit.move.move(unit, objective)
+	if unit.moves and objective:
+		game.unit.move.move(unit, objective)
 	else: stop(unit)
 
 
@@ -57,11 +60,8 @@ func ally_attacked(target, attacker):
 
 func stop(unit):
 	if unit.behavior == "advance":
-		unit.current_destiny = Vector2.ZERO
-		unit.objective = Vector2.ZERO
-		unit.current_step = Vector2.ZERO
 		unit.set_behavior("stop")
-		unit.set_state("idle")
+		game.unit.move.stop(unit)
 
 
 func on_idle_end(unit):
