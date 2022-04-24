@@ -145,7 +145,7 @@ radius = 48.0
 radius = 64.0
 
 [node name="mine" instance=ExtResource( 1 )]
-hp = 0
+hp = 1000
 regen = 0
 vision = 300
 type = "building"

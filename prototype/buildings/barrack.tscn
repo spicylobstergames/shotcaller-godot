@@ -164,7 +164,8 @@ radius = 40.0
 radius = 200.0
 
 [node name="barrack" instance=ExtResource( 1 )]
-hp = 900
+hp = 1000
+regen = 0
 vision = 300
 type = "building"
 subtype = "base"

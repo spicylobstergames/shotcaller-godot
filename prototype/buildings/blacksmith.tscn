@@ -145,7 +145,7 @@ radius = 48.0
 radius = 64.0
 
 [node name="blacksmith" instance=ExtResource( 1 )]
-hp = 0
+hp = 600
 regen = 0
 vision = 300
 type = "building"

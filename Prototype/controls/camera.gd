@@ -38,7 +38,7 @@ func _unhandled_input(event):
 		# NUMBER KEYPAD
 		if not event.is_pressed():
 			var cam_move = null;
-			var x = position_limit*0.92
+			var x = position_limit*0.95
 			match event.scancode:
 				KEY_KP_1: cam_move = [-x, x]
 				KEY_KP_2: cam_move = [0, x]

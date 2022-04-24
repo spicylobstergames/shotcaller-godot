@@ -145,7 +145,7 @@ radius = 48.0
 radius = 64.0
 
 [node name="church" instance=ExtResource( 1 )]
-hp = 0
+hp = 1200
 regen = 0
 vision = 300
 type = "building"
@@ -170,7 +170,7 @@ margin_bottom = -88.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2( 0, 0 )
-scale = Vector2( 3.46154, 5.66667 )
+scale = Vector2( 5, 12 )
 
 [node name="hpbar" parent="hud" index="2"]
 position = Vector2( 0, -93 )

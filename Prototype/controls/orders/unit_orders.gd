@@ -5,8 +5,10 @@ var game:Node
 var retreat_regen = 10
 var retreat_speed = 1.1
 
-var leaders_orders = {}
-var lanes_orders = {}
+var player_leaders_orders = {}
+var enemy_leaders_orders = {}
+var player_lanes_orders = {}
+var enemy_lanes_orders = {}
 
 
 func _ready():
@@ -27,13 +29,17 @@ func new_orders():
 
 func build_lanes():
 	for lane in game.map.lanes:
-		lanes_orders[lane] = new_orders()
+		player_lanes_orders[lane] = new_orders()
+		enemy_lanes_orders[lane] = new_orders()
 
 
 
 func build_leaders():
 	for leader in game.player_leaders:
-		leaders_orders[leader.name] = new_orders()
+		player_leaders_orders[leader.name] = new_orders()
+		
+	for leader in game.enemy_leaders:
+		enemy_leaders_orders[leader.name] = new_orders()
 	
 	hp_regen_cycle()
 
@@ -59,12 +65,17 @@ func set_regen(leader):
 
 
 func setup_pawn(unit, lane):
-	unit.current_speed = unit.speed * lanes_orders[lane].tactics.speed
+	if unit.team == game.player_team: 
+		unit.current_speed = unit.speed * player_lanes_orders[lane].tactics.speed
+	else: unit.current_speed = unit.speed * enemy_lanes_orders[lane].tactics.speed
 
 
 func setup_leaders():
 	for leader in game.player_leaders:
-		set_leader(leader, leaders_orders[leader.name])
+		set_leader(leader, player_leaders_orders[leader.name])
+		
+	for leader in game.enemy_leaders:
+		set_leader(leader, enemy_leaders_orders[leader.name])
 
 
 
@@ -81,14 +92,21 @@ func set_leader(leader, orders):
 func setup_lanes_priority():
 	for building in game.player_buildings:
 		if building.lane:
-			var priority = lanes_orders[building.lane].priority.duplicate()
+			var priority = player_lanes_orders[building.lane].priority.duplicate()
 			building.priority = priority
-
+			
+	for building in game.enemy_buildings:
+		if building.lane:
+			var priority = enemy_lanes_orders[building.lane].priority.duplicate()
+			building.priority = priority
 
 
 func set_lane_tactic(tactic):
 	var lane = game.selected_unit.lane
-	var lane_tactics = lanes_orders[lane].tactics
+	var lane_tactics
+	if game.selected_unit.team == game.player_team:
+		lane_tactics = player_lanes_orders[lane].tactics
+	else: lane_tactics = enemy_lanes_orders[lane].tactics
 	lane_tactics.tactic = tactic
 	match tactic:
 		"defend":
@@ -101,7 +119,11 @@ func set_lane_tactic(tactic):
 
 func set_leader_tactic(tactic):
 	var leader = game.selected_leader
-	var leader_tactics = leaders_orders[leader.name].tactics
+	var lane = game.selected_leader.lane
+	var leader_tactics
+	if game.selected_unit.team == game.player_team:
+		leader_tactics = player_leaders_orders[lane].tactics
+	else: leader_tactics = enemy_leaders_orders[lane].tactics
 	leader_tactics.tactic = tactic
 	match tactic:
 		"retreat":
@@ -120,13 +142,19 @@ func set_leader_tactic(tactic):
 
 func set_lane_priority(priority):
 	var lane = game.selected_unit.lane
-	var lane_priority = lanes_orders[lane].priority
+	var lane_priority
+	if game.selected_unit.team == game.player_team:
+		lane_priority = player_lanes_orders[lane].priority
+	else: lane_priority = enemy_lanes_orders[lane].priority
 	lane_priority.erase(priority)
 	lane_priority.push_front(priority)
 
 
 func set_leader_priority(priority):
-	var leader = leaders_orders[game.selected_leader.name]
+	var leader
+	if game.selected_unit.team == game.player_team:
+		leader = player_leaders_orders[game.selected_leader.name]
+	else: leader = enemy_leaders_orders[game.selected_leader.name]
 	var leader_priority = leader.priority
 	leader_priority.erase(priority)
 	leader_priority.push_front(priority)
@@ -183,5 +211,10 @@ func take_hit_retreat(attacker, target):
 func retreat(unit):
 	unit.retreating = true
 	unit.current_path = []
+	var order
+	if unit.team == game.player_team:
+		order = player_leaders_orders[unit.name]
+	else: order = enemy_leaders_orders[unit.name]
+	set_leader(unit, order)
 	game.unit.move.smart_move(unit, unit.origin)
 

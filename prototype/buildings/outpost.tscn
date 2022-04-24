@@ -164,7 +164,8 @@ radius = 32.0
 radius = 125.0
 
 [node name="outpost" instance=ExtResource( 1 )]
-hp = 800
+hp = 900
+regen = 0
 vision = 280
 type = "building"
 subtype = "backwood"
