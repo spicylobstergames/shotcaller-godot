@@ -1,6 +1,8 @@
 extends YSort
 var game:Node
 
+# self = game.map
+
 var blocks
 var walls
 var fog

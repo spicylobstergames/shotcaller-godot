@@ -1,6 +1,7 @@
 extends CanvasLayer
 var game:Node
 
+# self = game.ui
 
 var fps:Node
 var top_label:Node

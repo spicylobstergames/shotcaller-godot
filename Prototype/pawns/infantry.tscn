@@ -572,6 +572,7 @@ radius = 20.0
 
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
+vision = 140
 display_name = "infantry"
 title = "melee soldier"
 selectable = true
@@ -579,8 +580,7 @@ moves = true
 speed = 50.0
 collide = true
 attacks = true
-damage = 25
-attack_speed = 1.2
+damage = 60
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

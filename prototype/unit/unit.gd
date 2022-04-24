@@ -1,6 +1,8 @@
 extends Node
 var game:Node
 
+# self = game.unit.orders
+
 export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 1
@@ -136,19 +138,23 @@ func set_behavior(s):
 
 func setup_team():
 	var is_red = (self.team == "red")
-	# MIRROR
-	if self.type != "building":
-		self.mirror_toggle(is_red)
+	var is_blue = (self.team == "blue")
+	var is_neutral = (self.team == "neutral")
 	# COLORS
 	get_texture()
-	if not is_red:
-		self.texture.sprite.material = null
-	else:
-		self.texture.sprite.material = get_node("sprites/sprite").material
 	
-	# FLAGS
-	if self.type == "building":
-		if not is_red:
+	if is_blue:
+		self.texture.sprite.material = null
+	if is_red:
+		self.texture.sprite.material = get_node("sprites/sprite").material
+	if is_neutral:
+		self.texture.sprite.material = get_node("sprites/neutral").material
+	
+	# MIRROR
+	if self.type != "building": 
+		self.mirror_toggle(is_red)
+	else: # BLUE FLAGS
+		if is_blue:
 			var flags = self.get_node("sprites/flags").get_children()
 			for flag in flags:
 				var flag_sprite = flag.get_node("sprite")
@@ -169,20 +175,11 @@ func look_at(point):
 
 func mirror_toggle(on):
 	self.mirror = on
-	if on:
-		if self.type == "building":
-			self.get_node("sprites/body").scale.x = -1
-			self.get_node("sprites/flags").scale.x = -1
-		self.get_node("sprites").scale.x = -1
-		if self.attack_hit_position:
-			self.attack_hit_position.x = -1 * abs(self.attack_hit_position.x)
-	else:
-		if self.type == "building":
-			self.get_node("sprites/body").scale.x = 1
-			self.get_node("sprites/flags").scale.x = 1
-		self.get_node("sprites").scale.x = 1
-		if self.attack_hit_position:
-			self.attack_hit_position.x = abs(self.attack_hit_position.x)
+	var s = -1 if on else 1
+	self.get_node("sprites").scale.x = s
+	if self.attack_hit_position:
+		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
+
 
 
 func get_texture():

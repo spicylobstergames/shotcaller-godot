@@ -1,27 +1,35 @@
 extends Node
 var game:Node
 
+# self = game.unit.advance
 
 func _ready():
 	game = get_tree().get_current_scene()
 
 
-
 func start(unit, objective): # move_and_attack
-	if not unit.stunned:
+	if unit.attacks and not unit.stunned and game.unit.move.in_bounds(objective):
 		unit.set_behavior("advance")
 		unit.objective = objective
 		game.unit.attack.set_target(unit, null)
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
-		if not enemies: move(unit, objective) 
-		else:
+		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
+		var no_path = (unit.current_path.size() == 0)
+#		print('start: ',unit,' ', unit.team)
+#		for enemy in enemies: print('     ',enemy,' ', enemy.team)
+		if not enemies and not at_objective: move(unit, objective) 
+		if not enemies and at_objective and no_path: stop(unit)
+		if enemies:
 			var target = game.unit.orders.select_target(unit, enemies)
-			game.unit.attack.set_target(unit, target)
-			var target_position = target.global_position + target.collision_position
-			if not game.unit.attack.in_range(unit, target):
-				move(unit, target_position) 
-			else: 
-				game.unit.attack.start(unit, target_position)
+			if not target and not at_objective: move(unit, objective)
+			if not target and at_objective and no_path: stop(unit)
+			if target:
+				game.unit.attack.set_target(unit, target)
+				var target_position = target.global_position + target.collision_position
+				if not game.unit.attack.in_range(unit, target):
+					move(unit, target_position) 
+				else: 
+					game.unit.attack.start(unit, target_position)
 
 
 func move(unit, objective):
@@ -66,4 +74,4 @@ func stop(unit):
 
 func on_idle_end(unit):
 	if unit.behavior == "advance" or unit.behavior == "stop":
-		start(unit, unit.objective)
+		if unit.attacks: start(unit, unit.global_position)

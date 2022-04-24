@@ -1,6 +1,8 @@
 extends Panel
 var game:Node
 
+# self = game.ui.shop
+
 var item_button_preload = preload("res://items/button/item_button.tscn")
 var clear =false
 
@@ -13,18 +15,20 @@ const items = {
 	"axe": {
 		"name" :"Axe", 
 		"sprite": 0, 
-		"tooltip": "Adds 20 damage", 
-		"price": 10,  
+		"tooltip": "Adds 25 damage", 
+		"attributes": {"damage": 25},
+		"price": 600,  
 		"type": "equip", 
-		"attributes": {"damage": 20}
+		"delivery_time": 10
 	},
 	"helmet": {
 		"name": "Helmet", 
 		"sprite": 1, 
-		"tooltip": "Adds 50 HP", 
-		"price": 20, 
+		"tooltip": "Adds 150 HP", 
+		"attributes": {"hp": 150},
+		"price": 500, 
 		"type": "equip", 
-		"attributes": {"hp": 50}
+		"delivery_time": -1
 	},
 	"potion": {
 		"name": "Potion", 
@@ -32,7 +36,8 @@ const items = {
 		"tooltip": "Restore 50 HP",
 		"price": 5, 
 		"type": "consumable", 
-		"attributes": {"current_hp": 50}
+		"attributes": {"current_hp": 50},
+		"delivery_time": -1
 	}
 }
 

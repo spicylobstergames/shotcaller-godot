@@ -1,5 +1,7 @@
 extends Node2D
 
+# self = game
+
 var time = 0
 var player_kills = 0
 var player_deaths = 0
@@ -93,7 +95,7 @@ func start():
 		else: 
 			yield(get_tree().create_timer(1.0), "timeout")
 			unit.spawn.start()
-			yield(get_tree().create_timer(1.0), "timeout")
+			yield(get_tree().create_timer(2.0), "timeout")
 			unit.spawn.leaders()
 			map.setup_leaders()
 

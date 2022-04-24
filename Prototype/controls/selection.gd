@@ -1,6 +1,7 @@
 extends Node
 var game:Node
 
+# self = game.selection
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -12,7 +13,7 @@ func _unhandled_input(event):
 	# KEYBOARD
 	if event is InputEventKey:
 		if not event.is_pressed():
-			if game.selected_unit and game.selected_unit.type == "leader":
+			if game.selected_unit and (game.selected_unit.type == "leader" or game.test.unit):
 				
 				if event.scancode == KEY_SPACE: 
 					game.unit.move.smart_move(game.selected_unit, point)

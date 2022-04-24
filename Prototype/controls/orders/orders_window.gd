@@ -1,6 +1,8 @@
 extends ItemList
 var game:Node
 
+# self = game.ui.orders_window
+
 var clear = false
 
 var leader_orders = {}

@@ -1,6 +1,8 @@
 extends Control
 var game:Node
 
+# self = game.ui.minimap
+
 var update_map_texture:bool = true
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO

@@ -1,6 +1,8 @@
 extends Control
 var game:Node
 
+# self = game.ui.inventories
+
 var clear = false
 var gold = 0
 
@@ -123,7 +125,7 @@ func add_delivery(leader, item):
 	var new_delivery = {
 		"item": item,
 		"leader": leader,
-		"time": delivery_time+1,
+		"time": item.delivery_time+1,
 		"index": 0,
 		"label": null,
 		"button": null
@@ -228,6 +230,16 @@ func update_gui(leader_name):
 	game.ui.stats.update()
 
 
+	# Disable potion if full heath
+func update_consumables(leader):
+	var inventory = leaders[leader.name]
+	var counter = 0
+	for item in inventory.consumable_items:
+		var item_button = inventory.consumable_item_buttons[counter]
+		item_button.disabled = (leader.current_hp >= leader.hp)
+		counter += 1
+
+
 
 func update_buttons():
 	for leader in leaders:
@@ -238,6 +250,8 @@ func update_buttons():
 		
 		show()
 		inventory.container.show()
+		
+		update_consumables(game.selected_leader)
 		
 		# Hide or show sell buttons
 		if game.ui.shop.visible:
@@ -252,4 +266,4 @@ func update_buttons():
 		else:
 			for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
 				item_button.sell_button.hide()
-
+		

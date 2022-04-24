@@ -1,6 +1,8 @@
 extends Camera2D
 var game:Node
 
+# self = game.camera
+
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 var zoom_default = Vector2.ONE
@@ -72,9 +74,10 @@ func _unhandled_input(event):
 	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
-		var point = game.camera.get_global_mouse_position()
-		var h = game.map.size / 2
-		game.camera.global_position = point - Vector2(h,h)
+		if zoom.x >= 1:
+			var point = game.camera.get_global_mouse_position()
+			var h = game.map.size / 2
+			game.camera.global_position = point - Vector2(h,h)
 		if zoom.x == zoom_limit.y: zoom_reset()
 		elif zoom == zoom_default: zoom_in()
 	if event.is_action_pressed("zoom_out"):

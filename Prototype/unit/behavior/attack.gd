@@ -1,14 +1,14 @@
 extends Node
 var game:Node
 
+# self = game.unit.attack
 
 func _ready():
 	game = get_tree().get_current_scene()
 
 
 func start(unit, point):
-	if unit.attacks and not unit.stunned and point.x > 0 and point.y > 0:
-		
+	if unit.attacks and not unit.stunned and game.unit.move.in_bounds(point):
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(point)
 		
@@ -32,7 +32,6 @@ func set_target(unit, target):
 		unit.attack_count = 0
 		unit.last_target = unit.target
 		unit.target = target
-		
 
 
 

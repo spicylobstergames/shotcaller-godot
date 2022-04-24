@@ -1,6 +1,8 @@
 extends Node
 var game:Node
 
+# self = game.unit.skills
+
 
 const leader = {
 	"arthur": {

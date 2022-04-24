@@ -13,7 +13,7 @@
 [ext_resource path="res://assets/ui/gold.png" type="Texture" id=11]
 [ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
-[ext_resource path="res://controls/controls.gd" type="Script" id=14]
+[ext_resource path="res://controls/controls_window.gd" type="Script" id=14]
 [ext_resource path="res://ui/button/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
@@ -726,7 +726,6 @@ margin_left = 112.0
 margin_right = 164.0
 
 [node name="bot_right" type="Control" parent="."]
-visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0

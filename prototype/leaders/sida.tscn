@@ -554,7 +554,7 @@ radius = 100.0
 hp = 400
 vision = 210
 type = "leader"
-subtype = "archer"
+subtype = "ranged"
 display_name = "sida"
 title = "sami warrior"
 selectable = true
@@ -564,8 +564,7 @@ collide = true
 attacks = true
 ranged = true
 damage = 30
-attack_speed = 3.0
-projectile_speed = 220.0
+projectile_speed = 210.0
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )

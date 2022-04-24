@@ -1,6 +1,7 @@
 extends Node
 var game:Node
 
+# self = game.unit.orders
 
 var retreat_regen = 10
 var retreat_speed = 1.1
@@ -48,9 +49,12 @@ func hp_regen_cycle():
 	
 	for leader in game.player_leaders:
 		set_regen(leader)
+		game.ui.inventories.update_consumables(leader)
+		
 	for leader in game.enemy_leaders:
 		set_regen(leader)
-		
+	
+	
 	yield(get_tree().create_timer(1), "timeout")
 	hp_regen_cycle()
 
@@ -163,12 +167,13 @@ func set_leader_priority(priority):
 
 func select_target(unit, enemies):
 	var n = enemies.size()
+	if n == 0: return
+	
 	if n == 1:
 		return enemies[0]
 	
 	var sorted = game.utils.sort_by_distance(unit, enemies)
 	var closest_unit = sorted[0].unit
-	
 	
 	if n == 2:
 		var further_unit = sorted[1].unit
@@ -211,6 +216,7 @@ func take_hit_retreat(attacker, target):
 func retreat(unit):
 	unit.retreating = true
 	unit.current_path = []
+	game.unit.attack.set_target(unit, null)
 	var order
 	if unit.team == game.player_team:
 		order = player_leaders_orders[unit.name]

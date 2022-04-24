@@ -1,6 +1,7 @@
 extends VBoxContainer
 var game:Node
 
+# self = game.ui.leaders_icons
 
 var built = false
 var buttons_name = {}

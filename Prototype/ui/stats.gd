@@ -1,6 +1,7 @@
 extends ItemList
 var game:Node
 
+# self = game.ui.stats
 
 onready var panel = get_node("panel")
 onready var hpbar = panel.get_node("hpbar")
