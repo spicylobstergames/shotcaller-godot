@@ -548,11 +548,11 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.0
+radius = 120.0
 
 [node name="hongi" instance=ExtResource( 1 )]
 hp = 500
-vision = 140
+vision = 160
 type = "leader"
 subtype = "ranged"
 display_name = "hongi"

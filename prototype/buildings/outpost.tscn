@@ -160,8 +160,8 @@ radius = 16.0
 [sub_resource type="CircleShape2D" id=29]
 radius = 32.0
 
-[sub_resource type="CircleShape2D" id=27]
-radius = 125.0
+[sub_resource type="CircleShape2D" id=43]
+radius = 160.0
 
 [node name="outpost" instance=ExtResource( 1 )]
 hp = 900
@@ -252,4 +252,4 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -20 )
-shape = SubResource( 27 )
+shape = SubResource( 43 )

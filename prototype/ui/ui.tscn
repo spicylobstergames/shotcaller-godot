@@ -10,7 +10,6 @@
 [ext_resource path="res://items/button/item_button.tscn" type="PackedScene" id=8]
 [ext_resource path="res://controls/orders/button/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=10]
-[ext_resource path="res://assets/ui/gold.png" type="Texture" id=11]
 [ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
 [ext_resource path="res://controls/controls_window.gd" type="Script" id=14]
@@ -105,8 +104,8 @@ load_path = "res://.import/icons.png-bee93322a617e5fe670331de2acd3918.stex"
 
 [sub_resource type="AtlasTexture" id=30]
 atlas = SubResource( 29 )
-region = Rect2( 416, 0, 46, 46 )
-margin = Rect2( 5, 2, 0, 0 )
+region = Rect2( 624, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="DynamicFont" id=31]
 size = 8
@@ -120,29 +119,34 @@ margin = Rect2( 5, 2, 0, 0 )
 [sub_resource type="AtlasTexture" id=33]
 atlas = SubResource( 29 )
 region = Rect2( 46, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=34]
 atlas = SubResource( 29 )
-region = Rect2( 276, 0, 46, 46 )
-margin = Rect2( 5, 2, 0, 0 )
+region = Rect2( 336, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="StyleBoxEmpty" id=43]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 16 )
 region = Rect2( 48, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 16 )
-region = Rect2( 322, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+region = Rect2( 480, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 16 )
+region = Rect2( 624, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 16 )
-region = Rect2( 370, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+region = Rect2( 575, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -694,7 +698,9 @@ __meta__ = {
 [node name="gold_sprite" type="Sprite" parent="bot_mid/stats/panel"]
 position = Vector2( 281, 78 )
 scale = Vector2( 0.833333, 0.833333 )
-texture = ExtResource( 11 )
+texture = ExtResource( 16 )
+region_enabled = true
+region_rect = Rect2( 685, 13, 22, 22 )
 
 [node name="inventories" type="ItemList" parent="bot_mid/stats"]
 margin_left = 138.0
@@ -955,6 +961,7 @@ margin_right = 71.0
 margin_bottom = 139.0
 custom_styles/focus = SubResource( 43 )
 disabled = true
+icon = SubResource( 50 )
 value = "orders"
 
 [node name="name" parent="bot_right/buttons/orders_button" index="0"]

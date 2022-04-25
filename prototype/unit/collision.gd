@@ -35,10 +35,8 @@ func process(delta):
 		
 		if game.test.fog: 
 			if unit1.team == game.player_team: game.map.fog.clear_sigh_skip(unit1)
-	
-	
-	# loop 2: checks for collisions
-	
+		
+		
 		# projectiles collision
 		if unit1.projectiles.size():
 			for projectile in unit1.projectiles:
@@ -60,6 +58,8 @@ func process(delta):
 						
 						game.unit.attack.projectile_step(delta, projectile)
 	
+	
+	# loop 2: checks for units collisions
 	
 	for unit1 in game.all_units:
 		unit1.next_event  = ""

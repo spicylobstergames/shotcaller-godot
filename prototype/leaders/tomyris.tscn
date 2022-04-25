@@ -651,7 +651,7 @@ radius = 140.0
 
 [node name="tomyris" instance=ExtResource( 1 )]
 hp = 400
-vision = 140
+vision = 180
 type = "leader"
 subtype = "mounted"
 display_name = "tomyris"

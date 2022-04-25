@@ -117,6 +117,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				if attacker.team == game.player_team: game.player_kills += 1
 				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
+			game.unit.attack.set_target(attacker, null)
 			game.unit.advance.resume(attacker)
 
 

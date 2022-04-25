@@ -559,12 +559,12 @@ radius = 14.0
 radius = 28.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.0
+radius = 120.0
 
 [node name="takoda" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
-vision = 140
+vision = 180
 type = "leader"
 subtype = "mounted"
 display_name = "takoda"
