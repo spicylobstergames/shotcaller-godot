@@ -319,37 +319,13 @@ tracks/6/keys = {
 resource_name = "move"
 length = 0.8
 loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/body:scale")
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Vector2( 1, 0.95 ), Vector2( 1, 0.95 ), Vector2( 1, 1 ), Vector2( 1, 0.95 ), Vector2( 1, 0.95 ), Vector2( 1, 1 ), Vector2( 1, 0.95 ) ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("sprites/body:rotation_degrees")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ 0.0, -2.0, 2.0, 0.0, 0.0, -2.0, 2.0, 0.0 ]
-}
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
 "times": PoolRealArray( 0.8 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
@@ -357,53 +333,77 @@ tracks/2/keys = {
 "method": "on_move_end"
 } ]
 }
-tracks/3/type = "value"
-tracks/3/path = NodePath("sprites/body:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites/body:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
 "times": PoolRealArray( 0, 0.14772, 0.3, 0.4, 0.551537, 0.7, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 9 ), Vector2( 0, 4 ), Vector2( 0, 9 ), Vector2( 0, 9 ), Vector2( 0, 4 ), Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
-tracks/4/type = "value"
-tracks/4/path = NodePath("sprites/body:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
+tracks/2/type = "value"
+tracks/2/path = NodePath("sprites/body:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
 "times": PoolRealArray( 0, 0.8 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
-tracks/5/type = "value"
-tracks/5/path = NodePath("sprites/body:frame")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
+tracks/3/type = "value"
+tracks/3/path = NodePath("sprites/body:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
 "times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 0, 1, 0, 1, 0 ]
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath("sprites/axe:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("sprites/body:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+}
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/axe:visible")
+tracks/6/path = NodePath("sprites/body:rotation_degrees")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ false, false ]
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -4.0, 3.0, 0.0, -4.0, 3.0, 0.0 ]
 }
 
 [sub_resource type="Animation" id=33]
@@ -559,16 +559,16 @@ radius = 14.0
 radius = 28.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.0
+radius = 120.0
 
 [node name="takoda" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
-vision = 140
+vision = 180
 type = "leader"
 subtype = "mounted"
 display_name = "takoda"
-title = "the scout"
+title = "native scout"
 selectable = true
 moves = true
 speed = 60.0
@@ -585,9 +585,9 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 5 )
+offset = Vector2( -2, -4 )
 region_enabled = true
 region_rect = Rect2( 153, 10, 26, 20 )
 
@@ -617,16 +617,13 @@ texture = ExtResource( 4 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = 0.0556932
-scale = Vector2( 1, 0.926689 )
 frames = SubResource( 36 )
 offset = Vector2( 5, -24 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="3"]
 visible = false
-modulate = Color( 1, 1, 1, 0.301941 )
 position = Vector2( -7.1407, -19.9412 )
-rotation = -1.72889
+rotation = -2.0944
 scale = Vector2( 1, 1.069 )
 frames = SubResource( 41 )
 offset = Vector2( 6, -4 )

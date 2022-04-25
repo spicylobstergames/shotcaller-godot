@@ -2,11 +2,12 @@ extends Button
 var game:Node
 
 
-
 export var value:String
 
-var blue_team_button
-var red_team_button
+var blue_team_button:Node
+var red_team_button:Node
+var play_button:Node
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -15,16 +16,19 @@ func _ready():
 	var buttons = game.ui.main_menu.get_node("container/menu_team_buttons")
 	blue_team_button = buttons.get_node("blue_team_button")
 	red_team_button = buttons.get_node("red_team_button")
+	play_button = game.ui.main_menu.get_node("container/play_button")
+
+
 
 
 func button_down():
 	match self.value:
 		
 		"play":
-			get_tree().paused = false
-			game.ui.main_menu.hide()
-			game.ui.buttons.show()
+			#get_tree().paused = false
+			play_down()
 			game.start()
+		
 		
 		"blue":
 			game.player_team = "blue"
@@ -42,9 +46,12 @@ func button_down():
 		
 		
 		"menu":
-			get_tree().paused = true
+			#get_tree().paused = true
 			game.ui.main_menu.show()
 			game.ui.buttons.hide()
+			game.ui.controls.hide()
+			game.ui.shop.hide()
+			game.ui.orders.hide()
 			game.ui.leaders_icons.hide()
 		
 		
@@ -66,6 +73,7 @@ func button_down():
 				game.ui.inventories.update_buttons() # hide sell bt
 			game.ui.buttons_update()
 		
+		
 		"controls":
 			game.ui.controls.visible = !game.ui.controls.visible
 			if game.ui.controls.visible:
@@ -74,3 +82,27 @@ func button_down():
 				game.ui.inventories.update_buttons() # hide sell bt
 			else: game.control_state = "selection"
 			game.ui.buttons_update()
+
+
+
+func play_down():
+	game.ui.show_all()
+	game.ui.minimap.show()
+	game.ui.buttons.show()
+	#game.ui.buttons.show()
+	game.ui.main_menu.hide()
+	game.ui.main_menu_background.hide()
+	if game.ui.leaders_icons.built: game.ui.leaders_icons.show()
+	
+	
+	var highlight_button = play_button.get("custom_styles/focus")
+	
+	if blue_team_button.pressed: 
+		blue_team_button.set("custom_styles/disabled", highlight_button)
+	if red_team_button.pressed: 
+		red_team_button.set("custom_styles/disabled", highlight_button)
+	
+	blue_team_button.disabled = true
+	red_team_button.disabled = true
+	
+	game.ui.buttons_update()

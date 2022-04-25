@@ -1,6 +1,8 @@
 extends Camera2D
 var game:Node
 
+# self = game.camera
+
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 var zoom_default = Vector2.ONE
@@ -38,16 +40,17 @@ func _unhandled_input(event):
 		# NUMBER KEYPAD
 		if not event.is_pressed():
 			var cam_move = null;
+			var x = position_limit*0.95
 			match event.scancode:
-				KEY_KP_1: cam_move = [-position_limit, position_limit]
-				KEY_KP_2: cam_move = [0, position_limit]
-				KEY_KP_3: cam_move = [position_limit, position_limit]
-				KEY_KP_4: cam_move = [-position_limit, 0]
+				KEY_KP_1: cam_move = [-x, x]
+				KEY_KP_2: cam_move = [0, x]
+				KEY_KP_3: cam_move = [x, x]
+				KEY_KP_4: cam_move = [-x, 0]
 				KEY_KP_5: cam_move = [0, 0]
-				KEY_KP_6: cam_move = [position_limit, 0]
-				KEY_KP_7: cam_move = [-position_limit, -position_limit]
-				KEY_KP_8: cam_move = [0, -position_limit]
-				KEY_KP_9: cam_move = [position_limit, -position_limit]
+				KEY_KP_6: cam_move = [x, 0]
+				KEY_KP_7: cam_move = [-x, -x]
+				KEY_KP_8: cam_move = [0, -x]
+				KEY_KP_9: cam_move = [x, -x]
 			
 			if cam_move: 
 				zoom_reset()
@@ -71,9 +74,10 @@ func _unhandled_input(event):
 	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
-		var point = game.camera.get_global_mouse_position()
-		var h = game.map.size / 2
-		game.camera.global_position = point - Vector2(h,h)
+		if zoom.x >= 1:
+			var point = game.camera.get_global_mouse_position()
+			var h = game.map.size / 2
+			game.camera.global_position = point - Vector2(h,h)
 		if zoom.x == zoom_limit.y: zoom_reset()
 		elif zoom == zoom_default: zoom_in()
 	if event.is_action_pressed("zoom_out"):
@@ -131,6 +135,4 @@ func process():
 	if ratio < 1 and zoom.x > 1:
 		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
 		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
-
-
-
+	

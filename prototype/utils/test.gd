@@ -1,6 +1,7 @@
 extends Node
 var game:Node
 
+# self = game.test
 
 var unit = 0
 var fog = 0
@@ -15,15 +16,22 @@ func spawn_unit():
 	var s = game.unit.spawn
 	if unit: 
 		
-		var dummy = game.map.create(s.hongi, "mid", "red", "Vector2", Vector2(900,900))
-		dummy.set_behavior("stand")
-		dummy.hp = 10000
-		dummy.current_hp = 10000
-		#game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(900,930))
-		var leader = game.map.create(s.tomyris, "mid", "blue", "Vector2", Vector2(800,900))
-		
-		leader.hp = 10000
-		leader.current_hp = 10000
+#		var dummy = game.map.create(s.arthur, "mid", "red", "Vector2", Vector2(930,900))
+#		dummy.set_behavior("stand")
+#		dummy.hp = 100
+#		dummy.current_hp = 100
+#
+#		var inf = game.map.create(s.arthur, "mid", "red", "Vector2",  Vector2(900,900))
+#		inf.set_behavior("stand")
+#		inf.hp = 100
+#		inf.current_hp = 100
+#
+		var leader = game.map.create(s.sida, "mid", "blue", "Vector2", Vector2(850,1400))
+		game.map.create(s.archer, "mid", "blue", "Vector2",  Vector2(900,800))
+		game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1000,800))
+		game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1000,830))
+#		leader.hp = 100
+#		leader.current_hp = 100
 		
 		game.player_choose_leaders=[leader.name]
 		game.player_leaders=[leader]

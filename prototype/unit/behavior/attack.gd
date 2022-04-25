@@ -1,14 +1,14 @@
 extends Node
 var game:Node
 
+# self = game.unit.attack
 
 func _ready():
 	game = get_tree().get_current_scene()
 
 
 func start(unit, point):
-	if unit.attacks and not unit.stunned:
-		
+	if unit.attacks and not unit.stunned and game.unit.move.in_bounds(point):
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(point)
 		
@@ -20,9 +20,10 @@ func start(unit, point):
 				if target and target_position.distance_to(point) < target.collision_radius:
 					game.unit.attack.set_target(unit, target)
 		
-		unit.look_at(point)
-		unit.get_node("animations").playback_speed = unit.current_attack_speed
-		unit.set_state("attack")
+		if unit.target:
+			unit.look_at(point)
+			unit.get_node("animations").playback_speed = unit.current_attack_speed
+			unit.set_state("attack")
 
 
 func set_target(unit, target):
@@ -31,7 +32,6 @@ func set_target(unit, target):
 		unit.attack_count = 0
 		unit.last_target = unit.target
 		unit.target = target
-		
 
 
 
@@ -49,37 +49,30 @@ func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
 	var att_rad = unit1.attack_hit_radius
 	
-	var hitted
-	var target_hit = false
-	var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
+	# hit target
+	if can_hit(unit1, unit1.target) and in_range(unit1, unit1.target):
+		take_hit(unit1, unit1.target)
 	
-	for unit2 in neighbors:
-		if (unit1 != unit2 and 
-				unit2.hp and
-				unit2.current_hp > 0 and 
-				unit2 == unit1.target and  # or unit1 has cleave
-				in_range(unit1, unit2)):
-					
-			hitted = unit2
-			take_hit(unit1, unit2)
-			target_hit = true
-			break
-	
-	if not target_hit and neighbors.size():
-		var target = closest_enemy_unit(unit1, neighbors)
-		if target and in_range(unit1, target):
-			hitted = target
-			take_hit(unit1, target)
-	
+	# melee cleave damage
 	if unit1.display_name in game.unit.skills.leader:
 		var attacker_skills = game.unit.skills.leader[unit1.display_name]
-		
 		if "cleave" in attacker_skills:
+			var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
 			for unit2 in neighbors:
-				if (unit2.team != unit1.team and 
-						hitted != unit2 and
-						in_range(unit1, unit2)):
+				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})
+
+
+func can_hit(attacker, target):
+	return (
+		attacker != null and
+		target != null and
+		target != attacker and
+		target.team != attacker.team and
+		is_instance_valid(attacker) and
+		is_instance_valid(target) and
+		not target.dead
+	)
 
 
 func in_range(attacker, target):
@@ -93,10 +86,11 @@ func in_range(attacker, target):
 func take_hit(attacker, target, projectile = null, modifiers = {}):
 	modifiers = game.unit.skills.hit_modifiers(attacker, target, projectile, modifiers)
 	
+	if projectile:
+		if not modifiers.pierce: 
+			projectile_stuck(attacker, target, projectile)
 		
-	if projectile and not modifiers.pierce: 
-		projectile_stuck(attacker, target, projectile)
-		if projectile.targets != null:
+		if projectile.targets != null and projectile.targets.find(target) < 0:
 			projectile.targets.append(target)
 	
 	if target and target.current_hp > 0:
@@ -111,7 +105,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			game.unit.advance.ally_attacked(target, attacker)
 			
 		game.unit.orders.take_hit_retreat(attacker, target)
-		game.unit.hud.update_hpbar(target)
+		if target.hud: game.unit.hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
 		
 		if target.current_hp <= 0: 
@@ -123,19 +117,21 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				if attacker.team == game.player_team: game.player_kills += 1
 				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
+			game.unit.attack.set_target(attacker, null)
 			game.unit.advance.resume(attacker)
 
 
 
 func projectile_release(attacker):
-	projectile_start(attacker, attacker.target)
-	game.unit.skills.projectile_release(attacker)
+	if attacker.target and not attacker.target.dead:
+		projectile_start(attacker, attacker.target)
+		game.unit.skills.projectile_release(attacker)
+
 
 
 func projectile_start(attacker, target):
 	var target_position = target.global_position + target.collision_position
 	attacker.weapon.look_at(target_position)
-	
 	var projectile = attacker.projectile.duplicate()
 	var projectile_sprite = projectile.get_node("sprites")
 	var a = attacker.weapon.global_rotation
@@ -167,29 +163,31 @@ func projectile_start(attacker, target):
 		"sprite": projectile_sprite,
 		"speed": projectile_speed,
 		"rotation": projectile_rotation,
-		"lifetime": lifetime
+		"lifetime": lifetime,
+		"stuck":false
 	})
 
 
 func projectile_step(delta, projectile):
-	if projectile.speed:
-		projectile.node.global_position += projectile.speed * delta
-	
-	if projectile.rotation:
-		projectile.node.global_rotation += projectile.rotation * delta
+	if not projectile.stuck:
+		if projectile.speed:
+			projectile.node.global_position += projectile.speed * delta
+		
+		if projectile.rotation:
+			projectile.node.global_rotation += projectile.rotation * delta
 
 
 func projectile_stuck(attacker, target, projectile):
+	projectile.stuck = true
 	var stuck = projectile.node
 	var r = projectile.node.global_rotation
+	
 	if target: 
-		stuck = projectile.node.duplicate()
-		stuck.global_position = target.collision_position
-		if target.mirror:# and !projectile.rotation: 
-			r = Vector2(cos(r),-sin(r)).angle()
+		stuck.get_parent().remove_child(stuck)
 		target.get_node("sprites").add_child(stuck)
-		game.map.remove_child(projectile.node)
-		projectile.node.queue_free()
+		stuck.global_position = target.global_position + target.collision_position
+		if target.mirror: 
+			r = Vector2(cos(r),-sin(r)).angle()
 		
 	var a = 0.2 # angle variation
 	var ra = (randf()*a*2) - a
@@ -199,20 +197,21 @@ func projectile_stuck(attacker, target, projectile):
 	if projectile.rotation:
 		stuck.global_rotation = 0 + ra
 		if target:
+			# fix  axe vertical hit position
 			stuck.global_position += Vector2(0, projectile.speed.y * 0.033)
-			
+			# mirror stuck axe
 			if target.mirror:
 				stuck.global_rotation = PI + ra
 				stuck.scale.x *= -1
-		
+		# offset from center
 		var o = projectile.speed*-0.08
 		stuck.global_position += o
-		
-	stuck.get_node("sprites").frame = 1 # stuck sprite
+	
+	# stuck sprite
+	stuck.get_node("sprites").frame = 1 
+	# stop projectile movement
 	attacker.projectiles.erase(projectile)
-	
+	# remove projectile after 1.2 sec
 	yield(get_tree().create_timer(1.2), "timeout")
-	
-	if target: target.get_node("sprites").remove_child(stuck)
-	else: game.map.remove_child(stuck)
+	stuck.get_parent().remove_child(stuck)
 	stuck.queue_free()

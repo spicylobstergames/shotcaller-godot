@@ -13,7 +13,7 @@ func setup_timer(unit):
 
 
 func start(unit, destiny):
-	if unit.moves and not unit.stunned:
+	if unit.moves and not unit.stunned and in_bounds(destiny):
 		unit.set_behavior("move")
 		move(unit, destiny)
 		unit.get_node("animations").playback_speed = unit.current_speed / unit.speed
@@ -26,7 +26,7 @@ func in_bounds(p):
 
 
 func move(unit, destiny):
-	if unit.moves and in_bounds(destiny) and not unit.stunned:
+	if unit.moves and not unit.stunned:
 		unit.current_destiny = destiny
 		calc_step(unit)
 		unit.set_state("move")
@@ -89,6 +89,7 @@ func stop(unit):
 	unit.current_step = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
+	unit.get_node("animations").playback_speed = 1
 
 
 func stand(unit):

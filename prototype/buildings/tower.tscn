@@ -161,20 +161,21 @@ radius = 16.0
 radius = 32.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 125.0
+radius = 160.0
 
 [node name="tower" instance=ExtResource( 1 )]
 hp = 800
+regen = 0
 vision = 280
 type = "building"
-subtype = "tower"
+subtype = "lane"
 display_name = "tower"
 selectable = true
 collide = true
 attacks = true
 ranged = true
 damage = 50
-attack_speed = 1.4
+attack_speed = 1.2
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]

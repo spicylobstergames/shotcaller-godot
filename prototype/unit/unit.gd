@@ -1,6 +1,8 @@
 extends Node
 var game:Node
 
+# self = game.unit.orders
+
 export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 1
@@ -8,7 +10,7 @@ var current_regen:int = 1
 export var vision:int = 100
 var current_vision:int = 100
 export var type:String = "pawn" # building leader
-export var subtype:String = "infantry" # archer mounted
+export var subtype:String = "melee" # ranged mounted base lane backwood
 export var display_name:String
 export var title:String
 export var team:String = "blue"
@@ -75,6 +77,8 @@ var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat 
 var retreating = false
+var working = false
+var channeling = false
 
 
 var hud:Node
@@ -136,19 +140,23 @@ func set_behavior(s):
 
 func setup_team():
 	var is_red = (self.team == "red")
-	# MIRROR
-	if self.type != "building":
-		self.mirror_toggle(is_red)
+	var is_blue = (self.team == "blue")
+	var is_neutral = (self.team == "neutral")
 	# COLORS
 	get_texture()
-	if not is_red:
-		self.texture.sprite.material = null
-	else:
-		self.texture.sprite.material = get_node("sprites/sprite").material
 	
-	# FLAGS
-	if self.type == "building":
-		if not is_red:
+	if is_blue:
+		self.texture.sprite.material = null
+	if is_red:
+		self.texture.sprite.material = get_node("sprites/sprite").material
+	if is_neutral:
+		self.texture.sprite.material = get_node("sprites/neutral").material
+	
+	# MIRROR
+	if self.type != "building": 
+		self.mirror_toggle(is_red)
+	else: # BLUE FLAGS
+		if is_blue:
 			var flags = self.get_node("sprites/flags").get_children()
 			for flag in flags:
 				var flag_sprite = flag.get_node("sprite")
@@ -169,20 +177,11 @@ func look_at(point):
 
 func mirror_toggle(on):
 	self.mirror = on
-	if on:
-		if self.type == "building":
-			self.get_node("sprites/body").scale.x = -1
-			self.get_node("sprites/flags").scale.x = -1
-		self.get_node("sprites").scale.x = -1
-		if self.attack_hit_position:
-			self.attack_hit_position.x = -1 * abs(self.attack_hit_position.x)
-	else:
-		if self.type == "building":
-			self.get_node("sprites/body").scale.x = 1
-			self.get_node("sprites/flags").scale.x = 1
-		self.get_node("sprites").scale.x = 1
-		if self.attack_hit_position:
-			self.attack_hit_position.x = abs(self.attack_hit_position.x)
+	var s = -1 if on else 1
+	self.get_node("sprites").scale.x = s
+	if self.attack_hit_position:
+		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
+
 
 
 func get_texture():
@@ -190,7 +189,7 @@ func get_texture():
 		var body = get_node("sprites/body")
 		var texture_data
 		var region
-		var scale
+		var scale = Vector2(1,1)
 		var material
 		if self.team == "red": material = body.material
 		if body is Sprite: 
@@ -221,9 +220,9 @@ func get_units_on_sight(filters):
 	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, self.current_vision)
 	var targets = []
 	for unit2 in neighbors:
-		if unit2.hp:
+		if unit2.hp and self != unit2 and not unit2.dead:
 			var distance = self.global_position.distance_to(unit2.global_position)
-			if self != unit2 and distance < self.current_vision:
+			if distance < self.current_vision:
 				if not filters: targets.append(unit2)
 				else:
 					for filter in filters:
@@ -270,6 +269,7 @@ func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
 		path.follow_next(self)
 	elif self.moves:
+		self.working = false
 		move.end(self)
 		if self.attacks: 
 			advance.end(self)
@@ -308,11 +308,16 @@ func die():  # hp <= 0
 	self.set_state("death")
 	self.set_behavior("stand")
 	self.dead = true
+	self.target = null
+	self.channeling = false
+	self.working = false
 
 
 func on_death_end():  # death animation end
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
+	self.state = 'dead'
+	self.get_node("animations").current_animation = "[stop]"
 	if not game.test.stress:
 		match self.type:
 			"pawn":

@@ -1,6 +1,5 @@
 extends Node
 
-
 # author https://github.com/qiao/PathFinding.js/blob/master/src/core/Grid.js
 # ported to gdscript by rafaelcastrocouto
 

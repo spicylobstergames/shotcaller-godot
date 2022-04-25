@@ -512,7 +512,7 @@ radius = 20.0
 
 [node name="arthur" instance=ExtResource( 1 )]
 hp = 400
-vision = 140
+vision = 160
 type = "leader"
 display_name = "arthur"
 title = "the king"
@@ -536,6 +536,7 @@ scale = Vector2( 1.2, 1.2 )
 material = SubResource( 30 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( 0, -2 )
 region_enabled = true
 region_rect = Rect2( 31, 0, 14, 14 )
 

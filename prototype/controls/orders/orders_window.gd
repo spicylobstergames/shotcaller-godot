@@ -1,7 +1,9 @@
 extends ItemList
 var game:Node
 
-var clear = false
+# self = game.ui.orders
+
+var cleared = false
 
 var leader_orders = {}
 var lane_orders = {}
@@ -16,8 +18,12 @@ onready var container = get_node("scroll_container/container")
 const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
 	"lane_tactics": ["defend","default","attack"],
-	"priority": ["pawn", "leader", "building"]
+	"priority": ["pawn", "leader", "building"],
 	# subtype priority: melee ranged mounted
+	"camp": ["melee","ranged","mounted"],
+	"taxes": ["up","down"],
+	"mine": ["collect", "explode"],
+	"lumbermill": ["hire", "dismiss"]
 }
 
 const hint_tooltips_tactics = {
@@ -31,16 +37,19 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
+	clear()
 	
-	if not clear:
+	yield(get_tree(), "idle_frame")
+	update()
+
+
+func clear():
+	if not cleared:
 		for placeholder in container.get_children():
 			container.remove_child(placeholder)
 			placeholder.queue_free()
 		
-		clear = true
-	
-	yield(get_tree(), "idle_frame")
-	update()
+		cleared = true
 
 
 func build_leaders():
@@ -137,7 +146,8 @@ func setup_leader_buttons(orders):
 func update():
 	hide_all()
 	if (game.selected_unit and 
-			game.selected_unit.team == game.player_team):
+			game.selected_unit.team == game.player_team and
+			game.selected_unit.subtype != "backwood"):
 		
 		match game.selected_unit.type:
 			"pawn", "building": 

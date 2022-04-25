@@ -548,13 +548,13 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.0
+radius = 120.0
 
 [node name="sida" instance=ExtResource( 1 )]
 hp = 400
-vision = 200
+vision = 210
 type = "leader"
-subtype = "archer"
+subtype = "ranged"
 display_name = "sida"
 title = "sami warrior"
 selectable = true
@@ -564,7 +564,7 @@ collide = true
 attacks = true
 ranged = true
 damage = 30
-projectile_speed = 220.0
+projectile_speed = 210.0
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -572,9 +572,9 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( -3, -4 )
 region_enabled = true
 region_rect = Rect2( 2, 4, 21, 19 )
 
@@ -594,17 +594,15 @@ anims/stun = SubResource( 33 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = -0.0423532
-scale = Vector2( 1, 1.0205 )
 frames = SubResource( 36 )
-frame = 2
 offset = Vector2( 0, -15 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="2"]
 
 [node name="spear" type="AnimatedSprite" parent="sprites/weapon" index="0"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( -8.1407, 2.05879 )
-rotation = -0.280416
 scale = Vector2( 1, 1.1 )
 frames = SubResource( 39 )
 offset = Vector2( 0, -5 )

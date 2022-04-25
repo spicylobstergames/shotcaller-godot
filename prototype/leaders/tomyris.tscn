@@ -82,7 +82,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0, 0.8 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 2, 9 ), Vector2( 2, 9 ) ]
+"values": [ Vector2( 3, 9 ), Vector2( 3, 9 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("sprites/body:modulate")
@@ -245,7 +245,7 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.5, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 2, 9 ), Vector2( 2, 9 ), Vector2( 2, 5 ), Vector2( 1, 2 ), Vector2( 3, -3 ), Vector2( 2, -10 ) ]
+"values": [ Vector2( 3, 9 ), Vector2( 3, 9 ), Vector2( 2, 5 ), Vector2( 1, 2 ), Vector2( 3, -3 ), Vector2( 2, -10 ) ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("sprites/weapon/bow:visible")
@@ -336,7 +336,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 2, 9 ), Vector2( 2, 9 ) ]
+"values": [ Vector2( 3, 9 ), Vector2( 3, 9 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("sprites/body:modulate")
@@ -389,7 +389,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1, 0.95 ), Vector2( 1, 0.95 ), Vector2( 1, 1 ), Vector2( 1, 0.95 ), Vector2( 1, 0.95 ), Vector2( 1, 1 ), Vector2( 1, 0.95 ) ]
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("sprites/body:rotation_degrees")
@@ -398,10 +398,10 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, -2.0, 2.0, 0.0, 0.0, -2.0, 2.0, 0.0 ]
+"values": [ 0.0, -4.0, 3.0, 0.0, -4.0, 3.0, 0.0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("sprites/body:frame")
@@ -439,7 +439,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0, 0.14772, 0.3, 0.4, 0.551537, 0.7, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 2, 9 ), Vector2( 2, 4 ), Vector2( 2, 9 ), Vector2( 2, 9 ), Vector2( 2, 4 ), Vector2( 2, 9 ), Vector2( 2, 9 ) ]
+"values": [ Vector2( 3, 9 ), Vector2( 3, 4 ), Vector2( 3, 9 ), Vector2( 3, 9 ), Vector2( 3, 4 ), Vector2( 3, 9 ), Vector2( 3, 9 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("sprites/body:modulate")
@@ -527,7 +527,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 2, 9 ), Vector2( 2, 9 ) ]
+"values": [ Vector2( 3, 9 ), Vector2( 3, 9 ) ]
 }
 tracks/4/type = "value"
 tracks/4/path = NodePath("sprites/body:modulate")
@@ -651,11 +651,11 @@ radius = 140.0
 
 [node name="tomyris" instance=ExtResource( 1 )]
 hp = 400
-vision = 140
+vision = 180
 type = "leader"
 subtype = "mounted"
 display_name = "tomyris"
-title = "scythian"
+title = "scythian warrior"
 selectable = true
 moves = true
 speed = 50.0
@@ -671,9 +671,9 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 5 )
+offset = Vector2( 0, -5 )
 region_enabled = true
 region_rect = Rect2( 159, 10, 18, 22 )
 
@@ -702,11 +702,8 @@ texture = ExtResource( 4 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
 material = SubResource( 30 )
-position = Vector2( 2, 9 )
-rotation = -0.00706977
-scale = Vector2( 1, 1.00405 )
+position = Vector2( 3, 9 )
 frames = SubResource( 36 )
-frame = 2
 offset = Vector2( 2, -24 )
 
 [node name="sprite" parent="sprites" index="3"]
@@ -717,7 +714,8 @@ position = Vector2( -8, -17 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-modulate = Color( 1, 1, 1, 0.303801 )
+visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 26.2025, 0 )
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
@@ -725,9 +723,9 @@ frames = SubResource( 44 )
 offset = Vector2( -13, -1 )
 
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
+visible = false
 position = Vector2( 4.66035, 1.05636 )
-rotation = 0.136973
-scale = Vector2( 0.87848, 1 )
+rotation = 0.349066
 frames = SubResource( 45 )
 offset = Vector2( 10, 0 )
 

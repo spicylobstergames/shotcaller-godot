@@ -52,7 +52,7 @@ margin_bottom = 3.0
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 46, 46 )
-margin = Rect2( 5, 2, 0, 0 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="DynamicFont" id=15]
 size = 8

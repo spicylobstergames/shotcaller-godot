@@ -1,6 +1,7 @@
 extends ItemList
 var game:Node
 
+# self = game.ui.controls
 
 onready var controls_buttons = get_node("scroll_container/container/controls_buttons")
 

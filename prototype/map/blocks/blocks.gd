@@ -1,6 +1,9 @@
 extends Node2D
 var game:Node
 
+# self = game.map.blocks
+
+
 # COLLISION QUADTREES
 const _QuadtreeGD = preload("quadtree.gd")
 var quad

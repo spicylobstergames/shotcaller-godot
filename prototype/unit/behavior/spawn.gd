@@ -1,6 +1,8 @@
 extends Node
 var game:Node
 
+# self = game.unit.spawn
+
 var order_time = 8
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
@@ -17,6 +19,7 @@ var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
 
 var infantry:PackedScene = load("res://pawns/infantry.tscn")
 var archer:PackedScene = load("res://pawns/archer.tscn")
+var mounted:PackedScene = load("res://pawns/mounted.tscn")
 
 
 
@@ -25,6 +28,8 @@ var cemitery = {
 	"enemy_infantry": [],
 	"player_archer": [],
 	"enemy_archer": [],
+	"player_mounted": [],
+	"enemy_mounted": [],
 	"player_leaders": [],
 	"enemy_leaders": []
 }
@@ -144,7 +149,7 @@ func spawn_unit(unit, l, t, mode, point):
 func cemitery_add_pawn(unit):
 	var side = "player_"
 	if unit.team != game.player_team: side = "enemy_"
-	var index = side+unit.subtype
+	var index = side+unit.display_name
 	cemitery[index].append(unit)
 
 

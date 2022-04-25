@@ -33,6 +33,9 @@ func setup_pathfind():
 	for building in game.player_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
+	for building in game.enemy_buildings:
+		var pos = (building.global_position / game.map.tile_size).floor()
+		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
 	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
 	path_finder = Jpf.new()
@@ -106,8 +109,11 @@ func teleport(unit, point):
 	game.ui.controls.teleport_button.disabled = false
 	game.ui.controls.teleport_button.pressed = false
 	game.unit.move.stand(unit)
+	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
+	unit.working = false
+	unit.channeling = false
 	var new_position = point
 	# prevent teleport into buildings
 	var min_distance = 2 * building.collision_radius + unit.collision_radius

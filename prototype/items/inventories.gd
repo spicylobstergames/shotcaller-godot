@@ -1,7 +1,9 @@
 extends Control
 var game:Node
 
-var clear = false
+# self = game.ui.inventories
+
+var cleared = false
 var gold = 0
 
 const equip_items_max = 2
@@ -22,25 +24,36 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
-	
-	if not clear:
+	clear()
+
+
+func clear():
+	if not cleared:
 		var placeholder = self.get_node("placeholder")
 		self.remove_child(placeholder)
 		placeholder.queue_free()
-		clear = true
+		cleared = true
 
 
-func new_inventory():
+func new_inventory(leader):
+	
+	var extra_gold = 0
+	if leader.display_name in game.unit.skills.leader:
+		var leader_skills = game.unit.skills.leader[leader.display_name]
+		if "extra_gold" in leader_skills:
+				extra_gold = leader_skills.extra_gold
+	
 	var inventory = {
 		"container": HBoxContainer.new(),
 		"gold": 0,
+		"extra_gold": extra_gold,
 		"leader": null,
 		"equip_items": [],
 		"consumable_items":[],
 		"equip_item_buttons": [],
 		"consumable_item_buttons": []
 	}
-	#inventory.container.set("custom_constants/separation", 0)
+	
 	inventory.container.margin_top = sell_button_margin
 # warning-ignore:unused_variable
 	for index in range(equip_items_max):
@@ -54,11 +67,19 @@ func new_inventory():
 func build_leaders():
 	for leader in game.player_leaders:
 		add_inventory(leader)
+	gold_update_cycle()
+
+
+func gold_update_cycle():
+	game.ui.shop.update_buttons()
+	update_buttons()
+	yield(get_tree().create_timer(1), "timeout")
+	gold_update_cycle()
 
 
 func add_inventory(leader):
 	# Setup GUI for inventory
-	var inventory = new_inventory()
+	var inventory = new_inventory(leader)
 	add_child(inventory.container)
 	leaders[leader.name] = inventory
 	inventory.leader = leader
@@ -84,10 +105,9 @@ func add_inventory(leader):
 		
 
 func gold_timer_timeout(inventory):
-		# Updating gold label
-	inventory.gold += 10
+	inventory.gold += 1 + inventory.extra_gold
+	# Updates gold label
 	if game.selected_leader: game.ui.stats.update()
-	game.ui.shop.update_buttons()
 	yield(get_tree().create_timer(1), "timeout")
 	gold_timer_timeout(inventory)
 
@@ -115,7 +135,7 @@ func add_delivery(leader, item):
 	var new_delivery = {
 		"item": item,
 		"leader": leader,
-		"time": delivery_time+1,
+		"time": item.delivery_time+1,
 		"index": 0,
 		"label": null,
 		"button": null
@@ -150,7 +170,24 @@ func delivery_timer(delivery):
 		yield(get_tree().create_timer(1), "timeout")
 		delivery_timer(delivery)
 	else:
-		give_item(delivery)
+		match delivery.item.type:
+			"consumable": give_item(delivery)
+			"equip":
+				if game.ui.shop.close_to_blacksmith(delivery.leader): 
+					give_item(delivery)
+				else: 
+					var inventory = leaders[delivery.leader.name]
+					var index = delivery.index
+					inventory.equip_items[index] = delivery.item
+					delivery.item.ready = true
+					delivery.label.text = "ready"
+
+
+func is_delivering(leader):
+	if leader.name in game.ui.inventories.deliveries:
+		var delivery = game.ui.inventories.deliveries[leader.name]
+		return (delivery.time > 0)
+	else: return false
 
 
 func give_item(delivery):
@@ -159,9 +196,12 @@ func give_item(delivery):
 	var item = delivery.item
 	var index = delivery.index
 	
+	deliveries.erase(leader.name)
+	
 	match item.type:
 		"equip":
 			inventory.equip_items[index] = item
+			inventory.equip_item_buttons[index].setup(item)
 			for key in item.attributes.keys():
 				match key:
 					"hp":
@@ -172,11 +212,11 @@ func give_item(delivery):
 				leader[key] += item.attributes[key]
 		"consumable":
 			inventory.consumable_items[index] = item
+			inventory.consumable_item_buttons[index].setup(item)
 	
-	deliveries.erase(leader.name)
+	item.delivered = true
 	
-	leader.get_node("hud").update_hpbar(leader)
-	update_gui(leader.name)
+	game.unit.hud.update_hpbar(leader)
 
 
 
@@ -199,13 +239,13 @@ func remove_item(leader, index):
 		leaders[leader.name].consumable_items[index - equip_items_max] = null
 	
 	leader.get_node("hud").update_hpbar(leader)
-	update_gui(leader.name)
+	
 	
 	return item
 
 
 
-func update_gui(leader_name):
+func setup_items(leader_name):
 	var counter = 0
 	var inventory = leaders[leader_name]
 	for item in inventory.equip_items:
@@ -221,18 +261,41 @@ func update_gui(leader_name):
 
 
 
+	# Disable potion if full heath
+func update_consumables(leader):
+	var inventory = leaders[leader.name]
+	var counter = 0
+	for item in inventory.consumable_items:
+		var item_button = inventory.consumable_item_buttons[counter]
+		item_button.disabled = (leader.current_hp >= leader.hp)
+		counter += 1
+
+
+
 func update_buttons():
-	for leader in leaders:
-		leaders[leader].container.hide()
+	for leader in game.player_leaders:
+		var inventory = leaders[leader.name]
+		var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
+		inventory.container.hide()
+		# deliver ready items
+		if close_to_blacksmith:
+			for item in inventory.equip_items:
+				if item and item.ready and not item.delivered:
+					var ready_delivery = deliveries[leader.name]
+					give_item(ready_delivery)
 	
 	if game.selected_leader and game.selected_leader.name in leaders:
-		var inventory = leaders[game.selected_leader.name]
+		var leader = game.selected_leader
+		var inventory = leaders[leader.name]
+		var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
 		
 		show()
 		inventory.container.show()
+		update_consumables(leader)
 		
-		# Hide or show sell buttons
-		if game.ui.shop.visible:
+		
+		# toggle sell buttons
+		if game.ui.shop.visible and close_to_blacksmith:
 			var counter = 0
 			for item in inventory.equip_items:
 				inventory.equip_item_buttons[counter].show_sell_button()
@@ -244,4 +307,4 @@ func update_buttons():
 		else:
 			for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
 				item_button.sell_button.hide()
-
+		

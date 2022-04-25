@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -10,12 +10,12 @@
 [ext_resource path="res://items/button/item_button.tscn" type="PackedScene" id=8]
 [ext_resource path="res://controls/orders/button/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=10]
-[ext_resource path="res://assets/ui/gold.png" type="Texture" id=11]
+[ext_resource path="res://controls/controls.gd" type="Script" id=11]
 [ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
-[ext_resource path="res://controls/controls.gd" type="Script" id=14]
 [ext_resource path="res://ui/button/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
+[ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
@@ -50,7 +50,13 @@ margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
 
-[sub_resource type="StyleBoxEmpty" id=44]
+[sub_resource type="StyleBoxTexture" id=49]
+texture = ExtResource( 10 )
+region_rect = Rect2( 140, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=36]
 texture = ExtResource( 10 )
@@ -98,8 +104,8 @@ load_path = "res://.import/icons.png-bee93322a617e5fe670331de2acd3918.stex"
 
 [sub_resource type="AtlasTexture" id=30]
 atlas = SubResource( 29 )
-region = Rect2( 416, 0, 46, 46 )
-margin = Rect2( 5, 2, 0, 0 )
+region = Rect2( 624, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="DynamicFont" id=31]
 size = 8
@@ -113,29 +119,34 @@ margin = Rect2( 5, 2, 0, 0 )
 [sub_resource type="AtlasTexture" id=33]
 atlas = SubResource( 29 )
 region = Rect2( 46, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=34]
 atlas = SubResource( 29 )
-region = Rect2( 276, 0, 46, 46 )
-margin = Rect2( 5, 2, 0, 0 )
+region = Rect2( 336, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="StyleBoxEmpty" id=43]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 16 )
 region = Rect2( 48, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 16 )
-region = Rect2( 322, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+region = Rect2( 480, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 16 )
+region = Rect2( 624, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 16 )
-region = Rect2( 370, 0, 46, 46 )
-margin = Rect2( 5, 0, 0, 0 )
+region = Rect2( 575, 0, 46, 46 )
+margin = Rect2( 2, 2, 0, 0 )
 
 [node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -143,6 +154,19 @@ __meta__ = {
 "_edit_vertical_guides_": [ -366.0 ],
 "_editor_description_": "Prevents ui panning"
 }
+
+[node name="background" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="main" parent="background" instance=ExtResource( 17 )]
+position = Vector2( -528, -300 )
+scale = Vector2( 1.666, 1.666 )
 
 [node name="top_left" type="Control" parent="."]
 __meta__ = {
@@ -428,7 +452,7 @@ margin_right = 368.0
 margin_bottom = 242.0
 rect_min_size = Vector2( 360, 60 )
 custom_styles/pressed = SubResource( 26 )
-custom_styles/focus = SubResource( 44 )
+custom_styles/focus = SubResource( 49 )
 custom_styles/disabled = SubResource( 36 )
 toggle_mode = false
 text = "play"
@@ -674,7 +698,9 @@ __meta__ = {
 [node name="gold_sprite" type="Sprite" parent="bot_mid/stats/panel"]
 position = Vector2( 281, 78 )
 scale = Vector2( 0.833333, 0.833333 )
-texture = ExtResource( 11 )
+texture = ExtResource( 16 )
+region_enabled = true
+region_rect = Rect2( 685, 13, 22, 22 )
 
 [node name="inventories" type="ItemList" parent="bot_mid/stats"]
 margin_left = 138.0
@@ -810,7 +836,7 @@ margin_left = -286.0
 margin_top = -264.0
 margin_bottom = -154.0
 custom_styles/bg = SubResource( 15 )
-script = ExtResource( 14 )
+script = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -935,6 +961,7 @@ margin_right = 71.0
 margin_bottom = 139.0
 custom_styles/focus = SubResource( 43 )
 disabled = true
+icon = SubResource( 50 )
 value = "orders"
 
 [node name="name" parent="bot_right/buttons/orders_button" index="0"]

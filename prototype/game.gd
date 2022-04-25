@@ -1,5 +1,7 @@
 extends Node2D
 
+# self = game
+
 var time = 0
 var player_kills = 0
 var player_deaths = 0
@@ -51,14 +53,25 @@ func _ready():
 	map.blocks.setup_quadtree()
 
 
+func _process(delta: float) -> void:
+	if started: camera.process()
+	ui.process()
+	# build called after ui.minimap get_texture
+	
+	
+func _physics_process(delta):
+	if started: collision.process(delta)
+	
+	
 func build():
 	if not built:
 		built = true
 		
-		if test.unit:
+		if test.unit: # debug units
+			ui.main_menu.get_node("container/play_button").play_down()
 			start()
 		else:
-			get_tree().paused = true
+			#get_tree().paused = true
 			ui.main_menu.visible = true
 
 
@@ -78,22 +91,13 @@ func start():
 		
 		if test.unit:
 			test.spawn_unit()
-			#test.spawn_leaders()
 		
 		else: 
 			yield(get_tree().create_timer(1.0), "timeout")
 			unit.spawn.start()
-			yield(get_tree().create_timer(1.0), "timeout")
+			yield(get_tree().create_timer(2.0), "timeout")
 			unit.spawn.leaders()
 			map.setup_leaders()
 
-
-func _process(delta: float) -> void:
-	ui.process()
-	camera.process()
-
-
-func _physics_process(delta):
-	if started: collision.process(delta)
 
 

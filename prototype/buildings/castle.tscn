@@ -164,10 +164,10 @@ radius = 64.0
 radius = 250.0
 
 [node name="castle" instance=ExtResource( 1 )]
-hp = 1000
+hp = 1200
 vision = 320
 type = "building"
-subtype = "castle"
+subtype = "base"
 display_name = "castle"
 selectable = true
 collide = true

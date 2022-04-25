@@ -512,7 +512,7 @@ radius = 20.0
 
 [node name="raja" instance=ExtResource( 1 )]
 hp = 400
-vision = 140
+vision = 160
 type = "leader"
 display_name = "raja"
 title = "chola warrior"
@@ -530,9 +530,9 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( -1, -3 )
 region_enabled = true
 region_rect = Rect2( 6, 4, 18, 19 )
 

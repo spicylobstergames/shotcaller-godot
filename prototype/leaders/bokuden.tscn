@@ -572,10 +572,10 @@ radius = 20.0
 
 [node name="bokuden" instance=ExtResource( 1 )]
 hp = 400
-vision = 140
+vision = 160
 type = "leader"
 display_name = "bokuden"
-title = "samurai"
+title = "the samurai"
 selectable = true
 moves = true
 speed = 50.0
@@ -594,9 +594,9 @@ visible = false
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 40 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 4 )
+offset = Vector2( 0, -4 )
 region_enabled = true
 region_rect = Rect2( 7, 5, 30, 19 )
 
@@ -626,9 +626,6 @@ region_rect = Rect2( 132, 6, 14, 23 )
 
 [node name="sprite" parent="sprites" index="3"]
 visible = false
-
-[node name="collisions" parent="." index="5"]
-visible = true
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

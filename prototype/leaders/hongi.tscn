@@ -548,13 +548,13 @@ animations = [ {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 100.0
+radius = 120.0
 
 [node name="hongi" instance=ExtResource( 1 )]
 hp = 500
-vision = 140
+vision = 160
 type = "leader"
-subtype = "archer"
+subtype = "ranged"
 display_name = "hongi"
 title = "maori warrior"
 selectable = true
@@ -574,9 +574,9 @@ scale = Vector2( 10, 10 )
 
 [node name="icon" type="Sprite" parent="symbol" index="1"]
 material = SubResource( 30 )
-position = Vector2( 0, -1 )
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( -2, -2 )
 region_enabled = true
 region_rect = Rect2( 14, 4, 21, 18 )
 
@@ -594,17 +594,16 @@ anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
-modulate = Color( 1, 0.666667, 0.666667, 0.666667 )
 material = SubResource( 30 )
-position = Vector2( -1, 2 )
-scale = Vector2( 1, 1.2 )
+position = Vector2( 0, 9 )
 frames = SubResource( 36 )
 offset = Vector2( -6, -15 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="2"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( -8, -4 )
-rotation = -0.174533
+rotation = -1.5708
 frames = SubResource( 41 )
 offset = Vector2( 6, -4 )
 

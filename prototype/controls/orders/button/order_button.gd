@@ -21,15 +21,21 @@ func setup_order_button():
 	var sprite
 	match name:
 		"building": sprite = 0
-		"pawn": sprite = 1
-		"leader": sprite = 2
+		"pawn", "infantry": sprite = 1
+		"ranged": sprite = 2
+		"leader", "mount": sprite = 3
+		"retreat": sprite = 4
+		"defend": sprite = 5
+		"default": sprite = 6
+		"attack": sprite = 7
+		"lumberjack": sprite = 8
+		"less_taxes": sprite = 9
+		"default_taxes": sprite = 10
+		"increase_taxes": sprite = 11
+		"menu": sprite = 12
+		"order", "teleport": sprite = 13
 		
-		"retreat": sprite = 3
-		"defend": sprite = 4
-		"default": sprite = 5
-		"attack": sprite = 6
-		
-	icon.region.position.x = sprite * 46
+	icon.region.position.x = sprite * 48
 	
 	self.icon = icon
 

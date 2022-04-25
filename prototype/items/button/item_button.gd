@@ -42,7 +42,7 @@ func setup(new_item):
 		self.icon = icon
 		name_label.text = self.name
 		var price = new_item.price
-		if self.shop_item: price = new_item.sell_price
+		if not self.shop_item: price = new_item.sell_price
 		price_label.text = str(price)
 
 
@@ -78,5 +78,5 @@ func on_sell_button_down():
 	var sold_item = game.ui.inventories.remove_item(leader, index)
 	# Give the leader gold for half the cost of the item
 	game.ui.inventories.leaders[leader.name].gold += sold_item.sell_price
-	game.ui.inventories.update_gui(leader.name)
+	setup(null)
 

@@ -1,6 +1,7 @@
 extends CanvasLayer
 var game:Node
 
+# self = game.ui
 
 var fps:Node
 var top_label:Node
@@ -11,6 +12,7 @@ var shop:Node
 var controls:Node
 var orders:Node
 var main_menu:Node
+var main_menu_background:Node
 var leaders_icons:Node
 var orders_button:Node
 var shop_button:Node
@@ -28,6 +30,7 @@ func _ready():
 	stats = get_node("bot_mid/stats")
 	minimap = get_node("bot_left/minimap")
 	main_menu = get_node("mid/main_menu")
+	main_menu_background = get_node("background/main")
 	buttons = get_node("bot_right/buttons")
 	orders = get_node("bot_right/orders")
 	controls = get_node("bot_right/controls")
@@ -53,11 +56,23 @@ func process():
 	var n = game.all_units.size()
 	fps.set_text('fps: '+str(f)+' u:'+str(n))
 	
+	# minimap display update
 	if minimap and game.camera.zoom.x <= 1:
 		if minimap.update_map_texture: 
 			minimap.get_map_texture()
 		minimap.move_symbols()
 		minimap.follow_camera()
+	
+	# scale vertical main menu background to fit height
+	var h = get_viewport().size.y
+	var ratio = get_viewport().size.x / h
+	if ratio < 1: 
+		var s = 1/ratio
+		main_menu_background.scale = Vector2(s*1.666,s*1.666)
+		main_menu_background.position = Vector2(-528,-300*s)
+	else: 
+		main_menu_background.scale = Vector2(1.666,1.666)
+		main_menu_background.position = Vector2(-528,-300)
 
 
 
@@ -90,7 +105,8 @@ func hide_all_keep_stats():
 
 func show_select():
 	stats.update()
-	orders_button.disabled = false
+	if game.selected_unit.team == game.player_team:
+		orders_button.disabled = false
 	orders.update()
 	controls.update()
 
