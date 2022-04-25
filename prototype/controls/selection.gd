@@ -15,16 +15,20 @@ func _unhandled_input(event):
 		if not event.is_pressed():
 			if game.selected_unit and (game.selected_unit.type == "leader" or game.test.unit):
 				
-				if event.scancode == KEY_SPACE: 
+				if event.scancode == KEY_SPACE:
+					game.selected_unit.working = true
 					game.unit.move.smart_move(game.selected_unit, point)
 				
 				if event.scancode == KEY_A:
+					game.selected_unit.working = true
 					game.unit.advance.start(game.selected_unit, point)
 				
 				if event.scancode == KEY_T:
+					game.selected_unit.working = true
 					game.unit.path.teleport(game.selected_unit, point)
 					
 				if event.scancode == KEY_L:
+					game.selected_unit.working = true
 					game.unit.path.change_lane(game.selected_unit, point)
 				
 				if game.test.unit:
@@ -48,12 +52,15 @@ func _unhandled_input(event):
 							select(point)
 						
 						"teleport":
+							game.selected_unit.working = true
 							game.unit.path.teleport(game.selected_unit, point)
 						
 						"advance":
+							game.selected_unit.working = true
 							game.unit.advance.start(game.selected_unit, point)
 						
 						"move":
+							game.selected_unit.working = true
 							game.unit.move.smart_move(game.selected_unit, point)
 						
 						"lane":
@@ -104,9 +111,12 @@ func select_unit(unit):
 	else:
 		game.selected_leader = null
 		game.ui.shop.disable_all()
-		
+	
 	game.unit.hud.show_selected(unit)
 	game.ui.show_select()
+	
+	if unit.display_name == "blacksmith" and not game.ui.shop.visible: 
+		game.ui.shop_button.button_down()
 
 
 func unselect():

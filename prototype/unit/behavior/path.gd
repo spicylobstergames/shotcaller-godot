@@ -109,8 +109,11 @@ func teleport(unit, point):
 	game.ui.controls.teleport_button.disabled = false
 	game.ui.controls.teleport_button.pressed = false
 	game.unit.move.stand(unit)
+	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
+	unit.working = false
+	unit.channeling = false
 	var new_position = point
 	# prevent teleport into buildings
 	var min_distance = 2 * building.collision_radius + unit.collision_radius

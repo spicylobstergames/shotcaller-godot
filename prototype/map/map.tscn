@@ -485,7 +485,7 @@ script = ExtResource( 19 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -493,7 +493,6 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 512, 616 )
 frames = SubResource( 6 )
-frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -501,6 +500,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1600, 1514 )
 frames = SubResource( 6 )
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -654,14 +654,14 @@ attack_speed = 1.0
 visible = false
 
 [node name="top" type="Line2D" parent="lanes"]
-points = PoolVector2Array( 160, 1696, 160, 1383, 217, 1057, 162, 744, 164, 418, 223, 227, 415, 211, 674, 172, 1058, 202, 1381, 180, 1696, 159 )
+points = PoolVector2Array( 158, 1685, 160, 1383, 217, 1057, 162, 744, 164, 418, 223, 227, 415, 211, 674, 172, 1058, 202, 1381, 180, 1683, 160 )
 
 [node name="mid" type="Line2D" parent="lanes"]
 position = Vector2( 1, 0 )
-points = PoolVector2Array( 364, 1761, 434, 1589, 610, 1444, 735, 1250, 902, 1161, 1055, 1056, 1205, 953, 1376, 865, 1506, 668, 1671, 517, 1761, 353 )
+points = PoolVector2Array( 362, 1750, 434, 1589, 610, 1444, 735, 1250, 902, 1161, 1055, 1056, 1205, 953, 1376, 865, 1506, 668, 1671, 517, 1750, 357 )
 
 [node name="bot" type="Line2D" parent="lanes"]
-points = PoolVector2Array( 417, 1956, 604, 1952, 1055, 1894, 1376, 1932, 1695, 1892, 1892, 1891, 1951, 1698, 1956, 1377, 1895, 1057, 1952, 742, 1951, 420 )
+points = PoolVector2Array( 430, 1955, 604, 1952, 1055, 1894, 1376, 1932, 1695, 1892, 1892, 1891, 1951, 1698, 1956, 1377, 1895, 1057, 1952, 742, 1951, 420 )
 
 [editable path="buildings/red/camp"]
 [editable path="buildings/red/lumbermill"]

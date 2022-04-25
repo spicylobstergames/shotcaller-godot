@@ -20,10 +20,10 @@ func start(unit, point):
 				if target and target_position.distance_to(point) < target.collision_radius:
 					game.unit.attack.set_target(unit, target)
 		
-		
-		unit.look_at(point)
-		unit.get_node("animations").playback_speed = unit.current_attack_speed
-		unit.set_state("attack")
+		if unit.target:
+			unit.look_at(point)
+			unit.get_node("animations").playback_speed = unit.current_attack_speed
+			unit.set_state("attack")
 
 
 func set_target(unit, target):

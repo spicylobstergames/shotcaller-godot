@@ -60,12 +60,13 @@ func hp_regen_cycle():
 
 
 func set_regen(leader):
-	leader.current_regen = leader.regen
-	if leader.retreating: leader.current_regen += retreat_regen
-	leader.current_hp += leader.current_regen
-	leader.current_hp = min(leader.current_hp, leader.hp)
-	game.unit.hud.update_hpbar(leader)
-	if leader == game.selected_unit: game.ui.stats.update()
+	if not leader.dead:
+		leader.current_regen = leader.regen
+		if leader.retreating: leader.current_regen += retreat_regen
+		leader.current_hp += leader.current_regen
+		leader.current_hp = min(leader.current_hp, leader.hp)
+		game.unit.hud.update_hpbar(leader)
+		if leader == game.selected_unit: game.ui.stats.update()
 
 
 func setup_pawn(unit, lane):
@@ -90,8 +91,10 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 
-	if (not leader.retreating and 
-			not game.ui.shop.close_to_blacksmith(leader) ): 
+	# get back to lane 
+	if (not leader.working and
+			not leader.retreating and 
+			not (leader.team == game.player_team and game.ui.shop.close_to_blacksmith(leader)) ): 
 				
 		game.unit.path.follow_lane(leader)
 
@@ -225,5 +228,9 @@ func retreat(unit):
 		order = player_leaders_orders[unit.name]
 	else: order = enemy_leaders_orders[unit.name]
 	set_leader(unit, order)
-	game.unit.move.smart_move(unit, unit.origin)
+	var lane = unit.lane
+	var path = game.map[lane].duplicate()
+	if unit.team == "blue": path.invert()
+	game.unit.path.smart_follow(unit, path, "move")
+	
 

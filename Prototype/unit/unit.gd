@@ -77,6 +77,8 @@ var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat 
 var retreating = false
+var working = false
+var channeling = false
 
 
 var hud:Node
@@ -267,6 +269,7 @@ func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
 		path.follow_next(self)
 	elif self.moves:
+		self.working = false
 		move.end(self)
 		if self.attacks: 
 			advance.end(self)
@@ -305,11 +308,16 @@ func die():  # hp <= 0
 	self.set_state("death")
 	self.set_behavior("stand")
 	self.dead = true
+	self.target = null
+	self.channeling = false
+	self.working = false
 
 
 func on_death_end():  # death animation end
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
+	self.state = 'dead'
+	self.get_node("animations").current_animation = "[stop]"
 	if not game.test.stress:
 		match self.type:
 			"pawn":

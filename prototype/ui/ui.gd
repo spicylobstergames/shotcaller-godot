@@ -56,12 +56,14 @@ func process():
 	var n = game.all_units.size()
 	fps.set_text('fps: '+str(f)+' u:'+str(n))
 	
+	# minimap display update
 	if minimap and game.camera.zoom.x <= 1:
 		if minimap.update_map_texture: 
 			minimap.get_map_texture()
 		minimap.move_symbols()
 		minimap.follow_camera()
 	
+	# scale vertical main menu background to fit height
 	var h = get_viewport().size.y
 	var ratio = get_viewport().size.x / h
 	if ratio < 1: 
@@ -103,7 +105,8 @@ func hide_all_keep_stats():
 
 func show_select():
 	stats.update()
-	orders_button.disabled = false
+	if game.selected_unit.team == game.player_team:
+		orders_button.disabled = false
 	orders.update()
 	controls.update()
 

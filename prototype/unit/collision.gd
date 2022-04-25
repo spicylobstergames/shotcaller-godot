@@ -66,11 +66,11 @@ func process(delta):
 		if not unit1.dead:
 			# move arrival
 			if unit1.moves and unit1.state == "move":
-				if !unit1.target:
-					if game.utils.point_collision(unit1, unit1.current_destiny, game.map.half_tile_size):
+				if unit1.target or unit1.working:
+					if game.utils.point_collision(unit1, unit1.current_destiny):
 						unit1.next_event = "arrive"
 				else:
-					if game.utils.point_collision(unit1, unit1.current_destiny):
+					if game.utils.point_collision(unit1, unit1.current_destiny, game.map.half_tile_size):
 						unit1.next_event = "arrive"
 			
 		# units collision

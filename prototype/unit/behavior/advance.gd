@@ -15,8 +15,6 @@ func start(unit, objective): # move_and_attack
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
 		var no_path = (unit.current_path.size() == 0)
-#		print('start: ',unit,' ', unit.team)
-#		for enemy in enemies: print('     ',enemy,' ', enemy.team)
 		if not enemies and not at_objective: move(unit, objective) 
 		if not enemies and at_objective and no_path: stop(unit)
 		if enemies:
