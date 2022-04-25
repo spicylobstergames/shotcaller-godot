@@ -10,9 +10,9 @@
 [ext_resource path="res://items/button/item_button.tscn" type="PackedScene" id=8]
 [ext_resource path="res://controls/orders/button/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=10]
+[ext_resource path="res://controls/controls.gd" type="Script" id=11]
 [ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
-[ext_resource path="res://controls/controls_window.gd" type="Script" id=14]
 [ext_resource path="res://ui/button/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
@@ -836,7 +836,7 @@ margin_left = -286.0
 margin_top = -264.0
 margin_bottom = -154.0
 custom_styles/bg = SubResource( 15 )
-script = ExtResource( 14 )
+script = ExtResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
