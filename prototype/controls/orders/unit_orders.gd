@@ -90,7 +90,10 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 
-	if not leader.retreating: game.unit.path.follow_lane(leader)
+	if (not leader.retreating and 
+			not game.ui.shop.close_to_blacksmith(leader) ): 
+				
+		game.unit.path.follow_lane(leader)
 
 
 func setup_lanes_priority():

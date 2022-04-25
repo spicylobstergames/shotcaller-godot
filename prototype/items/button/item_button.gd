@@ -78,5 +78,5 @@ func on_sell_button_down():
 	var sold_item = game.ui.inventories.remove_item(leader, index)
 	# Give the leader gold for half the cost of the item
 	game.ui.inventories.leaders[leader.name].gold += sold_item.sell_price
-	game.ui.inventories.setup_items(leader.name)
+	setup(null)
 

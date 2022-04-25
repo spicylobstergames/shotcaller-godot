@@ -50,7 +50,11 @@ func _ready():
 	
 	clear()
 	
-	for item in items: add_item(items[item].duplicate(1))
+	for item in items: 
+		var new_item = items[item].duplicate(true)
+		new_item.ready = false
+		new_item.delivered = false
+		add_item(new_item)
 	
 	disable_all()
 	
@@ -94,7 +98,7 @@ func disable_equip():
 		item_button.disabled = true
 
 
-func close_to_shop(leader):
+func close_to_blacksmith(leader):
 	for blacksmith in blacksmiths:
 		var distance = leader.global_position.distance_to(blacksmith.global_position)
 		if distance < leader.current_vision:
@@ -102,12 +106,14 @@ func close_to_shop(leader):
 	return false
 
 
+
 func update_buttons():
 	if visible:
 		var leader = game.selected_leader
 		
+		
 		# disable all buttons if no leader selected or if delivery in proccess
-		if not leader or leader.name in game.ui.inventories.deliveries: 
+		if not leader or game.ui.inventories.is_delivering(leader): 
 			disable_all()
 			return
 		
@@ -119,7 +125,7 @@ func update_buttons():
 				item_button.disabled = (leader_gold < item_price)
 		
 		# disable equip if leader is not close to shop
-		if not close_to_shop(leader):
+		if not close_to_blacksmith(leader):
 			disable_equip()
 		
 		# disable buttons if leader don't have empty slots for item
