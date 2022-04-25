@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.ui.inventories
 
-var clear = false
+var cleared = false
 var gold = 0
 
 const equip_items_max = 2
@@ -24,12 +24,15 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
-	
-	if not clear:
+	clear()
+
+
+func clear():
+	if not cleared:
 		var placeholder = self.get_node("placeholder")
 		self.remove_child(placeholder)
 		placeholder.queue_free()
-		clear = true
+		cleared = true
 
 
 func new_inventory(leader):
@@ -94,8 +97,8 @@ func add_inventory(leader):
 		
 
 func gold_timer_timeout(inventory):
-		# Updating gold label
 	inventory.gold += 1 + inventory.extra_gold
+	# Updates gold label
 	if game.selected_leader: game.ui.stats.update()
 	game.ui.shop.update_buttons()
 	yield(get_tree().create_timer(1), "timeout")
@@ -186,7 +189,7 @@ func give_item(delivery):
 	deliveries.erase(leader.name)
 	
 	leader.get_node("hud").update_hpbar(leader)
-	update_gui(leader.name)
+	setup_items(leader.name)
 
 
 
@@ -209,13 +212,13 @@ func remove_item(leader, index):
 		leaders[leader.name].consumable_items[index - equip_items_max] = null
 	
 	leader.get_node("hud").update_hpbar(leader)
-	update_gui(leader.name)
+	setup_items(leader.name)
 	
 	return item
 
 
 
-func update_gui(leader_name):
+func setup_items(leader_name):
 	var counter = 0
 	var inventory = leaders[leader_name]
 	for item in inventory.equip_items:

@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.ui.orders_window
 
-var clear = false
+var cleared = false
 
 var leader_orders = {}
 var lane_orders = {}
@@ -37,16 +37,19 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
+	clear()
 	
-	if not clear:
+	yield(get_tree(), "idle_frame")
+	update()
+
+
+func clear():
+	if not cleared:
 		for placeholder in container.get_children():
 			container.remove_child(placeholder)
 			placeholder.queue_free()
 		
-		clear = true
-	
-	yield(get_tree(), "idle_frame")
-	update()
+		cleared = true
 
 
 func build_leaders():

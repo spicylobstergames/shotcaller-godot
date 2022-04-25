@@ -4,12 +4,13 @@ var game:Node
 # self = game.ui.shop
 
 var item_button_preload = preload("res://items/button/item_button.tscn")
-var clear =false
+var cleared =false
 
 onready var container = get_node("scroll_container/container")
 onready var equip_items = container.get_node("equip_items")
 onready var consumable_items = container.get_node("consumable_items")
 
+var blacksmiths
 
 const items = {
 	"axe": {
@@ -17,18 +18,18 @@ const items = {
 		"sprite": 0, 
 		"tooltip": "Adds 25 damage", 
 		"attributes": {"damage": 25},
-		"price": 600,  
+		"price": 5,  
 		"type": "equip", 
-		"delivery_time": 10
+		"delivery_time": 5
 	},
 	"helmet": {
 		"name": "Helmet", 
 		"sprite": 1, 
 		"tooltip": "Adds 150 HP", 
 		"attributes": {"hp": 150},
-		"price": 500, 
+		"price": 5, 
 		"type": "equip", 
-		"delivery_time": -1
+		"delivery_time": 5
 	},
 	"potion": {
 		"name": "Potion", 
@@ -37,7 +38,7 @@ const items = {
 		"price": 5, 
 		"type": "consumable", 
 		"attributes": {"current_hp": 50},
-		"delivery_time": -1
+		"delivery_time": 5
 	}
 }
 
@@ -47,7 +48,22 @@ func _ready():
 	
 	hide()
 	
-	if not clear:
+	clear()
+	
+	for item in items: add_item(items[item].duplicate(1))
+	
+	disable_all()
+	
+	yield(get_tree(), "idle_frame")
+	
+	blacksmiths = [
+		game.map.get_node("buildings/blue/blacksmith"),
+		game.map.get_node("buildings/red/blacksmith")
+	]
+
+
+func clear():
+	if not cleared:
 		for placeholder_item in equip_items.get_children():
 			equip_items.remove_child(placeholder_item)
 			placeholder_item.queue_free()
@@ -56,14 +72,7 @@ func _ready():
 			consumable_items.remove_child(placeholder_item)
 			placeholder_item.queue_free()
 		
-		clear = true
-
-
-	for item in items:
-		add_item(items[item].duplicate(1))
-	
-	disable_all()
-
+		cleared = true
 
 
 func add_item(item):
@@ -76,28 +85,44 @@ func add_item(item):
 
 
 func disable_all():
-	# Disable all buttons because leader is not selected or if delivery in proccess
 	for item_button in equip_items.get_children() + consumable_items.get_children():
 		item_button.disabled = true
-	return
+
+
+func disable_equip():
+	for item_button in equip_items.get_children():
+		item_button.disabled = true
+
+
+func close_to_shop(leader):
+	for blacksmith in blacksmiths:
+		var distance = leader.global_position.distance_to(blacksmith.global_position)
+		if distance < leader.current_vision:
+			return true
+	return false
 
 
 func update_buttons():
 	if visible:
 		var leader = game.selected_leader
+		
+		# disable all buttons if no leader selected or if delivery in proccess
 		if not leader or leader.name in game.ui.inventories.deliveries: 
 			disable_all()
 			return
 		
-		# Disable all buttons on which leader don't have enough golds
-		for item_button in equip_items.get_children() + consumable_items.get_children():
-			if leader and leader.name in game.ui.inventories.leaders:
-				var leader_gold = game.ui.inventories.leaders[leader.name].gold
+		# enable/disable all buttons on which leader don't have enough golds
+		if leader and leader.name in game.ui.inventories.leaders:
+			var leader_gold = game.ui.inventories.leaders[leader.name].gold
+			for item_button in equip_items.get_children() + consumable_items.get_children():
 				var item_price = item_button.item.price
 				item_button.disabled = (leader_gold < item_price)
 		
+		# disable equip if leader is not close to shop
+		if not close_to_shop(leader):
+			disable_equip()
 		
-		# Disable buttons if leader don't have empty slots for item
+		# disable buttons if leader don't have empty slots for item
 		if leader and leader.name in game.ui.inventories.leaders:
 			if !game.ui.inventories.equip_items_has_slots(leader.name):
 				for item_button in equip_items.get_children():
