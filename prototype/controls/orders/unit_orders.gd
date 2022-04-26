@@ -47,26 +47,25 @@ func build_leaders():
 
 func hp_regen_cycle():
 	
-	for leader in game.player_leaders:
-		set_regen(leader)
-		game.ui.inventories.update_consumables(leader)
-		
-	for leader in game.enemy_leaders:
-		set_regen(leader)
-	
+	for unit in game.all_units:
+		if unit.regen > 0:
+			set_regen(unit)
+			if unit.type == "leader" and unit.team == game.player_team:
+				game.ui.inventories.update_consumables(unit)
 	
 	yield(get_tree().create_timer(1), "timeout")
 	hp_regen_cycle()
 
 
-func set_regen(leader):
-	if not leader.dead:
-		leader.current_regen = leader.regen
-		if leader.retreating: leader.current_regen += retreat_regen
-		leader.current_hp += leader.current_regen
-		leader.current_hp = min(leader.current_hp, leader.hp)
-		game.unit.hud.update_hpbar(leader)
-		if leader == game.selected_unit: game.ui.stats.update()
+func set_regen(unit):
+	if not unit.dead:
+		unit.current_regen = unit.regen
+		if unit.retreating: unit.current_regen += retreat_regen
+		unit.current_hp += unit.current_regen
+		unit.current_hp = min(unit.current_hp, unit.hp)
+		game.unit.hud.update_hpbar(unit)
+		if unit == game.selected_unit: game.ui.stats.update()
+	else: unit.regen = 0
 
 
 func setup_pawn(unit, lane):

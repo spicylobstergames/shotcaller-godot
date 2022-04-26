@@ -224,7 +224,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.4, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1, 1.05 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1.04 ), Vector2( 1, 0.96 ), Vector2( 1, 1 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("sprites/body:rotation_degrees")
@@ -572,15 +572,17 @@ radius = 20.0
 
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
+regen = 1
 vision = 140
 display_name = "infantry"
 title = "melee soldier"
 selectable = true
 moves = true
-speed = 50.0
+speed = 35.0
 collide = true
 attacks = true
-damage = 60
+damage = 40
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]
@@ -604,8 +606,6 @@ anims/stun = SubResource( 33 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = 0.00872665
-scale = Vector2( 1, 0.933333 )
 frames = SubResource( 22 )
 offset = Vector2( -2, -11 )
 

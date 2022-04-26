@@ -512,16 +512,18 @@ radius = 20.0
 
 [node name="raja" instance=ExtResource( 1 )]
 hp = 400
+regen = 2
 vision = 160
 type = "leader"
 display_name = "raja"
 title = "chola warrior"
 selectable = true
 moves = true
-speed = 60.0
+speed = 50.0
 collide = true
 attacks = true
-damage = 30
+damage = 60
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

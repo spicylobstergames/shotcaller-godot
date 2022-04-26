@@ -18,27 +18,27 @@ const items = {
 		"sprite": 0, 
 		"tooltip": "Adds 25 damage", 
 		"attributes": {"damage": 25},
-		"price": 5,  
+		"price": 250,  
 		"type": "equip", 
-		"delivery_time": 5
+		"delivery_time": 20
 	},
 	"helmet": {
 		"name": "Helmet", 
 		"sprite": 1, 
 		"tooltip": "Adds 150 HP", 
 		"attributes": {"hp": 150},
-		"price": 5, 
+		"price": 300, 
 		"type": "equip", 
-		"delivery_time": 5
+		"delivery_time": 25
 	},
 	"potion": {
 		"name": "Potion", 
 		"sprite": 2, 
-		"tooltip": "Restore 50 HP",
-		"price": 5, 
+		"tooltip": "Restore 100 HP",
+		"attributes": {"current_hp": 100},
+		"price": 50, 
 		"type": "consumable", 
-		"attributes": {"current_hp": 50},
-		"delivery_time": 5
+		"delivery_time": 10
 	}
 }
 

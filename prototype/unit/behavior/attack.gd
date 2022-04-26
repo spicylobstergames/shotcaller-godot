@@ -95,9 +95,9 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 	
 	if target and target.current_hp > 0:
 		if not modifiers.dodge:
-			
+			var damage = max(1, modifiers.damage - target.defense)
 			#print("damage ", modifiers.damage)
-			target.current_hp -= modifiers.damage
+			target.current_hp -= damage
 			attacker.attack_count += 1
 			
 		if not modifiers.counter:

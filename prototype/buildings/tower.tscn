@@ -164,8 +164,7 @@ radius = 32.0
 radius = 160.0
 
 [node name="tower" instance=ExtResource( 1 )]
-hp = 800
-regen = 0
+hp = 1600
 vision = 280
 type = "building"
 subtype = "lane"

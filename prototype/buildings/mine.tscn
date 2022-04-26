@@ -146,7 +146,6 @@ radius = 64.0
 
 [node name="mine" instance=ExtResource( 1 )]
 hp = 1000
-regen = 0
 vision = 300
 type = "building"
 subtype = "backwood"

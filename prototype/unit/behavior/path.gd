@@ -112,19 +112,20 @@ func teleport(unit, point):
 	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
-	unit.working = false
-	unit.channeling = false
-	var new_position = point
-	# prevent teleport into buildings
-	var min_distance = 2 * building.collision_radius + unit.collision_radius
-	if distance <= min_distance:
-		var offset = (point - building.global_position).normalized()
-		new_position = building.global_position + (offset * min_distance)
-	# limit teleport range
-	if distance > teleport_max_distance:
-		var offset = (point - building.global_position).normalized()
-		new_position = building.global_position + (offset * teleport_max_distance)
+	if unit.channeling:
+		unit.working = false
+		unit.channeling = false
+		var new_position = point
+		# prevent teleport into buildings
+		var min_distance = 2 * building.collision_radius + unit.collision_radius
+		if distance <= min_distance:
+			var offset = (point - building.global_position).normalized()
+			new_position = building.global_position + (offset * min_distance)
+		# limit teleport range
+		if distance > teleport_max_distance:
+			var offset = (point - building.global_position).normalized()
+			new_position = building.global_position + (offset * teleport_max_distance)
 
-	unit.global_position = new_position
-	unit.lane = building.lane
-	unit.current_path = []
+		unit.global_position = new_position
+		unit.lane = building.lane
+		unit.current_path = []

@@ -640,6 +640,7 @@ radius = 140.0
 
 [node name="robin" instance=ExtResource( 1 )]
 hp = 400
+regen = 2
 vision = 160
 type = "leader"
 subtype = "archer"
@@ -647,11 +648,12 @@ display_name = "robin"
 title = "the hood"
 selectable = true
 moves = true
-speed = 50.0
+speed = 40.0
 collide = true
 attacks = true
 ranged = true
-damage = 30
+damage = 50
+defense = 5
 projectile_speed = 360.0
 
 [node name="symbol" parent="." index="1"]

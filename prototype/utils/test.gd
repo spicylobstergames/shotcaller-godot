@@ -27,9 +27,9 @@ func spawn_unit():
 #		inf.current_hp = 100
 #
 		var leader = game.map.create(s.sida, "mid", "blue", "Vector2", Vector2(850,1400))
-		game.map.create(s.archer, "mid", "blue", "Vector2",  Vector2(900,800))
-		game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1000,800))
-		game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1000,830))
+		game.map.create(s.archer, "mid", "blue", "Vector2",  Vector2(820,800))
+		game.map.create(s.mounted, "mid", "red", "Vector2",  Vector2(1000,800))
+		#game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1000,800))
 #		leader.hp = 100
 #		leader.current_hp = 100
 		

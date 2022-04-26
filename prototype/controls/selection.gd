@@ -123,8 +123,12 @@ func unselect():
 	game.control_state = "selection"
 	
 	if game.selected_unit:
+		
 		var unit = game.selected_unit
 		game.unit.hud.hide_unselect(unit)
+				
+		if unit.display_name == "blacksmith" and game.ui.shop.visible: 
+			game.ui.shop_button.button_down()
 		
 	game.selected_unit = null
 	game.selected_leader = null

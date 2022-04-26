@@ -6,7 +6,7 @@ var game:Node
 
 const leader = {
 	"arthur": {
-		"bonus damage": 10,
+		"bonus damage": 20,
 		"stun": 0.25,
 		"description": "25% chance to stun enemy"
 	},
@@ -18,7 +18,7 @@ const leader = {
 	"lorne": {
 		"respawn reduction": 0.8,
 		"defense": 5,
-		"description": "Ignores 5 damage on hits"
+		"description": "Ignores extra 5 damage on hits"
 	},
 	"hongi": {
 		"bonus hp": 100,
@@ -27,7 +27,7 @@ const leader = {
 	}, 
 	"nagato": {
 		"bonus retreat speed": 1.2,
-		"multi": 2,
+		"clones": 2,
 		"description": "Multiple units"
 		},
 	"osman": {
@@ -36,7 +36,7 @@ const leader = {
 		"description": "Extra 20% effect from potions"
 	},
 	"raja": {
-		"bonus speed": 1.1,
+		"bonus speed": 1.2,
 		"dodge": 0.2,
 		"description": "20% chance to avoid hits"
 	},
@@ -107,9 +107,6 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		if "dodge" in target_skills:
 			modifiers.dodge = (randf() <  target_skills.dodge)
 			
-		if "defense" in target_skills:
-			modifiers.damage -= target_skills.defense
-		
 		if not modifiers.counter:
 			if "counter" in target_skills and not attacker.ranged:
 				modifiers.damage = target_skills.counter

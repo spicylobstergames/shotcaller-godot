@@ -538,18 +538,20 @@ radius = 28.0
 radius = 25.0
 
 [node name="mounted" instance=ExtResource( 1 )]
-hp = 240
+hp = 260
+regen = 1
 vision = 160
 subtype = "mounted"
 display_name = "mounted"
 title = "mounted pawn"
 selectable = true
 moves = true
-speed = 80.0
+speed = 70.0
 collide = true
 attacks = true
-damage = 70
-attack_speed = 0.9
+damage = 45
+attack_speed = 0.7
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

@@ -5,8 +5,8 @@ var game:Node
 
 export var hp:int = 100
 var current_hp:int = 100
-export var regen:int = 1
-var current_regen:int = 1
+export var regen:int = 0
+var current_regen:int = 0
 export var vision:int = 100
 var current_vision:int = 100
 export var type:String = "pawn" # building leader
@@ -54,6 +54,8 @@ export var attack_range:int = 1
 var current_attack_range:int = 1
 export var attack_speed:float = 1
 var current_attack_speed:float = 1
+export var defense:int = 0
+var current_defense:int = 0
 var target:Node2D
 var last_target:Node2D
 var attack_count = 0
@@ -172,7 +174,8 @@ func oponent_team():
 
 
 func look_at(point):
-	self.mirror_toggle(point.x - self.global_position.x < 0)
+	if self.type != "building":
+		self.mirror_toggle(point.x - self.global_position.x < 0)
 
 
 func mirror_toggle(on):
@@ -289,6 +292,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 func stun_start():
 	self.wait_time = 2
 	self.stunned = true
+	self.channeling = false
 	self.set_state("stun")
 
 

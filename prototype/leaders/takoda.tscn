@@ -563,7 +563,7 @@ radius = 120.0
 
 [node name="takoda" instance=ExtResource( 1 )]
 hp = 400
-regen = 2
+regen = 4
 vision = 180
 type = "leader"
 subtype = "mounted"
@@ -571,11 +571,13 @@ display_name = "takoda"
 title = "native scout"
 selectable = true
 moves = true
-speed = 60.0
+speed = 50.0
 collide = true
 attacks = true
 ranged = true
-damage = 30
+damage = 60
+attack_speed = 0.9
+defense = 5
 projectile_speed = 200.0
 projectile_rotation = 20.0
 
