@@ -36,7 +36,7 @@ const leader = {
 		"description": "Extra 20% effect from potions"
 	},
 	"raja": {
-		"bonus speed": 1.2,
+		"bonus_speed": 5,
 		"dodge": 0.2,
 		"description": "20% chance to avoid hits"
 	},

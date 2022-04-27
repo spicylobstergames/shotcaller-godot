@@ -10,7 +10,8 @@ func _ready():
 func start(unit, objective): # move_and_attack
 	game.unit.attack.set_target(unit, null)
 	unit.objective = objective
-	if unit.attacks and not unit.stunned and game.unit.move.in_bounds(objective):
+	if (unit.attacks and game.unit.move.in_bounds(objective) and
+			not unit.retreating and not unit.stunned and not unit.channeling):
 		unit.set_behavior("advance")
 		
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})

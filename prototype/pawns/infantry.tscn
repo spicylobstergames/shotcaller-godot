@@ -579,10 +579,10 @@ title = "melee soldier"
 selectable = true
 moves = true
 speed = 35.0
-hunting_speed = 40.0
+hunting_speed = 50.0
 collide = true
 attacks = true
-damage = 40
+damage = 50
 defense = 5
 projectile_speed = 0.0
 

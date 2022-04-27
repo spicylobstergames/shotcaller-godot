@@ -648,11 +648,11 @@ title = "ranged soldier"
 selectable = true
 moves = true
 speed = 35.0
-hunting_speed = 50.0
+hunting_speed = 55.0
 collide = true
 attacks = true
 ranged = true
-damage = 38
+damage = 40
 defense = 2
 projectile_speed = 220.0
 

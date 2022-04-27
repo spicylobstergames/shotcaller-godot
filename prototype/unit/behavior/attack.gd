@@ -30,13 +30,13 @@ func start(unit, point):
 
 func set_target(unit, target):
 	if not target: unit.hunting = false
-	if target and not unit.target == target:
-		unit.current_attack_speed = unit.attack_speed
-		unit.attack_count = 0
-		unit.last_target = unit.target
+	if target:
+		if unit.moves: unit.hunting = true
+		unit.current_attack_speed = game.unit.modifiers.get_value(unit, "attack_speed")
+		if unit.target != target:
+			unit.attack_count = 0
+			unit.last_target = unit.target
 		unit.target = target
-		if unit.moves:
-			unit.hunting = true
 
 
 func closest_enemy_unit(unit, enemies):
@@ -73,6 +73,7 @@ func can_hit(attacker, target):
 		target != null and
 		target != attacker and
 		target.team != attacker.team and
+		target.type != "block" and
 		is_instance_valid(attacker) and
 		is_instance_valid(target) and
 		not target.dead

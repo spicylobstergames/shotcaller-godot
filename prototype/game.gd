@@ -93,7 +93,7 @@ func start():
 		
 		else: 
 			unit.spawn.start()
-			yield(get_tree().create_timer(1), "timeout")
+			yield(get_tree().create_timer(4), "timeout")
 			unit.spawn.leaders()
 			map.setup_leaders()
 
