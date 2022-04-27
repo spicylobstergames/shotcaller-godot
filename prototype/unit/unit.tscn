@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://skills/skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://controls/orders/unit_orders.gd" type="Script" id=12]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=13]
 [ext_resource path="res://unit/hud.gd" type="Script" id=14]
+[ext_resource path="res://skills/modifiers.gd" type="Script" id=15]
 
 [sub_resource type="DynamicFont" id=20]
 size = 10
@@ -74,6 +75,9 @@ script = ExtResource( 12 )
 
 [node name="skills" type="Node" parent="behavior"]
 script = ExtResource( 1 )
+
+[node name="modifiers" type="Node" parent="behavior"]
+script = ExtResource( 15 )
 
 [node name="symbol" type="Sprite" parent="."]
 visible = false

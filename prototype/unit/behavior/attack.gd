@@ -24,15 +24,19 @@ func start(unit, point):
 			unit.look_at(point)
 			unit.get_node("animations").playback_speed = unit.current_attack_speed
 			unit.set_state("attack")
+			
+		else: game.unit.advance.resume(unit)
 
 
 func set_target(unit, target):
-	if not unit.target == target:
+	if not target: unit.hunting = false
+	if target and not unit.target == target:
 		unit.current_attack_speed = unit.attack_speed
 		unit.attack_count = 0
 		unit.last_target = unit.target
 		unit.target = target
-
+		if unit.moves:
+			unit.hunting = true
 
 
 func closest_enemy_unit(unit, enemies):

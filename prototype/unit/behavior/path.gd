@@ -86,7 +86,6 @@ func follow_lane(unit):
 		var path = game.map[lane].duplicate()
 		if unit.team == "red": path.invert()
 		if unit.type != 'leader': 
-			game.unit.orders.setup_pawn(unit, lane)
 			follow(unit, path, "advance")
 		else: smart_follow(unit, path, "advance")
 

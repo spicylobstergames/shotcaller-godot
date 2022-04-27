@@ -139,10 +139,10 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 48.0
+radius = 60.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 64.0
+radius = 70.0
 
 [node name="church" instance=ExtResource( 1 )]
 hp = 3600
@@ -193,7 +193,7 @@ position = Vector2( 1, -80 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
 material = SubResource( 30 )
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 1.666, 1.666 )
 texture = ExtResource( 3 )
 offset = Vector2( 0, -22 )
 region_enabled = true

@@ -8,10 +8,11 @@ func _ready():
 
 
 func start(unit, objective): # move_and_attack
+	game.unit.attack.set_target(unit, null)
+	unit.objective = objective
 	if unit.attacks and not unit.stunned and game.unit.move.in_bounds(objective):
 		unit.set_behavior("advance")
-		unit.objective = objective
-		game.unit.attack.set_target(unit, null)
+		
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
 		var no_path = (unit.current_path.size() == 0)
@@ -67,6 +68,7 @@ func ally_attacked(target, attacker):
 func stop(unit):
 	if unit.behavior == "advance":
 		unit.set_behavior("stop")
+		
 		game.unit.move.stop(unit)
 
 

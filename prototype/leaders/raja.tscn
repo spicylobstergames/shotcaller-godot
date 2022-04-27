@@ -520,6 +520,7 @@ title = "chola warrior"
 selectable = true
 moves = true
 speed = 50.0
+hunting_speed = 60.0
 collide = true
 attacks = true
 damage = 60

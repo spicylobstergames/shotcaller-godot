@@ -26,7 +26,7 @@ const leader = {
 		"description": "Returns 10 damage on melee hits"
 	}, 
 	"nagato": {
-		"bonus retreat speed": 1.2,
+		"bonus_retreat_speed": 10,
 		"clones": 2,
 		"description": "Multiple units"
 		},
@@ -68,6 +68,12 @@ const leader = {
 }
 
 
+func get_value(unit, skill_name):
+	if unit.type == "leader":
+		var leader_skills = game.unit.skills.leader[unit.display_name]
+		if skill_name in leader_skills:
+			return leader_skills[skill_name]
+	return 0
 
 func _ready():
 	game = get_tree().get_current_scene()

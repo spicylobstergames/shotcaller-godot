@@ -70,7 +70,7 @@ func build():
 		if test.unit: # debug units
 			ui.main_menu.get_node("container/play_button").play_down()
 			start()
-		else:
+		else: # gotta handle timers for pause
 			#get_tree().paused = true
 			ui.main_menu.visible = true
 
@@ -79,13 +79,12 @@ func start():
 	if not started:
 		started = true
 		
-		#yield(get_tree(), "idle_frame")
 		rng.randomize()
 		map.setup_lanes()
+		ui.orders.build()
 		unit.path.setup_pathfind()
-		ui.orders.setup_lanes()
 		unit.spawn.choose_leaders()
-		
+
 		
 		if test.fog: map.fog.cover_map()
 		
@@ -94,7 +93,7 @@ func start():
 		
 		else: 
 			unit.spawn.start()
-			yield(get_tree().create_timer(4), "timeout")
+			yield(get_tree().create_timer(1), "timeout")
 			unit.spawn.leaders()
 			map.setup_leaders()
 

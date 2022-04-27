@@ -548,6 +548,7 @@ respawn = 0.8
 selectable = true
 moves = true
 speed = 50.0
+hunting_speed = 80.0
 collide = true
 attacks = true
 damage = 70

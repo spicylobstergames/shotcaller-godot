@@ -28,6 +28,7 @@ var selection_position:Vector2 = Vector2.ZERO
 # MOVEMENT
 export var moves:bool = false
 export var speed:float = 0
+export var hunting_speed:float = 0
 var current_speed:float = 0
 var angle:float = 0
 var origin:Vector2 = Vector2.ZERO
@@ -81,6 +82,8 @@ var tactics:String = "default" # aggresive defensive retreat
 var retreating = false
 var working = false
 var channeling = false
+var hunting = false
+var current_modifiers = {}
 
 
 var hud:Node
@@ -91,6 +94,7 @@ var advance:Node
 var path:Node
 var orders:Node
 var skills:Node
+var modifiers:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -103,6 +107,7 @@ func _ready():
 	if has_node("behavior/path"): path = get_node("behavior/path")
 	if has_node("behavior/orders"): orders = get_node("behavior/orders")
 	if has_node("behavior/skills"): skills = get_node("behavior/skills")
+	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
 	
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
@@ -123,8 +128,13 @@ func reset_unit():
 	self.current_speed = self.speed
 	self.current_damage = self.damage
 	self.current_attack_speed = self.attack_speed
+	self.current_modifiers = modifiers.new_modifiers()
 	self.visible = true
 	self.stunned = false
+	self.hunting = false
+	self.channeling = false
+	self.retreating = false
+	self.working = false
 	self.hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
 

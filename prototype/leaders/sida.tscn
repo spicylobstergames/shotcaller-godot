@@ -561,6 +561,7 @@ title = "sami warrior"
 selectable = true
 moves = true
 speed = 40.0
+hunting_speed = 50.0
 collide = true
 attacks = true
 ranged = true

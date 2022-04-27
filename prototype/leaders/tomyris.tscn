@@ -660,6 +660,7 @@ title = "scythian warrior"
 selectable = true
 moves = true
 speed = 50.0
+hunting_speed = 80.0
 collide = true
 attacks = true
 ranged = true
