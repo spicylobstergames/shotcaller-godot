@@ -203,13 +203,9 @@ func give_item(delivery):
 			inventory.equip_items[index] = item
 			inventory.equip_item_buttons[index].setup(item)
 			for key in item.attributes.keys():
-				match key:
-					"hp":
-						leader.current_hp += item.attributes[key]
-					"damage":
-						leader.current_damage += item.attributes[key]
-					
-				leader[key] += item.attributes[key]
+				game.unit.modifiers.add(leader, key, item.name, item.attributes[key])
+
+				#leader[key] += item.attributes[key]
 		"consumable":
 			inventory.consumable_items[index] = item
 			inventory.consumable_item_buttons[index].setup(item)
@@ -227,14 +223,10 @@ func remove_item(leader, index):
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
 		for key in item.attributes.keys():
-			match key:
-				"hp":
-					leader.current_hp -= item.attributes[key]
-				"damage":
-					leader.current_damage -= item.attributes[key]
-			leader[key] -= item.attributes[key]
+			game.unit.modifiers.remove(leader, key, item.name, item.attributes[key])
 			
 		leaders[leader.name].equip_items[index] = null
+		
 	elif item.type == "consumable":
 		leaders[leader.name].consumable_items[index - equip_items_max] = null
 	
@@ -267,7 +259,7 @@ func update_consumables(leader):
 	var counter = 0
 	for item in inventory.consumable_items:
 		var item_button = inventory.consumable_item_buttons[counter]
-		item_button.disabled = (leader.current_hp >= leader.hp)
+		item_button.disabled = (leader.current_hp >= game.unit.modifiers.get_value(leader, "hp"))
 		counter += 1
 
 

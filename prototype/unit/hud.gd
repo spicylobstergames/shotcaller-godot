@@ -17,7 +17,7 @@ func _ready():
 func hide_hpbars():
 	for unit in game.all_units:
 		if (unit != game.selected_unit and 
-				unit.current_hp == unit.hp and
+				unit.current_hp == game.unit.modifiers.get_value(unit, "hp") and
 				unit.hud and
 				unit.type != "leader"):
 					unit.hud.hpbar.visible = false
@@ -30,16 +30,18 @@ func show_hpbars():
 
 func update_hpbar(unit):
 	if unit.current_hp <= 0:
+		unit.current_hp = 0
 		unit.hud.hpbar.get_node("green").region_rect.size.x = 0
 	else:
 		if game.camera.zoom.x <= 1 and unit.hud:
+			var hp = game.unit.modifiers.get_value(unit, "hp")
 			unit.hud.hpbar.visible = true
-			var scale = float(unit.current_hp) / float(unit.hp)
+			var scale = float(unit.current_hp) / float(hp)
 			if scale < 0: scale = 0
 			if scale > 1: scale = 1
 			var size = unit.hud.hpbar.get_node("red").region_rect.size.x 
 			unit.hud.hpbar.get_node("green").region_rect.size.x = scale * size
-			if unit.type != "leader" and game.camera.zoom.x == 1 and unit.current_hp >= unit.hp:
+			if unit.type != "leader" and game.camera.zoom.x == 1 and unit.current_hp >= hp:
 					unit.hud.hpbar.hide()
 
 

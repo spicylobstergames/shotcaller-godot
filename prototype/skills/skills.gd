@@ -101,7 +101,7 @@ func secondary_projectile(attacker, target):
 
 func hit_modifiers(attacker, target, projectile, modifiers):
 	modifiers = {
-		"damage": attacker.current_damage,
+		"damage": game.unit.modifiers.get_value(attacker, "damage"),
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
 		"counter": false,
@@ -141,6 +141,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 				modifiers.damage += attacker_skills.bleed * min(10, attacker.attack_count)
 			
 			if "agile" in attacker_skills:
-				attacker.current_attack_speed = attacker.attack_speed + (attacker_skills.agile * min(10, attacker.attack_count))
+				game.unit.modifiers.remove(attacker, "attack_speed", "agile")
+				game.unit.modifiers.add(attacker, "attack_speed", "agile", attacker_skills.agile * min(10, attacker.attack_count))
 	
 	return modifiers

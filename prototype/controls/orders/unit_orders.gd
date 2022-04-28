@@ -8,7 +8,6 @@ var enemy_lanes_orders = {}
 var player_leaders_orders = {}
 var enemy_leaders_orders = {}
 
-var retreat_regen = 10
 
 
 func _ready():
@@ -109,12 +108,8 @@ func hp_regen_cycle(): # called every second
 
 func set_regen(unit):
 	if not unit.dead:
-		unit.current_regen = unit.regen
-		if unit.retreating: unit.current_regen += retreat_regen
-		unit.current_hp += unit.current_regen
-		unit.current_hp = min(unit.current_hp, unit.hp)
-		game.unit.hud.update_hpbar(unit)
-		if unit == game.selected_unit: game.ui.stats.update()
+		var regen = game.unit.modifiers.get_value(unit, "regen")
+		unit.heal(regen)
 	else: unit.regen = 0
 
 
@@ -138,7 +133,7 @@ func set_leader(leader, orders):
 			not leader.retreating and 
 			not (leader.team == game.player_team and game.ui.shop.close_to_blacksmith(leader)) ): 
 				
-		game.unit.path.follow_lane(leader)
+		game.unit.follow.lane(leader)
 
 
 
@@ -202,14 +197,15 @@ func closest_unit(unit, enemies):
 func take_hit_retreat(attacker, target):
 	match target.type:
 		"leader":
+			var hp = game.unit.modifiers.get_value(target, "hp")
 			match target.tactics:
 				"escape":
 					retreat(target)
 				"defensive":
-					if target.current_hp < target.hp / 2:
+					if target.current_hp < hp / 2:
 						retreat(target)
 				"default":
-					if target.current_hp < target.hp / 3:
+					if target.current_hp < hp / 3:
 						retreat(target)
 
 
@@ -225,6 +221,6 @@ func retreat(unit):
 	var lane = unit.lane
 	var path = game.map[lane].duplicate()
 	if unit.team == "blue": path.invert()
-	game.unit.path.smart_follow(unit, path, "move")
+	game.unit.follow.smart(unit, path, "move")
 	
 

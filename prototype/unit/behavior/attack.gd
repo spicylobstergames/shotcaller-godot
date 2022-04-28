@@ -22,19 +22,22 @@ func start(unit, point):
 		
 		if unit.target:
 			unit.look_at(point)
-			unit.get_node("animations").playback_speed = unit.current_attack_speed
+			unit.get_node("animations").playback_speed = game.unit.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 			
 		else: game.unit.advance.resume(unit)
 
 
 func set_target(unit, target):
-	if not target: unit.hunting = false
+	if not target: 
+		unit.hunting = false
+		unit.attack_count = 0
+		game.unit.modifiers.remove(unit, "attack_speed", "agile")
 	if target:
 		if unit.moves: unit.hunting = true
-		unit.current_attack_speed = game.unit.modifiers.get_value(unit, "attack_speed")
 		if unit.target != target:
 			unit.attack_count = 0
+			game.unit.modifiers.remove(unit, "attack_speed", "agile")
 			unit.last_target = unit.target
 		unit.target = target
 
@@ -82,7 +85,7 @@ func can_hit(attacker, target):
 
 func in_range(attacker, target):
 	var att_pos = attacker.global_position + attacker.attack_hit_position
-	var att_rad = attacker.attack_hit_radius * attacker.current_attack_range
+	var att_rad = game.unit.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
@@ -98,9 +101,9 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if projectile.targets != null and projectile.targets.find(target) < 0:
 			projectile.targets.append(target)
 	
-	if target and target.current_hp > 0:
+	if target and not target.dead:
 		if not modifiers.dodge:
-			var damage = max(1, modifiers.damage - target.defense)
+			var damage = max(1, modifiers.damage - game.unit.modifiers.get_value(target, "defense"))
 			#print("damage ", modifiers.damage)
 			target.current_hp -= damage
 			attacker.attack_count += 1

@@ -59,15 +59,15 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-func follow(unit, path, cb):
+func start(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
 		unit.current_path = path
 		game.unit[cb].start(unit, next_point)
 
 
-func follow_next(unit):
-	follow(unit, unit.current_path, unit.behavior)
+func next(unit):
+	start(unit, unit.current_path, unit.behavior)
 
 
 func change_lane(unit, point):
@@ -80,18 +80,18 @@ func change_lane(unit, point):
 
 
 
-func follow_lane(unit):
+func lane(unit):
 	if !unit.current_path:
 		var lane = unit.lane
 		var path = game.map[lane].duplicate()
 		if unit.team == "red": path.invert()
 		if unit.type != 'leader': 
-			follow(unit, path, "advance")
-		else: smart_follow(unit, path, "advance")
+			start(unit, path, "advance")
+		else: smart(unit, path, "advance")
 
 
 
-func smart_follow(unit, path, cb):
+func smart(unit, path, cb):
 	if path and path.size():
 		var new_path = game.utils.cut_path(unit, path)
 		var next_point = new_path.pop_front()

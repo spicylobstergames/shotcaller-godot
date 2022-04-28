@@ -101,7 +101,7 @@ func disable_equip():
 func close_to_blacksmith(leader):
 	for blacksmith in blacksmiths:
 		var distance = leader.global_position.distance_to(blacksmith.global_position)
-		if distance < leader.current_vision:
+		if distance < game.unit.modifiers.get_value(leader, "vision"):
 			return true
 	return false
 

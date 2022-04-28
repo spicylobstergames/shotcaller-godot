@@ -82,7 +82,7 @@ func start():
 		rng.randomize()
 		map.setup_lanes()
 		ui.orders.build()
-		unit.path.setup_pathfind()
+		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
 
 		

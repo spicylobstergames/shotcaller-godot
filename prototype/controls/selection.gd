@@ -25,11 +25,11 @@ func _unhandled_input(event):
 				
 				if event.scancode == KEY_T:
 					game.selected_unit.working = true
-					game.unit.path.teleport(game.selected_unit, point)
+					game.unit.follow.teleport(game.selected_unit, point)
 					
 				if event.scancode == KEY_L:
 					game.selected_unit.working = true
-					game.unit.path.change_lane(game.selected_unit, point)
+					game.unit.follow.change_lane(game.selected_unit, point)
 				
 				if game.test.unit:
 					if event.scancode == KEY_Z: # attack test
@@ -53,7 +53,7 @@ func _unhandled_input(event):
 						
 						"teleport":
 							game.selected_unit.working = true
-							game.unit.path.teleport(game.selected_unit, point)
+							game.unit.follow.teleport(game.selected_unit, point)
 						
 						"advance":
 							game.selected_unit.working = true
@@ -64,7 +64,7 @@ func _unhandled_input(event):
 							game.unit.move.smart_move(game.selected_unit, point)
 						
 						"lane":
-							game.unit.path.change_lane(game.selected_unit, point)
+							game.unit.follow.change_lane(game.selected_unit, point)
 		
 		
 		# MAP CLICK ZOOM IN

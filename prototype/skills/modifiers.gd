@@ -5,6 +5,7 @@ var game:Node
 
 var extra_retreat_speed = 10
 
+var retreat_regen = 10
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -26,8 +27,10 @@ func new_modifiers():
 func get_value(unit, mod_str):
 	var default = unit[mod_str]
 	
-	if mod_str == "speed":
-		default = get_speed(unit)
+	match mod_str:
+		"speed": default = get_speed(unit)
+		"regen": default = get_regen(unit)
+		"attack_range": default = get_att_range(unit)
 	
 	for modifier in unit.current_modifiers[mod_str]:
 		default += modifier.value
@@ -49,14 +52,25 @@ func get_speed(unit):
 	return default
 
 
-func add_modifier(unit, mod_str, mod_name, value):
+func get_regen(unit):
+	var default = unit.regen
+	if unit.retreating: default += retreat_regen
+	return default
+
+
+func get_att_range(unit):
+	return unit.attack_hit_radius * unit.attack_range
+
+
+
+func add(unit, mod_str, mod_name, value):
 	unit.current_modifiers[mod_str].append({
 		"name": mod_name,
 		"value": value
 	})
 
 
-func remove_modifier(unit, mod_str, mod_name):
+func remove(unit, mod_str, mod_name):
 	for modifier in unit.current_modifiers[mod_str]:
 		if modifier.name == mod_name:
 			unit.current_modifiers[mod_str].erase(modifier)

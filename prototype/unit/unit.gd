@@ -6,9 +6,7 @@ var game:Node
 export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 0
-var current_regen:int = 0
 export var vision:int = 100
-var current_vision:int = 100
 export var type:String = "pawn" # building leader
 export var subtype:String = "melee" # ranged mounted base lane backwood
 export var display_name:String
@@ -29,7 +27,6 @@ var selection_position:Vector2 = Vector2.ZERO
 export var moves:bool = false
 export var speed:float = 0
 export var hunting_speed:float = 0
-var current_speed:float = 0
 var angle:float = 0
 var origin:Vector2 = Vector2.ZERO
 var current_step:Vector2 = Vector2.ZERO
@@ -50,13 +47,9 @@ export var attacks:bool = false
 export var ranged:bool = false
 var stunned:bool = false
 export var damage:int = 0
-var current_damage:int = 0
 export var attack_range:int = 1
-var current_attack_range:int = 1
 export var attack_speed:float = 1
-var current_attack_speed:float = 1
 export var defense:int = 0
-var current_defense:int = 0
 var target:Node2D
 var last_target:Node2D
 var attack_count = 0
@@ -91,7 +84,7 @@ var spawn:Node
 var move:Node
 var attack:Node
 var advance:Node
-var path:Node
+var follow:Node
 var orders:Node
 var skills:Node
 var modifiers:Node
@@ -104,7 +97,7 @@ func _ready():
 	if has_node("behavior/move"): move = get_node("behavior/move")
 	if has_node("behavior/attack"): attack = get_node("behavior/attack")
 	if has_node("behavior/advance"): advance = get_node("behavior/advance")
-	if has_node("behavior/path"): path = get_node("behavior/path")
+	if has_node("behavior/follow"): follow = get_node("behavior/follow")
 	if has_node("behavior/orders"): orders = get_node("behavior/orders")
 	if has_node("behavior/skills"): skills = get_node("behavior/skills")
 	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
@@ -123,11 +116,6 @@ func reset_unit():
 	
 	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
-	self.current_attack_range = self.attack_range
-	self.current_vision = self.vision
-	self.current_speed = self.speed
-	self.current_damage = self.damage
-	self.current_attack_speed = self.attack_speed
 	self.current_modifiers = modifiers.new_modifiers()
 	self.visible = true
 	self.stunned = false
@@ -196,7 +184,6 @@ func mirror_toggle(on):
 		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
 
 
-
 func get_texture():
 	if not self.texture:
 		var body = get_node("sprites/body")
@@ -230,12 +217,13 @@ func get_texture():
 
 
 func get_units_on_sight(filters):
-	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, self.current_vision)
+	var current_vision = game.unit.modifiers.get_value(self, "vision")
+	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, current_vision)
 	var targets = []
 	for unit2 in neighbors:
 		if unit2.hp and self != unit2 and not unit2.dead:
 			var distance = self.global_position.distance_to(unit2.global_position)
-			if distance < self.current_vision:
+			if distance < current_vision:
 				if not filters: targets.append(unit2)
 				else:
 					for filter in filters:
@@ -280,7 +268,7 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		path.follow_next(self)
+		follow.next(self)
 	elif self.moves:
 		self.working = false
 		move.end(self)
@@ -297,6 +285,13 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 		attack.hit(self)
 		if self.moves:
 			advance.resume(self)
+
+
+func heal(heal_hp):
+	self.current_hp += heal_hp
+	self.current_hp = int(min(self.current_hp, modifiers.get_value(self, "hp")))
+	game.unit.hud.update_hpbar(self)
+	if self == game.selected_unit: game.ui.stats.update()
 
 
 func stun_start():
