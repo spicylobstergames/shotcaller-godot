@@ -526,11 +526,11 @@ scale = Vector2( 0.24, 0.24 )
 position = Vector2( 0, 150 )
 
 [node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap"]
-margin_left = 54.0
-margin_top = 54.0
-margin_right = 96.0
-margin_bottom = 96.0
-rect_pivot_offset = Vector2( 20, 20 )
+margin_left = 53.0
+margin_top = 53.0
+margin_right = 97.0
+margin_bottom = 97.0
+rect_pivot_offset = Vector2( 22, 22 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0
 editor_only = false

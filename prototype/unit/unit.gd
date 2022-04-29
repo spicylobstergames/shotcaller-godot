@@ -156,17 +156,22 @@ func setup_team():
 	# MIRROR
 	if self.type != "building": 
 		self.mirror_toggle(is_red)
-	else: # BLUE FLAGS
+	else: 
+		# mirror lumbermill
 		if self.display_name == "lumbermill" and get_parent().name == "blue":
 			self.mirror_toggle(true)
-		if is_blue:
-			var flags = self.get_node("sprites/flags").get_children()
-			for flag in flags:
-				var flag_sprite = flag.get_node("sprite")
-				var material = flag_sprite.material.duplicate()
-				material.set_shader_param("change_color", false)
-				flag_sprite.material = material
-
+		# color flags
+		var flags = self.get_node("sprites/flags").get_children()
+		for flag in flags:
+			var flag_sprite = flag.get_node("sprite")
+			var material = flag_sprite.material.duplicate()
+			var color = 1
+			if is_blue: color = 0
+			if is_neutral: color = 2
+			material.set_shader_param("change_color", color)
+			flag_sprite.material = material
+		
+			
 
 func oponent_team():
 	var t = "blue"
@@ -247,58 +252,57 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	advance.on_idle_end(self)
+	game.unit.advance.on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 
 
 func on_move(delta): # every frame if there's no collision
-	move.step(self, delta)
+	game.unit.move.step(self, delta)
 
 
 func on_collision(delta):
 	if self.moves: 
-		move.on_collision(self, delta)
+		game.unit.move.on_collision(self, delta)
 		if self.attacks: 
-			advance.on_collision(self)
+			game.unit.advance.on_collision(self)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves:
 		if self.attacks: 
-			advance.resume(self)
+			game.unit.advance.resume(self)
 	
-	game.unit.follow.draw_path(self)
+	if self == game.selected_unit: game.unit.follow.draw_path(self)
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		follow.next(self)
+		game.unit.follow.next(self)
 	elif self.moves:
-		match self.after_arive:
-			"conquer":
-				print("conquer")
+		if self.after_arive =="conquer": 
+			game.unit.orders.conquer_building(self)
 		self.after_arive = "stop"
 		self.working = false
-		move.end(self)
+		game.unit.move.end(self)
 		if self.attacks: 
-			advance.end(self)
+			game.unit.advance.end(self)
 
 
 func on_attack_release(): # every ranged projectile start
-	attack.projectile_release(self)
-	advance.resume(self)
+	game.unit.attack.projectile_release(self)
+	game.unit.advance.resume(self)
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
-		attack.hit(self)
+		game.unit.attack.hit(self)
 		if self.moves:
-			advance.resume(self)
+			game.unit.advance.resume(self)
 
 
 func heal(heal_hp):
 	self.current_hp += heal_hp
-	self.current_hp = int(min(self.current_hp, modifiers.get_value(self, "hp")))
+	self.current_hp = int(min(self.current_hp, game.unit.modifiers.get_value(self, "hp")))
 	game.unit.hud.update_hpbar(self)
 	if self == game.selected_unit: game.ui.stats.update()
 
@@ -315,9 +319,9 @@ func on_stun_end():
 	else:
 		self.stunned = false
 		if self.behavior == "move":
-			move.resume(self)
+			game.unit.move.resume(self)
 		if self.behavior == "advance":
-			advance.resume(self)
+			game.unit.advance.resume(self)
 		if self.behavior == "stand" or self.behavior == "stop":
 			self.set_state("idle")
 
@@ -342,6 +346,5 @@ func on_death_end():  # death animation end
 				game.unit.spawn.cemitery_add_pawn(self)
 			"leader":
 				game.unit.spawn.cemitery_add_leader(self)
-
-						
+	
 	else: game.test.respawn(self)

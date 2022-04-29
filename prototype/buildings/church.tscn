@@ -193,7 +193,7 @@ position = Vector2( 1, -80 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
 material = SubResource( 30 )
-scale = Vector2( 1.666, 1.666 )
+scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 3 )
 offset = Vector2( 0, -22 )
 region_enabled = true
@@ -211,9 +211,6 @@ visible = false
 position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
-
-[node name="collisions" parent="." index="5"]
-visible = true
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -20 )

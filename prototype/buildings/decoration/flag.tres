@@ -3,7 +3,7 @@
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
-uniform bool change_color = true;
+uniform int change_color = 0;
 uniform float speed = 1.0;
 uniform float frequency_x = 0.0;
 uniform float frequency_y = 0.0;
@@ -13,24 +13,30 @@ uniform float distortion_x = 0.0;
 uniform float distortion_y = 0.0;
 
 uniform vec4 origin:hint_color;
-uniform vec4 origin2:hint_color;
-uniform vec4 origin3:hint_color;
-uniform vec4 new:hint_color;
-uniform vec4 new2:hint_color;
-uniform vec4 new3:hint_color;
+uniform vec4 origin1:hint_color;
+uniform vec4 red:hint_color;
+uniform vec4 red1:hint_color;
+uniform vec4 gray:hint_color;
+uniform vec4 gray1:hint_color;
 
 uniform float tolerance;
 
 void fragment() {
 	vec4 current_pixel = texture(TEXTURE, UV);
-	if (change_color) {
-		vec4 new_pixel = current_pixel;
-		if (length(current_pixel - origin) < tolerance)
-			new_pixel = new;
-		if (length(current_pixel - origin2) < tolerance)
-			new_pixel = new2;
-		if (length(current_pixel - origin3) < tolerance)
-			new_pixel = new3;
+	vec4 new_pixel = current_pixel;
+	if (change_color > 0) {
+		if (change_color == 1) {
+			if (length(current_pixel - origin) < tolerance)
+				new_pixel = red;
+			if (length(current_pixel - origin1) < tolerance)
+				new_pixel = red1;
+		}
+		if (change_color == 2) {
+			if (length(current_pixel - origin) < tolerance)
+				new_pixel = gray;
+			if (length(current_pixel - origin1) < tolerance)
+				new_pixel = gray1;
+		}
 		COLOR = new_pixel;
 	} else {
 		COLOR = current_pixel
@@ -45,7 +51,7 @@ void vertex() {
 [resource]
 resource_name = "flag"
 shader = SubResource( 1 )
-shader_param/change_color = true
+shader_param/change_color = 1
 shader_param/speed = 1.0
 shader_param/frequency_x = 0.0
 shader_param/frequency_y = 7.0
@@ -54,9 +60,9 @@ shader_param/amplitude_y = 3.0
 shader_param/distortion_x = 0.0
 shader_param/distortion_y = 11.0
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/origin1 = Color( 0.32549, 0.584314, 0.709804, 1 )
+shader_param/red = Color( 0.537255, 0.317647, 0.4, 1 )
+shader_param/red1 = Color( 0.843137, 0.396078, 0.396078, 1 )
+shader_param/gray = Color( 0.447059, 0.490196, 0.45098, 1 )
+shader_param/gray1 = Color( 0.615686, 0.670588, 0.623529, 1 )
 shader_param/tolerance = 0.1

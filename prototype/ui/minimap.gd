@@ -136,12 +136,13 @@ func follow_camera():
 		var half = game.map.size / 2
 		var window_height = get_viewport().size.y
 		var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
+		var offset = 53
 		if is_panning: game.camera.position = pos
-		cam_rect.rect_position = Vector2(54,54) + game.camera.position / 13.5
+		cam_rect.rect_position = Vector2(offset,offset) + game.camera.position / 13.5
 		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
-		if cam_rect.rect_position.x > 108: cam_rect.rect_position.x = 108
+		if cam_rect.rect_position.x > offset*2: cam_rect.rect_position.x = offset*2
 		if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0
-		if cam_rect.rect_position.y > 108: cam_rect.rect_position.y = 108
+		if cam_rect.rect_position.y > offset*2: cam_rect.rect_position.y = offset*2
 
 
 func move_symbols():

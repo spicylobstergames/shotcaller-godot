@@ -192,6 +192,12 @@ func closest_unit(unit, enemies):
 	return sorted[0].unit
 
 
+
+func conquer_building(unit):
+	pass
+
+
+
 # RETREAT
 
 func take_hit_retreat(attacker, target):

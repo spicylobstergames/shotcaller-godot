@@ -80,19 +80,18 @@ func next(unit):
 
 
 func draw_path(unit):
-	if unit and unit == game.selected_unit:
+	if unit and unit.current_path:
+		path_line.visible = true
 		var pool = PoolVector2Array()
 		pool.push_back(unit.global_position)
-		if unit.current_path:
-			for point in unit.current_path:
-				pool.push_back(point)
+		pool.append_array(unit.current_path)
 		if unit.team == "blue":
 			path_line.default_color = Color(0.4,0.6,1, 0.3)
 		else: path_line.default_color = Color(1,0.3,0.3, 0.3)
 		path_line.points = pool
 	# todo add line shader
 	# https://www.reddit.com/r/godot/comments/btsrxc/shaders_for_line2d_are_tricky_does_anyone_use_them/
-	
+	else: path_line.visible = false
 
 
 func change_lane(unit, point):
