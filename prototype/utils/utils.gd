@@ -154,3 +154,17 @@ func label(string):
 		font = game.ui.shop.get_node("scroll_container/container/equip").get_font("font")
 	label_node.add_font_override("font", font)
 	return label_node
+
+
+func buildings_click(point):
+	for building in game.player_buildings:
+		if click_distance(building, point): return building
+	for building in game.enemy_buildings:
+		if click_distance(building, point): return building
+	for building in game.neutral_buildings:
+		if click_distance(building, point): return building
+	return null
+
+
+func click_distance(unit, point):
+	return unit.global_position.distance_to(point) <= unit.selection_radius

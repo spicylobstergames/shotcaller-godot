@@ -276,17 +276,21 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self == game.selected_unit: game.unit.follow.draw_path(self)
 
 
+
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
 		game.unit.follow.next(self)
 	elif self.moves:
+		self.working = false
+		game.unit.move.end(self)
+		
+		if self.attacks: 
+			game.unit.advance.end(self)
+		
 		if self.after_arive =="conquer": 
 			game.unit.orders.conquer_building(self)
 		self.after_arive = "stop"
-		self.working = false
-		game.unit.move.end(self)
-		if self.attacks: 
-			game.unit.advance.end(self)
+
 
 
 func on_attack_release(): # every ranged projectile start

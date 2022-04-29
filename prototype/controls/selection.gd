@@ -154,30 +154,11 @@ func order(unit, point):
 	unit.hunting = false
 	game.unit.attack.set_target(unit, null)
 	if point:
-		var building = buildings_click(point)
+		var building = game.utils.buildings_click(point)
 		if building:
+			point.y += game.map.tile_size
 			match building.team:
-				"neutral":
-					unit.after_arive = "conquer"
-					point.y += game.map.tile_size
-				game.player_team:
-					unit.after_arive = "stop"
-					point.y += game.map.tile_size
-				game.enemy_team:
-					unit.after_arive = "attack"
-					point.y += game.map.tile_size
+				"neutral": unit.after_arive = "conquer"
+				game.player_team: unit.after_arive = "stop"
+				game.enemy_team: unit.after_arive = "attack"
 		return point
-
-
-func buildings_click(point):
-	for building in game.player_buildings:
-		if click_distance(building, point): return building
-	for building in game.enemy_buildings:
-		if click_distance(building, point): return building
-	for building in game.neutral_buildings:
-		if click_distance(building, point): return building
-	return null
-
-
-func click_distance(unit, point):
-	return unit.global_position.distance_to(point) <= unit.selection_radius

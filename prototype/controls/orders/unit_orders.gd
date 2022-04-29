@@ -194,8 +194,19 @@ func closest_unit(unit, enemies):
 
 
 func conquer_building(unit):
-	pass
-
+	var point = unit.global_position
+	point.y -= game.map.tile_size
+	var building = game.utils.buildings_click(point)
+	
+	if building and building.team == "neutral" and not unit.stunned:
+		unit.channeling = true
+		unit.working = true
+		yield(get_tree().create_timer(3), "timeout")
+		if unit.channeling:
+			unit.channeling = false
+			unit.working = false
+			building.team = unit.team
+			building.setup_team()
 
 
 # RETREAT
