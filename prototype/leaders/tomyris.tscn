@@ -718,8 +718,7 @@ scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 visible = false
-modulate = Color( 1, 1, 1, 0 )
-position = Vector2( 26.2025, 0 )
+position = Vector2( 26, 0 )
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 frames = SubResource( 44 )

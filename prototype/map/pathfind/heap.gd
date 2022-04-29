@@ -10,9 +10,8 @@ class Heap:
 	###
 	#Default comparison function to be used
 	###
-	func _init(size, cmp):
+	func _init(cmp):
 		_nodes = []
-		#_nodes.resize(size)
 		_cmp = cmp
 	
 	
@@ -56,15 +55,12 @@ class Heap:
 
 	func empty():
 		return _nodes.empty()
-#		for node in _nodes:
-#			if not node == null: return false 
-#		return true
-
+	
 	func size():
 		return _nodes.size()
 
 	func clone():
-		var heap = Heap.new(_cmp, _nodes.size())
+		var heap = Heap.new(_cmp)
 		heap._nodes = _nodes.slice(0, -1)
 		return heap
 
@@ -104,7 +100,6 @@ class Heap:
 	#Pop the smallest item off the heap, maintaining the heap invariant.
 	###
 	func _heappop(array, cmp):
-		#print(array)
 		var item
 		var lastelt = array.pop_back()
 		if array.size():
@@ -113,7 +108,6 @@ class Heap:
 			_siftup(array, 0, cmp)
 		else:
 			item = lastelt
-		#print(item)
 		return item
 
 	###

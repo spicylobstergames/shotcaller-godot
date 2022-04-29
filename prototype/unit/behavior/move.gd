@@ -16,7 +16,7 @@ func start(unit, destiny):
 	if unit.moves and not unit.stunned and in_bounds(destiny):
 		unit.set_behavior("move")
 		move(unit, destiny)
-		unit.get_node("animations").playback_speed = game.unit.modifiers.get_value(unit, "speed") / unit.speed
+
 
 
 func in_bounds(p):
@@ -29,8 +29,9 @@ func move(unit, destiny):
 	if unit.moves and not unit.stunned:
 		unit.current_destiny = destiny
 		calc_step(unit)
+		unit.get_node("animations").playback_speed = game.unit.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
-
+	
 
 
 func calc_step(unit):
@@ -100,8 +101,8 @@ func stand(unit):
 
 
 
-func smart(unit, point):
+func smart(unit, point, cb):
 	if not unit.stunned:
 		var path = game.unit.follow.find_path(unit.global_position, point)
-		if path: game.unit.follow.start(unit, path, "move")
+		if path: game.unit.follow.start(unit, path, cb)
 

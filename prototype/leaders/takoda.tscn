@@ -635,11 +635,11 @@ offset = Vector2( 6, -4 )
 position = Vector2( 0, -25 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+visible = false
 position = Vector2( 2.20537e-06, 0 )
 z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-visible = false
 frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="5"]

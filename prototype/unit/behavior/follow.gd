@@ -80,7 +80,7 @@ func next(unit):
 
 
 func draw_path(unit):
-	if unit == game.selected_unit:
+	if unit and unit == game.selected_unit:
 		var pool = PoolVector2Array()
 		pool.push_back(unit.global_position)
 		if unit.current_path:
@@ -101,7 +101,7 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
-	game.unit.move.smart(unit, lane_start)
+	game.unit.move.smart(unit, lane_start, "move")
 
 
 

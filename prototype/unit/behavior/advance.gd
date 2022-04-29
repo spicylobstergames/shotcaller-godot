@@ -7,34 +7,37 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func start(unit, objective): # move_and_attack
+func start(unit, objective, smart_move = false): # move_and_attack
 	game.unit.attack.set_target(unit, null)
 	unit.objective = objective
 	if (unit.attacks and game.unit.move.in_bounds(objective) and
 			not unit.retreating and not unit.stunned and not unit.channeling):
 		unit.set_behavior("advance")
-		
+		if smart_move:
+			var path = game.unit.follow.find_path(unit.global_position, objective)
+			unit.current_path = path
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
 		var no_path = (unit.current_path.size() == 0)
-		if not enemies and not at_objective: move(unit, objective) 
+		if not enemies and not at_objective: move(unit, objective, smart_move) 
 		if not enemies and at_objective and no_path: stop(unit)
 		if enemies:
 			var target = game.unit.orders.select_target(unit, enemies)
-			if not target and not at_objective: move(unit, objective)
+			if not target and not at_objective: move(unit, objective, smart_move)
 			if not target and at_objective and no_path: stop(unit)
 			if target:
 				game.unit.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
 				if not game.unit.attack.in_range(unit, target):
-					move(unit, target_position) 
+					move(unit, target_position, smart_move) 
 				else: 
 					game.unit.attack.start(unit, target_position)
 
 
-func move(unit, objective):
+func move(unit, objective, smart_move):
 	if unit.moves and objective:
-		game.unit.move.move(unit, objective)
+		if smart_move: game.unit.move.smart(unit, objective, "advance")
+		else : game.unit.move.move(unit, objective)
 	else: stop(unit)
 
 
@@ -76,3 +79,7 @@ func stop(unit):
 func on_idle_end(unit):
 	if unit.behavior == "advance" or unit.behavior == "stop":
 		if unit.attacks: start(unit, unit.global_position)
+
+
+func smart(unit, objective):
+	start(unit, objective, true)

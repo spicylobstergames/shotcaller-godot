@@ -25,6 +25,8 @@ func _unhandled_input(event):
 					# attack test
 					if event.scancode == KEY_Z: attack(game.selected_unit, point) 
 					if event.scancode == KEY_S: stand(game.selected_unit)
+					
+				game.unit.follow.draw_path(game.selected_unit)
 	
 	
 	# CLICK SELECTION
@@ -41,6 +43,8 @@ func _unhandled_input(event):
 						"advance": advance(game.selected_unit, point)
 						"move": move(game.selected_unit, point)
 						"lane": change_lane(game.selected_unit, point)
+						
+					game.unit.follow.draw_path(game.selected_unit)
 		
 		
 		# MAP CLICK ZOOM IN
@@ -62,7 +66,6 @@ func _unhandled_input(event):
 			game.camera.zoom_reset()
 			var h = game.map.size / 2
 			game.camera.global_position = point - Vector2(h,h)
-
 
 func setup_selection(unit):
 	if unit.selectable: game.selectable_units.append(unit)
@@ -121,24 +124,24 @@ func get_sel_unit_at_point(point):
 
 
 func advance(unit, point):
-	order(unit, point)
-	game.unit.advance.start(unit, point)
+	var order_point = order(unit, point)
+	game.unit.advance.smart(unit, order_point)
 
 func attack(unit, point):
-	order(unit, point)
-	game.unit.attack.start(unit, point)
+	var order_point = order(unit, point)
+	game.unit.attack.start(unit, order_point)
 
 func teleport(unit, point):
-	order(unit, point)
-	game.unit.follow.teleport(unit, point)
+	var order_point = order(unit, point)
+	game.unit.follow.teleport(unit, order_point)
 
 func change_lane(unit, point):
-	order(unit, point)
-	game.unit.follow.change_lane(unit, point)
+	var order_point = order(unit, point)
+	game.unit.follow.change_lane(unit, order_point)
 
 func move(unit, point):
-	order(unit, point)
-	game.unit.move.smart(unit, point)
+	var order_point = order(unit, point)
+	game.unit.move.smart(unit, order_point, "move")
 
 func stand(unit):
 	order(unit, null)
@@ -147,19 +150,22 @@ func stand(unit):
 
 func order(unit, point):
 	unit.working = true
-	game.unit.follow.draw_path(unit)
-	var building = buildings_click(point)
-	if building:
-		match building.team:
-			"neutral":
-				unit.after_arive = "conquer"
-				point.y += game.map.tile_size
-			game.player_team:
-				unit.after_arive = "stop"
-				point.y += game.map.tile_size
-			game.enemy_team:
-				unit.after_arive = "attack"
-				point.y += game.map.tile_size
+	unit.hunting = false
+	game.unit.attack.set_target(unit, null)
+	if point:
+		var building = buildings_click(point)
+		if building:
+			match building.team:
+				"neutral":
+					unit.after_arive = "conquer"
+					point.y += game.map.tile_size
+				game.player_team:
+					unit.after_arive = "stop"
+					point.y += game.map.tile_size
+				game.enemy_team:
+					unit.after_arive = "attack"
+					point.y += game.map.tile_size
+		return point
 
 
 func buildings_click(point):

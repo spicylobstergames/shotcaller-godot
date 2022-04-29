@@ -66,7 +66,7 @@ var attack_hit_radius = 24
 # ADVANCE
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
-var after_arive:String = "" # "attack" "conquer" "stop"
+var after_arive:String = "stop" # "attack" "conquer"
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
@@ -270,10 +270,15 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 	
 	game.unit.follow.draw_path(self)
 
+
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
 		follow.next(self)
 	elif self.moves:
+		match self.after_arive:
+			"conquer":
+				print("conquer")
+		self.after_arive = "stop"
 		self.working = false
 		move.end(self)
 		if self.attacks: 

@@ -24,7 +24,7 @@ class JumpPointFinder:
 # */
 		
 	func findPath(startX, startY, endX, endY, _grid):
-		openList = Heap.new(_grid.width, "jpfCmp")
+		openList = Heap.new("jpfCmp")
 		startNode = _grid.getNodeAt(startX, startY)
 		endNode = _grid.getNodeAt(endX, endY)
 		grid = _grid
@@ -42,7 +42,6 @@ class JumpPointFinder:
 		while (!openList.empty()):
 			# pop the position of node which has the minimum `f` value.
 			node = openList.pop()
-			#print(node)
 			
 			node.closed = true
 			
