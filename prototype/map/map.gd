@@ -87,8 +87,9 @@ func setup_buildings():
 			game.collision.setup(building)
 			if building.team == game.player_team:
 				game.player_buildings.append(building)
-			else:
+			elif building.team == game.enemy_team:
 				game.enemy_buildings.append(building)
+			else: game.neutral_buildings.append(building)
 			game.all_units.append(building)
 
 

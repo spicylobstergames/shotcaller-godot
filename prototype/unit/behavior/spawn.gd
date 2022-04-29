@@ -119,16 +119,14 @@ func recycle(template, lane, team, point):
 
 
 func send_pawn(template, lane, team):
-	var path = game.map[lane].duplicate()
-	if team == "red": path.invert()
-	var start = path.pop_front()
-	var pawn = recycle(template, lane, team, start)
+	var path = game.map.new_path(lane, team)
+	var pawn = recycle(template, lane, team, path.start)
 	if not pawn:
 		var unit_template = infantry
 		if template == "archer": unit_template = archer
-		pawn = game.map.create(unit_template, lane, team, "point_random", start)
+		pawn = game.map.create(unit_template, lane, team, "point_random", path.start)
 	game.unit.orders.set_pawn(pawn)
-	game.unit.follow.start(pawn, path, "advance")
+	game.unit.follow.start(pawn, path.follow, "advance")
 
 
 

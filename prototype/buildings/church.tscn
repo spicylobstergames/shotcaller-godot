@@ -139,10 +139,10 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 60.0
+radius = 46.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 70.0
+radius = 60.0
 
 [node name="church" instance=ExtResource( 1 )]
 hp = 3600
@@ -211,6 +211,9 @@ visible = false
 position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
+
+[node name="collisions" parent="." index="5"]
+visible = true
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -20 )

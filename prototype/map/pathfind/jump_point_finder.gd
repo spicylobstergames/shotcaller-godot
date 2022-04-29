@@ -42,14 +42,14 @@ class JumpPointFinder:
 		while (!openList.empty()):
 			# pop the position of node which has the minimum `f` value.
 			node = openList.pop()
+			#print(node)
 			
-			if node:
-				node.closed = true
-				
-				if (node == endNode):
-					return expandPath(_backtrace(endNode))
-				
-				_identifySuccessors(node)
+			node.closed = true
+			
+			if (node == endNode):
+				return expandPath(_backtrace(endNode))
+			
+			_identifySuccessors(node)
 		
 		# fail to find the path
 		return []

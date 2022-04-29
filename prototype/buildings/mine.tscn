@@ -139,10 +139,10 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 48.0
+radius = 32.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 64.0
+radius = 45.0
 
 [node name="mine" instance=ExtResource( 1 )]
 hp = 1000

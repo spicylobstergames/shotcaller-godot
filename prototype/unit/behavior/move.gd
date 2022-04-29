@@ -100,7 +100,7 @@ func stand(unit):
 
 
 
-func smart_move(unit, point):
+func smart(unit, point):
 	if not unit.stunned:
 		var path = game.unit.follow.find_path(unit.global_position, point)
 		if path: game.unit.follow.start(unit, path, "move")

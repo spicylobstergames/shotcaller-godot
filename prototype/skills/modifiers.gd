@@ -26,7 +26,7 @@ func new_modifiers():
 
 func get_value(unit, mod_str):
 	var default = unit[mod_str]
-	
+
 	match mod_str:
 		"speed": default = get_speed(unit)
 		"regen": default = get_regen(unit)

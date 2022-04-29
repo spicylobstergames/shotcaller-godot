@@ -485,6 +485,7 @@ script = ExtResource( 19 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -492,7 +493,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 568, 425 )
 frames = SubResource( 6 )
-frame = 3
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -500,7 +501,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1544, 1705 )
 frames = SubResource( 6 )
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -562,7 +563,7 @@ position = Vector2( 479, 952 )
 team = "neutral"
 
 [node name="lumbermill" parent="buildings/blue" instance=ExtResource( 25 )]
-position = Vector2( 1568, 1720 )
+position = Vector2( 539, 438 )
 team = "neutral"
 
 [node name="red" type="YSort" parent="buildings"]
@@ -623,7 +624,7 @@ team = "red"
 
 [node name="camp" parent="buildings/red" instance=ExtResource( 22 )]
 position = Vector2( 992, 438 )
-team = "red"
+team = "neutral"
 
 [node name="outpost" parent="buildings/red" instance=ExtResource( 23 )]
 position = Vector2( 1248, 423 )
@@ -633,12 +634,9 @@ team = "red"
 position = Vector2( 1633, 1208 )
 team = "neutral"
 
-[node name="lumbermill" parent="buildings/red" instance=ExtResource( 25 )]
-position = Vector2( 539, 440 )
+[node name="lumbermill2" parent="buildings/red" instance=ExtResource( 25 )]
+position = Vector2( 1573, 1719 )
 team = "neutral"
-
-[node name="body" parent="buildings/red/lumbermill/sprites" index="3"]
-flip_h = true
 
 [node name="blocks" type="Node2D" parent="."]
 script = ExtResource( 20 )
@@ -652,12 +650,13 @@ visible = false
 
 [node name="top" type="Line2D" parent="lanes"]
 points = PoolVector2Array( 158, 1685, 160, 1383, 217, 1057, 162, 744, 164, 418, 183, 214, 415, 205, 674, 172, 1058, 202, 1381, 180, 1683, 160 )
+default_color = Color( 1, 1, 1, 0.196078 )
 
 [node name="mid" type="Line2D" parent="lanes"]
 position = Vector2( 1, 0 )
 points = PoolVector2Array( 362, 1750, 434, 1589, 610, 1444, 735, 1250, 902, 1161, 1055, 1056, 1205, 953, 1376, 865, 1506, 668, 1671, 517, 1750, 357 )
+default_color = Color( 1, 1, 1, 0.196078 )
 
 [node name="bot" type="Line2D" parent="lanes"]
 points = PoolVector2Array( 430, 1955, 676, 1936, 1055, 1894, 1376, 1932, 1694, 1894, 1934, 1886, 1951, 1698, 1956, 1377, 1895, 1057, 1952, 742, 1951, 420 )
-
-[editable path="buildings/red/lumbermill"]
+default_color = Color( 1, 1, 1, 0.196078 )

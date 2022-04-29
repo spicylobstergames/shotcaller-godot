@@ -64,10 +64,11 @@ var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
 # ADVANCE
+export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
+var after_arive:String = "" # "attack" "conquer" "stop"
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
-export var lane:String = "mid"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
@@ -156,6 +157,8 @@ func setup_team():
 	if self.type != "building": 
 		self.mirror_toggle(is_red)
 	else: # BLUE FLAGS
+		if self.display_name == "lumbermill" and get_parent().name == "blue":
+			self.mirror_toggle(true)
 		if is_blue:
 			var flags = self.get_node("sprites/flags").get_children()
 			for flag in flags:
@@ -264,7 +267,8 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves:
 		if self.attacks: 
 			advance.resume(self)
-
+	
+	game.unit.follow.draw_path(self)
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:

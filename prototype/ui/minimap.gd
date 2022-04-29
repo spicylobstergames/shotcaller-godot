@@ -109,9 +109,12 @@ func setup_symbol(unit):
 
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)
-	if unit.type != "leader" and unit.team == "red":
-		symbol.modulate = Color(0.85,0.4,0.4)
-
+	if unit.type != "leader":
+		match unit.team:
+			"red":
+				symbol.modulate = Color(0.85,0.4,0.4)
+			"neutral":
+				symbol.modulate = Color(0.5,0.5,0.5)
 
 func setup_leader_icon(unit, symbol):
 	if symbol.has_node("icon") and unit.type == "leader":
