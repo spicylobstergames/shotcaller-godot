@@ -10,6 +10,10 @@ func setup_timer(unit):
 	unit.collision_timer = Timer.new()
 	unit.collision_timer.one_shot = true
 	unit.add_child(unit.collision_timer)
+	
+	unit.channeling_timer = Timer.new()
+	unit.channeling_timer.one_shot = true
+	unit.add_child(unit.channeling_timer)
 
 
 func start(unit, destiny):

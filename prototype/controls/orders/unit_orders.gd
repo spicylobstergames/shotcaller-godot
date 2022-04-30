@@ -12,6 +12,7 @@ var enemy_leaders_orders = {}
 
 func _ready():
 	game = get_tree().get_current_scene()
+	
 
 
 const tactics_extra_speed = { 
@@ -95,13 +96,13 @@ func build_leaders():
 
 
 func hp_regen_cycle(): # called every second
-	
-	for unit in game.all_units:
-		if unit.regen > 0:
-			set_regen(unit)
-			if unit.type == "leader" and unit.team == game.player_team:
-				game.ui.inventories.update_consumables(unit)
-	
+	if not game.paused:
+		for unit in game.all_units:
+			if unit.regen > 0:
+				set_regen(unit)
+				if unit.type == "leader" and unit.team == game.player_team:
+					game.ui.inventories.update_consumables(unit)
+		
 	yield(get_tree().create_timer(1), "timeout")
 	hp_regen_cycle()
 
@@ -201,7 +202,11 @@ func conquer_building(unit):
 	if building and building.team == "neutral" and not unit.stunned:
 		unit.channeling = true
 		unit.working = true
-		yield(get_tree().create_timer(3), "timeout")
+		if unit.channeling_timer.time_left > 0: 
+			unit.channeling_timer.stop()
+		unit.channeling_timer.wait_time = 3
+		unit.channeling_timer.start()
+		yield(unit.channeling_timer, "timeout")
 		if unit.channeling:
 			unit.channeling = false
 			unit.working = false

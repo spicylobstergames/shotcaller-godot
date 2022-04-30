@@ -2,7 +2,7 @@ extends Node
 var game:Node
 
 # self = game.unit.spawn
-
+var timer:Timer
 var order_time = 8
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
@@ -40,6 +40,12 @@ var team_random_list = {"red": [], "blue": []}
 
 func _ready():
 	game = get_tree().get_current_scene()
+	yield(get_tree(), "idle_frame")
+	
+	timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = order_time
+	game.unit.add_child(timer)
 
 
 func choose_leaders():
@@ -100,11 +106,15 @@ func spawn_group_cycle():
 			for n in 3:
 				send_pawn("infantry", lane, team)
 	
-	yield(get_tree().create_timer(order_time), "timeout")
+	
+	timer.start()
+	yield(timer, "timeout")
 	game.unit.orders.leaders_cycle()
 	
-	yield(get_tree().create_timer(order_time), "timeout")
+	timer.start()
+	yield(timer, "timeout")
 	spawn_group_cycle()
+	game.unit.orders.leaders_cycle()
 
 
 func recycle(template, lane, team, point):

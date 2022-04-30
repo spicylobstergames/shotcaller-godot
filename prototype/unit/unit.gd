@@ -7,6 +7,7 @@ export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 0
 export var vision:int = 100
+var current_modifiers = {}
 export var type:String = "pawn" # building leader
 export var subtype:String = "melee" # ranged mounted base lane backwood
 export var display_name:String
@@ -16,7 +17,6 @@ export var respawn:float = 1
 var dead:bool = false
 var mirror:bool = false
 var texture:Dictionary
-
 
 # SELECTION
 export var selectable:bool = false
@@ -40,7 +40,7 @@ export var collide:bool = false
 var collision_radius = 0
 var collision_position:Vector2 = Vector2.ZERO
 var collide_target:Node2D
-var collision_timer
+var collision_timer:Timer
 
 # ATTACK
 export var attacks:bool = false
@@ -63,23 +63,25 @@ export var projectile_rotation:float = 0
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
-# ADVANCE
+# BEHAVIOR
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
 var after_arive:String = "stop" # "attack" "conquer"
-var objective:Vector2 = Vector2.ZERO
-var wait_time:int = 0
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat 
+var objective:Vector2 = Vector2.ZERO
+var wait_time:int = 0
+
+# ORDERS
 var retreating = false
 var working = false
-var channeling = false
 var hunting = false
-var current_modifiers = {}
+var channeling = false
+var channeling_timer:Timer
 
-
+# NODES
 var hud:Node
 var spawn:Node
 var move:Node

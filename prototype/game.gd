@@ -2,6 +2,7 @@ extends Node2D
 
 # self = game
 
+var paused = true
 var time = 0
 var player_kills = 0
 var player_deaths = 0
@@ -71,14 +72,15 @@ func build():
 		if test.unit: # debug units
 			ui.main_menu.get_node("container/play_button").play_down()
 			start()
-		else: # gotta handle timers for pause
-			#get_tree().paused = true
+		else: 
+			get_tree().paused = true
 			ui.main_menu.visible = true
 
 
 func start():
 	if not started:
 		started = true
+		paused = false
 		
 		rng.randomize()
 		map.setup_lanes()
