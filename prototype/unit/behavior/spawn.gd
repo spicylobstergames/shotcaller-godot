@@ -114,7 +114,6 @@ func spawn_group_cycle():
 	timer.start()
 	yield(timer, "timeout")
 	spawn_group_cycle()
-	game.unit.orders.leaders_cycle()
 
 
 func recycle(template, lane, team, point):

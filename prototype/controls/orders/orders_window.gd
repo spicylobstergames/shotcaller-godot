@@ -7,23 +7,32 @@ var cleared = false
 
 var leader_orders = {}
 var lane_orders = {}
+var mine_orders = {}
+var blacksmith_orders = {}
+var lumbermill_orders = {}
 var camp_orders = {}
+var outpost_orders = {}
 
-var camps
+var mine:Array = []
+var blacksmith:Array = []
+var lumbermill:Array = []
+var camp:Array = []
+var outpost:Array = []
+
+const neutrals = ["mine", "blacksmith", "lumbermill", "camp", "outpost"]
 
 var button_template:PackedScene = load("res://controls/orders/button/order_button.tscn")
-
-onready var container = get_node("scroll_container/container")
-
 
 const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
 	"lane_tactics": ["defend","default","attack"],
 	"priority": ["pawn", "leader", "building"],
 	"camp_hire": ["infantry","ranged","mount"],
-	"taxes": ["low_taxes","default_taxes","high_taxes"],
-	"mine": ["collect", "explode"],
-	"lumbermill": ["hire", "dismiss"]
+	"taxes": ["low","default","high"],
+	"gold": ["collect", "destroy"],
+	"lumberjack": ["hire", "dismiss"],
+	"tower_upgrades": ["extra room","fire arrows","reinforce"],
+	"pawn_upgrades": ["weapons","armor","boots"]
 }
 
 const hint_tooltips_tactics = {
@@ -40,10 +49,17 @@ const hint_tooltips_hire = {
 }
 
 const hint_tooltips_tax = {
-	"low_taxes": "Only 1 gold coin",
-	"default_taxes": "Default 20 coins tax",
-	"high_taxes": "Double taxes to 40 gold coins"
+	"low": "Only 1 gold coin",
+	"default": "Default 20 coins tax",
+	"high": "Double taxes to 40 gold coins"
 }
+
+const hint_tooltips_gold = {
+	"collect": "Sends the collected gold to your castle - 16s",
+	"destroy": "Explodes the mine destroying all collected gold - 4s",
+}
+
+onready var container = get_node("scroll_container/container")
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -53,10 +69,9 @@ func _ready():
 	
 	yield(get_tree(), "idle_frame")
 	
-	camps = [
-		game.map.get_node("buildings/blue/camp"),
-		game.map.get_node("buildings/red/camp")
-	]
+	for neutral in neutrals:
+		self[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+		self[neutral].append( game.map.get_node("buildings/red/" + neutral) )
 	
 	update()
 
@@ -73,8 +88,11 @@ func clear():
 
 func build():
 	setup_lanes()
+	build_mines()
+	build_blacksmiths()
+	build_lumbermills()
 	build_camps()
-	#build_lumbermills()
+	build_outposts()
 
 
 # LEADERS
@@ -88,7 +106,6 @@ func build_leaders():
 		container.add_child(orders_container.node)
 		leader_orders[leader.name] = orders_container
 		setup_leader_buttons(orders_container)
-	
 
 
 func setup_leader_buttons(orders_container):
@@ -102,7 +119,6 @@ func setup_leader_buttons(orders_container):
 
 
 # LANES
-
 
 func setup_lanes():
 	for lane in game.map.lanes:
@@ -125,16 +141,131 @@ func setup_lane_buttons(orders_container):
 	setup_priority(orders_container)
 
 
+# MINES
+
+func build_mines():
+	for building in mine:
+		var orders = {
+			"node": VBoxContainer.new(),
+			"camp": building
+		}
+		container.add_child(orders.node)
+		mine_orders[building.name] = orders
+		setup_mine_buttons(orders)
+
+
+func setup_mine_buttons(orders):
+	var label = game.utils.label("gold")
+	orders.node.add_child(label)
+	setup_gold(orders)
+	var label2 = game.utils.label("taxes")
+	orders.node.add_child(label2)
+	setup_taxes(orders)
+
+
+func setup_gold(orders):
+	var buttons_container = HBoxContainer.new()
+	orders.node.add_child(buttons_container)
+	for order in order_types.gold:
+		var button = button_template.instance()
+		buttons_container.add_child(button)
+		button.hint_tooltip = hint_tooltips_gold[order]
+		button.orders = {
+			"order": orders,
+			"type": "gold",
+			"gold": order
+		}
+		setup_order_button(button)
+	orders.node.add_child(HSeparator.new())
+
+
+# BLACKSMITH
+
+func build_blacksmiths():
+	for building in blacksmith:
+		var orders = {
+			"node": VBoxContainer.new(),
+			"camp": building
+		}
+		container.add_child(orders.node)
+		blacksmith_orders[building.name] = orders
+		setup_blacksmith_buttons(orders)
+
+
+func setup_blacksmith_buttons(orders):
+#	var label = game.utils.label("pawn upgrades")
+#	orders.node.add_child(label)
+#	setup_pawn_upgrades(orders)
+	var label2 = game.utils.label("taxes")
+	orders.node.add_child(label2)
+	setup_taxes(orders)
+
+
+func setup_pawn_upgrades(orders):
+	var buttons_container = HBoxContainer.new()
+	orders.node.add_child(buttons_container)
+	for order in order_types.pawn_upgrades:
+		var button = button_template.instance()
+		buttons_container.add_child(button)
+		#button.hint_tooltip = hint_tooltips_pawn_upgrades[order]
+		button.orders = {
+			"order": orders,
+			"type": "pawn_upgrade",
+			"pawn_upgrade": order
+		}
+		setup_order_button(button)
+	orders.node.add_child(HSeparator.new())
+
+
+
+# LUMBERMILL
+
+func build_lumbermills():
+	for building in lumbermill:
+		var orders = {
+			"node": VBoxContainer.new(),
+			"camp": building
+		}
+		container.add_child(orders.node)
+		lumbermill_orders[building.name] = orders
+		setup_lumbermill_buttons(orders)
+
+
+func setup_lumbermill_buttons(orders):
+	var label = game.utils.label("hire")
+	orders.node.add_child(label)
+	setup_lumberjack(orders)
+	var label2 = game.utils.label("taxes")
+	orders.node.add_child(label2)
+	setup_taxes(orders)
+
+
+func setup_lumberjack(orders):
+	var buttons_container = HBoxContainer.new()
+	orders.node.add_child(buttons_container)
+	for order in order_types.gold:
+		var button = button_template.instance()
+		buttons_container.add_child(button)
+		#button.hint_tooltip = hint_tooltips_lumberjack[order]
+		button.orders = {
+			"order": orders,
+			"type": "lumberjack",
+			"lumberjack": order
+		}
+		setup_order_button(button)
+	orders.node.add_child(HSeparator.new())
+
+
 # CAMPS
 
 func build_camps():
-	for camp in camps:
+	for building in camp:
 		var orders = {
 			"node": VBoxContainer.new(),
-			"camp": camp
+			"camp": building
 		}
 		container.add_child(orders.node)
-		camp_orders[camp.name] = orders
+		camp_orders[building.name] = orders
 		setup_camp_buttons(orders)
 
 
@@ -142,7 +273,7 @@ func setup_camp_buttons(orders):
 	var label = game.utils.label("hire")
 	orders.node.add_child(label)
 	setup_hire(orders)
-	var label2 = game.utils.label("camp taxes")
+	var label2 = game.utils.label("taxes")
 	orders.node.add_child(label2)
 	setup_taxes(orders)
 
@@ -166,6 +297,28 @@ func setup_hire(orders):
 	orders.node.add_child(HSeparator.new())
 
 
+# OUTPOSTS
+
+func build_outposts():
+	for building in outpost:
+		var orders = {
+			"node": VBoxContainer.new(),
+			"camp": building
+		}
+		container.add_child(orders.node)
+		outpost_orders[building.name] = orders
+		setup_outpost_buttons(orders)
+
+
+func setup_outpost_buttons(orders):
+	#var label = game.utils.label("tower upgrades")
+	#orders.node.add_child(label)
+	#setup_tower_upgrades(orders)
+	var label2 = game.utils.label("taxes")
+	orders.node.add_child(label2)
+	setup_taxes(orders)
+
+
 # TAXES
 
 func setup_taxes(orders):
@@ -181,7 +334,7 @@ func setup_taxes(orders):
 			"taxes": tax
 		}
 		setup_order_button(button)
-		if tax == "default_taxes":
+		if tax == "default":
 			button.pressed = true
 			button.disabled = true
 	orders.node.add_child(HSeparator.new())
@@ -243,6 +396,9 @@ func update():
 				"camp":
 					show_orders()
 					camp_orders[game.selected_unit.name].node.show()
+				"mine":
+					show_orders()
+					mine_orders[game.selected_unit.name].node.show()
 			
 		else: 
 			match game.selected_unit.type:

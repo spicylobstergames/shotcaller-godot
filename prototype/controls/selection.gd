@@ -34,8 +34,6 @@ func _unhandled_input(event):
 		if game.camera.zoom.x <= 1:
 			match event.button_index:
 				
-				BUTTON_RIGHT: unselect()
-				
 				BUTTON_LEFT: 
 					match game.control_state:
 						"selection": select(point)
@@ -43,8 +41,15 @@ func _unhandled_input(event):
 						"advance": advance(game.selected_unit, point)
 						"move": move(game.selected_unit, point)
 						"lane": change_lane(game.selected_unit, point)
-						
-					game.unit.follow.draw_path(game.selected_unit)
+				
+				BUTTON_RIGHT: 
+					match game.control_state:
+						"selection": advance(game.selected_unit, point)#unselect()
+						"teleport": teleport(game.selected_unit, point)
+						"advance": advance(game.selected_unit, point)
+						"move": move(game.selected_unit, point)
+						"lane": change_lane(game.selected_unit, point)
+			game.unit.follow.draw_path(game.selected_unit)
 		
 		
 		# MAP CLICK ZOOM IN

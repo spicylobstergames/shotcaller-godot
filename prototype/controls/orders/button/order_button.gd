@@ -27,11 +27,11 @@ func setup_order_button():
 		"retreat": sprite = 4
 		"defend": sprite = 5
 		"default": sprite = 6
-		"attack": sprite = 7
+		"attack", "destroy": sprite = 7
 		"lumberjack": sprite = 8
-		"low_taxes": sprite = 9
-		"default_taxes": sprite = 10
-		"high_taxes": sprite = 11
+		"low": sprite = 9
+		"default": sprite = 10
+		"high", "collect": sprite = 11
 		"menu": sprite = 12
 		"order", "teleport": sprite = 13
 		
