@@ -26,13 +26,7 @@ margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
 
-[sub_resource type="StyleBoxTexture" id=4]
-texture = ExtResource( 3 )
-region_rect = Rect2( 140, 0, 35, 35 )
-margin_left = 3.0
-margin_right = 3.0
-margin_top = 3.0
-margin_bottom = 3.0
+[sub_resource type="StyleBoxEmpty" id=31]
 
 [sub_resource type="StyleBoxTexture" id=5]
 texture = ExtResource( 3 )
@@ -83,7 +77,7 @@ size_flags_vertical = 0
 custom_fonts/font = SubResource( 1 )
 custom_styles/hover = SubResource( 2 )
 custom_styles/pressed = SubResource( 3 )
-custom_styles/focus = SubResource( 4 )
+custom_styles/focus = SubResource( 31 )
 custom_styles/disabled = SubResource( 5 )
 custom_styles/normal = SubResource( 6 )
 toggle_mode = true

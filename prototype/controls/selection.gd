@@ -114,7 +114,10 @@ func unselect():
 				
 		if unit.display_name == "blacksmith" and game.ui.shop.visible: 
 			game.ui.shop_button.button_down()
-		
+	
+	var buttons = game.ui.leaders_icons.buttons_name
+	for all_leader_name in buttons: 
+		buttons[all_leader_name].pressed = false
 	game.unit.follow.draw_path(null)
 	game.selected_unit = null
 	game.selected_leader = null
