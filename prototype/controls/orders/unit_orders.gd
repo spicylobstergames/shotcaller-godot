@@ -211,6 +211,9 @@ func conquer_building(unit):
 			unit.channeling = false
 			unit.working = false
 			building.team = unit.team
+			match building.display_name:
+				"camp", "outpost":
+					building.attacks = true
 			building.setup_team()
 
 

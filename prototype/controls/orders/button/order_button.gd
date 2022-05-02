@@ -15,6 +15,9 @@ func _ready():
 func setup_order_button():
 	var name = self.orders[self.orders.type]
 	name_label.text = name
+	var hint = str(get_index()+1)
+	if "hint" in self.orders: hint = orders.hint
+	hint_label.text = hint
 	var icon_ref = self.icon
 	if not icon_ref: icon_ref = self.saved_icon
 	var icon = icon_ref.duplicate()

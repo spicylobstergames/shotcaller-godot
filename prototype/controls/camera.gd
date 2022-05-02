@@ -27,9 +27,17 @@ func _unhandled_input(event):
 		# ARROW KEYS
 		match event.scancode:
 			
-			KEY_Q: game.camera.zoom_out()
-			KEY_W: game.camera.zoom_reset()
-			KEY_E: game.camera.zoom_in()
+			# cam zoom test
+#			KEY_Q: game.camera.zoom_out()
+#			KEY_W: game.camera.zoom_reset()
+#			KEY_E: game.camera.zoom_in()
+			
+			#
+			KEY_1: focus_leader(1)
+			KEY_2: focus_leader(2)
+			KEY_3: focus_leader(3)
+			KEY_4: focus_leader(4)
+			KEY_5: focus_leader(5)
 			
 			
 			KEY_LEFT:  arrow_keys_move.x = -arrow_keys_speed if event.is_pressed() else 0
@@ -83,6 +91,13 @@ func _unhandled_input(event):
 	if event.is_action_pressed("zoom_out"):
 		if zoom.x == zoom_limit.x: zoom_reset()
 		elif zoom == zoom_default: zoom_out()
+
+func focus_leader(index):
+	if game.player_leaders.size() >= index:
+		var leader = game.player_leaders[index-1]
+		if leader:
+			game.camera.global_position = leader.global_position - game.camera.offset
+			game.selection.select_unit(leader)
 
 
 func zoom_reset(): 

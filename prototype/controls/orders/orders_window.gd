@@ -76,6 +76,9 @@ const hint_tooltips_pawn_upgrades = {
 	"armor": "+5 extra defense for 200 gold"
 }
 
+const hint_keys_up = ["q","w","e","r"]
+const hint_keys_down = ["a","s","d","f"]
+
 
 onready var container = get_node("scroll_container/container")
 
@@ -184,6 +187,7 @@ func setup_mine_buttons(orders):
 func setup_gold(orders):
 	var buttons_container = HBoxContainer.new()
 	orders.node.add_child(buttons_container)
+	var index = 0
 	for order in order_types.gold:
 		var button = button_template.instance()
 		buttons_container.add_child(button)
@@ -191,8 +195,10 @@ func setup_gold(orders):
 		button.orders = {
 			"order": orders,
 			"type": "gold",
-			"gold": order
+			"gold": order,
+			"hint": hint_keys_up[index]
 		}
+		index += 1
 		setup_order_button(button)
 	orders.node.add_child(HSeparator.new())
 
@@ -222,6 +228,7 @@ func setup_blacksmith_buttons(orders):
 func setup_pawn_upgrades(orders):
 	var buttons_container = HBoxContainer.new()
 	orders.node.add_child(buttons_container)
+	var index = 0
 	for upgrade in order_types.pawn_upgrades:
 		var button = button_template.instance()
 		buttons_container.add_child(button)
@@ -229,8 +236,10 @@ func setup_pawn_upgrades(orders):
 		button.orders = {
 			"order": orders,
 			"type": "pawn_upgrades",
-			"pawn_upgrades": upgrade
+			"pawn_upgrades": upgrade,
+			"hint": hint_keys_up[index]
 		}
+		index += 1
 		setup_order_button(button)
 	orders.node.add_child(HSeparator.new())
 
@@ -261,6 +270,7 @@ func setup_lumbermill_buttons(orders):
 func setup_lumberjack(orders):
 	var buttons_container = HBoxContainer.new()
 	orders.node.add_child(buttons_container)
+	var index = 0
 	for order in order_types.lumberjack:
 		var button = button_template.instance()
 		buttons_container.add_child(button)
@@ -268,8 +278,10 @@ func setup_lumberjack(orders):
 		button.orders = {
 			"order": orders,
 			"type": "lumberjack",
-			"lumberjack": order
+			"lumberjack": order,
+			"hint": hint_keys_up[index]
 		}
+		index += 1
 		setup_order_button(button)
 	orders.node.add_child(HSeparator.new())
 
@@ -299,6 +311,7 @@ func setup_camp_buttons(orders):
 func setup_hire(orders):
 	var buttons_container = HBoxContainer.new()
 	orders.node.add_child(buttons_container)
+	var index = 0
 	for hire in order_types.camp_hire:
 		var button = button_template.instance()
 		buttons_container.add_child(button)
@@ -306,8 +319,10 @@ func setup_hire(orders):
 		button.orders = {
 			"order": orders,
 			"type": "camp_hire",
-			"camp_hire": hire
+			"camp_hire": hire,
+			"hint": hint_keys_up[index]
 		}
+		index += 1
 		setup_order_button(button)
 		if hire == "melee":
 			button.pressed = true
@@ -340,6 +355,7 @@ func setup_outpost_buttons(orders):
 func setup_tower_upgrades(orders):
 	var buttons_container = HBoxContainer.new()
 	orders.node.add_child(buttons_container)
+	var index = 0
 	for upgrade in order_types.tower_upgrades:
 		var button = button_template.instance()
 		buttons_container.add_child(button)
@@ -347,8 +363,10 @@ func setup_tower_upgrades(orders):
 		button.orders = {
 			"order": orders,
 			"type": "tower_upgrades",
-			"tower_upgrades": upgrade
+			"tower_upgrades": upgrade,
+			"hint": hint_keys_up[index]
 		}
+		index += 1
 		setup_order_button(button)
 	orders.node.add_child(HSeparator.new())
 
@@ -359,6 +377,7 @@ func setup_tower_upgrades(orders):
 func setup_taxes(orders):
 	var buttons_container = HBoxContainer.new()
 	orders.node.add_child(buttons_container)
+	var index = 0
 	for tax in order_types.taxes:
 		var button = button_template.instance()
 		buttons_container.add_child(button)
@@ -366,8 +385,10 @@ func setup_taxes(orders):
 		button.orders = {
 			"order": orders,
 			"type": "taxes",
-			"taxes": tax
+			"taxes": tax,
+			"hint": hint_keys_down[index]
 		}
+		index += 1
 		setup_order_button(button)
 		if tax == "medium":
 			button.pressed = true
@@ -380,14 +401,17 @@ func setup_taxes(orders):
 func setup_tactics(orders_container, tactics):
 	var buttons_container = HBoxContainer.new()
 	orders_container.node.add_child(buttons_container)
+	var index = 0
 	for tactic in tactics:
 		var button = button_template.instance()
 		button.hint_tooltip = hint_tooltips_tactics[tactic]
 		button.orders = {
 			"order": orders_container,
 			"type": "tactic",
-			"tactic": tactic
+			"tactic": tactic,
+			"hint": hint_keys_up[index]
 		}
+		index += 1
 		setup_order_button(button)
 		if tactic == "default":
 			button.pressed = true
@@ -401,13 +425,16 @@ func setup_tactics(orders_container, tactics):
 func setup_priority(orders_container):
 	var buttons_container = HBoxContainer.new()
 	orders_container.node.add_child(buttons_container)
+	var index = 0
 	for priority in order_types.priority:
 		var button = button_template.instance()
 		button.orders =  {
 			"order": orders_container,
 			"type": "priority",
-			"priority": priority
+			"priority": priority,
+			"hint": hint_keys_down[index]
 		}
+		index += 1
 		setup_order_button(button)
 		button.set_toggle_mode(false)
 		button.set_action_mode(true)

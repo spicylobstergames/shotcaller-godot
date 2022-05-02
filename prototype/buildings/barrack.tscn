@@ -176,6 +176,7 @@ attacks = true
 ranged = true
 damage = 60
 attack_speed = 1.3
+defense = 20
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]

@@ -154,6 +154,7 @@ title = "gold mine"
 respawn = 0.0
 selectable = true
 collide = true
+defense = 15
 projectile_speed = 0.0
 lane = ""
 

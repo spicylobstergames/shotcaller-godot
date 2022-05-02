@@ -15,16 +15,17 @@ func _unhandled_input(event):
 		if not event.is_pressed():
 			if (game.selected_unit and 
 				(game.selected_unit.type == "leader" or game.test.unit)):
-				
-				if event.scancode == KEY_SPACE: move(game.selected_unit, point)
-				if event.scancode == KEY_A: advance(game.selected_unit, point)
-				if event.scancode == KEY_T: teleport(game.selected_unit, point)
-				if event.scancode == KEY_L: change_lane(game.selected_unit, point)
+				match event.scancode:
+					KEY_E: move(game.selected_unit, point)
+					KEY_R: advance(game.selected_unit, point)
+					KEY_Q: teleport(game.selected_unit, point)
+					KEY_W: change_lane(game.selected_unit, point)
 				
 				if game.test.unit:
 					# attack test
-					if event.scancode == KEY_Z: attack(game.selected_unit, point) 
-					if event.scancode == KEY_S: stand(game.selected_unit)
+					match event.scancode:
+						KEY_A: attack(game.selected_unit, point) 
+						KEY_S: stand(game.selected_unit)
 					
 				game.unit.follow.draw_path(game.selected_unit)
 	
@@ -130,24 +131,29 @@ func get_sel_unit_at_point(point):
 
 
 func advance(unit, point):
-	var order_point = order(unit, point)
-	game.unit.advance.smart(unit, order_point)
+	if unit.attacks and unit.moves:
+		var order_point = order(unit, point)
+		game.unit.advance.smart(unit, order_point)
 
 func attack(unit, point):
-	var order_point = order(unit, point)
-	game.unit.attack.start(unit, order_point)
+	if unit.attacks:
+		var order_point = order(unit, point)
+		game.unit.attack.start(unit, order_point)
 
 func teleport(unit, point):
-	var order_point = order(unit, point)
-	game.unit.follow.teleport(unit, order_point)
+	if unit.moves:
+		var order_point = order(unit, point)
+		game.unit.follow.teleport(unit, order_point)
 
 func change_lane(unit, point):
-	var order_point = order(unit, point)
-	game.unit.follow.change_lane(unit, order_point)
+	if unit.moves:
+		var order_point = order(unit, point)
+		game.unit.follow.change_lane(unit, order_point)
 
 func move(unit, point):
-	var order_point = order(unit, point)
-	game.unit.move.smart(unit, order_point, "move")
+	if unit.moves:
+		var order_point = order(unit, point)
+		game.unit.move.smart(unit, order_point, "move")
 
 func stand(unit):
 	order(unit, null)

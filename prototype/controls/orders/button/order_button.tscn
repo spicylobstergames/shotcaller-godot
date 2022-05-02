@@ -110,7 +110,7 @@ margin_right = -3.0
 margin_bottom = 1.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 22 )
-text = "a"
+text = "1"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
