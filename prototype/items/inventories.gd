@@ -71,8 +71,9 @@ func build_leaders():
 
 
 func gold_update_cycle():
-	game.ui.shop.update_buttons()
-	update_buttons()
+	if not game.paused:
+		game.ui.shop.update_buttons()
+		update_buttons()
 	yield(get_tree().create_timer(1), "timeout")
 	gold_update_cycle()
 
@@ -105,9 +106,10 @@ func add_inventory(leader):
 		
 
 func gold_timer_timeout(inventory):
-	inventory.gold += 1 + inventory.extra_gold
-	# Updates gold label
-	if game.selected_leader: game.ui.stats.update()
+	if not game.paused:
+		inventory.gold += 1 + inventory.extra_gold
+		# Updates gold label
+		if game.selected_leader: game.ui.stats.update()
 	yield(get_tree().create_timer(1), "timeout")
 	gold_timer_timeout(inventory)
 
@@ -163,25 +165,28 @@ func add_delivery(leader, item):
 
 
 func delivery_timer(delivery):
-	delivery.label.show()
-	delivery.time -= 1
-	if delivery.time > 0:
-		delivery.label.text = "0:0"+str(delivery.time)
+	if not game.paused:
+		delivery.label.show()
+		delivery.time -= 1
+		if delivery.time > 0:
+			delivery.label.text = "0:0"+str(delivery.time)
+			yield(get_tree().create_timer(1), "timeout")
+			delivery_timer(delivery)
+		else:
+			match delivery.item.type:
+				"consumable": give_item(delivery)
+				"equip":
+					if game.ui.shop.close_to_blacksmith(delivery.leader): 
+						give_item(delivery)
+					else: 
+						var inventory = leaders[delivery.leader.name]
+						var index = delivery.index
+						inventory.equip_items[index] = delivery.item
+						delivery.item.ready = true
+						delivery.label.text = "ready"
+	else: 
 		yield(get_tree().create_timer(1), "timeout")
 		delivery_timer(delivery)
-	else:
-		match delivery.item.type:
-			"consumable": give_item(delivery)
-			"equip":
-				if game.ui.shop.close_to_blacksmith(delivery.leader): 
-					give_item(delivery)
-				else: 
-					var inventory = leaders[delivery.leader.name]
-					var index = delivery.index
-					inventory.equip_items[index] = delivery.item
-					delivery.item.ready = true
-					delivery.label.text = "ready"
-
 
 func is_delivering(leader):
 	if leader.name in game.ui.inventories.deliveries:
@@ -203,13 +208,9 @@ func give_item(delivery):
 			inventory.equip_items[index] = item
 			inventory.equip_item_buttons[index].setup(item)
 			for key in item.attributes.keys():
-				match key:
-					"hp":
-						leader.current_hp += item.attributes[key]
-					"damage":
-						leader.current_damage += item.attributes[key]
-					
-				leader[key] += item.attributes[key]
+				game.unit.modifiers.add(leader, key, item.name, item.attributes[key])
+
+				#leader[key] += item.attributes[key]
 		"consumable":
 			inventory.consumable_items[index] = item
 			inventory.consumable_item_buttons[index].setup(item)
@@ -227,14 +228,10 @@ func remove_item(leader, index):
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
 		for key in item.attributes.keys():
-			match key:
-				"hp":
-					leader.current_hp -= item.attributes[key]
-				"damage":
-					leader.current_damage -= item.attributes[key]
-			leader[key] -= item.attributes[key]
+			game.unit.modifiers.remove(leader, key, item.name, item.attributes[key])
 			
 		leaders[leader.name].equip_items[index] = null
+		
 	elif item.type == "consumable":
 		leaders[leader.name].consumable_items[index - equip_items_max] = null
 	
@@ -267,7 +264,7 @@ func update_consumables(leader):
 	var counter = 0
 	for item in inventory.consumable_items:
 		var item_button = inventory.consumable_item_buttons[counter]
-		item_button.disabled = (leader.current_hp >= leader.hp)
+		item_button.disabled = (leader.current_hp >= game.unit.modifiers.get_value(leader, "hp"))
 		counter += 1
 
 

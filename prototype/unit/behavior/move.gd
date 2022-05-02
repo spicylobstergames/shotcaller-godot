@@ -10,13 +10,17 @@ func setup_timer(unit):
 	unit.collision_timer = Timer.new()
 	unit.collision_timer.one_shot = true
 	unit.add_child(unit.collision_timer)
+	
+	unit.channeling_timer = Timer.new()
+	unit.channeling_timer.one_shot = true
+	unit.add_child(unit.channeling_timer)
 
 
 func start(unit, destiny):
 	if unit.moves and not unit.stunned and in_bounds(destiny):
 		unit.set_behavior("move")
 		move(unit, destiny)
-		unit.get_node("animations").playback_speed = unit.current_speed / unit.speed
+
 
 
 func in_bounds(p):
@@ -29,15 +33,17 @@ func move(unit, destiny):
 	if unit.moves and not unit.stunned:
 		unit.current_destiny = destiny
 		calc_step(unit)
+		unit.get_node("animations").playback_speed = game.unit.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
-
+	
 
 
 func calc_step(unit):
-	if unit.current_speed > 0:
+	var speed = game.unit.modifiers.get_value(unit, "speed")
+	if speed > 0:
 		var distance = unit.current_destiny - unit.global_position
 		unit.angle = distance.angle()
-		unit.current_step = Vector2(unit.current_speed * cos(unit.angle), unit.current_speed * sin(unit.angle))
+		unit.current_step = Vector2(speed* cos(unit.angle), speed * sin(unit.angle))
 		unit.look_at(unit.current_destiny)
 
 
@@ -63,7 +69,7 @@ func on_collision(unit, delta):
 			unit.global_position -= pr.normalized()
 			a = randf()*2*PI # just try a random direction
 		unit.angle = a # change directioin
-		var s = unit.current_speed
+		var s = game.unit.modifiers.get_value(unit, "speed")
 		unit.current_step = Vector2(s * cos(a), s * sin(a))
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
@@ -99,8 +105,8 @@ func stand(unit):
 
 
 
-func smart_move(unit, point):
+func smart(unit, point, cb):
 	if not unit.stunned:
-		var path = game.unit.path.find_path(unit.global_position, point)
-		if path: game.unit.path.follow(unit, path, "move")
+		var path = game.unit.follow.find_path(unit.global_position, point)
+		if path: game.unit.follow.start(unit, path, cb)
 

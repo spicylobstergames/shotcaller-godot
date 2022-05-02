@@ -2,6 +2,7 @@ extends Node2D
 
 # self = game
 
+var paused = true
 var time = 0
 var player_kills = 0
 var player_deaths = 0
@@ -17,6 +18,7 @@ var enemy_units:Array = []
 var enemy_buildings:Array = []
 var all_units:Array = []
 var selectable_units:Array = []
+var neutral_buildings:Array = []
 
 var selected_unit:Node2D
 var selected_leader:Node2D
@@ -70,22 +72,22 @@ func build():
 		if test.unit: # debug units
 			ui.main_menu.get_node("container/play_button").play_down()
 			start()
-		else:
-			#get_tree().paused = true
+		else: 
+			get_tree().paused = true
 			ui.main_menu.visible = true
 
 
 func start():
 	if not started:
 		started = true
+		paused = false
 		
-		#yield(get_tree(), "idle_frame")
 		rng.randomize()
 		map.setup_lanes()
-		unit.path.setup_pathfind()
-		ui.orders.setup_lanes()
+		ui.orders.build()
+		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
-		
+
 		
 		if test.fog: map.fog.cover_map()
 		
@@ -93,9 +95,8 @@ func start():
 			test.spawn_unit()
 		
 		else: 
-			yield(get_tree().create_timer(1.0), "timeout")
 			unit.spawn.start()
-			yield(get_tree().create_timer(2.0), "timeout")
+			yield(get_tree().create_timer(4), "timeout")
 			unit.spawn.leaders()
 			map.setup_leaders()
 

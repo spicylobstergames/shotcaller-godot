@@ -22,27 +22,33 @@ func start(unit, point):
 		
 		if unit.target:
 			unit.look_at(point)
-			unit.get_node("animations").playback_speed = unit.current_attack_speed
+			unit.get_node("animations").playback_speed = game.unit.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
+		
+		else: game.unit.advance.resume(unit)
 
 
 func set_target(unit, target):
-	if not unit.target == target:
-		unit.current_attack_speed = unit.attack_speed
+	if not target: 
+		unit.hunting = false
 		unit.attack_count = 0
+		game.unit.modifiers.remove(unit, "attack_speed", "agile")
+	if target and unit.moves: unit.hunting = true
+	if unit.target != target:
+		unit.attack_count = 0
+		game.unit.modifiers.remove(unit, "attack_speed", "agile")
 		unit.last_target = unit.target
-		unit.target = target
-
+	unit.target = target
 
 
 func closest_enemy_unit(unit, enemies):
 	var sorted = game.utils.sort_by_distance(unit, enemies)
 	var filtered = []
 	for enemy in sorted:
-		if enemy.unit.team != game.player_team:
+		if enemy.unit.team == game.enemy_team and not enemy.dead:
 			filtered.append(enemy.unit)
-	if filtered:
-		return filtered[0]
+			
+	if filtered: return filtered[0]
 
 
 func hit(unit1):
@@ -69,6 +75,7 @@ func can_hit(attacker, target):
 		target != null and
 		target != attacker and
 		target.team != attacker.team and
+		target.type != "block" and
 		is_instance_valid(attacker) and
 		is_instance_valid(target) and
 		not target.dead
@@ -77,7 +84,7 @@ func can_hit(attacker, target):
 
 func in_range(attacker, target):
 	var att_pos = attacker.global_position + attacker.attack_hit_position
-	var att_rad = attacker.attack_hit_radius * attacker.current_attack_range
+	var att_rad = game.unit.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
@@ -93,11 +100,10 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if projectile.targets != null and projectile.targets.find(target) < 0:
 			projectile.targets.append(target)
 	
-	if target and target.current_hp > 0:
+	if target and not target.dead:
 		if not modifiers.dodge:
-			
-			#print("damage ", modifiers.damage)
-			target.current_hp -= modifiers.damage
+			var damage = max(1, modifiers.damage - game.unit.modifiers.get_value(target, "defense"))
+			target.current_hp -= damage
 			attacker.attack_count += 1
 			
 		if not modifiers.counter:
@@ -133,12 +139,16 @@ func projectile_start(attacker, target):
 	var target_position = target.global_position + target.collision_position
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
+	game.map.add_child(projectile)
 	var projectile_sprite = projectile.get_node("sprites")
+	projectile.global_position = attacker.projectile.global_position
+	projectile.visible = true
+	projectile_sprite.visible = true
+	# speed
 	var a = attacker.weapon.global_rotation
 	var speed = attacker.projectile_speed
 	var projectile_speed = Vector2(cos(a)*speed, sin(a)*speed)
-	var lifetime = attacker.attack_hit_radius / attacker.projectile_speed
-	projectile.global_position = attacker.projectile.global_position
+	# rotation
 	var projectile_rotation
 	if attacker.projectile_rotation:
 		projectile_rotation = attacker.projectile_rotation
@@ -147,15 +157,13 @@ func projectile_start(attacker, target):
 			projectile_rotation *= -1
 			projectile_sprite.scale.x *= -1
 	projectile.global_rotation = a
-	projectile.visible = true
-	projectile_sprite.visible = true
+	# target
 	var targets = null
 	if attacker.display_name in game.unit.skills.leader:
 		var attacker_skills = game.unit.skills.leader[attacker.display_name]
 		if "pierce" in attacker_skills: 
 			target = null
 			targets = []
-	game.map.add_child(projectile)
 	attacker.projectiles.append({
 		"target": target,
 		"targets": targets,
@@ -163,8 +171,8 @@ func projectile_start(attacker, target):
 		"sprite": projectile_sprite,
 		"speed": projectile_speed,
 		"rotation": projectile_rotation,
-		"lifetime": lifetime,
-		"stuck":false
+		"radius": game.unit.modifiers.get_value(attacker, "attack_range"),
+		"stuck": false
 	})
 
 
@@ -180,6 +188,7 @@ func projectile_step(delta, projectile):
 func projectile_stuck(attacker, target, projectile):
 	projectile.stuck = true
 	var stuck = projectile.node
+	var sprites = stuck.get_node("sprites")
 	var r = projectile.node.global_rotation
 	
 	if target: 
@@ -189,7 +198,7 @@ func projectile_stuck(attacker, target, projectile):
 		if target.mirror: 
 			r = Vector2(cos(r),-sin(r)).angle()
 		
-	var a = 0.2 # angle variation
+	var a = 0.2 # rad angle variation
 	var ra = (randf()*a*2) - a
 	stuck.global_rotation = r + ra
 	
@@ -197,18 +206,16 @@ func projectile_stuck(attacker, target, projectile):
 	if projectile.rotation:
 		stuck.global_rotation = 0 + ra
 		if target:
-			# fix  axe vertical hit position
-			stuck.global_position += Vector2(0, projectile.speed.y * 0.033)
 			# mirror stuck axe
 			if target.mirror:
 				stuck.global_rotation = PI + ra
 				stuck.scale.x *= -1
 		# offset from center
-		var o = projectile.speed*-0.08
-		stuck.global_position += o
+		sprites.offset.x = -10
+		stuck.global_position -= projectile.speed*0.03
 	
 	# stuck sprite
-	stuck.get_node("sprites").frame = 1 
+	sprites.frame = 1 
 	# stop projectile movement
 	attacker.projectiles.erase(projectile)
 	# remove projectile after 1.2 sec

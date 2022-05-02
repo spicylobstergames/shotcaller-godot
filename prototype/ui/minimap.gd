@@ -109,9 +109,12 @@ func setup_symbol(unit):
 
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)
-	if unit.type != "leader" and unit.team == "red":
-		symbol.modulate = Color(0.85,0.4,0.4)
-
+	if unit.type != "leader":
+		match unit.team:
+			"red":
+				symbol.modulate = Color(0.85,0.4,0.4)
+			"neutral":
+				symbol.modulate = Color(0.5,0.5,0.5)
 
 func setup_leader_icon(unit, symbol):
 	if symbol.has_node("icon") and unit.type == "leader":
@@ -133,12 +136,13 @@ func follow_camera():
 		var half = game.map.size / 2
 		var window_height = get_viewport().size.y
 		var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
+		var offset = 53
 		if is_panning: game.camera.position = pos
-		cam_rect.rect_position = Vector2(50,50) + game.camera.position / 15.2
+		cam_rect.rect_position = Vector2(offset,offset) + game.camera.position / 13.5
 		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
-		if cam_rect.rect_position.x > 100: cam_rect.rect_position.x = 100
+		if cam_rect.rect_position.x > offset*2: cam_rect.rect_position.x = offset*2
 		if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0
-		if cam_rect.rect_position.y > 100: cam_rect.rect_position.y = 100
+		if cam_rect.rect_position.y > offset*2: cam_rect.rect_position.y = offset*2
 
 
 func move_symbols():

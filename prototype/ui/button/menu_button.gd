@@ -25,7 +25,6 @@ func button_down():
 	match self.value:
 		
 		"play":
-			#get_tree().paused = false
 			play_down()
 			game.start()
 		
@@ -46,10 +45,15 @@ func button_down():
 		
 		
 		"menu":
-			#get_tree().paused = true
+			game.paused = true
+			get_tree().paused = true
+			game.unit.spawn.timer.stop()
+			game.ui.main_menu_background.show()
 			game.ui.main_menu.show()
 			game.ui.buttons.hide()
 			game.ui.controls.hide()
+			game.ui.minimap.hide()
+			game.ui.stats.hide()
 			game.ui.shop.hide()
 			game.ui.orders.hide()
 			game.ui.leaders_icons.hide()
@@ -86,6 +90,8 @@ func button_down():
 
 
 func play_down():
+	game.paused = false
+	get_tree().paused = false
 	game.ui.show_all()
 	game.ui.minimap.show()
 	game.ui.buttons.show()

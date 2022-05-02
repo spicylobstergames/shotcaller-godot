@@ -6,7 +6,7 @@ var game:Node
 
 const leader = {
 	"arthur": {
-		"bonus damage": 10,
+		"bonus damage": 20,
 		"stun": 0.25,
 		"description": "25% chance to stun enemy"
 	},
@@ -18,7 +18,7 @@ const leader = {
 	"lorne": {
 		"respawn reduction": 0.8,
 		"defense": 5,
-		"description": "Ignores 5 damage on hits"
+		"description": "Ignores extra 5 damage on hits"
 	},
 	"hongi": {
 		"bonus hp": 100,
@@ -26,8 +26,8 @@ const leader = {
 		"description": "Returns 10 damage on melee hits"
 	}, 
 	"nagato": {
-		"bonus retreat speed": 1.2,
-		"multi": 2,
+		"bonus_retreat_speed": 10,
+		"clones": 2,
 		"description": "Multiple units"
 		},
 	"osman": {
@@ -36,7 +36,7 @@ const leader = {
 		"description": "Extra 20% effect from potions"
 	},
 	"raja": {
-		"bonus speed": 1.1,
+		"bonus_speed": 5,
 		"dodge": 0.2,
 		"description": "20% chance to avoid hits"
 	},
@@ -68,6 +68,12 @@ const leader = {
 }
 
 
+func get_value(unit, skill_name):
+	if unit.type == "leader":
+		var leader_skills = game.unit.skills.leader[unit.display_name]
+		if skill_name in leader_skills:
+			return leader_skills[skill_name]
+	return 0
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -95,7 +101,7 @@ func secondary_projectile(attacker, target):
 
 func hit_modifiers(attacker, target, projectile, modifiers):
 	modifiers = {
-		"damage": attacker.current_damage,
+		"damage": game.unit.modifiers.get_value(attacker, "damage"),
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
 		"counter": false,
@@ -107,9 +113,6 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		if "dodge" in target_skills:
 			modifiers.dodge = (randf() <  target_skills.dodge)
 			
-		if "defense" in target_skills:
-			modifiers.damage -= target_skills.defense
-		
 		if not modifiers.counter:
 			if "counter" in target_skills and not attacker.ranged:
 				modifiers.damage = target_skills.counter
@@ -138,6 +141,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 				modifiers.damage += attacker_skills.bleed * min(10, attacker.attack_count)
 			
 			if "agile" in attacker_skills:
-				attacker.current_attack_speed = attacker.attack_speed + (attacker_skills.agile * min(10, attacker.attack_count))
+				game.unit.modifiers.remove(attacker, "attack_speed", "agile")
+				game.unit.modifiers.add(attacker, "attack_speed", "agile", attacker_skills.agile * min(10, attacker.attack_count))
 	
 	return modifiers

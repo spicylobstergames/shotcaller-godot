@@ -552,6 +552,7 @@ radius = 120.0
 
 [node name="hongi" instance=ExtResource( 1 )]
 hp = 500
+regen = 2
 vision = 160
 type = "leader"
 subtype = "ranged"
@@ -559,12 +560,14 @@ display_name = "hongi"
 title = "maori warrior"
 selectable = true
 moves = true
-speed = 50.0
+speed = 35.0
+hunting_speed = 50.0
 collide = true
 attacks = true
 ranged = true
-damage = 30
+damage = 60
 attack_speed = 0.9
+defense = 5
 projectile_speed = 200.0
 projectile_rotation = 20.0
 

@@ -526,10 +526,11 @@ scale = Vector2( 0.24, 0.24 )
 position = Vector2( 0, 150 )
 
 [node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap"]
-margin_left = 50.0
-margin_top = 50.0
-margin_right = 100.0
-margin_bottom = 100.0
+margin_left = 53.0
+margin_top = 53.0
+margin_right = 97.0
+margin_bottom = 97.0
+rect_pivot_offset = Vector2( 22, 22 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0
 editor_only = false
@@ -880,7 +881,7 @@ custom_fonts/font = SubResource( 31 )
 text = "teleport"
 
 [node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/teleport_button" index="2"]
-text = "t"
+text = "q"
 
 [node name="lane_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 margin_left = 64.0
@@ -894,7 +895,7 @@ script = null
 text = "lane"
 
 [node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/lane_button" index="2"]
-text = "l"
+text = "w"
 
 [node name="move_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 margin_left = 128.0
@@ -908,7 +909,7 @@ script = null
 text = "move"
 
 [node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/move_button" index="2"]
-text = "space"
+text = "e"
 
 [node name="attack_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 margin_left = 192.0
@@ -920,6 +921,9 @@ script = null
 
 [node name="name" parent="bot_right/controls/scroll_container/container/controls_buttons/attack_button" index="0"]
 text = "attack"
+
+[node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/attack_button" index="2"]
+text = "r"
 
 [node name="buttons" type="ItemList" parent="bot_right"]
 margin_left = -150.0
@@ -953,6 +957,9 @@ value = "shop"
 
 [node name="name" parent="bot_right/buttons/shop_button" index="0"]
 text = "shop"
+
+[node name="hint" parent="bot_right/buttons/shop_button" index="2"]
+text = "B"
 
 [node name="orders_button" parent="bot_right/buttons" instance=ExtResource( 15 )]
 margin_left = 11.0

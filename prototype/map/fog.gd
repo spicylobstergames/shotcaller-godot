@@ -53,11 +53,11 @@ func cover_map():
 var sight_mem:Dictionary = {}
 
 func compute_sight(unit):
-	var id = unit.current_vision
+	var id = game.unit.modifiers.get_value(unit, "vision")
 	if id in sight_mem: return sight_mem[id]
 	var a = []
-	if unit.current_vision > 0:
-		var rad = round(unit.current_vision/cell_size.x)
+	if id > 0:
+		var rad = round(id/cell_size.x)
 		for y in range(0, 2*rad):
 			a.append([])
 			for x in range(0, 2*rad):
@@ -74,8 +74,9 @@ func clear_sigh_skip(unit):
 
 
 func clear_sight(unit):
-	if unit.current_vision > 0:
-		var rad = round(unit.current_vision/cell_size.x)
+	var id = game.unit.modifiers.get_value(unit, "vision")
+	if id > 0:
+		var rad = round(id/cell_size.x)
 		var pos = world_to_map(unit.global_position)
 		var a = compute_sight(unit)
 		
@@ -87,7 +88,7 @@ func clear_sight(unit):
 						game.map.fog.set_cellv(p, -1)
 					else: 
 						if game.map.fog.get_cellv(p) >= 0:
-							var line = game.unit.path.path_finder.expandPath([[pos.x, pos.y], [p.x, p.y]])
+							var line = game.unit.follow.path_finder.expandPath([[pos.x, pos.y], [p.x, p.y]])
 							var blocked = false
 							for point in line:
 								var tree = trees.get_cell(point[0]/3, point[1]/3)

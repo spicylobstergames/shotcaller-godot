@@ -139,14 +139,13 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 48.0
+radius = 32.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 64.0
+radius = 50.0
 
 [node name="blacksmith" instance=ExtResource( 1 )]
-hp = 600
-regen = 0
+hp = 1800
 vision = 300
 type = "building"
 subtype = "backwood"

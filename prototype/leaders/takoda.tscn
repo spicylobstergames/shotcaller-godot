@@ -563,7 +563,7 @@ radius = 120.0
 
 [node name="takoda" instance=ExtResource( 1 )]
 hp = 400
-regen = 2
+regen = 4
 vision = 180
 type = "leader"
 subtype = "mounted"
@@ -571,11 +571,14 @@ display_name = "takoda"
 title = "native scout"
 selectable = true
 moves = true
-speed = 60.0
+speed = 35.0
+hunting_speed = 60.0
 collide = true
 attacks = true
 ranged = true
-damage = 30
+damage = 60
+attack_speed = 0.9
+defense = 5
 projectile_speed = 200.0
 projectile_rotation = 20.0
 
@@ -632,11 +635,11 @@ offset = Vector2( 6, -4 )
 position = Vector2( 0, -25 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+visible = false
 position = Vector2( 2.20537e-06, 0 )
 z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-visible = false
 frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="5"]

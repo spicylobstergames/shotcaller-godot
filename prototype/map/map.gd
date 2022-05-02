@@ -7,6 +7,9 @@ var blocks
 var walls
 var fog
 
+var blue_castle
+var red_castle
+
 var size:int = 2112
 
 const tile_size = 64
@@ -25,6 +28,10 @@ func _ready():
 	walls = get_node("tiles/walls")
 	fog = get_node("tiles/fog")
 	blocks = get_node("blocks")
+	
+	
+	red_castle = get_node("buildings/red/castle")
+	blue_castle = get_node("buildings/blue/castle")
 
 
 func setup_lanes():
@@ -40,8 +47,11 @@ func setup_lanes():
 
 
 func new_path(lane, team):
-	var path = game.map[lane].duplicate()
-	if team == "red": path.invert()
+	var path = self[lane].duplicate()
+	if team == "blue": path.append(red_castle.global_position)
+	if team == "red": 
+		path.invert()
+		path.append(blue_castle.global_position)
 	var start = path.pop_front()
 	return {
 		"start": start,
@@ -54,7 +64,7 @@ func setup_leaders():
 	game.ui.leaders_icons.show()
 	game.ui.inventories.build_leaders()
 	game.ui.orders.build_leaders()
-
+	game.unit.orders.build_leaders()
 
 
 func line_to_array(line):
@@ -77,8 +87,9 @@ func setup_buildings():
 			game.collision.setup(building)
 			if building.team == game.player_team:
 				game.player_buildings.append(building)
-			else:
+			elif building.team == game.enemy_team:
 				game.enemy_buildings.append(building)
+			else: game.neutral_buildings.append(building)
 			game.all_units.append(building)
 
 
@@ -87,7 +98,6 @@ func create(template, lane, team, mode, point):
 	game.map.add_child(unit)
 	unit.reset_unit()
 	game.all_units.append(unit)
-	
 	game.selection.setup_selection(unit)
 	game.collision.setup(unit)
 	game.unit.move.setup_timer(unit)

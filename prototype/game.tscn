@@ -16,6 +16,7 @@ script = ExtResource( 2 )
 [node name="map" parent="." instance=ExtResource( 1 )]
 
 [node name="unit" parent="map" instance=ExtResource( 5 )]
+visible = false
 
 [node name="camera" type="Camera2D" parent="."]
 offset = Vector2( 1056, 1056 )

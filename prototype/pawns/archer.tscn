@@ -272,7 +272,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.4, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1, 1.05 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+"values": [ Vector2( 1, 1 ), Vector2( 1, 1.03 ), Vector2( 1, 0.97 ), Vector2( 1, 1 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("sprites/body:rotation_degrees")
@@ -639,18 +639,21 @@ radius = 20.0
 radius = 140.0
 
 [node name="archer" instance=ExtResource( 1 )]
-hp = 140
+hp = 160
+regen = 1
 vision = 150
 subtype = "ranged"
 display_name = "archer"
 title = "ranged soldier"
 selectable = true
 moves = true
-speed = 55.0
+speed = 35.0
+hunting_speed = 55.0
 collide = true
 attacks = true
 ranged = true
-damage = 50
+damage = 40
+defense = 2
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]
@@ -675,8 +678,6 @@ anims/stun = SubResource( 33 )
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
-rotation = -0.0279292
-scale = Vector2( 1, 0.987112 )
 frames = SubResource( 22 )
 offset = Vector2( 0, -15 )
 
@@ -686,6 +687,7 @@ scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 19.6519, 2 )
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
@@ -696,10 +698,8 @@ offset = Vector2( -11, 0 )
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
 visible = false
 position = Vector2( 0, 1 )
-rotation = 0.00184998
-scale = Vector2( 0.925, 1 )
+rotation = 0.349066
 frames = SubResource( 38 )
-frame = 1
 offset = Vector2( 10, 0 )
 
 [node name="sprite" parent="sprites" index="3"]

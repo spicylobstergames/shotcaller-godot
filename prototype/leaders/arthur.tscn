@@ -512,16 +512,19 @@ radius = 20.0
 
 [node name="arthur" instance=ExtResource( 1 )]
 hp = 400
+regen = 2
 vision = 160
 type = "leader"
 display_name = "arthur"
 title = "the king"
 selectable = true
 moves = true
-speed = 50.0
+speed = 35.0
+hunting_speed = 50.0
 collide = true
 attacks = true
-damage = 40
+damage = 80
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

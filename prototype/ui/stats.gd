@@ -29,14 +29,14 @@ func update():
 	else:
 		show()
 		unit_name.text = "%s" % [unit.display_name]
-		hp.text = "%s / %s" % [max(unit.current_hp,0), unit.hp]
-		if unit.regen: regen.text = "+%s" % [unit.regen]
+		hp.text = "%s / %s" % [max(unit.current_hp,0), game.unit.modifiers.get_value(unit, "hp")]
+		if unit.regen: regen.text = "+%s" % [game.unit.modifiers.get_value(unit, "regen")]
 		else: regen.text = ""
 		add_new_hpbar(unit)
-		damage.text = "Damage: %s" % unit.current_damage
-		vision.text = "Vision: %s" % unit.current_vision
-		att_range.text = "Range: %s" % unit.attack_hit_radius
-		if unit.moves: speed.text = "Speed: %s" % unit.current_speed
+		damage.text = "Damage: %s" % game.unit.modifiers.get_value(unit, "damage")
+		vision.text = "Vision: %s" % game.unit.modifiers.get_value(unit, "vision")
+		att_range.text = "Range: %s" % game.unit.modifiers.get_value(unit, "attack_range")
+		if unit.moves: speed.text = "Speed: %s" % game.unit.modifiers.get_value(unit, "speed")
 		else: speed.text = ""
 		set_texture(portrait_sprite, unit.texture)
 		if unit.type == "leader" and unit.team == game.player_team:

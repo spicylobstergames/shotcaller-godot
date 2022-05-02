@@ -552,6 +552,7 @@ radius = 120.0
 
 [node name="sida" instance=ExtResource( 1 )]
 hp = 400
+regen = 2
 vision = 210
 type = "leader"
 subtype = "ranged"
@@ -559,11 +560,13 @@ display_name = "sida"
 title = "sami warrior"
 selectable = true
 moves = true
-speed = 50.0
+speed = 35.0
+hunting_speed = 50.0
 collide = true
 attacks = true
 ranged = true
-damage = 30
+damage = 50
+defense = 5
 projectile_speed = 210.0
 
 [node name="symbol" parent="." index="1"]

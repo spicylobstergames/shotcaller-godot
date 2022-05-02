@@ -5,10 +5,9 @@ var game:Node
 
 export var hp:int = 100
 var current_hp:int = 100
-export var regen:int = 1
-var current_regen:int = 1
+export var regen:int = 0
 export var vision:int = 100
-var current_vision:int = 100
+var current_modifiers = {}
 export var type:String = "pawn" # building leader
 export var subtype:String = "melee" # ranged mounted base lane backwood
 export var display_name:String
@@ -19,7 +18,6 @@ var dead:bool = false
 var mirror:bool = false
 var texture:Dictionary
 
-
 # SELECTION
 export var selectable:bool = false
 var selection_radius = 36
@@ -28,7 +26,7 @@ var selection_position:Vector2 = Vector2.ZERO
 # MOVEMENT
 export var moves:bool = false
 export var speed:float = 0
-var current_speed:float = 0
+export var hunting_speed:float = 0
 var angle:float = 0
 var origin:Vector2 = Vector2.ZERO
 var current_step:Vector2 = Vector2.ZERO
@@ -42,18 +40,16 @@ export var collide:bool = false
 var collision_radius = 0
 var collision_position:Vector2 = Vector2.ZERO
 var collide_target:Node2D
-var collision_timer
+var collision_timer:Timer
 
 # ATTACK
 export var attacks:bool = false
 export var ranged:bool = false
 var stunned:bool = false
 export var damage:int = 0
-var current_damage:int = 0
 export var attack_range:int = 1
-var current_attack_range:int = 1
 export var attack_speed:float = 1
-var current_attack_speed:float = 1
+export var defense:int = 0
 var target:Node2D
 var last_target:Node2D
 var attack_count = 0
@@ -67,28 +63,34 @@ export var projectile_rotation:float = 0
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
-# ADVANCE
-var next_event:String = "" # "on_arive" "on_move" "on_collision"
-var objective:Vector2 = Vector2.ZERO
-var wait_time:int = 0
+# BEHAVIOR
 export var lane:String = "mid"
+var next_event:String = "" # "on_arive" "on_move" "on_collision"
+var after_arive:String = "stop" # "attack" "conquer"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat 
+var objective:Vector2 = Vector2.ZERO
+var wait_time:int = 0
+
+# ORDERS
 var retreating = false
 var working = false
+var hunting = false
 var channeling = false
+var channeling_timer:Timer
 
-
+# NODES
 var hud:Node
 var spawn:Node
 var move:Node
 var attack:Node
 var advance:Node
-var path:Node
+var follow:Node
 var orders:Node
 var skills:Node
+var modifiers:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -98,9 +100,10 @@ func _ready():
 	if has_node("behavior/move"): move = get_node("behavior/move")
 	if has_node("behavior/attack"): attack = get_node("behavior/attack")
 	if has_node("behavior/advance"): advance = get_node("behavior/advance")
-	if has_node("behavior/path"): path = get_node("behavior/path")
+	if has_node("behavior/follow"): follow = get_node("behavior/follow")
 	if has_node("behavior/orders"): orders = get_node("behavior/orders")
 	if has_node("behavior/skills"): skills = get_node("behavior/skills")
+	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
 	
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
@@ -116,13 +119,13 @@ func reset_unit():
 	
 	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
-	self.current_attack_range = self.attack_range
-	self.current_vision = self.vision
-	self.current_speed = self.speed
-	self.current_damage = self.damage
-	self.current_attack_speed = self.attack_speed
+	self.current_modifiers = modifiers.new_modifiers()
 	self.visible = true
 	self.stunned = false
+	self.hunting = false
+	self.channeling = false
+	self.retreating = false
+	self.working = false
 	self.hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
 
@@ -155,15 +158,22 @@ func setup_team():
 	# MIRROR
 	if self.type != "building": 
 		self.mirror_toggle(is_red)
-	else: # BLUE FLAGS
-		if is_blue:
-			var flags = self.get_node("sprites/flags").get_children()
-			for flag in flags:
-				var flag_sprite = flag.get_node("sprite")
-				var material = flag_sprite.material.duplicate()
-				material.set_shader_param("change_color", false)
-				flag_sprite.material = material
-
+	else: 
+		# mirror lumbermill
+		if self.display_name == "lumbermill" and get_parent().name == "blue":
+			self.mirror_toggle(true)
+		# color flags
+		var flags = self.get_node("sprites/flags").get_children()
+		for flag in flags:
+			var flag_sprite = flag.get_node("sprite")
+			var material = flag_sprite.material.duplicate()
+			var color = 1
+			if is_blue: color = 0
+			if is_neutral: color = 2
+			material.set_shader_param("change_color", color)
+			flag_sprite.material = material
+		
+			
 
 func oponent_team():
 	var t = "blue"
@@ -172,7 +182,8 @@ func oponent_team():
 
 
 func look_at(point):
-	self.mirror_toggle(point.x - self.global_position.x < 0)
+	if self.type != "building":
+		self.mirror_toggle(point.x - self.global_position.x < 0)
 
 
 func mirror_toggle(on):
@@ -181,7 +192,6 @@ func mirror_toggle(on):
 	self.get_node("sprites").scale.x = s
 	if self.attack_hit_position:
 		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
-
 
 
 func get_texture():
@@ -217,12 +227,13 @@ func get_texture():
 
 
 func get_units_on_sight(filters):
-	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, self.current_vision)
+	var current_vision = game.unit.modifiers.get_value(self, "vision")
+	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, current_vision)
 	var targets = []
 	for unit2 in neighbors:
 		if unit2.hp and self != unit2 and not unit2.dead:
 			var distance = self.global_position.distance_to(unit2.global_position)
-			if distance < self.current_vision:
+			if distance < current_vision:
 				if not filters: targets.append(unit2)
 				else:
 					for filter in filters:
@@ -243,52 +254,69 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	advance.on_idle_end(self)
+	game.unit.advance.on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 
 
 func on_move(delta): # every frame if there's no collision
-	move.step(self, delta)
+	game.unit.move.step(self, delta)
 
 
 func on_collision(delta):
 	if self.moves: 
-		move.on_collision(self, delta)
+		game.unit.move.on_collision(self, delta)
 		if self.attacks: 
-			advance.on_collision(self)
+			game.unit.advance.on_collision(self)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves:
 		if self.attacks: 
-			advance.resume(self)
+			game.unit.advance.resume(self)
+	
+	if self == game.selected_unit: game.unit.follow.draw_path(self)
+
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		path.follow_next(self)
+		game.unit.follow.next(self)
 	elif self.moves:
 		self.working = false
-		move.end(self)
+		game.unit.move.end(self)
+		
 		if self.attacks: 
-			advance.end(self)
+			game.unit.advance.end(self)
+		
+		if self.after_arive =="conquer": 
+			game.unit.orders.conquer_building(self)
+		self.after_arive = "stop"
+
 
 
 func on_attack_release(): # every ranged projectile start
-	attack.projectile_release(self)
-	advance.resume(self)
+	game.unit.attack.projectile_release(self)
+	game.unit.advance.resume(self)
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
-		attack.hit(self)
+		game.unit.attack.hit(self)
 		if self.moves:
-			advance.resume(self)
+			game.unit.advance.resume(self)
+
+
+func heal(heal_hp):
+	self.current_hp += heal_hp
+	self.current_hp = int(min(self.current_hp, game.unit.modifiers.get_value(self, "hp")))
+	game.unit.hud.update_hpbar(self)
+	if self == game.selected_unit: game.ui.stats.update()
 
 
 func stun_start():
 	self.wait_time = 2
 	self.stunned = true
+	self.channeling = false
 	self.set_state("stun")
 
 
@@ -297,9 +325,9 @@ func on_stun_end():
 	else:
 		self.stunned = false
 		if self.behavior == "move":
-			move.resume(self)
+			game.unit.move.resume(self)
 		if self.behavior == "advance":
-			advance.resume(self)
+			game.unit.advance.resume(self)
 		if self.behavior == "stand" or self.behavior == "stop":
 			self.set_state("idle")
 
@@ -324,6 +352,5 @@ func on_death_end():  # death animation end
 				game.unit.spawn.cemitery_add_pawn(self)
 			"leader":
 				game.unit.spawn.cemitery_add_leader(self)
-
-						
+	
 	else: game.test.respawn(self)

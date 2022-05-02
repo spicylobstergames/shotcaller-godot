@@ -145,8 +145,7 @@ radius = 48.0
 radius = 64.0
 
 [node name="lumbermill" instance=ExtResource( 1 )]
-hp = 600
-regen = 0
+hp = 1200
 vision = 300
 type = "building"
 subtype = "backwood"
@@ -155,6 +154,7 @@ title = "saw mill"
 respawn = 0.0
 selectable = true
 collide = true
+defense = 10
 projectile_speed = 0.0
 lane = ""
 

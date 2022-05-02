@@ -2,6 +2,8 @@ extends Node
 var game:Node
 
 
+var path_line
+
 const teleport_time = 3
 const teleport_max_distance = 100
 
@@ -16,7 +18,7 @@ var path_finder
 
 func _ready():
 	game = get_tree().get_current_scene()
-
+	path_line = Line2D.new()
 
 func setup_pathfind():
 	# get tiles
@@ -36,9 +38,14 @@ func setup_pathfind():
 	for building in game.enemy_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
+	for building in game.neutral_buildings:
+		var pos = (building.global_position / game.map.tile_size).floor()
+		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
 	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
 	path_finder = Jpf.new()
+	
+	game.map.add_child(path_line)
 
 
 func find_path(g1, g2):
@@ -48,6 +55,8 @@ func find_path(g1, g2):
 	var p2 = (g2 / cell_size).floor()
 	if in_limits(p1) and in_limits(p2):
 		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
+		# path to global_position
+		# int array[x,y] to float dict Vector2(x,y)float 
 		var path = []
 		for i in range(1, solved_path.size()):
 			var item = solved_path[i]
@@ -59,15 +68,30 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-func follow(unit, path, cb):
+func start(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
 		unit.current_path = path
 		game.unit[cb].start(unit, next_point)
 
 
-func follow_next(unit):
-	follow(unit, unit.current_path, unit.behavior)
+func next(unit):
+	start(unit, unit.current_path, unit.behavior)
+
+
+func draw_path(unit):
+	if unit and unit.current_path:
+		path_line.visible = true
+		var pool = PoolVector2Array()
+		pool.push_back(unit.global_position)
+		pool.append_array(unit.current_path)
+		if unit.team == "blue":
+			path_line.default_color = Color(0.4,0.6,1, 0.3)
+		else: path_line.default_color = Color(1,0.3,0.3, 0.3)
+		path_line.points = pool
+	# todo add line shader
+	# https://www.reddit.com/r/godot/comments/btsrxc/shaders_for_line2d_are_tricky_does_anyone_use_them/
+	else: path_line.visible = false
 
 
 func change_lane(unit, point):
@@ -76,23 +100,22 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
-	game.unit.move.smart_move(unit, lane_start)
+	game.unit.move.smart(unit, lane_start, "move")
 
 
 
-func follow_lane(unit):
+func lane(unit):
 	if !unit.current_path:
 		var lane = unit.lane
 		var path = game.map[lane].duplicate()
 		if unit.team == "red": path.invert()
 		if unit.type != 'leader': 
-			game.unit.orders.setup_pawn(unit, lane)
-			follow(unit, path, "advance")
-		else: smart_follow(unit, path, "advance")
+			start(unit, path, "advance")
+		else: smart(unit, path, "advance")
 
 
 
-func smart_follow(unit, path, cb):
+func smart(unit, path, cb):
 	if path and path.size():
 		var new_path = game.utils.cut_path(unit, path)
 		var next_point = new_path.pop_front()
@@ -112,19 +135,20 @@ func teleport(unit, point):
 	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
-	unit.working = false
-	unit.channeling = false
-	var new_position = point
-	# prevent teleport into buildings
-	var min_distance = 2 * building.collision_radius + unit.collision_radius
-	if distance <= min_distance:
-		var offset = (point - building.global_position).normalized()
-		new_position = building.global_position + (offset * min_distance)
-	# limit teleport range
-	if distance > teleport_max_distance:
-		var offset = (point - building.global_position).normalized()
-		new_position = building.global_position + (offset * teleport_max_distance)
+	if unit.channeling:
+		unit.working = false
+		unit.channeling = false
+		var new_position = point
+		# prevent teleport into buildings
+		var min_distance = 2 * building.collision_radius + unit.collision_radius
+		if distance <= min_distance:
+			var offset = (point - building.global_position).normalized()
+			new_position = building.global_position + (offset * min_distance)
+		# limit teleport range
+		if distance > teleport_max_distance:
+			var offset = (point - building.global_position).normalized()
+			new_position = building.global_position + (offset * teleport_max_distance)
 
-	unit.global_position = new_position
-	unit.lane = building.lane
-	unit.current_path = []
+		unit.global_position = new_position
+		unit.lane = building.lane
+		unit.current_path = []

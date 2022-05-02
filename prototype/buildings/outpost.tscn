@@ -158,14 +158,13 @@ animations = [ {
 radius = 16.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 32.0
+radius = 45.0
 
 [sub_resource type="CircleShape2D" id=43]
-radius = 160.0
+radius = 180.0
 
 [node name="outpost" instance=ExtResource( 1 )]
-hp = 900
-regen = 0
+hp = 2000
 vision = 280
 type = "building"
 subtype = "backwood"
@@ -173,10 +172,10 @@ display_name = "outpost"
 title = "outpost tower"
 selectable = true
 collide = true
-attacks = true
 ranged = true
 damage = 50
 attack_speed = 1.2
+defense = 15
 projectile_speed = 220.0
 lane = ""
 

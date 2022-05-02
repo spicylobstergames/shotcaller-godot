@@ -10,9 +10,8 @@ class Heap:
 	###
 	#Default comparison function to be used
 	###
-	func _init(size, cmp):
+	func _init(cmp):
 		_nodes = []
-		_nodes.resize(size)
 		_cmp = cmp
 	
 	
@@ -55,13 +54,13 @@ class Heap:
 		_nodes = []
 
 	func empty():
-		return _nodes.size() == 0
-
+		return _nodes.empty()
+	
 	func size():
 		return _nodes.size()
 
 	func clone():
-		var heap = Heap.new(_cmp, _nodes.size())
+		var heap = Heap.new(_cmp)
 		heap._nodes = _nodes.slice(0, -1)
 		return heap
 

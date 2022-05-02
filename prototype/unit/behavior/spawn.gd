@@ -2,7 +2,7 @@ extends Node
 var game:Node
 
 # self = game.unit.spawn
-
+var timer:Timer
 var order_time = 8
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
@@ -40,6 +40,12 @@ var team_random_list = {"red": [], "blue": []}
 
 func _ready():
 	game = get_tree().get_current_scene()
+	yield(get_tree(), "idle_frame")
+	
+	timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = order_time
+	game.unit.add_child(timer)
 
 
 func choose_leaders():
@@ -74,15 +80,16 @@ func leaders():
 			var lane = "top"
 			if counter == 2: lane = "mid"
 			if counter > 2: lane = "bot"
-			
 			var path = game.map.new_path(lane, team)
-			
 			var leader_node = game.map.create(self[leader], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
-			game.unit.path.follow(leader_node, path.follow, "advance")
+			send_leader(leader_node, path.follow)
 			counter += 1
-	
-	
+
+
+func send_leader(leader, path):
+	yield(get_tree(), "idle_frame")
+	game.unit.follow.start(leader, path, "advance")
 
 
 func start():
@@ -90,8 +97,8 @@ func start():
 
 
 func spawn_group_cycle():
-	game.unit.orders.setup_lanes_priority()
-	game.unit.orders.setup_leaders()
+	game.unit.orders.lanes_cycle()
+	game.unit.orders.leaders_cycle()
 	
 	for team in ["red", "blue"]:
 		for lane in ["top", "mid", "bot"]:
@@ -99,10 +106,13 @@ func spawn_group_cycle():
 			for n in 3:
 				send_pawn("infantry", lane, team)
 	
-	yield(get_tree().create_timer(order_time), "timeout")
-	game.unit.orders.setup_leaders()
 	
-	yield(get_tree().create_timer(order_time), "timeout")
+	timer.start()
+	yield(timer, "timeout")
+	game.unit.orders.leaders_cycle()
+	
+	timer.start()
+	yield(timer, "timeout")
 	spawn_group_cycle()
 
 
@@ -118,16 +128,14 @@ func recycle(template, lane, team, point):
 
 
 func send_pawn(template, lane, team):
-	var path = game.map[lane].duplicate()
-	if team == "red": path.invert()
-	var start = path.pop_front()
-	var pawn = recycle(template, lane, team, start)
+	var path = game.map.new_path(lane, team)
+	var pawn = recycle(template, lane, team, path.start)
 	if not pawn:
 		var unit_template = infantry
 		if template == "archer": unit_template = archer
-		pawn = game.map.create(unit_template, lane, team, "point_random", start)
-	game.unit.orders.setup_pawn(pawn, lane)
-	game.unit.path.follow(pawn, path, "advance")
+		pawn = game.map.create(unit_template, lane, team, "point_random", path.start)
+	game.unit.orders.set_pawn(pawn)
+	game.unit.follow.start(pawn, path.follow, "advance")
 
 
 
@@ -171,5 +179,4 @@ func cemitery_add_leader(leader):
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)
 	leader.reset_unit()
-	game.unit.orders.setup_pawn(leader, lane)
-	game.unit.path.follow(leader, path, "advance")
+	game.unit.follow.start(leader, path, "advance")

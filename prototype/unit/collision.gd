@@ -35,33 +35,39 @@ func process(delta):
 		
 		if game.test.fog: 
 			if unit1.team == game.player_team: game.map.fog.clear_sigh_skip(unit1)
-		
+	
+	
+	# loop 2: checks for collisions
+	
+	for unit1 in game.all_units:
 		
 		# projectiles collision
+		
 		if unit1.projectiles.size():
 			for projectile in unit1.projectiles:
 				if is_instance_valid(projectile.node) and projectile.speed and projectile.stuck == false:
-					projectile.lifetime -= delta
-					if projectile.lifetime < 0:
+					var stuck = false
+					var projectile_position = projectile.node.global_position + (projectile.speed * delta)
+					if projectile_position.distance_to(unit1.global_position) > projectile.radius:
 						game.unit.attack.projectile_stuck(unit1, null, projectile)
+						stuck = true
 					else:
 						if projectile.target:
-							if game.utils.point_collision(projectile.target, projectile.node.global_position):
+							if game.utils.point_collision(projectile.target, projectile_position):
 								game.unit.attack.take_hit(unit1, projectile.target, projectile)
+								stuck = true
 						else: # pierces
-							var targets = game.map.blocks.get_units_in_radius(projectile.node.global_position, 1)
+							var targets = game.map.blocks.get_units_in_radius(projectile_position, 1) 
 							for target in targets:
 								if (game.unit.attack.can_hit(unit1, target) and
 										projectile.targets.find(target) < 0 and
-										game.utils.point_collision(target, projectile.node.global_position) ):
+										game.utils.point_collision(target, projectile_position) ):
 									game.unit.attack.take_hit(unit1, target, projectile)
-						
-						game.unit.attack.projectile_step(delta, projectile)
-	
-	
-	# loop 2: checks for units collisions
-	
-	for unit1 in game.all_units:
+						# move projectile
+						if not stuck: game.unit.attack.projectile_step(delta, projectile)
+		
+		# units collision
+		
 		unit1.next_event  = ""
 		if not unit1.dead:
 			# move arrival
@@ -69,7 +75,7 @@ func process(delta):
 				if unit1.target or unit1.working:
 					if game.utils.point_collision(unit1, unit1.current_destiny):
 						unit1.next_event = "arrive"
-				else:
+				else: # larger collision destiny for auto movement
 					if game.utils.point_collision(unit1, unit1.current_destiny, game.map.half_tile_size):
 						unit1.next_event = "arrive"
 			

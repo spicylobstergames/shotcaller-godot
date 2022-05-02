@@ -572,17 +572,20 @@ radius = 20.0
 
 [node name="bokuden" instance=ExtResource( 1 )]
 hp = 400
+regen = 2
 vision = 160
 type = "leader"
 display_name = "bokuden"
 title = "the samurai"
 selectable = true
 moves = true
-speed = 50.0
+speed = 35.0
+hunting_speed = 50.0
 collide = true
 attacks = true
-damage = 30
+damage = 60
 attack_speed = 1.2
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

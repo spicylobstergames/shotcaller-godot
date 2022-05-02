@@ -158,14 +158,13 @@ animations = [ {
 radius = 16.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 32.0
+radius = 45.0
 
 [sub_resource type="CircleShape2D" id=27]
 radius = 160.0
 
 [node name="tower" instance=ExtResource( 1 )]
-hp = 800
-regen = 0
+hp = 1600
 vision = 280
 type = "building"
 subtype = "lane"
@@ -176,6 +175,7 @@ attacks = true
 ranged = true
 damage = 50
 attack_speed = 1.2
+defense = 10
 projectile_speed = 220.0
 
 [node name="symbol" parent="." index="1"]

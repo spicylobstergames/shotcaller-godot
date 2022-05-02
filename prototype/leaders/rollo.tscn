@@ -548,16 +548,19 @@ radius = 30.0
 
 [node name="rollo" instance=ExtResource( 1 )]
 hp = 400
+regen = 2
 vision = 140
 type = "leader"
 display_name = "rollo"
 title = "the viking"
 selectable = true
 moves = true
-speed = 50.0
+speed = 35.0
+hunting_speed = 50.0
 collide = true
 attacks = true
-damage = 30
+damage = 60
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]

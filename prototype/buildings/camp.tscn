@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/archer.png" type="Texture" id=2]
@@ -139,14 +139,16 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=28]
-radius = 48.0
+radius = 32.0
 
 [sub_resource type="CircleShape2D" id=29]
-radius = 64.0
+radius = 45.0
+
+[sub_resource type="CircleShape2D" id=42]
+radius = 160.0
 
 [node name="camp" instance=ExtResource( 1 )]
-hp = 600
-regen = 0
+hp = 1800
 vision = 300
 type = "building"
 subtype = "backwood"
@@ -155,7 +157,9 @@ title = "mercenary camp"
 respawn = 0.0
 selectable = true
 collide = true
-projectile_speed = 0.0
+damage = 40
+defense = 10
+projectile_speed = 220.0
 lane = ""
 
 [node name="symbol" parent="." index="1"]
@@ -202,7 +206,7 @@ region_enabled = true
 region_rect = Rect2( 64, 23, 75, 65 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
-position = Vector2( 0, -43 )
+position = Vector2( -8, -27 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
@@ -221,3 +225,7 @@ shape = SubResource( 28 )
 [node name="select" parent="collisions" index="1"]
 position = Vector2( 0, -20 )
 shape = SubResource( 29 )
+
+[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+position = Vector2( 0, -20 )
+shape = SubResource( 42 )
