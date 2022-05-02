@@ -52,6 +52,7 @@ export var attack_speed:float = 1
 export var defense:int = 0
 var target:Node2D
 var last_target:Node2D
+var aim_point:Vector2
 var attack_count = 0
 var weapon:Node2D
 

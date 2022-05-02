@@ -16,15 +16,17 @@ func start(unit, point):
 			var neighbors = game.map.blocks.get_units_in_radius(point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
-				var target_position = target.global_position + target.collision_position
-				if target and target_position.distance_to(point) < target.collision_radius:
-					game.unit.attack.set_target(unit, target)
+				if target:
+					var target_position = target.global_position + target.collision_position
+					if target_position.distance_to(point) < target.collision_radius:
+						game.unit.attack.set_target(unit, target)
 		
-		if unit.target:
+		if unit.target or game.test.unit:
+			unit.aim_point = point
 			unit.look_at(point)
 			unit.get_node("animations").playback_speed = game.unit.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
-		
+			
 		else: game.unit.advance.resume(unit)
 
 
@@ -45,7 +47,7 @@ func closest_enemy_unit(unit, enemies):
 	var sorted = game.utils.sort_by_distance(unit, enemies)
 	var filtered = []
 	for enemy in sorted:
-		if enemy.unit.team == game.enemy_team and not enemy.dead:
+		if enemy.unit.team == game.enemy_team and not enemy.unit.dead:
 			filtered.append(enemy.unit)
 			
 	if filtered: return filtered[0]
@@ -129,14 +131,16 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 
 func projectile_release(attacker):
-	if attacker.target and not attacker.target.dead:
-		projectile_start(attacker, attacker.target)
-		game.unit.skills.projectile_release(attacker)
+	#if attacker.target and not attacker.target.dead:
+	projectile_start(attacker, attacker.target)
+	game.unit.skills.projectile_release(attacker)
 
 
 
 func projectile_start(attacker, target):
-	var target_position = target.global_position + target.collision_position
+	var target_position = attacker.aim_point
+	if target:
+		target_position = target.global_position + target.collision_position
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	game.map.add_child(projectile)
@@ -157,13 +161,13 @@ func projectile_start(attacker, target):
 			projectile_rotation *= -1
 			projectile_sprite.scale.x *= -1
 	projectile.global_rotation = a
-	# target
+	# piercing target array
 	var targets = null
 	if attacker.display_name in game.unit.skills.leader:
 		var attacker_skills = game.unit.skills.leader[attacker.display_name]
 		if "pierce" in attacker_skills: 
 			target = null
-			targets = []
+	if not target: targets = []
 	attacker.projectiles.append({
 		"target": target,
 		"targets": targets,

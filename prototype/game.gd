@@ -59,12 +59,9 @@ func _process(delta: float) -> void:
 	if started: camera.process()
 	ui.process()
 	# build called after ui.minimap get_texture
-	
-	
-func _physics_process(delta):
-	if started: collision.process(delta)
-	
-	
+
+
+
 func build():
 	if not built:
 		built = true
@@ -87,13 +84,13 @@ func start():
 		ui.orders.build()
 		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
-
 		
 		if test.fog: map.fog.cover_map()
 		
 		if test.unit:
 			test.spawn_unit()
-		
+		elif test.stress:
+			test.spawn_random_units()
 		else: 
 			unit.spawn.start()
 			yield(get_tree().create_timer(4), "timeout")
@@ -101,4 +98,6 @@ func start():
 			map.setup_leaders()
 
 
+func _physics_process(delta):
+	if started: collision.process(delta)
 
