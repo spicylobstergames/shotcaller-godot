@@ -69,6 +69,7 @@ font_data = ExtResource( 1 )
 margin_right = 60.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 60, 60 )
+focus_mode = 1
 custom_fonts/font = SubResource( 2 )
 custom_styles/hover = SubResource( 23 )
 custom_styles/pressed = SubResource( 24 )

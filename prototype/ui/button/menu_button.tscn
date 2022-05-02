@@ -51,7 +51,7 @@ margin_bottom = 3.0
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 3 )
-region = Rect2( 416, 0, 46, 46 )
+region = Rect2( 0, 0, 46, 46 )
 margin = Rect2( 5, 0, 0, 0 )
 
 [sub_resource type="DynamicFont" id=15]
@@ -69,6 +69,7 @@ font_data = ExtResource( 1 )
 margin_right = 60.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 60, 60 )
+focus_mode = 1
 custom_fonts/font = SubResource( 2 )
 custom_styles/hover = SubResource( 23 )
 custom_styles/pressed = SubResource( 24 )
