@@ -98,6 +98,10 @@ func focus_leader(index):
 		if leader:
 			game.camera.global_position = leader.global_position - game.camera.offset
 			game.selection.select_unit(leader)
+			var buttons = game.ui.leaders_icons.buttons_name
+			for all_leader_name in buttons: 
+				buttons[all_leader_name].pressed = false
+			buttons[leader.name].pressed = true
 
 
 func zoom_reset(): 
