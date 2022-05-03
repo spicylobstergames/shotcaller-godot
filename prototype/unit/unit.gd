@@ -74,6 +74,7 @@ var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat 
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
+var gold = 0
 
 # ORDERS
 var retreating = false
@@ -244,11 +245,6 @@ func get_units_on_sight(filters):
 
 
 
-func get_gold():
-	if self.name in game.ui.inventories.leaders:
-		return game.ui.inventories.leaders[self.name].gold
-
-
 func wait():
 	self.wait_time = game.rng.randi_range(1,4)
 	self.set_state("idle")
@@ -291,6 +287,7 @@ func on_arrive(): # when collides with destiny
 			game.unit.advance.end(self)
 		
 		if self.after_arive =="conquer": 
+			print("conquer")
 			game.unit.orders.conquer_building(self)
 		self.after_arive = "stop"
 
@@ -299,6 +296,7 @@ func on_arrive(): # when collides with destiny
 func on_attack_release(): # every ranged projectile start
 	game.unit.attack.projectile_release(self)
 	game.unit.advance.resume(self)
+
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
@@ -312,6 +310,15 @@ func heal(heal_hp):
 	self.current_hp = int(min(self.current_hp, game.unit.modifiers.get_value(self, "hp")))
 	game.unit.hud.update_hpbar(self)
 	if self == game.selected_unit: game.ui.stats.update()
+
+
+func channel_start(time):
+	self.channeling = true
+	self.working = true
+	if self.channeling_timer.time_left > 0: 
+		self.channeling_timer.stop()
+	self.channeling_timer.wait_time = time
+	self.channeling_timer.start()
 
 
 func stun_start():

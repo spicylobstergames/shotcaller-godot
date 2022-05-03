@@ -51,7 +51,7 @@ func on_button_down():
 	
 	if self.shop_item:
 		# BUY ITEM
-		game.ui.inventories.leaders[leader.name].gold -= item.price
+		leader.gold -= item.price
 		game.ui.inventories.add_delivery(leader, item)
 		game.ui.shop.disable_all()
 
@@ -77,6 +77,6 @@ func on_sell_button_down():
 	var leader = game.selected_leader
 	var sold_item = game.ui.inventories.remove_item(leader, index)
 	# Give the leader gold for half the cost of the item
-	game.ui.inventories.leaders[leader.name].gold += sold_item.sell_price
+	leader.gold += sold_item.sell_price
 	setup(null)
 

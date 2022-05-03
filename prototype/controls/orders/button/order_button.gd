@@ -60,12 +60,18 @@ func button_down():
 				else: game.unit.orders.set_lane_priority(self.orders.priority)
 		
 		"gold":
-			game.unit.orders.gold_order(self.orders.gold)
+			game.unit.orders.gold_order(self.orders)
 			disable_siblings(self)
 			self.disabled = true
 		
 		"taxes":
-			clear_siblings(self)
+			for button in game.ui.orders.tax_buttons:
+				if button.orders.taxes == self.orders.taxes:
+					button.pressed = true
+					button.disabled = true
+				else: 
+					button.pressed = false
+					button.disabled = false
 			game.unit.orders.set_taxes(self.orders.taxes)
 			self.disabled = true
 		

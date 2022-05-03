@@ -39,12 +39,16 @@ func update():
 		if unit.moves: speed.text = "Speed: %s" % game.unit.modifiers.get_value(unit, "speed")
 		else: speed.text = ""
 		set_texture(portrait_sprite, unit.texture)
-		if unit.type == "leader" and unit.team == game.player_team:
-			gold.text = "%s" % unit.get_gold()
+		if ((unit.team == game.player_team and unit.type == "leader")
+				or (unit.team != game.enemy_team and unit.display_name == "mine")):
+			gold.text = "%s" % unit.gold
+			gold.visible = true
 			gold_sprite.visible = true
 		else:
-			gold.text = ""
+			gold.visible = false
 			gold_sprite.visible = false
+
+
 
 
 func set_texture(portrait, texture):

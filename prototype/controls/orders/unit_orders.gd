@@ -9,6 +9,10 @@ var player_leaders_orders = {}
 var enemy_leaders_orders = {}
 
 
+var conquer_time = 3
+var destroy_time = 5
+var collect_time = 16
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -195,26 +199,53 @@ func closest_unit(unit, enemies):
 
 
 func conquer_building(unit):
+	print("conquer start")
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
 	
 	if building and building.team == "neutral" and not unit.stunned:
-		unit.channeling = true
-		unit.working = true
-		if unit.channeling_timer.time_left > 0: 
-			unit.channeling_timer.stop()
-		unit.channeling_timer.wait_time = 3
-		unit.channeling_timer.start()
+		unit.channel_start(conquer_time)
 		yield(unit.channeling_timer, "timeout")
 		if unit.channeling:
+			print("conquer end")
 			unit.channeling = false
 			unit.working = false
+			building.channeling = false
+			building.working = false
 			building.team = unit.team
+			building.setup_team()
 			match building.display_name:
 				"camp", "outpost":
 					building.attacks = true
-			building.setup_team()
+
+
+func gold_order(orders):
+	print("gold start")
+	var mine = orders.order.mine
+	if orders.gold == "collect":
+		mine.channel_start(collect_time)
+		yield(mine.channeling_timer, "timeout")
+		if mine.channeling:
+			print("colect end")
+			mine.channeling = false
+			mine.working = false
+			var leaders = game.player_leaders
+			if mine.team == game.enemy_team: leaders = game.enemy_team
+			for leader in leaders:
+				leader.gold += floor(mine.gold / leaders.size())
+			mine.gold = 0
+	
+	if orders.gold == "destroy":
+		mine.channel_start(destroy_time)
+		yield(mine.channeling_timer, "timeout")
+		if mine.channeling:
+			print("destroy end")
+			mine.channeling = false
+			mine.working = false
+			mine.gold = 0
+			mine.team = "neutral"
+			mine.setup_team()
 
 
 # RETREAT

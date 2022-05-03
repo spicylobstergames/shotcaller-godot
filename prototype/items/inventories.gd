@@ -4,7 +4,6 @@ var game:Node
 # self = game.ui.inventories
 
 var cleared = false
-var gold = 0
 
 const equip_items_max = 2
 const consumable_items_max = 1
@@ -84,7 +83,7 @@ func add_inventory(leader):
 	add_child(inventory.container)
 	leaders[leader.name] = inventory
 	inventory.leader = leader
-	gold_timer_timeout(inventory)
+	gold_timer_timeout(leader)
 	var counter = 0
 	var item_button
 # warning-ignore:unused_variable
@@ -103,15 +102,18 @@ func add_inventory(leader):
 		item_button.index = counter
 		counter += 1
 		item_button.setup(null)
-		
 
-func gold_timer_timeout(inventory):
+
+func gold_timer_timeout(unit):
 	if not game.paused:
-		inventory.gold += 1 + inventory.extra_gold
+		var extra_gold = 0
+		if unit.name in leaders:
+			extra_gold += leaders[unit.name].extra_gold
+		unit.gold += 1 + extra_gold
 		# Updates gold label
-		if game.selected_leader: game.ui.stats.update()
+		if unit == game.selected_unit: game.ui.stats.update()
 	yield(get_tree().create_timer(1), "timeout")
-	gold_timer_timeout(inventory)
+	gold_timer_timeout(unit)
 
 
 
