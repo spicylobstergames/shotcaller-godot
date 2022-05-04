@@ -165,6 +165,7 @@ __meta__ = {
 }
 
 [node name="main" parent="background" instance=ExtResource( 17 )]
+pause_mode = 2
 position = Vector2( -528, -300 )
 scale = Vector2( 1.666, 1.666 )
 

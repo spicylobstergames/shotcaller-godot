@@ -30,7 +30,7 @@ func spawn_unit():
 		dummy.set_behavior("stand")
 		dummy.hp = 10000
 		dummy.current_hp = 10000
-		#game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1000,900))
+		game.map.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
 #		leader.hp = 100
 #		leader.current_hp = 100
 		
