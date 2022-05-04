@@ -88,7 +88,8 @@ func projectile_release(attacker):
 			var enemies = attacker.get_units_on_sight({"team": attacker.oponent_team()})
 			var sorted = game.utils.sort_by_distance(attacker, enemies)
 			for enemy in sorted:
-				if enemy.unit != attacker.target and game.unit.attack.in_range(attacker, enemy.unit):
+				if (enemy.unit != attacker.target and 
+					game.unit.attack.in_range(attacker, enemy.unit)):
 					secondary_projectile(attacker, enemy.unit)
 
 

@@ -141,6 +141,7 @@ func projectile_start(attacker, target):
 	var target_position = attacker.aim_point
 	if target:
 		target_position = target.global_position + target.collision_position
+		if target_position.x < 0 or target_position.y < 0: return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	game.map.add_child(projectile)
