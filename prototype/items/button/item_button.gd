@@ -16,7 +16,7 @@ func _ready():
 
 
 func setup(new_item):
-	sell_button.hide()
+	sell_button.visible = false
 	
 	if new_item == null:
 		self.item = null
@@ -26,8 +26,8 @@ func setup(new_item):
 		self.icon = null
 		self.hint_tooltip = "Buy items in the Blacksmith"
 		self.disabled = true
-		name_label.hide()
-		price_label.hide()
+		name_label.visible = false
+		price_label.visible = false
 
 	else:
 		self.item = new_item
@@ -55,8 +55,8 @@ func on_button_down():
 		game.ui.inventories.add_delivery(leader, item)
 		game.ui.shop.disable_all()
 
-	else: # inventory item
-		# USE ITEM
+	else:
+		# use inventory item
 		for key in item.attributes.keys():
 			if key in leader:
 				leader[key] += item.attributes[key]

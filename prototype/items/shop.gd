@@ -118,7 +118,8 @@ func update_buttons():
 			return
 		
 		# enable/disable all buttons on which leader don't have enough golds
-		if leader and leader.name in game.ui.inventories.leaders:
+		var inventory = game.ui.inventories.get_leader_inventory(leader)
+		if leader and inventory:
 			for item_button in equip_items.get_children() + consumable_items.get_children():
 				var item_price = item_button.item.price
 				item_button.disabled = (leader.gold < item_price)
@@ -128,11 +129,11 @@ func update_buttons():
 			disable_equip()
 		
 		# disable buttons if leader don't have empty slots for item
-		if leader and leader.name in game.ui.inventories.leaders:
-			if !game.ui.inventories.equip_items_has_slots(leader.name):
+		if leader and inventory:
+			if !game.ui.inventories.equip_items_has_slots(leader):
 				for item_button in equip_items.get_children():
 					item_button.disabled = true
-			if !game.ui.inventories.consumable_items_has_slots(leader.name):
+			if !game.ui.inventories.consumable_items_has_slots(leader):
 				for item_button in consumable_items.get_children():
 					item_button.disabled = true
 

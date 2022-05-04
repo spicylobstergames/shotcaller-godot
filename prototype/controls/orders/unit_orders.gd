@@ -342,9 +342,9 @@ func set_taxes(tax, team):
 
 func update_taxes():
 	for leader in game.player_leaders:
-		game.ui.inventories.leaders[leader.name].extra_tax_gold = tax_gold[player_tax]
+		game.ui.inventories.player_leaders_inv[leader.name].extra_tax_gold = tax_gold[player_tax]
 	for leader in game.enemy_leaders:
-		game.ui.inventories.leaders[leader.name].extra_tax_gold = tax_gold[enemy_tax] 
+		game.ui.inventories.enemy_leaders_inv[leader.name].extra_tax_gold = tax_gold[enemy_tax] 
 
 
 # RETREAT
