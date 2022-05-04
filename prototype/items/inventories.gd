@@ -4,7 +4,6 @@ var game:Node
 # self = game.ui.inventories
 
 var cleared = false
-var gold = 0
 
 const equip_items_max = 2
 const consumable_items_max = 1
@@ -37,16 +36,17 @@ func clear():
 
 func new_inventory(leader):
 	
-	var extra_gold = 0
+	var extra_skill_gold = 0
 	if leader.display_name in game.unit.skills.leader:
 		var leader_skills = game.unit.skills.leader[leader.display_name]
 		if "extra_gold" in leader_skills:
-				extra_gold = leader_skills.extra_gold
+				extra_skill_gold = leader_skills.extra_gold
 	
 	var inventory = {
 		"container": HBoxContainer.new(),
-		"gold": 0,
-		"extra_gold": extra_gold,
+		"extra_skill_gold": extra_skill_gold,
+		"extra_tax_gold": 0,
+		"extra_mine_gold": 0,
 		"leader": null,
 		"equip_items": [],
 		"consumable_items":[],
@@ -67,6 +67,8 @@ func new_inventory(leader):
 func build_leaders():
 	for leader in game.player_leaders:
 		add_inventory(leader)
+	for leader in game.enemy_leaders:
+		add_inventory(leader)
 	gold_update_cycle()
 
 
@@ -84,7 +86,7 @@ func add_inventory(leader):
 	add_child(inventory.container)
 	leaders[leader.name] = inventory
 	inventory.leader = leader
-	gold_timer_timeout(inventory)
+	gold_timer_timeout(leader)
 	var counter = 0
 	var item_button
 # warning-ignore:unused_variable
@@ -103,15 +105,20 @@ func add_inventory(leader):
 		item_button.index = counter
 		counter += 1
 		item_button.setup(null)
-		
 
-func gold_timer_timeout(inventory):
+
+func gold_timer_timeout(unit):
 	if not game.paused:
-		inventory.gold += 1 + inventory.extra_gold
+		var gold_per_sec = 1
+		if unit.name in leaders:
+			gold_per_sec += leaders[unit.name].extra_skill_gold
+			gold_per_sec += leaders[unit.name].extra_tax_gold
+			gold_per_sec += leaders[unit.name].extra_mine_gold
+		unit.gold += gold_per_sec
 		# Updates gold label
-		if game.selected_leader: game.ui.stats.update()
+		if unit == game.selected_unit: game.ui.stats.update()
 	yield(get_tree().create_timer(1), "timeout")
-	gold_timer_timeout(inventory)
+	gold_timer_timeout(unit)
 
 
 
@@ -210,7 +217,6 @@ func give_item(delivery):
 			for key in item.attributes.keys():
 				game.unit.modifiers.add(leader, key, item.name, item.attributes[key])
 
-				#leader[key] += item.attributes[key]
 		"consumable":
 			inventory.consumable_items[index] = item
 			inventory.consumable_item_buttons[index].setup(item)

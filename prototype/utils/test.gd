@@ -3,9 +3,9 @@ var game:Node
 
 # self = game.test
 
-var unit = 0
-var fog = 0
+var unit = 1
 var stress = 0
+var fog = 0
 
 
 func _ready():
@@ -24,9 +24,9 @@ func spawn_unit():
 #		inf.hp = 100
 #		inf.current_hp = 100
 #
-		var leader = game.map.create(s.takoda, "mid", "blue", "Vector2", Vector2(840,900))
-		game.map.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,900))
-		var dummy = game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1020,900))
+		var leader = game.map.create(s.takoda, "mid", "blue", "Vector2", Vector2(440,900))
+		game.map.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
+		var dummy = game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1020,650))
 		dummy.set_behavior("stand")
 		dummy.hp = 10000
 		dummy.current_hp = 10000

@@ -9,7 +9,7 @@ export var regen:int = 0
 export var vision:int = 100
 var current_modifiers = {}
 export var type:String = "pawn" # building leader
-export var subtype:String = "melee" # ranged mounted base lane backwood
+export var subtype:String = "melee" # ranged base lane backwood
 export var display_name:String
 export var title:String
 export var team:String = "blue"
@@ -25,6 +25,7 @@ var selection_position:Vector2 = Vector2.ZERO
 
 # MOVEMENT
 export var moves:bool = false
+export var mounted:bool = false
 export var speed:float = 0
 export var hunting_speed:float = 0
 var angle:float = 0
@@ -52,6 +53,7 @@ export var attack_speed:float = 1
 export var defense:int = 0
 var target:Node2D
 var last_target:Node2D
+var aim_point:Vector2
 var attack_count = 0
 var weapon:Node2D
 
@@ -73,6 +75,7 @@ var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat 
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
+var gold = 0
 
 # ORDERS
 var retreating = false
@@ -213,8 +216,7 @@ func get_texture():
 			texture_data = body.frames.get_frame('default', 0)
 			region = texture_data.region
 			scale = Vector2(2.5,2.5)
-			match self.subtype:
-				"mounted": scale = Vector2(1.8,1.8)
+			if self.mounted: scale = Vector2(1.8,1.8)
 		self.texture = {
 			"sprite": body,
 			"data": texture_data,
@@ -241,11 +243,6 @@ func get_units_on_sight(filters):
 							targets.append(unit2)
 	return targets
 
-
-
-func get_gold():
-	if self.name in game.ui.inventories.leaders:
-		return game.ui.inventories.leaders[self.name].gold
 
 
 func wait():
@@ -291,13 +288,14 @@ func on_arrive(): # when collides with destiny
 		
 		if self.after_arive =="conquer": 
 			game.unit.orders.conquer_building(self)
-		self.after_arive = "stop"
+			self.after_arive = "stop"
 
 
 
 func on_attack_release(): # every ranged projectile start
 	game.unit.attack.projectile_release(self)
 	game.unit.advance.resume(self)
+
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks: 
@@ -311,6 +309,15 @@ func heal(heal_hp):
 	self.current_hp = int(min(self.current_hp, game.unit.modifiers.get_value(self, "hp")))
 	game.unit.hud.update_hpbar(self)
 	if self == game.selected_unit: game.ui.stats.update()
+
+
+func channel_start(time):
+	self.channeling = true
+	self.working = true
+	if self.channeling_timer.time_left > 0: 
+		self.channeling_timer.stop()
+	self.channeling_timer.wait_time = time
+	self.channeling_timer.start()
 
 
 func stun_start():

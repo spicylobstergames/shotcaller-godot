@@ -119,10 +119,9 @@ func update_buttons():
 		
 		# enable/disable all buttons on which leader don't have enough golds
 		if leader and leader.name in game.ui.inventories.leaders:
-			var leader_gold = game.ui.inventories.leaders[leader.name].gold
 			for item_button in equip_items.get_children() + consumable_items.get_children():
 				var item_price = item_button.item.price
-				item_button.disabled = (leader_gold < item_price)
+				item_button.disabled = (leader.gold < item_price)
 		
 		# disable equip if leader is not close to shop
 		if not close_to_blacksmith(leader):

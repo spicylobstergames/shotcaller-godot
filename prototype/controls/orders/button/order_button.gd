@@ -7,6 +7,7 @@ onready var hint_label = get_node("hint")
 
 var orders
 var saved_icon
+var counter = 0
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -26,7 +27,7 @@ func setup_order_button():
 		"building","extra room": sprite = 0
 		"pawn","infantry": sprite = 1
 		"ranged","fire arrows": sprite = 2
-		"leader","mount": sprite = 3
+		"leader","mounted": sprite = 3
 		"retreat": sprite = 4
 		"defend","reinforce","armor": sprite = 5
 		"default","boots": sprite = 6
@@ -59,19 +60,25 @@ func button_down():
 					game.unit.orders.set_leader_priority(self.orders.priority)
 				else: game.unit.orders.set_lane_priority(self.orders.priority)
 		
-		"gold":
-			game.unit.orders.gold_order(self.orders.gold)
-			disable_siblings(self)
+		"taxes":
+			for button in game.ui.orders.tax_buttons:
+				if button.orders.taxes == self.orders.taxes:
+					button.pressed = true
+					button.disabled = true
+				else: 
+					button.pressed = false
+					button.disabled = false
+			game.unit.orders.set_taxes(self.orders.taxes, game.player_team)
 			self.disabled = true
 		
-		"taxes":
-			clear_siblings(self)
-			game.unit.orders.set_taxes(self.orders.taxes)
+		"gold":
+			game.unit.orders.gold_order(self)
+			disable_siblings(self)
 			self.disabled = true
 		
 		"camp_hire":
 			clear_siblings(self)
-			game.unit.orders.camp_hire(self.orders.camp_hire)
+			game.unit.orders.camp_hire(self.orders.camp_hire, game.player_team)
 			self.disabled = true
 		
 		"lumberjack":

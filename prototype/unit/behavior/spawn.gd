@@ -99,13 +99,16 @@ func start():
 func spawn_group_cycle():
 	game.unit.orders.lanes_cycle()
 	game.unit.orders.leaders_cycle()
+	game.unit.orders.update_taxes()
 	
 	for team in ["red", "blue"]:
+		var extra_unit = game.unit.orders.player_extra_unit
+		if team != game.player_team: extra_unit = game.unit.orders.enemy_extra_unit
 		for lane in ["top", "mid", "bot"]:
 			send_pawn("archer", lane, team)
-			for n in 3:
+			for n in 2:
 				send_pawn("infantry", lane, team)
-	
+			send_pawn(extra_unit, lane, team)
 	
 	timer.start()
 	yield(timer, "timeout")
@@ -131,8 +134,7 @@ func send_pawn(template, lane, team):
 	var path = game.map.new_path(lane, team)
 	var pawn = recycle(template, lane, team, path.start)
 	if not pawn:
-		var unit_template = infantry
-		if template == "archer": unit_template = archer
+		var unit_template = self[template]
 		pawn = game.map.create(unit_template, lane, team, "point_random", path.start)
 	game.unit.orders.set_pawn(pawn)
 	game.unit.follow.start(pawn, path.follow, "advance")
