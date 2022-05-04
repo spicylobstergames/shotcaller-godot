@@ -9,7 +9,7 @@ export var regen:int = 0
 export var vision:int = 100
 var current_modifiers = {}
 export var type:String = "pawn" # building leader
-export var subtype:String = "melee" # ranged mounted base lane backwood
+export var subtype:String = "melee" # ranged base lane backwood
 export var display_name:String
 export var title:String
 export var team:String = "blue"
@@ -25,6 +25,7 @@ var selection_position:Vector2 = Vector2.ZERO
 
 # MOVEMENT
 export var moves:bool = false
+export var mounted:bool = false
 export var speed:float = 0
 export var hunting_speed:float = 0
 var angle:float = 0
@@ -215,8 +216,7 @@ func get_texture():
 			texture_data = body.frames.get_frame('default', 0)
 			region = texture_data.region
 			scale = Vector2(2.5,2.5)
-			match self.subtype:
-				"mounted": scale = Vector2(1.8,1.8)
+			if self.mounted: scale = Vector2(1.8,1.8)
 		self.texture = {
 			"sprite": body,
 			"data": texture_data,
@@ -287,9 +287,8 @@ func on_arrive(): # when collides with destiny
 			game.unit.advance.end(self)
 		
 		if self.after_arive =="conquer": 
-			print("conquer")
 			game.unit.orders.conquer_building(self)
-		self.after_arive = "stop"
+			self.after_arive = "stop"
 
 
 

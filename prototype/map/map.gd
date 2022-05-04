@@ -15,6 +15,8 @@ var size:int = 2112
 const tile_size = 64
 const half_tile_size = tile_size / 2
 
+const neutrals = ["mine", "blacksmith", "lumbermill", "camp", "outpost"]
+
 var lanes:Array = ["bot", "mid", "top"]
 
 var top:Array

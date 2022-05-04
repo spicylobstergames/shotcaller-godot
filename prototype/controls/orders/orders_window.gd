@@ -21,7 +21,6 @@ var lumbermill:Array = []
 var camp:Array = []
 var outpost:Array = []
 
-const neutrals = ["mine", "blacksmith", "lumbermill", "camp", "outpost"]
 
 var button_template:PackedScene = load("res://controls/orders/button/order_button.tscn")
 
@@ -29,7 +28,7 @@ const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
 	"lane_tactics": ["defend","default","attack"],
 	"priority": ["pawn", "leader", "building"],
-	"camp_hire": ["infantry","ranged","mount"],
+	"camp_hire": ["infantry","ranged","mounted"],
 	"taxes": ["low","medium","high"],
 	"gold": ["collect", "destroy"],
 	"lumberjack": ["hire", "dismiss"],
@@ -47,7 +46,7 @@ const hint_tooltips_tactics = {
 const hint_tooltips_hire = {
 	"infantry": "Extra infantry, costs 5 gold",
 	"ranged": "Extra archer, costs 10 gold",
-	"mount": "Extra mounted soldier, costs 15 gold"
+	"mounted": "Extra mounted soldier, costs 15 gold"
 }
 
 const hint_tooltips_tax = {
@@ -92,7 +91,7 @@ func _ready():
 	
 	yield(get_tree(), "idle_frame")
 	
-	for neutral in neutrals:
+	for neutral in game.map.neutrals:
 		self[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
 		self[neutral].append( game.map.get_node("buildings/red/" + neutral) )
 	
@@ -170,7 +169,6 @@ func build_mines():
 	for building in mine:
 		game.ui.inventories.gold_timer_timeout(building)
 		building.channeling_timer = Timer.new()
-		building.channeling_timer.one_shot = true
 		building.add_child(building.channeling_timer)
 		
 		var orders = {
@@ -402,7 +400,7 @@ func setup_taxes(orders):
 		}
 		index += 1
 		setup_order_button(button)
-		if tax == "medium":
+		if tax == "low":
 			button.pressed = true
 			button.disabled = true
 	orders.node.add_child(HSeparator.new())
@@ -487,12 +485,12 @@ func update():
 				"blacksmith":
 					show_orders()
 					blacksmith_orders[game.selected_unit.name+side].node.show()
-				"lumbermill":
-					show_orders()
-					lumbermill_orders[game.selected_unit.name+side].node.show()
-				"outpost":
-					show_orders()
-					outpost_orders[game.selected_unit.name+side].node.show()
+#				"lumbermill":
+#					show_orders()
+#					lumbermill_orders[game.selected_unit.name+side].node.show()
+#				"outpost":
+#					show_orders()
+#					outpost_orders[game.selected_unit.name+side].node.show()
 			
 
 	else:

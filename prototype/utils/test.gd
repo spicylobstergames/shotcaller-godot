@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.test
 
-var unit = 0
+var unit = 1
 var stress = 0
 var fog = 0
 

@@ -9,26 +9,24 @@ func _ready():
 
 func start(unit, objective, smart_move = false): # move_and_attack
 	game.unit.attack.set_target(unit, null)
-	unit.objective = objective
-	if (unit.attacks and game.unit.move.in_bounds(objective) and
+	if objective: unit.objective = objective
+	if (unit.attacks and game.unit.move.in_bounds(unit.objective) and
 			not unit.retreating and not unit.stunned and not unit.channeling):
 		unit.set_behavior("advance")
 		if smart_move:
-			var path = game.unit.follow.find_path(unit.global_position, objective)
+			var path = game.unit.follow.find_path(unit.global_position, unit.objective)
 			unit.current_path = path
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
-		var no_path = (unit.current_path.size() == 0)
-		if not enemies and not at_objective: move(unit, objective, smart_move) 
+		var has_path = (unit.current_path.size() > 0)
+		if not enemies and not at_objective: move(unit, unit.objective, smart_move) 
 		if not enemies and at_objective: 
-			if no_path: stop(unit)
-			else: game.unit.follow.start(unit, unit.current_path, "advance")
+			if has_path: game.unit.follow.start(unit, unit.current_path, "advance")
 		if enemies:
 			var target = game.unit.orders.select_target(unit, enemies)
-			if not target and not at_objective: move(unit, objective, smart_move)
+			if not target and not at_objective: move(unit, unit.objective, smart_move)
 			if not target and at_objective:
-				if no_path: stop(unit)
-				else: game.unit.follow.start(unit, unit.current_path, "advance")
+				if has_path: game.unit.follow.start(unit, unit.current_path, "advance")
 			if target:
 				game.unit.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
@@ -53,13 +51,13 @@ func on_collision(unit):
 
 func resume(unit):
 	if unit.behavior == "advance":
-		start(unit, unit.objective)
+		start(unit, null)
 
 
 func end(unit):
 	if unit.behavior == "advance":
 		if unit.current_destiny != unit.objective:
-			start(unit, unit.objective)
+			start(unit, null)
 		else: stop(unit)
 
 
@@ -76,7 +74,6 @@ func ally_attacked(target, attacker):
 func stop(unit):
 	if unit.behavior == "advance":
 		unit.set_behavior("stop")
-		
 		game.unit.move.stop(unit)
 
 

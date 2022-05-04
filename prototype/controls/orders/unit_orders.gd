@@ -8,6 +8,11 @@ var enemy_lanes_orders = {}
 var player_leaders_orders = {}
 var enemy_leaders_orders = {}
 
+var player_tax = "low"
+var enemy_tax = "low"
+
+var player_extra_unit = "infantry"
+var enemy_extra_unit = "infantry"
 
 var conquer_time = 3
 var destroy_time = 5
@@ -17,7 +22,11 @@ var collect_time = 16
 func _ready():
 	game = get_tree().get_current_scene()
 	
-
+const tax_gold = {
+	"low": 0,
+	"medium": 1,
+	"high": 2
+}
 
 const tactics_extra_speed = { 
 	"retreat": 0,
@@ -132,9 +141,22 @@ func set_leader(leader, orders):
 	var tactics = orders.tactics
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
-
+	
+	var extra_unit = player_extra_unit
+	if leader.team == game.enemy_team:
+		extra_unit = enemy_extra_unit
+	var cost
+	match extra_unit:
+		"infantry": cost = 1
+		"archer": cost = 2
+		"mounted": cost = 3
+	leader.gold -= cost
+	
 	# get back to lane 
-	if (not leader.working and
+	if (not leader.after_arive == "conquer" and
+			not leader.after_arive == "attack" and
+			not leader.working and
+			not leader.channeling and
 			not leader.retreating and 
 			not (leader.team == game.player_team and game.ui.shop.close_to_blacksmith(leader)) ): 
 				
@@ -199,53 +221,130 @@ func closest_unit(unit, enemies):
 
 
 func conquer_building(unit):
-	print("conquer start")
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
-	
 	if building and building.team == "neutral" and not unit.stunned:
 		unit.channel_start(conquer_time)
 		yield(unit.channeling_timer, "timeout")
+		# conquer
 		if unit.channeling:
-			print("conquer end")
 			unit.channeling = false
 			unit.working = false
 			building.channeling = false
-			building.working = false
 			building.team = unit.team
 			building.setup_team()
+			
+			 # check empty backwood
+			var leaders = game.player_leaders
+			if unit.team != game.player_team: leaders = game.enemy_leaders
+			var oponent_has_no_buildings = true
+			var oponent_team = unit.oponent_team()
+			for neutral in game.map.neutrals:
+				var neutral_building = game.map.get_node("buildings/"+oponent_team+"/"+neutral)
+				if neutral_building.team == oponent_team:
+					oponent_has_no_buildings = false
+					break
+			if oponent_has_no_buildings:
+				# remove tax gold from conquered team
+				leaders = game.player_leaders
+				if oponent_team == game.enemy_team:
+					leaders = game.enemy_leaders
+				for leader in leaders:
+					var inventory = game.ui.inventories.leaders[leader.name]
+					inventory.extra_tax_gold = 0
+			
 			match building.display_name:
-				"camp", "outpost":
+				"camp", "outpost": # allow neutral attack
 					building.attacks = true
+				
+				"mine": # add mine gold
+					for leader in leaders:
+						game.ui.inventories.leaders[leader.name].extra_mine_gold = 1
+			
+			game.ui.show_select()
 
 
-func gold_order(orders):
-	print("gold start")
-	var mine = orders.order.mine
-	if orders.gold == "collect":
-		mine.channel_start(collect_time)
-		yield(mine.channeling_timer, "timeout")
+# MINE
+
+func gold_order(button):
+	var mine = button.orders.order.mine
+	mine.channeling_timer.stop()
+	mine.channeling_timer.wait_time = 1
+	mine.channeling_timer.start()
+	mine.channeling = true
+	match button.orders.gold:
+		"collect":
+			button.counter = collect_time
+			button.hint_label.text = str(collect_time)
+			gold_collect_counter(button)
+		"destroy":
+			button.counter = destroy_time
+			button.hint_label.text = str(button.counter)
+			gold_destroy_counter(button)
+
+
+func gold_collect_counter(button):
+	var mine = button.orders.order.mine
+	yield(mine.channeling_timer, "timeout")
+	if button.counter > 0:
+		button.counter -= 1
+		button.hint_label.text = str(button.counter)
+		gold_collect_counter(button)
+	else:
+		mine.channeling_timer.stop()
+		button.disabled = false
 		if mine.channeling:
-			print("colect end")
 			mine.channeling = false
-			mine.working = false
 			var leaders = game.player_leaders
 			if mine.team == game.enemy_team: leaders = game.enemy_team
 			for leader in leaders:
 				leader.gold += floor(mine.gold / leaders.size())
 			mine.gold = 0
-	
-	if orders.gold == "destroy":
-		mine.channel_start(destroy_time)
-		yield(mine.channeling_timer, "timeout")
+
+
+func gold_destroy_counter(button):
+	var mine = button.orders.order.mine
+	yield(mine.channeling_timer, "timeout")
+	if button.counter > 0:
+		button.counter -= 1
+		button.hint_label.text = str(button.counter)
+		gold_destroy_counter(button)
+	else:
+		mine.channeling_timer.stop()
+		button.disabled = false
 		if mine.channeling:
-			print("destroy end")
 			mine.channeling = false
-			mine.working = false
 			mine.gold = 0
 			mine.team = "neutral"
 			mine.setup_team()
+			game.ui.show_select()
+			for leader in game.player_leaders:
+				game.ui.inventories.leaders[leader.name].extra_mine_gold = 0
+
+
+
+# CAMP
+
+func camp_hire(unit, team):
+	if team == game.player_team:
+		player_extra_unit = unit
+	else: enemy_extra_unit = unit
+
+
+# TAXES
+
+func set_taxes(tax, team):
+	if team == game.player_team:
+		player_tax = tax
+	else: enemy_tax = tax
+
+
+func update_taxes():
+	for leader in game.player_leaders:
+		game.ui.inventories.leaders[leader.name].extra_tax_gold = tax_gold[player_tax]
+	for leader in game.enemy_leaders:
+		game.ui.inventories.leaders[leader.name].extra_tax_gold = tax_gold[enemy_tax] 
 
 
 # RETREAT
