@@ -235,35 +235,47 @@ func conquer_building(unit):
 			building.team = unit.team
 			building.setup_team()
 			
-			 # check empty backwood
-			var leaders = game.player_leaders
-			if unit.team != game.player_team: leaders = game.enemy_leaders
-			var oponent_has_no_buildings = true
-			var oponent_team = unit.oponent_team()
-			for neutral in game.map.neutrals:
-				var neutral_building = game.map.get_node("buildings/"+oponent_team+"/"+neutral)
-				if neutral_building.team == oponent_team:
-					oponent_has_no_buildings = false
-					break
-			if oponent_has_no_buildings:
-				# remove tax gold from conquered team
-				leaders = game.player_leaders
-				if oponent_team == game.enemy_team:
-					leaders = game.enemy_leaders
-				for leader in leaders:
-					var inventory = game.ui.inventories.leaders[leader.name]
-					inventory.extra_tax_gold = 0
+			var op_team = unit.oponent_team()
+			if not has_neutral_buildings(op_team):
+				remove_tax(op_team)
 			
 			match building.display_name:
 				"camp", "outpost": # allow neutral attack
 					building.attacks = true
 				
-				"mine": # add mine gold
-					for leader in leaders:
-						game.ui.inventories.leaders[leader.name].extra_mine_gold = 1
+				"mine": add_mine_gold(unit.team)
 			
 			game.ui.show_select()
 
+func add_mine_gold(team):
+	var leaders = game.player_leaders
+	var inventories = game.ui.inventories.player_leaders_inv
+	if team == game.enemy_team:
+		leaders = game.enemy_leaders
+		inventories = game.ui.inventories.enemy_leaders_inv
+	for leader in leaders:
+		inventories[leader.name].extra_mine_gold = 1
+
+
+func has_neutral_buildings(team):
+	var neutral_buildings = false
+	for neutral in game.map.neutrals:
+		var neutral_building = game.map.get_node("buildings/"+team+"/"+neutral)
+		if neutral_building.team == team:
+			neutral_buildings = true
+			break
+	return neutral_buildings
+
+
+func remove_tax(team):
+	var leaders = game.player_leaders
+	var inventories = game.ui.inventories.player_leaders_inv
+	if team == game.enemy_team:
+		leaders = game.enemy_leaders
+		inventories = game.ui.inventories.enemy_leaders_inv
+	for leader in leaders:
+		var inventory = inventories[leader.name]
+		inventory.extra_tax_gold = 0
 
 # MINE
 
