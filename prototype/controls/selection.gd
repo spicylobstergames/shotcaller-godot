@@ -175,4 +175,6 @@ func order(unit, point):
 				"neutral": unit.after_arive = "conquer"
 				game.player_team: unit.after_arive = "stop"
 				game.enemy_team: unit.after_arive = "attack"
+			if building.display_name == "church":
+				unit.after_arive = "pray"
 		return point
