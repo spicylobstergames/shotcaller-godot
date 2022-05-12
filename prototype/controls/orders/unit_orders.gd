@@ -17,7 +17,8 @@ var enemy_extra_unit = "infantry"
 var conquer_time = 3
 var destroy_time = 5
 var collect_time = 16
-
+var pray_time = 10
+var pray_cooldown = 60
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -247,6 +248,26 @@ func conquer_building(unit):
 			
 			game.ui.show_select()
 
+func pray_in_church(unit):
+	var point = unit.global_position
+	point.y -= game.map.tile_size
+	var building = game.utils.buildings_click(point)
+	if building and building.team == unit.team \
+			and building.display_name == "church" \
+			and building.channeling == false \
+			and not unit.stunned:
+		building.channeling = true
+		unit.channel_start(pray_time)
+		yield(unit.channeling_timer, "timeout")
+		if unit.channeling:
+			unit.channeling = false
+			unit.working = false
+			pray(unit)
+			game.ui.show_select()
+			# Chruch pray cooldown <- temporary solution
+			yield(get_tree().create_timer(pray_cooldown), "timeout")
+			building.channeling = false
+
 func add_mine_gold(team):
 	var leaders = game.player_leaders
 	var inventories = game.ui.inventories.player_leaders_inv
@@ -276,6 +297,19 @@ func remove_tax(team):
 	for leader in leaders:
 		var inventory = inventories[leader.name]
 		inventory.extra_tax_gold = 0
+
+# CHURCH
+
+var _pray_bonuses = [
+		["regen", 1],
+		["defense", 2],
+		["hp", 10]
+	]
+
+func pray(unit):
+	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
+	print(random_bonus)
+	game.unit.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
 # MINE
 

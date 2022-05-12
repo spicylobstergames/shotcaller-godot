@@ -15,6 +15,7 @@ export var title:String
 export var team:String = "blue"
 export var respawn:float = 1
 var dead:bool = false
+export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 
@@ -68,7 +69,7 @@ var attack_hit_radius = 24
 # BEHAVIOR
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
-var after_arive:String = "stop" # "attack" "conquer"
+var after_arive:String = "stop" # "attack" "conquer" "pray"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
@@ -288,6 +289,9 @@ func on_arrive(): # when collides with destiny
 		
 		if self.after_arive =="conquer": 
 			game.unit.orders.conquer_building(self)
+			self.after_arive = "stop"
+		elif self.after_arive == "pray":
+			game.unit.orders.pray_in_church(self)
 			self.after_arive = "stop"
 
 
