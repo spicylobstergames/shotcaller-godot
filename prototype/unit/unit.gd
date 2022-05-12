@@ -15,6 +15,7 @@ export var title:String
 export var team:String = "blue"
 export var respawn:float = 1
 var dead:bool = false
+export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 

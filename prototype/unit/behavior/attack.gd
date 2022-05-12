@@ -46,10 +46,12 @@ func set_target(unit, target):
 func closest_enemy_unit(unit, enemies):
 	var sorted = game.utils.sort_by_distance(unit, enemies)
 	var filtered = []
+	
 	for enemy in sorted:
-		if enemy.unit.team == game.enemy_team and not enemy.unit.dead:
-			filtered.append(enemy.unit)
-			
+		if (enemy.unit.team == game.enemy_team and 
+			not enemy.unit.dead and 
+			not enemy.unit.immune): filtered.append(enemy.unit)
+	
 	if filtered: return filtered[0]
 
 
@@ -80,7 +82,8 @@ func can_hit(attacker, target):
 		target.type != "block" and
 		is_instance_valid(attacker) and
 		is_instance_valid(target) and
-		not target.dead
+		not target.dead and
+		not target.immune
 	)
 
 
@@ -102,7 +105,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if projectile.targets != null and projectile.targets.find(target) < 0:
 			projectile.targets.append(target)
 	
-	if target and not target.dead:
+	if target and not target.dead and not target.immune:
 		if not modifiers.dodge:
 			var damage = max(1, modifiers.damage - game.unit.modifiers.get_value(target, "defense"))
 			target.current_hp -= damage
@@ -131,7 +134,6 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 
 func projectile_release(attacker):
-	#if attacker.target and not attacker.target.dead:
 	projectile_start(attacker, attacker.target)
 	game.unit.skills.projectile_release(attacker)
 
@@ -141,7 +143,8 @@ func projectile_start(attacker, target):
 	var target_position = attacker.aim_point
 	if target:
 		target_position = target.global_position + target.collision_position
-		if target_position.x < 0 or target_position.y < 0: return
+		if target.dead or target.immune: return
+	if not game.unit.move.in_bounds(target_position): return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	game.map.add_child(projectile)

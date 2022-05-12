@@ -152,6 +152,7 @@ subtype = "backwood"
 display_name = "church"
 title = "sacred temple"
 respawn = 0.0
+immune = true
 selectable = true
 collide = true
 projectile_speed = 0.0
