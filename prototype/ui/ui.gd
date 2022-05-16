@@ -105,7 +105,8 @@ func hide_all_keep_stats():
 
 func show_select():
 	stats.update()
-	if game.selected_unit.team == game.player_team:
+	if (game.selected_unit and
+		game.selected_unit.team == game.player_team):
 		orders_button.disabled = false
 	orders.update()
 	controls.update()

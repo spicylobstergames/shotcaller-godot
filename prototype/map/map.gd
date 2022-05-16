@@ -112,3 +112,13 @@ func create(template, lane, team, mode, point):
 	return unit
 
 
+
+func has_neutral_buildings(team):
+	var neutral_buildings = false
+	for neutral in game.map.neutrals:
+		var neutral_building = game.map.get_node("buildings/"+team+"/"+neutral)
+		if neutral_building.team == team:
+			neutral_buildings = true
+			break
+	return neutral_buildings
+

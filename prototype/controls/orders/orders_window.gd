@@ -485,12 +485,12 @@ func update():
 				"blacksmith":
 					show_orders()
 					blacksmith_orders[game.selected_unit.name+side].node.show()
-#				"lumbermill":
-#					show_orders()
-#					lumbermill_orders[game.selected_unit.name+side].node.show()
-#				"outpost":
-#					show_orders()
-#					outpost_orders[game.selected_unit.name+side].node.show()
+				"lumbermill":
+					show_orders()
+					lumbermill_orders[game.selected_unit.name+side].node.show()
+				"outpost":
+					show_orders()
+					outpost_orders[game.selected_unit.name+side].node.show()
 			
 
 	else:

@@ -20,8 +20,12 @@ var collect_time = 16
 var pray_time = 10
 var pray_cooldown = 60
 
-func _ready():
-	game = get_tree().get_current_scene()
+const _pray_bonuses = [
+	["regen", 1],
+	["defense", 2],
+	["hp", 10]
+]
+
 	
 const tax_gold = {
 	"low": 0,
@@ -46,6 +50,9 @@ func new_orders():
 		}
 	}
 
+
+func _ready():
+	game = get_tree().get_current_scene()
 
 # LANES
 
@@ -237,7 +244,7 @@ func conquer_building(unit):
 			building.setup_team()
 			
 			var op_team = unit.oponent_team()
-			if not has_neutral_buildings(op_team):
+			if not game.map.has_neutral_buildings(op_team):
 				remove_tax(op_team)
 			
 			match building.display_name:
@@ -247,6 +254,10 @@ func conquer_building(unit):
 				"mine": add_mine_gold(unit.team)
 			
 			game.ui.show_select()
+
+
+# CHURCH
+
 
 func pray_in_church(unit):
 	var point = unit.global_position
@@ -268,6 +279,16 @@ func pray_in_church(unit):
 			yield(get_tree().create_timer(pray_cooldown), "timeout")
 			building.channeling = false
 
+
+
+func pray(unit):
+	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
+	print(random_bonus)
+	game.unit.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
+
+
+# MINE
+
 func add_mine_gold(team):
 	var leaders = game.player_leaders
 	var inventories = game.ui.inventories.player_leaders_inv
@@ -277,41 +298,6 @@ func add_mine_gold(team):
 	for leader in leaders:
 		inventories[leader.name].extra_mine_gold = 1
 
-
-func has_neutral_buildings(team):
-	var neutral_buildings = false
-	for neutral in game.map.neutrals:
-		var neutral_building = game.map.get_node("buildings/"+team+"/"+neutral)
-		if neutral_building.team == team:
-			neutral_buildings = true
-			break
-	return neutral_buildings
-
-
-func remove_tax(team):
-	var leaders = game.player_leaders
-	var inventories = game.ui.inventories.player_leaders_inv
-	if team == game.enemy_team:
-		leaders = game.enemy_leaders
-		inventories = game.ui.inventories.enemy_leaders_inv
-	for leader in leaders:
-		var inventory = inventories[leader.name]
-		inventory.extra_tax_gold = 0
-
-# CHURCH
-
-var _pray_bonuses = [
-		["regen", 1],
-		["defense", 2],
-		["hp", 10]
-	]
-
-func pray(unit):
-	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	print(random_bonus)
-	game.unit.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
-
-# MINE
 
 func gold_order(button):
 	var mine = button.orders.order.mine
@@ -378,6 +364,13 @@ func camp_hire(unit, team):
 	else: enemy_extra_unit = unit
 
 
+# LUMBERMILL
+
+func lumberjack_hire(orders, team):
+	var lumbermill = game.selected_unit
+	var lumberjack = game.unit.spawn.next_to_building("lumberjack", game.player_team, lumbermill)
+	# start lumberjack wood cycle
+
 # TAXES
 
 func set_taxes(tax, team):
@@ -391,6 +384,17 @@ func update_taxes():
 		game.ui.inventories.player_leaders_inv[leader.name].extra_tax_gold = tax_gold[player_tax]
 	for leader in game.enemy_leaders:
 		game.ui.inventories.enemy_leaders_inv[leader.name].extra_tax_gold = tax_gold[enemy_tax] 
+
+
+func remove_tax(team):
+	var leaders = game.player_leaders
+	var inventories = game.ui.inventories.player_leaders_inv
+	if team == game.enemy_team:
+		leaders = game.enemy_leaders
+		inventories = game.ui.inventories.enemy_leaders_inv
+	for leader in leaders:
+		var inventory = inventories[leader.name]
+		inventory.extra_tax_gold = 0
 
 
 # RETREAT
