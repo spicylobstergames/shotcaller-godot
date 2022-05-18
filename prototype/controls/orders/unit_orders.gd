@@ -19,6 +19,7 @@ var destroy_time = 5
 var collect_time = 16
 var pray_time = 10
 var pray_cooldown = 60
+var cut_time = 6
 
 const _pray_bonuses = [
 	["regen", 1],
@@ -163,6 +164,7 @@ func set_leader(leader, orders):
 	# get back to lane 
 	if (not leader.after_arive == "conquer" and
 			not leader.after_arive == "attack" and
+			not leader.after_arive == "pray" and
 			not leader.working and
 			not leader.channeling and
 			not leader.retreating and 
@@ -229,6 +231,7 @@ func closest_unit(unit, enemies):
 
 
 func conquer_building(unit):
+	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
@@ -260,13 +263,14 @@ func conquer_building(unit):
 
 
 func pray_in_church(unit):
+	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
-	if building and building.team == unit.team \
-			and building.display_name == "church" \
-			and building.channeling == false \
-			and not unit.stunned:
+	if (building and building.team == unit.team 
+			and building.display_name == "church" 
+			and building.channeling == false 
+			and not unit.stunned):
 		building.channeling = true
 		unit.channel_start(pray_time)
 		yield(unit.channeling_timer, "timeout")
@@ -283,7 +287,7 @@ func pray_in_church(unit):
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	print(random_bonus)
+	#print(random_bonus)
 	game.unit.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
 
@@ -368,8 +372,40 @@ func camp_hire(unit, team):
 
 func lumberjack_hire(orders, team):
 	var lumbermill = game.selected_unit
-	var lumberjack = game.unit.spawn.next_to_building("lumberjack", game.player_team, lumbermill)
-	# start lumberjack wood cycle
+	var lumberjack = game.unit.spawn.next_to_building("lumberjack", lumbermill)
+	lumberjack.origin = lumberjack.global_position
+	# start lumberjack wood cut cycle
+	lumber_start(lumberjack)
+
+
+func lumber_start(lumberjack):
+	var cut_position = lumberjack.origin - Vector2(game.map.tile_size,0)
+	lumberjack.working = true
+	lumberjack.after_arive = "cut"
+	game.unit.move.move(lumberjack, cut_position)
+
+
+func lumber_cut(lumberjack):
+	lumberjack.after_arive = "stop"
+	lumberjack.set_state("attack")
+	if lumberjack.channeling_timer.time_left > 0: 
+		lumberjack.channeling_timer.stop()
+	lumberjack.channeling_timer.wait_time = cut_time
+	lumberjack.channeling_timer.start()
+	# cut animation end
+	yield(lumberjack.channeling_timer, "timeout")
+	lumberjack.working = true
+	game.unit.move.move(lumberjack, lumberjack.origin)
+	lumberjack.after_arive = "lumber_arive"
+
+
+func lumber_arive(lumberjack):
+	# heal all player buildings
+	
+	# restart lumberjack wood cut cycle
+	lumber_start(lumberjack)
+
+
 
 # TAXES
 

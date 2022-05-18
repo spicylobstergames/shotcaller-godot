@@ -157,18 +157,18 @@ func spawn_unit(unit, l, t, mode, point):
 	return unit
 
 
-func next_to_building(template, team, building):
+func next_to_building(template, building):
 	var spawn_point = building.global_position
-	if team == game.player_team: spawn_point.x += game.map.tile_size
+	if building.team == "blue": spawn_point.x -= game.map.tile_size
 	else: spawn_point.x += game.map.tile_size
 	var unit_template = self[template]
-	return game.map.create(unit_template, "", team, "point", spawn_point)
+	return game.map.create(unit_template, "", building.team, "point", spawn_point)
 
 
 func cemitery_add_pawn(unit):
-	var side = "player_"
-	if unit.team != game.player_team: side = "enemy_"
-	var index = side+unit.display_name
+	var side = "player"
+	if unit.team != game.player_team: side = "enemy"
+	var index = side+"_"+unit.display_name
 	cemitery[index].append(unit)
 
 

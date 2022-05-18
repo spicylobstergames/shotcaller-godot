@@ -69,7 +69,7 @@ var attack_hit_radius = 24
 # BEHAVIOR
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
-var after_arive:String = "stop" # "attack" "conquer" "pray"
+var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
@@ -269,10 +269,7 @@ func on_collision(delta):
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves:
-		if self.attacks: 
-			game.unit.advance.resume(self)
-	
+	if self.moves and self.attacks: game.unit.advance.resume(self)
 	if self == game.selected_unit: game.unit.follow.draw_path(self)
 
 
@@ -284,16 +281,13 @@ func on_arrive(): # when collides with destiny
 		self.working = false
 		game.unit.move.end(self)
 		
-		if self.attacks: 
-			game.unit.advance.end(self)
+		if self.attacks: game.unit.advance.end(self)
 		
-		if self.after_arive =="conquer": 
-			game.unit.orders.conquer_building(self)
-			self.after_arive = "stop"
-		elif self.after_arive == "pray":
-			game.unit.orders.pray_in_church(self)
-			self.after_arive = "stop"
-
+		match self.after_arive:
+			"conquer": game.unit.orders.conquer_building(self)
+			"pray": game.unit.orders.pray_in_church(self)
+			"cut": game.unit.orders.lumber_cut(self)
+			"lumber_arive": game.unit.orders.lumber_arive(self)
 
 
 func on_attack_release(): # every ranged projectile start
