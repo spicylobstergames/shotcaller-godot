@@ -19,6 +19,7 @@ var enemy_buildings:Array = []
 var all_units:Array = []
 var selectable_units:Array = []
 var neutral_buildings:Array = []
+var all_buildings:Array = []
 
 var selected_unit:Node2D
 var selected_leader:Node2D

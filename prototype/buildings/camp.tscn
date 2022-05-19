@@ -149,6 +149,7 @@ radius = 160.0
 
 [node name="camp" instance=ExtResource( 1 )]
 hp = 1800
+regen = 10
 vision = 300
 type = "building"
 subtype = "backwood"

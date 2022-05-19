@@ -3,10 +3,10 @@ var game:Node
 
 # self = game.unit.orders
 
-var player_lanes_orders = {}
-var enemy_lanes_orders = {}
-var player_leaders_orders = {}
-var enemy_leaders_orders = {}
+const player_lanes_orders = {}
+const enemy_lanes_orders = {}
+const player_leaders_orders = {}
+const enemy_leaders_orders = {}
 
 var player_tax = "low"
 var enemy_tax = "low"
@@ -14,12 +14,13 @@ var enemy_tax = "low"
 var player_extra_unit = "infantry"
 var enemy_extra_unit = "infantry"
 
-var conquer_time = 3
-var destroy_time = 5
-var collect_time = 16
-var pray_time = 10
-var pray_cooldown = 60
-var cut_time = 6
+const lumberjack_cost = 100
+const conquer_time = 3
+const destroy_time = 5
+const collect_time = 16
+const pray_time = 10
+const pray_cooldown = 60
+const cut_time = 6
 
 const _pray_bonuses = [
 	["regen", 1],
@@ -120,7 +121,7 @@ func build_leaders():
 func hp_regen_cycle(): # called every second
 	if not game.paused:
 		for unit in game.all_units:
-			if unit.regen > 0:
+			if unit.type != "building" and unit.regen > 0:
 				set_regen(unit)
 				if unit.type == "leader" and unit.team == game.player_team:
 					game.ui.inventories.update_consumables(unit)
@@ -333,7 +334,7 @@ func gold_collect_counter(button):
 		if mine.channeling:
 			mine.channeling = false
 			var leaders = game.player_leaders
-			if mine.team == game.enemy_team: leaders = game.enemy_team
+			if mine.team == game.enemy_team: leaders = game.enemy_leaders
 			for leader in leaders:
 				leader.gold += floor(mine.gold / leaders.size())
 			mine.gold = 0
@@ -366,6 +367,16 @@ func camp_hire(unit, team):
 	if team == game.player_team:
 		player_extra_unit = unit
 	else: enemy_extra_unit = unit
+	
+	var cost
+	match unit:
+		"infantry": cost = 1
+		"archer": cost = 2
+		"mounted": cost = 3
+	
+	var leaders = game.player_leaders
+	if team == game.enemy_team: leaders = game.enemy_leaders
+	for leader in leaders: leader.gold -= cost
 
 
 # LUMBERMILL
@@ -374,6 +385,11 @@ func lumberjack_hire(orders, team):
 	var lumbermill = game.selected_unit
 	var lumberjack = game.unit.spawn.next_to_building("lumberjack", lumbermill)
 	lumberjack.origin = lumberjack.global_position
+	
+	var leaders = game.player_leaders
+	if team == game.enemy_team: leaders = game.enemy_leaders
+	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
+	
 	# start lumberjack wood cut cycle
 	lumber_start(lumberjack)
 
@@ -392,6 +408,7 @@ func lumber_cut(lumberjack):
 		lumberjack.channeling_timer.stop()
 	lumberjack.channeling_timer.wait_time = cut_time
 	lumberjack.channeling_timer.start()
+	
 	# cut animation end
 	yield(lumberjack.channeling_timer, "timeout")
 	lumberjack.working = true
@@ -401,10 +418,12 @@ func lumber_cut(lumberjack):
 
 func lumber_arive(lumberjack):
 	# heal all player buildings
+	for building in game.all_buildings:
+		if lumberjack.team == building.team:
+			building.heal(building.regen)
 	
 	# restart lumberjack wood cut cycle
 	lumber_start(lumberjack)
-
 
 
 # TAXES

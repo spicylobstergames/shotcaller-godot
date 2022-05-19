@@ -234,7 +234,7 @@ func get_units_on_sight(filters):
 	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, current_vision)
 	var targets = []
 	for unit2 in neighbors:
-		if unit2.hp and self != unit2 and not unit2.dead:
+		if unit2.hp and self != unit2 and not unit2.dead and not unit2.immune:
 			var distance = self.global_position.distance_to(unit2.global_position)
 			if distance < current_vision:
 				if not filters: targets.append(unit2)

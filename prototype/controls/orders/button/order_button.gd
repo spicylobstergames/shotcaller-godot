@@ -87,7 +87,7 @@ func button_down():
 			self.disabled = true
 		
 		"dismiss":
-			
+			#todo
 			self.disabled = true
 		
 		"pawn_upgrades":

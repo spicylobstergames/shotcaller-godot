@@ -93,6 +93,7 @@ func setup_buildings():
 				game.enemy_buildings.append(building)
 			else: game.neutral_buildings.append(building)
 			game.all_units.append(building)
+			game.all_buildings.append(building)
 
 
 func create(template, lane, team, mode, point):

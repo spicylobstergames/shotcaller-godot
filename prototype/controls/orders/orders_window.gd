@@ -61,7 +61,7 @@ const hint_tooltips_gold = {
 }
 
 const hint_tooltips_lumberjack = {
-	"hire": "Hires a lumberjack for 100 gold (+1/sec repair)",
+	"hire": "Hire lumberjack - 100 gold (allow buiding repair)",
 	"dismiss": "Dismiss lumberjack",
 }
 
