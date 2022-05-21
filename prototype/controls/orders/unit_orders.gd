@@ -123,7 +123,7 @@ func hp_regen_cycle(): # called every second
 		for unit in game.all_units:
 			if unit.type != "building" and unit.regen > 0:
 				set_regen(unit)
-				if unit.type == "leader" and unit.team == game.player_team:
+				if unit.type == "leader" and game.can_control(unit):
 					game.ui.inventories.update_consumables(unit)
 		
 	yield(get_tree().create_timer(1), "timeout")
@@ -169,7 +169,7 @@ func set_leader(leader, orders):
 			not leader.working and
 			not leader.channeling and
 			not leader.retreating and 
-			not (leader.team == game.player_team and game.ui.shop.close_to_blacksmith(leader)) ): 
+			not (game.can_control(leader) and game.ui.shop.close_to_blacksmith(leader)) ): 
 				
 		game.unit.follow.lane(leader)
 
@@ -186,7 +186,7 @@ func set_leader_tactic(tactic):
 
 
 func set_leader_priority(priority):
-	var leader = game.selected_unit
+	var leader = game.selected_leader
 	var leader_orders
 	if leader.team == game.player_team:
 		leader_orders = player_leaders_orders[leader.name]
@@ -230,6 +230,8 @@ func closest_unit(unit, enemies):
 	return sorted[0].unit
 
 
+# BACKWOOD
+
 
 func conquer_building(unit):
 	unit.after_arive = "stop"
@@ -258,6 +260,11 @@ func conquer_building(unit):
 				"mine": add_mine_gold(unit.team)
 			
 			game.ui.show_select()
+
+
+func building_destroy(building):
+	building.team = "neutral"
+	building.setup_team()
 
 
 # CHURCH

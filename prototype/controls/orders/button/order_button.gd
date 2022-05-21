@@ -56,7 +56,7 @@ func button_down():
 		"priority":
 			if not is_first_child(self):
 				move_to_front(self)
-				if game.selected_unit.type == "leader":
+				if game.selected_leader:
 					game.unit.orders.set_leader_priority(self.orders.priority)
 				else: game.unit.orders.set_lane_priority(self.orders.priority)
 		
@@ -68,7 +68,7 @@ func button_down():
 				else: 
 					button.pressed = false
 					button.disabled = false
-			game.unit.orders.set_taxes(self.orders.taxes, game.player_team)
+			game.unit.orders.set_taxes(self.orders.taxes, self.team)
 			self.disabled = true
 		
 		"gold":
@@ -78,11 +78,11 @@ func button_down():
 		
 		"camp_hire":
 			clear_siblings(self)
-			game.unit.orders.camp_hire(self.orders.camp_hire, game.player_team)
+			game.unit.orders.camp_hire(self.orders.camp_hire, self.team)
 			self.disabled = true
 		
 		"lumberjack":
-			game.unit.orders.lumberjack_hire(self.orders, game.player_team)
+			game.unit.orders.lumberjack_hire(self.orders, self.team)
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		

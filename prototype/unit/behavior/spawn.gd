@@ -73,7 +73,7 @@ func random_leader(team):
 
 
 func leaders():
-	for team  in ["blue", "red"]:
+	for team in game.teams:
 		var counter = 0
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
@@ -102,7 +102,7 @@ func spawn_group_cycle():
 	game.unit.orders.leaders_cycle()
 	game.unit.orders.update_taxes()
 	
-	for team in ["red", "blue"]:
+	for team in game.teams:
 		var extra_unit = game.unit.orders.player_extra_unit
 		if team != game.player_team: extra_unit = game.unit.orders.enemy_extra_unit
 		for lane in ["top", "mid", "bot"]:

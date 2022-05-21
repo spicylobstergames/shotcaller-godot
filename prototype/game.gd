@@ -26,6 +26,7 @@ var selected_leader:Node2D
 
 var player_team:String = "blue"
 var enemy_team:String = "red"
+var teams = ["blue", "red"]
 
 var rng = RandomNumberGenerator.new()
 
@@ -102,3 +103,6 @@ func start():
 func _physics_process(delta):
 	if started: collision.process(delta)
 
+
+func can_control(unit):
+	return (unit and not unit.dead) # and unit.team == game.player_team 

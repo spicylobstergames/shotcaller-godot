@@ -119,6 +119,13 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if target.hud: game.unit.hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
 		
+		if (target.type == "building" and 
+				target.subtype == "backwood"):# and
+				#target.current_hp / game.unit.modifiers.get_value(target, "hp") <= 0.5):
+			print(target.current_hp)
+			print(game.unit.modifiers.get_value(target, "hp") )
+			#game.unit.orders.building_destroy(target)
+		
 		if target.current_hp <= 0: 
 			target.current_hp = 0
 			target.die()

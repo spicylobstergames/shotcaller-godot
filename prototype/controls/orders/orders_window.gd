@@ -120,13 +120,13 @@ func build():
 # LEADERS
 
 func build_leaders():
-	for leader in game.player_leaders:
+	for leader in game.player_leaders + game.enemy_leaders:
 		var orders_container = {
 			"node": VBoxContainer.new(),
 			"leader": leader
 		}
 		container.add_child(orders_container.node)
-		leader_orders[leader.name] = orders_container
+		leader_orders[leader.name+leader.team] = orders_container
 		setup_leader_buttons(orders_container)
 
 
@@ -143,15 +143,16 @@ func setup_leader_buttons(orders_container):
 # LANES
 
 func setup_lanes():
-	for lane in game.map.lanes:
-		var orders_container = {
-			"node": VBoxContainer.new(),
-			"type": "lane",
-			"lane": lane
-		}
-		container.add_child(orders_container.node)
-		lane_orders[lane] = orders_container
-		setup_lane_buttons(orders_container)
+	for team in game.teams:
+		for lane in game.map.lanes:
+			var orders_container = {
+				"node": VBoxContainer.new(),
+				"type": "lane",
+				"lane": lane
+			}
+			container.add_child(orders_container.node)
+			lane_orders[lane+team] = orders_container
+			setup_lane_buttons(orders_container)
 
 
 func setup_lane_buttons(orders_container):
@@ -462,35 +463,35 @@ func setup_order_button(button):
 
 func update():
 	hide_all()
-	if game.selected_unit and game.selected_unit.team == game.player_team:
-		if not game.selected_unit.subtype == "backwood":
-			
-			match game.selected_unit.type:
+	var unit = game.selected_unit
+	if game.can_control(unit):
+		if not unit.subtype == "backwood":
+			match unit.type:
 				"pawn", "building": 
 					show_orders()
-					lane_orders[game.selected_unit.lane].node.show()
+					lane_orders[unit.lane+unit.team].node.show()
 				"leader": 
 					show_orders()
-					leader_orders[game.selected_unit.name].node.show()
+					leader_orders[unit.name+unit.team].node.show()
 		
 		else:
-			var side = game.selected_unit.get_parent().name
-			match game.selected_unit.display_name:
+			var side = unit.get_parent().name
+			match unit.display_name:
 				"camp":
 					show_orders()
-					camp_orders[game.selected_unit.name+side].node.show()
+					camp_orders[unit.name+side].node.show()
 				"mine":
 					show_orders()
-					mine_orders[game.selected_unit.name+side].node.show()
+					mine_orders[unit.name+side].node.show()
 				"blacksmith":
 					show_orders()
-					blacksmith_orders[game.selected_unit.name+side].node.show()
+					blacksmith_orders[unit.name+side].node.show()
 				"lumbermill":
 					show_orders()
-					lumbermill_orders[game.selected_unit.name+side].node.show()
+					lumbermill_orders[unit.name+side].node.show()
 				"outpost":
 					show_orders()
-					outpost_orders[game.selected_unit.name+side].node.show()
+					outpost_orders[unit.name+side].node.show()
 			
 
 	else:
