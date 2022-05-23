@@ -1,3 +1,9 @@
+https://spicylobster.itch.io/shotcaller
+
+https://spicylobster.itch.io/shotcaller/devlog/377524/shotcaller-mvp-release
+
+---
+
 This prototype was made with Godot Engine.
 
 Previous iteration in Rust: [Shotcaller](https://github.com/amethyst/shotcaller)
