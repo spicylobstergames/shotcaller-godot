@@ -81,6 +81,7 @@ func start():
 		started = true
 		paused = false
 		
+		
 		rng.randomize()
 		map.setup_lanes()
 		ui.orders.build()

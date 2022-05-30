@@ -68,7 +68,7 @@ func button_down():
 				else: 
 					button.pressed = false
 					button.disabled = false
-			game.unit.orders.set_taxes(self.orders.taxes, self.team)
+			game.unit.orders.set_taxes(self.orders.taxes, game.selected_unit.team)
 			self.disabled = true
 		
 		"gold":
@@ -78,11 +78,11 @@ func button_down():
 		
 		"camp_hire":
 			clear_siblings(self)
-			game.unit.orders.camp_hire(self.orders.camp_hire, self.team)
+			game.unit.orders.camp_hire(self.orders.camp_hire, game.selected_unit.team)
 			self.disabled = true
 		
 		"lumberjack":
-			game.unit.orders.lumberjack_hire(self.orders, self.team)
+			game.unit.orders.lumberjack_hire(self.orders, game.selected_unit.team)
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		

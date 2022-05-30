@@ -390,9 +390,20 @@ func camp_hire(unit, team):
 
 func lumberjack_hire(orders, team):
 	var lumbermill = game.selected_unit
-	var lumberjack = game.unit.spawn.next_to_building("lumberjack", lumbermill)
-	lumberjack.origin = lumberjack.global_position
+	var lumberjack = lumbermill.target
 	
+	# create lumberjack
+	if not lumberjack:
+		lumberjack = game.unit.spawn.next_to_building("lumberjack", lumbermill)
+		lumberjack.origin = lumberjack.global_position
+		lumberjack.target = lumbermill
+		lumbermill.target = lumberjack
+	
+	lumberjack.team = team
+	lumberjack.setup_team()
+	lumberjack.visible = true
+	
+	# charge player
 	var leaders = game.player_leaders
 	if team == game.enemy_team: leaders = game.enemy_leaders
 	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
@@ -429,8 +440,11 @@ func lumber_arive(lumberjack):
 		if lumberjack.team == building.team:
 			building.heal(building.regen)
 	
-	# restart lumberjack wood cut cycle
-	lumber_start(lumberjack)
+	var lumbermill = lumberjack.target
+	if lumbermill.team == "neutral":
+		lumberjack.visible = false
+	else:	# restart lumberjack wood cut cycle
+		lumber_start(lumberjack)
 
 
 # TAXES
