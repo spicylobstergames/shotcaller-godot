@@ -35,6 +35,12 @@ const tax_gold = {
 	"high": 2
 }
 
+const tax_conquer_limit = {
+	"low": 0.25,
+	"medium": 0.5,
+	"high": 0.75
+}
+
 const tactics_extra_speed = { 
 	"retreat": 0,
 	"defend": -5,

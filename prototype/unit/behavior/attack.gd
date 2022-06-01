@@ -125,7 +125,13 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				var hp = game.unit.modifiers.get_value(target, "hp")
 				var rate = float(target.current_hp)/float(hp)
 				
-				if rate <= 0.5:
+				var tax = game.unit.orders.player_tax
+				if target.team == game.enemy_team:
+					tax = game.unit.orders.enemy_tax
+					
+				var limit = game.unit.orders.tax_conquer_limit[tax]
+				
+				if rate <= limit:
 					game.unit.orders.building_destroy(target)
 		
 		if target.current_hp <= 0: 
