@@ -124,14 +124,17 @@ func build_leaders():
 	hp_regen_cycle()
 
 
-func hp_regen_cycle(): # called every second
+func hp_regen_cycle(): # called every second  and
 	if not game.paused:
 		for unit in game.all_units:
-			if unit.type != "building" and unit.regen > 0:
+			var has_regen = (unit.regen > 0)
+			var is_building = (unit.type == "building")
+			var is_neutral = (unit.team == "neutral")
+			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				set_regen(unit)
 				if unit.type == "leader" and game.can_control(unit):
 					game.ui.inventories.update_consumables(unit)
-		
+	
 	yield(get_tree().create_timer(1), "timeout")
 	hp_regen_cycle()
 
@@ -244,28 +247,32 @@ func conquer_building(unit):
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
-	if building and building.team == "neutral" and not unit.stunned:
-		unit.channel_start(conquer_time)
-		yield(unit.channeling_timer, "timeout")
-		# conquer
-		if unit.channeling:
-			unit.channeling = false
-			unit.working = false
-			building.channeling = false
-			building.team = unit.team
-			building.setup_team()
-			
-			var op_team = unit.oponent_team()
-			if not game.map.has_neutral_buildings(op_team):
-				remove_tax(op_team)
-			
-			match building.display_name:
-				"camp", "outpost": # allow neutral attack
-					building.attacks = true
+	if not unit.stunned and building:
+		var hp = float(game.unit.modifiers.get_value(building, "hp"))
+		var current_hp = float(building.current_hp)
+		var building_full_hp = ( (current_hp / hp) == 1 )
+		if building.team == "neutral" and building_full_hp:
+			unit.channel_start(conquer_time)
+			yield(unit.channeling_timer, "timeout")
+			# conquer
+			if unit.channeling:
+				unit.channeling = false
+				unit.working = false
+				building.channeling = false
+				building.team = unit.team
+				building.setup_team()
 				
-				"mine": add_mine_gold(unit.team)
-			
-			game.ui.show_select()
+				var op_team = unit.oponent_team()
+				if not game.map.has_neutral_buildings(op_team):
+					remove_tax(op_team)
+				
+				match building.display_name:
+					"camp", "outpost": # allow neutral attack
+						building.attacks = true
+					
+					"mine": add_mine_gold(unit.team)
+				
+				game.ui.show_select()
 
 
 func building_destroy(building):
