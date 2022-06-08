@@ -13,8 +13,7 @@ func _unhandled_input(event):
 	# KEYBOARD
 	if event is InputEventKey:
 		if not event.is_pressed():
-			if (game.selected_unit and 
-				(game.selected_unit.type == "leader" or game.test.unit)):
+			if game.selected_unit:
 				match event.scancode:
 					KEY_E: move(game.selected_unit, point)
 					KEY_R: advance(game.selected_unit, point)
@@ -87,7 +86,7 @@ func select_unit(unit):
 	unselect()
 	game.selected_unit = unit
 	
-	if unit.team == game.player_team and unit.type == "leader":
+	if game.can_control(unit) and unit.type == "leader":
 		game.selected_leader = unit
 		game.ui.shop.update_buttons()
 		game.ui.inventories.update_buttons()
@@ -124,7 +123,6 @@ func unselect():
 	game.ui.hide_unselect()
 
 
-
 func get_sel_unit_at_point(point):
 	for unit in game.selectable_units:
 		var select_rad =  unit.selection_radius
@@ -134,33 +132,34 @@ func get_sel_unit_at_point(point):
 
 
 func advance(unit, point):
-	if unit.attacks and unit.moves:
+	if unit.attacks and unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
 		game.unit.advance.smart(unit, order_point)
 
 func attack(unit, point):
-	if unit.attacks:
+	if unit.attacks and game.can_control(unit):
 		var order_point = order(unit, point)
 		game.unit.attack.start(unit, order_point)
 
 func teleport(unit, point):
-	if unit.moves:
+	if unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
 		game.unit.follow.teleport(unit, order_point)
 
 func change_lane(unit, point):
-	if unit.moves:
+	if unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
 		game.unit.follow.change_lane(unit, order_point)
 
 func move(unit, point):
-	if unit.moves:
+	if unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
 		game.unit.move.smart(unit, order_point, "move")
 
 func stand(unit):
-	order(unit, null)
-	game.unit.move.stand(unit)
+	if game.can_control(unit):
+		order(unit, null)
+		game.unit.move.stand(unit)
 
 
 func order(unit, point):
@@ -171,10 +170,11 @@ func order(unit, point):
 		var building = game.utils.buildings_click(point)
 		if building:
 			point.y += game.map.tile_size
+			var oponent = unit.oponent_team()
 			match building.team:
 				"neutral": unit.after_arive = "conquer"
-				game.player_team: unit.after_arive = "stop"
-				game.enemy_team: unit.after_arive = "attack"
+				unit.team: unit.after_arive = "stop"
+				oponent: unit.after_arive = "attack"
 			if building.display_name == "church":
 				unit.after_arive = "pray"
 		return point

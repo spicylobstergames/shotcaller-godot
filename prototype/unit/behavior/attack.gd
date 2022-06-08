@@ -119,6 +119,21 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if target.hud: game.unit.hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
 		
+		if (target.type == "building" and 
+				target.subtype == "backwood"):
+				
+				var hp = game.unit.modifiers.get_value(target, "hp")
+				var rate = float(target.current_hp)/float(hp)
+				
+				var tax = game.unit.orders.player_tax
+				if target.team == game.enemy_team:
+					tax = game.unit.orders.enemy_tax
+					
+				var limit = game.unit.orders.tax_conquer_limit[tax]
+				
+				if rate <= limit:
+					game.unit.orders.lose_building(target)
+		
 		if target.current_hp <= 0: 
 			target.current_hp = 0
 			target.die()
@@ -228,5 +243,6 @@ func projectile_stuck(attacker, target, projectile):
 	attacker.projectiles.erase(projectile)
 	# remove projectile after 1.2 sec
 	yield(get_tree().create_timer(1.2), "timeout")
-	stuck.get_parent().remove_child(stuck)
-	stuck.queue_free()
+	if not target:
+		stuck.get_parent().remove_child(stuck)
+		stuck.queue_free()

@@ -2,10 +2,10 @@ extends Node2D
 
 # self = game
 
-var paused = true
-var time = 0
-var player_kills = 0
-var player_deaths = 0
+var paused:bool = true
+var time:int = 0
+var player_kills:int = 0
+var player_deaths:int = 0
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
 var player_units:Array = []
@@ -19,12 +19,14 @@ var enemy_buildings:Array = []
 var all_units:Array = []
 var selectable_units:Array = []
 var neutral_buildings:Array = []
+var all_buildings:Array = []
 
 var selected_unit:Node2D
 var selected_leader:Node2D
 
 var player_team:String = "blue"
 var enemy_team:String = "red"
+var teams = ["blue", "red"]
 
 var rng = RandomNumberGenerator.new()
 
@@ -79,6 +81,8 @@ func start():
 		started = true
 		paused = false
 		
+		Engine.time_scale = 3
+		
 		rng.randomize()
 		map.setup_lanes()
 		ui.orders.build()
@@ -101,3 +105,6 @@ func start():
 func _physics_process(delta):
 	if started: collision.process(delta)
 
+
+func can_control(unit):
+	return (unit and not unit.dead) # and unit.team == game.player_team 

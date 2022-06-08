@@ -73,7 +73,7 @@ func random_leader(team):
 
 
 func leaders():
-	for team  in ["blue", "red"]:
+	for team in game.teams:
 		var counter = 0
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
@@ -102,7 +102,7 @@ func spawn_group_cycle():
 	game.unit.orders.leaders_cycle()
 	game.unit.orders.update_taxes()
 	
-	for team in ["red", "blue"]:
+	for team in game.teams:
 		var extra_unit = game.unit.orders.player_extra_unit
 		if team != game.player_team: extra_unit = game.unit.orders.enemy_extra_unit
 		for lane in ["top", "mid", "bot"]:
@@ -157,10 +157,18 @@ func spawn_unit(unit, l, t, mode, point):
 	return unit
 
 
+func next_to_building(template, building):
+	var spawn_point = building.global_position
+	if building.team == "blue": spawn_point.x -= game.map.tile_size
+	else: spawn_point.x += game.map.tile_size
+	var unit_template = self[template]
+	return game.map.create(unit_template, "", building.team, "point", spawn_point)
+
+
 func cemitery_add_pawn(unit):
-	var side = "player_"
-	if unit.team != game.player_team: side = "enemy_"
-	var index = side+unit.display_name
+	var side = "player"
+	if unit.team != game.player_team: side = "enemy"
+	var index = side+"_"+unit.display_name
 	cemitery[index].append(unit)
 
 

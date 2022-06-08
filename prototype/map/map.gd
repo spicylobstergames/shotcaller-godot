@@ -77,7 +77,6 @@ func line_to_array(line):
 	return array
 
 
-
 func setup_buildings():
 	for team in get_node("buildings").get_children():
 		for building in team.get_children():
@@ -93,6 +92,7 @@ func setup_buildings():
 				game.enemy_buildings.append(building)
 			else: game.neutral_buildings.append(building)
 			game.all_units.append(building)
+			game.all_buildings.append(building)
 
 
 func create(template, lane, team, mode, point):
@@ -111,4 +111,14 @@ func create(template, lane, team, mode, point):
 			game.enemy_leaders.append(unit)
 	return unit
 
+
+
+func has_neutral_buildings(team):
+	var neutral_buildings = false
+	for neutral in game.map.neutrals:
+		var neutral_building = game.map.get_node("buildings/"+team+"/"+neutral)
+		if neutral_building.team == team:
+			neutral_buildings = true
+			break
+	return neutral_buildings
 

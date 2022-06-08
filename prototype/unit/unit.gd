@@ -69,7 +69,7 @@ var attack_hit_radius = 24
 # BEHAVIOR
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
-var after_arive:String = "stop" # "attack" "conquer" "pray"
+var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
@@ -115,7 +115,7 @@ func _ready():
 
 
 func reset_unit():
-	self.setup_team()
+	self.setup_team(self.team)
 	
 	if self.type == "leader": 
 		self.hud.state.visible = true
@@ -145,11 +145,13 @@ func set_behavior(s):
 	#self.get_node("hud/state").text = s
 
 
-func setup_team():
+func setup_team(team):
+	self.team = team
+	
 	var is_red = (self.team == "red")
 	var is_blue = (self.team == "blue")
 	var is_neutral = (self.team == "neutral")
-	# COLORS
+	# UPDATE TEXTURE COLORS
 	get_texture()
 	
 	if is_blue:
@@ -234,7 +236,7 @@ func get_units_on_sight(filters):
 	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, current_vision)
 	var targets = []
 	for unit2 in neighbors:
-		if unit2.hp and self != unit2 and not unit2.dead:
+		if unit2.hp and self != unit2 and not unit2.dead and not unit2.immune:
 			var distance = self.global_position.distance_to(unit2.global_position)
 			if distance < current_vision:
 				if not filters: targets.append(unit2)
@@ -269,10 +271,7 @@ func on_collision(delta):
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves:
-		if self.attacks: 
-			game.unit.advance.resume(self)
-	
+	if self.moves and self.attacks: game.unit.advance.resume(self)
 	if self == game.selected_unit: game.unit.follow.draw_path(self)
 
 
@@ -284,16 +283,13 @@ func on_arrive(): # when collides with destiny
 		self.working = false
 		game.unit.move.end(self)
 		
-		if self.attacks: 
-			game.unit.advance.end(self)
+		if self.attacks: game.unit.advance.end(self)
 		
-		if self.after_arive =="conquer": 
-			game.unit.orders.conquer_building(self)
-			self.after_arive = "stop"
-		elif self.after_arive == "pray":
-			game.unit.orders.pray_in_church(self)
-			self.after_arive = "stop"
-
+		match self.after_arive:
+			"conquer": game.unit.orders.conquer_building(self)
+			"pray": game.unit.orders.pray_in_church(self)
+			"cut": game.unit.orders.lumber_cut(self)
+			"lumber_arive": game.unit.orders.lumber_arive(self)
 
 
 func on_attack_release(): # every ranged projectile start

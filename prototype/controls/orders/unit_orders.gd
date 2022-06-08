@@ -3,10 +3,10 @@ var game:Node
 
 # self = game.unit.orders
 
-var player_lanes_orders = {}
-var enemy_lanes_orders = {}
-var player_leaders_orders = {}
-var enemy_leaders_orders = {}
+const player_lanes_orders = {}
+const enemy_lanes_orders = {}
+const player_leaders_orders = {}
+const enemy_leaders_orders = {}
 
 var player_tax = "low"
 var enemy_tax = "low"
@@ -14,19 +14,31 @@ var enemy_tax = "low"
 var player_extra_unit = "infantry"
 var enemy_extra_unit = "infantry"
 
-var conquer_time = 3
-var destroy_time = 5
-var collect_time = 16
-var pray_time = 10
-var pray_cooldown = 60
+const lumberjack_cost = 100
+const conquer_time = 3
+const destroy_time = 5
+const collect_time = 16
+const pray_time = 10
+const pray_cooldown = 60
+const cut_time = 6
 
-func _ready():
-	game = get_tree().get_current_scene()
+const _pray_bonuses = [
+	["regen", 1],
+	["defense", 2],
+	["hp", 10]
+]
+
 	
 const tax_gold = {
 	"low": 0,
 	"medium": 1,
 	"high": 2
+}
+
+const tax_conquer_limit = {
+	"low": 0.25,
+	"medium": 0.5,
+	"high": 0.75
 }
 
 const tactics_extra_speed = { 
@@ -46,6 +58,9 @@ func new_orders():
 		}
 	}
 
+
+func _ready():
+	game = get_tree().get_current_scene()
 
 # LANES
 
@@ -109,14 +124,17 @@ func build_leaders():
 	hp_regen_cycle()
 
 
-func hp_regen_cycle(): # called every second
+func hp_regen_cycle(): # called every second  and
 	if not game.paused:
 		for unit in game.all_units:
-			if unit.regen > 0:
+			var has_regen = (unit.regen > 0)
+			var is_building = (unit.type == "building")
+			var is_neutral = (unit.team == "neutral")
+			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				set_regen(unit)
-				if unit.type == "leader" and unit.team == game.player_team:
+				if unit.type == "leader" and game.can_control(unit):
 					game.ui.inventories.update_consumables(unit)
-		
+	
 	yield(get_tree().create_timer(1), "timeout")
 	hp_regen_cycle()
 
@@ -156,10 +174,11 @@ func set_leader(leader, orders):
 	# get back to lane 
 	if (not leader.after_arive == "conquer" and
 			not leader.after_arive == "attack" and
+			not leader.after_arive == "pray" and
 			not leader.working and
 			not leader.channeling and
 			not leader.retreating and 
-			not (leader.team == game.player_team and game.ui.shop.close_to_blacksmith(leader)) ): 
+			not (game.can_control(leader) and game.ui.shop.close_to_blacksmith(leader)) ): 
 				
 		game.unit.follow.lane(leader)
 
@@ -176,7 +195,7 @@ func set_leader_tactic(tactic):
 
 
 func set_leader_priority(priority):
-	var leader = game.selected_unit
+	var leader = game.selected_leader
 	var leader_orders
 	if leader.team == game.player_team:
 		leader_orders = player_leaders_orders[leader.name]
@@ -220,42 +239,67 @@ func closest_unit(unit, enemies):
 	return sorted[0].unit
 
 
+# BACKWOOD
+
 
 func conquer_building(unit):
+	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
-	if building and building.team == "neutral" and not unit.stunned:
-		unit.channel_start(conquer_time)
-		yield(unit.channeling_timer, "timeout")
-		# conquer
-		if unit.channeling:
-			unit.channeling = false
-			unit.working = false
-			building.channeling = false
-			building.team = unit.team
-			building.setup_team()
-			
-			var op_team = unit.oponent_team()
-			if not has_neutral_buildings(op_team):
-				remove_tax(op_team)
-			
-			match building.display_name:
-				"camp", "outpost": # allow neutral attack
-					building.attacks = true
+	if not unit.stunned and building:
+		var hp = float(game.unit.modifiers.get_value(building, "hp"))
+		var current_hp = float(building.current_hp)
+		var building_full_hp = ( (current_hp / hp) == 1 )
+		if building.team == "neutral" and building_full_hp:
+			unit.channel_start(conquer_time)
+			yield(unit.channeling_timer, "timeout")
+			# conquer
+			if unit.channeling:
+				unit.channeling = false
+				unit.working = false
+				building.channeling = false
+				building.setup_team(unit.team)
 				
-				"mine": add_mine_gold(unit.team)
-			
-			game.ui.show_select()
+				match building.display_name:
+					"camp", "outpost": building.attacks = true
+					"mine": set_mine_gold(unit.team, 1)
+				
+				game.ui.show_select()
+
+
+func lose_building(building):
+	var team = building.team
+	
+	match building.display_name:
+		# todo "blacksmith": allow stealing enemy item
+		"camp": 
+			if team == game.player_team:
+				player_extra_unit = "infantry"
+			else: enemy_extra_unit = "infantry"
+			building.attacks = false
+		
+		"outpost": building.attacks = false
+		"mine": set_mine_gold(team, 0)
+		
+	building.setup_team("neutral")
+	
+	if not game.map.has_neutral_buildings(team): remove_tax(team)
+
+
+
+# CHURCH
+
 
 func pray_in_church(unit):
+	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.buildings_click(point)
-	if building and building.team == unit.team \
-			and building.display_name == "church" \
-			and building.channeling == false \
-			and not unit.stunned:
+	if (building and building.team == unit.team 
+			and building.display_name == "church" 
+			and building.channeling == false 
+			and not unit.stunned):
 		building.channeling = true
 		unit.channel_start(pray_time)
 		yield(unit.channeling_timer, "timeout")
@@ -268,50 +312,25 @@ func pray_in_church(unit):
 			yield(get_tree().create_timer(pray_cooldown), "timeout")
 			building.channeling = false
 
-func add_mine_gold(team):
-	var leaders = game.player_leaders
-	var inventories = game.ui.inventories.player_leaders_inv
-	if team == game.enemy_team:
-		leaders = game.enemy_leaders
-		inventories = game.ui.inventories.enemy_leaders_inv
-	for leader in leaders:
-		inventories[leader.name].extra_mine_gold = 1
 
-
-func has_neutral_buildings(team):
-	var neutral_buildings = false
-	for neutral in game.map.neutrals:
-		var neutral_building = game.map.get_node("buildings/"+team+"/"+neutral)
-		if neutral_building.team == team:
-			neutral_buildings = true
-			break
-	return neutral_buildings
-
-
-func remove_tax(team):
-	var leaders = game.player_leaders
-	var inventories = game.ui.inventories.player_leaders_inv
-	if team == game.enemy_team:
-		leaders = game.enemy_leaders
-		inventories = game.ui.inventories.enemy_leaders_inv
-	for leader in leaders:
-		var inventory = inventories[leader.name]
-		inventory.extra_tax_gold = 0
-
-# CHURCH
-
-var _pray_bonuses = [
-		["regen", 1],
-		["defense", 2],
-		["hp", 10]
-	]
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	print(random_bonus)
+	#print(random_bonus)
 	game.unit.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
+
 # MINE
+
+func set_mine_gold(team, value):
+	var leaders = game.player_leaders
+	var inventories = game.ui.inventories.player_leaders_inv
+	if team == game.enemy_team:
+		leaders = game.enemy_leaders
+		inventories = game.ui.inventories.enemy_leaders_inv
+	for leader in leaders:
+		inventories[leader.name].extra_mine_gold = value
+
 
 func gold_order(button):
 	var mine = button.orders.order.mine
@@ -343,7 +362,7 @@ func gold_collect_counter(button):
 		if mine.channeling:
 			mine.channeling = false
 			var leaders = game.player_leaders
-			if mine.team == game.enemy_team: leaders = game.enemy_team
+			if mine.team == game.enemy_team: leaders = game.enemy_leaders
 			for leader in leaders:
 				leader.gold += floor(mine.gold / leaders.size())
 			mine.gold = 0
@@ -362,8 +381,7 @@ func gold_destroy_counter(button):
 		if mine.channeling:
 			mine.channeling = false
 			mine.gold = 0
-			mine.team = "neutral"
-			mine.setup_team()
+			mine.setup_team("neutral")
 			game.ui.show_select()
 			for leader in game.player_leaders:
 				game.ui.inventories.leaders[leader.name].extra_mine_gold = 0
@@ -376,6 +394,76 @@ func camp_hire(unit, team):
 	if team == game.player_team:
 		player_extra_unit = unit
 	else: enemy_extra_unit = unit
+	
+	var cost
+	match unit:
+		"infantry": cost = 1
+		"archer": cost = 2
+		"mounted": cost = 3
+	
+	var leaders = game.player_leaders
+	if team == game.enemy_team: leaders = game.enemy_leaders
+	for leader in leaders: leader.gold -= cost
+
+
+# LUMBERMILL
+
+func lumberjack_hire(orders, team):
+	var lumbermill = game.selected_unit
+	var lumberjack = lumbermill.target
+	
+	# create lumberjack
+	if not lumberjack:
+		lumberjack = game.unit.spawn.next_to_building("lumberjack", lumbermill)
+		lumberjack.origin = lumberjack.global_position
+		lumberjack.target = lumbermill
+		lumbermill.target = lumberjack
+	
+	lumberjack.setup_team(team)
+	lumberjack.visible = true
+	
+	# charge player
+	var leaders = game.player_leaders
+	if team == game.enemy_team: leaders = game.enemy_leaders
+	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
+	
+	# start lumberjack wood cut cycle
+	lumber_start(lumberjack)
+
+
+func lumber_start(lumberjack):
+	var cut_position = lumberjack.origin - Vector2(game.map.tile_size,0)
+	lumberjack.working = true
+	lumberjack.after_arive = "cut"
+	game.unit.move.move(lumberjack, cut_position)
+
+
+func lumber_cut(lumberjack):
+	lumberjack.after_arive = "stop"
+	lumberjack.set_state("attack")
+	if lumberjack.channeling_timer.time_left > 0: 
+		lumberjack.channeling_timer.stop()
+	lumberjack.channeling_timer.wait_time = cut_time
+	lumberjack.channeling_timer.start()
+	
+	# cut animation end
+	yield(lumberjack.channeling_timer, "timeout")
+	lumberjack.working = true
+	game.unit.move.move(lumberjack, lumberjack.origin)
+	lumberjack.after_arive = "lumber_arive"
+
+
+func lumber_arive(lumberjack):
+	# heal all player buildings
+	for building in game.all_buildings:
+		if lumberjack.team == building.team:
+			building.heal(building.regen)
+	
+	var lumbermill = lumberjack.target
+	if lumbermill.team == "neutral":
+		lumberjack.visible = false
+	else:	# restart lumberjack wood cut cycle
+		lumber_start(lumberjack)
 
 
 # TAXES
@@ -391,6 +479,17 @@ func update_taxes():
 		game.ui.inventories.player_leaders_inv[leader.name].extra_tax_gold = tax_gold[player_tax]
 	for leader in game.enemy_leaders:
 		game.ui.inventories.enemy_leaders_inv[leader.name].extra_tax_gold = tax_gold[enemy_tax] 
+
+
+func remove_tax(team):
+	var leaders = game.player_leaders
+	var inventories = game.ui.inventories.player_leaders_inv
+	if team == game.enemy_team:
+		leaders = game.enemy_leaders
+		inventories = game.ui.inventories.enemy_leaders_inv
+	for leader in leaders:
+		var inventory = inventories[leader.name]
+		inventory.extra_tax_gold = 0
 
 
 # RETREAT
