@@ -2,10 +2,10 @@ extends Node2D
 
 # self = game
 
-var paused = true
-var time = 0
-var player_kills = 0
-var player_deaths = 0
+var paused:bool = true
+var time:int = 0
+var player_kills:int = 0
+var player_deaths:int = 0
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
 var player_units:Array = []

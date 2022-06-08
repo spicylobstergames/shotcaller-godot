@@ -115,7 +115,7 @@ func _ready():
 
 
 func reset_unit():
-	self.setup_team()
+	self.setup_team(self.team)
 	
 	if self.type == "leader": 
 		self.hud.state.visible = true
@@ -145,11 +145,13 @@ func set_behavior(s):
 	#self.get_node("hud/state").text = s
 
 
-func setup_team():
+func setup_team(team):
+	self.team = team
+	
 	var is_red = (self.team == "red")
 	var is_blue = (self.team == "blue")
 	var is_neutral = (self.team == "neutral")
-	# COLORS
+	# UPDATE TEXTURE COLORS
 	get_texture()
 	
 	if is_blue:

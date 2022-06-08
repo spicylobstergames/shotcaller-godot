@@ -132,7 +132,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				var limit = game.unit.orders.tax_conquer_limit[tax]
 				
 				if rate <= limit:
-					game.unit.orders.building_destroy(target)
+					game.unit.orders.lose_building(target)
 		
 		if target.current_hp <= 0: 
 			target.current_hp = 0

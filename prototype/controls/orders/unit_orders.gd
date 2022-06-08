@@ -259,25 +259,33 @@ func conquer_building(unit):
 				unit.channeling = false
 				unit.working = false
 				building.channeling = false
-				building.team = unit.team
-				building.setup_team()
-				
-				var op_team = unit.oponent_team()
-				if not game.map.has_neutral_buildings(op_team):
-					remove_tax(op_team)
+				building.setup_team(unit.team)
 				
 				match building.display_name:
-					"camp", "outpost": # allow neutral attack
-						building.attacks = true
-					
-					"mine": add_mine_gold(unit.team)
+					"camp", "outpost": building.attacks = true
+					"mine": set_mine_gold(unit.team, 1)
 				
 				game.ui.show_select()
 
 
-func building_destroy(building):
-	building.team = "neutral"
-	building.setup_team()
+func lose_building(building):
+	var team = building.team
+	
+	match building.display_name:
+		# todo "blacksmith": allow stealing enemy item
+		"camp": 
+			if team == game.player_team:
+				player_extra_unit = "infantry"
+			else: enemy_extra_unit = "infantry"
+			building.attacks = false
+		
+		"outpost": building.attacks = false
+		"mine": set_mine_gold(team, 0)
+		
+	building.setup_team("neutral")
+	
+	if not game.map.has_neutral_buildings(team): remove_tax(team)
+
 
 
 # CHURCH
@@ -314,14 +322,14 @@ func pray(unit):
 
 # MINE
 
-func add_mine_gold(team):
+func set_mine_gold(team, value):
 	var leaders = game.player_leaders
 	var inventories = game.ui.inventories.player_leaders_inv
 	if team == game.enemy_team:
 		leaders = game.enemy_leaders
 		inventories = game.ui.inventories.enemy_leaders_inv
 	for leader in leaders:
-		inventories[leader.name].extra_mine_gold = 1
+		inventories[leader.name].extra_mine_gold = value
 
 
 func gold_order(button):
@@ -373,8 +381,7 @@ func gold_destroy_counter(button):
 		if mine.channeling:
 			mine.channeling = false
 			mine.gold = 0
-			mine.team = "neutral"
-			mine.setup_team()
+			mine.setup_team("neutral")
 			game.ui.show_select()
 			for leader in game.player_leaders:
 				game.ui.inventories.leaders[leader.name].extra_mine_gold = 0
@@ -412,8 +419,7 @@ func lumberjack_hire(orders, team):
 		lumberjack.target = lumbermill
 		lumbermill.target = lumberjack
 	
-	lumberjack.team = team
-	lumberjack.setup_team()
+	lumberjack.setup_team(team)
 	lumberjack.visible = true
 	
 	# charge player

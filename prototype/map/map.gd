@@ -77,7 +77,6 @@ func line_to_array(line):
 	return array
 
 
-
 func setup_buildings():
 	for team in get_node("buildings").get_children():
 		for building in team.get_children():
