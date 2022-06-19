@@ -9,6 +9,8 @@ var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
 var hongi:PackedScene = load("res://leaders/hongi.tscn")
 var lorne:PackedScene = load("res://leaders/lorne.tscn")
+var nagato:PackedScene = load("res://leaders/nagato.tscn")
+var osman:PackedScene = load("res://leaders/osman.tscn")
 var raja:PackedScene = load("res://leaders/raja.tscn")
 var robin:PackedScene = load("res://leaders/robin.tscn")
 var rollo:PackedScene = load("res://leaders/rollo.tscn")
@@ -35,7 +37,7 @@ var cemitery = {
 	"enemy_leaders": []
 }
 
-const leader_list = ["arthur","bokuden","hongi","lorne","raja","robin","rollo","sida","takoda","tomyris"]
+const leader_list = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
 
 var team_random_list = {"red": [], "blue": []}
 

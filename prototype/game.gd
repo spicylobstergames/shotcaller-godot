@@ -81,7 +81,7 @@ func start():
 		started = true
 		paused = false
 		
-		Engine.time_scale = 3
+		#Engine.time_scale = 3
 		
 		rng.randomize()
 		map.setup_lanes()

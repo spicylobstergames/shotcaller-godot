@@ -46,16 +46,14 @@ func process(delta):
 		if unit1.projectiles.size():
 			for projectile in unit1.projectiles:
 				if is_instance_valid(projectile.node) and projectile.speed and projectile.stuck == false:
-					var stuck = false
 					var projectile_position = projectile.node.global_position + (projectile.speed * delta)
-					if projectile_position.distance_to(unit1.global_position) > projectile.radius:
+					# projectile out of range
+					if projectile_position.distance_to(unit1.global_position + unit1.collision_position) > projectile.radius:
 						game.unit.attack.projectile_stuck(unit1, null, projectile)
-						stuck = true
 					else:
 						if projectile.target:
 							if game.utils.point_collision(projectile.target, projectile_position):
 								game.unit.attack.take_hit(unit1, projectile.target, projectile)
-								stuck = true
 						else: # pierces
 							var targets = game.map.blocks.get_units_in_radius(projectile_position, 1) 
 							for target in targets:
@@ -64,7 +62,7 @@ func process(delta):
 										game.utils.point_collision(target, projectile_position) ):
 									game.unit.attack.take_hit(unit1, target, projectile)
 						# move projectile
-						if not stuck: game.unit.attack.projectile_step(delta, projectile)
+						if not projectile.stuck: game.unit.attack.projectile_step(delta, projectile)
 		
 		# units collision
 		
