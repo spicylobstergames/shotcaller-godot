@@ -92,7 +92,7 @@ func in_range(attacker, target):
 	var att_rad = game.unit.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
-	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
+	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad * 0.9)
 
 
 func take_hit(attacker, target, projectile = null, modifiers = {}):
@@ -226,7 +226,7 @@ func projectile_stuck(attacker, target, projectile):
 	stuck.global_rotation = r + ra
 	
 	# rotating axe
-	if projectile.rotation:
+	if projectile.rotation == 20:
 		stuck.global_rotation = 0 + ra
 		if target:
 			# mirror stuck axe

@@ -30,10 +30,9 @@ func start(unit, objective, smart_move = false): # move_and_attack
 			if target:
 				game.unit.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
-				if not game.unit.attack.in_range(unit, target):
-					move(unit, target_position, smart_move) 
-				else: 
+				if game.unit.attack.in_range(unit, target):
 					game.unit.attack.start(unit, target_position)
+				else: move(unit, target_position, smart_move) 
 
 
 func move(unit, objective, smart_move):

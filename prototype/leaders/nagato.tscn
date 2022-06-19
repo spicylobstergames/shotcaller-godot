@@ -549,8 +549,8 @@ regen = 2
 vision = 160
 type = "leader"
 subtype = "ranged"
-display_name = "hongi"
-title = "maori warrior"
+display_name = "nagato"
+title = "ninja clan"
 selectable = true
 moves = true
 speed = 35.0
@@ -562,7 +562,7 @@ damage = 60
 attack_speed = 0.9
 defense = 5
 projectile_speed = 200.0
-projectile_rotation = 20.0
+projectile_rotation = 40.0
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
