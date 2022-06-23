@@ -21,37 +21,22 @@ func _ready():
 
 func skip_start():
 	clear_frame = (clear_frame + 1) % clear_skip
-	if clear_frame%(clear_skip*2) == 0: cover_map()
+	if clear_frame % clear_skip == 0 : cover_map()
 
-
-var quarter = 0
 
 func cover_map():
-	if quarter == 0:
-		for y in floor(tile_map_size/2):
-			for x in floor(tile_map_size/2):
-				game.map.fog.set_cell(x, y, 0)
-	
-	if quarter == 1:
-		for y in range(floor(tile_map_size/2), tile_map_size):
-			for x in floor(tile_map_size/2):
-				game.map.fog.set_cell(x, y, 0)
-	
-	if quarter == 2:
-		for y in tile_map_size:
-			for x in range(floor(tile_map_size/2), tile_map_size):
-				game.map.fog.set_cell(x, y, 0)
-	
-	if quarter == 3:
-		for y in tile_map_size:
-			for x in range(floor(tile_map_size/2), tile_map_size):
-				game.map.fog.set_cell(x, y, 0)
-				
-	quarter = (quarter + 1) % 4
+	for y in floor(tile_map_size):
+		for x in floor(tile_map_size):
+			game.map.fog.set_cell(x, y, 0)
 
 
 var sight_mem:Dictionary = {}
-
+# computes and caches 2d arrays with circle booleans eg:
+# 00100
+# 01110
+# 11111
+# 01110
+# 00100
 func compute_sight(unit):
 	var id = game.unit.modifiers.get_value(unit, "vision")
 	if id in sight_mem: return sight_mem[id]
@@ -63,14 +48,13 @@ func compute_sight(unit):
 			for x in range(0, 2*rad):
 				var r = Vector2(x-rad, y-rad)
 				var d = r.length()
-				a[a.size()-1].append(d < rad)
+				a[a.size()-1].append(d <= rad)
 	sight_mem[id] = a
 	return a
 
 
 func clear_sigh_skip(unit):
-	if clear_frame%clear_skip == 0:
-		clear_sight(unit)
+	if clear_frame % clear_skip == 0 : clear_sight(unit)
 
 
 func clear_sight(unit):
@@ -84,19 +68,17 @@ func clear_sight(unit):
 			for x in a[y].size():
 				if (a[y][x]):
 					var p = pos - Vector2(rad,rad) + Vector2(x,y)
-					if (unit.type == "building"): 
-						game.map.fog.set_cellv(p, -1)
-					else: 
-						if game.map.fog.get_cellv(p) >= 0:
-							var line = game.unit.follow.path_finder.expandPath([[pos.x, pos.y], [p.x, p.y]])
-							var blocked = false
-							for point in line:
-								var tree = trees.get_cell(point[0]/3, point[1]/3)
-								if tree > 0: 
-									blocked = true
-									
-							if not blocked: game.map.fog.set_cellv(p, -1)
-							
+#					if (unit.type == "building"): 
+					game.map.fog.set_cellv(p, -1)
+#					else: 
+#						if game.map.fog.get_cellv(p) >= 0:
+#							var line = game.unit.follow.path_finder.expandPath([[pos.x, pos.y], [p.x, p.y]])
+#							var blocked = false
+#							for point in line:
+#								var tree = trees.get_cell(point[0]/3, point[1]/3)
+#								if tree > 0: blocked = true
+#							if not blocked: game.map.fog.set_cellv(p, -1)
+#
 #				var la = PI/6
 #				var a = abs(game.utils.limit_angle(r.angle() - unit.angle))
 #				if d > rad and (unit.type == "building" or a<la):
