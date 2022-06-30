@@ -87,6 +87,7 @@ var channeling_timer:Timer
 
 # NODES
 var hud:Node
+var sprites:Node
 var spawn:Node
 var move:Node
 var attack:Node
@@ -109,6 +110,7 @@ func _ready():
 	if has_node("behavior/skills"): skills = get_node("behavior/skills")
 	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
 	
+	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
