@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://skills/skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=13]
 [ext_resource path="res://unit/hud.gd" type="Script" id=14]
 [ext_resource path="res://skills/modifiers.gd" type="Script" id=15]
+[ext_resource path="res://assets/map/light.png" type="Texture" id=16]
 
 [sub_resource type="DynamicFont" id=20]
 size = 10
@@ -152,10 +153,12 @@ region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="shadow" type="Sprite" parent="sprites"]
 modulate = Color( 0, 0, 0, 0.294118 )
+light_mask = 0
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 
 [node name="sprite" type="Sprite" parent="sprites"]
+light_mask = 0
 material = SubResource( 30 )
 position = Vector2( 0, 9 )
 texture = ExtResource( 3 )
@@ -187,3 +190,14 @@ disabled = true
 [node name="select" type="CollisionShape2D" parent="collisions"]
 shape = SubResource( 19 )
 disabled = true
+
+[node name="light" type="Light2D" parent="."]
+visible = false
+scale = Vector2( 10, 10 )
+texture = ExtResource( 16 )
+energy = 1.5
+mode = 3
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 64.0
+shadow_item_cull_mask = 2

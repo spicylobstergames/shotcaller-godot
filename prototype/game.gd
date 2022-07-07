@@ -106,5 +106,5 @@ func _physics_process(delta):
 	if started: collision.process(delta)
 
 
-func can_control(unit):
-	return (unit and not unit.dead) # and unit.team == game.player_team 
+func can_control(unit1):
+	return (unit1 and not unit1.dead) # and unit.team == game.player_team 

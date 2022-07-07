@@ -5,7 +5,7 @@ var game:Node
 
 var unit = 0
 var stress = 0
-var fog = 1
+var fog = 0
 
 
 func _ready():

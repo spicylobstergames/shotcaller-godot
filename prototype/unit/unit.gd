@@ -156,6 +156,9 @@ func setup_team(team):
 	# UPDATE TEXTURE COLORS
 	get_texture()
 	
+	get_node("light").visible = false
+	#if team == game.player_team: get_node("light").visible = true
+	
 	if is_blue:
 		self.texture.sprite.material = null
 	if is_red:
@@ -171,22 +174,23 @@ func setup_team(team):
 		if self.display_name == "lumbermill" and get_parent().name == "blue":
 			self.mirror_toggle(true)
 		# color flags
-		var flags = self.get_node("sprites/flags").get_children()
-		for flag in flags:
-			var flag_sprite = flag.get_node("sprite")
-			var material = flag_sprite.material.duplicate()
-			var color = 1
-			if is_blue: color = 0
-			if is_neutral: color = 2
-			material.set_shader_param("change_color", color)
-			flag_sprite.material = material
+#		var flags = self.get_node("sprites/flags").get_children()
+#		for flag in flags:
+#			var flag_sprite = flag.get_node("sprite")
+#			var material = flag_sprite.material.duplicate()
+#			var color = 1
+#			if is_blue: color = 0
+#			if is_neutral: color = 2
+#			material.set_shader_param("change_color", color)
+#			flag_sprite.material = material
 		
 			
 
 func oponent_team():
-	var t = "blue"
-	if self.team == t: t = "red"
-	return t
+	match self.team: 
+		"red": return "blue"
+		"blue": return "red"
+		"neutral": return ""
 
 
 func look_at(point):
