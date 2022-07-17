@@ -2,7 +2,7 @@
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
-[ext_resource path="res://assets/leaders/hongi.png" type="Texture" id=3]
+[ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture" id=3]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -600,7 +600,6 @@ anims/stun = SubResource( 33 )
 position = Vector2( 0, 9 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
-material = SubResource( 30 )
 position = Vector2( 0, 9 )
 frames = SubResource( 36 )
 offset = Vector2( -6, -15 )
