@@ -147,8 +147,8 @@ func set_behavior(s):
 	#self.get_node("hud/state").text = s
 
 
-func setup_team(team):
-	self.team = team
+func setup_team(new_team):
+	self.team = new_team
 	
 	var is_red = (self.team == "red")
 	var is_blue = (self.team == "blue")
@@ -157,7 +157,7 @@ func setup_team(team):
 	get_texture()
 	
 	get_node("light").visible = false
-	#if team == game.player_team: get_node("light").visible = true
+	if new_team == game.player_team: get_node("light").visible = true
 	
 	if is_blue:
 		self.texture.sprite.material = null
