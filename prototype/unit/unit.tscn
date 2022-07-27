@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://skills/skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
@@ -16,6 +16,9 @@
 [ext_resource path="res://unit/hud.gd" type="Script" id=14]
 [ext_resource path="res://skills/modifiers.gd" type="Script" id=15]
 [ext_resource path="res://assets/map/light.png" type="Texture" id=16]
+
+[sub_resource type="CanvasItemMaterial" id=43]
+light_mode = 2
 
 [sub_resource type="DynamicFont" id=20]
 size = 10
@@ -40,6 +43,7 @@ radius = 30.0
 radius = 50.04
 
 [node name="unit" type="Node2D"]
+material = SubResource( 43 )
 script = ExtResource( 7 )
 
 [node name="behavior" type="Node" parent="."]
@@ -138,10 +142,12 @@ region_enabled = true
 region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="sprites" type="Node2D" parent="."]
+use_parent_material = true
 
 [node name="shadow" type="Sprite" parent="sprites"]
 modulate = Color( 0, 0, 0, 0.294118 )
 light_mask = 0
+use_parent_material = true
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 

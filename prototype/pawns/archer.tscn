@@ -663,26 +663,31 @@ anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
+use_parent_material = true
 position = Vector2( 0, 9 )
 frames = SubResource( 22 )
 offset = Vector2( 0, -15 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="2"]
+use_parent_material = true
 position = Vector2( 0, -4 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 visible = false
 modulate = Color( 1, 1, 1, 0 )
+use_parent_material = true
 position = Vector2( 19.6519, 2 )
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
+use_parent_material = true
 position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
 
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
 visible = false
+use_parent_material = true
 position = Vector2( 0, 1 )
 rotation = 0.349066
 frames = SubResource( 38 )

@@ -202,6 +202,7 @@ position = Vector2( 0, 0 )
 position = Vector2( 1, -71 )
 
 [node name="body" type="Sprite" parent="sprites" index="3"]
+use_parent_material = true
 texture = ExtResource( 3 )
 offset = Vector2( 0, -34 )
 region_enabled = true
