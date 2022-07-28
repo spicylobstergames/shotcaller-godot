@@ -587,6 +587,7 @@ anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
+use_parent_material = true
 position = Vector2( 0, 9 )
 rotation = 0.0229965
 scale = Vector2( 1, 0.96706 )
@@ -596,6 +597,7 @@ offset = Vector2( 2, -15 )
 
 [node name="weapon" type="Sprite" parent="sprites" index="2"]
 visible = false
+use_parent_material = true
 texture = ExtResource( 3 )
 offset = Vector2( 8, -2 )
 region_enabled = true

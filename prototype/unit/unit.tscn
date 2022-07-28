@@ -91,10 +91,12 @@ region_enabled = true
 region_rect = Rect2( 10, 3, 1, 1 )
 
 [node name="hud" type="Node2D" parent="."]
+use_parent_material = true
 script = ExtResource( 14 )
 
 [node name="state" type="Label" parent="hud"]
 visible = false
+use_parent_material = true
 margin_left = -37.0
 margin_top = -37.0
 margin_right = 38.0
@@ -115,16 +117,19 @@ texture = ExtResource( 2 )
 
 [node name="hpbar" type="Node2D" parent="hud"]
 visible = false
+use_parent_material = true
 position = Vector2( 0, -19 )
 
 [node name="bar" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.168627, 0.160784, 0.227451, 0.862745 )
+use_parent_material = true
 texture = ExtResource( 4 )
 region_enabled = true
 region_rect = Rect2( 2, 2, 22, 4 )
 
 [node name="red" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.682353, 0.172549, 0.172549, 1 )
+use_parent_material = true
 position = Vector2( -9, 0 )
 texture = ExtResource( 4 )
 centered = false
@@ -134,6 +139,7 @@ region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="green" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.0392157, 0.643137, 0.117647, 1 )
+use_parent_material = true
 position = Vector2( -9, 0 )
 texture = ExtResource( 4 )
 centered = false

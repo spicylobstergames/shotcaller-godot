@@ -620,12 +620,14 @@ scale = Vector2( 1.3, 1.4 )
 texture = ExtResource( 4 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="2"]
+use_parent_material = true
 position = Vector2( 0, 9 )
 frames = SubResource( 36 )
 offset = Vector2( 5, -24 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="3"]
 visible = false
+use_parent_material = true
 position = Vector2( -7.1407, -19.9412 )
 rotation = -2.0944
 scale = Vector2( 1, 1.069 )
@@ -633,14 +635,17 @@ frames = SubResource( 41 )
 offset = Vector2( 6, -4 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
+use_parent_material = true
 position = Vector2( 0, -25 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 visible = false
+use_parent_material = true
 position = Vector2( 2.20537e-06, 0 )
 z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
+use_parent_material = true
 frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="5"]

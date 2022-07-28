@@ -593,6 +593,7 @@ anims/stun = SubResource( 33 )
 position = Vector2( 0, 9 )
 
 [node name="body" type="AnimatedSprite" parent="sprites" index="1"]
+use_parent_material = true
 position = Vector2( 0, 9 )
 rotation = 0.0654572
 scale = Vector2( 1, 0.90624 )
@@ -602,20 +603,24 @@ offset = Vector2( 0, -13 )
 
 [node name="shuriken" type="AnimatedSprite" parent="sprites" index="2"]
 visible = false
+use_parent_material = true
 position = Vector2( -8, -6 )
 rotation = -1.07987
 frames = SubResource( 41 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="3"]
 visible = false
+use_parent_material = true
 position = Vector2( 0, -8 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 visible = false
+use_parent_material = true
 z_index = 1
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
+use_parent_material = true
 frames = SubResource( 39 )
 
 [node name="sprite" parent="sprites" index="4"]
