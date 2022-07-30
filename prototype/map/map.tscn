@@ -576,6 +576,7 @@ script = ExtResource( 19 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -583,7 +584,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 448, 553 )
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -591,7 +592,6 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1664, 1577 )
 frames = SubResource( 6 )
-frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -757,7 +757,7 @@ default_color = Color( 1, 1, 1, 0.196078 )
 color = Color( 0.25098, 0.25098, 0.25098, 1 )
 
 [node name="light" type="Light2D" parent="."]
-position = Vector2( 247, -64 )
+position = Vector2( 252, -29 )
 scale = Vector2( 10, 10 )
 texture = ExtResource( 27 )
 mode = 2

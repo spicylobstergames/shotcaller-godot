@@ -196,7 +196,6 @@ visible = false
 position = Vector2( 0, 0 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
-use_parent_material = true
 
 [node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 5 )]
 position = Vector2( 1, -58 )
