@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/rollo_blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/leaders/rollo_red.png" type="Texture" id=4]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -603,8 +604,11 @@ offset = Vector2( 8, -2 )
 region_enabled = true
 region_rect = Rect2( 126, 8, 33, 22 )
 
-[node name="sprite" parent="sprites" index="3"]
-visible = false
+[node name="blue" parent="sprites" index="3"]
+texture = ExtResource( 3 )
+
+[node name="red" parent="sprites" index="5"]
+texture = ExtResource( 4 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

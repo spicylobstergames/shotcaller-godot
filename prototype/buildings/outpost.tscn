@@ -1,9 +1,11 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=2]
 [ext_resource path="res://assets/buildings/neutral_blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/buildings/neutral_red.png" type="Texture" id=4]
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -192,9 +194,8 @@ anims/idle = SubResource( 25 )
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
-[node name="sprite" parent="sprites" index="1"]
-visible = false
-position = Vector2( 0, 0 )
+[node name="blue" parent="sprites" index="1"]
+texture = ExtResource( 3 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 
@@ -228,6 +229,12 @@ rotation = 0.141846
 scale = Vector2( 0.85, 1 )
 frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
+
+[node name="neutral" parent="sprites" index="5"]
+texture = ExtResource( 6 )
+
+[node name="red" parent="sprites" index="6"]
+texture = ExtResource( 4 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -6 )

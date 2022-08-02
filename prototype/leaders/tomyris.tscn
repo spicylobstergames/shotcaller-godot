@@ -1,10 +1,11 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/robin_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=4]
 [ext_resource path="res://assets/leaders/tomyris_blue.png" type="Texture" id=5]
+[ext_resource path="res://assets/leaders/tomyris_red.png" type="Texture" id=6]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -711,8 +712,8 @@ position = Vector2( 3, 9 )
 frames = SubResource( 36 )
 offset = Vector2( 2, -24 )
 
-[node name="sprite" parent="sprites" index="3"]
-visible = false
+[node name="blue" parent="sprites" index="3"]
+texture = ExtResource( 5 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="4"]
 use_parent_material = true
@@ -736,6 +737,9 @@ position = Vector2( 4.66035, 1.05636 )
 rotation = 0.349066
 frames = SubResource( 45 )
 offset = Vector2( 10, 0 )
+
+[node name="red" parent="sprites" index="6"]
+texture = ExtResource( 6 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/lorne_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=4]
+[ext_resource path="res://assets/leaders/lorne_red.png" type="Texture" id=5]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -587,8 +588,8 @@ frames = SubResource( 36 )
 frame = 2
 offset = Vector2( 4, -22 )
 
-[node name="sprite" parent="sprites" index="3"]
-visible = false
+[node name="blue" parent="sprites" index="3"]
+texture = ExtResource( 3 )
 
 [node name="weapon" type="Sprite" parent="sprites" index="4"]
 use_parent_material = true
@@ -598,6 +599,9 @@ centered = false
 offset = Vector2( 1, -20 )
 region_enabled = true
 region_rect = Rect2( 308, 9, 16, 31 )
+
+[node name="red" parent="sprites" index="6"]
+texture = ExtResource( 5 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

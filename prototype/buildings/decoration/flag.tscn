@@ -31,10 +31,8 @@ tracks/1/keys = {
 }
 
 [node name="flag" type="Node2D"]
-use_parent_material = true
 
 [node name="sprite" type="Sprite" parent="."]
-use_parent_material = true
 rotation = 0.0698132
 texture = ExtResource( 1 )
 centered = false

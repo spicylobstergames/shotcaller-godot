@@ -594,7 +594,7 @@ offset = Vector2( 6, -6 )
 region_enabled = true
 region_rect = Rect2( 82, 2, 12, 18 )
 
-[node name="sprite" parent="sprites" index="3"]
+[node name="blue" parent="sprites" index="3"]
 visible = false
 
 [node name="block" parent="collisions" index="0"]

@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.unit.orders
+# self = game.unit
 
 export var hp:int = 100
 var current_hp:int = 100
@@ -18,6 +18,9 @@ var dead:bool = false
 export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
+var blue_tex
+var red_tex
+var gray_tex
 
 # SELECTION
 export var selectable:bool = false
@@ -114,7 +117,9 @@ func _ready():
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
-
+	if has_node("sprites/blue"): blue_tex = get_node("sprites/blue").texture
+	if has_node("sprites/red"): red_tex =  get_node("sprites/red").texture
+	if has_node("sprites/neutral"): gray_tex = get_node("sprites/neutral").texture
 
 func reset_unit():
 	self.setup_team(self.team)
@@ -159,30 +164,34 @@ func setup_team(new_team):
 	get_node("light").visible = false
 	if new_team == game.player_team: get_node("light").visible = true
 	
-	var red_mat =  get_node("sprites/red").material
-	var blue_mat = get_node("sprites/neutral").material
+	var body = get_node("sprites/body")
+	if body is Sprite: 
+		if is_blue: self.texture.sprite.texture = blue_tex
+		if is_red: self.texture.sprite.texture = red_tex
+		if is_neutral: self.texture.sprite.texture = gray_tex
+	else:
+		for frame in body.frames.get_frame_count('default'):
+			if is_blue: body.frames.set_frame('default', frame, blue_tex)
+			if is_red: body.frames.set_frame('default', frame, red_tex)
+			if is_neutral: body.frames.set_frame('default', frame, gray_tex)
+			
 	
 	# MIRROR
 	if self.type != "building": 
 		self.mirror_toggle(is_red)
+		
 	else: 
 		# mirror lumbermill
 		if self.display_name == "lumbermill" and get_parent().name == "blue":
 			self.mirror_toggle(true)
 		# color flags
-		var flags = self.get_node("sprites/flags")
-		
-		if is_blue:
-			self.texture.sprite.material = null
-			flags.material = null
-		if is_red:
-			self.texture.sprite.material = red_mat
-			flags.material = red_mat
-		if is_neutral:
-			self.texture.sprite.material = blue_mat
-			flags.material = blue_mat
-		
-			
+		var flags = self.get_node("sprites/flags").get_children()
+		for flag in flags:
+			var flag_sprite = flag.get_node("sprite")
+			if is_blue: flag_sprite.texture = blue_tex
+			if is_red: flag_sprite.texture = red_tex
+			if is_neutral: flag_sprite.texture = gray_tex
+
 
 func oponent_team():
 	match self.team: 
@@ -210,8 +219,6 @@ func get_texture():
 		var texture_data
 		var region
 		var scale = Vector2(1,1)
-		var material
-		if self.team == "red": material = body.material
 		if body is Sprite: 
 			texture_data = body.texture 
 			region = body.region_rect
@@ -228,7 +235,6 @@ func get_texture():
 			"sprite": body,
 			"data": texture_data,
 			"mirror": self.mirror,
-			"material": material,
 			"region": region,
 			"scale": scale
 		}

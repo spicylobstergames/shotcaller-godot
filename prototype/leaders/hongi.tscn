@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/leaders/hongi_red.png" type="Texture" id=4]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -629,8 +630,11 @@ z_index = 1
 use_parent_material = true
 frames = SubResource( 39 )
 
-[node name="sprite" parent="sprites" index="4"]
-visible = false
+[node name="blue" parent="sprites" index="4"]
+texture = ExtResource( 3 )
+
+[node name="red" parent="sprites" index="6"]
+texture = ExtResource( 4 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
