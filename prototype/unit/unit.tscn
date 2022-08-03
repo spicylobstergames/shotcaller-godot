@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://skills/skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
@@ -24,6 +24,60 @@ light_mode = 2
 [sub_resource type="DynamicFont" id=20]
 size = 10
 font_data = ExtResource( 5 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 3 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 13 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 13 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 13 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 17 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 17 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=53]
+animations = [ {
+"frames": [ SubResource( 46 ), SubResource( 21 ), SubResource( 23 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 50 ), SubResource( 51 ), SubResource( 52 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+} ]
 
 [sub_resource type="CircleShape2D" id=18]
 radius = 30.0
@@ -137,7 +191,6 @@ region_enabled = true
 region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="sprites" type="Node2D" parent="."]
-use_parent_material = true
 
 [node name="shadow" type="Sprite" parent="sprites"]
 modulate = Color( 0, 0, 0, 0.294118 )
@@ -146,30 +199,13 @@ use_parent_material = true
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 
-[node name="blue" type="Sprite" parent="sprites"]
+[node name="body" type="AnimatedSprite" parent="sprites"]
 visible = false
-light_mask = 0
+use_parent_material = true
 position = Vector2( 0, 9 )
-texture = ExtResource( 3 )
-offset = Vector2( 0, -11 )
-region_enabled = true
-region_rect = Rect2( 4, 0, 20, 24 )
-
-[node name="neutral" type="Sprite" parent="sprites"]
-visible = false
-position = Vector2( 0, 9 )
-texture = ExtResource( 17 )
-offset = Vector2( 0, -11 )
-region_enabled = true
-region_rect = Rect2( 4, 0, 20, 24 )
-
-[node name="red" type="Sprite" parent="sprites"]
-visible = false
-position = Vector2( 0, 9 )
-texture = ExtResource( 13 )
-offset = Vector2( 0, -11 )
-region_enabled = true
-region_rect = Rect2( 4, 0, 20, 24 )
+frames = SubResource( 53 )
+animation = "neutral"
+offset = Vector2( -2, -11 )
 
 [node name="collisions" type="Area2D" parent="."]
 visible = false

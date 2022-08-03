@@ -18,9 +18,6 @@ var dead:bool = false
 export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
-var blue_tex
-var red_tex
-var gray_tex
 
 # SELECTION
 export var selectable:bool = false
@@ -117,9 +114,6 @@ func _ready():
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
-	if has_node("sprites/blue"): blue_tex = get_node("sprites/blue").texture
-	if has_node("sprites/red"): red_tex =  get_node("sprites/red").texture
-	if has_node("sprites/neutral"): gray_tex = get_node("sprites/neutral").texture
 
 func reset_unit():
 	self.setup_team(self.team)
@@ -164,17 +158,14 @@ func setup_team(new_team):
 	get_node("light").visible = false
 	if new_team == game.player_team: get_node("light").visible = true
 	
-	var body = get_node("sprites/body")
-	if body is Sprite: 
-		if is_blue: self.texture.sprite.texture = blue_tex
-		if is_red: self.texture.sprite.texture = red_tex
-		if is_neutral: self.texture.sprite.texture = gray_tex
-	else:
-		for frame in body.frames.get_frame_count('default'):
-			if is_blue: body.frames.set_frame('default', frame, blue_tex)
-			if is_red: body.frames.set_frame('default', frame, red_tex)
-			if is_neutral: body.frames.set_frame('default', frame, gray_tex)
-			
+	sprites.use_parent_material = true
+	
+	var body = sprites.get_node("body")
+
+	if is_blue: body.animation = 'default'
+	if is_red: body.animation = 'red'
+	if is_neutral: body.animation = 'neutral'
+	
 	
 	# MIRROR
 	if self.type != "building": 
@@ -187,10 +178,11 @@ func setup_team(new_team):
 		# color flags
 		var flags = self.get_node("sprites/flags").get_children()
 		for flag in flags:
-			var flag_sprite = flag.get_node("sprite")
-			if is_blue: flag_sprite.texture = blue_tex
-			if is_red: flag_sprite.texture = red_tex
-			if is_neutral: flag_sprite.texture = gray_tex
+			var flag_sprite = flag.get_node("sprites")
+			
+			if is_blue: flag_sprite.animation = 'default'
+			if is_red: flag_sprite.animation = 'red'
+			if is_neutral: flag_sprite.animation = 'neutral'
 
 
 func oponent_team():

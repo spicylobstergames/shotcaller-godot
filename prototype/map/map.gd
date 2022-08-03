@@ -31,7 +31,6 @@ func _ready():
 	fog = get_node("tiles/fog")
 	blocks = get_node("blocks")
 	
-	
 	red_castle = get_node("buildings/red/castle")
 	blue_castle = get_node("buildings/blue/castle")
 

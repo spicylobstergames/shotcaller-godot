@@ -65,6 +65,7 @@ func _process(delta: float) -> void:
 
 
 func build():
+	
 	if not built:
 		built = true
 		
@@ -89,7 +90,7 @@ func start():
 		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
 		
-		if test.fog: map.fog.cover_map()
+		map.get_node("fog").visible = true
 		
 		if test.unit:
 			test.spawn_unit()

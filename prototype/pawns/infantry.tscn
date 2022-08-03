@@ -1,7 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/pawns/infantry_red.png" type="Texture" id=2]
 [ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=4]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -155,7 +157,7 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
+"update": 0,
 "values": [ false, false ]
 }
 tracks/4/type = "method"
@@ -185,28 +187,28 @@ tracks/5/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 0 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/body:position")
+tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ), Vector2( 0, 5 ), Vector2( -1, 2 ), Vector2( 1, -3 ), Vector2( 0, -10 ) ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/weapon:rotation_degrees")
+tracks/7/path = NodePath("sprites/body:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, 0.0 ]
+"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ), Vector2( 0, 5 ), Vector2( -1, 2 ), Vector2( 1, -3 ), Vector2( 0, -10 ) ]
 }
 
 [sub_resource type="Animation" id=25]
@@ -258,7 +260,7 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
+"update": 0,
 "values": [ false, false ]
 }
 tracks/4/type = "method"
@@ -276,7 +278,7 @@ tracks/4/keys = {
 } ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("sprites/body:position")
+tracks/5/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -285,10 +287,10 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
+tracks/6/path = NodePath("sprites/body:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -297,7 +299,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0, 0.0 ]
+"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/body:modulate")
@@ -361,7 +363,7 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
+"update": 0,
 "values": [ false, false ]
 }
 tracks/4/type = "method"
@@ -379,7 +381,7 @@ tracks/4/keys = {
 } ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("sprites/body:position")
+tracks/5/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -388,10 +390,10 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
+tracks/6/path = NodePath("sprites/body:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -400,7 +402,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0, 0.0 ]
+"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/body:modulate")
@@ -463,7 +465,7 @@ tracks/3/enabled = true
 tracks/3/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
+"update": 0,
 "values": [ false, false ]
 }
 tracks/4/type = "method"
@@ -481,7 +483,7 @@ tracks/4/keys = {
 } ]
 }
 tracks/5/type = "value"
-tracks/5/path = NodePath("sprites/body:position")
+tracks/5/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -490,10 +492,10 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
+"values": [ 0.0, 0.0 ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
+tracks/6/path = NodePath("sprites/body:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -502,7 +504,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 0.0, 0.0 ]
+"values": [ Vector2( 0, 9 ), Vector2( 0, 9 ) ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/body:modulate")
@@ -517,23 +519,33 @@ tracks/7/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=20]
+[sub_resource type="AtlasTexture" id=34]
 atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 24, 24 )
+region = Rect2( 72, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 3 )
-region = Rect2( 24, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 2 )
+region = Rect2( 72, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 3 )
-region = Rect2( 48, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 4 )
+region = Rect2( 72, 0, 24, 24 )
 
-[sub_resource type="SpriteFrames" id=22]
+[sub_resource type="SpriteFrames" id=35]
 animations = [ {
-"frames": [ SubResource( 20 ), SubResource( 21 ), SubResource( 23 ) ],
+"frames": [ SubResource( 34 ) ],
 "loop": true,
 "name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 61 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 37 ) ],
+"loop": true,
+"name": "neutral",
 "speed": 5.0
 } ]
 
@@ -579,23 +591,16 @@ anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
-[node name="body" type="AnimatedSprite" parent="sprites" index="1"]
-use_parent_material = true
-position = Vector2( 0, 9 )
-frames = SubResource( 22 )
-offset = Vector2( -2, -11 )
+[node name="body" parent="sprites" index="1"]
+visible = true
+animation = "default"
 
-[node name="weapon" type="Sprite" parent="sprites" index="2"]
+[node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
 visible = false
-use_parent_material = true
 position = Vector2( 6, 2 )
-texture = ExtResource( 3 )
-offset = Vector2( 6, -6 )
-region_enabled = true
-region_rect = Rect2( 82, 2, 12, 18 )
-
-[node name="blue" parent="sprites" index="3"]
-visible = false
+frames = SubResource( 35 )
+animation = "neutral"
+offset = Vector2( 2, -5 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

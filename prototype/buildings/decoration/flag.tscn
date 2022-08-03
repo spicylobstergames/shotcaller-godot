@@ -1,12 +1,44 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/buildings/buildings_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/buildings/buildings_red.png" type="Texture" id=2]
+[ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 112, 0, 16, 14 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 112, 0, 16, 14 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 3 )
+region = Rect2( 112, 0, 16, 14 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 4 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+} ]
 
 [sub_resource type="Animation" id=1]
 resource_name = "idle"
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("sprite:position")
+tracks/0/path = NodePath("sprites:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -18,7 +50,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("sprite:rotation_degrees")
+tracks/1/path = NodePath("sprites:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -32,13 +64,11 @@ tracks/1/keys = {
 
 [node name="flag" type="Node2D"]
 
-[node name="sprite" type="Sprite" parent="."]
+[node name="sprites" type="AnimatedSprite" parent="."]
 rotation = 0.0698132
-texture = ExtResource( 1 )
+frames = SubResource( 5 )
 centered = false
-offset = Vector2( 0, -5 )
-region_enabled = true
-region_rect = Rect2( 112, 3, 13, 10 )
+offset = Vector2( 0, -7 )
 
 [node name="animations" type="AnimationPlayer" parent="."]
 autoplay = "idle"
