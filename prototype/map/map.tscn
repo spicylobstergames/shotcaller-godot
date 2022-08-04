@@ -763,7 +763,7 @@ visible = false
 color = Color( 0.25098, 0.25098, 0.25098, 1 )
 
 [node name="light" type="Light2D" parent="."]
-position = Vector2( 1639, 478 )
+position = Vector2( 255, -55 )
 scale = Vector2( 10, 10 )
 texture = ExtResource( 27 )
 mode = 2

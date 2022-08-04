@@ -63,8 +63,10 @@ tracks/1/keys = {
 }
 
 [node name="flag" type="Node2D"]
+use_parent_material = true
 
 [node name="sprites" type="AnimatedSprite" parent="."]
+use_parent_material = true
 rotation = 0.0698132
 frames = SubResource( 5 )
 centered = false

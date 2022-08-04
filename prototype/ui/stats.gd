@@ -53,7 +53,6 @@ func update():
 func set_texture(portrait, texture):
 	portrait.texture = texture.data
 	portrait.region_rect = texture.region
-	portrait.material = texture.material
 	portrait.scale = texture.scale
 	var sx = abs(portrait.scale.x)
 	portrait.scale.x = -1 * sx if texture.mirror else sx

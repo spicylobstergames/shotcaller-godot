@@ -25,15 +25,15 @@ light_mode = 2
 size = 10
 font_data = ExtResource( 5 )
 
-[sub_resource type="AtlasTexture" id=46]
+[sub_resource type="AtlasTexture" id=54]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=21]
+[sub_resource type="AtlasTexture" id=55]
 atlas = ExtResource( 3 )
 region = Rect2( 24, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=56]
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 24, 24 )
 
@@ -63,7 +63,7 @@ region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=53]
 animations = [ {
-"frames": [ SubResource( 46 ), SubResource( 21 ), SubResource( 23 ) ],
+"frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
