@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=2]
@@ -111,6 +111,36 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 3 )
+region = Rect2( 139, 32, 64, 56 )
+
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 6 )
+region = Rect2( 139, 32, 64, 56 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 5 )
+region = Rect2( 139, 32, 64, 56 )
+
+[sub_resource type="SpriteFrames" id=45]
+animations = [ {
+"frames": [ SubResource( 42 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 43 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 44 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 2 )
 region = Rect2( 160, 0, 32, 32 )
@@ -173,20 +203,20 @@ anims/idle = SubResource( 25 )
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
+[node name="body" parent="sprites" index="1"]
+visible = true
+use_parent_material = false
+frames = SubResource( 45 )
+animation = "default"
+offset = Vector2( 0, -30 )
+
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 visible = false
 
 [node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 4 )]
 position = Vector2( 1, -80 )
 
-[node name="body" type="Sprite" parent="sprites" index="3"]
-use_parent_material = true
-texture = ExtResource( 3 )
-offset = Vector2( 0, -22 )
-region_enabled = true
-region_rect = Rect2( 139, 32, 64, 56 )
-
-[node name="weapon" type="Node2D" parent="sprites" index="4"]
+[node name="weapon" type="Node2D" parent="sprites" index="3"]
 position = Vector2( 0, -43 )
 scale = Vector2( 1.0686, 1 )
 

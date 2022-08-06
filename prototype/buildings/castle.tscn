@@ -116,12 +116,12 @@ tracks/1/keys = {
 atlas = ExtResource( 5 )
 region = Rect2( 0, 0, 96, 128 )
 
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 96, 128 )
-
 [sub_resource type="AtlasTexture" id=45]
 atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 96, 128 )
 
 [sub_resource type="SpriteFrames" id=46]
@@ -131,14 +131,14 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 44 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 45 ) ],
 "loop": true,
 "name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 44 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 

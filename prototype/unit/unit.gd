@@ -88,6 +88,7 @@ var channeling_timer:Timer
 # NODES
 var hud:Node
 var sprites:Node
+var body:Node
 var spawn:Node
 var move:Node
 var attack:Node
@@ -111,6 +112,7 @@ func _ready():
 	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
 	
 	if has_node("sprites"): sprites = get_node("sprites")
+	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
@@ -149,47 +151,43 @@ func set_behavior(s):
 func setup_team(new_team):
 	self.team = new_team
 	
-	var is_red = (self.team == "red")
-	var is_blue = (self.team == "blue")
-	var is_neutral = (self.team == "neutral")
-	# UPDATE TEXTURE COLORS
-	get_texture()
-	
+	# hide fog setup
 	get_node("light").visible = false
 	if new_team == game.player_team: get_node("light").visible = true
-	
 	sprites.use_parent_material = true
 	
-	var body = sprites.get_node("body")
-
-	if is_blue: body.animation = 'default'
-	if is_red: body.animation = 'red'
-	if is_neutral: body.animation = 'neutral'
+	# color body sprite
+	set_text_anim(new_team, body)
 	
+	# color weapons
+	if weapon is AnimatedSprite: set_text_anim(new_team, weapon)
 	
-	# MIRROR
-	if self.type != "building": 
-		self.mirror_toggle(is_red)
-		
-	else: 
-		# mirror lumbermill
+	# mirror red pawns, leaders and neutrals
+	var is_red = (self.team == "red")
+	if self.type != "building": self.mirror_toggle(is_red)
+	
+	else: # mirror lumbermill
 		if self.display_name == "lumbermill" and get_parent().name == "blue":
 			self.mirror_toggle(true)
+			
 		# color flags
 		var flags = self.get_node("sprites/flags").get_children()
 		for flag in flags:
 			var flag_sprite = flag.get_node("sprites")
-			
-			if is_blue: flag_sprite.animation = 'default'
-			if is_red: flag_sprite.animation = 'red'
-			if is_neutral: flag_sprite.animation = 'neutral'
+			set_text_anim(new_team, flag_sprite)
+
+
+func set_text_anim(new_team, text):
+	if new_team == "blue": text.animation = 'default'
+	if new_team == "red": text.animation = 'red'
+	if new_team == "neutral": text.animation = 'neutral'
 
 
 func oponent_team():
 	match self.team: 
 		"red": return "blue"
 		"blue": return "red"
-		"neutral": return ""
+		"neutral": return "all"
 
 
 func look_at(point):
@@ -203,35 +201,7 @@ func mirror_toggle(on):
 	self.get_node("sprites").scale.x = s
 	if self.attack_hit_position:
 		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
-
-
-func get_texture():
-	if not self.texture:
-		var body = get_node("sprites/body")
-		var texture_data
-		var region
-		var scale = Vector2(1,1)
-		if body is Sprite: 
-			texture_data = body.texture 
-			region = body.region_rect
-			match self.subtype:
-				"tower": scale = Vector2(1,1)
-				"barrack": scale = Vector2(0.9,0.9)
-				"castle": scale = Vector2(0.8,0.8)
-		else:
-			texture_data = body.frames.get_frame('default', 0)
-			region = texture_data.region
-			scale = Vector2(2.5,2.5)
-			if self.mounted: scale = Vector2(1.8,1.8)
-		self.texture = {
-			"sprite": body,
-			"data": texture_data,
-			"mirror": self.mirror,
-			"region": region,
-			"scale": scale
-		}
-	return self.texture
-
+		
 
 func get_units_on_sight(filters):
 	var current_vision = game.unit.modifiers.get_value(self, "vision")
