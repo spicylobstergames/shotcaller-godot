@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -517,11 +517,36 @@ region = Rect2( 144, 0, 48, 48 )
 atlas = ExtResource( 5 )
 region = Rect2( 192, 0, 48, 48 )
 
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 6 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 6 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 6 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 6 )
+region = Rect2( 192, 0, 48, 48 )
+
 [sub_resource type="SpriteFrames" id=36]
 animations = [ {
 "frames": [ SubResource( 42 ), SubResource( 43 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ) ],
 "loop": true,
 "name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 
@@ -620,10 +645,10 @@ position = Vector2( 0, 8 )
 scale = Vector2( 1.3, 1.4 )
 texture = ExtResource( 4 )
 
-[node name="body" type="AnimatedSprite" parent="sprites" index="2"]
-use_parent_material = true
-position = Vector2( 0, 9 )
+[node name="body" parent="sprites" index="2"]
+visible = true
 frames = SubResource( 36 )
+animation = "default"
 offset = Vector2( 5, -24 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="3"]
@@ -648,12 +673,6 @@ z_index = 1
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 use_parent_material = true
 frames = SubResource( 39 )
-
-[node name="blue" parent="sprites" index="5"]
-texture = ExtResource( 5 )
-
-[node name="red" parent="sprites" index="7"]
-texture = ExtResource( 6 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

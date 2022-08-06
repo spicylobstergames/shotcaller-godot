@@ -172,9 +172,6 @@ anims/idle = SubResource( 25 )
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
-[node name="blue" parent="sprites" index="1"]
-texture = ExtResource( 3 )
-
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 visible = false
 
@@ -200,12 +197,6 @@ visible = false
 position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
-
-[node name="neutral" parent="sprites" index="5"]
-texture = ExtResource( 6 )
-
-[node name="red" parent="sprites" index="6"]
-texture = ExtResource( 5 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -20 )

@@ -28,7 +28,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	walls = get_node("tiles/walls")
-	fog = get_node("tiles/fog")
+	fog = get_node("fog")
 	blocks = get_node("blocks")
 	
 	red_castle = get_node("buildings/red/castle")

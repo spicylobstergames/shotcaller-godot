@@ -194,9 +194,6 @@ anims/idle = SubResource( 25 )
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
-[node name="blue" parent="sprites" index="1"]
-texture = ExtResource( 3 )
-
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 
 [node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 5 )]
@@ -229,12 +226,6 @@ rotation = 0.141846
 scale = Vector2( 0.85, 1 )
 frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
-
-[node name="neutral" parent="sprites" index="5"]
-texture = ExtResource( 6 )
-
-[node name="red" parent="sprites" index="6"]
-texture = ExtResource( 4 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -6 )

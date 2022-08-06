@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -508,11 +508,28 @@ region = Rect2( 32, 0, 32, 32 )
 atlas = ExtResource( 4 )
 region = Rect2( 64, 0, 32, 32 )
 
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 5 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 5 )
+region = Rect2( 64, 0, 32, 32 )
+
 [sub_resource type="SpriteFrames" id=36]
 animations = [ {
 "frames": [ SubResource( 42 ), SubResource( 43 ), SubResource( 44 ) ],
 "loop": true,
 "name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 46 ), SubResource( 47 ), SubResource( 48 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 
@@ -593,20 +610,18 @@ anims/stun = SubResource( 33 )
 [node name="shadow" parent="sprites" index="0"]
 position = Vector2( 0, 9 )
 
-[node name="body" type="AnimatedSprite" parent="sprites" index="1"]
-use_parent_material = true
-position = Vector2( 0, 9 )
-rotation = 0.0654572
-scale = Vector2( 1, 0.90624 )
+[node name="body" parent="sprites" index="1"]
+visible = true
 frames = SubResource( 36 )
-frame = 2
+animation = "default"
 offset = Vector2( 0, -13 )
 
 [node name="shuriken" type="AnimatedSprite" parent="sprites" index="2"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 use_parent_material = true
 position = Vector2( -8, -6 )
-rotation = -1.07987
+rotation = -1.5708
 frames = SubResource( 41 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="3"]
@@ -623,12 +638,6 @@ z_index = 1
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
 use_parent_material = true
 frames = SubResource( 39 )
-
-[node name="blue" parent="sprites" index="4"]
-texture = ExtResource( 4 )
-
-[node name="red" parent="sprites" index="6"]
-texture = ExtResource( 5 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

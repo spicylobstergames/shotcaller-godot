@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -508,11 +508,40 @@ region = Rect2( 192, 0, 48, 48 )
 atlas = ExtResource( 3 )
 region = Rect2( 240, 0, 48, 48 )
 
+[sub_resource type="AtlasTexture" id=54]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=55]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 5 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=57]
+atlas = ExtResource( 5 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=58]
+atlas = ExtResource( 5 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=59]
+atlas = ExtResource( 5 )
+region = Rect2( 240, 0, 48, 48 )
+
 [sub_resource type="SpriteFrames" id=36]
 animations = [ {
 "frames": [ SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ) ],
 "loop": true,
 "name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 57 ), SubResource( 58 ), SubResource( 59 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 
@@ -581,17 +610,14 @@ position = Vector2( 0, 8 )
 scale = Vector2( 1.3, 1.4 )
 texture = ExtResource( 4 )
 
-[node name="body" type="AnimatedSprite" parent="sprites" index="2"]
-use_parent_material = true
+[node name="body" parent="sprites" index="2"]
+visible = true
 position = Vector2( 2, 9 )
 frames = SubResource( 36 )
-frame = 2
+animation = "red"
 offset = Vector2( 4, -22 )
 
-[node name="blue" parent="sprites" index="3"]
-texture = ExtResource( 3 )
-
-[node name="weapon" type="Sprite" parent="sprites" index="4"]
+[node name="weapon" type="Sprite" parent="sprites" index="3"]
 use_parent_material = true
 position = Vector2( -1, -16 )
 texture = ExtResource( 3 )
@@ -599,9 +625,6 @@ centered = false
 offset = Vector2( 1, -20 )
 region_enabled = true
 region_rect = Rect2( 308, 9, 16, 31 )
-
-[node name="red" parent="sprites" index="6"]
-texture = ExtResource( 5 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )
