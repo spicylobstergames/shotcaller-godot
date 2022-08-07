@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -552,11 +552,24 @@ region = Rect2( 96, 0, 32, 32 )
 atlas = ExtResource( 3 )
 region = Rect2( 128, 0, 32, 32 )
 
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 4 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 4 )
+region = Rect2( 128, 0, 32, 32 )
+
 [sub_resource type="SpriteFrames" id=39]
 animations = [ {
 "frames": [ SubResource( 43 ), SubResource( 44 ) ],
 "loop": true,
 "name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 
@@ -616,18 +629,19 @@ anims/stun = SubResource( 33 )
 visible = true
 frames = SubResource( 36 )
 animation = "red"
+frame = 2
 offset = Vector2( 0, -15 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="2"]
 use_parent_material = true
 
 [node name="spear" type="AnimatedSprite" parent="sprites/weapon" index="0"]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
 use_parent_material = true
 position = Vector2( -8.1407, 2.05879 )
 scale = Vector2( 1, 1.1 )
 frames = SubResource( 39 )
+animation = "red"
 offset = Vector2( 0, -5 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="1"]
@@ -641,6 +655,7 @@ use_parent_material = true
 position = Vector2( 0, 4.76837e-07 )
 scale = Vector2( 1, 1.1 )
 frames = SubResource( 39 )
+animation = "red"
 offset = Vector2( -13, -1 )
 
 [node name="block" parent="collisions" index="0"]

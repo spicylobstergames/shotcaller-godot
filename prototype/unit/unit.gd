@@ -161,6 +161,11 @@ func setup_team(new_team):
 	
 	# color weapons
 	if weapon is AnimatedSprite: set_text_anim(new_team, weapon)
+	if has_node("sprites/weapon/spear"): 
+		var spear = get_node("sprites/weapon/spear")
+		set_text_anim(new_team, spear)
+		var spear_proj = get_node("sprites/weapon/spear/projectile/sprites")
+		set_text_anim(new_team, spear_proj)
 	
 	# mirror red pawns, leaders and neutrals
 	var is_red = (self.team == "red")

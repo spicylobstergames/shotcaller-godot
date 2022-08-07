@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
@@ -520,6 +520,27 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 3 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 4 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=43]
+animations = [ {
+"frames": [ SubResource( 41 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 42 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
 [sub_resource type="CircleShape2D" id=32]
 
 [sub_resource type="CircleShape2D" id=29]
@@ -566,20 +587,15 @@ anims/stun = SubResource( 33 )
 
 [node name="body" parent="sprites" index="1"]
 visible = true
-scale = Vector2( 1, 1.02753 )
 frames = SubResource( 36 )
 animation = "default"
+frame = 2
 offset = Vector2( 2, -15 )
 
-[node name="weapon" type="Sprite" parent="sprites" index="2"]
-visible = false
-use_parent_material = true
-position = Vector2( 6, 2 )
-rotation = 0.176891
-texture = ExtResource( 3 )
+[node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
+position = Vector2( 6, 1 )
+frames = SubResource( 43 )
 offset = Vector2( 6, -6 )
-region_enabled = true
-region_rect = Rect2( 104, 5, 17, 25 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
