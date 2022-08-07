@@ -37,18 +37,6 @@ region = Rect2( 24, 0, 24, 24 )
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 24, 24 )
 
-[sub_resource type="AtlasTexture" id=47]
-atlas = ExtResource( 13 )
-region = Rect2( 0, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 13 )
-region = Rect2( 24, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 13 )
-region = Rect2( 48, 0, 24, 24 )
-
 [sub_resource type="AtlasTexture" id=50]
 atlas = ExtResource( 17 )
 region = Rect2( 0, 0, 24, 24 )
@@ -61,6 +49,18 @@ region = Rect2( 24, 0, 24, 24 )
 atlas = ExtResource( 17 )
 region = Rect2( 48, 0, 24, 24 )
 
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 13 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 13 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 13 )
+region = Rect2( 48, 0, 24, 24 )
+
 [sub_resource type="SpriteFrames" id=53]
 animations = [ {
 "frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ) ],
@@ -68,14 +68,14 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 50 ), SubResource( 51 ), SubResource( 52 ) ],
 "loop": true,
 "name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 
@@ -200,11 +200,9 @@ position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 
 [node name="body" type="AnimatedSprite" parent="sprites"]
-visible = false
 use_parent_material = true
 position = Vector2( 0, 9 )
 frames = SubResource( 53 )
-animation = "neutral"
 offset = Vector2( -2, -11 )
 
 [node name="collisions" type="Area2D" parent="."]
@@ -224,8 +222,7 @@ shape = SubResource( 19 )
 disabled = true
 
 [node name="light" type="Light2D" parent="."]
-visible = false
-scale = Vector2( 10, 10 )
+scale = Vector2( 6.25, 6.25 )
 texture = ExtResource( 16 )
 mode = 2
 shadow_enabled = true

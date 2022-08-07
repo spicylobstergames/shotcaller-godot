@@ -151,10 +151,14 @@ func set_behavior(s):
 func setup_team(new_team):
 	self.team = new_team
 	
-	# hide fog setup
-	get_node("light").visible = false
-	if new_team == game.player_team: get_node("light").visible = true
-	sprites.use_parent_material = true
+	# fog setup
+	if has_node("light"):
+		var light = get_node("light")
+		light.visible = false
+		if new_team == game.player_team: light.visible = true
+		var s = self.vision / 16
+		light.scale = Vector2(s,s)
+		sprites.use_parent_material = true
 	
 	# color body sprite
 	set_text_anim(new_team, body)
