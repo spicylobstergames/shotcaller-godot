@@ -21,24 +21,25 @@ func _ready():
 	hide()
 
 
-
 func update():
 	var unit = game.selected_unit
 	clear_old_hpbar()
 	if not unit: hide()
 	else:
 		show()
+		set_portrait(portrait_sprite, unit)
+		add_new_hpbar(unit)
+		# stats
 		unit_name.text = "%s" % [unit.display_name]
 		hp.text = "%s / %s" % [max(unit.current_hp,0), game.unit.modifiers.get_value(unit, "hp")]
 		if unit.regen: regen.text = "+%s" % [game.unit.modifiers.get_value(unit, "regen")]
 		else: regen.text = ""
-		add_new_hpbar(unit)
 		damage.text = "Damage: %s" % game.unit.modifiers.get_value(unit, "damage")
 		vision.text = "Vision: %s" % game.unit.modifiers.get_value(unit, "vision")
 		att_range.text = "Range: %s" % game.unit.modifiers.get_value(unit, "attack_range")
 		if unit.moves: speed.text = "Speed: %s" % game.unit.modifiers.get_value(unit, "speed")
 		else: speed.text = ""
-		set_texture(portrait_sprite, unit.texture)
+		# gold
 		if ((game.can_control(unit) and unit.type == "leader")
 				or unit.display_name == "mine"):
 			gold.text = "%s" % unit.gold
@@ -49,15 +50,23 @@ func update():
 			gold_sprite.visible = false
 
 
-
-func set_texture(portrait, texture):
-	portrait.texture = texture.data
-	portrait.region_rect = texture.region
-	portrait.material = texture.material
-	portrait.scale = texture.scale
+func set_portrait(portrait, unit):
+	var anim = unit.team
+	if unit.team == 'blue': anim = 'default'
+	
+	var texture_data = unit.body.frames.get_frame(anim, 0)
+	portrait.texture = texture_data
+	portrait.region_rect.size = texture_data.region.size
+	
+	var scale = Vector2(2.4,2.4)
+	if unit.mounted: scale = Vector2(1.5,1.5)
+	if unit.type == 'building': scale =  Vector2(1,1)
+	match unit.display_name:
+		"barrack": scale = Vector2(0.8,0.8)
+		"castle": scale = Vector2(0.6,0.6)
+	portrait.scale = scale
 	var sx = abs(portrait.scale.x)
-	portrait.scale.x = -1 * sx if texture.mirror else sx
-
+	portrait.scale.x = -1 * sx if unit.mirror else sx
 
 
 func clear_old_hpbar():

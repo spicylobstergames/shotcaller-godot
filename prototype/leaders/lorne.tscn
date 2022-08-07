@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
-[ext_resource path="res://assets/leaders/lorne.png" type="Texture" id=3]
+[ext_resource path="res://assets/leaders/lorne_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=4]
+[ext_resource path="res://assets/leaders/lorne_red.png" type="Texture" id=5]
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 2 )
@@ -105,7 +106,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, -50.0, 120.0, 130.0, 0.0 ]
+"values": [ 0.0, -80.0, 120.0, 100.0, 0.0 ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/weapon:visible")
@@ -507,25 +508,63 @@ region = Rect2( 192, 0, 48, 48 )
 atlas = ExtResource( 3 )
 region = Rect2( 240, 0, 48, 48 )
 
+[sub_resource type="AtlasTexture" id=54]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=55]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 5 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=57]
+atlas = ExtResource( 5 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=58]
+atlas = ExtResource( 5 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=59]
+atlas = ExtResource( 5 )
+region = Rect2( 240, 0, 48, 48 )
+
 [sub_resource type="SpriteFrames" id=36]
 animations = [ {
 "frames": [ SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 57 ), SubResource( 58 ), SubResource( 59 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
 } ]
 
-[sub_resource type="ShaderMaterial" id=54]
-shader = ExtResource( 2 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.290196, 0.572549, 0.427451, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = Color( 0.521569, 0.721569, 0.305882, 1 )
-shader_param/tolerance = 0.1
+[sub_resource type="AtlasTexture" id=60]
+atlas = ExtResource( 3 )
+region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 5 )
+region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=62]
+animations = [ {
+"frames": [ SubResource( 60 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 61 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
 
 [sub_resource type="CircleShape2D" id=46]
 radius = 14.0
@@ -587,28 +626,24 @@ visible = false
 
 [node name="big_shadow" type="Sprite" parent="sprites" index="1"]
 modulate = Color( 0, 0, 0, 0.294118 )
+light_mask = 0
+use_parent_material = true
 position = Vector2( 0, 8 )
 scale = Vector2( 1.3, 1.4 )
 texture = ExtResource( 4 )
 
-[node name="body" type="AnimatedSprite" parent="sprites" index="2"]
-material = SubResource( 30 )
+[node name="body" parent="sprites" index="2"]
+visible = true
 position = Vector2( 2, 9 )
 frames = SubResource( 36 )
-frame = 2
+animation = "default"
 offset = Vector2( 4, -22 )
 
-[node name="sprite" parent="sprites" index="3"]
+[node name="weapon" type="AnimatedSprite" parent="sprites" index="3"]
 visible = false
-
-[node name="weapon" type="Sprite" parent="sprites" index="4"]
-material = SubResource( 54 )
 position = Vector2( -1, -16 )
-texture = ExtResource( 3 )
-centered = false
-offset = Vector2( 1, -20 )
-region_enabled = true
-region_rect = Rect2( 308, 9, 16, 31 )
+frames = SubResource( 62 )
+offset = Vector2( 2, -4 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

@@ -1,8 +1,8 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://skills/skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
-[ext_resource path="res://assets/pawns/infantry.png" type="Texture" id=3]
+[ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/unit/hpbar.png" type="Texture" id=4]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://unit/behavior/spawn.gd" type="Script" id=6]
@@ -12,37 +12,72 @@
 [ext_resource path="res://unit/behavior/advance.gd" type="Script" id=10]
 [ext_resource path="res://unit/behavior/attack.gd" type="Script" id=11]
 [ext_resource path="res://controls/orders/unit_orders.gd" type="Script" id=12]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=13]
+[ext_resource path="res://assets/pawns/infantry_red.png" type="Texture" id=13]
 [ext_resource path="res://unit/hud.gd" type="Script" id=14]
 [ext_resource path="res://skills/modifiers.gd" type="Script" id=15]
+[ext_resource path="res://assets/map/light.png" type="Texture" id=16]
+[ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=17]
+
+[sub_resource type="CanvasItemMaterial" id=45]
+light_mode = 2
 
 [sub_resource type="DynamicFont" id=20]
 size = 10
 font_data = ExtResource( 5 )
 
-[sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 13 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.2, 0.266667, 0.380392, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = Color( 0.462745, 0.219608, 0.294118, 1 )
-shader_param/tolerance = 0.1
+[sub_resource type="AtlasTexture" id=54]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 24, 24 )
 
-[sub_resource type="ShaderMaterial" id=35]
-shader = ExtResource( 13 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.2, 0.266667, 0.380392, 1 )
-shader_param/new = Color( 0.447059, 0.490196, 0.45098, 1 )
-shader_param/new2 = Color( 0.615686, 0.670588, 0.623529, 1 )
-shader_param/new3 = Color( 0.882353, 0.92549, 0.870588, 1 )
-shader_param/new4 = Color( 0.298039, 0.32549, 0.298039, 1 )
-shader_param/tolerance = 0.1
+[sub_resource type="AtlasTexture" id=55]
+atlas = ExtResource( 3 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 17 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 17 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=47]
+atlas = ExtResource( 13 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 13 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 13 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=53]
+animations = [ {
+"frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 50 ), SubResource( 51 ), SubResource( 52 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
 
 [sub_resource type="CircleShape2D" id=18]
 radius = 30.0
@@ -51,6 +86,7 @@ radius = 30.0
 radius = 50.04
 
 [node name="unit" type="Node2D"]
+material = SubResource( 45 )
 script = ExtResource( 7 )
 
 [node name="behavior" type="Node" parent="."]
@@ -98,10 +134,12 @@ region_enabled = true
 region_rect = Rect2( 10, 3, 1, 1 )
 
 [node name="hud" type="Node2D" parent="."]
+use_parent_material = true
 script = ExtResource( 14 )
 
 [node name="state" type="Label" parent="hud"]
 visible = false
+use_parent_material = true
 margin_left = -37.0
 margin_top = -37.0
 margin_right = 38.0
@@ -122,16 +160,19 @@ texture = ExtResource( 2 )
 
 [node name="hpbar" type="Node2D" parent="hud"]
 visible = false
+use_parent_material = true
 position = Vector2( 0, -19 )
 
 [node name="bar" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.168627, 0.160784, 0.227451, 0.862745 )
+use_parent_material = true
 texture = ExtResource( 4 )
 region_enabled = true
 region_rect = Rect2( 2, 2, 22, 4 )
 
 [node name="red" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.682353, 0.172549, 0.172549, 1 )
+use_parent_material = true
 position = Vector2( -9, 0 )
 texture = ExtResource( 4 )
 centered = false
@@ -141,6 +182,7 @@ region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="green" type="Sprite" parent="hud/hpbar"]
 modulate = Color( 0.0392157, 0.643137, 0.117647, 1 )
+use_parent_material = true
 position = Vector2( -9, 0 )
 texture = ExtResource( 4 )
 centered = false
@@ -152,25 +194,16 @@ region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="shadow" type="Sprite" parent="sprites"]
 modulate = Color( 0, 0, 0, 0.294118 )
+light_mask = 0
+use_parent_material = true
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 
-[node name="sprite" type="Sprite" parent="sprites"]
-material = SubResource( 30 )
+[node name="body" type="AnimatedSprite" parent="sprites"]
+use_parent_material = true
 position = Vector2( 0, 9 )
-texture = ExtResource( 3 )
-offset = Vector2( 0, -11 )
-region_enabled = true
-region_rect = Rect2( 4, 0, 20, 24 )
-
-[node name="neutral" type="Sprite" parent="sprites"]
-visible = false
-material = SubResource( 35 )
-position = Vector2( 0, 9 )
-texture = ExtResource( 3 )
-offset = Vector2( 0, -11 )
-region_enabled = true
-region_rect = Rect2( 4, 0, 20, 24 )
+frames = SubResource( 53 )
+offset = Vector2( -2, -11 )
 
 [node name="collisions" type="Area2D" parent="."]
 visible = false
@@ -187,3 +220,12 @@ disabled = true
 [node name="select" type="CollisionShape2D" parent="collisions"]
 shape = SubResource( 19 )
 disabled = true
+
+[node name="light" type="Light2D" parent="."]
+scale = Vector2( 6.25, 6.25 )
+texture = ExtResource( 16 )
+mode = 2
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 50.0
+shadow_item_cull_mask = 2

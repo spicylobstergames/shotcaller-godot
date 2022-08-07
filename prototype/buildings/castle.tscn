@@ -1,10 +1,11 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/pawns/archer.png" type="Texture" id=3]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=4]
-[ext_resource path="res://assets/buildings/buildings.png" type="Texture" id=5]
+[ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/buildings/buildings_red.png" type="Texture" id=4]
+[ext_resource path="res://assets/buildings/buildings_blue.png" type="Texture" id=5]
+[ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -40,6 +41,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=31]
 resource_name = "death"
 length = 0.6
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("sprites:scale")
 tracks/0/interp = 1
@@ -110,17 +112,35 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 4 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = null
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = null
-shader_param/tolerance = 0.1
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="SpriteFrames" id=46]
+animations = [ {
+"frames": [ SubResource( 43 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 45 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 44 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 3 )
@@ -204,8 +224,13 @@ anims/idle = SubResource( 25 )
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
-[node name="sprite" parent="sprites" index="1"]
-visible = false
+[node name="body" parent="sprites" index="1"]
+visible = true
+use_parent_material = false
+position = Vector2( 0, 11 )
+frames = SubResource( 46 )
+animation = "default"
+offset = Vector2( 0, -51 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 
@@ -225,14 +250,7 @@ scale = Vector2( 0.8, 0.8 )
 position = Vector2( 24, -97.5 )
 scale = Vector2( 0.8, 0.8 )
 
-[node name="body" type="Sprite" parent="sprites" index="3"]
-material = SubResource( 30 )
-texture = ExtResource( 5 )
-offset = Vector2( 0, -44 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 96, 120 )
-
-[node name="weapon" type="Node2D" parent="sprites" index="4"]
+[node name="weapon" type="Node2D" parent="sprites" index="3"]
 position = Vector2( 0, -37 )
 scale = Vector2( 1.0686, 1 )
 

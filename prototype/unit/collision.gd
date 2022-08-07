@@ -26,7 +26,6 @@ func setup(unit):
 
 func process(delta):
 	game.map.blocks.quad.clear()
-	if game.test.fog: game.map.fog.skip_start()
 	
 	# loop 1
 	for unit1 in game.all_units:
@@ -34,18 +33,11 @@ func process(delta):
 		# add units to quad
 		if unit1.collide and not unit1.dead:
 			game.map.blocks.quad.add_body(unit1)
-		
-		# clear fog if unit has sight
-		if game.test.fog: game.map.fog.clear_sigh_skip(unit1)
 	
 	
 	# loop 2: checks for collisions
 	
 	for unit1 in game.all_units:
-		
-		# hide units behind fog
-		if game.test.fog: game.map.fog.hide_unit_skip(unit1)
-		
 		# projectiles collision
 		
 		if unit1.projectiles.size():

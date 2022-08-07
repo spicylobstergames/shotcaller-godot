@@ -23,5 +23,5 @@ func _capture():
 
 
 func _on_Timer_timeout():
-	_capture()
+	#_capture()
 	pass # Replace with function body.

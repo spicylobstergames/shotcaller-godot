@@ -65,6 +65,7 @@ func _process(delta: float) -> void:
 
 
 func build():
+	
 	if not built:
 		built = true
 		
@@ -89,7 +90,7 @@ func start():
 		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
 		
-		if test.fog: map.fog.cover_map()
+		map.get_node("fog").visible = true
 		
 		if test.unit:
 			test.spawn_unit()
@@ -106,5 +107,5 @@ func _physics_process(delta):
 	if started: collision.process(delta)
 
 
-func can_control(unit):
-	return (unit and not unit.dead) # and unit.team == game.player_team 
+func can_control(unit1):
+	return (unit1 and not unit1.dead) # and unit.team == game.player_team 

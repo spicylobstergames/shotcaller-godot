@@ -20,7 +20,7 @@ func _ready():
 	
 	map_sprite = game.get_node("map/zoom_out_sprite")
 	map_tiles = game.get_node("map/tiles")
-	map_fog = game.get_node("map/tiles/fog")
+	map_fog = game.get_node("map/fog")
 	cam_rect = get_node("cam_rect")
 	map_symbols = get_node("symbols")
 	
@@ -84,8 +84,7 @@ func get_map_texture():
 func corner_view():
 	map_sprite.visible = false
 	#map_tiles.visible = true
-	for tile in map_tiles.get_children(): 
-		if not tile == map_fog: tile.show()
+	for tile in map_tiles.get_children(): tile.show()
 	yield(get_tree(), "idle_frame")
 	self.visible = true
 
@@ -93,8 +92,7 @@ func corner_view():
 func hide_view():
 	map_sprite.visible = true
 	#map_tiles.visible = false
-	for tile in map_tiles.get_children(): 
-		if not tile == map_fog: tile.hide()
+	for tile in map_tiles.get_children(): tile.hide()
 	
 	# avoid input messing up
 	yield(get_tree(), "idle_frame")
