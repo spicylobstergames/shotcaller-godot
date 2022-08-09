@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.ui.minimap
 
-var update_map_texture:bool = true
+var update_map_texture:bool = false
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 
@@ -18,9 +18,9 @@ var map_symbols_map = []
 func _ready():
 	game = get_tree().get_current_scene()
 	
-	map_sprite = game.get_node("map/zoom_out_sprite")
-	map_tiles = game.get_node("map/tiles")
-	map_fog = game.get_node("map/fog")
+	map_sprite = game.get_node("maps/3lane_map/zoom_out_sprite")
+	map_tiles = game.get_node("maps/3lane_map/tiles")
+	map_fog = game.get_node("maps/3lane_map/fog")
 	cam_rect = get_node("cam_rect")
 	map_symbols = get_node("symbols")
 	
@@ -62,7 +62,9 @@ func over_minimap(event):
 
 
 func get_map_texture():
+	print('get_map_texture')
 	game.ui.hide_all()
+	game.ui.main_menu_background.hide()
 	for unit in game.all_units: unit.hide()
 	yield(get_tree(), "idle_frame")
 	var data = game.get_viewport().get_texture().get_data()
@@ -78,7 +80,8 @@ func get_map_texture():
 	update_map_texture = false
 	game.ui.show_all()
 	for unit in game.all_units: unit.show()
-	if not game.built: game.build()
+	if not game.started: 
+		game.ui.main_menu.get_node("container/play_button").play_down()
 
 
 func corner_view():

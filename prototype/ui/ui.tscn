@@ -160,9 +160,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="main" parent="background" instance=ExtResource( 17 )]
 pause_mode = 2
@@ -211,6 +208,7 @@ __meta__ = {
 }
 
 [node name="shop" type="Panel" parent="top_right"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -286.0
@@ -356,9 +354,6 @@ margin_top = 16.0
 margin_right = 384.0
 margin_bottom = 264.0
 custom_constants/separation = 8
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="menu_title" type="Label" parent="mid/main_menu/container"]
 margin_right = 368.0
@@ -476,6 +471,7 @@ __meta__ = {
 }
 
 [node name="leaders_icons" type="VBoxContainer" parent="mid_left"]
+visible = false
 margin_top = -162.0
 margin_right = 60.0
 margin_bottom = 146.0
@@ -511,13 +507,11 @@ __meta__ = {
 }
 
 [node name="minimap" type="ItemList" parent="bot_left"]
+visible = false
 margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 15 )
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="sprite" type="Sprite" parent="bot_left/minimap"]
 position = Vector2( 75, 75 )
@@ -549,6 +543,7 @@ __meta__ = {
 }
 
 [node name="stats" type="ItemList" parent="bot_mid"]
+visible = false
 margin_left = -150.0
 margin_top = -96.0
 margin_right = 150.0
@@ -743,6 +738,7 @@ __meta__ = {
 }
 
 [node name="orders" type="ItemList" parent="bot_right"]
+visible = false
 margin_left = -286.0
 margin_top = -354.0
 margin_bottom = -154.0
@@ -834,6 +830,7 @@ margin_left = 192.0
 margin_right = 252.0
 
 [node name="controls" type="ItemList" parent="bot_right"]
+visible = false
 margin_left = -286.0
 margin_top = -264.0
 margin_bottom = -154.0
@@ -927,6 +924,7 @@ text = "attack"
 text = "r"
 
 [node name="buttons" type="ItemList" parent="bot_right"]
+visible = false
 margin_left = -150.0
 margin_top = -150.0
 custom_styles/bg = SubResource( 15 )

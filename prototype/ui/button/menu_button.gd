@@ -25,9 +25,15 @@ func button_down():
 	match self.value:
 		
 		"play":
-			play_down()
-			game.start()
-		
+			game.ui.main_menu.visible = false
+			game.ui.main_menu_background.visible = false
+			game.get_node('maps').visible = true
+			
+			game.paused = false
+			get_tree().paused = false
+			
+			game.ui.minimap.update_map_texture = true
+			print('play')
 		
 		"blue":
 			game.player_team = "blue"
@@ -90,14 +96,11 @@ func button_down():
 
 
 func play_down():
-	game.paused = false
-	get_tree().paused = false
+	print('play_down')
 	game.ui.show_all()
 	game.ui.minimap.show()
 	game.ui.buttons.show()
-	#game.ui.buttons.show()
-	game.ui.main_menu.hide()
-	game.ui.main_menu_background.hide()
+	
 	if game.ui.leaders_icons.built: game.ui.leaders_icons.show()
 	
 	
@@ -112,3 +115,5 @@ func play_down():
 	red_team_button.disabled = true
 	
 	game.ui.buttons_update()
+	
+	game.start()

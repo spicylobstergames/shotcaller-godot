@@ -176,7 +176,7 @@ func setup_team(new_team):
 	if self.type != "building": self.mirror_toggle(is_red)
 	
 	else: # mirror lumbermill
-		if self.display_name == "lumbermill" and get_parent().name == "blue":
+		if self.display_name == "lumbermill" and self.get_parent().name == "blue":
 			self.mirror_toggle(true)
 			
 		# color flags
