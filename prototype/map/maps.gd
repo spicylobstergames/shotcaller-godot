@@ -15,6 +15,7 @@ func load_map(map_name):
 
 
 func map_loaded():
+	game.map.fog.visible = game.map.fog_of_war
 	game.ui.buttons_update()
 	game.ui.show_all()
 	game.start()

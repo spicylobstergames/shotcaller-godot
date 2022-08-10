@@ -21,12 +21,3 @@ var lanes:Array = ["bot", "mid", "top"]
 var lanes_paths = {}
 
 var fog_of_war:bool = true
-
-func _ready():
-	game = get_tree().get_current_scene()
-	fog.visible = fog_of_war
-
-
-
-
-
