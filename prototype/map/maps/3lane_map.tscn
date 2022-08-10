@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://assets/map/grass.png" type="Texture" id=1]
 [ext_resource path="res://assets/map/brick.png" type="Texture" id=2]
@@ -12,8 +12,7 @@
 [ext_resource path="res://buildings/barrack.tscn" type="PackedScene" id=10]
 [ext_resource path="res://buildings/castle.tscn" type="PackedScene" id=11]
 [ext_resource path="res://buildings/tower.tscn" type="PackedScene" id=12]
-[ext_resource path="res://map/map.gd" type="Script" id=13]
-[ext_resource path="res://map/blocks/block_template.tscn" type="PackedScene" id=14]
+[ext_resource path="res://map/maps/3lane_map.gd" type="Script" id=13]
 [ext_resource path="res://assets/map/mud.png" type="Texture" id=15]
 [ext_resource path="res://assets/map/brick_church.png" type="Texture" id=16]
 [ext_resource path="res://buildings/church.tscn" type="PackedScene" id=17]
@@ -24,7 +23,6 @@
 [ext_resource path="res://buildings/blacksmith.tscn" type="PackedScene" id=24]
 [ext_resource path="res://buildings/lumbermill.tscn" type="PackedScene" id=25]
 [ext_resource path="res://assets/map/wet_brick.png" type="Texture" id=26]
-[ext_resource path="res://assets/map/light.png" type="Texture" id=27]
 
 [sub_resource type="TileSet" id=1]
 resource_local_to_scene = true
@@ -549,7 +547,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 1
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -557,6 +555,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 448, 553 )
 frames = SubResource( 6 )
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -564,7 +563,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1664, 1577 )
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -738,10 +737,6 @@ team = "neutral"
 [node name="blocks" type="Node2D" parent="."]
 script = ExtResource( 20 )
 
-[node name="unit" parent="blocks" instance=ExtResource( 14 )]
-scale = Vector2( 1, 1.01239 )
-attack_speed = 1.0
-
 [node name="lanes" type="Node2D" parent="."]
 visible = false
 
@@ -760,14 +755,4 @@ default_color = Color( 1, 1, 1, 0.196078 )
 
 [node name="fog" type="CanvasModulate" parent="."]
 visible = false
-color = Color( 0.25098, 0.25098, 0.25098, 1 )
-
-[node name="light" type="Light2D" parent="."]
-position = Vector2( 255, -55 )
-scale = Vector2( 10, 10 )
-texture = ExtResource( 27 )
-mode = 2
-shadow_enabled = true
-shadow_filter = 1
-shadow_filter_smooth = 50.0
-shadow_item_cull_mask = 2
+color = Color( 0.392157, 0.392157, 0.392157, 1 )

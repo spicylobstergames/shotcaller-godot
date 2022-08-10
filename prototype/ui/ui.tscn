@@ -167,6 +167,7 @@ position = Vector2( -528, -300 )
 scale = Vector2( 1.666, 1.666 )
 
 [node name="top_left" type="Control" parent="."]
+visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -179,11 +180,9 @@ margin_bottom = 32.0
 custom_fonts/font = SubResource( 17 )
 text = "fps
 "
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="top_mid" type="Control" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 
@@ -333,9 +332,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="main_menu" type="ItemList" parent="mid"]
 pause_mode = 2
@@ -464,6 +460,7 @@ visible = false
 text = "space"
 
 [node name="mid_left" type="Control" parent="."]
+visible = false
 anchor_top = 0.5
 anchor_bottom = 0.5
 __meta__ = {
@@ -471,7 +468,6 @@ __meta__ = {
 }
 
 [node name="leaders_icons" type="VBoxContainer" parent="mid_left"]
-visible = false
 margin_top = -162.0
 margin_right = 60.0
 margin_bottom = 146.0
@@ -500,6 +496,7 @@ margin_top = 248.0
 margin_bottom = 308.0
 
 [node name="bot_left" type="Control" parent="."]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -507,7 +504,6 @@ __meta__ = {
 }
 
 [node name="minimap" type="ItemList" parent="bot_left"]
-visible = false
 margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 15 )
@@ -534,6 +530,7 @@ __meta__ = {
 }
 
 [node name="bot_mid" type="Control" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -543,7 +540,6 @@ __meta__ = {
 }
 
 [node name="stats" type="ItemList" parent="bot_mid"]
-visible = false
 margin_left = -150.0
 margin_top = -96.0
 margin_right = 150.0
@@ -729,6 +725,7 @@ margin_left = 112.0
 margin_right = 164.0
 
 [node name="bot_right" type="Control" parent="."]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -738,7 +735,6 @@ __meta__ = {
 }
 
 [node name="orders" type="ItemList" parent="bot_right"]
-visible = false
 margin_left = -286.0
 margin_top = -354.0
 margin_bottom = -154.0
@@ -830,7 +826,6 @@ margin_left = 192.0
 margin_right = 252.0
 
 [node name="controls" type="ItemList" parent="bot_right"]
-visible = false
 margin_left = -286.0
 margin_top = -264.0
 margin_bottom = -154.0
@@ -924,7 +919,6 @@ text = "attack"
 text = "r"
 
 [node name="buttons" type="ItemList" parent="bot_right"]
-visible = false
 margin_left = -150.0
 margin_top = -150.0
 custom_styles/bg = SubResource( 15 )

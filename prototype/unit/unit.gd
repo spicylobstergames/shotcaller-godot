@@ -152,7 +152,7 @@ func setup_team(new_team):
 	self.team = new_team
 	
 	# fog setup
-	if has_node("light"):
+	if game.map.fog_of_war and self.has_node("light"):
 		var light = get_node("light")
 		light.visible = false
 		if new_team == game.player_team: light.visible = true

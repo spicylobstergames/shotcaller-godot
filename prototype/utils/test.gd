@@ -15,27 +15,27 @@ func spawn_unit():
 	var s = game.unit.spawn
 	if unit: 
 		
-#		var dummy = game.map.create(s.arthur, "mid", "red", "Vector2", Vector2(930,900))
+#		var dummy = game.maps.create(s.arthur, "mid", "red", "Vector2", Vector2(930,900))
 
 #
-#		var inf = game.map.create(s.arthur, "mid", "red", "Vector2",  Vector2(900,900))
+#		var inf = game.maps.create(s.arthur, "mid", "red", "Vector2",  Vector2(900,900))
 #		inf.set_behavior("stand")
 #		inf.hp = 100
 #		inf.current_hp = 100
 #
-		var leader = game.map.create(s.nagato, "mid", "blue", "Vector2", Vector2(940,900))
-		#game.map.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
-		var dummy = game.map.create(s.infantry, "mid", "red", "Vector2",  Vector2(1020,650))
+		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(940,900))
+		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
+		var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(1020,650))
 		dummy.set_behavior("stand")
 		dummy.hp = 10000
 		dummy.current_hp = 10000
-		#game.map.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
+		#game.maps.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
 #		leader.hp = 100
 #		leader.current_hp = 100
 		
 		game.player_choose_leaders=[leader.name]
 		game.player_leaders=[leader]
-		game.map.setup_leaders()
+		game.maps.setup_leaders()
 	
 	if stress: spawn_random_units()
 
@@ -47,9 +47,9 @@ func spawn_random_units():
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
-		game.map.create(s.infantry, "top", t, "random_map", Vector2.ZERO)
-		game.map.create(s.infantry, "mid", t, "random_map", Vector2.ZERO)
-		game.map.create(s.archer, "bot", t, "random_map", Vector2.ZERO)
+		game.maps.create(s.infantry, "top", t, "random_map", Vector2.ZERO)
+		game.maps.create(s.infantry, "mid", t, "random_map", Vector2.ZERO)
+		game.maps.create(s.archer, "bot", t, "random_map", Vector2.ZERO)
 
 
 func unit_wait_end(unit1):
@@ -70,14 +70,14 @@ func spawn_leaders():
 	var t1 = game.player_team
 	var s = game.unit.spawn
 	if test_leaders:
-		game.map.create(s.arthur, "mid", t1, "Vector2", Vector2(900,550))
-		game.map.create(s.bokuden, "mid", t1, "Vector2", Vector2(900,600))
-		game.map.create(s.hongi, "mid", t1, "Vector2", Vector2(900,650))
-		game.map.create(s.lorne, "mid", t1, "Vector2", Vector2(900,700))
-		game.map.create(s.raja, "mid", t1, "Vector2", Vector2(900,750))
-		game.map.create(s.robin, "mid", t1, "Vector2", Vector2(900,800))
-		game.map.create(s.rollo, "mid", t1, "Vector2", Vector2(900,850))
-		game.map.create(s.sida, "mid", t1, "Vector2", Vector2(900,900))
-		game.map.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
-		game.map.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
+		game.maps.create(s.arthur, "mid", t1, "Vector2", Vector2(900,550))
+		game.maps.create(s.bokuden, "mid", t1, "Vector2", Vector2(900,600))
+		game.maps.create(s.hongi, "mid", t1, "Vector2", Vector2(900,650))
+		game.maps.create(s.lorne, "mid", t1, "Vector2", Vector2(900,700))
+		game.maps.create(s.raja, "mid", t1, "Vector2", Vector2(900,750))
+		game.maps.create(s.robin, "mid", t1, "Vector2", Vector2(900,800))
+		game.maps.create(s.rollo, "mid", t1, "Vector2", Vector2(900,850))
+		game.maps.create(s.sida, "mid", t1, "Vector2", Vector2(900,900))
+		game.maps.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
+		game.maps.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
 

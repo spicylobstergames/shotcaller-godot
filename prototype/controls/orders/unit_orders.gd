@@ -519,7 +519,7 @@ func retreat(unit):
 	else: order = enemy_leaders_orders[unit.name]
 	set_leader(unit, order)
 	var lane = unit.lane
-	var path = game.map[lane].duplicate()
+	var path = game.map.lanes_paths[lane].duplicate()
 	if unit.team == "blue": path.invert()
 	game.unit.follow.smart(unit, path, "move")
 	

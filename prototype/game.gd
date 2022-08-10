@@ -30,6 +30,7 @@ var teams = ["blue", "red"]
 
 var rng = RandomNumberGenerator.new()
 
+onready var maps = get_node("maps")
 onready var map = get_node("maps/3lane_map")
 onready var camera = get_node("camera")
 onready var map_camera = get_node("map_camera")
@@ -50,16 +51,9 @@ func _ready():
 	get_tree().paused = true
 
 
-
 func _process(delta: float) -> void:
-	# if opt.show.fps:
-	var f = Engine.get_frames_per_second()
-	var n = all_units.size()
-	ui.fps.set_text('fps: '+str(f)+' u:'+str(n))
-	
 	if started: camera.process()
 	ui.process()
-
 
 
 func build():
@@ -68,28 +62,22 @@ func build():
 		
 		if test.unit: # debug units
 			ui.main_menu.get_node("container/play_button").play_down()
-		
-		
-	print('build')
 
 
 func start():
-	print('game started')
 	if not started:
 		started = true
 		paused = false
 		
-		map.setup_buildings()
+		maps.setup_buildings()
 		map.blocks.setup_quadtree()
 		#Engine.time_scale = 3
 		
 		rng.randomize()
-		map.setup_lanes()
+		maps.setup_lanes()
 		ui.orders.build()
 		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
-		
-		map.get_node("fog").visible = true
 		
 		if test.unit:
 			test.spawn_unit()
@@ -99,7 +87,7 @@ func start():
 			unit.spawn.start()
 			yield(get_tree().create_timer(4), "timeout")
 			unit.spawn.leaders()
-			map.setup_leaders()
+			maps.setup_leaders()
 
 
 func _physics_process(delta):

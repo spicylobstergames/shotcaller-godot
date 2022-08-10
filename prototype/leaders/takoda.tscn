@@ -639,16 +639,14 @@ anims/stun = SubResource( 33 )
 visible = false
 
 [node name="big_shadow" type="Sprite" parent="sprites" index="1"]
-modulate = Color( 0, 0, 0, 0.294118 )
-light_mask = 0
+modulate = Color( 0, 0, 0, 0.117647 )
+use_parent_material = true
 position = Vector2( 0, 8 )
 scale = Vector2( 1.3, 1.4 )
 texture = ExtResource( 4 )
 
 [node name="body" parent="sprites" index="2"]
-visible = true
 frames = SubResource( 36 )
-animation = "default"
 offset = Vector2( 5, -24 )
 
 [node name="axe" type="AnimatedSprite" parent="sprites" index="3"]

@@ -132,7 +132,7 @@ func get_sel_unit_at_point(point):
 
 
 func advance(unit, point):
-	if unit.attacks and unit.moves and game.can_control(unit):
+	if unit and unit.attacks and unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
 		game.unit.advance.smart(unit, order_point)
 

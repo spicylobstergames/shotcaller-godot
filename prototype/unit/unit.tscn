@@ -193,8 +193,7 @@ region_rect = Rect2( 4, 7, 18, 2 )
 [node name="sprites" type="Node2D" parent="."]
 
 [node name="shadow" type="Sprite" parent="sprites"]
-modulate = Color( 0, 0, 0, 0.294118 )
-light_mask = 0
+modulate = Color( 0, 0, 0, 0.117647 )
 use_parent_material = true
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
@@ -222,10 +221,11 @@ shape = SubResource( 19 )
 disabled = true
 
 [node name="light" type="Light2D" parent="."]
+visible = false
 scale = Vector2( 6.25, 6.25 )
 texture = ExtResource( 16 )
 mode = 2
 shadow_enabled = true
 shadow_filter = 1
-shadow_filter_smooth = 50.0
+shadow_filter_smooth = 30.0
 shadow_item_cull_mask = 2

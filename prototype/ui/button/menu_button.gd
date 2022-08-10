@@ -27,14 +27,23 @@ func button_down():
 		"play":
 			game.ui.main_menu.visible = false
 			game.ui.main_menu_background.visible = false
-			game.get_node('maps').visible = true
+			
+			var highlight_button = play_button.get("custom_styles/focus")
+			
+			if blue_team_button.pressed: 
+				blue_team_button.set("custom_styles/disabled", highlight_button)
+			if red_team_button.pressed: 
+				red_team_button.set("custom_styles/disabled", highlight_button)
+			
+			blue_team_button.disabled = true
+			red_team_button.disabled = true
 			
 			game.paused = false
 			get_tree().paused = false
 			
-			game.ui.minimap.update_map_texture = true
-			print('play')
-		
+			game.maps.load_map('3lane_map')
+			
+			
 		"blue":
 			game.player_team = "blue"
 			game.enemy_team = "red"
@@ -93,27 +102,3 @@ func button_down():
 			else: game.control_state = "selection"
 			game.ui.buttons_update()
 
-
-
-func play_down():
-	print('play_down')
-	game.ui.show_all()
-	game.ui.minimap.show()
-	game.ui.buttons.show()
-	
-	if game.ui.leaders_icons.built: game.ui.leaders_icons.show()
-	
-	
-	var highlight_button = play_button.get("custom_styles/focus")
-	
-	if blue_team_button.pressed: 
-		blue_team_button.set("custom_styles/disabled", highlight_button)
-	if red_team_button.pressed: 
-		red_team_button.set("custom_styles/disabled", highlight_button)
-	
-	blue_team_button.disabled = true
-	red_team_button.disabled = true
-	
-	game.ui.buttons_update()
-	
-	game.start()
