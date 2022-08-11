@@ -92,6 +92,17 @@ func _unhandled_input(event):
 		if zoom.x == zoom_limit.x: zoom_reset()
 		elif zoom == zoom_default: zoom_out()
 
+
+func start():
+	var h = game.map.size / 2
+	offset = Vector2(h,h)
+	limit_left = -h
+	limit_top = -h
+	limit_right = h
+	limit_bottom = h
+	margin = h
+
+
 func focus_leader(index):
 	if game.player_leaders.size() >= index:
 		var leader = game.player_leaders[index-1]

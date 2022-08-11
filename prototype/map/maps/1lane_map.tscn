@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://assets/map/grass.png" type="Texture" id=1]
 [ext_resource path="res://assets/map/brick.png" type="Texture" id=2]
@@ -13,7 +13,6 @@
 [ext_resource path="res://buildings/castle.tscn" type="PackedScene" id=11]
 [ext_resource path="res://buildings/tower.tscn" type="PackedScene" id=12]
 [ext_resource path="res://map/maps/1lane_map.gd" type="Script" id=13]
-[ext_resource path="res://assets/map/light.png" type="Texture" id=14]
 [ext_resource path="res://assets/map/mud.png" type="Texture" id=15]
 [ext_resource path="res://assets/map/brick_church.png" type="Texture" id=16]
 [ext_resource path="res://map/blocks/blocks.gd" type="Script" id=20]
@@ -552,7 +551,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
-frame = 1
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -570,7 +569,7 @@ position = Vector2( 222, 868 )
 
 [node name="tower" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
-position = Vector2( 424, 652 )
+position = Vector2( 400, 673 )
 
 [node name="blacksmith" parent="buildings/blue" instance=ExtResource( 24 )]
 material = SubResource( 57 )
@@ -591,7 +590,7 @@ team = "red"
 
 [node name="tower" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
-position = Vector2( 600, 433 )
+position = Vector2( 624, 416 )
 team = "red"
 
 [node name="blacksmith" parent="buildings/red" instance=ExtResource( 24 )]
@@ -607,18 +606,9 @@ visible = false
 
 [node name="mid" type="Line2D" parent="lanes"]
 position = Vector2( 0, 2 )
-points = PoolVector2Array( 276, 782, 358, 697, 396, 616, 527, 526, 638, 462, 687, 370, 780, 269 )
+points = PoolVector2Array( 276, 782, 338, 723, 382, 638, 527, 526, 660, 428, 715, 345, 780, 269 )
 default_color = Color( 1, 1, 1, 0.196078 )
 
 [node name="fog" type="CanvasModulate" parent="."]
+visible = false
 color = Color( 0.392157, 0.392157, 0.392157, 1 )
-
-[node name="light" type="Light2D" parent="."]
-position = Vector2( 267, 473 )
-scale = Vector2( 6.25, 6.25 )
-texture = ExtResource( 14 )
-mode = 2
-shadow_enabled = true
-shadow_filter = 1
-shadow_filter_smooth = 30.0
-shadow_item_cull_mask = 2

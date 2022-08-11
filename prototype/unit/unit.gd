@@ -98,6 +98,7 @@ var orders:Node
 var skills:Node
 var modifiers:Node
 
+
 func _ready():
 	game = get_tree().get_current_scene()
 	
@@ -161,15 +162,15 @@ func setup_team(new_team):
 		sprites.use_parent_material = true
 	
 	# color body sprite
-	set_text_anim(new_team, body)
+	set_anim(new_team, body)
 	
 	# color weapons
-	if weapon is AnimatedSprite: set_text_anim(new_team, weapon)
+	if weapon is AnimatedSprite: set_anim(new_team, weapon)
 	if has_node("sprites/weapon/spear"): 
 		var spear = get_node("sprites/weapon/spear")
-		set_text_anim(new_team, spear)
+		set_anim(new_team, spear)
 		var spear_proj = get_node("sprites/weapon/spear/projectile/sprites")
-		set_text_anim(new_team, spear_proj)
+		set_anim(new_team, spear_proj)
 	
 	# mirror red pawns, leaders and neutrals
 	var is_red = (self.team == "red")
@@ -183,13 +184,13 @@ func setup_team(new_team):
 		var flags = self.get_node("sprites/flags").get_children()
 		for flag in flags:
 			var flag_sprite = flag.get_node("sprites")
-			set_text_anim(new_team, flag_sprite)
+			set_anim(new_team, flag_sprite)
 
 
-func set_text_anim(new_team, text):
-	if new_team == "blue": text.animation = 'default'
-	if new_team == "red": text.animation = 'red'
-	if new_team == "neutral": text.animation = 'neutral'
+func set_anim(new_team, sprites):
+	if new_team == "blue": sprites.animation = 'default'
+	if new_team == "red": sprites.animation = 'red'
+	if new_team == "neutral": sprites.animation = 'neutral'
 
 
 func oponent_team():

@@ -224,10 +224,8 @@ anims/idle = SubResource( 25 )
 visible = false
 
 [node name="body" parent="sprites" index="1"]
-visible = true
 use_parent_material = false
 frames = SubResource( 44 )
-animation = "default"
 offset = Vector2( 0, -36 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
