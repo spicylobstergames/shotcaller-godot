@@ -20,6 +20,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 	path_line = Line2D.new()
 
+
 func setup_pathfind():
 	# get tiles
 	var walls_rect = game.map.walls.get_used_rect()

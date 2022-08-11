@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://map/maps/3lane_map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://game.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://utils/utils.gd" type="Script" id=8]
 [ext_resource path="res://utils/test.gd" type="Script" id=9]
 [ext_resource path="res://unit/collision.gd" type="Script" id=10]
+[ext_resource path="res://map/maps/1lane_map.tscn" type="PackedScene" id=11]
 
 [node name="game" type="Node2D"]
 script = ExtResource( 2 )
@@ -18,10 +19,13 @@ script = ExtResource( 2 )
 visible = false
 
 [node name="maps" type="Node2D" parent="."]
-visible = false
 script = ExtResource( 6 )
 
+[node name="1lane_map" parent="maps" instance=ExtResource( 11 )]
+visible = false
+
 [node name="3lane_map" parent="maps" instance=ExtResource( 1 )]
+visible = false
 
 [node name="camera" type="Camera2D" parent="."]
 offset = Vector2( 1056, 1056 )

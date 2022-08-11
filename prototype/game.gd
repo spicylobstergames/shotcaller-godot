@@ -31,7 +31,6 @@ var teams = ["blue", "red"]
 var rng = RandomNumberGenerator.new()
 
 onready var maps = get_node("maps")
-onready var map = get_node("maps/3lane_map")
 onready var camera = get_node("camera")
 onready var map_camera = get_node("map_camera")
 onready var unit = get_node("unit")
@@ -40,6 +39,8 @@ onready var ui = get_node("ui")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
+
+var map:Node
 
 var control_state = "selection"
 

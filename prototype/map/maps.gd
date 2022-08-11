@@ -8,14 +8,18 @@ func _ready():
 
 
 func load_map(map_name):
+	if game.map:
+		game.map.visible = false
+		game.map.trees.occluder_light_mask = 0
 	current_map = map_name
 	game.map = game.maps.get_node(map_name)
-	game.get_node('maps').visible = true
+	game.map.visible = true
 	game.ui.minimap.update_map_texture = true
 
 
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
+	game.map.trees.occluder_light_mask = 2
 	game.ui.buttons_update()
 	game.ui.show_all()
 	game.start()
@@ -73,6 +77,18 @@ func setup_buildings():
 			else: game.neutral_buildings.append(building)
 			game.all_units.append(building)
 			game.all_buildings.append(building)
+	
+	# shop
+	game.ui.shop.blacksmiths = [
+		game.map.get_node("buildings/blue/blacksmith"),
+		game.map.get_node("buildings/red/blacksmith")
+	]
+	
+	# orders
+	for neutral in game.map.neutrals:
+		game.ui.orders[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+		game.ui.orders[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+	game.ui.orders.update()
 
 
 func create(template, lane, team, mode, point):
