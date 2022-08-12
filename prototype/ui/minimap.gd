@@ -17,10 +17,9 @@ var map_symbols_map = []
 func _ready():
 	game = get_tree().get_current_scene()
 	
-	map_sprite = game.get_node("maps/3lane_map/zoom_out_sprite")
-	map_tiles = game.get_node("maps/3lane_map/tiles")
 	cam_rect = get_node("cam_rect")
 	map_symbols = get_node("symbols")
+
 
 
 func _input(event):
@@ -56,24 +55,40 @@ func over_minimap(event):
 		event.position.y > get_viewport().size.y - 150
 	)
 
+func start():
+	map_sprite = game.map.get_node("zoom_out_sprite")
+	map_tiles = game.map.get_node("tiles")
+	game.ui.minimap.update_map_texture = true
+
 
 func get_map_texture():
+	# set camera zoom and limits
+	game.camera.offset = game.map.mid
+	game.camera.zoom_limit = game.map.zoom_limit
+	var zoom_out = game.map.zoom_limit.y
+	game.camera.zoom =  Vector2(zoom_out, zoom_out)
+	# hides units and ui
 	game.ui.hide_all()
 	for unit in game.all_units: unit.hide()
 	yield(get_tree(), "idle_frame")
+	# take snapshop
 	var data = game.get_viewport().get_texture().get_data()
 	data.flip_y()
 	var texture = ImageTexture.new()
 	texture.create_from_image(data, 1)
+	# set minimap texture
 	var minimap_sprite = self.get_node("sprite")
 	minimap_sprite.set_texture(texture)
+	# set zoom out tile replace
 	map_sprite.set_texture(texture)
-	map_sprite.scale = game.map_camera.zoom
-	game.map_camera.current = false
-	game.get_node("camera").current = true
-	update_map_texture = false
+	map_sprite.scale = game.camera.zoom
+	# reset cam
+	game.camera.zoom_reset()
+	# reset units and ui back again
 	game.ui.show_all()
 	for unit in game.all_units: unit.show()
+	# turn off and callback
+	update_map_texture = false
 	game.maps.map_loaded()
 
 

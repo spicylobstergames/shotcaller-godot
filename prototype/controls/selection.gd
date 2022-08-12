@@ -57,8 +57,7 @@ func _unhandled_input(event):
 			match event.button_index:
 				BUTTON_LEFT: 
 					game.camera.zoom_reset()
-					var h = game.map.size / 2
-					game.camera.global_position = point - Vector2(h,h)
+					game.camera.global_position = point - game.map.mid
 	
 	
 	# TOUCH SELECTION
@@ -69,8 +68,7 @@ func _unhandled_input(event):
 		# MAP TOUCH ZOOM IN
 		else: 
 			game.camera.zoom_reset()
-			var h = game.map.size / 2
-			game.camera.global_position = point - Vector2(h,h)
+			game.camera.global_position = point - game.map.mid
 
 func setup_selection(unit):
 	if unit.selectable: game.selectable_units.append(unit)

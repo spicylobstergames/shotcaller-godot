@@ -29,16 +29,12 @@ visible = false
 
 [node name="camera" type="Camera2D" parent="."]
 offset = Vector2( 1056, 1056 )
+current = true
 limit_left = -1056
 limit_top = -1056
 limit_right = 1056
 limit_bottom = 1056
 script = ExtResource( 3 )
-
-[node name="map_camera" type="Camera2D" parent="."]
-offset = Vector2( 1056, 1056 )
-current = true
-zoom = Vector2( 3.52, 3.52 )
 
 [node name="ui" parent="." instance=ExtResource( 4 )]
 

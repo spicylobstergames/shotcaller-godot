@@ -14,7 +14,7 @@ func load_map(map_name):
 	current_map = map_name
 	game.map = game.maps.get_node(map_name)
 	game.map.visible = true
-	game.ui.minimap.update_map_texture = true
+	game.ui.minimap.start()
 
 
 func map_loaded():
@@ -22,7 +22,6 @@ func map_loaded():
 	game.map.trees.occluder_light_mask = 2
 	game.camera.start()
 	game.ui.buttons_update()
-	game.ui.show_all()
 	game.start()
 
 
