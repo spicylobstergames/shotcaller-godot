@@ -117,3 +117,9 @@ func has_neutral_buildings(team):
 			neutral_buildings = true
 			break
 	return neutral_buildings
+
+
+func buildings_visibility(b):
+	for team in game.map.get_node("buildings").get_children():
+		for building in team.get_children():
+			building.visible = b
