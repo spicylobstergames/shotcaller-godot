@@ -41,7 +41,7 @@ func button_down():
 			game.paused = false
 			get_tree().paused = false
 			
-			game.maps.load_map('1lane_map')
+			game.maps.load_map(game.maps.current_map)
 			
 			
 		"blue":

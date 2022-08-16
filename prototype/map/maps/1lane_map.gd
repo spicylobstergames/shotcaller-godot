@@ -24,4 +24,4 @@ var lanes_paths = {}
 
 var fog_of_war:bool = true
 
-var zoom_limit:Vector2 = Vector2(0.5,2.52)
+var zoom_limit:Vector2 = Vector2(0.5,1.76)

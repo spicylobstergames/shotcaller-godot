@@ -13,6 +13,8 @@ var cam_rect:Node
 var map_symbols:Node
 var map_symbols_map = []
 
+var size:int = 150
+var scale:float = 1.0
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -51,8 +53,8 @@ func over_minimap(event):
 		self.get_parent().visible and
 		self.visible and 
 		"position" in event and 
-		event.position.x < 150 and 
-		event.position.y > get_viewport().size.y - 150
+		event.position.x < size and 
+		event.position.y > get_viewport().size.y - size
 	)
 
 func start():
@@ -79,6 +81,8 @@ func get_map_texture():
 	# set minimap texture
 	var minimap_sprite = self.get_node("sprite")
 	minimap_sprite.set_texture(texture)
+	scale = 0.96 * float(size) / float(texture.get_height())
+	minimap_sprite.scale = Vector2(scale, scale)
 	# set zoom out tile replace
 	map_sprite.set_texture(texture)
 	map_sprite.scale = game.camera.zoom
@@ -140,6 +144,11 @@ func copy_symbol(unit, symbol):
 	map_symbols.add_child(copy)
 
 
+	# minimap size 150~
+	# texture size 600~~
+	# map size 1056
+	# scale .25
+	
 func follow_camera():
 	if self.visible:
 		var half = game.map.size / 2
@@ -159,4 +168,4 @@ func move_symbols():
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = Vector2(2,-148) + map_symbols_map[i].global_position/14.5
+			symbol.position = Vector2(0,-size) + map_symbols_map[i].global_position/14.5
