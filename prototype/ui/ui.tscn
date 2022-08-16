@@ -511,6 +511,7 @@ script = ExtResource( 4 )
 
 [node name="sprite" type="Sprite" parent="bot_left/minimap"]
 position = Vector2( 75, 75 )
+region_enabled = true
 
 [node name="symbols" type="Node2D" parent="bot_left/minimap"]
 position = Vector2( 0, 150 )

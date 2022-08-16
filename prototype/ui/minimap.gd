@@ -14,6 +14,7 @@ var map_symbols:Node
 var map_symbols_map = []
 
 var size:int = 150
+var border:int = 4
 var scale:float = 1.0
 
 func _ready():
@@ -81,8 +82,19 @@ func get_map_texture():
 	# set minimap texture
 	var minimap_sprite = self.get_node("sprite")
 	minimap_sprite.set_texture(texture)
-	scale = 0.96 * float(size) / float(texture.get_height())
+	var w = float(texture.get_width())
+	var h = float(texture.get_height())
+	var texture_size = min(w, h)
+	scale = float(size) / float(texture_size)
 	minimap_sprite.scale = Vector2(scale, scale)
+	# texture might be a rectangle so region_rect will clip it
+	var texture_ratio = w / h
+	var h_diff = 0
+	var v_diff = 0
+	if texture_ratio > 1.0: h_diff = (w - texture_size) / 2
+	if texture_ratio < 1.0: v_diff = (h - texture_size) / 2
+	minimap_sprite.region_rect.position = Vector2(h_diff+border/scale, v_diff+border/scale)
+	minimap_sprite.region_rect.size = Vector2((size-border)/scale, (size-border)/scale)
 	# set zoom out tile replace
 	map_sprite.set_texture(texture)
 	map_sprite.scale = game.camera.zoom
@@ -145,18 +157,13 @@ func copy_symbol(unit, symbol):
 	map_symbols.add_child(copy)
 
 
-	# minimap size 150~
-	# texture size 600~~
-	# map size 1056
-	# scale .25
-	
 func follow_camera():
 	if self.visible:
 		var half = game.map.size / 2
 		var window_height = get_viewport().size.y
 		var s = float(game.map.size) / float(size)
 		var pos = Vector2( -half+(pan_position.x * s), half + ((pan_position.y - window_height) * s)  )
-		var offset = 52
+		var offset = 53
 		if is_panning: game.camera.position = pos
 		cam_rect.rect_position = Vector2(offset,offset) + game.camera.position / s
 		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
