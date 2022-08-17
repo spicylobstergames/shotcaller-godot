@@ -59,7 +59,10 @@ func choose_leaders():
 	game.player_choose_leaders = []
 	game.enemy_choose_leaders = []
 	
-	for n in 5:
+	var n_leaders = 1
+	if game.map.lanes.size() == 3: n_leaders = 5
+	
+	for n in n_leaders:
 		#game.player_choose_leaders.append("arthur")
 		#game.enemy_choose_leaders.append("arthur")
 		game.player_choose_leaders.append(random_leader(game.player_team))
@@ -80,11 +83,13 @@ func leaders():
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
 		for leader in leaders:
-			var lane = "top"
-			if counter == 2: lane = "mid"
-			if counter > 2: lane = "bot"
-			var path = game.map.new_path(lane, team)
-			var leader_node = game.map.create(self[leader], lane, team, "point_random", path.start)
+			var lane = game.map.lanes[0]
+			if game.map.lanes.size() == 3:
+				if counter < 2: lane = game.map.lanes[0]
+				if counter == 2: lane = game.map.lanes[1]
+				if counter > 2: lane = game.map.lanes[2]
+			var path = game.maps.new_path(lane, team)
+			var leader_node = game.maps.create(self[leader], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
 			send_leader(leader_node, path.follow)
 			counter += 1
@@ -107,7 +112,7 @@ func spawn_group_cycle():
 	for team in game.teams:
 		var extra_unit = game.unit.orders.player_extra_unit
 		if team != game.player_team: extra_unit = game.unit.orders.enemy_extra_unit
-		for lane in ["top", "mid", "bot"]:
+		for lane in game.map.lanes:
 			send_pawn("archer", lane, team)
 			for n in 2:
 				send_pawn("infantry", lane, team)
@@ -134,11 +139,11 @@ func recycle(template, lane, team, point):
 
 
 func send_pawn(template, lane, team):
-	var path = game.map.new_path(lane, team)
+	var path = game.maps.new_path(lane, team)
 	var pawn = recycle(template, lane, team, path.start)
 	if not pawn:
 		var unit_template = self[template]
-		pawn = game.map.create(unit_template, lane, team, "point_random", path.start)
+		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
 	game.unit.orders.set_pawn(pawn)
 	game.unit.follow.start(pawn, path.follow, "advance")
 
@@ -164,7 +169,7 @@ func next_to_building(template, building):
 	if building.team == "blue": spawn_point.x -= game.map.tile_size
 	else: spawn_point.x += game.map.tile_size
 	var unit_template = self[template]
-	return game.map.create(unit_template, "", building.team, "point", spawn_point)
+	return game.maps.create(unit_template, "", building.team, "point", spawn_point)
 
 
 func cemitery_add_pawn(unit):
@@ -187,7 +192,7 @@ func cemitery_add_leader(leader):
 	# respawn leader
 	var team = leader.team
 	var lane = leader.lane
-	var path = game.map[leader.lane].duplicate()
+	var path = game.map.lanes_paths[leader.lane].duplicate()
 	if leader.team == "red": path.invert()
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)

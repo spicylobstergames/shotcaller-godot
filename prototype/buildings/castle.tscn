@@ -201,9 +201,11 @@ projectile_speed = 220.0
 [node name="symbol" parent="." index="1"]
 position = Vector2( 0, -1.90735e-06 )
 scale = Vector2( 24, 24 )
+offset = Vector2( 0, -1 )
 
 [node name="symbol_border" parent="symbol" index="0"]
 scale = Vector2( 1.33333, 1.33333 )
+offset = Vector2( 0, -0.75 )
 
 [node name="state" parent="hud" index="0"]
 margin_top = -118.0
@@ -225,11 +227,9 @@ anims/idle = SubResource( 25 )
 visible = false
 
 [node name="body" parent="sprites" index="1"]
-visible = true
 use_parent_material = false
 position = Vector2( 0, 11 )
 frames = SubResource( 46 )
-animation = "default"
 offset = Vector2( 0, -51 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]

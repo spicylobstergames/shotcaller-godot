@@ -1,7 +1,7 @@
 tool
 extends TileMap
 
-var map_size = Vector2(2112,2112)
+export var map_size = Vector2(2112,2112)
 
 func set_cell(x: int, y: int, tile: int, flip_x = false, flip_y = false, transpose = false, autotile_coord = Vector2.ZERO) -> void:
 	var cell_pos = map_to_world(Vector2(x, y))

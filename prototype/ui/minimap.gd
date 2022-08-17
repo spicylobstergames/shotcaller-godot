@@ -3,28 +3,26 @@ var game:Node
 
 # self = game.ui.minimap
 
-var update_map_texture:bool = true
+var update_map_texture:bool = false
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 
 var map_sprite:Node
 var map_tiles:Node
-var map_fog:Node
 var cam_rect:Node
 var map_symbols:Node
 var map_symbols_map = []
 
+var size:int = 150
+var border:int = 4
+var scale:float = 1.0
 
 func _ready():
 	game = get_tree().get_current_scene()
 	
-	map_sprite = game.get_node("map/zoom_out_sprite")
-	map_tiles = game.get_node("map/tiles")
-	map_fog = game.get_node("map/fog")
 	cam_rect = get_node("cam_rect")
 	map_symbols = get_node("symbols")
-	
-	hide()
+
 
 
 func _input(event):
@@ -56,29 +54,58 @@ func over_minimap(event):
 		self.get_parent().visible and
 		self.visible and 
 		"position" in event and 
-		event.position.x < 150 and 
-		event.position.y > get_viewport().size.y - 150
+		event.position.x < size and 
+		event.position.y > get_viewport().size.y - size
 	)
+
+func start():
+	map_sprite = game.map.get_node("zoom_out_sprite")
+	map_tiles = game.map.get_node("tiles")
+	game.ui.minimap.update_map_texture = true
 
 
 func get_map_texture():
+	# set camera zoom and limits
+	game.camera.offset = game.map.mid
+	game.camera.zoom_limit = game.map.zoom_limit
+	var zoom_out = game.map.zoom_limit.y
+	game.camera.zoom =  Vector2(zoom_out, zoom_out)
+	# hides units and ui
 	game.ui.hide_all()
-	for unit in game.all_units: unit.hide()
+	game.maps.buildings_visibility(false)
 	yield(get_tree(), "idle_frame")
+	# take snapshop
 	var data = game.get_viewport().get_texture().get_data()
 	data.flip_y()
 	var texture = ImageTexture.new()
 	texture.create_from_image(data, 1)
+	# set minimap texture
 	var minimap_sprite = self.get_node("sprite")
 	minimap_sprite.set_texture(texture)
+	var w = float(texture.get_width())
+	var h = float(texture.get_height())
+	var texture_size = min(w, h)
+	scale = float(size) / float(texture_size)
+	minimap_sprite.scale = Vector2(scale, scale)
+	# texture might be a rectangle so region_rect will clip it
+	var texture_ratio = w / h
+	var h_diff = 0
+	var v_diff = 0
+	if texture_ratio > 1.0: h_diff = (w - texture_size) / 2
+	if texture_ratio < 1.0: v_diff = (h - texture_size) / 2
+	minimap_sprite.region_rect.position = Vector2(h_diff+border/scale, v_diff+border/scale)
+	minimap_sprite.region_rect.size = Vector2((size-border)/scale, (size-border)/scale)
+	# set zoom out tile replace
 	map_sprite.set_texture(texture)
-	map_sprite.scale = game.map_camera.zoom
-	game.map_camera.current = false
-	game.get_node("camera").current = true
-	update_map_texture = false
+	map_sprite.scale = game.camera.zoom
+	# reset cam
+	game.camera.zoom_reset()
+	# reset units and ui back again
 	game.ui.show_all()
-	for unit in game.all_units: unit.show()
-	if not game.built: game.build()
+	game.maps.buildings_visibility(true)
+	# turn off and callback
+	update_map_texture = false
+	game.maps.map_loaded()
 
 
 func corner_view():
@@ -93,7 +120,6 @@ func hide_view():
 	map_sprite.visible = true
 	#map_tiles.visible = false
 	for tile in map_tiles.get_children(): tile.hide()
-	
 	# avoid input messing up
 	yield(get_tree(), "idle_frame")
 	self.visible = false
@@ -105,6 +131,7 @@ func setup_symbol(unit):
 		setup_unit_symbol(unit, symbol)
 		copy_symbol(unit, symbol)
 
+
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)
 	if unit.type != "leader":
@@ -113,6 +140,7 @@ func setup_unit_symbol(unit, symbol):
 				symbol.modulate = Color(0.85,0.4,0.4)
 			"neutral":
 				symbol.modulate = Color(0.5,0.5,0.5)
+
 
 func setup_leader_icon(unit, symbol):
 	if symbol.has_node("icon") and unit.type == "leader":
@@ -133,10 +161,11 @@ func follow_camera():
 	if self.visible:
 		var half = game.map.size / 2
 		var window_height = get_viewport().size.y
-		var pos = Vector2( -half+(pan_position.x * 15), half + ((pan_position.y - window_height) * 15)  )
+		var s = float(game.map.size) / float(size)
+		var pos = Vector2( -half+(pan_position.x * s), half + ((pan_position.y - window_height) * s)  )
 		var offset = 53
 		if is_panning: game.camera.position = pos
-		cam_rect.rect_position = Vector2(offset,offset) + game.camera.position / 13.5
+		cam_rect.rect_position = Vector2(offset,offset) + game.camera.position / s
 		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
 		if cam_rect.rect_position.x > offset*2: cam_rect.rect_position.x = offset*2
 		if cam_rect.rect_position.y < 0: cam_rect.rect_position.y = 0
@@ -148,4 +177,4 @@ func move_symbols():
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = Vector2(2,-148) + map_symbols_map[i].global_position/14.5
+			symbol.position = Vector2(0,-size) + (map_symbols_map[i].global_position / game.map.size*size)

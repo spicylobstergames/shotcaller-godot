@@ -20,6 +20,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 	path_line = Line2D.new()
 
+
 func setup_pathfind():
 	# get tiles
 	var walls_rect = game.map.walls.get_used_rect()
@@ -96,7 +97,7 @@ func draw_path(unit):
 
 func change_lane(unit, point):
 	var lane = game.utils.closer_lane(point)
-	var path = game.map[lane].duplicate()
+	var path = game.map.lanes_paths[lane].duplicate()
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
@@ -107,7 +108,7 @@ func change_lane(unit, point):
 func lane(unit):
 	if !unit.current_path:
 		var lane = unit.lane
-		var path = game.map[lane].duplicate()
+		var path = game.map.lanes_paths[lane].duplicate()
 		if unit.team == "red": path.invert()
 		if unit.type != 'leader': 
 			start(unit, path, "advance")

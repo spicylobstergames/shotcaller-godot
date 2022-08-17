@@ -42,10 +42,6 @@ func _ready():
 	shop_button = buttons.get_node("shop_button")
 	orders_button = buttons.get_node("orders_button")
 
-	buttons.hide()
-	main_menu.hide()
-	leaders_icons.hide()
-
 	count_time()
 
 
@@ -57,11 +53,12 @@ func process():
 	fps.set_text('fps: '+str(f)+' u:'+str(n))
 	
 	# minimap display update
-	if minimap and game.camera.zoom.x <= 1:
-		if minimap.update_map_texture: 
+	if minimap:
+		if minimap.update_map_texture:
 			minimap.get_map_texture()
-		minimap.move_symbols()
-		minimap.follow_camera()
+		if game.camera.zoom.x <= 1:
+			minimap.move_symbols()
+			minimap.follow_camera()
 	
 	# scale vertical main menu background to fit height
 	var h = get_viewport().size.y
@@ -73,7 +70,6 @@ func process():
 	else: 
 		main_menu_background.scale = Vector2(1.666,1.666)
 		main_menu_background.position = Vector2(-528,-300)
-
 
 
 func count_time():

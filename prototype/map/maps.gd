@@ -1,63 +1,28 @@
-extends YSort
+extends Node2D
 var game:Node
 
-# self = game.map
-
-var blocks
-var walls
-var fog
-
-var blue_castle
-var red_castle
-
-var size:int = 2112
-
-const tile_size = 64
-const half_tile_size = tile_size / 2
-
-const neutrals = ["mine", "blacksmith", "lumbermill", "camp", "outpost"]
-
-var lanes:Array = ["bot", "mid", "top"]
-
-var top:Array
-var mid:Array
-var bot:Array
-
+var current_map = '1lane_map'
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
-	walls = get_node("tiles/walls")
-	fog = get_node("fog")
-	blocks = get_node("blocks")
-	
-	red_castle = get_node("buildings/red/castle")
-	blue_castle = get_node("buildings/blue/castle")
 
 
-func setup_lanes():
-	var top_line = game.map.get_node("lanes/top")
-	var mid_line = game.map.get_node("lanes/mid")
-	var bot_line = game.map.get_node("lanes/bot")
-	
-	top = line_to_array(top_line)
-	mid = line_to_array(mid_line)
-	bot = line_to_array(bot_line)
-	
-	game.unit.orders.build_lanes()
+func load_map(map_name):
+	if game.map:
+		game.map.visible = false
+		game.map.trees.occluder_light_mask = 0
+	current_map = map_name
+	game.map = game.maps.get_node(map_name)
+	game.map.visible = true
+	game.ui.minimap.start()
 
 
-func new_path(lane, team):
-	var path = self[lane].duplicate()
-	if team == "blue": path.append(red_castle.global_position)
-	if team == "red": 
-		path.invert()
-		path.append(blue_castle.global_position)
-	var start = path.pop_front()
-	return {
-		"start": start,
-		"follow": path
-	}
+func map_loaded():
+	game.map.fog.visible = game.map.fog_of_war
+	game.map.trees.occluder_light_mask = 2
+	game.camera.start()
+	game.ui.buttons_update()
+	game.start()
 
 
 func setup_leaders():
@@ -68,6 +33,27 @@ func setup_leaders():
 	game.unit.orders.build_leaders()
 
 
+func new_path(lane, team):
+	var path = game.map.lanes_paths[lane].duplicate()
+	if team == "blue": path.append(game.map.red_castle.global_position)
+	if team == "red": 
+		path.invert()
+		path.append(game.map.blue_castle.global_position)
+	var start = path.pop_front()
+	return {
+		"start": start,
+		"follow": path
+	}
+
+
+func setup_lanes():
+	for lane in game.map.lanes:
+		var line = game.map.get_node("lanes/"+ lane)
+		game.map.lanes_paths[lane] = line_to_array(line)
+	
+	game.unit.orders.build_lanes()
+
+
 func line_to_array(line):
 	# from PoolVector2Array to Array
 	var array = []
@@ -75,9 +61,8 @@ func line_to_array(line):
 		array.append(point)
 	return array
 
-
 func setup_buildings():
-	for team in get_node("buildings").get_children():
+	for team in game.map.get_node("buildings").get_children():
 		for building in team.get_children():
 			building.reset_unit()
 			game.ui.minimap.setup_symbol(building)
@@ -92,6 +77,18 @@ func setup_buildings():
 			else: game.neutral_buildings.append(building)
 			game.all_units.append(building)
 			game.all_buildings.append(building)
+	
+	# shop
+	game.ui.shop.blacksmiths = [
+		game.map.get_node("buildings/blue/blacksmith"),
+		game.map.get_node("buildings/red/blacksmith")
+	]
+	
+	# orders
+	for neutral in game.map.neutrals:
+		game.ui.orders[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+		game.ui.orders[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+	game.ui.orders.update()
 
 
 func create(template, lane, team, mode, point):
@@ -121,3 +118,8 @@ func has_neutral_buildings(team):
 			break
 	return neutral_buildings
 
+
+func buildings_visibility(b):
+	for team in game.map.get_node("buildings").get_children():
+		for building in team.get_children():
+			building.visible = b

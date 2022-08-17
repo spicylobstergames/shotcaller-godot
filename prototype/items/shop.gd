@@ -59,11 +59,6 @@ func _ready():
 	disable_all()
 	
 	yield(get_tree(), "idle_frame")
-	
-	blacksmiths = [
-		game.map.get_node("buildings/blue/blacksmith"),
-		game.map.get_node("buildings/red/blacksmith")
-	]
 
 
 func clear():

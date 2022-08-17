@@ -88,14 +88,6 @@ func _ready():
 	
 	hide()
 	clear()
-	
-	yield(get_tree(), "idle_frame")
-	
-	for neutral in game.map.neutrals:
-		self[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
-		self[neutral].append( game.map.get_node("buildings/red/" + neutral) )
-	
-	update()
 
 
 
@@ -110,11 +102,12 @@ func clear():
 
 func build():
 	setup_lanes()
-	build_mines()
 	build_blacksmiths()
-	build_lumbermills()
-	build_camps()
-	build_outposts()
+	if game.map.neutrals.size() > 1:
+		build_mines()
+		build_lumbermills()
+		build_camps()
+		build_outposts()
 
 
 # LEADERS

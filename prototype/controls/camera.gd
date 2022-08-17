@@ -5,8 +5,8 @@ var game:Node
 
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
-var zoom_default = Vector2.ONE
-var zoom_limit:Vector2 = Vector2(0.5,3.52)
+var zoom_default:Vector2 = Vector2.ONE
+var zoom_limit:Vector2 = Vector2.ONE
 var margin:int = limit_right;
 var position_limit:int = 756
 var arrow_keys_speed:int = 4
@@ -17,7 +17,6 @@ func _ready():
 	game = get_tree().get_current_scene()
 	zoom = zoom_default
 	yield(get_tree(), "idle_frame")
-	zoom_limit.y = game.map_camera.zoom.y
 
 
 func _unhandled_input(event):
@@ -84,13 +83,23 @@ func _unhandled_input(event):
 	if event.is_action_pressed("zoom_in"):
 		if zoom.x >= 1:
 			var point = game.camera.get_global_mouse_position()
-			var h = game.map.size / 2
-			game.camera.global_position = point - Vector2(h,h)
+			game.camera.global_position = point - game.map.mid
 		if zoom.x == zoom_limit.y: zoom_reset()
 		elif zoom == zoom_default: zoom_in()
 	if event.is_action_pressed("zoom_out"):
 		if zoom.x == zoom_limit.x: zoom_reset()
 		elif zoom == zoom_default: zoom_out()
+
+
+func start():
+	offset = game.map.mid
+	var h = offset.x
+	limit_left = -h
+	limit_top = -h
+	limit_right = h
+	limit_bottom = h
+	margin = h
+
 
 func focus_leader(index):
 	if game.player_leaders.size() >= index:

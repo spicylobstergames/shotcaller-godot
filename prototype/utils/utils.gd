@@ -49,7 +49,7 @@ func compare_distance(a: Dictionary, b: Dictionary) -> bool:
 func closer_lane(point):
 	var distances = []
 	for lane in game.map.lanes:
-		for lane_point in game.map[lane]:
+		for lane_point in game.map.lanes_paths[lane]:
 			distances.append({
 				"distance": point.distance_to(lane_point),
 				"lane": lane

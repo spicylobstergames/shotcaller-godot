@@ -179,9 +179,11 @@ lane = ""
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 0, -1.78814e-07 )
+offset = Vector2( 0, -1 )
 
 [node name="symbol_border" parent="symbol" index="0"]
 scale = Vector2( 1.4, 1.4 )
+offset = Vector2( 0, -0.71 )
 
 [node name="state" parent="hud" index="0"]
 margin_top = -79.0
@@ -203,10 +205,8 @@ anims/idle = SubResource( 25 )
 visible = false
 
 [node name="body" parent="sprites" index="1"]
-visible = true
 use_parent_material = false
 frames = SubResource( 43 )
-animation = "default"
 offset = Vector2( 0, -30 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]

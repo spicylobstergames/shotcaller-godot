@@ -160,9 +160,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="main" parent="background" instance=ExtResource( 17 )]
 pause_mode = 2
@@ -170,6 +167,7 @@ position = Vector2( -528, -300 )
 scale = Vector2( 1.666, 1.666 )
 
 [node name="top_left" type="Control" parent="."]
+visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -182,11 +180,9 @@ margin_bottom = 32.0
 custom_fonts/font = SubResource( 17 )
 text = "fps
 "
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="top_mid" type="Control" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 
@@ -211,6 +207,7 @@ __meta__ = {
 }
 
 [node name="shop" type="Panel" parent="top_right"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -286.0
@@ -335,30 +332,21 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="main_menu" type="ItemList" parent="mid"]
 pause_mode = 2
 margin_left = -200.0
-margin_top = -140.0
+margin_top = -180.0
 margin_right = 200.0
-margin_bottom = 140.0
+margin_bottom = 180.0
 custom_styles/bg = SubResource( 15 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="container" type="VBoxContainer" parent="mid/main_menu"]
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 384.0
 margin_bottom = 264.0
-custom_constants/separation = 8
-__meta__ = {
-"_edit_use_anchors_": false
-}
+custom_constants/separation = 3
 
 [node name="menu_title" type="Label" parent="mid/main_menu/container"]
 margin_right = 368.0
@@ -371,29 +359,29 @@ __meta__ = {
 }
 
 [node name="separator" type="HSeparator" parent="mid/main_menu/container"]
-margin_top = 26.0
+margin_top = 21.0
 margin_right = 368.0
-margin_bottom = 50.0
+margin_bottom = 45.0
 custom_constants/separation = 24
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="team_choose" type="Label" parent="mid/main_menu/container"]
-margin_top = 58.0
+margin_top = 48.0
 margin_right = 368.0
-margin_bottom = 74.0
+margin_bottom = 64.0
 custom_fonts/font = SubResource( 7 )
-text = "choose your team"
+text = "choose  team"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="menu_team_buttons" type="HBoxContainer" parent="mid/main_menu/container"]
-margin_top = 82.0
+margin_top = 67.0
 margin_right = 368.0
-margin_bottom = 142.0
+margin_bottom = 127.0
 custom_constants/separation = 20
 alignment = 1
 __meta__ = {
@@ -439,18 +427,85 @@ visible = false
 text = "2"
 
 [node name="separator2" type="HSeparator" parent="mid/main_menu/container"]
-margin_top = 150.0
+margin_top = 130.0
 margin_right = 368.0
-margin_bottom = 174.0
+margin_bottom = 154.0
+custom_constants/separation = 24
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="map_choose" type="Label" parent="mid/main_menu/container"]
+margin_top = 157.0
+margin_right = 368.0
+margin_bottom = 173.0
+custom_fonts/font = SubResource( 7 )
+text = "choose  map"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="menu_map_buttons" type="HBoxContainer" parent="mid/main_menu/container"]
+margin_top = 176.0
+margin_right = 368.0
+margin_bottom = 236.0
+custom_constants/separation = 20
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="small_map_button" parent="mid/main_menu/container/menu_map_buttons" instance=ExtResource( 15 )]
+margin_left = 14.0
+margin_right = 174.0
+rect_min_size = Vector2( 160, 60 )
+custom_styles/focus = SubResource( 41 )
+disabled = true
+pressed = true
+text = "small"
+icon = null
+value = "small"
+
+[node name="name" parent="mid/main_menu/container/menu_map_buttons/small_map_button" index="0"]
+visible = false
+text = "blue"
+
+[node name="hint" parent="mid/main_menu/container/menu_map_buttons/small_map_button" index="2"]
+visible = false
+text = "1"
+
+[node name="large_map_button" parent="mid/main_menu/container/menu_map_buttons" instance=ExtResource( 15 )]
+margin_left = 194.0
+margin_right = 354.0
+rect_min_size = Vector2( 160, 60 )
+focus_mode = 2
+custom_styles/focus = SubResource( 42 )
+text = "large"
+icon = null
+value = "large"
+
+[node name="name" parent="mid/main_menu/container/menu_map_buttons/large_map_button" index="0"]
+visible = false
+text = "red"
+
+[node name="hint" parent="mid/main_menu/container/menu_map_buttons/large_map_button" index="2"]
+visible = false
+text = "2"
+
+[node name="separator3" type="HSeparator" parent="mid/main_menu/container"]
+margin_top = 239.0
+margin_right = 368.0
+margin_bottom = 263.0
 custom_constants/separation = 24
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="play_button" parent="mid/main_menu/container" instance=ExtResource( 15 )]
-margin_top = 182.0
+margin_top = 266.0
 margin_right = 368.0
-margin_bottom = 242.0
+margin_bottom = 326.0
 rect_min_size = Vector2( 360, 60 )
 custom_styles/pressed = SubResource( 26 )
 custom_styles/focus = SubResource( 49 )
@@ -469,6 +524,7 @@ visible = false
 text = "space"
 
 [node name="mid_left" type="Control" parent="."]
+visible = false
 anchor_top = 0.5
 anchor_bottom = 0.5
 __meta__ = {
@@ -504,6 +560,7 @@ margin_top = 248.0
 margin_bottom = 308.0
 
 [node name="bot_left" type="Control" parent="."]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -515,13 +572,10 @@ margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 15 )
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="sprite" type="Sprite" parent="bot_left/minimap"]
 position = Vector2( 75, 75 )
-scale = Vector2( 0.24, 0.24 )
+region_enabled = true
 
 [node name="symbols" type="Node2D" parent="bot_left/minimap"]
 position = Vector2( 0, 150 )
@@ -540,6 +594,7 @@ __meta__ = {
 }
 
 [node name="bot_mid" type="Control" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -734,6 +789,7 @@ margin_left = 112.0
 margin_right = 164.0
 
 [node name="bot_right" type="Control" parent="."]
+visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -1008,6 +1064,8 @@ text = "y"
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button3"]
 [editable path="mid/main_menu/container/menu_team_buttons/blue_team_button"]
 [editable path="mid/main_menu/container/menu_team_buttons/red_team_button"]
+[editable path="mid/main_menu/container/menu_map_buttons/small_map_button"]
+[editable path="mid/main_menu/container/menu_map_buttons/large_map_button"]
 [editable path="mid/main_menu/container/play_button"]
 [editable path="bot_right/controls/scroll_container/container/controls_buttons/teleport_button"]
 [editable path="bot_right/controls/scroll_container/container/controls_buttons/lane_button"]
