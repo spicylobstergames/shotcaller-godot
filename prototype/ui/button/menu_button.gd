@@ -6,6 +6,8 @@ export var value:String
 
 var blue_team_button:Node
 var red_team_button:Node
+var small_map_button:Node
+var large_map_button:Node
 var play_button:Node
 
 
@@ -13,11 +15,13 @@ func _ready():
 	game = get_tree().get_current_scene()
 	yield(get_tree(), "idle_frame")
 	
-	var buttons = game.ui.main_menu.get_node("container/menu_team_buttons")
-	blue_team_button = buttons.get_node("blue_team_button")
-	red_team_button = buttons.get_node("red_team_button")
+	var menu_buttons = game.ui.main_menu.get_node("container/menu_team_buttons")
+	blue_team_button = menu_buttons.get_node("blue_team_button")
+	red_team_button = menu_buttons.get_node("red_team_button")
+	var map_buttons = game.ui.main_menu.get_node("container/menu_map_buttons")
+	small_map_button = map_buttons.get_node("small_map_button")
+	large_map_button = map_buttons.get_node("large_map_button")	
 	play_button = game.ui.main_menu.get_node("container/play_button")
-
 
 
 
@@ -58,6 +62,17 @@ func button_down():
 			blue_team_button.disabled = false
 			red_team_button.disabled = true
 		
+		"small":
+			game.maps.current_map = "1lane_map"
+			large_map_button.pressed = false
+			large_map_button.disabled = false
+			small_map_button.disabled = true
+		
+		"large":
+			game.maps.current_map = "3lane_map"
+			small_map_button.pressed = false
+			small_map_button.disabled = false
+			large_map_button.disabled = true
 		
 		"menu":
 			game.paused = true
