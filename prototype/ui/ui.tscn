@@ -542,20 +542,25 @@ __meta__ = {
 }
 
 [node name="leader_button" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 
 [node name="leader_button2" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 62.0
 margin_bottom = 122.0
 
 [node name="leader_button3" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 124.0
 margin_bottom = 184.0
 
 [node name="leader_button4" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 186.0
 margin_bottom = 246.0
 
 [node name="leader_button5" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 248.0
 margin_bottom = 308.0
 

@@ -33,6 +33,7 @@ func build():
 		var icon = button.get_node("sprite")
 		if game.player_team == "blue": icon.material = null
 		icon.region_rect.position.x = sprite * 96
+		button.visible = true
 		button.leader =  leader
 	built = true
 	show()
