@@ -591,10 +591,6 @@ anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
-[node name="body" parent="sprites" index="1"]
-visible = true
-animation = "default"
-
 [node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
 visible = false
 position = Vector2( 6, 2 )

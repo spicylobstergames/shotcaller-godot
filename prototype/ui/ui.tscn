@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://controls/controls.gd" type="Script" id=11]
 [ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
+[ext_resource path="res://assets/map/light.png" type="Texture" id=14]
 [ext_resource path="res://ui/button/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
@@ -579,8 +580,20 @@ custom_styles/bg = SubResource( 15 )
 script = ExtResource( 4 )
 
 [node name="sprite" type="Sprite" parent="bot_left/minimap"]
+modulate = Color( 0.392157, 0.392157, 0.392157, 1 )
 position = Vector2( 75, 75 )
 region_enabled = true
+
+[node name="light" type="Light2D" parent="bot_left/minimap"]
+visible = false
+texture = ExtResource( 14 )
+energy = 2.5
+mode = 2
+range_layer_min = 1
+range_layer_max = 1
+shadow_filter = 1
+shadow_filter_smooth = 30.0
+shadow_item_cull_mask = 2
 
 [node name="symbols" type="Node2D" parent="bot_left/minimap"]
 position = Vector2( 0, 150 )
@@ -594,9 +607,6 @@ rect_pivot_offset = Vector2( 22, 22 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0
 editor_only = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="bot_mid" type="Control" parent="."]
 visible = false

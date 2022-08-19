@@ -145,14 +145,24 @@ func setup_unit_symbol(unit, symbol):
 func setup_leader_icon(unit, symbol):
 	if symbol.has_node("icon") and unit.type == "leader":
 		var icon = symbol.get_node("icon")
+		icon.light_mask = 0
 		if unit.team == "blue": icon.material = null
 		else: icon.scale.x = -1 * abs(icon.scale.x)
 
 
 func copy_symbol(unit, symbol):
-	var copy = symbol.duplicate()
-	copy.visible = true
-	copy.scale *= 0.25
+	var copy = Node2D.new()
+	var sym = symbol.duplicate()
+	sym.light_mask = 0
+	sym.visible = true
+	sym.scale *= 0.25
+	copy.add_child(sym)
+	if unit.team == game.player_team:
+		var light = get_node("light").duplicate()
+		light.visible = true
+		var s = float(unit.vision) / float(size)
+		light.scale = Vector2(s,s)
+		copy.add_child(light)
 	map_symbols_map.append(unit)
 	map_symbols.add_child(copy)
 

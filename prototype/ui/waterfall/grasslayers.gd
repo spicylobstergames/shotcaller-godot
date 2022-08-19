@@ -7,16 +7,16 @@ export var do_distribution := false setget _set_do_distribution
 export(int) var in_a_rows = 1
 export(int) var row_distance = 10
 
-export(int) var random_range = 0.0
-export(int) var random_range_y = 0.0
+export(int) var random_range = 0
+export(int) var random_range_y = 0
 
 export(Vector2) var center_light = Vector2.ZERO
 export(Vector2) var focal_size = Vector2.ONE
 
 export(float,0,1) var noise_strength = 0.5 
-export(float,0,1,1e-9) var focus = 1
+export(float,0,1,1e-9) var focus = 1.0
 
-export(PoolColorArray) var colors = [
+export(Array) var colors = [
 	Color(0.086275, 0.352941, 0.298039, 1.0),
 	Color(0.137255, 0.564706, 0.388235, 1.0),
 	Color(0.117647, 0.737255, 0.450980, 1.0),
