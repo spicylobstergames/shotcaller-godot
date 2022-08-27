@@ -79,9 +79,6 @@ custom_styles/normal = SubResource( 13 )
 toggle_mode = true
 icon = SubResource( 14 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="name" type="Label" parent="."]
 margin_top = 4.0

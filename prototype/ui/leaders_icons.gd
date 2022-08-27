@@ -12,7 +12,6 @@ var sprites_order = ["arthur","bokuden","hongi","lorne","nagato","osman","raja",
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
 	hide()
 
 
@@ -22,6 +21,7 @@ func build():
 	var buttons_array = self.get_children()
 	for leader in game.player_leaders:
 		var button = buttons_array[index]
+		button.hpbar.visible = true
 		index += 1
 		button.name = leader.name
 		buttons_name[leader.name] = button
@@ -35,6 +35,6 @@ func build():
 		icon.region_rect.position.x = sprite * 96
 		button.visible = true
 		button.leader =  leader
-	built = true
-	show()
+	self.built = true
+	self.visible = true
 
