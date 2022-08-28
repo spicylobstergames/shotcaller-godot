@@ -9,8 +9,8 @@ var buttons:Node
 var stats:Node
 var minimap:Node
 var shop:Node
-var controls:Node
-var orders:Node
+var controls_menu:Node
+var orders_menu:Node
 var main_menu:Node
 var main_menu_background:Node
 var leaders_icons:Node
@@ -32,8 +32,8 @@ func _ready():
 	main_menu = get_node("mid/main_menu")
 	main_menu_background = get_node("background/main")
 	buttons = get_node("bot_right/buttons")
-	orders = get_node("bot_right/orders")
-	controls = get_node("bot_right/controls")
+	orders_menu = get_node("bot_right/orders_menu")
+	controls_menu = get_node("bot_right/controls_menu")
 	leaders_icons = get_node("mid_left/leaders_icons")
 	
 	inventories = stats.get_node("inventories")
@@ -103,14 +103,14 @@ func show_select():
 	stats.update()
 	if game.can_control(game.selected_unit):
 		orders_button.disabled = false
-	orders.update()
-	controls.update()
+	orders_menu.update()
+	controls_menu.update()
 
 
 func hide_unselect():
 	stats.update()
-	controls.hide()
-	orders.hide()
+	controls_menu.hide()
+	orders_menu.hide()
 	controls_button.disabled = true
 	orders_button.disabled = true
 	inventories.hide()
@@ -120,6 +120,6 @@ func hide_unselect():
 
 
 func buttons_update():
-	orders_button.set_pressed(orders.visible)
+	orders_button.set_pressed(orders_menu.visible)
 	shop_button.set_pressed(shop.visible)
-	controls_button.set_pressed(controls.visible)
+	controls_button.set_pressed(controls_menu.visible)

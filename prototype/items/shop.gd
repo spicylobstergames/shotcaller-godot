@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.ui.shop
 
-var item_button_preload = preload("res://items/button/item_button.tscn")
+var item_button_preload = preload("res://ui/buttons/item_button.tscn")
 var cleared =false
 
 onready var container = get_node("scroll_container/container")

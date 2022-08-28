@@ -28,8 +28,7 @@ func map_loaded():
 func setup_leaders():
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
-	game.ui.orders.build_leaders()
-	game.unit.orders.build_leaders()
+	game.ui.orders_menu.build_leaders()
 
 
 func new_path(lane, team):
@@ -85,9 +84,9 @@ func setup_buildings():
 	
 	# orders
 	for neutral in game.map.neutrals:
-		game.ui.orders[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
-		game.ui.orders[neutral].append( game.map.get_node("buildings/red/" + neutral) )
-	game.ui.orders.update()
+		game.ui.orders_menu[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+		game.ui.orders_menu[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+	game.ui.orders_menu.update()
 
 
 func create(template, lane, team, mode, point):
