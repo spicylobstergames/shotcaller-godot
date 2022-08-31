@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://skills/skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
@@ -19,6 +19,9 @@
 [ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=17]
 
 [sub_resource type="CanvasItemMaterial" id=45]
+light_mode = 2
+
+[sub_resource type="CanvasItemMaterial" id=57]
 light_mode = 2
 
 [sub_resource type="DynamicFont" id=20]
@@ -118,6 +121,8 @@ script = ExtResource( 15 )
 [node name="symbol" type="Sprite" parent="."]
 visible = false
 modulate = Color( 0.32549, 0.584314, 0.709804, 1 )
+light_mask = 3
+material = SubResource( 57 )
 scale = Vector2( 20, 20 )
 z_index = 2
 texture = ExtResource( 2 )
@@ -126,12 +131,13 @@ region_rect = Rect2( 1, 1, 1, 1 )
 
 [node name="symbol_border" type="Sprite" parent="symbol"]
 modulate = Color( 0, 0, 0, 1 )
+light_mask = 3
+use_parent_material = true
 scale = Vector2( 1.30769, 1.30769 )
-z_index = 1
-z_as_relative = false
+z_index = -1
 texture = ExtResource( 2 )
 region_enabled = true
-region_rect = Rect2( 10, 3, 1, 1 )
+region_rect = Rect2( 1, 1, 1, 1 )
 
 [node name="hud" type="Node2D" parent="."]
 use_parent_material = true

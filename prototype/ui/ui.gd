@@ -8,6 +8,7 @@ var top_label:Node
 var buttons:Node
 var stats:Node
 var minimap:Node
+var rect_layer: Node
 var shop:Node
 var controls_menu:Node
 var orders_menu:Node
@@ -28,7 +29,8 @@ func _ready():
 	top_label = get_node("top_mid/label")
 	shop = get_node("top_right/shop")
 	stats = get_node("bot_mid/stats")
-	minimap = get_node("bot_left/minimap")
+	minimap = get_node("bot_left/minimap_border/minimap")
+	rect_layer = get_node("bot_left/minimap_border/rect_layer")
 	main_menu = get_node("mid/main_menu")
 	main_menu_background = get_node("background/main")
 	buttons = get_node("bot_right/buttons")

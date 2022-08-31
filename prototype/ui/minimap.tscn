@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/map/light.png" type="Texture" id=1]
+[ext_resource path="res://ui/minimap.gd" type="Script" id=2]
+[ext_resource path="res://assets/ui/minimap.png" type="Texture" id=3]
+
+[node name="minimap" type="CanvasLayer"]
+layer = 2
+script = ExtResource( 2 )
+
+[node name="sprite" type="Sprite" parent="."]
+light_mask = 2
+position = Vector2( 75, -75 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 2, 2, 142, 142 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="fog" type="CanvasModulate" parent="."]
+color = Color( 0.392157, 0.392157, 0.392157, 1 )
+
+[node name="light_template" type="Light2D" parent="."]
+visible = false
+light_mask = 2
+texture = ExtResource( 1 )
+mode = 2
+range_layer_min = 2
+range_layer_max = 2
+range_item_cull_mask = 2
+shadow_filter = 1
+shadow_filter_smooth = 30.0
+shadow_item_cull_mask = 2
+
+[node name="symbols" type="Node2D" parent="."]
+position = Vector2( 0, -150 )

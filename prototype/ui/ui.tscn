@@ -1,9 +1,8 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
 [ext_resource path="res://items/shop.gd" type="Script" id=3]
-[ext_resource path="res://ui/minimap.gd" type="Script" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://controls/orders_menu.gd" type="Script" id=7]
@@ -13,7 +12,7 @@
 [ext_resource path="res://controls/controls_menu.gd" type="Script" id=11]
 [ext_resource path="res://ui/buttons/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
-[ext_resource path="res://assets/map/light.png" type="Texture" id=14]
+[ext_resource path="res://ui/minimap.tscn" type="PackedScene" id=14]
 [ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
@@ -571,40 +570,39 @@ margin_bottom = 308.0
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="minimap" type="ItemList" parent="bot_left"]
+[node name="minimap_border" type="ItemList" parent="bot_left"]
 margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 15 )
-script = ExtResource( 4 )
 
-[node name="sprite" type="Sprite" parent="bot_left/minimap"]
-modulate = Color( 0.392157, 0.392157, 0.392157, 1 )
-position = Vector2( 75, 75 )
-region_enabled = true
-
-[node name="light" type="Light2D" parent="bot_left/minimap"]
+[node name="minimap" parent="bot_left/minimap_border" instance=ExtResource( 14 )]
 visible = false
-texture = ExtResource( 14 )
-energy = 2.5
-mode = 2
-range_layer_min = 1
-range_layer_max = 1
-shadow_filter = 1
-shadow_filter_smooth = 30.0
-shadow_item_cull_mask = 2
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
-[node name="symbols" type="Node2D" parent="bot_left/minimap"]
-position = Vector2( 0, 150 )
+[node name="rect_layer" type="CanvasLayer" parent="bot_left/minimap_border"]
+layer = 2
+visible = false
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
-[node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap"]
-margin_left = 53.0
-margin_top = 53.0
-margin_right = 97.0
-margin_bottom = 97.0
+[node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap_border/rect_layer"]
+margin_left = 50.0
+margin_top = -100.0
+margin_right = 94.0
+margin_bottom = -56.0
+rect_pivot_offset = Vector2( 22, 22 )
+border_color = Color( 1, 1, 1, 0.666667 )
+border_width = 2.0
+editor_only = false
+
+[node name="cam_rect2" type="ReferenceRect" parent="bot_left/minimap_border/rect_layer"]
+visible = false
+margin_left = 52.0
+margin_top = 500.0
+margin_right = 96.0
+margin_bottom = 544.0
 rect_pivot_offset = Vector2( 22, 22 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0

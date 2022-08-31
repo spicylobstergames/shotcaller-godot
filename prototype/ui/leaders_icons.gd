@@ -7,7 +7,7 @@ var built = false
 var buttons_name = {}
 
 
-var button_template:PackedScene = load("res://controls/orders/button/order_button.tscn")
+var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
 var sprites_order = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
 
 func _ready():
