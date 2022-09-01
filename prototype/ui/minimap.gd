@@ -147,11 +147,14 @@ func setup_unit_symbol(unit, symbol):
 
 
 func setup_leader_icon(unit, symbol):
-	if symbol.has_node("icon") and unit.type == "leader":
-		var icon = symbol.get_node("icon")
+	if unit.type == "leader":
+		var icon = symbol.get_node("icon_blue")
+		if unit.team == "red": 
+			icon = symbol.get_node("icon_red")
+			icon.scale.x = -1 * abs(icon.scale.x)
+		icon.visible = true;
 		icon.material = symbol.material
 		icon.light_mask = symbol.light_mask
-		if unit.team == "red": icon.scale.x = -1 * abs(icon.scale.x)
 
 
 func copy_symbol(unit, symbol):

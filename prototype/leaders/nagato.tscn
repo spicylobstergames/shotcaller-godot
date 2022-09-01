@@ -1,22 +1,9 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/nagato_blue.png" type="Texture" id=4]
 [ext_resource path="res://assets/leaders/nagato_red.png" type="Texture" id=5]
-
-[sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 2 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.235294, 0.27451, 0.376471, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.835294, 0.556863, 0.501961, 1 )
-shader_param/new4 = Color( 0.462745, 0.219608, 0.294118, 1 )
-shader_param/tolerance = 0.1
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -586,10 +573,21 @@ projectile_rotation = 40.0
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
-[node name="icon" type="Sprite" parent="symbol" index="1"]
-material = SubResource( 30 )
+[node name="symbol_border" parent="symbol" index="0"]
+visible = false
+
+[node name="icon_blue" type="Sprite" parent="symbol" index="1"]
+visible = false
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 3 )
+offset = Vector2( -2, -2 )
+region_enabled = true
+region_rect = Rect2( 14, 4, 21, 18 )
+
+[node name="icon_red" type="Sprite" parent="symbol" index="2"]
+visible = false
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 5 )
 offset = Vector2( -2, -2 )
 region_enabled = true
 region_rect = Rect2( 14, 4, 21, 18 )
@@ -611,9 +609,7 @@ anims/stun = SubResource( 33 )
 position = Vector2( 0, 9 )
 
 [node name="body" parent="sprites" index="1"]
-visible = true
 frames = SubResource( 36 )
-animation = "default"
 offset = Vector2( 0, -13 )
 
 [node name="shuriken" type="AnimatedSprite" parent="sprites" index="2"]
