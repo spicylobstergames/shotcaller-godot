@@ -329,12 +329,18 @@ func die():  # hp <= 0
 	self.channeling = false
 	self.working = false
 
+func clear_stuck():
+	var node = self.get_node("sprites/stuck")
+	for n in node.get_children():
+		node.remove_child(n)
+		n.queue_free()
 
 func on_death_end():  # death animation end
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
+	self.clear_stuck()
 	if not game.test.stress:
 		match self.type:
 			"pawn":

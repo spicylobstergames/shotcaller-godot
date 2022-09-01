@@ -216,7 +216,7 @@ func projectile_stuck(attacker, target, projectile):
 	
 	if target: 
 		stuck.get_parent().remove_child(stuck)
-		target.get_node("sprites").add_child(stuck)
+		target.get_node("sprites/stuck").add_child(stuck)
 		stuck.global_position = target.global_position + target.collision_position
 		if target.mirror: 
 			r = Vector2(cos(r),-sin(r)).angle()
@@ -243,6 +243,6 @@ func projectile_stuck(attacker, target, projectile):
 	attacker.projectiles.erase(projectile)
 	# remove projectile after 1.2 sec
 	yield(get_tree().create_timer(1.2), "timeout")
-	if not target:
+	if is_instance_valid(stuck):
 		stuck.get_parent().remove_child(stuck)
 		stuck.queue_free()

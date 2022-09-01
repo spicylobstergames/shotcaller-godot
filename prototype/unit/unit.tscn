@@ -210,6 +210,8 @@ position = Vector2( 0, 9 )
 frames = SubResource( 53 )
 offset = Vector2( -2, -11 )
 
+[node name="stuck" type="Node2D" parent="sprites"]
+
 [node name="collisions" type="Area2D" parent="."]
 visible = false
 collision_layer = 0
