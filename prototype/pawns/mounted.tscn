@@ -1,12 +1,11 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/mounted_red.png" type="Texture" id=2]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=3]
-[ext_resource path="res://assets/pawns/infantry_red.png" type="Texture" id=4]
-[ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=5]
+[ext_resource path="res://assets/leaders/rollo_red.png" type="Texture" id=4]
 [ext_resource path="res://assets/pawns/mounted_blue.png" type="Texture" id=6]
-[ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=7]
+[ext_resource path="res://assets/leaders/rollo_blue.png" type="Texture" id=8]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -96,7 +95,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.4, 0.8 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, -50.0, 120.0, 130.0, 0.0 ]
+"values": [ -20.0, -50.0, 60.0, 65.0, -20.0 ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/weapon:visible")
@@ -511,31 +510,27 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 5 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id=63]
+atlas = ExtResource( 8 )
+region = Rect2( 120, 0, 40, 32 )
 
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 7 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=61]
+[sub_resource type="AtlasTexture" id=64]
 atlas = ExtResource( 4 )
-region = Rect2( 72, 0, 24, 24 )
+region = Rect2( 120, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=62]
 animations = [ {
-"frames": [ SubResource( 34 ) ],
+"frames": [ SubResource( 63 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 37 ) ],
+"frames": [  ],
 "loop": true,
 "name": "neutral",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 61 ) ],
+"frames": [ SubResource( 64 ) ],
 "loop": true,
 "name": "red",
 "speed": 5.0
@@ -601,14 +596,14 @@ texture = ExtResource( 3 )
 [node name="body" parent="sprites" index="2"]
 position = Vector2( 0, 8 )
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( 5, -24 )
 
 [node name="weapon" type="AnimatedSprite" parent="sprites" index="3"]
-visible = false
-position = Vector2( -3, -15 )
-rotation = 0.187907
+position = Vector2( 1, -14 )
+rotation = -0.349066
 frames = SubResource( 62 )
-offset = Vector2( 3, -4 )
+offset = Vector2( 5, -9 )
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )

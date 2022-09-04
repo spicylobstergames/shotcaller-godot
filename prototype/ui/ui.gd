@@ -77,11 +77,14 @@ func process():
 func count_time():
 	if not get_tree().paused:
 		game.time += 1 
-		var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
-		top_label.text ="player: %s/%s - time: %s - enemy: %s/%s" % array
-		
-	yield(get_tree().create_timer(1), "timeout")
-	count_time()
+		if game.victory:
+			top_label.text = game.victory + ' WINS!'
+		else:
+			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
+			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
+			
+			yield(get_tree().create_timer(1), "timeout")
+			count_time()
 
 
 

@@ -17,7 +17,7 @@ var mid = Vector2(size/2, size/2)
 const tile_size = 64
 const half_tile_size = tile_size / 2
 
-const neutrals = ["blacksmith"]
+const neutrals = ["blacksmith", "camp"]
 
 var lanes:Array = ["mid"]
 var lanes_paths = {}

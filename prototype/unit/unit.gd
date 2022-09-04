@@ -321,6 +321,7 @@ func on_stun_end():
 			self.set_state("idle")
 
 
+
 func die():  # hp <= 0
 	self.set_state("death")
 	self.set_behavior("stand")
@@ -329,19 +330,18 @@ func die():  # hp <= 0
 	self.channeling = false
 	self.working = false
 
-func clear_stuck():
-	var node = self.get_node("sprites/stuck")
-	for n in node.get_children():
-		node.remove_child(n)
-		n.queue_free()
 
 func on_death_end():  # death animation end
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
-	self.clear_stuck()
+	attack.clear_stuck(self)
 	if not game.test.stress:
+		if self.display_name == 'castle':
+			if self.team == game.player_team:
+				game.vicotry = 'ENEMY'
+			else: game.vicotry = 'PLAYER'
 		match self.type:
 			"pawn":
 				game.unit.spawn.cemitery_add_pawn(self)

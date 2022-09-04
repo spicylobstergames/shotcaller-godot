@@ -78,15 +78,19 @@ func setup_buildings():
 			game.all_buildings.append(building)
 	
 	# shop
-	game.ui.shop.blacksmiths = [
-		game.map.get_node("buildings/blue/blacksmith"),
-		game.map.get_node("buildings/red/blacksmith")
-	]
+	game.ui.shop.blacksmiths = [];
+	if game.map.has_node("buildings/blue/blacksmith"):
+		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/blue/blacksmith") )
+	if game.map.has_node("buildings/red/blacksmith"):
+		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/red/blacksmith") )
 	
 	# orders
 	for neutral in game.map.neutrals:
-		game.ui.orders_menu[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
-		game.ui.orders_menu[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+		if game.map.has_node("buildings/blue/" + neutral):
+			game.ui.orders_menu[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+		if game.map.has_node("buildings/red/" + neutral):
+			game.ui.orders_menu[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+	
 	game.ui.orders_menu.update()
 
 

@@ -246,3 +246,11 @@ func projectile_stuck(attacker, target, projectile):
 	if is_instance_valid(stuck):
 		stuck.get_parent().remove_child(stuck)
 		stuck.queue_free()
+
+
+func clear_stuck(unit):
+	var node = unit.get_node("sprites/stuck")
+	for n in node.get_children():
+		node.remove_child(n)
+		n.queue_free()
+
