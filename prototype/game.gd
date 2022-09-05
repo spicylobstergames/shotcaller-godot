@@ -42,10 +42,12 @@ onready var test = get_node("test")
 var map:Node
 
 var control_state = "selection"
-var victory:String
 
 var built:bool = false
 var started:bool = false
+var ended:bool = false
+
+var victory:String
 
 
 func _ready():

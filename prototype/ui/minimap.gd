@@ -115,6 +115,7 @@ func corner_view():
 	yield(get_tree(), "idle_frame")
 	self.visible = true
 	game.ui.rect_layer.visible = true
+	game.ui.get_node("bot_left").visible = true
 
 
 func hide_view():
@@ -125,6 +126,7 @@ func hide_view():
 	yield(get_tree(), "idle_frame")
 	self.visible = false
 	game.ui.rect_layer.visible = false
+	game.ui.get_node("bot_left").visible = false
 
 
 func setup_symbol(unit):

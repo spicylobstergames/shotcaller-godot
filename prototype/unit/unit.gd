@@ -337,15 +337,14 @@ func on_death_end():  # death animation end
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
 	attack.clear_stuck(self)
-	if not game.test.stress:
-		if self.display_name == 'castle':
-			if self.team == game.player_team:
-				game.vicotry = 'ENEMY'
-			else: game.vicotry = 'PLAYER'
+	if game.test.stress: game.test.respawn(self)
+	else:
 		match self.type:
-			"pawn":
-				game.unit.spawn.cemitery_add_pawn(self)
-			"leader":
-				game.unit.spawn.cemitery_add_leader(self)
+			"pawn": game.unit.spawn.cemitery_add_pawn(self)
+			"leader": game.unit.spawn.cemitery_add_leader(self)
+			"building":
+				if self.display_name == 'castle':
+					game.ended = true
+					if self.team == game.player_team: game.victory = 'ENEMY'
+					else: game.victory = 'PLAYER'
 	
-	else: game.test.respawn(self)

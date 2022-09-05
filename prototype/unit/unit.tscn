@@ -199,7 +199,7 @@ region_rect = Rect2( 4, 7, 18, 2 )
 [node name="sprites" type="Node2D" parent="."]
 
 [node name="shadow" type="Sprite" parent="sprites"]
-modulate = Color( 0, 0, 0, 0.117647 )
+modulate = Color( 0, 0, 0, 0.0627451 )
 use_parent_material = true
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )

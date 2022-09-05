@@ -77,14 +77,14 @@ func process():
 func count_time():
 	if not get_tree().paused:
 		game.time += 1 
-		if game.victory:
+		if game.ended:
 			top_label.text = game.victory + ' WINS!'
 		else:
 			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
 			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
 			
-			yield(get_tree().create_timer(1), "timeout")
-			count_time()
+	yield(get_tree().create_timer(1), "timeout")
+	count_time()
 
 
 
@@ -96,12 +96,6 @@ func hide_all():
 func show_all():
 	for panel in self.get_children():
 		panel.show()
-
-
-func hide_all_keep_stats():
-	hide_all()
-	get_node("bot_mid").show()
-
 
 
 func show_select():
