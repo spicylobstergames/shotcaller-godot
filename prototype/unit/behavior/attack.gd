@@ -16,10 +16,8 @@ func start(unit, point):
 			var neighbors = game.map.blocks.get_units_in_radius(point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
-				if target:
-					var target_position = target.global_position + target.collision_position
-					if target_position.distance_to(point) < target.collision_radius:
-						game.unit.attack.set_target(unit, target)
+				if can_hit(unit, target) and in_range(unit, target):
+					game.unit.attack.set_target(unit, target)
 		
 		if unit.target or game.test.unit:
 			unit.aim_point = point
@@ -44,15 +42,14 @@ func set_target(unit, target):
 
 
 func closest_enemy_unit(unit, enemies):
-	var sorted = game.utils.sort_by_distance(unit, enemies)
 	var filtered = []
 	
-	for enemy in sorted:
-		if (enemy.unit.team == game.enemy_team and 
-			not enemy.unit.dead and 
-			not enemy.unit.immune): filtered.append(enemy.unit)
+	for enemy in enemies:
+		if can_hit(unit, enemy): filtered.append(enemy)
 	
-	if filtered: return filtered[0]
+	var sorted = game.utils.sort_by_distance(unit, filtered)
+	
+	if sorted: return sorted[0].unit
 
 
 func hit(unit1):
@@ -92,7 +89,7 @@ func in_range(attacker, target):
 	var att_rad = game.unit.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
-	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad * 0.9)
+	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
 func take_hit(attacker, target, projectile = null, modifiers = {}):

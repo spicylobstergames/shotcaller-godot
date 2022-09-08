@@ -207,13 +207,18 @@ func set_leader_priority(priority):
 
 
 func select_target(unit, enemies):
-	var n = enemies.size()
+	var filtered = []
+	
+	for enemy in enemies:
+		if game.unit.attack.can_hit(unit, enemy): filtered.append(enemy)
+	
+	var n = filtered.size()
 	if n == 0: return
 	
 	if n == 1:
-		return enemies[0]
+		return filtered[0]
 	
-	var sorted = game.utils.sort_by_distance(unit, enemies)
+	var sorted = game.utils.sort_by_distance(unit, filtered)
 	var closest_unit = sorted[0].unit
 	
 	if n == 2:
