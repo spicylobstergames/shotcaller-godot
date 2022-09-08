@@ -166,9 +166,6 @@ func copy_symbol(unit, symbol):
 	if unit.team == game.player_team:
 		var light = get_node("light_template").duplicate()
 		light.visible = true
-		#0.0025 1056
-		#0.005  2112
-		#print(game.map.size)
 		var s = float(unit.vision) * 2 / (game.map.size)
 		light.scale = Vector2(s,s)
 		sym.add_child(light)

@@ -101,27 +101,24 @@ func close_to_blacksmith(leader):
 	return false
 
 
-
 func update_buttons():
 	if visible:
 		var leader = game.selected_leader
-		
-		
 		# disable all buttons if no leader selected or if delivery in proccess
-		if not leader or game.ui.inventories.is_delivering(leader): 
+		if not leader or game.ui.inventories.is_delivering(leader):
 			disable_all()
 			return
 		
-		# enable/disable all buttons on which leader don't have enough golds
+				# disable equip if leader is not close to shop
+		if not close_to_blacksmith(leader):
+			disable_equip()
+		
+		# enable/disable buttons on which leader don't have enough golds
 		var inventory = game.ui.inventories.get_leader_inventory(leader)
 		if leader and inventory:
 			for item_button in equip_items.get_children() + consumable_items.get_children():
 				var item_price = item_button.item.price
 				item_button.disabled = (leader.gold < item_price)
-		
-		# disable equip if leader is not close to shop
-		if not close_to_blacksmith(leader):
-			disable_equip()
 		
 		# disable buttons if leader don't have empty slots for item
 		if leader and inventory:
