@@ -1,7 +1,7 @@
 extends ItemList
 var game:Node
 
-# self = game.ui.orders
+# self = game.ui.orders_menu
 
 var cleared = false
 
@@ -22,7 +22,7 @@ var camp:Array = []
 var outpost:Array = []
 
 
-var button_template:PackedScene = load("res://controls/orders/button/order_button.tscn")
+var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
 
 const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
@@ -121,6 +121,7 @@ func build_leaders():
 		container.add_child(orders_container.node)
 		leader_orders[leader.name+leader.team] = orders_container
 		setup_leader_buttons(orders_container)
+		game.unit.orders.build_leaders()
 
 
 func setup_leader_buttons(orders_container):

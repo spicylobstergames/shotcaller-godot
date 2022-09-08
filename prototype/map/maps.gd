@@ -20,6 +20,7 @@ func load_map(map_name):
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
 	game.map.trees.occluder_light_mask = 2
+	game.map.walls.occluder_light_mask = 2
 	game.camera.start()
 	game.ui.buttons_update()
 	game.start()
@@ -27,10 +28,8 @@ func map_loaded():
 
 func setup_leaders():
 	game.ui.leaders_icons.build()
-	game.ui.leaders_icons.show()
 	game.ui.inventories.build_leaders()
-	game.ui.orders.build_leaders()
-	game.unit.orders.build_leaders()
+	game.ui.orders_menu.build_leaders()
 
 
 func new_path(lane, team):
@@ -79,16 +78,20 @@ func setup_buildings():
 			game.all_buildings.append(building)
 	
 	# shop
-	game.ui.shop.blacksmiths = [
-		game.map.get_node("buildings/blue/blacksmith"),
-		game.map.get_node("buildings/red/blacksmith")
-	]
+	game.ui.shop.blacksmiths = [];
+	if game.map.has_node("buildings/blue/blacksmith"):
+		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/blue/blacksmith") )
+	if game.map.has_node("buildings/red/blacksmith"):
+		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/red/blacksmith") )
 	
 	# orders
 	for neutral in game.map.neutrals:
-		game.ui.orders[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
-		game.ui.orders[neutral].append( game.map.get_node("buildings/red/" + neutral) )
-	game.ui.orders.update()
+		if game.map.has_node("buildings/blue/" + neutral):
+			game.ui.orders_menu[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+		if game.map.has_node("buildings/red/" + neutral):
+			game.ui.orders_menu[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+	
+	game.ui.orders_menu.update()
 
 
 func create(template, lane, team, mode, point):

@@ -187,10 +187,10 @@ func setup_team(new_team):
 			set_anim(new_team, flag_sprite)
 
 
-func set_anim(new_team, sprites):
-	if new_team == "blue": sprites.animation = 'default'
-	if new_team == "red": sprites.animation = 'red'
-	if new_team == "neutral": sprites.animation = 'neutral'
+func set_anim(new_team, sprite):
+	if new_team == "blue": sprite.animation = 'default'
+	if new_team == "red": sprite.animation = 'red'
+	if new_team == "neutral": sprite.animation = 'neutral'
 
 
 func oponent_team():
@@ -321,6 +321,7 @@ func on_stun_end():
 			self.set_state("idle")
 
 
+
 func die():  # hp <= 0
 	self.set_state("death")
 	self.set_behavior("stand")
@@ -335,11 +336,15 @@ func on_death_end():  # death animation end
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
-	if not game.test.stress:
+	attack.clear_stuck(self)
+	if game.test.stress: game.test.respawn(self)
+	else:
 		match self.type:
-			"pawn":
-				game.unit.spawn.cemitery_add_pawn(self)
-			"leader":
-				game.unit.spawn.cemitery_add_leader(self)
+			"pawn": game.unit.spawn.cemitery_add_pawn(self)
+			"leader": game.unit.spawn.cemitery_add_leader(self)
+			"building":
+				if self.display_name == 'castle':
+					game.ended = true
+					if self.team == game.player_team: game.victory = 'ENEMY'
+					else: game.victory = 'PLAYER'
 	
-	else: game.test.respawn(self)

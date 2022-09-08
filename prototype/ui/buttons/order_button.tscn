@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://controls/orders/button/order_button.gd" type="Script" id=2]
+[ext_resource path="res://ui/buttons/order_button.gd" type="Script" id=2]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=3]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=4]
 
@@ -79,9 +79,6 @@ custom_styles/normal = SubResource( 13 )
 toggle_mode = true
 icon = SubResource( 14 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="name" type="Label" parent="."]
 margin_top = 4.0

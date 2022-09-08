@@ -8,9 +8,10 @@ var top_label:Node
 var buttons:Node
 var stats:Node
 var minimap:Node
+var rect_layer: Node
 var shop:Node
-var controls:Node
-var orders:Node
+var controls_menu:Node
+var orders_menu:Node
 var main_menu:Node
 var main_menu_background:Node
 var leaders_icons:Node
@@ -28,12 +29,13 @@ func _ready():
 	top_label = get_node("top_mid/label")
 	shop = get_node("top_right/shop")
 	stats = get_node("bot_mid/stats")
-	minimap = get_node("bot_left/minimap")
+	minimap = get_node("bot_left/minimap_border/minimap")
+	rect_layer = get_node("bot_left/minimap_border/rect_layer")
 	main_menu = get_node("mid/main_menu")
 	main_menu_background = get_node("background/main")
 	buttons = get_node("bot_right/buttons")
-	orders = get_node("bot_right/orders")
-	controls = get_node("bot_right/controls")
+	orders_menu = get_node("bot_right/orders_menu")
+	controls_menu = get_node("bot_right/controls_menu")
 	leaders_icons = get_node("mid_left/leaders_icons")
 	
 	inventories = stats.get_node("inventories")
@@ -75,9 +77,12 @@ func process():
 func count_time():
 	if not get_tree().paused:
 		game.time += 1 
-		var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
-		top_label.text ="player: %s/%s - time: %s - enemy: %s/%s" % array
-		
+		if game.ended:
+			top_label.text = game.victory + ' WINS!'
+		else:
+			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
+			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
+			
 	yield(get_tree().create_timer(1), "timeout")
 	count_time()
 
@@ -93,24 +98,18 @@ func show_all():
 		panel.show()
 
 
-func hide_all_keep_stats():
-	hide_all()
-	get_node("bot_mid").show()
-
-
-
 func show_select():
 	stats.update()
 	if game.can_control(game.selected_unit):
 		orders_button.disabled = false
-	orders.update()
-	controls.update()
+	orders_menu.update()
+	controls_menu.update()
 
 
 func hide_unselect():
 	stats.update()
-	controls.hide()
-	orders.hide()
+	controls_menu.hide()
+	orders_menu.hide()
 	controls_button.disabled = true
 	orders_button.disabled = true
 	inventories.hide()
@@ -120,6 +119,6 @@ func hide_unselect():
 
 
 func buttons_update():
-	orders_button.set_pressed(orders.visible)
+	orders_button.set_pressed(orders_menu.visible)
 	shop_button.set_pressed(shop.visible)
-	controls_button.set_pressed(controls.visible)
+	controls_button.set_pressed(controls_menu.visible)

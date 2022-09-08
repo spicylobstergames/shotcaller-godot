@@ -126,12 +126,12 @@ func smart(unit, path, cb):
 
 
 func teleport(unit, point):
-	game.ui.controls.teleport_button.disabled = true
+	game.ui.controls_menu.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
 	game.control_state = "selection"
-	game.ui.controls.teleport_button.disabled = false
-	game.ui.controls.teleport_button.pressed = false
+	game.ui.controls_menu.teleport_button.disabled = false
+	game.ui.controls_menu.teleport_button.pressed = false
 	game.unit.move.stand(unit)
 	unit.channeling = true
 	

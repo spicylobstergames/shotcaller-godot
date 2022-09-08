@@ -18,7 +18,7 @@ var enemy_leaders_inv = {}
 var enemy_deliveries = {}
 
 
-var item_button_preload = preload("res://items/button/item_button.tscn")
+var item_button_preload = preload("res://ui/buttons/item_button.tscn")
 var sell_button_margin = 40
 
 

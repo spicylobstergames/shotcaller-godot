@@ -3,17 +3,17 @@
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
 [ext_resource path="res://items/shop.gd" type="Script" id=3]
-[ext_resource path="res://ui/minimap.gd" type="Script" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://controls/orders/orders_window.gd" type="Script" id=7]
-[ext_resource path="res://items/button/item_button.tscn" type="PackedScene" id=8]
-[ext_resource path="res://controls/orders/button/order_button.tscn" type="PackedScene" id=9]
+[ext_resource path="res://controls/orders_menu.gd" type="Script" id=7]
+[ext_resource path="res://ui/buttons/item_button.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/buttons/order_button.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=10]
-[ext_resource path="res://controls/controls.gd" type="Script" id=11]
-[ext_resource path="res://ui/button/leader_button.tscn" type="PackedScene" id=12]
+[ext_resource path="res://controls/controls_menu.gd" type="Script" id=11]
+[ext_resource path="res://ui/buttons/leader_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/leaders_icons.gd" type="Script" id=13]
-[ext_resource path="res://ui/button/menu_button.tscn" type="PackedScene" id=15]
+[ext_resource path="res://ui/minimap.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
 
@@ -200,6 +200,7 @@ __meta__ = {
 }
 
 [node name="top_right" type="Control" parent="."]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 __meta__ = {
@@ -207,11 +208,12 @@ __meta__ = {
 }
 
 [node name="shop" type="Panel" parent="top_right"]
-visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -286.0
-margin_bottom = 242.0
+margin_left = -288.0
+margin_top = 16.0
+margin_right = -2.0
+margin_bottom = 254.0
 custom_styles/panel = SubResource( 15 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -232,7 +234,7 @@ __meta__ = {
 
 [node name="container" type="VBoxContainer" parent="top_right/shop/scroll_container"]
 margin_right = 256.0
-margin_bottom = 218.0
+margin_bottom = 214.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -542,20 +544,25 @@ __meta__ = {
 }
 
 [node name="leader_button" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 
 [node name="leader_button2" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 62.0
 margin_bottom = 122.0
 
 [node name="leader_button3" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 124.0
 margin_bottom = 184.0
 
 [node name="leader_button4" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 186.0
 margin_bottom = 246.0
 
 [node name="leader_button5" parent="mid_left/leaders_icons" instance=ExtResource( 12 )]
+visible = false
 margin_top = 248.0
 margin_bottom = 308.0
 
@@ -563,35 +570,43 @@ margin_bottom = 308.0
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="minimap" type="ItemList" parent="bot_left"]
+[node name="minimap_border" type="ItemList" parent="bot_left"]
 margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 15 )
-script = ExtResource( 4 )
 
-[node name="sprite" type="Sprite" parent="bot_left/minimap"]
-position = Vector2( 75, 75 )
-region_enabled = true
+[node name="minimap" parent="bot_left/minimap_border" instance=ExtResource( 14 )]
+visible = false
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
-[node name="symbols" type="Node2D" parent="bot_left/minimap"]
-position = Vector2( 0, 150 )
+[node name="rect_layer" type="CanvasLayer" parent="bot_left/minimap_border"]
+layer = 2
+visible = false
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
-[node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap"]
-margin_left = 53.0
-margin_top = 53.0
-margin_right = 97.0
-margin_bottom = 97.0
+[node name="cam_rect" type="ReferenceRect" parent="bot_left/minimap_border/rect_layer"]
+margin_left = 50.0
+margin_top = -100.0
+margin_right = 94.0
+margin_bottom = -56.0
 rect_pivot_offset = Vector2( 22, 22 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0
 editor_only = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="cam_rect2" type="ReferenceRect" parent="bot_left/minimap_border/rect_layer"]
+visible = false
+margin_left = 52.0
+margin_top = 500.0
+margin_right = 96.0
+margin_bottom = 544.0
+rect_pivot_offset = Vector2( 22, 22 )
+border_color = Color( 1, 1, 1, 0.666667 )
+border_width = 2.0
+editor_only = false
 
 [node name="bot_mid" type="Control" parent="."]
 visible = false
@@ -798,7 +813,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="orders" type="ItemList" parent="bot_right"]
+[node name="orders_menu" type="ItemList" parent="bot_right"]
 margin_left = -286.0
 margin_top = -354.0
 margin_bottom = -154.0
@@ -808,7 +823,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scroll_container" type="ScrollContainer" parent="bot_right/orders"]
+[node name="scroll_container" type="ScrollContainer" parent="bot_right/orders_menu"]
 margin_left = 16.0
 margin_top = 12.0
 margin_right = 288.0
@@ -818,78 +833,78 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="container" type="VBoxContainer" parent="bot_right/orders/scroll_container"]
+[node name="container" type="VBoxContainer" parent="bot_right/orders_menu/scroll_container"]
 margin_right = 252.0
 margin_bottom = 172.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="orders_container" type="VBoxContainer" parent="bot_right/orders/scroll_container/container"]
+[node name="orders_container" type="VBoxContainer" parent="bot_right/orders_menu/scroll_container/container"]
 margin_right = 252.0
 margin_bottom = 80.0
 
-[node name="label" type="Label" parent="bot_right/orders/scroll_container/container/orders_container"]
+[node name="label" type="Label" parent="bot_right/orders_menu/scroll_container/container/orders_container"]
 margin_right = 252.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
-[node name="container" type="HBoxContainer" parent="bot_right/orders/scroll_container/container/orders_container"]
+[node name="container" type="HBoxContainer" parent="bot_right/orders_menu/scroll_container/container/orders_container"]
 margin_top = 20.0
 margin_right = 252.0
 margin_bottom = 80.0
 
-[node name="order_button" parent="bot_right/orders/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
+[node name="order_button" parent="bot_right/orders_menu/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
 
-[node name="order_button2" parent="bot_right/orders/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
+[node name="order_button2" parent="bot_right/orders_menu/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
 margin_left = 64.0
 margin_right = 124.0
 
-[node name="order_button3" parent="bot_right/orders/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
+[node name="order_button3" parent="bot_right/orders_menu/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
 margin_left = 128.0
 margin_right = 188.0
 
-[node name="order_button4" parent="bot_right/orders/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
+[node name="order_button4" parent="bot_right/orders_menu/scroll_container/container/orders_container/container" instance=ExtResource( 9 )]
 margin_left = 192.0
 margin_right = 252.0
 
-[node name="HSeparator" type="HSeparator" parent="bot_right/orders/scroll_container/container"]
+[node name="HSeparator" type="HSeparator" parent="bot_right/orders_menu/scroll_container/container"]
 margin_top = 84.0
 margin_right = 252.0
 margin_bottom = 88.0
 
-[node name="orders_container2" type="VBoxContainer" parent="bot_right/orders/scroll_container/container"]
+[node name="orders_container2" type="VBoxContainer" parent="bot_right/orders_menu/scroll_container/container"]
 margin_top = 92.0
 margin_right = 252.0
 margin_bottom = 172.0
 
-[node name="label" type="Label" parent="bot_right/orders/scroll_container/container/orders_container2"]
+[node name="label" type="Label" parent="bot_right/orders_menu/scroll_container/container/orders_container2"]
 margin_right = 252.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "orders"
 
-[node name="container" type="HBoxContainer" parent="bot_right/orders/scroll_container/container/orders_container2"]
+[node name="container" type="HBoxContainer" parent="bot_right/orders_menu/scroll_container/container/orders_container2"]
 margin_top = 20.0
 margin_right = 252.0
 margin_bottom = 80.0
 
-[node name="order_button" parent="bot_right/orders/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
+[node name="order_button" parent="bot_right/orders_menu/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
 
-[node name="order_button2" parent="bot_right/orders/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
+[node name="order_button2" parent="bot_right/orders_menu/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
 margin_left = 64.0
 margin_right = 124.0
 
-[node name="order_button3" parent="bot_right/orders/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
+[node name="order_button3" parent="bot_right/orders_menu/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
 margin_left = 128.0
 margin_right = 188.0
 
-[node name="order_button4" parent="bot_right/orders/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
+[node name="order_button4" parent="bot_right/orders_menu/scroll_container/container/orders_container2/container" instance=ExtResource( 9 )]
 margin_left = 192.0
 margin_right = 252.0
 
-[node name="controls" type="ItemList" parent="bot_right"]
+[node name="controls_menu" type="ItemList" parent="bot_right"]
 margin_left = -286.0
 margin_top = -264.0
 margin_bottom = -154.0
@@ -899,7 +914,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="scroll_container" type="ScrollContainer" parent="bot_right/controls"]
+[node name="scroll_container" type="ScrollContainer" parent="bot_right/controls_menu"]
 margin_left = 16.0
 margin_top = 12.0
 margin_right = 278.0
@@ -909,38 +924,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="container" type="VBoxContainer" parent="bot_right/controls/scroll_container"]
+[node name="container" type="VBoxContainer" parent="bot_right/controls_menu/scroll_container"]
 margin_right = 252.0
 margin_bottom = 80.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="label" type="Label" parent="bot_right/controls/scroll_container/container"]
+[node name="label" type="Label" parent="bot_right/controls_menu/scroll_container/container"]
 margin_right = 252.0
 margin_bottom = 16.0
 custom_fonts/font = SubResource( 7 )
 text = "controls"
 
-[node name="controls_buttons" type="HBoxContainer" parent="bot_right/controls/scroll_container/container"]
+[node name="controls_buttons" type="HBoxContainer" parent="bot_right/controls_menu/scroll_container/container"]
 margin_top = 20.0
 margin_right = 252.0
 margin_bottom = 80.0
 
-[node name="teleport_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
+[node name="teleport_button" parent="bot_right/controls_menu/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 custom_styles/pressed = SubResource( 27 )
 custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 30 )
 script = null
 
-[node name="name" parent="bot_right/controls/scroll_container/container/controls_buttons/teleport_button" index="0"]
+[node name="name" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/teleport_button" index="0"]
 custom_fonts/font = SubResource( 31 )
 text = "teleport"
 
-[node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/teleport_button" index="2"]
+[node name="hint" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/teleport_button" index="2"]
 text = "q"
 
-[node name="lane_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
+[node name="lane_button" parent="bot_right/controls_menu/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 margin_left = 64.0
 margin_right = 124.0
 custom_styles/pressed = SubResource( 27 )
@@ -948,13 +963,13 @@ custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 32 )
 script = null
 
-[node name="name" parent="bot_right/controls/scroll_container/container/controls_buttons/lane_button" index="0"]
+[node name="name" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/lane_button" index="0"]
 text = "lane"
 
-[node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/lane_button" index="2"]
+[node name="hint" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/lane_button" index="2"]
 text = "w"
 
-[node name="move_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
+[node name="move_button" parent="bot_right/controls_menu/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 margin_left = 128.0
 margin_right = 188.0
 custom_styles/pressed = SubResource( 27 )
@@ -962,13 +977,13 @@ custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 33 )
 script = null
 
-[node name="name" parent="bot_right/controls/scroll_container/container/controls_buttons/move_button" index="0"]
+[node name="name" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/move_button" index="0"]
 text = "move"
 
-[node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/move_button" index="2"]
+[node name="hint" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/move_button" index="2"]
 text = "e"
 
-[node name="attack_button" parent="bot_right/controls/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
+[node name="attack_button" parent="bot_right/controls_menu/scroll_container/container/controls_buttons" instance=ExtResource( 9 )]
 margin_left = 192.0
 margin_right = 252.0
 custom_styles/pressed = SubResource( 27 )
@@ -976,10 +991,10 @@ custom_styles/disabled = SubResource( 45 )
 icon = SubResource( 34 )
 script = null
 
-[node name="name" parent="bot_right/controls/scroll_container/container/controls_buttons/attack_button" index="0"]
+[node name="name" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/attack_button" index="0"]
 text = "attack"
 
-[node name="hint" parent="bot_right/controls/scroll_container/container/controls_buttons/attack_button" index="2"]
+[node name="hint" parent="bot_right/controls_menu/scroll_container/container/controls_buttons/attack_button" index="2"]
 text = "r"
 
 [node name="buttons" type="ItemList" parent="bot_right"]
@@ -1051,10 +1066,10 @@ text = "menu"
 text = "y"
 
 [connection signal="gui_input" from="bot_mid/stats/panel" to="bot_mid/stats" method="stats_down"]
-[connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/teleport_button" to="bot_right/controls" method="teleport_button_down"]
-[connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/lane_button" to="bot_right/controls" method="lane_button_down"]
-[connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/move_button" to="bot_right/controls" method="move_button_down"]
-[connection signal="pressed" from="bot_right/controls/scroll_container/container/controls_buttons/attack_button" to="bot_right/controls" method="attack_button_down"]
+[connection signal="pressed" from="bot_right/controls_menu/scroll_container/container/controls_buttons/teleport_button" to="bot_right/controls_menu" method="teleport_button_down"]
+[connection signal="pressed" from="bot_right/controls_menu/scroll_container/container/controls_buttons/lane_button" to="bot_right/controls_menu" method="lane_button_down"]
+[connection signal="pressed" from="bot_right/controls_menu/scroll_container/container/controls_buttons/move_button" to="bot_right/controls_menu" method="move_button_down"]
+[connection signal="pressed" from="bot_right/controls_menu/scroll_container/container/controls_buttons/attack_button" to="bot_right/controls_menu" method="attack_button_down"]
 
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button"]
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button2"]
@@ -1067,10 +1082,10 @@ text = "y"
 [editable path="mid/main_menu/container/menu_map_buttons/small_map_button"]
 [editable path="mid/main_menu/container/menu_map_buttons/large_map_button"]
 [editable path="mid/main_menu/container/play_button"]
-[editable path="bot_right/controls/scroll_container/container/controls_buttons/teleport_button"]
-[editable path="bot_right/controls/scroll_container/container/controls_buttons/lane_button"]
-[editable path="bot_right/controls/scroll_container/container/controls_buttons/move_button"]
-[editable path="bot_right/controls/scroll_container/container/controls_buttons/attack_button"]
+[editable path="bot_right/controls_menu/scroll_container/container/controls_buttons/teleport_button"]
+[editable path="bot_right/controls_menu/scroll_container/container/controls_buttons/lane_button"]
+[editable path="bot_right/controls_menu/scroll_container/container/controls_buttons/move_button"]
+[editable path="bot_right/controls_menu/scroll_container/container/controls_buttons/attack_button"]
 [editable path="bot_right/buttons/controls_button"]
 [editable path="bot_right/buttons/shop_button"]
 [editable path="bot_right/buttons/orders_button"]

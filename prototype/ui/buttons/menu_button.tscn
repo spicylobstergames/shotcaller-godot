@@ -1,16 +1,16 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://ui/button/menu_button.gd" type="Script" id=2]
+[ext_resource path="res://ui/buttons/menu_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=3]
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="DynamicFont" id=2]
 size = 11
-font_data = ExtResource( 1 )
+font_data = ExtResource( 4 )
 
 [sub_resource type="StyleBoxTexture" id=23]
-texture = ExtResource( 4 )
+texture = ExtResource( 2 )
 region_rect = Rect2( 105, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -18,7 +18,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=24]
-texture = ExtResource( 4 )
+texture = ExtResource( 2 )
 region_rect = Rect2( 70, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -26,7 +26,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=25]
-texture = ExtResource( 4 )
+texture = ExtResource( 2 )
 region_rect = Rect2( 140, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -34,7 +34,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=26]
-texture = ExtResource( 4 )
+texture = ExtResource( 2 )
 region_rect = Rect2( 70, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -42,7 +42,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=13]
-texture = ExtResource( 4 )
+texture = ExtResource( 2 )
 region_rect = Rect2( 0, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -56,14 +56,14 @@ margin = Rect2( 5, 0, 0, 0 )
 
 [sub_resource type="DynamicFont" id=15]
 size = 8
-font_data = ExtResource( 1 )
+font_data = ExtResource( 4 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32, 32 )
 
 [sub_resource type="DynamicFont" id=22]
 size = 9
-font_data = ExtResource( 1 )
+font_data = ExtResource( 4 )
 
 [node name="menu_button" type="Button"]
 margin_right = 60.0
@@ -78,7 +78,7 @@ custom_styles/disabled = SubResource( 26 )
 custom_styles/normal = SubResource( 13 )
 toggle_mode = true
 icon = SubResource( 14 )
-script = ExtResource( 2 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

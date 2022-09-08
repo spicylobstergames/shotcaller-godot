@@ -19,15 +19,15 @@ func start(unit, objective, smart_move = false): # move_and_attack
 		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
 		var has_path = (unit.current_path.size() > 0)
-		if not enemies and not at_objective: move(unit, unit.objective, smart_move) 
-		if not enemies and at_objective: 
-			if has_path: game.unit.follow.start(unit, unit.current_path, "advance")
-		if enemies:
+		if not enemies:
+			if not at_objective: move(unit, unit.objective, smart_move) 
+			elif has_path: game.unit.follow.start(unit, unit.current_path, "advance")
+		else:
 			var target = game.unit.orders.select_target(unit, enemies)
-			if not target and not at_objective: move(unit, unit.objective, smart_move)
-			if not target and at_objective:
-				if has_path: game.unit.follow.start(unit, unit.current_path, "advance")
-			if target:
+			if not target:
+				if not at_objective: move(unit, unit.objective, smart_move)
+				elif has_path: game.unit.follow.start(unit, unit.current_path, "advance")
+			else:
 				game.unit.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
 				if game.unit.attack.in_range(unit, target):

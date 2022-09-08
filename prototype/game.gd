@@ -45,6 +45,9 @@ var control_state = "selection"
 
 var built:bool = false
 var started:bool = false
+var ended:bool = false
+
+var victory:String
 
 
 func _ready():
@@ -75,7 +78,7 @@ func start():
 		
 		rng.randomize()
 		maps.setup_lanes()
-		ui.orders.build()
+		ui.orders_menu.build()
 		unit.follow.setup_pathfind()
 		unit.spawn.choose_leaders()
 		

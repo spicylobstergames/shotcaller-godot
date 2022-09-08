@@ -1,23 +1,9 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
 [ext_resource path="res://assets/leaders/robin_blue.png" type="Texture" id=3]
-[ext_resource path="res://assets/unit/shadow.png" type="Texture" id=4]
 [ext_resource path="res://assets/leaders/tomyris_blue.png" type="Texture" id=5]
 [ext_resource path="res://assets/leaders/tomyris_red.png" type="Texture" id=6]
-
-[sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 2 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.235294, 0.27451, 0.376471, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = Color( 0.411765, 0.231373, 0.298039, 1 )
-shader_param/tolerance = 0.1
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -699,10 +685,21 @@ projectile_speed = 220.0
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
-[node name="icon" type="Sprite" parent="symbol" index="1"]
-material = SubResource( 30 )
+[node name="symbol_border" parent="symbol" index="0"]
+visible = false
+
+[node name="icon_blue" type="Sprite" parent="symbol" index="1"]
+visible = false
 scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 5 )
+offset = Vector2( 0, -5 )
+region_enabled = true
+region_rect = Rect2( 159, 10, 18, 22 )
+
+[node name="icon_red" type="Sprite" parent="symbol" index="2"]
+visible = false
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 6 )
 offset = Vector2( 0, -5 )
 region_enabled = true
 region_rect = Rect2( 159, 10, 18, 22 )
@@ -722,21 +719,14 @@ anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
 [node name="shadow" parent="sprites" index="0"]
-visible = false
+scale = Vector2( 1.4, 1.4 )
 
-[node name="big_shadow" type="Sprite" parent="sprites" index="1"]
-modulate = Color( 0, 0, 0, 0.117647 )
-use_parent_material = true
-position = Vector2( 0, 8 )
-scale = Vector2( 1.3, 1.4 )
-texture = ExtResource( 4 )
-
-[node name="body" parent="sprites" index="2"]
+[node name="body" parent="sprites" index="1"]
 position = Vector2( 3, 9 )
 frames = SubResource( 36 )
 offset = Vector2( 2, -24 )
 
-[node name="weapon" type="Node2D" parent="sprites" index="3"]
+[node name="weapon" type="Node2D" parent="sprites" index="2"]
 use_parent_material = true
 position = Vector2( -8, -17 )
 scale = Vector2( 1.0686, 1 )

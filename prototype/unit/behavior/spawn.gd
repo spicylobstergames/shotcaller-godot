@@ -23,7 +23,7 @@ var infantry:PackedScene = load("res://pawns/infantry.tscn")
 var archer:PackedScene = load("res://pawns/archer.tscn")
 var mounted:PackedScene = load("res://pawns/mounted.tscn")
 
-var lumberjack:PackedScene = load("res://unit/lumberjack.tscn")
+var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
 
 
 var cemitery = {

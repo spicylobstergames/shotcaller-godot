@@ -41,7 +41,9 @@ func button_down():
 			
 			blue_team_button.disabled = true
 			red_team_button.disabled = true
-			
+			small_map_button.disabled = true
+			large_map_button.disabled = true
+
 			game.paused = false
 			get_tree().paused = false
 			
@@ -78,15 +80,10 @@ func button_down():
 			game.paused = true
 			get_tree().paused = true
 			game.unit.spawn.timer.stop()
-			game.ui.main_menu_background.show()
-			game.ui.main_menu.show()
-			game.ui.buttons.hide()
-			game.ui.controls.hide()
-			game.ui.minimap.hide()
-			game.ui.stats.hide()
-			game.ui.shop.hide()
-			game.ui.orders.hide()
-			game.ui.leaders_icons.hide()
+			game.ui.hide_all()
+			game.ui.get_node('mid').visible = true
+			game.ui.main_menu_background.visible = true
+			game.ui.main_menu.visible = true
 		
 		
 		"shop":
@@ -94,25 +91,25 @@ func button_down():
 			game.ui.inventories.update_buttons()
 			if game.ui.shop.visible:
 				game.ui.shop.update_buttons()
-				game.ui.controls.hide()
-				game.ui.orders.hide()
+				game.ui.controls_menu.visible = false
+				game.ui.orders_menu.visible = false
 			game.ui.buttons_update()
 		
 		
 		"orders":
-			game.ui.orders.visible = !game.ui.orders.visible
-			if game.ui.orders.visible:
-				game.ui.shop.hide()
-				game.ui.controls.hide()
+			game.ui.orders_menu.visible = !game.ui.orders_menu.visible
+			if game.ui.orders_menu.visible:
+				game.ui.shop.visible = false
+				game.ui.controls_menu.visible = false
 				game.ui.inventories.update_buttons() # hide sell bt
 			game.ui.buttons_update()
 		
 		
 		"controls":
-			game.ui.controls.visible = !game.ui.controls.visible
-			if game.ui.controls.visible:
-				game.ui.shop.hide()
-				game.ui.orders.hide()
+			game.ui.controls_menu.visible = !game.ui.controls_menu.visible
+			if game.ui.controls_menu.visible:
+				game.ui.shop.visible = false
+				game.ui.orders_menu.visible = false
 				game.ui.inventories.update_buttons() # hide sell bt
 			else: game.control_state = "selection"
 			game.ui.buttons_update()
