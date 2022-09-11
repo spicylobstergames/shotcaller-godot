@@ -1,8 +1,9 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
 [ext_resource path="res://items/shop.gd" type="Script" id=3]
+[ext_resource path="res://ui/leader_select_panel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://controls/orders_menu.gd" type="Script" id=7]
@@ -524,6 +525,17 @@ text = "red"
 [node name="hint" parent="mid/main_menu/container/play_button" index="2"]
 visible = false
 text = "space"
+
+[node name="leader_select_panel" parent="mid" instance=ExtResource( 4 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -145.0
+margin_top = -191.0
+margin_right = 145.0
+margin_bottom = 191.0
 
 [node name="mid_left" type="Control" parent="."]
 visible = false

@@ -1,0 +1,190 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ui/leader_select_panel.gd" type="Script" id=1]
+[ext_resource path="res://ui/buttons/leader_select_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=3]
+[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=4]
+[ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=5]
+[ext_resource path="res://ui/buttons/leader_portrait.gd" type="Script" id=6]
+[ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=7]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 4 )
+shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
+shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
+shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
+shader_param/origin4 = Color( 0.2, 0.266667, 0.380392, 1 )
+shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
+shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
+shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
+shader_param/new4 = Color( 0.462745, 0.219608, 0.294118, 1 )
+shader_param/tolerance = 0.1
+
+[node name="leader_select_panel" type="PanelContainer"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -334.0
+margin_bottom = -362.0
+script = ExtResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 283.0
+margin_bottom = 311.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 276.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 5 )
+text = "Select your leader"
+align = 1
+valign = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+margin_top = 22.0
+margin_right = 276.0
+margin_bottom = 26.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+margin_top = 30.0
+margin_right = 276.0
+margin_bottom = 218.0
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/CenterContainer"]
+margin_left = 12.0
+margin_right = 264.0
+margin_bottom = 188.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+columns = 4
+
+[node name="leader_select_button" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+
+[node name="leader_select_button2" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 64.0
+margin_right = 124.0
+
+[node name="leader_select_button3" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 128.0
+margin_right = 188.0
+
+[node name="leader_select_button4" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 192.0
+margin_right = 252.0
+
+[node name="leader_select_button5" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_top = 64.0
+margin_bottom = 124.0
+
+[node name="leader_select_button6" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 124.0
+margin_bottom = 124.0
+
+[node name="leader_select_button7" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 128.0
+margin_top = 64.0
+margin_right = 188.0
+margin_bottom = 124.0
+
+[node name="leader_select_button8" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 192.0
+margin_top = 64.0
+margin_right = 252.0
+margin_bottom = 124.0
+
+[node name="leader_select_button9" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_top = 128.0
+margin_bottom = 188.0
+
+[node name="leader_select_button10" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 64.0
+margin_top = 128.0
+margin_right = 124.0
+margin_bottom = 188.0
+
+[node name="leader_select_button11" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 128.0
+margin_top = 128.0
+margin_right = 188.0
+margin_bottom = 188.0
+
+[node name="leader_select_button12" parent="VBoxContainer/CenterContainer/GridContainer" instance=ExtResource( 2 )]
+margin_left = 192.0
+margin_top = 128.0
+margin_right = 252.0
+margin_bottom = 188.0
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 222.0
+margin_right = 276.0
+margin_bottom = 226.0
+
+[node name="selected_leader_container" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 230.0
+margin_right = 276.0
+margin_bottom = 304.0
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/selected_leader_container"]
+margin_right = 276.0
+margin_bottom = 74.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/selected_leader_container/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 269.0
+margin_bottom = 67.0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer"]
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+
+[node name="sprite" type="Sprite" parent="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer/MarginContainer"]
+material = SubResource( 1 )
+position = Vector2( 30, 30 )
+scale = Vector2( 0.479167, 0.479167 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 96, 96 )
+script = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer"]
+margin_left = 64.0
+margin_right = 198.0
+margin_bottom = 60.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = ExtResource( 5 )
+text = "leade_name"
+align = 1
+valign = 1
+
+[node name="menu_button" parent="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
+margin_left = 202.0
+margin_right = 262.0
+text = "Play"
+icon = null
+value = "choose_leader"
+
+[node name="name" parent="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer/menu_button" index="0"]
+visible = false
+
+[node name="hint" parent="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer/menu_button" index="2"]
+visible = false
+
+[node name="no_leader_selected_label" type="Label" parent="VBoxContainer"]
+visible = false
+margin_top = 308.0
+margin_right = 276.0
+margin_bottom = 368.0
+rect_min_size = Vector2( 60, 60 )
+custom_fonts/font = ExtResource( 5 )
+text = "No leader selected"
+align = 1
+valign = 1
+
+[editable path="VBoxContainer/selected_leader_container/PanelContainer/HBoxContainer/menu_button"]
