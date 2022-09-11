@@ -3,7 +3,7 @@
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
 [ext_resource path="res://items/shop.gd" type="Script" id=3]
-[ext_resource path="res://ui/leader_select_panel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/stats.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://controls/orders_menu.gd" type="Script" id=7]
@@ -526,16 +526,17 @@ text = "red"
 visible = false
 text = "space"
 
-[node name="leader_select_panel" parent="mid" instance=ExtResource( 4 )]
+[node name="team_selection_menu" parent="mid" instance=ExtResource( 4 )]
+pause_mode = 2
 visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -145.0
-margin_top = -191.0
-margin_right = 145.0
-margin_bottom = 191.0
+margin_left = -229.0
+margin_top = -204.0
+margin_right = 229.0
+margin_bottom = 204.0
 
 [node name="mid_left" type="Control" parent="."]
 visible = false

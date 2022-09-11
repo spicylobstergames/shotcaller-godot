@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://ui/buttons/leader_select_button.gd" type="Script" id=1]
+[ext_resource path="res://ui/team_selection/leader_select_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=3]
-[ext_resource path="res://ui/buttons/leader_portrait.gd" type="Script" id=4]
+[ext_resource path="res://ui/team_selection/leader_portrait.gd" type="Script" id=4]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 
@@ -85,8 +85,7 @@ material = SubResource( 30 )
 position = Vector2( 30, 30 )
 scale = Vector2( 0.479167, 0.479167 )
 texture = ExtResource( 3 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 96, 96 )
+hframes = 12
 script = ExtResource( 4 )
 
 [node name="name" type="Label" parent="."]

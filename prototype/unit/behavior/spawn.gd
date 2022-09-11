@@ -50,25 +50,6 @@ func _ready():
 	timer.wait_time = order_time
 	game.unit.add_child(timer)
 
-
-func choose_leaders():
-	
-	team_random_list.blue = leader_list.duplicate()
-	team_random_list.red = leader_list.duplicate()
-	
-	#game.player_choose_leaders = []
-	game.enemy_choose_leaders = []
-	
-	var n_leaders = 1
-	if game.map.lanes.size() == 3: n_leaders = 5
-	
-	for n in n_leaders:
-		#game.player_choose_leaders.append("arthur")
-		#game.enemy_choose_leaders.append("arthur")
-		#game.player_choose_leaders.append(random_leader(game.player_team))
-		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
-
-
 func random_leader(team):
 	var team_list = team_random_list[team]
 	var index = floor(randf() * team_list.size())
@@ -83,6 +64,8 @@ func leaders():
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
 		for leader in leaders:
+			if leader == "Random":
+				leader = leader_list[randi() % leader_list.size()]
 			var lane = game.map.lanes[0]
 			if game.map.lanes.size() == 3:
 				if counter < 2: lane = game.map.lanes[0]

@@ -1,0 +1,146 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=1]
+[ext_resource path="res://ui/team_selection/leader_select_menu_panel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/team_selection/team_selection_menu.gd" type="Script" id=3]
+[ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=4]
+
+[node name="team_selection_menu" type="PanelContainer"]
+margin_right = 307.0
+margin_bottom = 149.0
+script = ExtResource( 3 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 363.0
+margin_bottom = 401.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 356.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 1 )
+text = "Team selection"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 22.0
+margin_right = 356.0
+margin_bottom = 26.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 30.0
+margin_right = 356.0
+margin_bottom = 330.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+margin_right = 172.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 172.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 1 )
+text = "Team Red"
+align = 1
+valign = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 22.0
+margin_right = 172.0
+margin_bottom = 272.0
+rect_min_size = Vector2( 0, 250 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="red_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 216.0
+margin_bottom = 238.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="leader_select_menu_panel" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 216.0
+margin_bottom = 74.0
+
+[node name="add_leader_red" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 276.0
+margin_right = 172.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+text = "add character"
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
+margin_left = 176.0
+margin_right = 180.0
+margin_bottom = 300.0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+margin_left = 184.0
+margin_right = 356.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 172.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 1 )
+text = "Team blue"
+align = 1
+valign = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 22.0
+margin_right = 172.0
+margin_bottom = 272.0
+rect_min_size = Vector2( 0, 250 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="blue_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
+unique_name_in_owner = true
+margin_right = 216.0
+margin_bottom = 238.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="leader_select_menu_panel" parent="VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 216.0
+margin_bottom = 74.0
+
+[node name="add_leader_blue" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+margin_top = 276.0
+margin_right = 172.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+text = "add character"
+
+[node name="menu_button" parent="VBoxContainer" instance=ExtResource( 4 )]
+margin_top = 334.0
+margin_right = 356.0
+margin_bottom = 394.0
+text = "Play"
+icon = null
+value = "choose_leaders"
+
+[node name="name" parent="VBoxContainer/menu_button" index="0"]
+visible = false
+
+[node name="hint" parent="VBoxContainer/menu_button" index="2"]
+visible = false
+
+[editable path="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/red_team_container/leader_select_menu_panel"]
+[editable path="VBoxContainer/menu_button"]
