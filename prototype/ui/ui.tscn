@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -74,6 +74,26 @@ size = 10
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=6]
+size = 11
+font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=51]
+bg_color = Color( 0.211765, 0.392157, 0.8, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=52]
+bg_color = Color( 0.505882, 0.498039, 0.780392, 0.376471 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="DynamicFont" id=53]
 size = 11
 font_data = ExtResource( 6 )
 
@@ -627,9 +647,6 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="stats" type="ItemList" parent="bot_mid"]
 margin_left = -150.0
@@ -657,9 +674,6 @@ margin_left = 100.0
 margin_top = 20.0
 margin_right = 100.0
 margin_bottom = 20.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="hp" type="Label" parent="bot_mid/stats/panel"]
 margin_left = 98.0
@@ -705,14 +719,37 @@ margin_top = 12.0
 margin_right = 84.0
 margin_bottom = 84.0
 rect_clip_content = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="sprite" type="Sprite" parent="bot_mid/stats/panel/portrait"]
 position = Vector2( 34, 34 )
 scale = Vector2( 2, 2 )
 region_enabled = true
+
+[node name="CenterContainer" type="MarginContainer" parent="bot_mid/stats/panel/portrait"]
+margin_top = 54.0
+margin_right = 72.0
+margin_bottom = 72.0
+
+[node name="exp_bar" type="ProgressBar" parent="bot_mid/stats/panel/portrait/CenterContainer"]
+margin_right = 72.0
+margin_bottom = 18.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_styles/fg = SubResource( 51 )
+custom_styles/bg = SubResource( 52 )
+value = 50.0
+percent_visible = false
+
+[node name="level_label" type="Label" parent="bot_mid/stats/panel/portrait/CenterContainer"]
+margin_top = 2.0
+margin_right = 72.0
+margin_bottom = 15.0
+custom_fonts/font = SubResource( 53 )
+text = "level 1"
+align = 1
+valign = 1
 
 [node name="vision" type="Label" parent="bot_mid/stats/panel"]
 margin_left = 94.0
@@ -723,9 +760,6 @@ custom_fonts/font = SubResource( 6 )
 text = "vision"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="damage" type="Label" parent="bot_mid/stats/panel"]
 margin_left = 94.0
@@ -762,9 +796,6 @@ custom_fonts/font = SubResource( 6 )
 text = "speed"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="gold" type="Label" parent="bot_mid/stats/panel"]
 margin_left = 193.0
@@ -776,9 +807,6 @@ custom_fonts/font = SubResource( 9 )
 text = "gold"
 align = 2
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="gold_sprite" type="Sprite" parent="bot_mid/stats/panel"]
 position = Vector2( 281, 78 )
