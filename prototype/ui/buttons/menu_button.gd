@@ -42,11 +42,18 @@ func button_down():
 			red_team_button.disabled = true
 			small_map_button.disabled = true
 			large_map_button.disabled = true
-			game.ui.get_node("mid/leader_select_panel").visible = true
+			game.ui.get_node("mid/team_selection_menu").visible = true
 
-		"choose_leader":
+		"choose_leaders":
 			game.ui.main_menu_background.visible = false
-			game.ui.get_node("mid/leader_select_panel").visible = false
+			var team_selection_menu = game.ui.get_node("mid/team_selection_menu")
+			team_selection_menu.visible = false
+			if game.player_team == "blue":
+				game.player_choose_leaders = team_selection_menu.get_blue_team_leaders()
+				game.enemy_choose_leaders = team_selection_menu.get_red_team_leaders()
+			else:
+				game.player_choose_leaders = team_selection_menu.get_red_team_leaders()
+				game.enemy_choose_leaders = team_selection_menu.get_blue_team_leaders()				
 			game.paused = false
 			get_tree().paused = false
 			game.maps.load_map(game.maps.current_map)
