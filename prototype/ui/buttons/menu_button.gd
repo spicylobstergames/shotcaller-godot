@@ -30,7 +30,6 @@ func button_down():
 		
 		"play":
 			game.ui.main_menu.visible = false
-			game.ui.main_menu_background.visible = false
 			
 			var highlight_button = play_button.get("custom_styles/focus")
 			
@@ -43,10 +42,13 @@ func button_down():
 			red_team_button.disabled = true
 			small_map_button.disabled = true
 			large_map_button.disabled = true
+			game.ui.get_node("mid/leader_select_panel").visible = true
 
+		"choose_leader":
+			game.ui.main_menu_background.visible = false
+			game.ui.get_node("mid/leader_select_panel").visible = false
 			game.paused = false
 			get_tree().paused = false
-			
 			game.maps.load_map(game.maps.current_map)
 			
 			

@@ -56,7 +56,7 @@ func choose_leaders():
 	team_random_list.blue = leader_list.duplicate()
 	team_random_list.red = leader_list.duplicate()
 	
-	game.player_choose_leaders = []
+	#game.player_choose_leaders = []
 	game.enemy_choose_leaders = []
 	
 	var n_leaders = 1
@@ -65,7 +65,7 @@ func choose_leaders():
 	for n in n_leaders:
 		#game.player_choose_leaders.append("arthur")
 		#game.enemy_choose_leaders.append("arthur")
-		game.player_choose_leaders.append(random_leader(game.player_team))
+		#game.player_choose_leaders.append(random_leader(game.player_team))
 		game.enemy_choose_leaders.append(random_leader(game.enemy_team))
 
 
