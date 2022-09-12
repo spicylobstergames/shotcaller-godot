@@ -98,6 +98,14 @@ var orders:Node
 var skills:Node
 var modifiers:Node
 
+# Experience
+var experience_timer : Timer = Timer.new()
+var experience : float = 0
+var level : int = 1
+const EXP_PER_KILL = 20
+const EXP_PER_5_SEC = 5
+const EXP_LEVEL_COEFFICIENT = 100
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -116,7 +124,25 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	
+	if type == "leader":
+		experience_timer.wait_time = 5
+		experience_timer.autostart = true
+		experience_timer.connect("timeout", self, "on_experience_tick")
+		add_child(experience_timer)
+		
+func gain_experience(value):
+	experience += value
+	if experience >= experience_needed():
+		experience -= experience_needed()
+		level += 1
 
+func on_experience_tick():
+	gain_experience(EXP_PER_5_SEC)
+	experience_timer.start()
+
+func experience_needed():
+	return EXP_LEVEL_COEFFICIENT * level
 
 func reset_unit():
 	self.setup_team(self.team)
@@ -329,6 +355,11 @@ func die():  # hp <= 0
 	self.target = null
 	self.channeling = false
 	self.working = false
+	
+	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, 200)
+	for neighbor in neighbors:
+		if neighbor.type == "leader" and neighbor.team != team:
+			neighbor.gain_experience(EXP_PER_KILL)
 
 
 func on_death_end():  # death animation end

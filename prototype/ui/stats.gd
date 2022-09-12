@@ -15,6 +15,8 @@ onready var speed = panel.get_node("speed")
 onready var gold = panel.get_node("gold")
 onready var gold_sprite = panel.get_node("gold_sprite")
 onready var portrait_sprite = panel.get_node("portrait/sprite")
+onready var level_label : Label = get_node("panel/portrait/CenterContainer/level_label")
+onready var exp_bar : ProgressBar = get_node("panel/portrait/CenterContainer/exp_bar")
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -45,9 +47,17 @@ func update():
 			gold.text = "%s" % unit.gold
 			gold.visible = true
 			gold_sprite.visible = true
+			level_label.visible = true
+			exp_bar.visible = true
+			level_label.text = "Level %d" % unit.level
+			exp_bar.value = unit.experience
+			exp_bar.max_value = unit.experience_needed()
 		else:
 			gold.visible = false
 			gold_sprite.visible = false
+			level_label.visible = false
+			exp_bar.visible = false
+			
 
 
 func set_portrait(portrait, unit):
