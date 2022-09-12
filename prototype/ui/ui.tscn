@@ -427,6 +427,9 @@ value = "blue"
 visible = false
 text = "blue"
 
+[node name="touch_button" parent="mid/main_menu/container/menu_team_buttons/blue_team_button" index="1"]
+scale = Vector2( 2.5, 1 )
+
 [node name="hint" parent="mid/main_menu/container/menu_team_buttons/blue_team_button" index="2"]
 visible = false
 text = "1"
@@ -444,6 +447,9 @@ value = "red"
 [node name="name" parent="mid/main_menu/container/menu_team_buttons/red_team_button" index="0"]
 visible = false
 text = "red"
+
+[node name="touch_button" parent="mid/main_menu/container/menu_team_buttons/red_team_button" index="1"]
+scale = Vector2( 2.5, 1 )
 
 [node name="hint" parent="mid/main_menu/container/menu_team_buttons/red_team_button" index="2"]
 visible = false
@@ -494,6 +500,9 @@ value = "small"
 visible = false
 text = "blue"
 
+[node name="touch_button" parent="mid/main_menu/container/menu_map_buttons/small_map_button" index="1"]
+scale = Vector2( 2.5, 1 )
+
 [node name="hint" parent="mid/main_menu/container/menu_map_buttons/small_map_button" index="2"]
 visible = false
 text = "1"
@@ -511,6 +520,9 @@ value = "large"
 [node name="name" parent="mid/main_menu/container/menu_map_buttons/large_map_button" index="0"]
 visible = false
 text = "red"
+
+[node name="touch_button" parent="mid/main_menu/container/menu_map_buttons/large_map_button" index="1"]
+scale = Vector2( 2.5, 1 )
 
 [node name="hint" parent="mid/main_menu/container/menu_map_buttons/large_map_button" index="2"]
 visible = false
@@ -542,21 +554,19 @@ value = "play"
 visible = false
 text = "red"
 
+[node name="touch_button" parent="mid/main_menu/container/play_button" index="1"]
+scale = Vector2( 5.8, 1 )
+
 [node name="hint" parent="mid/main_menu/container/play_button" index="2"]
 visible = false
 text = "space"
 
 [node name="team_selection_menu" parent="mid" instance=ExtResource( 4 )]
-pause_mode = 2
 visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
 margin_left = -229.0
 margin_top = -204.0
-margin_right = 229.0
-margin_bottom = 204.0
+margin_right = 231.0
+margin_bottom = 236.0
 
 [node name="mid_left" type="Control" parent="."]
 visible = false

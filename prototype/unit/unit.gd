@@ -128,6 +128,7 @@ func _ready():
 	if type == "leader":
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
+# warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
 		
