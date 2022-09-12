@@ -107,7 +107,6 @@ __meta__ = {
 }
 
 [node name="touch_button" type="TouchScreenButton" parent="."]
-visible = false
 shape = SubResource( 8 )
 
 [node name="hint" type="Label" parent="."]

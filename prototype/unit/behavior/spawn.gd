@@ -5,6 +5,8 @@ var game:Node
 var timer:Timer
 var order_time = 8
 
+const leader_list = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
+
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
 var hongi:PackedScene = load("res://leaders/hongi.tscn")
@@ -18,10 +20,13 @@ var sida:PackedScene = load("res://leaders/sida.tscn")
 var takoda:PackedScene = load("res://leaders/takoda.tscn")
 var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
 
+var pawns_list = ['infantry', 'archer', 'mounted']
 
 var infantry:PackedScene = load("res://pawns/infantry.tscn")
 var archer:PackedScene = load("res://pawns/archer.tscn")
 var mounted:PackedScene = load("res://pawns/mounted.tscn")
+
+var neutrals_list = ['lumberjack']
 
 var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
 
@@ -36,8 +41,6 @@ var cemitery = {
 	"player_leaders": [],
 	"enemy_leaders": []
 }
-
-const leader_list = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
 
 var team_random_list = {"red": [], "blue": []}
 
@@ -64,7 +67,7 @@ func leaders():
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
 		for leader in leaders:
-			if leader == "Random":
+			if leader == "random":
 				leader = leader_list[randi() % leader_list.size()]
 			var lane = game.map.lanes[0]
 			if game.map.lanes.size() == 3:

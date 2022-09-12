@@ -110,7 +110,6 @@ __meta__ = {
 }
 
 [node name="item_touch_button" type="TouchScreenButton" parent="."]
-visible = false
 shape = SubResource( 1 )
 
 [node name="sell_button" type="Button" parent="."]
@@ -131,7 +130,6 @@ __meta__ = {
 }
 
 [node name="item_touch_button" type="TouchScreenButton" parent="sell_button"]
-visible = false
 shape = SubResource( 5 )
 
 [connection signal="pressed" from="." to="." method="on_button_down"]

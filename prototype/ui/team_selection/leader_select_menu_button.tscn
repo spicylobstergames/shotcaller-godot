@@ -86,5 +86,7 @@ region_rect = Rect2( 0, 0, 96, 96 )
 script = ExtResource( 4 )
 
 [node name="touch_button" type="TouchScreenButton" parent="."]
-visible = false
 shape = SubResource( 8 )
+
+[connection signal="button_down" from="." to="." method="_button_down"]
+[connection signal="pressed" from="touch_button" to="." method="_button_down"]

@@ -65,20 +65,20 @@ extents = Vector2( 32, 32 )
 [node name="leader_select_menu_panel" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -432.0
-margin_bottom = -526.0
+margin_right = -384.0
+margin_bottom = -550.0
 script = ExtResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 209.0
-margin_bottom = 67.0
+margin_bottom = 43.0
 
 [node name="button" type="Button" parent="HBoxContainer"]
-margin_right = 60.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
+margin_right = 36.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 36, 36 )
 focus_mode = 1
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -93,23 +93,28 @@ script = ExtResource( 5 )
 
 [node name="sprite" type="Sprite" parent="HBoxContainer/button"]
 material = SubResource( 30 )
-position = Vector2( 30, 30 )
-scale = Vector2( 0.479167, 0.479167 )
+position = Vector2( 18, 18 )
+scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 6 )
 hframes = 12
 script = ExtResource( 4 )
 
 [node name="touch_button" type="TouchScreenButton" parent="HBoxContainer/button"]
-visible = false
+position = Vector2( -3, -3 )
+scale = Vector2( 0.7, 0.7 )
 shape = SubResource( 8 )
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-margin_left = 64.0
+margin_left = 40.0
 margin_right = 202.0
-margin_bottom = 60.0
+margin_bottom = 36.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_fonts/font = ExtResource( 8 )
 text = "LEADER NAME"
 align = 1
 valign = 1
+
+[connection signal="button_down" from="HBoxContainer/button" to="HBoxContainer/button" method="_button_down"]
+[connection signal="select_leader" from="HBoxContainer/button" to="." method="_select_leader"]
+[connection signal="pressed" from="HBoxContainer/button/touch_button" to="HBoxContainer/button" method="_button_down"]
