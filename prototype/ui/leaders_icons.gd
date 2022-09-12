@@ -8,15 +8,14 @@ var buttons_name = {}
 
 
 var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
-var sprites_order
 
 func _ready():
+	game = get_tree().get_current_scene()
 	hide()
 
 
 func build():
-	game = get_tree().get_current_scene()
-	sprites_order = game.unit.spawn.leader_list
+	var sprites_order = autoload.leaders
 	var index = 0
 	var buttons_array = self.get_children()
 	for leader in game.player_leaders:

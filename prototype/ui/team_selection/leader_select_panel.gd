@@ -2,16 +2,15 @@ extends Control
 
 signal leader_selected(leader)
 
-var leaders = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
+
 onready var leader_select_button = preload("res://ui/team_selection/leader_select_button.tscn")
 onready var leader_grid = $VBoxContainer/CenterContainer/GridContainer
-#var game
-#var leaders
+
 
 func _ready():
 	for child in leader_grid.get_children():
 		leader_grid.remove_child(child)
-	for leader in leaders:
+	for leader in autoload.leaders:
 		var button = leader_select_button.instance()
 		button.prepare(leader)
 		leader_grid.add_child(button)

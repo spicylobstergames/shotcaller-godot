@@ -5,7 +5,6 @@ var game:Node
 var timer:Timer
 var order_time = 8
 
-const leader_list = ["arthur","bokuden","hongi","lorne","nagato","osman","raja","robin","rollo","sida","takoda","tomyris"]
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
@@ -68,7 +67,7 @@ func leaders():
 		if team != game.player_team: leaders = game.enemy_choose_leaders
 		for leader in leaders:
 			if leader == "random":
-				leader = leader_list[randi() % leader_list.size()]
+				leader = autoload.leaders[randi() % autoload.leaders.size()]
 			var lane = game.map.lanes[0]
 			if game.map.lanes.size() == 3:
 				if counter < 2: lane = game.map.lanes[0]
