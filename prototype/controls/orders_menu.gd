@@ -137,12 +137,13 @@ func setup_leader_buttons(orders_container):
 # LANES
 
 func setup_lanes():
-	for team in game.teams:
+	for team in autoload.teams:
 		for lane in game.map.lanes:
 			var orders_container = {
 				"node": VBoxContainer.new(),
 				"type": "lane",
-				"lane": lane
+				"lane": lane,
+				"team": team
 			}
 			container.add_child(orders_container.node)
 			lane_orders[lane+team] = orders_container

@@ -19,16 +19,11 @@ var sida:PackedScene = load("res://leaders/sida.tscn")
 var takoda:PackedScene = load("res://leaders/takoda.tscn")
 var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
 
-var pawns_list = ['infantry', 'archer', 'mounted']
-
 var infantry:PackedScene = load("res://pawns/infantry.tscn")
 var archer:PackedScene = load("res://pawns/archer.tscn")
 var mounted:PackedScene = load("res://pawns/mounted.tscn")
 
-var neutrals_list = ['lumberjack']
-
 var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
-
 
 var cemitery = {
 	"player_infantry": [],
@@ -61,20 +56,21 @@ func random_leader(team):
 
 
 func leaders():
-	for team in game.teams:
+	for team in autoload.teams:
 		var counter = 0
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
 		for leader in leaders:
+			var leader_name = leader
 			if leader == "random":
-				leader = autoload.leaders[randi() % autoload.leaders.size()]
+				leader_name = autoload.leaders.keys()[randi() % autoload.leaders.size()]
 			var lane = game.map.lanes[0]
 			if game.map.lanes.size() == 3:
 				if counter < 2: lane = game.map.lanes[0]
 				if counter == 2: lane = game.map.lanes[1]
 				if counter > 2: lane = game.map.lanes[2]
 			var path = game.maps.new_path(lane, team)
-			var leader_node = game.maps.create(self[leader], lane, team, "point_random", path.start)
+			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
 			send_leader(leader_node, path.follow)
 			counter += 1
@@ -94,7 +90,7 @@ func spawn_group_cycle():
 	game.unit.orders.leaders_cycle()
 	game.unit.orders.update_taxes()
 	
-	for team in game.teams:
+	for team in autoload.teams:
 		var extra_unit = game.unit.orders.player_extra_unit
 		if team != game.player_team: extra_unit = game.unit.orders.enemy_extra_unit
 		for lane in game.map.lanes:

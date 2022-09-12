@@ -12,6 +12,6 @@ func prepare(leader):
 		frame = 0
 	else:
 		texture = leader_icons
-		var sprite_index = autoload.leaders.find(leader)
+		var sprite_index = autoload.leaders[leader]
 		hframes = autoload.leaders.size()
 		frame = sprite_index

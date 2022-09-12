@@ -26,7 +26,6 @@ var selected_leader:Node2D
 
 var player_team:String = "blue"
 var enemy_team:String = "red"
-var teams = ["blue", "red"]
 
 var rng = RandomNumberGenerator.new()
 

@@ -15,7 +15,6 @@ func _ready():
 
 
 func build():
-	var sprites_order = autoload.leaders
 	var index = 0
 	var buttons_array = self.get_children()
 	for leader in game.player_leaders:
@@ -28,7 +27,7 @@ func build():
 		name_label.text = leader.display_name
 		var hint_label = button.get_node("hint")
 		hint_label.text = str(index)
-		var sprite = sprites_order.find(leader.display_name)
+		var sprite = autoload.leaders[leader.display_name]
 		var icon = button.get_node("sprite")
 		if game.player_team == "blue": icon.material = null
 		icon.region_rect.position.x = sprite * 96
