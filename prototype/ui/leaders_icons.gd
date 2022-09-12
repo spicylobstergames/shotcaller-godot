@@ -8,15 +8,13 @@ var buttons_name = {}
 
 
 var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
-var sprites_order
 
 func _ready():
+	game = get_tree().get_current_scene()
 	hide()
 
 
 func build():
-	game = get_tree().get_current_scene()
-	sprites_order = game.unit.spawn.leader_list
 	var index = 0
 	var buttons_array = self.get_children()
 	for leader in game.player_leaders:
@@ -29,7 +27,7 @@ func build():
 		name_label.text = leader.display_name
 		var hint_label = button.get_node("hint")
 		hint_label.text = str(index)
-		var sprite = sprites_order.find(leader.display_name)
+		var sprite = autoload.leaders[leader.display_name]
 		var icon = button.get_node("sprite")
 		if game.player_team == "blue": icon.material = null
 		icon.region_rect.position.x = sprite * 96

@@ -215,9 +215,11 @@ func setup_team(new_team):
 
 
 func set_anim(new_team, sprite):
-	if new_team == "blue": sprite.animation = 'default'
-	if new_team == "red": sprite.animation = 'red'
-	if new_team == "neutral": sprite.animation = 'neutral'
+	if new_team and sprite:
+		match new_team: 
+			"blue": sprite.animation = 'default'
+			"red": sprite.animation = 'red'
+			"neutral": sprite.animation = 'neutral'
 
 
 func oponent_team():

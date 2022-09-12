@@ -18,6 +18,10 @@ boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://assets/icon.png"
 
+[autoload]
+
+autoload="*res://autoload/autoload.gd"
+
 [debug]
 
 gdscript/warnings/unused_argument=false
