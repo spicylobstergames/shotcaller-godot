@@ -56,6 +56,8 @@ func random_leader(team):
 
 
 func leaders():
+	var red_leaders = []
+	var blue_leaders = []
 	for team in autoload.teams:
 		var counter = 0
 		var leaders = game.player_choose_leaders
@@ -74,6 +76,11 @@ func leaders():
 			leader_node.origin = path.start
 			send_leader(leader_node, path.follow)
 			counter += 1
+			if team == "red":
+				red_leaders.append(leader_node)
+			else:
+				blue_leaders.append(leader_node)
+	game.ui.get_node("score_board").initialize(red_leaders, blue_leaders)
 
 
 func send_leader(leader, path):

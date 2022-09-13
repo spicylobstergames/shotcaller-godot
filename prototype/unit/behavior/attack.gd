@@ -107,6 +107,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			var damage = max(1, modifiers.damage - game.unit.modifiers.get_value(target, "defense"))
 			target.current_hp -= damage
 			attacker.attack_count += 1
+			target.last_attacker = attacker
 			
 		if not modifiers.counter:
 			game.unit.advance.react(target, attacker)

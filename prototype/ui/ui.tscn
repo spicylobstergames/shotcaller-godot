@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://items/inventories.gd" type="Script" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
+[ext_resource path="res://ui/scoreboard/score_board.tscn" type="PackedScene" id=18]
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
@@ -1115,6 +1116,10 @@ text = "menu"
 
 [node name="hint" parent="bot_right/buttons/menu_button" index="2"]
 text = "y"
+
+[node name="score_board" parent="." instance=ExtResource( 18 )]
+pause_mode = 2
+mouse_filter = 1
 
 [connection signal="gui_input" from="bot_mid/stats/panel" to="bot_mid/stats" method="stats_down"]
 [connection signal="pressed" from="bot_right/controls_menu/scroll_container/container/controls_buttons/teleport_button" to="bot_right/controls_menu" method="teleport_button_down"]

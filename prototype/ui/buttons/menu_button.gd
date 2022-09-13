@@ -53,7 +53,7 @@ func button_down():
 				game.enemy_choose_leaders = team_selection_menu.get_red_team_leaders()
 			else:
 				game.player_choose_leaders = team_selection_menu.get_red_team_leaders()
-				game.enemy_choose_leaders = team_selection_menu.get_blue_team_leaders()				
+				game.enemy_choose_leaders = team_selection_menu.get_blue_team_leaders()
 			game.paused = false
 			get_tree().paused = false
 			game.maps.load_map(game.maps.current_map)

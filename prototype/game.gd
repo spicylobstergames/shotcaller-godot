@@ -86,6 +86,7 @@ func start():
 			test.spawn_random_units()
 		else: 
 			unit.spawn.start()
+			ui.get_node("score_board").visible = false
 			yield(get_tree().create_timer(4), "timeout")
 			unit.spawn.leaders()
 			maps.setup_leaders()
