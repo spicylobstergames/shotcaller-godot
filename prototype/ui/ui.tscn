@@ -1119,6 +1119,7 @@ text = "y"
 
 [node name="score_board" parent="." instance=ExtResource( 18 )]
 pause_mode = 2
+visible = false
 mouse_filter = 1
 
 [connection signal="gui_input" from="bot_mid/stats/panel" to="bot_mid/stats" method="stats_down"]
