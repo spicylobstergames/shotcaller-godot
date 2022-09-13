@@ -1,0 +1,137 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/ui/question_mark.png" type="Texture" id=2]
+[ext_resource path="res://assets/ui/icons.png" type="Texture" id=3]
+[ext_resource path="res://ui/scoreboard/score_board_entry.gd" type="Script" id=4]
+[ext_resource path="res://ui/team_selection/leader_portrait.gd" type="Script" id=5]
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 1 )
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 3 )
+region = Rect2( 680, 10, 30, 30 )
+
+[node name="score_board_entry" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -380.0
+margin_bottom = -538.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 4 )
+
+[node name="Panel" type="PanelContainer" parent="."]
+margin_right = 313.0
+margin_bottom = 62.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 306.0
+margin_bottom = 55.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer"]
+margin_right = 48.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+
+[node name="portrait" type="Sprite" parent="Panel/HBoxContainer/CenterContainer2"]
+unique_name_in_owner = true
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
+centered = false
+script = ExtResource( 5 )
+
+[node name="separator4" type="Control" parent="Panel/HBoxContainer"]
+margin_left = 52.0
+margin_right = 62.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="level" type="Label" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 66.0
+margin_right = 79.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 2 )
+text = "2"
+align = 1
+valign = 1
+
+[node name="separator" type="Control" parent="Panel/HBoxContainer"]
+margin_left = 83.0
+margin_right = 93.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="kda" type="Label" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 97.0
+margin_right = 164.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 2 )
+text = "10/0/10"
+align = 1
+valign = 1
+
+[node name="separator2" type="Control" parent="Panel/HBoxContainer"]
+margin_left = 168.0
+margin_right = 178.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="last_hits" type="Label" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 182.0
+margin_right = 208.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 2 )
+text = "20"
+align = 1
+valign = 1
+
+[node name="separator3" type="Control" parent="Panel/HBoxContainer"]
+margin_left = 212.0
+margin_right = 222.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="gold_amount" type="Label" parent="Panel/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 226.0
+margin_right = 265.0
+margin_bottom = 48.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 3 )
+text = "300"
+align = 1
+valign = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer"]
+margin_left = 269.0
+margin_right = 299.0
+margin_bottom = 48.0
+size_flags_horizontal = 7
+size_flags_vertical = 3
+
+[node name="Sprite2" type="TextureRect" parent="Panel/HBoxContainer/CenterContainer"]
+margin_top = 9.0
+margin_right = 30.0
+margin_bottom = 39.0
+size_flags_horizontal = 12
+size_flags_vertical = 12
+texture = SubResource( 1 )

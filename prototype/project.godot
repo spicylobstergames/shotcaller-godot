@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node",
+"class": "Unit",
+"language": "GDScript",
+"path": "res://unit/unit.gd"
+} ]
+_global_script_class_icons={
+"Unit": ""
+}
+
 [application]
 
 config/name="Shotcall"

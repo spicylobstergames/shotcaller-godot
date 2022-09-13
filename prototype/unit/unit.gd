@@ -1,4 +1,5 @@
 extends Node
+class_name Unit
 var game:Node
 
 # self = game.unit
@@ -106,6 +107,12 @@ const EXP_PER_KILL = 20
 const EXP_PER_5_SEC = 5
 const EXP_LEVEL_COEFFICIENT = 100
 
+# SCORE
+var last_attacker : Unit = null
+var last_hit_count = 0
+var kills = 0
+var deaths = 0
+var assists = 0
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -363,6 +370,13 @@ func die():  # hp <= 0
 	for neighbor in neighbors:
 		if neighbor.type == "leader" and neighbor.team != team:
 			neighbor.gain_experience(EXP_PER_KILL)
+
+	if type == 'leader':
+		if last_attacker:
+			last_attacker.kills += 1
+		deaths += 1
+	elif type == 'pawn':
+		last_attacker.last_hit_count += 1
 
 
 func on_death_end():  # death animation end
