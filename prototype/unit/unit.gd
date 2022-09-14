@@ -113,6 +113,11 @@ var last_hit_count = 0
 var kills = 0
 var deaths = 0
 var assists = 0
+# Key - unit, value - OS.get_ticks_msec() - time when attack was performed
+var assist_candidates = {}
+# Maximum time between a units last attack on a target and its death for it to
+# count as an assist
+const ASSIST_TIME_IN_SECONDS = 3
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -170,7 +175,8 @@ func reset_unit():
 	self.working = false
 	self.hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
-
+	assist_candidates = {}
+	last_attacker = null
 
 func set_state(s):
 	if not self.dead:
@@ -375,7 +381,12 @@ func die():  # hp <= 0
 		if last_attacker:
 			last_attacker.kills += 1
 		deaths += 1
-	elif type == 'pawn':
+		for attacker in assist_candidates.keys():
+			if attacker == last_attacker:
+				continue
+			if OS.get_ticks_msec() - assist_candidates[attacker] < ASSIST_TIME_IN_SECONDS * 1000:
+					attacker.assists += 1
+	elif type == 'pawn' and last_attacker != null:
 		last_attacker.last_hit_count += 1
 
 
