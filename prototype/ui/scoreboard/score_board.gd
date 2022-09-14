@@ -31,3 +31,10 @@ func update():
 	for container in [team_red_container, team_blue_container]:
 		for child in container.get_children():
 			child.update()
+
+func _unhandled_input(event):
+	if event is InputEventKey:
+		if event.echo:
+			return
+		if event.scancode == KEY_TAB and is_ready:			
+			visible = event.is_pressed()
