@@ -50,7 +50,7 @@ export var attacks:bool = false
 export var ranged:bool = false
 var stunned:bool = false
 export var damage:int = 0
-export var attack_range:int = 1
+export var attack_range:float = 1
 export var attack_speed:float = 1
 export var defense:int = 0
 var target:Node2D
