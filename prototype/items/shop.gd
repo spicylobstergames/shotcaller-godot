@@ -26,7 +26,7 @@ const items = {
 	"Sword of Zanmar": {
 		"name": "Sword of Zanmar",
 		"sprite": 0,
-		"tooltip": "Forged of pure high-carbon steel\nDamage +50, Attack speed +50%",
+		"tooltip": "Forged of pure high-carbon steel\nDamage +50 Attack speed +50%",
 		"attributes": {"damage": 50, "attack_speed": .5},
 		"price": 500,
 		"type": "equip",
@@ -35,7 +35,7 @@ const items = {
 	"Elven Bow": {
 		"name": "Elven Bow",
 		"sprite": 0,
-		"tooltip": "\nDamage +20, Attack speed +25%, Range +40%",
+		"tooltip": "\nDamage +20, Attack speed +25% Range +40%",
 		"attributes": {"damage": 20, "attack_speed": .25, "attack_range": .4},
 		"price": 500,
 		"type": "equip",
@@ -55,7 +55,7 @@ const items = {
 	"Glass Shield": {
 		"name": "Glass Shield",
 		"sprite": 1,
-		"tooltip": "Magically reinforced, stronger than steel\nHealth +200, Vision +50",
+		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
 		"attributes": {"hp": 200, "vision": 50},
 		"price": 500,
 		"type": "equip",
@@ -64,7 +64,7 @@ const items = {
 	"Dragonscale Armor": {
 		"name": "Dragonscale Armor",
 		"sprite": 1,
-		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300, Defense +4, Speed -10",
+		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300 Defense +4 Speed -10",
 		"attributes": {"hp": 300, "defense": 4, "speed": -10},
 		"price": 500,
 		"type": "equip",
@@ -73,7 +73,7 @@ const items = {
 	"Magic Amulet": {
 		"name": "Magic Amulet",
 		"sprite": 1,
-		"tooltip": "A crystal imbued with magical force\nRegen +2, Speed +15",
+		"tooltip": "A crystal imbued with magical force\nRegen +2 Speed +15",
 		"attributes": {"regen": 2, "speed": 15},
 		"price": 350,
 		"type": "equip",
@@ -103,7 +103,7 @@ const items = {
 	"Oligan's Eye": {
 		"name": "Oligan's Eye",
 		"sprite": 1,
-		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100, Speed +10",
+		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100 Speed +10",
 		"attributes": {"vision": 100, "speed": 10},
 		"price": 350,
 		"type": "equip",
