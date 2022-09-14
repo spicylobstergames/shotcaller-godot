@@ -46,7 +46,7 @@ size = 9
 font_data = ExtResource( 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 32 )
+extents = Vector2( 26, 26 )
 
 [sub_resource type="DynamicFont" id=22]
 size = 10
@@ -61,7 +61,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 32, 18 )
+extents = Vector2( 26, 18 )
 
 [node name="item_button" type="Button"]
 margin_right = 52.0
@@ -75,9 +75,6 @@ custom_styles/disabled = SubResource( 26 )
 custom_styles/normal = SubResource( 13 )
 icon = SubResource( 14 )
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="name" type="Label" parent="."]
 margin_left = 3.0
