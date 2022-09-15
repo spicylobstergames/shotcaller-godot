@@ -9,7 +9,6 @@ func _ready():
 
 func _unhandled_input(event):
 	var point = game.camera.get_global_mouse_position()
-	var score_board = game.ui.get_node("score_board")
 	
 	# KEYBOARD
 	if event is InputEventKey:
@@ -28,11 +27,7 @@ func _unhandled_input(event):
 						KEY_S: stand(game.selected_unit)
 					
 				game.unit.follow.draw_path(game.selected_unit)
-		if event.scancode == KEY_TAB and score_board.is_ready:
-			score_board.visible = event.is_pressed()
-		
 
-	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
 		if game.camera.zoom.x <= 1:
