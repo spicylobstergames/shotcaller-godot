@@ -222,7 +222,6 @@ __meta__ = {
 }
 
 [node name="top_right" type="Control" parent="."]
-visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 __meta__ = {
@@ -252,8 +251,8 @@ __meta__ = {
 }
 
 [node name="container" type="VBoxContainer" parent="top_right/shop/scroll_container"]
-margin_right = 256.0
-margin_bottom = 354.0
+margin_right = 244.0
+margin_bottom = 344.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -279,160 +278,301 @@ text = "Equip"
 [node name="equip_items" type="GridContainer" parent="top_right/shop/scroll_container/container"]
 margin_top = 50.0
 margin_right = 244.0
-margin_bottom = 214.0
+margin_bottom = 208.0
 columns = 4
 
 [node name="item_button" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
+margin_right = 50.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button2" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 56.0
-margin_right = 108.0
+margin_left = 54.0
+margin_right = 104.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button2" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button2" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button3" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 112.0
-margin_right = 164.0
+margin_left = 108.0
+margin_right = 158.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button3" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button3" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button4" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 168.0
-margin_right = 220.0
+margin_left = 162.0
+margin_right = 212.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button4" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button4" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button5" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_top = 56.0
-margin_bottom = 108.0
+margin_top = 54.0
+margin_right = 50.0
+margin_bottom = 104.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button5" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button5" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button6" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 56.0
-margin_top = 56.0
-margin_right = 108.0
-margin_bottom = 108.0
+margin_left = 54.0
+margin_top = 54.0
+margin_right = 104.0
+margin_bottom = 104.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button6" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button6" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button7" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 112.0
-margin_top = 56.0
-margin_right = 164.0
-margin_bottom = 108.0
+margin_left = 108.0
+margin_top = 54.0
+margin_right = 158.0
+margin_bottom = 104.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button7" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button7" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button8" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 168.0
-margin_top = 56.0
-margin_right = 220.0
-margin_bottom = 108.0
+margin_left = 162.0
+margin_top = 54.0
+margin_right = 212.0
+margin_bottom = 104.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button8" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button8" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button9" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_top = 112.0
-margin_bottom = 164.0
+margin_top = 108.0
+margin_right = 50.0
+margin_bottom = 158.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button9" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button9" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button10" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 56.0
-margin_top = 112.0
-margin_right = 108.0
-margin_bottom = 164.0
+margin_left = 54.0
+margin_top = 108.0
+margin_right = 104.0
+margin_bottom = 158.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button10" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button10" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="separator2" type="HSeparator" parent="top_right/shop/scroll_container/container"]
-margin_top = 218.0
+margin_top = 212.0
 margin_right = 244.0
-margin_bottom = 222.0
+margin_bottom = 216.0
 
 [node name="consumable" type="Label" parent="top_right/shop/scroll_container/container"]
-margin_top = 226.0
+margin_top = 220.0
 margin_right = 244.0
-margin_bottom = 242.0
+margin_bottom = 236.0
 custom_fonts/font = SubResource( 7 )
 text = "Consumable"
 
 [node name="consumable_items" type="GridContainer" parent="top_right/shop/scroll_container/container"]
-margin_top = 246.0
+margin_top = 240.0
 margin_right = 244.0
-margin_bottom = 354.0
+margin_bottom = 344.0
 columns = 4
 
 [node name="item_button" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
+margin_right = 50.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button2" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 56.0
-margin_right = 108.0
+margin_left = 54.0
+margin_right = 104.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button2" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button2" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button3" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 112.0
-margin_right = 164.0
+margin_left = 108.0
+margin_right = 158.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button3" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button3" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button4" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 168.0
-margin_right = 220.0
+margin_left = 162.0
+margin_right = 212.0
+margin_bottom = 50.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button4" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button4" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button5" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_top = 56.0
-margin_bottom = 108.0
+margin_top = 54.0
+margin_right = 50.0
+margin_bottom = 104.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button5" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button5" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="item_button6" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 56.0
-margin_top = 56.0
-margin_right = 108.0
-margin_bottom = 108.0
+margin_left = 54.0
+margin_top = 54.0
+margin_right = 104.0
+margin_bottom = 104.0
 focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button6" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button6" index="3"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="mid_right" type="Control" parent="."]
 anchor_left = 1.0

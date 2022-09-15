@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/items/items.png" type="Texture" id=2]
@@ -39,10 +39,14 @@ margin_bottom = 3.0
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 2 )
-region = Rect2( 92, 0, 46, 46 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="DynamicFont" id=28]
+size = 8
+font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 9
+size = 10
 font_data = ExtResource( 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -66,7 +70,7 @@ extents = Vector2( 26, 18 )
 [node name="item_button" type="Button"]
 margin_right = 52.0
 margin_bottom = 52.0
-rect_min_size = Vector2( 50, 50 )
+rect_min_size = Vector2( 52, 52 )
 focus_mode = 1
 custom_styles/hover = SubResource( 23 )
 custom_styles/pressed = SubResource( 26 )
@@ -74,20 +78,18 @@ custom_styles/focus = SubResource( 25 )
 custom_styles/disabled = SubResource( 26 )
 custom_styles/normal = SubResource( 13 )
 icon = SubResource( 14 )
+icon_align = 1
 script = ExtResource( 3 )
 
 [node name="name" type="Label" parent="."]
-margin_left = 3.0
+margin_left = 1.0
 margin_top = 1.0
-margin_right = 52.0
-margin_bottom = 15.0
+margin_right = 51.0
+margin_bottom = 23.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 28 )
 text = "Name"
 autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="price" type="Label" parent="."]
 anchor_left = 1.0
@@ -122,9 +124,6 @@ custom_styles/focus = SubResource( 25 )
 custom_styles/disabled = SubResource( 26 )
 custom_styles/normal = SubResource( 27 )
 text = "sell"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="item_touch_button" type="TouchScreenButton" parent="sell_button"]
 shape = SubResource( 5 )
