@@ -38,7 +38,7 @@ func setup(new_item):
 		var icon_ref = self.icon
 		if not icon_ref: icon_ref = self.saved_icon
 		var icon = icon_ref.duplicate()
-		icon.region.position.x = new_item.sprite * 46
+		icon.region.position.x = new_item.sprite * 32
 		self.icon = icon
 		name_label.text = self.name
 		var price = new_item.price

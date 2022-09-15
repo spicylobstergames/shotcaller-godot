@@ -23,9 +23,9 @@ const items = {
 		"type": "equip",
 		"delivery_time": 20
 	},
-	"Sword of Zanmar": {
-		"name": "Sword of Zanmar",
-		"sprite": 0,
+	"Sword": {
+		"name": "Sword",
+		"sprite": 1,
 		"tooltip": "Forged of pure high-carbon steel\nDamage +50 Attack speed +50%",
 		"attributes": {"damage": 50, "attack_speed": .5},
 		"price": 500,
@@ -34,7 +34,7 @@ const items = {
 	},
 	"Elven Bow": {
 		"name": "Elven Bow",
-		"sprite": 0,
+		"sprite": 2,
 		"tooltip": "\nDamage +20, Attack speed +25% Range +40%",
 		"attributes": {"damage": 20, "attack_speed": .25, "attack_range": .4},
 		"price": 500,
@@ -45,35 +45,35 @@ const items = {
 	# Defensive
 	"Helmet": {
 		"name": "Helmet",
-		"sprite": 1,
+		"sprite": 3,
 		"tooltip": "Adds 150 HP",
 		"attributes": {"hp": 150},
 		"price": 300,
 		"type": "equip",
 		"delivery_time": 25
 	},
-	"Glass Shield": {
-		"name": "Glass Shield",
-		"sprite": 1,
+	"Shield": {
+		"name": "Holly Shield",
+		"sprite": 4,
 		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
 		"attributes": {"hp": 200, "vision": 50},
 		"price": 500,
 		"type": "equip",
 		"delivery_time": 25
 	},
-	"Dragonscale Armor": {
-		"name": "Dragonscale Armor",
-		"sprite": 1,
+	"Dragonscale": {
+		"name": "Dragonscale",
+		"sprite": 5,
 		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300 Defense +4 Speed -10",
 		"attributes": {"hp": 300, "defense": 4, "speed": -10},
 		"price": 500,
 		"type": "equip",
 		"delivery_time": 25
 	},
-	"Magic Amulet": {
-		"name": "Magic Amulet",
-		"sprite": 1,
-		"tooltip": "A crystal imbued with magical force\nRegen +2 Speed +15",
+	"Feather": {
+		"name": "Magic Feather",
+		"sprite": 6,
+		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
 		"attributes": {"regen": 2, "speed": 15},
 		"price": 350,
 		"type": "equip",
@@ -84,17 +84,17 @@ const items = {
 	# Utility
 	"Boots": {
 		"name": "Boots",
-		"sprite": 1,
+		"sprite": 7,
 		"tooltip": "Protect your feet from the ground\nSpeed +15",
 		"attributes": {"speed": 15},
 		"price": 300,
 		"type": "equip",
 		"delivery_time": 25
 	},
-	"Telescope": {
-		"name": "Telescope",
-		"sprite": 1,
-		"tooltip": "Crafted with precision-forged glass\nVision +50",
+	"Torch": {
+		"name": "Torch",
+		"sprite": 8,
+		"tooltip": "This torch will never burn out\nVision +50",
 		"attributes": {"vision": 50},
 		"price": 150,
 		"type": "equip",
@@ -102,7 +102,7 @@ const items = {
 	},
 	"Oligan's Eye": {
 		"name": "Oligan's Eye",
-		"sprite": 1,
+		"sprite": 9,
 		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100 Speed +10",
 		"attributes": {"vision": 100, "speed": 10},
 		"price": 350,
@@ -113,7 +113,7 @@ const items = {
 	# Consumables
 	"Small Health": {
 		"name": "Small Health",
-		"sprite": 2,
+		"sprite": 10,
 		"tooltip": "Restore 100 HP",
 		"attributes": {"current_hp": 100},
 		"price": 50,
@@ -122,7 +122,7 @@ const items = {
 	},
 	"Medium Health": {
 		"name": "Medium Health",
-		"sprite": 2,
+		"sprite": 11,
 		"tooltip": "Restore 150 HP",
 		"attributes": {"current_hp": 150},
 		"price": 75,
@@ -131,7 +131,7 @@ const items = {
 	},
 	"Large Health": {
 		"name": "Large Health",
-		"sprite": 2,
+		"sprite": 12,
 		"tooltip": "Restore 250 HP",
 		"attributes": {"current_hp": 250},
 		"price": 125,
