@@ -27,22 +27,25 @@ func _ready():
 
 func button_down():
 	match self.value:
-		
 		"play":
 			game.ui.main_menu.visible = false
-			
-			var highlight_button = play_button.get("custom_styles/focus")
-			
-			if blue_team_button.pressed: 
-				blue_team_button.set("custom_styles/disabled", highlight_button)
-			if red_team_button.pressed: 
-				red_team_button.set("custom_styles/disabled", highlight_button)
-			
-			blue_team_button.disabled = true
-			red_team_button.disabled = true
-			small_map_button.disabled = true
-			large_map_button.disabled = true
-			game.ui.get_node("mid/team_selection_menu").visible = true
+			if game.started:
+				resume_game()
+			else: # new game
+				var highlight_button = play_button.get("custom_styles/focus")
+				
+				# lock selections 
+				if blue_team_button.pressed: 
+					blue_team_button.set("custom_styles/disabled", highlight_button)
+				if red_team_button.pressed: 
+					red_team_button.set("custom_styles/disabled", highlight_button)
+				
+				blue_team_button.disabled = true
+				red_team_button.disabled = true
+				small_map_button.disabled = true
+				large_map_button.disabled = true
+				
+				game.ui.get_node("mid/team_selection_menu").visible = true
 
 		"choose_leaders":
 			game.ui.main_menu_background.visible = false
@@ -54,10 +57,8 @@ func button_down():
 			else:
 				game.player_choose_leaders = team_selection_menu.get_red_team_leaders()
 				game.enemy_choose_leaders = team_selection_menu.get_blue_team_leaders()
-			game.paused = false
-			get_tree().paused = false
 			game.maps.load_map(game.maps.current_map)
-			
+			resume_game()
 			
 		"blue":
 			game.player_team = "blue"
@@ -88,12 +89,13 @@ func button_down():
 		"menu":
 			game.paused = true
 			get_tree().paused = true
-			game.unit.spawn.timer.stop()
+			game.unit.spawn.timer.paused = true
 			game.ui.hide_all()
 			game.ui.get_node('mid').visible = true
+			game.ui.minimap.visible = false
+			game.ui.get_node("mid/team_selection_menu").visible = false
 			game.ui.main_menu_background.visible = true
 			game.ui.main_menu.visible = true
-		
 		
 		"shop":
 			game.ui.shop.visible = !game.ui.shop.visible
@@ -123,3 +125,14 @@ func button_down():
 			else: game.control_state = "selection"
 			game.ui.buttons_update()
 
+func resume_game():
+	game.ui.main_menu_background.visible = false
+	game.paused = false
+	get_tree().paused = false
+	game.unit.spawn.timer.paused = false;
+	game.ui.show_all()
+	game.ui.get_node('mid').visible = false
+	game.ui.minimap.visible = true
+	game.ui.main_menu_background.visible = false
+	game.ui.main_menu.visible = false
+	game.ui.get_node("score_board").visible = false
