@@ -14,7 +14,7 @@ var blacksmiths
 
 const items = {
 	# Offensive
-	"Axe": {
+	"axe": {
 		"name": "Axe",
 		"sprite": 0,
 		"tooltip": "Used to chop wood, now used for war\nDamage +25",
@@ -23,7 +23,7 @@ const items = {
 		"type": "equip",
 		"delivery_time": 20
 	},
-	"Sword": {
+	"sword": {
 		"name": "Sword",
 		"sprite": 1,
 		"tooltip": "Forged of pure high-carbon steel\nDamage +50 Attack speed +50%",
@@ -32,8 +32,8 @@ const items = {
 		"type": "equip",
 		"delivery_time": 30
 	},
-	"Elven Bow": {
-		"name": "Elven Bow",
+	"bow": {
+		"name": "Elven\nBow",
 		"sprite": 2,
 		"tooltip": "\nDamage +20, Attack speed +25% Range +40%",
 		"attributes": {"damage": 20, "attack_speed": .25, "attack_range": .4},
@@ -43,100 +43,118 @@ const items = {
 	},
 
 	# Defensive
-	"Helmet": {
+	"helmet": {
 		"name": "Helmet",
 		"sprite": 3,
 		"tooltip": "Adds 150 HP",
 		"attributes": {"hp": 150},
 		"price": 300,
 		"type": "equip",
-		"delivery_time": 25
+		"delivery_time": 20
 	},
-	"Shield": {
-		"name": "Holly Shield",
+	"great_helm": {
+		"name": "Great\nHelm",
 		"sprite": 4,
-		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
-		"attributes": {"hp": 200, "vision": 50},
+		"tooltip": "Adds 150 HP Defense +5",
+		"attributes": {"hp": 200, "defense": 5},
 		"price": 500,
 		"type": "equip",
-		"delivery_time": 25
+		"delivery_time": 20
 	},
-	"Dragonscale": {
-		"name": "Dragonscale",
-		"sprite": 5,
-		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300 Defense +4 Speed -10",
-		"attributes": {"hp": 300, "defense": 4, "speed": -10},
-		"price": 500,
-		"type": "equip",
-		"delivery_time": 25
-	},
-	"Feather": {
-		"name": "Magic Feather",
-		"sprite": 6,
-		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
-		"attributes": {"regen": 2, "speed": 15},
-		"price": 350,
-		"type": "equip",
-		"delivery_time": 15
-	},
-
-
-	# Utility
-	"Boots": {
+	"boots": {
 		"name": "Boots",
-		"sprite": 7,
+		"sprite": 5,
 		"tooltip": "Protect your feet from the ground\nSpeed +15",
 		"attributes": {"speed": 15},
 		"price": 300,
 		"type": "equip",
-		"delivery_time": 25
+		"delivery_time": 15
 	},
-	"Torch": {
-		"name": "Torch",
+	"shield": {
+		"name": "Shield",
+		"sprite": 6,
+		"tooltip": "Wooden shield\nHealth +50",
+		"attributes": {"hp": 100},
+		"price": 200,
+		"type": "equip",
+		"delivery_time": 30
+	},
+	"holly_shield": {
+		"name": "Holly\nShield",
+		"sprite": 7,
+		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
+		"attributes": {"hp": 200, "vision": 50},
+		"price": 450,
+		"type": "equip",
+		"delivery_time": 30
+	},
+	"scale": {
+		"name": "Dragon\nscale",
 		"sprite": 8,
+		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300 Defense +4 Speed -10",
+		"attributes": {"hp": 300, "defense": 4, "speed": -10},
+		"price": 500,
+		"type": "equip",
+		"delivery_time": 30
+	},
+
+
+	# Utility
+	"torch": {
+		"name": "Torch",
+		"sprite": 9,
 		"tooltip": "This torch will never burn out\nVision +50",
 		"attributes": {"vision": 50},
 		"price": 150,
 		"type": "equip",
 		"delivery_time": 15
 	},
-	"Oligan's Eye": {
-		"name": "Oligan's Eye",
-		"sprite": 9,
+	"feather": {
+		"name": "Magic\nFeather",
+		"sprite": 10,
+		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
+		"attributes": {"regen": 2, "speed": 15},
+		"price": 350,
+		"type": "equip",
+		"delivery_time": 15
+	},
+	"eye": {
+		"name": "Oligan's\nEye",
+		"sprite": 11,
 		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100 Speed +10",
 		"attributes": {"vision": 100, "speed": 10},
 		"price": 350,
 		"type": "equip",
-		"delivery_time": 25
+		"delivery_time": 30
 	},
 
 	# Consumables
-	"Small Health": {
-		"name": "Small Health",
-		"sprite": 10,
+	"small_hp": {
+		"name": "Small\nHealth",
+		"sprite": 12,
 		"tooltip": "Restore 100 HP",
 		"attributes": {"current_hp": 100},
 		"price": 50,
 		"type": "consumable",
 		"delivery_time": 10
 	},
-	"Medium Health": {
-		"name": "Medium Health",
-		"sprite": 11,
+	"medium_hp": {
+		"name": "Medium\nHealth",
+		"sprite": 13,
 		"tooltip": "Restore 150 HP",
 		"attributes": {"current_hp": 150},
 		"price": 75,
 		"type": "consumable",
-		"delivery_time": 10
+		"delivery_time": 15
 	},
-	"Large Health": {
-		"name": "Large Health",
-		"sprite": 12,
+	"large_hp": {
+		"name": "Large\nHealth",
+		"sprite": 14,
 		"tooltip": "Restore 250 HP",
 		"attributes": {"current_hp": 250},
 		"price": 125,
 		"type": "consumable",
-		"delivery_time": 10
+		"delivery_time": 20
 	}
 }
 
