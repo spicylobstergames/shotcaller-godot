@@ -74,7 +74,7 @@ var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
-var tactics:String = "default" # aggresive defensive retreat 
+var tactics:String = "default" # aggresive defensive retreat
 var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
 var gold = 0
@@ -121,7 +121,7 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
+
 	if has_node("hud"): hud = get_node("hud")
 	if has_node("behavior/spawn"): spawn = get_node("behavior/spawn")
 	if has_node("behavior/move"): move = get_node("behavior/move")
@@ -131,19 +131,19 @@ func _ready():
 	if has_node("behavior/orders"): orders = get_node("behavior/orders")
 	if has_node("behavior/skills"): skills = get_node("behavior/skills")
 	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
-	
+
 	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
-	
+
 	if type == "leader":
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
-		
+
 func gain_experience(value):
 	experience += value
 	if experience >= experience_needed():
@@ -159,11 +159,11 @@ func experience_needed():
 
 func reset_unit():
 	self.setup_team(self.team)
-	
-	if self.type == "leader": 
+
+	if self.type == "leader":
 		self.hud.state.visible = true
 		self.hud.hpbar.visible = true
-	
+
 	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_modifiers = modifiers.new_modifiers()
@@ -191,7 +191,7 @@ func set_behavior(s):
 
 func setup_team(new_team):
 	self.team = new_team
-	
+
 	# fog setup
 	if game.map.fog_of_war and self.has_node("light"):
 		var light = get_node("light")
@@ -200,26 +200,26 @@ func setup_team(new_team):
 		var s = self.vision / 16
 		light.scale = Vector2(s,s)
 		sprites.use_parent_material = true
-	
+
 	# color body sprite
 	set_anim(new_team, body)
-	
+
 	# color weapons
 	if weapon is AnimatedSprite: set_anim(new_team, weapon)
-	if has_node("sprites/weapon/spear"): 
+	if has_node("sprites/weapon/spear"):
 		var spear = get_node("sprites/weapon/spear")
 		set_anim(new_team, spear)
 		var spear_proj = get_node("sprites/weapon/spear/projectile/sprites")
 		set_anim(new_team, spear_proj)
-	
+
 	# mirror red pawns, leaders and neutrals
 	var is_red = (self.team == "red")
 	if self.type != "building": self.mirror_toggle(is_red)
-	
+
 	else: # mirror lumbermill
 		if self.display_name == "lumbermill" and self.get_parent().name == "blue":
 			self.mirror_toggle(true)
-			
+
 		# color flags
 		var flags = self.get_node("sprites/flags").get_children()
 		for flag in flags:
@@ -229,14 +229,14 @@ func setup_team(new_team):
 
 func set_anim(new_team, sprite):
 	if new_team and sprite:
-		match new_team: 
+		match new_team:
 			"blue": sprite.animation = 'default'
 			"red": sprite.animation = 'red'
 			"neutral": sprite.animation = 'neutral'
 
 
 func oponent_team():
-	match self.team: 
+	match self.team:
 		"red": return "blue"
 		"blue": return "red"
 		"neutral": return "all"
@@ -253,7 +253,7 @@ func mirror_toggle(on):
 	self.get_node("sprites").scale.x = s
 	if self.attack_hit_position:
 		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
-		
+
 
 func get_units_on_sight(filters):
 	var current_vision = game.unit.modifiers.get_value(self, "vision")
@@ -288,9 +288,9 @@ func on_move(delta): # every frame if there's no collision
 
 
 func on_collision(delta):
-	if self.moves: 
+	if self.moves:
 		game.unit.move.on_collision(self, delta)
-		if self.attacks: 
+		if self.attacks:
 			game.unit.advance.on_collision(self)
 
 
@@ -306,9 +306,9 @@ func on_arrive(): # when collides with destiny
 	elif self.moves:
 		self.working = false
 		game.unit.move.end(self)
-		
+
 		if self.attacks: game.unit.advance.end(self)
-		
+
 		match self.after_arive:
 			"conquer": game.unit.orders.conquer_building(self)
 			"pray": game.unit.orders.pray_in_church(self)
@@ -322,7 +322,7 @@ func on_attack_release(): # every ranged projectile start
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
-	if self.attacks: 
+	if self.attacks:
 		game.unit.attack.hit(self)
 		if self.moves:
 			game.unit.advance.resume(self)
@@ -338,7 +338,7 @@ func heal(heal_hp):
 func channel_start(time):
 	self.channeling = true
 	self.working = true
-	if self.channeling_timer.time_left > 0: 
+	if self.channeling_timer.time_left > 0:
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
 	self.channeling_timer.start()
@@ -371,7 +371,7 @@ func die():  # hp <= 0
 	self.target = null
 	self.channeling = false
 	self.working = false
-	
+
 	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, 200)
 	for neighbor in neighbors:
 		if neighbor.type == "leader" and neighbor.team != team:
@@ -403,7 +403,6 @@ func on_death_end():  # death animation end
 			"leader": game.unit.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == 'castle':
-					game.ended = true
-					if self.team == game.player_team: game.victory = 'ENEMY'
-					else: game.victory = 'PLAYER'
-	
+					EventMachine.register_event(Events.GAME_END,
+							["ENEMY" if team == game.player_team else "PLAYER"])
+

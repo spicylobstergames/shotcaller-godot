@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://ui/scoreboard/score_board_entry.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=2]
 [ext_resource path="res://ui/scoreboard/score_board.gd" type="Script" id=3]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0901961, 0.101961, 0.305882, 1 )
@@ -19,6 +20,14 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.423529, 0.0392157, 0.00392157, 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 4 )
 
 [node name="score_board" type="Control"]
 anchor_right = 1.0
@@ -150,4 +159,38 @@ margin_bottom = 326.0
 [node name="update_timer" type="Timer" parent="."]
 autostart = true
 
+[node name="CenterContainer2" type="CenterContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 18.0
+
+[node name="result_label" type="Label" parent="CenterContainer2"]
+unique_name_in_owner = true
+visible = false
+margin_left = 201.0
+margin_top = -14.0
+margin_right = 399.0
+margin_bottom = 31.0
+custom_fonts/font = SubResource( 3 )
+text = "DEFEAT"
+
+[node name="CenterContainer3" type="CenterContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = -47.0
+margin_right = 3.0
+margin_bottom = -47.0
+
+[node name="restart_button" type="Button" parent="CenterContainer3"]
+unique_name_in_owner = true
+visible = false
+margin_left = 199.0
+margin_top = -21.0
+margin_right = 400.0
+margin_bottom = 21.0
+custom_fonts/font = SubResource( 4 )
+text = "Restart"
+
 [connection signal="timeout" from="update_timer" to="." method="_on_update_timer_timeout"]
+[connection signal="pressed" from="CenterContainer3/restart_button" to="." method="_on_restart_button_pressed"]
