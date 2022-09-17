@@ -203,7 +203,7 @@ func setup_team(new_team):
 	if has_node("sprites/weapon/spear"): 
 		var spear = get_node("sprites/weapon/spear")
 		set_anim(new_team, spear)
-		var spear_proj = get_node("sprites/weapon/spear/projectile/sprites")
+		var spear_proj = get_node("sprites/weapon/projectile/sprites")
 		set_anim(new_team, spear_proj)
 	
 	# mirror red pawns, leaders and neutrals
