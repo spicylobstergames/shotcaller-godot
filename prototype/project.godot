@@ -31,6 +31,8 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 autoload="*res://autoload/autoload.gd"
+EventMachine="*res://utils/event_machine.gd"
+Events="*res://utils/events.gd"
 
 [debug]
 

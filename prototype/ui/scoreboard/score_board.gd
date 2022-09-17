@@ -10,6 +10,7 @@ func _ready():
 		for child in container.get_children():
 			container.remove_child(child)
 	visible = false
+	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
 
 func initialize(red_leaders : Array, blue_leaders : Array):
 	for red_leader_index in red_leaders.size():
@@ -36,5 +37,18 @@ func _unhandled_input(event):
 	if event is InputEventKey:
 		if event.echo:
 			return
-		if event.scancode == KEY_TAB and is_ready:			
+		if event.scancode == KEY_TAB and is_ready:
 			visible = event.is_pressed()
+
+func handle_game_end(victor):
+	is_ready = false
+	visible = true
+	$update_timer.stop()
+	$"%result_label".text = "Victory" if victor == "PLAYER" else "DEFEAT"
+	$"%result_label".visible = true
+	$"%restart_button".visible = true
+
+
+func _on_restart_button_pressed():
+	EventMachine.reset()
+	get_tree().reload_current_scene()
