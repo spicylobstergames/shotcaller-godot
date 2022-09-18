@@ -163,7 +163,7 @@ func setup_lane_buttons(orders_container):
 
 func build_mines():
 	for building in mine:
-		game.ui.inventories.gold_timer_timeout(building)
+		game.ui.inventories.gold_timer(building)
 		building.channeling_timer = Timer.new()
 		building.add_child(building.channeling_timer)
 		

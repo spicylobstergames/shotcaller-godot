@@ -8,7 +8,7 @@
 [ext_resource path="res://map/maps.gd" type="Script" id=6]
 [ext_resource path="res://controls/selection.gd" type="Script" id=7]
 [ext_resource path="res://utils/utils.gd" type="Script" id=8]
-[ext_resource path="res://utils/test.gd" type="Script" id=9]
+[ext_resource path="res://test/test.gd" type="Script" id=9]
 [ext_resource path="res://unit/collision.gd" type="Script" id=10]
 [ext_resource path="res://map/maps/1lane_map.tscn" type="PackedScene" id=11]
 

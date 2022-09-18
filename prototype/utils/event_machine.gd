@@ -12,6 +12,7 @@ func register_listener(event : int, node : Node, method : String, extra_args : A
 	if not event_listeners.keys().has(event):
 		event_listeners[event] = []
 	else:
+# warning-ignore:return_value_discarded
 		deregister_listener(event, node, method)
 	event_listeners[event].append({
 		"node" : node,

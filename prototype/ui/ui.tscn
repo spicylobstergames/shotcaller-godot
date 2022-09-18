@@ -18,7 +18,8 @@
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
 [ext_resource path="res://ui/scoreboard/score_board.tscn" type="PackedScene" id=18]
-[ext_resource path="res://ui/CheatConsole.gd" type="Script" id=19]
+[ext_resource path="res://ui/cheat_console.gd" type="Script" id=19]
+
 
 [sub_resource type="DynamicFont" id=17]
 size = 11

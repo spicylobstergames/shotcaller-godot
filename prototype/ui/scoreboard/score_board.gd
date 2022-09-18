@@ -51,4 +51,5 @@ func handle_game_end(victor):
 
 func _on_restart_button_pressed():
 	EventMachine.reset()
+# warning-ignore:return_value_discarded
 	get_tree().reload_current_scene()

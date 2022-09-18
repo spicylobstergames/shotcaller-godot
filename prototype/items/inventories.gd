@@ -71,7 +71,14 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-	gold_update_cycle()
+	
+	
+	var timer := Timer.new()
+	timer.wait_time = 1
+	game.ui.get_node("bot_mid").add_child(timer)
+	timer.start()
+# warning-ignore:return_value_discarded
+	timer.connect("timeout", self, "gold_update_cycle")
 
 
 func get_leader_inventory(leader):
@@ -112,8 +119,6 @@ func gold_update_cycle():
 	if not game.paused:
 		game.ui.shop.update_buttons()
 		update_buttons()
-	yield(get_tree().create_timer(1), "timeout")
-	gold_update_cycle()
 
 
 func add_inventory(leader):
@@ -121,7 +126,7 @@ func add_inventory(leader):
 	var inventory = new_inventory(leader)
 	add_child(inventory.container)
 	set_leader_inventory(leader, inventory)
-	gold_timer_timeout(leader)
+	gold_timer(leader)
 	var counter = 0
 	var item_button
 # warning-ignore:unused_variable
@@ -142,6 +147,15 @@ func add_inventory(leader):
 		item_button.setup(null)
 
 
+func gold_timer(unit):
+	var timer := Timer.new()
+	timer.wait_time = 1
+	unit.add_child(timer)
+	timer.start()
+# warning-ignore:return_value_discarded
+	timer.connect("timeout", self, "gold_timer_timeout", [unit])
+	
+
 func gold_timer_timeout(unit):
 	if not game.paused:
 		var inventory = get_leader_inventory(unit)
@@ -153,9 +167,6 @@ func gold_timer_timeout(unit):
 		unit.gold += gold_per_sec
 		# Updates gold label
 		if unit == game.selected_unit: game.ui.stats.update()
-	yield(get_tree().create_timer(1), "timeout")
-	gold_timer_timeout(unit)
-
 
 
 func equip_items_has_slots(leader):
