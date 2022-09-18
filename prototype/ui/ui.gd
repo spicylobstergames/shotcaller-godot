@@ -24,7 +24,7 @@ var inventories:Node
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
+
 	fps = get_node("top_left/fps")
 	top_label = get_node("top_mid/label")
 	shop = get_node("top_right/shop")
@@ -37,15 +37,15 @@ func _ready():
 	orders_menu = get_node("bot_right/orders_menu")
 	controls_menu = get_node("bot_right/controls_menu")
 	leaders_icons = get_node("mid_left/leaders_icons")
-	
+
 	inventories = stats.get_node("inventories")
-	
+
 	controls_button = buttons.get_node("controls_button")
 	shop_button = buttons.get_node("shop_button")
 	orders_button = buttons.get_node("orders_button")
 
 	count_time()
-
+	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
 
 
 func process():
@@ -53,7 +53,7 @@ func process():
 	var f = Engine.get_frames_per_second()
 	var n = game.all_units.size()
 	fps.set_text('fps: '+str(f)+' u:'+str(n))
-	
+
 	# minimap display update
 	if minimap:
 		if minimap.update_map_texture:
@@ -61,28 +61,28 @@ func process():
 		if game.camera.zoom.x <= 1:
 			minimap.move_symbols()
 			minimap.follow_camera()
-	
+
 	# scale vertical main menu background to fit height
 	var h = get_viewport().size.y
 	var ratio = get_viewport().size.x / h
-	if ratio < 1: 
+	if ratio < 1:
 		var s = 1/ratio
 		main_menu_background.scale = Vector2(s*1.666,s*1.666)
 		main_menu_background.position = Vector2(-528,-300*s)
-	else: 
+	else:
 		main_menu_background.scale = Vector2(1.666,1.666)
 		main_menu_background.position = Vector2(-528,-300)
 
 
 func count_time():
 	if not get_tree().paused:
-		game.time += 1 
+		game.time += 1
 		if game.ended:
 			top_label.text = game.victory + ' WINS!'
 		else:
 			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
 			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
-			
+
 	yield(get_tree().create_timer(1), "timeout")
 	count_time()
 
@@ -122,3 +122,8 @@ func buttons_update():
 	orders_button.set_pressed(orders_menu.visible)
 	shop_button.set_pressed(shop.visible)
 	controls_button.set_pressed(controls_menu.visible)
+
+func handle_game_end(victor : String):
+	game.ended = true
+	game.victory = victor
+	get_tree().paused = true

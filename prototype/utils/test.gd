@@ -9,6 +9,7 @@ var stress = 0
 
 func _ready():
 	game = get_tree().get_current_scene()
+	EventMachine.register_listener(Events.CHEAT_CODE, self, "apply_cheat_code")
 
 
 func spawn_unit():
@@ -81,3 +82,10 @@ func spawn_leaders():
 		game.maps.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
 		game.maps.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
 
+
+func apply_cheat_code(code):
+	match code:
+		"WIN":
+			EventMachine.register_event(Events.GAME_END, ["PLAYER"])
+		"LOSE":
+			EventMachine.register_event(Events.GAME_END, ["ENEMY"])

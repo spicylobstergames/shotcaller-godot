@@ -7,6 +7,12 @@ var extra_retreat_speed = 10
 
 var retreat_regen = 10
 
+export var hp_per_level : float = 10
+export var regen_per_level : float = 2
+export var damage_per_level : float = 2.5
+export var defense_per_level : float = 2
+export var attack_speed_per_level : float = 0.05
+
 func _ready():
 	game = get_tree().get_current_scene()
 
@@ -35,7 +41,15 @@ func get_value(unit, mod_str):
 	for modifier in unit.current_modifiers[mod_str]:
 		default += modifier.value
 	
-	return default
+	var level_bonus = unit.level - 1
+	match mod_str:
+		"hp": level_bonus *= hp_per_level
+		"regen": level_bonus *= regen_per_level
+		"damage": level_bonus *= damage_per_level
+		"defense": level_bonus *= defense_per_level
+		"attack_speed": level_bonus *= attack_speed_per_level
+	
+	return default + level_bonus
 
 
 func get_speed(unit):
