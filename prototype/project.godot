@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Unit",
 "language": "GDScript",
 "path": "res://unit/unit.gd"
+}, {
+"base": "YSort",
+"class": "base_map",
+"language": "GDScript",
+"path": "res://map/maps/base_map.gd"
 } ]
 _global_script_class_icons={
-"Unit": ""
+"Unit": "",
+"base_map": ""
 }
 
 [application]

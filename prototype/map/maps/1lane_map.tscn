@@ -12,7 +12,7 @@
 [ext_resource path="res://buildings/barrack.tscn" type="PackedScene" id=10]
 [ext_resource path="res://buildings/castle.tscn" type="PackedScene" id=11]
 [ext_resource path="res://buildings/tower.tscn" type="PackedScene" id=12]
-[ext_resource path="res://map/maps/1lane_map.gd" type="Script" id=13]
+[ext_resource path="res://map/maps/base_map.gd" type="Script" id=13]
 [ext_resource path="res://buildings/camp.tscn" type="PackedScene" id=14]
 [ext_resource path="res://assets/map/mud.png" type="Texture" id=15]
 [ext_resource path="res://assets/map/brick_church.png" type="Texture" id=16]
@@ -555,7 +555,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -563,7 +563,8 @@ offset = Vector2( 0, -12 )
 
 [node name="blue" type="YSort" parent="buildings"]
 
-[node name="castle" parent="buildings/blue" instance=ExtResource( 11 )]
+[node name="blue_castle" parent="buildings/blue" instance=ExtResource( 11 )]
+unique_name_in_owner = true
 material = SubResource( 57 )
 position = Vector2( 126, 984 )
 
@@ -582,7 +583,8 @@ team = "neutral"
 
 [node name="red" type="YSort" parent="buildings"]
 
-[node name="castle" parent="buildings/red" instance=ExtResource( 11 )]
+[node name="red_castle" parent="buildings/red" instance=ExtResource( 11 )]
+unique_name_in_owner = true
 material = SubResource( 57 )
 position = Vector2( 954, 169 )
 team = "red"

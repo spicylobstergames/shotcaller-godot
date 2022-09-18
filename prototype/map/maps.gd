@@ -34,10 +34,10 @@ func setup_leaders():
 
 func new_path(lane, team):
 	var path = game.map.lanes_paths[lane].duplicate()
-	if team == "blue": path.append(game.map.red_castle.global_position)
+	if team == "blue": path.append(game.map.find_node("red_castle").global_position)
 	if team == "red": 
 		path.invert()
-		path.append(game.map.blue_castle.global_position)
+		path.append(game.map.find_node("blue_castle").global_position)
 	var start = path.pop_front()
 	return {
 		"start": start,
