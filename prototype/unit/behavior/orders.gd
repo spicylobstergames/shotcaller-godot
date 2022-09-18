@@ -121,7 +121,12 @@ func build_leaders():
 	for leader in game.enemy_leaders:
 		enemy_leaders_orders[leader.name] = new_orders()
 	
-	hp_regen_cycle()
+	var timer := Timer.new()
+	timer.wait_time = 1
+	game.map.add_child(timer)
+	timer.start()
+# warning-ignore:return_value_discarded
+	timer.connect("timeout", self, "hp_regen_cycle")
 
 
 func hp_regen_cycle(): # called every second  and
@@ -134,9 +139,6 @@ func hp_regen_cycle(): # called every second  and
 				set_regen(unit)
 				if unit.type == "leader" and game.can_control(unit):
 					game.ui.inventories.update_consumables(unit)
-	
-	yield(get_tree().create_timer(1), "timeout")
-	hp_regen_cycle()
 
 
 func set_regen(unit):

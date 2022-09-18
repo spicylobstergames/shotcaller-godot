@@ -21,6 +21,7 @@ var controls_button:Node
 var menu_button:Node
 var inventories:Node
 
+var timer:Timer
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -43,8 +44,14 @@ func _ready():
 	controls_button = buttons.get_node("controls_button")
 	shop_button = buttons.get_node("shop_button")
 	orders_button = buttons.get_node("orders_button")
-
-	count_time()
+	
+	timer = Timer.new()
+	timer.wait_time = 1
+	get_node("top_mid").add_child(timer)
+	timer.start()
+# warning-ignore:return_value_discarded
+	timer.connect("timeout", self, "count_time")
+	
 	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
 
 
@@ -82,10 +89,6 @@ func count_time():
 		else:
 			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
 			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
-
-	yield(get_tree().create_timer(1), "timeout")
-	count_time()
-
 
 
 func hide_all():

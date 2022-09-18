@@ -7,7 +7,6 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-
 func circle_point_collision(p, c, r):
 	return p.distance_to(c) < r
 

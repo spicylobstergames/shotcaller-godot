@@ -18,7 +18,8 @@
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=16]
 [ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
 [ext_resource path="res://ui/scoreboard/score_board.tscn" type="PackedScene" id=18]
-[ext_resource path="res://ui/CheatConsole.gd" type="Script" id=19]
+[ext_resource path="res://ui/cheat_console.gd" type="Script" id=19]
+
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
@@ -100,7 +101,7 @@ size = 11
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=9]
-size = 13
+size = 15
 font_data = ExtResource( 6 )
 
 [sub_resource type="StyleBoxFlat" id=10]
@@ -223,6 +224,7 @@ __meta__ = {
 }
 
 [node name="top_right" type="Control" parent="."]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 __meta__ = {
@@ -232,10 +234,9 @@ __meta__ = {
 [node name="shop" type="Panel" parent="top_right"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -288.0
+margin_left = -228.0
 margin_top = 16.0
-margin_right = -2.0
-margin_bottom = 346.0
+margin_bottom = 378.0
 custom_styles/panel = SubResource( 15 )
 script = ExtResource( 3 )
 
@@ -247,44 +248,41 @@ margin_top = 11.0
 margin_right = -14.0
 margin_bottom = -13.0
 rect_pivot_offset = Vector2( 290, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="container" type="VBoxContainer" parent="top_right/shop/scroll_container"]
-margin_right = 244.0
-margin_bottom = 344.0
+margin_right = 198.0
+margin_bottom = 338.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
 [node name="shop_title" type="Label" parent="top_right/shop/scroll_container/container"]
-margin_right = 244.0
-margin_bottom = 18.0
+margin_top = 2.0
+margin_right = 198.0
+margin_bottom = 20.0
 custom_fonts/font = SubResource( 35 )
 text = "shop"
 
 [node name="separator" type="HSeparator" parent="top_right/shop/scroll_container/container"]
-margin_top = 22.0
-margin_right = 244.0
-margin_bottom = 26.0
+margin_top = 24.0
+margin_right = 198.0
+margin_bottom = 28.0
 
 [node name="equip" type="Label" parent="top_right/shop/scroll_container/container"]
-margin_top = 30.0
-margin_right = 244.0
-margin_bottom = 46.0
+margin_top = 32.0
+margin_right = 198.0
+margin_bottom = 48.0
 custom_fonts/font = SubResource( 7 )
 text = "Equip"
 
 [node name="equip_items" type="GridContainer" parent="top_right/shop/scroll_container/container"]
-margin_top = 50.0
-margin_right = 244.0
-margin_bottom = 208.0
-columns = 4
+margin_top = 52.0
+margin_right = 198.0
+margin_bottom = 256.0
+columns = 3
 
 [node name="item_button" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_right = 50.0
-margin_bottom = 50.0
+margin_right = 60.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button" index="0"]
@@ -299,9 +297,8 @@ __meta__ = {
 }
 
 [node name="item_button2" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 54.0
-margin_right = 104.0
-margin_bottom = 50.0
+margin_left = 64.0
+margin_right = 124.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button2" index="0"]
@@ -316,9 +313,8 @@ __meta__ = {
 }
 
 [node name="item_button3" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 108.0
-margin_right = 158.0
-margin_bottom = 50.0
+margin_left = 128.0
+margin_right = 188.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button3" index="0"]
@@ -333,9 +329,9 @@ __meta__ = {
 }
 
 [node name="item_button4" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 162.0
-margin_right = 212.0
-margin_bottom = 50.0
+margin_top = 52.0
+margin_right = 60.0
+margin_bottom = 100.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button4" index="0"]
@@ -350,9 +346,10 @@ __meta__ = {
 }
 
 [node name="item_button5" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_top = 54.0
-margin_right = 50.0
-margin_bottom = 104.0
+margin_left = 64.0
+margin_top = 52.0
+margin_right = 124.0
+margin_bottom = 100.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button5" index="0"]
@@ -367,10 +364,10 @@ __meta__ = {
 }
 
 [node name="item_button6" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 54.0
-margin_top = 54.0
-margin_right = 104.0
-margin_bottom = 104.0
+margin_left = 128.0
+margin_top = 52.0
+margin_right = 188.0
+margin_bottom = 100.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button6" index="0"]
@@ -385,10 +382,9 @@ __meta__ = {
 }
 
 [node name="item_button7" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 108.0
-margin_top = 54.0
-margin_right = 158.0
-margin_bottom = 104.0
+margin_top = 104.0
+margin_right = 60.0
+margin_bottom = 152.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button7" index="0"]
@@ -403,10 +399,10 @@ __meta__ = {
 }
 
 [node name="item_button8" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 162.0
-margin_top = 54.0
-margin_right = 212.0
-margin_bottom = 104.0
+margin_left = 64.0
+margin_top = 104.0
+margin_right = 124.0
+margin_bottom = 152.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button8" index="0"]
@@ -421,9 +417,10 @@ __meta__ = {
 }
 
 [node name="item_button9" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_top = 108.0
-margin_right = 50.0
-margin_bottom = 158.0
+margin_left = 128.0
+margin_top = 104.0
+margin_right = 188.0
+margin_bottom = 152.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button9" index="0"]
@@ -438,10 +435,9 @@ __meta__ = {
 }
 
 [node name="item_button10" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
-margin_left = 54.0
-margin_top = 108.0
-margin_right = 104.0
-margin_bottom = 158.0
+margin_top = 156.0
+margin_right = 60.0
+margin_bottom = 204.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button10" index="0"]
@@ -455,27 +451,62 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="item_button11" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
+margin_left = 64.0
+margin_top = 156.0
+margin_right = 124.0
+margin_bottom = 204.0
+focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button11" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button11" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button12" parent="top_right/shop/scroll_container/container/equip_items" instance=ExtResource( 8 )]
+margin_left = 128.0
+margin_top = 156.0
+margin_right = 188.0
+margin_bottom = 204.0
+focus_mode = 2
+
+[node name="name" parent="top_right/shop/scroll_container/container/equip_items/item_button12" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="top_right/shop/scroll_container/container/equip_items/item_button12" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="separator2" type="HSeparator" parent="top_right/shop/scroll_container/container"]
-margin_top = 212.0
-margin_right = 244.0
-margin_bottom = 216.0
+margin_top = 260.0
+margin_right = 198.0
+margin_bottom = 264.0
 
 [node name="consumable" type="Label" parent="top_right/shop/scroll_container/container"]
-margin_top = 220.0
-margin_right = 244.0
-margin_bottom = 236.0
+margin_top = 268.0
+margin_right = 198.0
+margin_bottom = 284.0
 custom_fonts/font = SubResource( 7 )
 text = "Consumable"
 
 [node name="consumable_items" type="GridContainer" parent="top_right/shop/scroll_container/container"]
-margin_top = 240.0
-margin_right = 244.0
-margin_bottom = 344.0
-columns = 4
+margin_top = 288.0
+margin_right = 198.0
+margin_bottom = 336.0
+columns = 3
 
 [node name="item_button" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_right = 50.0
-margin_bottom = 50.0
+margin_right = 60.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button" index="0"]
@@ -490,9 +521,8 @@ __meta__ = {
 }
 
 [node name="item_button2" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 54.0
-margin_right = 104.0
-margin_bottom = 50.0
+margin_left = 64.0
+margin_right = 124.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button2" index="0"]
@@ -507,9 +537,8 @@ __meta__ = {
 }
 
 [node name="item_button3" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 108.0
-margin_right = 158.0
-margin_bottom = 50.0
+margin_left = 128.0
+margin_right = 188.0
 focus_mode = 2
 
 [node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button3" index="0"]
@@ -518,58 +547,6 @@ __meta__ = {
 }
 
 [node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button3" index="3"]
-visible = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="item_button4" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 162.0
-margin_right = 212.0
-margin_bottom = 50.0
-focus_mode = 2
-
-[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button4" index="0"]
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button4" index="3"]
-visible = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="item_button5" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_top = 54.0
-margin_right = 50.0
-margin_bottom = 104.0
-focus_mode = 2
-
-[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button5" index="0"]
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button5" index="3"]
-visible = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="item_button6" parent="top_right/shop/scroll_container/container/consumable_items" instance=ExtResource( 8 )]
-margin_left = 54.0
-margin_top = 54.0
-margin_right = 104.0
-margin_bottom = 104.0
-focus_mode = 2
-
-[node name="name" parent="top_right/shop/scroll_container/container/consumable_items/item_button6" index="0"]
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="sell_button" parent="top_right/shop/scroll_container/container/consumable_items/item_button6" index="3"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -909,9 +886,6 @@ __meta__ = {
 margin_right = 300.0
 margin_bottom = 96.0
 custom_styles/panel = SubResource( 15 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="hpbar" type="Control" parent="bot_mid/stats/panel"]
 margin_left = 100.0
@@ -1042,33 +1016,31 @@ align = 1
 valign = 1
 
 [node name="gold" type="Label" parent="bot_mid/stats/panel"]
-margin_left = 193.0
-margin_top = 71.0
-margin_right = 269.0
-margin_bottom = 88.0
-custom_colors/font_color = Color( 0.94902, 0.772549, 0.0705882, 1 )
+margin_left = 188.0
+margin_top = 69.0
+margin_right = 264.0
+margin_bottom = 86.0
+custom_colors/font_color = Color( 1, 0.796078, 0.243137, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 9 )
 text = "gold"
 align = 2
 valign = 1
 
 [node name="gold_sprite" type="Sprite" parent="bot_mid/stats/panel"]
-position = Vector2( 281, 78 )
-scale = Vector2( 0.833333, 0.833333 )
+position = Vector2( 265, 62 )
 texture = ExtResource( 16 )
+centered = false
 region_enabled = true
-region_rect = Rect2( 685, 13, 22, 22 )
+region_rect = Rect2( 682, 10, 28, 27 )
 
 [node name="inventories" type="ItemList" parent="bot_mid/stats"]
-margin_left = 138.0
+margin_left = 108.0
 margin_top = -94.0
 margin_right = 298.0
 margin_bottom = -2.0
 custom_styles/bg = SubResource( 10 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="placeholder" type="HBoxContainer" parent="bot_mid/stats/inventories"]
 margin_top = 40.0
@@ -1079,14 +1051,15 @@ __meta__ = {
 }
 
 [node name="item_button" parent="bot_mid/stats/inventories/placeholder" instance=ExtResource( 8 )]
+margin_right = 60.0
 
 [node name="item_button2" parent="bot_mid/stats/inventories/placeholder" instance=ExtResource( 8 )]
-margin_left = 56.0
-margin_right = 108.0
+margin_left = 64.0
+margin_right = 124.0
 
 [node name="item_button3" parent="bot_mid/stats/inventories/placeholder" instance=ExtResource( 8 )]
-margin_left = 112.0
-margin_right = 164.0
+margin_left = 128.0
+margin_right = 188.0
 
 [node name="bot_right" type="Control" parent="."]
 visible = false
@@ -1381,12 +1354,11 @@ script = ExtResource( 19 )
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button8"]
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button9"]
 [editable path="top_right/shop/scroll_container/container/equip_items/item_button10"]
+[editable path="top_right/shop/scroll_container/container/equip_items/item_button11"]
+[editable path="top_right/shop/scroll_container/container/equip_items/item_button12"]
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button"]
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button2"]
 [editable path="top_right/shop/scroll_container/container/consumable_items/item_button3"]
-[editable path="top_right/shop/scroll_container/container/consumable_items/item_button4"]
-[editable path="top_right/shop/scroll_container/container/consumable_items/item_button5"]
-[editable path="top_right/shop/scroll_container/container/consumable_items/item_button6"]
 [editable path="mid/main_menu/container/menu_team_buttons/blue_team_button"]
 [editable path="mid/main_menu/container/menu_team_buttons/red_team_button"]
 [editable path="mid/main_menu/container/menu_map_buttons/small_map_button"]
