@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
+[ext_resource path="res://ui/minimap.tscn" type="PackedScene" id=2]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 35, 175, 86 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+modulate_color = Color( 1, 1, 1, 0.941176 )
+
+[node name="minimap_border" type="ItemList"]
+margin_top = -150.0
+margin_right = 150.0
+custom_styles/bg = SubResource( 1 )
+
+[node name="minimap" parent="." instance=ExtResource( 2 )]
+visible = false
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
+
+[node name="rect_layer" type="CanvasLayer" parent="."]
+layer = 2
+visible = false
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
+
+[node name="cam_rect" type="ReferenceRect" parent="rect_layer"]
+margin_left = 50.0
+margin_top = -100.0
+margin_right = 94.0
+margin_bottom = -56.0
+rect_pivot_offset = Vector2( 22, 22 )
+border_color = Color( 1, 1, 1, 0.666667 )
+border_width = 2.0
+editor_only = false
+
+[node name="cam_rect2" type="ReferenceRect" parent="rect_layer"]
+visible = false
+margin_left = 52.0
+margin_top = 500.0
+margin_right = 96.0
+margin_bottom = 544.0
+rect_pivot_offset = Vector2( 22, 22 )
+border_color = Color( 1, 1, 1, 0.666667 )
+border_width = 2.0
+editor_only = false

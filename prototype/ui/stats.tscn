@@ -1,0 +1,250 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
+[ext_resource path="res://assets/ui/icons.png" type="Texture" id=2]
+[ext_resource path="res://ui/stats.gd" type="Script" id=3]
+[ext_resource path="res://items/inventories.gd" type="Script" id=4]
+[ext_resource path="res://ui/buttons/item_button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 35, 175, 86 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+modulate_color = Color( 1, 1, 1, 0.941176 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 10
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 11
+font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.211765, 0.392157, 0.8, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.505882, 0.498039, 0.780392, 0.376471 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 11
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 13
+font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.192157, 0.188235, 0.223529, 0 )
+
+[node name="stats" type="ItemList"]
+margin_left = -150.0
+margin_top = -96.0
+margin_right = 150.0
+rect_pivot_offset = Vector2( -763, -347 )
+rect_clip_content = false
+custom_styles/bg = SubResource( 1 )
+max_columns = 0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="panel" type="Panel" parent="."]
+margin_right = 300.0
+margin_bottom = 96.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="hpbar" type="Control" parent="panel"]
+margin_left = 100.0
+margin_top = 20.0
+margin_right = 100.0
+margin_bottom = 20.0
+
+[node name="hp" type="Label" parent="panel"]
+margin_left = 98.0
+margin_top = 12.0
+margin_right = 170.0
+margin_bottom = 28.0
+custom_fonts/font = SubResource( 3 )
+text = "999/999"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="Label" parent="panel"]
+margin_left = 150.0
+margin_top = 13.0
+margin_right = 265.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "name"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="regen" type="Label" parent="panel"]
+margin_left = 240.0
+margin_top = 12.0
+margin_right = 284.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0.109804, 0.819608, 0.223529, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "+1"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="portrait" type="Control" parent="panel"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 84.0
+margin_bottom = 84.0
+rect_clip_content = true
+
+[node name="sprite" type="Sprite" parent="panel/portrait"]
+position = Vector2( 34, 34 )
+scale = Vector2( 2, 2 )
+region_enabled = true
+
+[node name="CenterContainer" type="MarginContainer" parent="panel/portrait"]
+margin_top = 54.0
+margin_right = 72.0
+margin_bottom = 72.0
+
+[node name="exp_bar" type="ProgressBar" parent="panel/portrait/CenterContainer"]
+margin_right = 72.0
+margin_bottom = 18.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_styles/fg = SubResource( 5 )
+custom_styles/bg = SubResource( 6 )
+value = 50.0
+percent_visible = false
+
+[node name="level_label" type="Label" parent="panel/portrait/CenterContainer"]
+margin_top = 2.0
+margin_right = 72.0
+margin_bottom = 15.0
+custom_fonts/font = SubResource( 7 )
+text = "level 1"
+align = 1
+valign = 1
+
+[node name="vision" type="Label" parent="panel"]
+margin_left = 94.0
+margin_top = 34.0
+margin_right = 142.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 4 )
+text = "vision"
+align = 1
+valign = 1
+
+[node name="damage" type="Label" parent="panel"]
+margin_left = 94.0
+margin_top = 48.0
+margin_right = 157.0
+margin_bottom = 62.0
+custom_fonts/font = SubResource( 4 )
+text = "damage"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="range" type="Label" parent="panel"]
+margin_left = 94.0
+margin_top = 62.0
+margin_right = 144.0
+margin_bottom = 76.0
+custom_fonts/font = SubResource( 4 )
+text = "range"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="speed" type="Label" parent="panel"]
+margin_left = 94.0
+margin_top = 76.0
+margin_right = 144.0
+margin_bottom = 90.0
+custom_fonts/font = SubResource( 4 )
+text = "speed"
+align = 1
+valign = 1
+
+[node name="gold" type="Label" parent="panel"]
+margin_left = 188.0
+margin_top = 69.0
+margin_right = 264.0
+margin_bottom = 86.0
+custom_colors/font_color = Color( 1, 0.796078, 0.243137, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 8 )
+text = "gold"
+align = 2
+valign = 1
+
+[node name="gold_sprite" type="Sprite" parent="panel"]
+position = Vector2( 265, 62 )
+texture = ExtResource( 2 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 682, 10, 28, 27 )
+
+[node name="inventories" type="ItemList" parent="."]
+margin_left = 108.0
+margin_top = -94.0
+margin_right = 298.0
+margin_bottom = -2.0
+custom_styles/bg = SubResource( 9 )
+script = ExtResource( 4 )
+
+[node name="placeholder" type="HBoxContainer" parent="inventories"]
+margin_top = 40.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button" parent="inventories/placeholder" instance=ExtResource( 5 )]
+focus_mode = 2
+
+[node name="item_button2" parent="inventories/placeholder" instance=ExtResource( 5 )]
+margin_left = 56.0
+margin_right = 108.0
+focus_mode = 2
+
+[node name="item_button3" parent="inventories/placeholder" instance=ExtResource( 5 )]
+margin_left = 112.0
+margin_right = 164.0
+focus_mode = 2
+
+[connection signal="gui_input" from="panel" to="." method="stats_down"]
