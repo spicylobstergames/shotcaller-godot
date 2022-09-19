@@ -6,4 +6,5 @@ func _gui_input(event):
 			var code = text
 			text = ""
 			EventMachine.register_event(Events.CHEAT_CODE, [code])
+			release_focus()
 			
