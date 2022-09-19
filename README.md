@@ -8,4 +8,4 @@ https://spicylobster.itch.io/shotcaller/devlog/377524/shotcaller-mvp-release
 
 This prototype was made with Godot Engine.
 
-Previous iteration in Rust: [Shotcaller](https://github.com/amethyst/shotcaller)
+Previous iteration: [Shotcaller made in minigene](https://github.com/spicylobstergames/shotcaller-minigene), a Rust-lang terminal-first engine.
