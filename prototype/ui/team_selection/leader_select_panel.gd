@@ -21,10 +21,20 @@ func _ready():
 	random_button.connect("leader_selected", self, "_leader_selected")
 
 
+var selected_leader = ""
 func _leader_selected(leader):
-	emit_signal("leader_selected", leader[0])
+	selected_leader = leader[0]
+	$Description.prepare(leader[0])
+	$Description.visible = true
+	
+
 
 
 func clear_color_remap():
 	for child in leader_grid.get_children():
 		child.clear_color_remap()
+
+
+func _on_description_confirm():
+	$Description.visible = false
+	emit_signal("leader_selected", selected_leader)
