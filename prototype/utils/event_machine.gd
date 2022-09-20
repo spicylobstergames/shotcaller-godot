@@ -7,6 +7,7 @@ func register_event(event : int, args : Array = []):
 		for listener in event_listeners[event]:
 			listener["node"].callv(listener["method"], args + listener["extra_args"])
 
+
 func register_listener(event : int, node : Node, method : String, extra_args : Array = []):
 	assert(node.has_method(method), "Error registering listener: Node %s does not have method %s" % [node.name, method])
 	if not event_listeners.keys().has(event):
@@ -14,11 +15,13 @@ func register_listener(event : int, node : Node, method : String, extra_args : A
 	else:
 # warning-ignore:return_value_discarded
 		deregister_listener(event, node, method)
+		
 	event_listeners[event].append({
 		"node" : node,
 		"method" : method,
 		"extra_args" : extra_args
 	})
+
 
 # Return number of deregistered event listeners
 func deregister_listener(event : int, node : Node, method : String) -> int:
