@@ -83,10 +83,11 @@ const items = {
 		"name": "Holy\nShield",
 		"sprite": 7,
 		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
-		"attributes": {"hp": 200, "vision": 50},
+		"attributes": {"hp": 150, "vision": 50},
 		"price": 450,
 		"type": "equip",
-		"delivery_time": 30
+		"delivery_time": 30,
+		"passive": "res://items/passives/holy_shield.tscn" # nearby units +50 health
 	},
 	"scale": {
 		"name": "Dragon\nscale",
@@ -117,7 +118,7 @@ const items = {
 		"price": 350,
 		"type": "equip",
 		"delivery_time": 15,
-		"passive": "res://items/passives/feather.tscn"
+		"passive": "res://items/passives/feather.tscn" # nearby units +10 speed
 	},
 	"eye": {
 		"name": "Oligan's\nEye",
