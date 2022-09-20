@@ -12,7 +12,7 @@ margin_top = 5.0
 margin_bottom = 5.0
 modulate_color = Color( 1, 1, 1, 0.941176 )
 
-[node name="minimap_border" type="ItemList"]
+[node name="minimap_container" type="ItemList"]
 margin_top = -150.0
 margin_right = 150.0
 custom_styles/bg = SubResource( 1 )
