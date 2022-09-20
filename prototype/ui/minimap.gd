@@ -19,8 +19,7 @@ var sprite_scale:float = 1.0
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
-	cam_rect = game.get_node("ui/bot_left/minimap_border/rect_layer/cam_rect")
+	cam_rect = get_parent().get_node("rect_layer/cam_rect")
 	map_symbols = get_node("symbols")
 
 
