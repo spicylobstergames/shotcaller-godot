@@ -143,7 +143,7 @@ func spawn_unit(unit, l, t, mode, point):
 	unit.dead = false
 	unit.visible = true
 	if mode == "point_random":
-		point = game.utils.offset_point_random(unit, point, 25)
+		point = game.utils.offset_point_random(point, 25)
 	if mode == "random_map":
 		point = game.utils.random_point()
 	unit.global_position = point
