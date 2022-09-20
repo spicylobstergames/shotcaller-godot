@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://abilites/aura_of_courage.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/arthur_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/arthur_red.png" type="Texture" id=4]
 [ext_resource path="res://assets/ui/abilities/aura_of_courage.png" type="Texture" id=5]
+[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=6]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -549,6 +550,7 @@ projectile_speed = 0.0
 
 [node name="aura_of_courage" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
 icon = ExtResource( 5 )
+status_effect_icon = ExtResource( 6 )
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 
 [node name="symbol" parent="." index="1"]

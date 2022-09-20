@@ -119,6 +119,8 @@ var assist_candidates = {}
 # count as an assist
 const ASSIST_TIME_IN_SECONDS = 3
 
+var status_effects = {}
+
 func _ready():
 	game = get_tree().get_current_scene()
 
