@@ -549,6 +549,7 @@ projectile_speed = 0.0
 
 [node name="aura_of_courage" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
 icon = ExtResource( 5 )
+description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
