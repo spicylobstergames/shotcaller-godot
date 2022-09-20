@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://abilites/multishot.gd" type="Script" id=1]
+[ext_resource path="res://assets/ui/abilities/multishot.png" type="Texture" id=2]
+[ext_resource path="res://assets/ui/abilities/multishot_small.png" type="Texture" id=3]
+
+[node name="mutlishot" type="Node"]
+script = ExtResource( 1 )
+icon = ExtResource( 2 )
+status_effect_icon = ExtResource( 3 )
