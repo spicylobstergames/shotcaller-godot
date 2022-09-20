@@ -1,0 +1,354 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
+[ext_resource path="res://items/shop.gd" type="Script" id=2]
+[ext_resource path="res://ui/buttons/item_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 35, 175, 86 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+modulate_color = Color( 1, 1, 1, 0.941176 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 15
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 13
+font_data = ExtResource( 4 )
+
+[node name="shop" type="Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -228.0
+margin_top = 16.0
+margin_bottom = 378.0
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 2 )
+
+[node name="scroll_container" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 11.0
+margin_right = -14.0
+margin_bottom = -13.0
+rect_pivot_offset = Vector2( 290, 0 )
+
+[node name="container" type="VBoxContainer" parent="scroll_container"]
+margin_right = 186.0
+margin_bottom = 354.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="shop_title" type="Label" parent="scroll_container/container"]
+margin_right = 186.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 2 )
+text = "shop"
+
+[node name="separator" type="HSeparator" parent="scroll_container/container"]
+margin_top = 22.0
+margin_right = 186.0
+margin_bottom = 26.0
+
+[node name="equip" type="Label" parent="scroll_container/container"]
+margin_top = 30.0
+margin_right = 186.0
+margin_bottom = 46.0
+custom_fonts/font = SubResource( 3 )
+text = "Equip"
+
+[node name="equip_items" type="GridContainer" parent="scroll_container/container"]
+margin_top = 50.0
+margin_right = 186.0
+margin_bottom = 270.0
+columns = 3
+
+[node name="item_button" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button2" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 56.0
+margin_right = 108.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button2" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button2" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button3" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 112.0
+margin_right = 164.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button3" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button3" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button4" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_top = 56.0
+margin_bottom = 108.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button4" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button4" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button5" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 56.0
+margin_top = 56.0
+margin_right = 108.0
+margin_bottom = 108.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button5" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button5" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button6" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 112.0
+margin_top = 56.0
+margin_right = 164.0
+margin_bottom = 108.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button6" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button6" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button7" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_top = 112.0
+margin_bottom = 164.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button7" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button7" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button8" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 56.0
+margin_top = 112.0
+margin_right = 108.0
+margin_bottom = 164.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button8" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button8" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button9" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 112.0
+margin_top = 112.0
+margin_right = 164.0
+margin_bottom = 164.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button9" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button9" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button10" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_top = 168.0
+margin_bottom = 220.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button10" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button10" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button11" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 56.0
+margin_top = 168.0
+margin_right = 108.0
+margin_bottom = 220.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button11" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button11" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button12" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
+margin_left = 112.0
+margin_top = 168.0
+margin_right = 164.0
+margin_bottom = 220.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/equip_items/item_button12" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button12" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="separator2" type="HSeparator" parent="scroll_container/container"]
+margin_top = 274.0
+margin_right = 186.0
+margin_bottom = 278.0
+
+[node name="consumable" type="Label" parent="scroll_container/container"]
+margin_top = 282.0
+margin_right = 186.0
+margin_bottom = 298.0
+custom_fonts/font = SubResource( 3 )
+text = "Consumable"
+
+[node name="consumable_items" type="GridContainer" parent="scroll_container/container"]
+margin_top = 302.0
+margin_right = 186.0
+margin_bottom = 354.0
+columns = 3
+
+[node name="item_button" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/consumable_items/item_button" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button2" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
+margin_left = 56.0
+margin_right = 108.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/consumable_items/item_button2" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button2" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button3" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
+margin_left = 112.0
+margin_right = 164.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/consumable_items/item_button3" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button3" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[editable path="scroll_container/container/equip_items/item_button"]
+[editable path="scroll_container/container/equip_items/item_button2"]
+[editable path="scroll_container/container/equip_items/item_button3"]
+[editable path="scroll_container/container/equip_items/item_button4"]
+[editable path="scroll_container/container/equip_items/item_button5"]
+[editable path="scroll_container/container/equip_items/item_button6"]
+[editable path="scroll_container/container/equip_items/item_button7"]
+[editable path="scroll_container/container/equip_items/item_button8"]
+[editable path="scroll_container/container/equip_items/item_button9"]
+[editable path="scroll_container/container/equip_items/item_button10"]
+[editable path="scroll_container/container/equip_items/item_button11"]
+[editable path="scroll_container/container/equip_items/item_button12"]
+[editable path="scroll_container/container/consumable_items/item_button"]
+[editable path="scroll_container/container/consumable_items/item_button2"]
+[editable path="scroll_container/container/consumable_items/item_button3"]

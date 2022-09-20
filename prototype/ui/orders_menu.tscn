@@ -1,0 +1,118 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
+[ext_resource path="res://controls/orders_menu.gd" type="Script" id=2]
+[ext_resource path="res://ui/buttons/order_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 35, 175, 86 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+modulate_color = Color( 1, 1, 1, 0.941176 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 13
+font_data = ExtResource( 4 )
+
+[node name="orders_menu" type="ItemList"]
+margin_left = -286.0
+margin_top = -354.0
+margin_bottom = -154.0
+custom_styles/bg = SubResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scroll_container" type="ScrollContainer" parent="."]
+margin_left = 16.0
+margin_top = 12.0
+margin_right = 288.0
+margin_bottom = 204.0
+rect_pivot_offset = Vector2( 290, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="container" type="VBoxContainer" parent="scroll_container"]
+margin_right = 252.0
+margin_bottom = 172.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="orders_container" type="VBoxContainer" parent="scroll_container/container"]
+margin_right = 252.0
+margin_bottom = 80.0
+
+[node name="label" type="Label" parent="scroll_container/container/orders_container"]
+margin_right = 252.0
+margin_bottom = 16.0
+custom_fonts/font = SubResource( 2 )
+text = "orders"
+
+[node name="container" type="HBoxContainer" parent="scroll_container/container/orders_container"]
+margin_top = 20.0
+margin_right = 252.0
+margin_bottom = 80.0
+
+[node name="order_button" parent="scroll_container/container/orders_container/container" instance=ExtResource( 3 )]
+focus_mode = 2
+
+[node name="order_button2" parent="scroll_container/container/orders_container/container" instance=ExtResource( 3 )]
+margin_left = 64.0
+margin_right = 124.0
+focus_mode = 2
+
+[node name="order_button3" parent="scroll_container/container/orders_container/container" instance=ExtResource( 3 )]
+margin_left = 128.0
+margin_right = 188.0
+focus_mode = 2
+
+[node name="order_button4" parent="scroll_container/container/orders_container/container" instance=ExtResource( 3 )]
+margin_left = 192.0
+margin_right = 252.0
+focus_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="scroll_container/container"]
+margin_top = 84.0
+margin_right = 252.0
+margin_bottom = 88.0
+
+[node name="orders_container2" type="VBoxContainer" parent="scroll_container/container"]
+margin_top = 92.0
+margin_right = 252.0
+margin_bottom = 172.0
+
+[node name="label" type="Label" parent="scroll_container/container/orders_container2"]
+margin_right = 252.0
+margin_bottom = 16.0
+custom_fonts/font = SubResource( 2 )
+text = "orders"
+
+[node name="container" type="HBoxContainer" parent="scroll_container/container/orders_container2"]
+margin_top = 20.0
+margin_right = 252.0
+margin_bottom = 80.0
+
+[node name="order_button" parent="scroll_container/container/orders_container2/container" instance=ExtResource( 3 )]
+focus_mode = 2
+
+[node name="order_button2" parent="scroll_container/container/orders_container2/container" instance=ExtResource( 3 )]
+margin_left = 64.0
+margin_right = 124.0
+focus_mode = 2
+
+[node name="order_button3" parent="scroll_container/container/orders_container2/container" instance=ExtResource( 3 )]
+margin_left = 128.0
+margin_right = 188.0
+focus_mode = 2
+
+[node name="order_button4" parent="scroll_container/container/orders_container2/container" instance=ExtResource( 3 )]
+margin_left = 192.0
+margin_right = 252.0
+focus_mode = 2
