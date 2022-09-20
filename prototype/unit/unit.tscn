@@ -120,6 +120,8 @@ script = ExtResource( 15 )
 
 [node name="abilities" type="Node" parent="behavior"]
 
+[node name="item_passives" type="Node" parent="behavior"]
+
 [node name="symbol" type="Sprite" parent="."]
 visible = false
 modulate = Color( 0.32549, 0.584314, 0.709804, 1 )

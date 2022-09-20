@@ -13,7 +13,7 @@ export(String, MULTILINE) var description = "This unit can shoot at all enemy ch
 export var status_effect_icon : Texture
 
 func _ready():
-	unit.status_effects["mutlishot"] = {
+	unit.status_effects["multishot"] = {
 		icon = status_effect_icon,
 		hint = "Multishot: target all enemies in range"
 	}

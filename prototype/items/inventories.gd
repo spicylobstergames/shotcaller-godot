@@ -24,7 +24,7 @@ var sell_button_margin = 40
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
+
 	hide()
 	clear()
 
@@ -43,7 +43,7 @@ func new_inventory(leader):
 		var leader_skills = game.unit.skills.leader[leader.display_name]
 		if "extra_gold" in leader_skills:
 				extra_skill_gold = leader_skills.extra_gold
-	
+
 	var inventory = {
 		"container": HBoxContainer.new(),
 		"extra_skill_gold": extra_skill_gold,
@@ -55,7 +55,7 @@ func new_inventory(leader):
 		"equip_item_buttons": [],
 		"consumable_item_buttons": []
 	}
-	
+
 	inventory.container.margin_top = sell_button_margin
 # warning-ignore:unused_variable
 	for index in range(equip_items_max):
@@ -71,8 +71,8 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-	
-	
+
+
 	var timer := Timer.new()
 	timer.wait_time = 1
 	game.ui.get_node("bot_mid").add_child(timer)
@@ -94,7 +94,7 @@ func set_leader_inventory(leader, inventory):
 		var inv = player_leaders_inv
 		if not leader.team == game.player_team:
 			inv = enemy_leaders_inv
-			
+
 		inventory.leader = leader
 		inv[leader.name] = inventory
 
@@ -154,7 +154,7 @@ func gold_timer(unit):
 	timer.start()
 # warning-ignore:return_value_discarded
 	timer.connect("timeout", self, "gold_timer_timeout", [unit])
-	
+
 
 func gold_timer_timeout(unit):
 	if not game.paused:
@@ -198,7 +198,7 @@ func add_delivery(leader, item):
 	}
 	set_leader_delivery(leader, new_delivery)
 	var inventory = get_leader_inventory(leader)
-	
+
 	if item.type == "equip":
 		for index in range(equip_items_max):
 			if inventory.equip_items[index] == null:
@@ -211,7 +211,7 @@ func add_delivery(leader, item):
 				new_delivery.index = index
 				new_delivery.button = inventory.consumable_item_buttons[index]
 				break
-	
+
 	new_delivery.label = new_delivery.button.price_label
 	delivery_timer(new_delivery)
 
@@ -226,7 +226,7 @@ func delivery_timer(delivery):
 			match delivery.item.type:
 				"consumable": give_item(delivery)
 				"equip":
-					if game.ui.shop.close_to_blacksmith(delivery.leader): 
+					if game.ui.shop.close_to_blacksmith(delivery.leader):
 						give_item(delivery)
 					else:
 						var inventory = get_leader_inventory(delivery.leader)
@@ -250,44 +250,47 @@ func give_item(delivery):
 	var inventory = get_leader_inventory(leader)
 	var item = delivery.item
 	var index = delivery.index
-	
+
 	get_leader_delivery(leader).erase(leader.name)
-	
+
 	match item.type:
 		"equip":
 			inventory.equip_items[index] = item
 			inventory.equip_item_buttons[index].setup(item)
 			for key in item.attributes.keys():
 				game.unit.modifiers.add(leader, key, item.name, item.attributes[key])
+			if "passive" in item:
+				var item_scene = load(item.passive)
+				leader.get_node("behavior/item_passives").add_child(item_scene.instance())
 
 		"consumable":
 			inventory.consumable_items[index] = item
 			inventory.consumable_item_buttons[index].setup(item)
-	
+
 	item.delivered = true
-	
+
 	game.unit.hud.update_hpbar(leader)
 
 
 
 func remove_item(leader, index):
 	var inventory = get_leader_inventory(leader)
-	
+
 	var leader_items = inventory.equip_items + inventory.consumable_items
 	var item = leader_items[index]
-	
+
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
 		for key in item.attributes.keys():
 			game.unit.modifiers.remove(leader, key, item.name, item.attributes[key])
-			
+
 		inventory.equip_items[index] = null
-		
+
 	elif item.type == "consumable":
 		inventory.consumable_items[index - equip_items_max] = null
-	
+
 	leader.get_node("hud").update_hpbar(leader)
-	
+
 	return item
 
 
@@ -314,16 +317,16 @@ func update_buttons():
 				if item and item.ready and not item.delivered:
 					var delivery = get_leader_delivery(leader)
 					give_item(delivery)
-	
+
 	if game.selected_leader:
 		var inventory = get_leader_inventory(game.selected_leader)
 		var leader = game.selected_leader
 		var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
-		
+
 		show()
 		inventory.container.show()
 		update_consumables(leader)
-		
+
 		# toggle sell buttons
 		if game.ui.shop.visible and close_to_blacksmith:
 			var counter = 0
@@ -337,4 +340,4 @@ func update_buttons():
 		else:
 			for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
 				item_button.sell_button.hide()
-		
+
