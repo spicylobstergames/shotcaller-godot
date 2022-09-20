@@ -79,8 +79,8 @@ const items = {
 		"type": "equip",
 		"delivery_time": 30
 	},
-	"holly_shield": {
-		"name": "Holly\nShield",
+	"holy_shield": {
+		"name": "Holy\nShield",
 		"sprite": 7,
 		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
 		"attributes": {"hp": 200, "vision": 50},
@@ -113,10 +113,11 @@ const items = {
 		"name": "Magic\nFeather",
 		"sprite": 10,
 		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
-		"attributes": {"regen": 2, "speed": 15},
+		"attributes": {"regen": 2, "speed": 5}, # Other 10 comes from passive
 		"price": 350,
 		"type": "equip",
-		"delivery_time": 15
+		"delivery_time": 15,
+		"passive": "res://items/passives/feather.tscn"
 	},
 	"eye": {
 		"name": "Oligan's\nEye",
@@ -161,19 +162,19 @@ const items = {
 
 func _ready():
 	game = get_tree().get_current_scene()
-	
+
 	hide()
-	
+
 	clear()
-	
-	for item in items: 
+
+	for item in items:
 		var new_item = items[item].duplicate(true)
 		new_item.ready = false
 		new_item.delivered = false
 		add_item(new_item)
-	
+
 	disable_all()
-	
+
 	yield(get_tree(), "idle_frame")
 
 
@@ -182,11 +183,11 @@ func clear():
 		for placeholder_item in equip_items.get_children():
 			equip_items.remove_child(placeholder_item)
 			placeholder_item.queue_free()
-		
+
 		for placeholder_item in consumable_items.get_children():
 			consumable_items.remove_child(placeholder_item)
 			placeholder_item.queue_free()
-		
+
 		cleared = true
 
 
@@ -224,18 +225,18 @@ func update_buttons():
 		if not leader or game.ui.inventories.is_delivering(leader):
 			disable_all()
 			return
-		
+
 				# disable equip if leader is not close to shop
 		if not close_to_blacksmith(leader):
 			disable_equip()
-		
+
 		# enable/disable buttons on which leader don't have enough golds
 		var inventory = game.ui.inventories.get_leader_inventory(leader)
 		if leader and inventory:
 			for item_button in equip_items.get_children() + consumable_items.get_children():
 				var item_price = item_button.item.price
 				item_button.disabled = (leader.gold < item_price)
-		
+
 		# disable buttons if leader don't have empty slots for item
 		if leader and inventory:
 			if !game.ui.inventories.equip_items_has_slots(leader):
