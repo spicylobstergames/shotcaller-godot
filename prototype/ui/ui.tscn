@@ -44,6 +44,7 @@ __meta__ = {
 }
 
 [node name="fps" type="Label" parent="top_left"]
+unique_name_in_owner = true
 margin_left = 4.0
 margin_top = 2.0
 margin_right = 124.0
@@ -57,7 +58,8 @@ visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 
-[node name="label" type="Label" parent="top_mid"]
+[node name="main_label" type="Label" parent="top_mid"]
+unique_name_in_owner = true
 margin_left = -150.0
 margin_top = 2.0
 margin_right = 150.0
@@ -79,6 +81,7 @@ __meta__ = {
 }
 
 [node name="shop" parent="top_right" instance=ExtResource( 3 )]
+unique_name_in_owner = true
 
 [node name="mid_right" type="Control" parent="."]
 anchor_left = 1.0
@@ -93,8 +96,10 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 
 [node name="main_menu" parent="mid" instance=ExtResource( 20 )]
+unique_name_in_owner = true
 
 [node name="team_selection_menu" parent="mid" instance=ExtResource( 4 )]
+unique_name_in_owner = true
 visible = false
 margin_left = -229.0
 margin_top = -204.0
@@ -110,13 +115,15 @@ __meta__ = {
 }
 
 [node name="leaders_icons" parent="mid_left" instance=ExtResource( 12 )]
+unique_name_in_owner = true
 
 [node name="bot_left" type="Control" parent="."]
 visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 
-[node name="minimap_border" parent="bot_left" instance=ExtResource( 5 )]
+[node name="minimap_container" parent="bot_left" instance=ExtResource( 5 )]
+unique_name_in_owner = true
 
 [node name="bot_mid" type="Control" parent="."]
 visible = false
@@ -126,6 +133,7 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 
 [node name="stats" parent="bot_mid" instance=ExtResource( 9 )]
+unique_name_in_owner = true
 
 [node name="bot_right" type="Control" parent="."]
 visible = false
@@ -138,10 +146,13 @@ __meta__ = {
 }
 
 [node name="orders_menu" parent="bot_right" instance=ExtResource( 7 )]
+unique_name_in_owner = true
 
 [node name="controls_menu" parent="bot_right" instance=ExtResource( 2 )]
+unique_name_in_owner = true
 
 [node name="buttons" parent="bot_right" instance=ExtResource( 8 )]
+unique_name_in_owner = true
 
 [node name="score_board" parent="." instance=ExtResource( 18 )]
 pause_mode = 2

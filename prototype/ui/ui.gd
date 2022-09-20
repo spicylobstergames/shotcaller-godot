@@ -8,6 +8,7 @@ var top_label:Node
 var buttons:Node
 var stats:Node
 var minimap:Node
+var minimap_container:Node
 var rect_layer: Node
 var shop:Node
 var controls_menu:Node
@@ -26,18 +27,19 @@ var timer:Timer
 func _ready():
 	game = get_tree().get_current_scene()
 
-	fps = get_node("top_left/fps")
-	top_label = get_node("top_mid/label")
-	shop = get_node("top_right/shop")
-	stats = get_node("bot_mid/stats")
-	minimap = get_node("bot_left/minimap_border/minimap")
-	rect_layer = get_node("bot_left/minimap_border/rect_layer")
-	main_menu = get_node("mid/main_menu")
+	fps = get_node("%fps")
+	top_label = get_node("%main_label")
+	shop = get_node("%shop")
+	stats = get_node("%stats")
+	minimap_container = get_node("%minimap_container")
+	minimap = minimap_container.get_node("minimap")
+	rect_layer = minimap_container.get_node("rect_layer")
+	main_menu = get_node("%main_menu")
 	main_menu_background = get_node("background/main")
-	buttons = get_node("bot_right/buttons")
-	orders_menu = get_node("bot_right/orders_menu")
-	controls_menu = get_node("bot_right/controls_menu")
-	leaders_icons = get_node("mid_left/leaders_icons")
+	buttons = get_node("%buttons")
+	orders_menu = get_node("%orders_menu")
+	controls_menu = get_node("%controls_menu")
+	leaders_icons = get_node("%leaders_icons")
 
 	inventories = stats.get_node("inventories")
 
