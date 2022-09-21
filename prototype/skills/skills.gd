@@ -86,7 +86,7 @@ func projectile_release(attacker):
 		
 		if "multishot" in attacker_skills:
 			var enemies = attacker.get_units_on_sight({"team": attacker.oponent_team()})
-			var sorted = game.utils.sort_by_distance(attacker, enemies)
+			var sorted = attacker.sort_by_distance(enemies)
 			for enemy in sorted:
 				if (enemy.unit != attacker.target and 
 					game.unit.attack.in_range(attacker, enemy.unit)):

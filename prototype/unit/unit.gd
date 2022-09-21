@@ -19,6 +19,7 @@ var dead:bool = false
 export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
+var units_in_radius := []
 
 # SELECTION
 export var selectable:bool = false
@@ -100,9 +101,12 @@ var skills:Node
 var modifiers:Node
 
 # Experience
+var get_units_timer : Timer = Timer.new()
 var experience_timer : Timer = Timer.new()
 var experience : float = 0
 var level : int = 1
+
+const EXP_RANGE = 200
 const EXP_PER_KILL = 20
 const EXP_PER_5_SEC = 5
 const EXP_LEVEL_COEFFICIENT = 100
@@ -120,6 +124,7 @@ var assist_candidates = {}
 const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -140,6 +145,13 @@ func _ready():
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
 	if type == "leader":
+		# save units around for items and exp
+		get_units_timer.wait_time = 1
+		get_units_timer.autostart = true
+# warning-ignore:return_value_discarded
+		get_units_timer.connect("timeout", self, "on_every_second")
+		add_child(get_units_timer)
+
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
 # warning-ignore:return_value_discarded
@@ -257,21 +269,78 @@ func mirror_toggle(on):
 		self.attack_hit_position.x = s * abs(self.attack_hit_position.x)
 
 
+func sort_by_distance(array):
+	var sorted = []
+	for unit2 in array:
+		sorted.append({
+			"unit": unit2,
+			"distance": self.global_position.distance_to(unit2.global_position)
+		})
+	sorted.sort_custom(game.utils, "compare_distance")
+	return sorted
+
+
+func closest_unit(enemies):
+	var sorted = self.sort_by_distance(enemies)
+	return sorted[0].unit
+
+
+func cut_path(path):
+	var distances = []
+	var path_size = path.size()
+	var first_point = path[0]
+	for index in path_size:
+		var point = path[index]
+		var d1 = self.global_position.distance_to(point)
+		var d2 = first_point.distance_to(point)
+		distances.append({
+			"distance": d1 - (d2 / 10),
+			"point": point,
+			"index": index
+		})
+	distances.sort_custom(game.utils, "compare_distance")
+	var next_first_point = distances[0]
+	
+	var new_path = path.slice(next_first_point.index, path_size)
+	return new_path
+
+
+func point_collision(point, offset=0):
+	var unit1_pos = self.global_position + self.collision_position
+	return game.utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
+
+
+func check_collision(unit2, delta):
+	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
+	var unit1_rad = self.collision_radius
+	var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
+	var unit2_rad = unit2.collision_radius
+	return game.utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
+
+
+func get_collision_around(delta):
+	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
+	var unit1_rad = self.collision_radius
+	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+
+
 func get_units_on_sight(filters):
 	var current_vision = game.unit.modifiers.get_value(self, "vision")
-	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, current_vision)
+	var pos1 = self.global_position
+	var neighbors = game.map.blocks.get_units_in_radius(pos1, current_vision)
 	var targets = []
 	for unit2 in neighbors:
 		if unit2.hp and self != unit2 and not unit2.dead and not unit2.immune:
-			var distance = self.global_position.distance_to(unit2.global_position)
-			if distance < current_vision:
-				if not filters: targets.append(unit2)
-				else:
-					for filter in filters:
-						if unit2[filter] == filters[filter]:
-							targets.append(unit2)
+			if not filters: targets.append(unit2)
+			else:
+				for filter in filters:
+					if unit2[filter] == filters[filter]:
+						targets.append(unit2)
 	return targets
 
+
+func on_every_second():
+	self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
 
 
 func wait():
@@ -374,7 +443,7 @@ func die():  # hp <= 0
 	self.channeling = false
 	self.working = false
 
-	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, 200)
+	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
 		if neighbor.type == "leader" and neighbor.team != team:
 			neighbor.gain_experience(EXP_PER_KILL)

@@ -24,7 +24,12 @@ func setup_quadtree():
 
 
 func get_units_in_radius(pos, rad):
-	return quad.get_units_in_radius(pos, rad)
+	var quad_units = quad.get_units_in_radius(pos, rad)
+	var in_radius_units = []
+	for unit1 in quad_units:
+		var pos1 = unit1.global_position
+		if pos.distance_to(pos1) <= rad: in_radius_units.append(unit1)
+	return in_radius_units
 
 
 func create_block(x, y):

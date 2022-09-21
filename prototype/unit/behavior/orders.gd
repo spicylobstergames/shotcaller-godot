@@ -220,7 +220,7 @@ func select_target(unit, enemies):
 	if n == 1:
 		return filtered[0]
 	
-	var sorted = game.utils.sort_by_distance(unit, filtered)
+	var sorted = unit.sort_by_distance(filtered)
 	var closest_unit = sorted[0].unit
 	
 	if n == 2:
@@ -241,10 +241,6 @@ func select_target(unit, enemies):
 					return enemy.unit
 
 
-func closest_unit(unit, enemies):
-	var sorted = game.utils.sort_by_distance(unit, enemies)
-	return sorted[0].unit
-
 
 # BACKWOOD
 
@@ -253,7 +249,7 @@ func conquer_building(unit):
 	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
-	var building = game.utils.buildings_click(point)
+	var building = game.utils.get_building(point)
 	if not unit.stunned and building:
 		var hp = float(game.unit.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
@@ -302,7 +298,7 @@ func pray_in_church(unit):
 	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
-	var building = game.utils.buildings_click(point)
+	var building = game.utils.get_building(point)
 	if (building and building.team == unit.team 
 			and building.display_name == "church" 
 			and building.channeling == false 

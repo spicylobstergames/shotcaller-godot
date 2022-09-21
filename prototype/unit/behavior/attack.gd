@@ -47,7 +47,7 @@ func closest_enemy_unit(unit, enemies):
 	for enemy in enemies:
 		if can_hit(unit, enemy): filtered.append(enemy)
 	
-	var sorted = game.utils.sort_by_distance(unit, filtered)
+	var sorted = unit.sort_by_distance(filtered)
 	
 	if sorted: return sorted[0].unit
 
@@ -187,6 +187,7 @@ func projectile_start(attacker, target):
 		if "pierce" in attacker_skills: 
 			target = null
 	if not target: targets = []
+	var radius = game.unit.modifiers.get_value(attacker, "attack_range") + 20
 	attacker.projectiles.append({
 		"target": target,
 		"targets": targets,
@@ -194,7 +195,7 @@ func projectile_start(attacker, target):
 		"sprite": projectile_sprite,
 		"speed": projectile_speed,
 		"rotation": projectile_rotation,
-		"radius": game.unit.modifiers.get_value(attacker, "attack_range"),
+		"radius": radius,
 		"stuck": false
 	})
 

@@ -20,7 +20,7 @@ func _on_update_timer_timeout():
 			affected_units.erase(other_unit)
 			other_unit.status_effects.erase("feather")
 
-	for other_unit in game.map.blocks.get_units_in_radius(unit.global_position, 200):
+	for other_unit in unit.units_in_radius:
 		if other_unit.team == unit.team and unit.type != "building":
 			other_unit.modifiers.remove(other_unit, "speed", "feather")
 			other_unit.modifiers.add(other_unit, "speed", "feather", VALUE)
