@@ -5,6 +5,7 @@ var item = null
 var index = 0
 var saved_icon
 var shop_item = false
+var price_after_discount
 
 onready var name_label = get_node("name")
 onready var price_label = get_node("price")
@@ -44,6 +45,7 @@ func setup(new_item):
 		var price = new_item.price
 		if not self.shop_item: price = new_item.sell_price
 		price_label.text = str(price)
+		price_after_discount = price
 
 
 func on_button_down():
@@ -51,7 +53,8 @@ func on_button_down():
 	
 	if self.shop_item:
 		# BUY ITEM
-		leader.gold -= item.price
+		leader.gold -= price_after_discount
+		
 		game.ui.inventories.add_delivery(leader, item)
 		game.ui.shop.disable_all()
 
