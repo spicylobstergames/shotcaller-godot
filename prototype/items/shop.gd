@@ -222,12 +222,30 @@ func close_to_blacksmith(leader):
 func update_buttons():
 	if visible:
 		var leader = game.selected_leader
+		var trader = null
+		
+		if leader != null:
+			trader = leader.get_node_or_null("behavior/abilities/trader")
+		
+		# checks if leader has trader ability, updates price labels
+		if trader != null:
+			for item_button in equip_items.get_children() + consumable_items.get_children():
+				var price = item_button.item.price
+				item_button.price_after_discount = price - price * (float(trader.VALUE * leader.level)/100)
+				item_button.price_after_discount = int(item_button.price_after_discount)
+				item_button.price_label.text = str(item_button.price_after_discount)
+		else:
+			for item_button in equip_items.get_children() + consumable_items.get_children():
+				item_button.price_after_discount = item_button.item.price
+				item_button.price_label.text = str(item_button.price_after_discount)
+		
+		
 		# disable all buttons if no leader selected or if delivery in proccess
 		if not leader or game.ui.inventories.is_delivering(leader):
 			disable_all()
 			return
 
-				# disable equip if leader is not close to shop
+		# disable equip if leader is not close to shop
 		if not close_to_blacksmith(leader):
 			disable_equip()
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://skills/abilites/trader.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/osman_red.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/osman_blue.png" type="Texture" id=4]
 
@@ -552,6 +553,8 @@ attacks = true
 damage = 60
 defense = 5
 projectile_speed = 0.0
+
+[node name="trader" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
