@@ -19,6 +19,7 @@ var dead:bool = false
 export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
+var units_in_radius := []
 
 # SELECTION
 export var selectable:bool = false
@@ -100,6 +101,7 @@ var skills:Node
 var modifiers:Node
 
 # Experience
+var get_units_timer : Timer = Timer.new()
 var experience_timer : Timer = Timer.new()
 var experience : float = 0
 var level : int = 1
@@ -123,6 +125,7 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
 
+
 func _ready():
 	game = get_tree().get_current_scene()
 
@@ -142,6 +145,13 @@ func _ready():
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 
 	if type == "leader":
+		# save units around for items and exp
+		get_units_timer.wait_time = 1
+		get_units_timer.autostart = true
+# warning-ignore:return_value_discarded
+		get_units_timer.connect("timeout", self, "on_every_second")
+		add_child(get_units_timer)
+
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
 # warning-ignore:return_value_discarded
@@ -329,6 +339,8 @@ func get_units_on_sight(filters):
 	return targets
 
 
+func on_every_second():
+	self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
 
 
 func wait():
@@ -431,7 +443,7 @@ func die():  # hp <= 0
 	self.channeling = false
 	self.working = false
 
-	var neighbors = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE)
+	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
 		if neighbor.type == "leader" and neighbor.team != team:
 			neighbor.gain_experience(EXP_PER_KILL)
