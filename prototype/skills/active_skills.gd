@@ -17,12 +17,12 @@ class ActiveSkill:
 	var current_cooldown: int
 	var effects: Array # array of skill effects, looks like [FuncRef, FuncRef, ..]
 	
-	func _init(display_name, description, cooldown, effects):
-		self.display_name = display_name
-		self.description = description
-		self.cooldown = cooldown
+	func _init(_display_name, _description, _cooldown, _effects):
+		self.display_name = _display_name
+		self.description = _description
+		self.cooldown = _cooldown
 		self.current_cooldown = 0
-		self.effects = effects
+		self.effects = _effects
 	
 	func on_cooldown():
 		return self.current_cooldown > 0

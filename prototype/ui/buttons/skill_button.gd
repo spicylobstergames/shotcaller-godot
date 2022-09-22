@@ -8,14 +8,15 @@ onready var _game: Node = get_tree().get_current_scene()
 
 
 func _ready():
+# warning-ignore:return_value_discarded
 	connect("button_down", self, "_button_down")
 
 
-func setup(skill):
-	self.skill = skill
+func setup(_skill):
+	self.skill = _skill
 	self.disabled = self.skill.on_cooldown()
 	_name.text = self.skill.display_name
-	self.hint_tooltip = skill.description
+	self.hint_tooltip = _skill.description
 
 
 func reset():
