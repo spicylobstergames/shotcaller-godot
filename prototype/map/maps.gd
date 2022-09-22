@@ -30,6 +30,7 @@ func setup_leaders():
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
 	game.ui.orders_menu.build_leaders()
+	game.ui.active_skills.build_leaders()
 
 
 func new_path(lane, team):

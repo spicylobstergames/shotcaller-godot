@@ -21,6 +21,7 @@ var shop_button:Node
 var controls_button:Node
 var menu_button:Node
 var inventories:Node
+var active_skills:Node
 
 var timer:Timer
 
@@ -46,6 +47,8 @@ func _ready():
 	controls_button = buttons.get_node("controls_button")
 	shop_button = buttons.get_node("shop_button")
 	orders_button = buttons.get_node("orders_button")
+	
+	active_skills = $bot_mid/stats/active_skills
 	
 	timer = Timer.new()
 	timer.wait_time = 1
