@@ -15,6 +15,7 @@ func setup(skill):
 	self.skill = skill
 	self.disabled = self.skill.on_cooldown()
 	_name.text = self.skill.display_name
+	self.hint_tooltip = skill.description
 
 
 func reset():
@@ -23,6 +24,7 @@ func reset():
 	self._cooldown.text = ""
 	self.disabled = true
 	self.skill = null
+	self.hint_tooltip = ""
 
 
 func _button_down():
