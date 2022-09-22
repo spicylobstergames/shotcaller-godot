@@ -17,7 +17,7 @@ onready var gold_sprite = panel.get_node("gold_sprite")
 onready var portrait_sprite = panel.get_node("portrait/sprite")
 onready var level_label : Label = get_node("panel/portrait/CenterContainer/level_label")
 onready var exp_bar : ProgressBar = get_node("panel/portrait/CenterContainer/exp_bar")
-onready var status_effect_display = $"%status_effect_display"
+onready var status_effect_display = $status_effect_display
 
 
 func _ready():

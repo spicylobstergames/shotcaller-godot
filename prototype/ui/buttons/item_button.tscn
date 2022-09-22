@@ -50,7 +50,7 @@ size = 10
 font_data = ExtResource( 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 24 )
+extents = Vector2( 24, 24 )
 
 [sub_resource type="DynamicFont" id=22]
 size = 10
@@ -65,12 +65,12 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 32, 18 )
+extents = Vector2( 24, 18 )
 
 [node name="item_button" type="Button"]
-margin_right = 64.0
+margin_right = 48.0
 margin_bottom = 48.0
-rect_min_size = Vector2( 60, 48 )
+rect_min_size = Vector2( 48, 48 )
 focus_mode = 1
 custom_styles/hover = SubResource( 23 )
 custom_styles/pressed = SubResource( 26 )
@@ -84,7 +84,7 @@ script = ExtResource( 3 )
 [node name="name" type="Label" parent="."]
 margin_left = 3.0
 margin_top = 2.0
-margin_right = 61.0
+margin_right = 35.909
 margin_bottom = 27.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 28 )

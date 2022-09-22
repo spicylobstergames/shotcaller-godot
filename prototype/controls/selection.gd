@@ -88,6 +88,7 @@ func select_unit(unit):
 		game.ui.shop.update_buttons()
 		game.ui.inventories.update_buttons()
 		game.ui.controls_button.disabled = false
+		game.ui.active_skills.update_buttons()
 	else:
 		game.selected_leader = null
 		game.ui.shop.disable_all()
