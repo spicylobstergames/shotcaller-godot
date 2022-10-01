@@ -71,6 +71,8 @@ func get_map_texture():
 	game.camera.zoom =  Vector2(zoom_out, zoom_out)
 	# hides units and ui
 	game.ui.hide_all()
+	self.visible = false
+	game.ui.rect_layer.visible = false
 	game.maps.buildings_visibility(false)
 	yield(get_tree(), "idle_frame")
 	# take snapshop
@@ -101,6 +103,8 @@ func get_map_texture():
 	game.camera.zoom_reset()
 	# reset units and ui back again
 	game.ui.show_all()
+	self.visible = true
+	game.ui.rect_layer.visible = true
 	game.maps.buildings_visibility(true)
 	# turn off and callback
 	update_map_texture = false

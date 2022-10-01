@@ -13,6 +13,7 @@ func load_map(map_name):
 		game.map.trees.occluder_light_mask = 0
 	current_map = map_name
 	game.map = game.maps.get_node(map_name)
+	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
 	game.map.visible = true
 	game.ui.minimap.start()
 
