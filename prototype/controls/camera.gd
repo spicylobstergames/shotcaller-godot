@@ -97,7 +97,6 @@ func _unhandled_input(event):
 				avg_touch /= _touches.size()
 				_touches_info.cur_avg_pos = avg_touch
 				pan_position = Vector2(-1 * (_touches_info.cur_avg_pos - _touches_info.last_avg_pos))
-				print(avg_touch)
 			
 		
 	# ZOOM
@@ -112,10 +111,6 @@ func _unhandled_input(event):
 		elif zoom == zoom_default: zoom_out()
 
 
-func _zoom_camera(dir):
-	zoom += Vector2(0.1, 0.1) * dir
-	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
-	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
 
 
 func start():
@@ -156,6 +151,10 @@ func zoom_out():
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 	game.ui.minimap.hide_view()
 
+func _zoom_camera(dir):
+	zoom += Vector2(0.1, 0.1) * dir
+	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
+	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
 
 func process():
 	var ratio = get_viewport().size.x / get_viewport().size.y
@@ -166,12 +165,12 @@ func process():
 	else: translate(arrow_keys_move)
 	
 	if(_touches.size()>0):
-		_touches_info.last_radius = _touches_info.radius
-		_touches_info.radius = (_touches.values()[0].current.position - _touches_info.cur_avg_pos).length()
+		_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
 		if(_touches_info.last_radius != 0):
 			_zoom_camera((_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
 	
 	#RESET VARS AND SET LAST VARS
+	_touches_info.last_radius = _touches_info.radius
 	_touches_info.last_avg_pos = _touches_info.cur_avg_pos
 	pan_position = Vector2.ZERO
 	
