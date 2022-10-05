@@ -3,7 +3,10 @@ var game:Node
 
 # self = game.camera
 
+var _touches = {} # for pinch zoom and drag with multiple fingers
+var _touches_info = {"num_touch_last_frame":0, "radius":0, "total_pan":0}
 var is_panning:bool = false
+var is_zooming:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 var zoom_default:Vector2 = Vector2.ONE
 var zoom_limit:Vector2 = Vector2.ONE
@@ -66,19 +69,30 @@ func _unhandled_input(event):
 	if game:
 		var over_minimap = game.ui.minimap.over_minimap(event)
 		# MOUSE PAN
-		if event.is_action("pan") and not over_minimap:
-			is_panning = event.is_action_pressed("pan")
-		elif event is InputEventMouseMotion:
-			if is_panning: pan_position = Vector2(-1 * event.relative)
+		#if event.is_action("pan") and not over_minimap:
+		#	is_panning = event.is_action_pressed("pan")
+		#elif event is InputEventMouseMotion:
+		#	if is_panning: pan_position = Vector2(-1 * event.relative)
 		
 		
-		# TOUCH PAN
+		# TOUCH PAN AND ZOOM
 		if event is InputEventScreenTouch and not over_minimap:
-			is_panning = event.is_pressed()
+			if !event.is_pressed():
+				_touches.erase(event.index)
+			else:
+				is_panning = true
+				_touches[event.index] = {"start":event, "current":event}
 		elif event is InputEventScreenDrag:
-			if is_panning: pan_position = Vector2(-1 * event.relative)
+			if is_panning : 
+				_touches[event.index]["current"] = event
+				var avg_touch = Vector2(0,0)
+				for key in _touches:
+					avg_touch += _touches[key]["current"].relative
+				avg_touch /= _touches.size()
+				pan_position = Vector2(-1 * avg_touch)
+				print(avg_touch)
+			
 		
-	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
 		if zoom.x >= 1:
@@ -89,7 +103,8 @@ func _unhandled_input(event):
 	if event.is_action_pressed("zoom_out"):
 		if zoom.x == zoom_limit.x: zoom_reset()
 		elif zoom == zoom_default: zoom_out()
-
+		
+var oldRelDelta = 0
 
 func start():
 	offset = game.map.mid
