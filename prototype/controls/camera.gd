@@ -4,7 +4,7 @@ var game:Node
 # self = game.camera
 
 var _touches = {} # for pinch zoom and drag with multiple fingers
-var _touches_info = {"num_touch_last_frame":0, "radius":0, "total_pan":0, "last_avg_pos":Vector2.ZERO, "cur_avg_pos":Vector2.ZERO}
+var _touches_info = {"num_touch_last_frame":0, "radius":0,"last_radius":0, "total_pan":0, "last_avg_pos":Vector2.ZERO, "cur_avg_pos":Vector2.ZERO}
 var is_panning:bool = false
 var is_zooming:bool = false
 var pan_position:Vector2 = Vector2.ZERO
@@ -110,8 +110,13 @@ func _unhandled_input(event):
 	if event.is_action_pressed("zoom_out"):
 		if zoom.x == zoom_limit.x: zoom_reset()
 		elif zoom == zoom_default: zoom_out()
-		
-var oldRelDelta = 0
+
+
+func _zoom_camera(dir):
+	zoom += Vector2(0.1, 0.1) * dir
+	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
+	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
+
 
 func start():
 	offset = game.map.mid
@@ -159,6 +164,14 @@ func process():
 	if is_panning: translate(pan_position * zoom.x)
 	# APPLY KEYBOARD PAN
 	else: translate(arrow_keys_move)
+	
+	if(_touches.size()>0):
+		_touches_info.last_radius = _touches_info.radius
+		_touches_info.radius = (_touches.values()[0].current.position - _touches_info.cur_avg_pos).length()
+		if(_touches_info.last_radius != 0):
+			_zoom_camera((_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
+	
+	#RESET VARS AND SET LAST VARS
 	_touches_info.last_avg_pos = _touches_info.cur_avg_pos
 	pan_position = Vector2.ZERO
 	
