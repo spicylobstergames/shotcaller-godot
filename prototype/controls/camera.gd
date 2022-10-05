@@ -4,7 +4,7 @@ var game:Node
 # self = game.camera
 
 var _touches = {} # for pinch zoom and drag with multiple fingers
-var _touches_info = {"num_touch_last_frame":0, "radius":0, "total_pan":0}
+var _touches_info = {"num_touch_last_frame":0, "radius":0, "total_pan":0, "last_avg_pos":Vector2.ZERO, "cur_avg_pos":Vector2.ZERO}
 var is_panning:bool = false
 var is_zooming:bool = false
 var pan_position:Vector2 = Vector2.ZERO
@@ -81,15 +81,22 @@ func _unhandled_input(event):
 				_touches.erase(event.index)
 			else:
 				is_panning = true
+				if(_touches.size() == 0):
+					_touches_info.last_avg_pos = event.position
+					_touches_info.cur_avg_pos = event.position
 				_touches[event.index] = {"start":event, "current":event}
-		elif event is InputEventScreenDrag:
+		if event is InputEventScreenDrag:
+			if not event.index in _touches:
+				_touches[event.index] = {"start":event, "current":event}
+				is_panning = true
 			if is_panning : 
 				_touches[event.index]["current"] = event
 				var avg_touch = Vector2(0,0)
 				for key in _touches:
-					avg_touch += _touches[key]["current"].relative
+					avg_touch += _touches[key]["current"].position
 				avg_touch /= _touches.size()
-				pan_position = Vector2(-1 * avg_touch)
+				_touches_info.cur_avg_pos = avg_touch
+				pan_position = Vector2(-1 * (_touches_info.cur_avg_pos - _touches_info.last_avg_pos))
 				print(avg_touch)
 			
 		
@@ -152,7 +159,7 @@ func process():
 	if is_panning: translate(pan_position * zoom.x)
 	# APPLY KEYBOARD PAN
 	else: translate(arrow_keys_move)
-	
+	_touches_info.last_avg_pos = _touches_info.cur_avg_pos
 	pan_position = Vector2.ZERO
 	
 	# KEEP CAMERA PAN LIMITS
