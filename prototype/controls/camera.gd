@@ -79,6 +79,11 @@ func _unhandled_input(event):
 		if event is InputEventScreenTouch and not over_minimap:
 			if !event.is_pressed():
 				_touches.erase(event.index)
+				if _touches.size() == 0:
+					_touches_info.last_radius = 0
+					_touches_info.last_avg_pos = Vector2.ZERO
+					_touches_info.radius = 0
+					_touches_info.cur_avg_pos = Vector2.ZERO
 			else:
 				is_panning = true
 				if(_touches.size() == 0):
@@ -166,8 +171,10 @@ func process():
 	
 	if(_touches.size()>0):
 		_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
-		if(_touches_info.last_radius != 0):
+		if(_touches_info.last_radius != 0 && _touches.size() > 1):
 			_zoom_camera((_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
+			print(_touches_info)
+			print((_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
 	
 	#RESET VARS AND SET LAST VARS
 	_touches_info.last_radius = _touches_info.radius
