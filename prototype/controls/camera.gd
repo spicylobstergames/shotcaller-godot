@@ -76,10 +76,10 @@ func _unhandled_input(event):
 	if game:
 		var over_minimap = game.ui.minimap.over_minimap(event)
 		# MOUSE PAN
-		#if event.is_action("pan") and not over_minimap:
-		#	is_panning = event.is_action_pressed("pan")
-		#elif event is InputEventMouseMotion:
-		#	if is_panning: pan_position = Vector2(-1 * event.relative)
+		if event.is_action("pan") and not over_minimap:
+			is_panning = event.is_action_pressed("pan")
+		elif event is InputEventMouseMotion:
+			if is_panning: pan_position = Vector2(-1 * event.relative)
 		
 		
 		# TOUCH PAN AND ZOOM
