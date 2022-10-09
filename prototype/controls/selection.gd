@@ -55,8 +55,9 @@ func _unhandled_input(event):
 		else: 
 			match event.button_index:
 				BUTTON_LEFT: 
-					game.camera.zoom_reset()
-					game.camera.global_position = point - game.map.mid
+					if(game.camera._touches_info.num_touch_last_frame < 1 and game.camera._touches.size() == 0): #prevent touches converted to clicks from triggering a zoom
+						game.camera.zoom_reset()
+						game.camera.global_position = point - game.map.mid
 	
 	
 	# TOUCH SELECTION
@@ -66,8 +67,9 @@ func _unhandled_input(event):
 		
 		# MAP TOUCH ZOOM IN
 		else: 
-			game.camera.zoom_reset()
-			game.camera.global_position = point - game.map.mid
+			if(game.camera._touches_info.num_touch_last_frame < 1):#prevent weird warps from taking one figure off at a time
+				game.camera.zoom_reset()
+				game.camera.global_position = point - game.map.mid
 
 func setup_selection(unit):
 	if unit.selectable: game.selectable_units.append(unit)

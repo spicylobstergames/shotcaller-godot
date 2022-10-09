@@ -111,14 +111,9 @@ func _unhandled_input(event):
 		
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
-		if zoom.x >= 1:
-			var point = game.camera.get_global_mouse_position()
-			game.camera.global_position = point - game.map.mid
-		if zoom.x == zoom_limit.y: zoom_reset()
-		elif zoom == zoom_default: zoom_in()
+		_zoom_camera(-1)
 	if event.is_action_pressed("zoom_out"):
-		if zoom.x == zoom_limit.x: zoom_reset()
-		elif zoom == zoom_default: zoom_out()
+		_zoom_camera(1)
 
 
 
@@ -177,9 +172,7 @@ func process():
 	if(_touches.size()>0):
 		_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
 		if(_touches_info.last_radius != 0 && _touches.size() > 1):
-			_zoom_camera((_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
-			print(_touches_info)
-			print((_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
+			_zoom_camera(3*(_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
 	
 	#RESET VARS AND SET LAST VARS
 	_touches_info.last_radius = _touches_info.radius
