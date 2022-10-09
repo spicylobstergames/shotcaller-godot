@@ -88,6 +88,7 @@ func select_unit(unit):
 		game.ui.shop.update_buttons()
 		game.ui.inventories.update_buttons()
 		game.ui.controls_button.disabled = false
+		game.ui.active_skills.update_buttons()
 	else:
 		game.selected_leader = null
 		game.ui.shop.disable_all()
@@ -164,7 +165,7 @@ func order(unit, point):
 	unit.hunting = false
 	game.unit.attack.set_target(unit, null)
 	if point:
-		var building = game.utils.buildings_click(point)
+		var building = game.utils.get_building(point)
 		if building:
 			point.y += game.map.tile_size
 			var oponent = unit.oponent_team()

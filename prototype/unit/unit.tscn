@@ -1,6 +1,6 @@
 [gd_scene load_steps=33 format=2]
 
-[ext_resource path="res://skills/skills.gd" type="Script" id=1]
+[ext_resource path="res://skills/passive_skills.gd" type="Script" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
 [ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/unit/hpbar.png" type="Texture" id=4]
@@ -17,6 +17,7 @@
 [ext_resource path="res://skills/modifiers.gd" type="Script" id=15]
 [ext_resource path="res://assets/map/light.png" type="Texture" id=16]
 [ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=17]
+
 
 [sub_resource type="CanvasItemMaterial" id=45]
 light_mode = 2
@@ -119,6 +120,8 @@ script = ExtResource( 1 )
 script = ExtResource( 15 )
 
 [node name="abilities" type="Node" parent="behavior"]
+
+[node name="item_passives" type="Node" parent="behavior"]
 
 [node name="symbol" type="Sprite" parent="."]
 visible = false

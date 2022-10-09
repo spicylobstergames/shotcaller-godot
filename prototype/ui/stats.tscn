@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=2]
@@ -6,6 +6,9 @@
 [ext_resource path="res://items/inventories.gd" type="Script" id=4]
 [ext_resource path="res://ui/buttons/item_button.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://ui/status_effects/status_effects_display.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/buttons/skill_button.tscn" type="PackedScene" id=8]
+[ext_resource path="res://skills/active_skills.gd" type="Script" id=9]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -53,6 +56,10 @@ font_data = ExtResource( 6 )
 [sub_resource type="StyleBoxFlat" id=9]
 bg_color = Color( 0.192157, 0.188235, 0.223529, 0 )
 
+[sub_resource type="DynamicFont" id=10]
+size = 9
+font_data = ExtResource( 6 )
+
 [node name="stats" type="ItemList"]
 margin_left = -150.0
 margin_top = -96.0
@@ -63,7 +70,8 @@ custom_styles/bg = SubResource( 1 )
 max_columns = 0
 script = ExtResource( 3 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_horizontal_guides_": [ -98.0, -149.0 ],
+"_edit_vertical_guides_": [ 150.0 ]
 }
 
 [node name="panel" type="Panel" parent="."]
@@ -172,9 +180,6 @@ custom_fonts/font = SubResource( 4 )
 text = "damage"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="range" type="Label" parent="panel"]
 margin_left = 94.0
@@ -219,32 +224,66 @@ region_enabled = true
 region_rect = Rect2( 682, 10, 28, 27 )
 
 [node name="inventories" type="ItemList" parent="."]
-margin_left = 108.0
-margin_top = -94.0
-margin_right = 298.0
-margin_bottom = -2.0
+margin_left = 146.0
+margin_top = -90.0
+margin_right = 336.0
+margin_bottom = 2.0
 custom_styles/bg = SubResource( 9 )
 script = ExtResource( 4 )
 
 [node name="placeholder" type="HBoxContainer" parent="inventories"]
 margin_top = 40.0
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 182.0
+margin_bottom = 88.0
 
 [node name="item_button" parent="inventories/placeholder" instance=ExtResource( 5 )]
 focus_mode = 2
 
 [node name="item_button2" parent="inventories/placeholder" instance=ExtResource( 5 )]
-margin_left = 56.0
-margin_right = 108.0
+margin_left = 52.0
+margin_right = 100.0
 focus_mode = 2
 
 [node name="item_button3" parent="inventories/placeholder" instance=ExtResource( 5 )]
-margin_left = 112.0
-margin_right = 164.0
+margin_left = 104.0
+margin_right = 152.0
 focus_mode = 2
+
+[node name="active_skills" type="ItemList" parent="."]
+margin_left = 3.0
+margin_top = -77.0
+margin_right = 171.0
+margin_bottom = -2.0
+custom_styles/bg = SubResource( 9 )
+script = ExtResource( 9 )
+
+[node name="tip" type="Label" parent="active_skills"]
+visible = false
+margin_left = -10.0
+margin_top = 4.0
+margin_right = 143.0
+margin_bottom = 20.0
+custom_fonts/font = SubResource( 10 )
+text = "PRESS ESC TO CANCEL"
+align = 1
+
+[node name="placeholder" type="HBoxContainer" parent="active_skills"]
+margin_top = 15.0
+margin_right = 182.0
+margin_bottom = 75.0
+
+[node name="skill_button" parent="active_skills/placeholder" instance=ExtResource( 8 )]
+margin_bottom = 60.0
+
+[node name="skill_button2" parent="active_skills/placeholder" instance=ExtResource( 8 )]
+margin_left = 64.0
+margin_right = 124.0
+margin_bottom = 60.0
+
+[node name="status_effect_display" parent="." instance=ExtResource( 7 )]
+margin_left = 4.0
+margin_top = -99.0
+margin_right = 76.0
+margin_bottom = -75.0
 
 [connection signal="gui_input" from="panel" to="." method="stats_down"]

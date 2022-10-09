@@ -50,7 +50,7 @@ size_flags_vertical = 3
 margin_right = 217.0
 margin_bottom = 18.0
 custom_fonts/font = ExtResource( 1 )
-text = "team bue"
+text = "team blue"
 align = 1
 valign = 1
 

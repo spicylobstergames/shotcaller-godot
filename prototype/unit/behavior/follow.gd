@@ -118,7 +118,7 @@ func lane(unit):
 
 func smart(unit, path, cb):
 	if path and path.size():
-		var new_path = game.utils.cut_path(unit, path)
+		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
 		game.unit[cb].start(unit, next_point)
