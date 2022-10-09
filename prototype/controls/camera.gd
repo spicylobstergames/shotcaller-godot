@@ -4,7 +4,12 @@ var game:Node
 # self = game.camera
 
 var _touches = {} # for pinch zoom and drag with multiple fingers
-var _touches_info = {"num_touch_last_frame":0, "radius":0,"last_radius":0, "total_pan":0, "last_avg_pos":Vector2.ZERO, "cur_avg_pos":Vector2.ZERO}
+var _touches_info = {"num_touch_last_frame":0, 
+					"radius":0,
+					"last_radius":0, 
+					"total_pan":0, 
+					"last_avg_pos":Vector2.ZERO, 
+					"cur_avg_pos":Vector2.ZERO}
 var is_panning:bool = false
 var is_zooming:bool = false
 var pan_position:Vector2 = Vector2.ZERO
@@ -179,6 +184,7 @@ func process():
 	#RESET VARS AND SET LAST VARS
 	_touches_info.last_radius = _touches_info.radius
 	_touches_info.last_avg_pos = _touches_info.cur_avg_pos
+	_touches_info.num_touch_last_frame = _touches.size()
 	pan_position = Vector2.ZERO
 	
 	# KEEP CAMERA PAN LIMITS
