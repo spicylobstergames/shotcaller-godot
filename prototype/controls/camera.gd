@@ -19,6 +19,8 @@ var margin:int = limit_right;
 var position_limit:int = 756
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
+var pinch_sensitivity = 3
+var default_zoom_sensitivity = .1
 
 
 func _ready():
@@ -146,18 +148,18 @@ func zoom_reset():
 	game.unit.hud.hide_hpbars()
 	
 	
-func zoom_in(): 
+func full_zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	game.ui.minimap.corner_view()
 	game.unit.hud.show_hpbars()
 	
 	
-func zoom_out(): 
+func full_zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 	game.ui.minimap.hide_view()
 
 func _zoom_camera(dir):
-	zoom += Vector2(0.1, 0.1) * dir
+	zoom += Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
 	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
 	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
 
@@ -172,7 +174,7 @@ func process():
 	if(_touches.size()>0):
 		_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
 		if(_touches_info.last_radius != 0 && _touches.size() > 1):
-			_zoom_camera(3*(_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
+			_zoom_camera(pinch_sensitivity * (_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
 	
 	#RESET VARS AND SET LAST VARS
 	_touches_info.last_radius = _touches_info.radius
