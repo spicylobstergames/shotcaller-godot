@@ -53,6 +53,11 @@ window/handheld/orientation="sensor"
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
 
+[global]
+
+etc=false
+touch=false
+
 [importer_defaults]
 
 texture={
@@ -131,7 +136,6 @@ quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1
 threads/thread_model=2
 vram_compression/import_etc=true
-vram_compression/import_etc2=false
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false
 quality/shading/force_vertex_shading.mobile=false

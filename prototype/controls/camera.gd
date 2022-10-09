@@ -3,7 +3,15 @@ var game:Node
 
 # self = game.camera
 
+var _touches = {} # for pinch zoom and drag with multiple fingers
+var _touches_info = {"num_touch_last_frame":0, 
+					"radius":0,
+					"last_radius":0, 
+					"total_pan":0, 
+					"last_avg_pos":Vector2.ZERO, 
+					"cur_avg_pos":Vector2.ZERO}
 var is_panning:bool = false
+var is_zooming:bool = false
 var pan_position:Vector2 = Vector2.ZERO
 var zoom_default:Vector2 = Vector2.ONE
 var zoom_limit:Vector2 = Vector2.ONE
@@ -11,6 +19,8 @@ var margin:int = limit_right;
 var position_limit:int = 756
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
+var pinch_sensitivity = 3
+var default_zoom_sensitivity = .1
 
 
 func _ready():
@@ -66,29 +76,48 @@ func _unhandled_input(event):
 	if game:
 		var over_minimap = game.ui.minimap.over_minimap(event)
 		# MOUSE PAN
-		if event.is_action("pan") and not over_minimap:
-			is_panning = event.is_action_pressed("pan")
-		elif event is InputEventMouseMotion:
-			if is_panning: pan_position = Vector2(-1 * event.relative)
+		#if event.is_action("pan") and not over_minimap:
+		#	is_panning = event.is_action_pressed("pan")
+		#elif event is InputEventMouseMotion:
+		#	if is_panning: pan_position = Vector2(-1 * event.relative)
 		
 		
-		# TOUCH PAN
+		# TOUCH PAN AND ZOOM
 		if event is InputEventScreenTouch and not over_minimap:
-			is_panning = event.is_pressed()
-		elif event is InputEventScreenDrag:
-			if is_panning: pan_position = Vector2(-1 * event.relative)
+			if !event.is_pressed():
+				_touches.erase(event.index)
+				if _touches.size() == 0:
+					_touches_info.last_radius = 0
+					_touches_info.last_avg_pos = Vector2.ZERO
+					_touches_info.radius = 0
+					_touches_info.cur_avg_pos = Vector2.ZERO
+			else:
+				is_panning = true
+				if(_touches.size() == 0):
+					_touches_info.last_avg_pos = event.position
+					_touches_info.cur_avg_pos = event.position
+				_touches[event.index] = {"start":event, "current":event}
+		if event is InputEventScreenDrag:
+			if not event.index in _touches:
+				_touches[event.index] = {"start":event, "current":event}
+				is_panning = true
+			if is_panning : 
+				_touches[event.index]["current"] = event
+				var avg_touch = Vector2(0,0)
+				for key in _touches:
+					avg_touch += _touches[key]["current"].position
+				avg_touch /= _touches.size()
+				_touches_info.cur_avg_pos = avg_touch
+				pan_position = Vector2(-1 * (_touches_info.cur_avg_pos - _touches_info.last_avg_pos))
+			
 		
-	
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
-		if zoom.x >= 1:
-			var point = game.camera.get_global_mouse_position()
-			game.camera.global_position = point - game.map.mid
-		if zoom.x == zoom_limit.y: zoom_reset()
-		elif zoom == zoom_default: zoom_in()
+		_zoom_camera(-1)
 	if event.is_action_pressed("zoom_out"):
-		if zoom.x == zoom_limit.x: zoom_reset()
-		elif zoom == zoom_default: zoom_out()
+		_zoom_camera(1)
+
+
 
 
 func start():
@@ -119,16 +148,20 @@ func zoom_reset():
 	game.unit.hud.hide_hpbars()
 	
 	
-func zoom_in(): 
+func full_zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	game.ui.minimap.corner_view()
 	game.unit.hud.show_hpbars()
 	
 	
-func zoom_out(): 
+func full_zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 	game.ui.minimap.hide_view()
 
+func _zoom_camera(dir):
+	zoom += Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
+	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
+	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
 
 func process():
 	var ratio = get_viewport().size.x / get_viewport().size.y
@@ -138,6 +171,15 @@ func process():
 	# APPLY KEYBOARD PAN
 	else: translate(arrow_keys_move)
 	
+	if(_touches.size()>0):
+		_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
+		if(_touches_info.last_radius != 0 && _touches.size() > 1):
+			_zoom_camera(pinch_sensitivity * (_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
+	
+	#RESET VARS AND SET LAST VARS
+	_touches_info.last_radius = _touches_info.radius
+	_touches_info.last_avg_pos = _touches_info.cur_avg_pos
+	_touches_info.num_touch_last_frame = _touches.size()
 	pan_position = Vector2.ZERO
 	
 	# KEEP CAMERA PAN LIMITS
