@@ -66,7 +66,7 @@ func build():
 			ui.main_menu.get_node("container/play_button").play_down()
 
 
-func start():
+func map_loaded():
 	if not started:
 		started = true
 		paused = false
@@ -85,7 +85,7 @@ func start():
 		elif test.stress:
 			test.spawn_random_units()
 		else: 
-			unit.spawn.start()
+			unit.spawn.pawns()
 			ui.get_node("score_board").visible = false
 			yield(get_tree().create_timer(4), "timeout")
 			unit.spawn.leaders()

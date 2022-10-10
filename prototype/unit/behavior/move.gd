@@ -17,7 +17,7 @@ func setup_timer(unit):
 	unit.add_child(unit.channeling_timer)
 
 
-func start(unit, destiny):
+func point(unit, destiny):
 	if unit.moves and not unit.stunned and in_bounds(destiny):
 		unit.set_behavior("move")
 		move(unit, destiny)
@@ -109,5 +109,5 @@ func stand(unit):
 func smart(unit, point, cb):
 	if not unit.stunned:
 		var path = game.unit.follow.find_path(unit.global_position, point)
-		if path: game.unit.follow.start(unit, path, cb)
+		if path: game.unit.follow.path(unit, path, cb)
 

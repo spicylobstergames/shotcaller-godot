@@ -120,7 +120,7 @@ func _unhandled_input(event):
 
 
 
-func start():
+func map_loaded():
 	offset = game.map.mid
 	var h = offset.x
 	limit_left = -h

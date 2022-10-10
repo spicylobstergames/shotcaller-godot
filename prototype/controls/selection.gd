@@ -139,7 +139,7 @@ func advance(unit, point):
 func attack(unit, point):
 	if unit.attacks and game.can_control(unit):
 		var order_point = order(unit, point)
-		game.unit.attack.start(unit, order_point)
+		game.unit.attack.point(unit, order_point)
 
 func teleport(unit, point):
 	if unit.moves and game.can_control(unit):
