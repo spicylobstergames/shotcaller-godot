@@ -57,7 +57,7 @@ func over_minimap(event):
 		event.position.y > get_viewport().size.y - size
 	)
 
-func start():
+func map_loaded():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
 	game.ui.minimap.update_map_texture = true

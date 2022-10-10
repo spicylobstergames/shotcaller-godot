@@ -69,15 +69,15 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-func start(unit, path, cb):
+func path(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
 		unit.current_path = path
-		game.unit[cb].start(unit, next_point)
+		game.unit[cb].point(unit, next_point)
 
 
 func next(unit):
-	start(unit, unit.current_path, unit.behavior)
+	path(unit, unit.current_path, unit.behavior)
 
 
 func draw_path(unit):
@@ -111,7 +111,7 @@ func lane(unit):
 		var path = game.map.lanes_paths[lane].duplicate()
 		if unit.team == "red": path.invert()
 		if unit.type != 'leader': 
-			start(unit, path, "advance")
+			path(unit, path, "advance")
 		else: smart(unit, path, "advance")
 
 
@@ -121,7 +121,7 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		game.unit[cb].start(unit, next_point)
+		game.unit[cb].point(unit, next_point)
 
 
 
