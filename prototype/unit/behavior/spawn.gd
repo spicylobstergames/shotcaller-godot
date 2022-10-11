@@ -85,10 +85,10 @@ func leaders():
 
 func send_leader(leader, path):
 	yield(get_tree(), "idle_frame")
-	Behavior.follow.start(leader, path, "advance")
+	Behavior.follow.path(leader, path, "advance")
 
 
-func start():
+func pawns():
 	spawn_group_cycle()
 
 
@@ -133,7 +133,7 @@ func send_pawn(template, lane, team):
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
 	Behavior.orders.set_pawn(pawn)
-	Behavior.follow.start(pawn, path.follow, "advance")
+	Behavior.follow.path(pawn, path.follow, "advance")
 
 
 
@@ -185,4 +185,4 @@ func cemitery_add_leader(leader):
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)
 	leader.reset_unit()
-	Behavior.follow.start(leader, path, "advance")
+	Behavior.follow.path(leader, path, "advance")

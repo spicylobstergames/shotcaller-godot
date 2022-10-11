@@ -15,16 +15,16 @@ func load_map(map_name):
 	game.map = game.maps.get_node(map_name)
 	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
 	game.map.visible = true
-	game.ui.minimap.start()
+	game.ui.minimap.map_loaded()
 
 
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
 	game.map.trees.occluder_light_mask = 2
 	game.map.walls.occluder_light_mask = 2
-	game.camera.start()
+	game.camera.map_loaded()
 	game.ui.buttons_update()
-	game.start()
+	game.map_loaded()
 
 
 func setup_leaders():

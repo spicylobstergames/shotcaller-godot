@@ -57,7 +57,7 @@ func unit_wait_end(unit1):
 	if stress:
 		var o = 2000
 		var d = Vector2(randf()*o,randf()*o)
-		if Behavior.moves: Behavior.advance.start(unit1, d)
+		if Behavior.moves: Behavior.advance.point(unit1, d)
 
 
 func respawn(unit1):
