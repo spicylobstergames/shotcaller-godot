@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
+"class": "Behaviors",
+"language": "GDScript",
+"path": "res://unit/behavior.gd"
+}, {
+"base": "Node",
 "class": "Unit",
 "language": "GDScript",
 "path": "res://unit/unit.gd"
@@ -20,6 +25,7 @@ _global_script_classes=[ {
 "path": "res://map/maps/base_map.gd"
 } ]
 _global_script_class_icons={
+"Behaviors": "",
 "Unit": "",
 "base_map": ""
 }
@@ -39,6 +45,8 @@ config/icon="res://assets/icon.png"
 autoload="*res://autoload/autoload.gd"
 EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
+Behavior="*res://unit/behavior.tscn"
+Hud="*res://ui/hud.tscn"
 
 [debug]
 

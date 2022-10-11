@@ -13,7 +13,7 @@ func _ready():
 
 
 func spawn_unit():
-	var s = game.unit.spawn
+	var s = Behavior.spawn
 	if unit: 
 		
 #		var dummy = game.maps.create(s.arthur, "mid", "red", "Vector2", Vector2(930,900))
@@ -44,7 +44,7 @@ func spawn_unit():
 func spawn_random_units():
 	game.rng.randomize()
 	var n = 80
-	var s = game.unit.spawn
+	var s = Behavior.spawn
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
@@ -57,19 +57,19 @@ func unit_wait_end(unit1):
 	if stress:
 		var o = 2000
 		var d = Vector2(randf()*o,randf()*o)
-		if game.unit.moves: game.unit.advance.start(unit1, d)
+		if Behavior.moves: Behavior.advance.start(unit1, d)
 
 
 func respawn(unit1):
 	if stress and unit1.type != "building":
 		yield(get_tree().create_timer(1), "timeout")
-		game.unit.spawn.spawn_unit(unit1, unit1.lane, unit1.team, "random_map", Vector2.ZERO)
+		Behavior.spawn.spawn_unit(unit1, unit1.lane, unit1.team, "random_map", Vector2.ZERO)
 
 
 func spawn_leaders():
 	var test_leaders = 0; # must build inventory and orders 
 	var t1 = game.player_team
-	var s = game.unit.spawn
+	var s = Behavior.spawn
 	if test_leaders:
 		game.maps.create(s.arthur, "mid", t1, "Vector2", Vector2(900,550))
 		game.maps.create(s.bokuden, "mid", t1, "Vector2", Vector2(900,600))

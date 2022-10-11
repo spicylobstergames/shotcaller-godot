@@ -59,7 +59,7 @@ func rollo_basic():
 	
 	if targets.size() >= 3:
 		for unit in targets:
-			_game.unit.attack.spell_hit(leader, unit, 100)
+			Behavior.attack.spell_hit(leader, unit, 100)
 	
 	return true
 

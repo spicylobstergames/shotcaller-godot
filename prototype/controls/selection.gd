@@ -26,7 +26,7 @@ func _unhandled_input(event):
 						KEY_A: attack(game.selected_unit, point) 
 						KEY_S: stand(game.selected_unit)
 					
-				game.unit.follow.draw_path(game.selected_unit)
+				Behavior.follow.draw_path(game.selected_unit)
 
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
@@ -48,7 +48,7 @@ func _unhandled_input(event):
 						"advance": advance(game.selected_unit, point)
 						"move": move(game.selected_unit, point)
 						"lane": change_lane(game.selected_unit, point)
-			game.unit.follow.draw_path(game.selected_unit)
+			Behavior.follow.draw_path(game.selected_unit)
 		
 		
 		# MAP CLICK ZOOM IN
@@ -95,8 +95,8 @@ func select_unit(unit):
 		game.selected_leader = null
 		game.ui.shop.disable_all()
 	
-	game.unit.follow.draw_path(unit)
-	game.unit.hud.show_selected(unit)
+	Behavior.follow.draw_path(unit)
+	Hud.show_selected(unit)
 	game.ui.show_select()
 	
 	if unit.display_name == "blacksmith" and not game.ui.shop.visible: 
@@ -109,7 +109,7 @@ func unselect():
 	if game.selected_unit:
 		
 		var unit = game.selected_unit
-		game.unit.hud.hide_unselect(unit)
+		Hud.hide_unselect(unit)
 				
 		if unit.display_name == "blacksmith" and game.ui.shop.visible: 
 			game.ui.shop_button.button_down()
@@ -117,7 +117,7 @@ func unselect():
 	var buttons = game.ui.leaders_icons.buttons_name
 	for all_leader_name in buttons: 
 		buttons[all_leader_name].pressed = false
-	game.unit.follow.draw_path(null)
+	Behavior.follow.draw_path(null)
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.hide_unselect()
@@ -134,38 +134,38 @@ func get_sel_unit_at_point(point):
 func advance(unit, point):
 	if unit and unit.attacks and unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
-		game.unit.advance.smart(unit, order_point)
+		Behavior.advance.smart(unit, order_point)
 
 func attack(unit, point):
 	if unit.attacks and game.can_control(unit):
 		var order_point = order(unit, point)
-		game.unit.attack.start(unit, order_point)
+		Behavior.attack.start(unit, order_point)
 
 func teleport(unit, point):
 	if unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
-		game.unit.follow.teleport(unit, order_point)
+		Behavior.follow.teleport(unit, order_point)
 
 func change_lane(unit, point):
 	if unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
-		game.unit.follow.change_lane(unit, order_point)
+		Behavior.follow.change_lane(unit, order_point)
 
 func move(unit, point):
 	if unit.moves and game.can_control(unit):
 		var order_point = order(unit, point)
-		game.unit.move.smart(unit, order_point, "move")
+		Behavior.move.smart(unit, order_point, "move")
 
 func stand(unit):
 	if game.can_control(unit):
 		order(unit, null)
-		game.unit.move.stand(unit)
+		Behavior.move.stand(unit)
 
 
 func order(unit, point):
 	unit.working = true
 	unit.hunting = false
-	game.unit.attack.set_target(unit, null)
+	Behavior.attack.set_target(unit, null)
 	if point:
 		var building = game.utils.get_building(point)
 		if building:

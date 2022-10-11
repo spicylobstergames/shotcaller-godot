@@ -78,17 +78,17 @@ func start():
 		rng.randomize()
 		maps.setup_lanes()
 		ui.orders_menu.build()
-		unit.follow.setup_pathfind()
+		Behavior.follow.setup_pathfind()
 		
 		if test.unit:
 			test.spawn_unit()
 		elif test.stress:
 			test.spawn_random_units()
 		else: 
-			unit.spawn.start()
+			Behavior.spawn.start()
 			ui.get_node("score_board").visible = false
 			yield(get_tree().create_timer(4), "timeout")
-			unit.spawn.leaders()
+			Behavior.spawn.leaders()
 			maps.setup_leaders()
 
 

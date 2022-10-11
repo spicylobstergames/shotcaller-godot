@@ -555,7 +555,6 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
-frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 

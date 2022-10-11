@@ -73,7 +73,8 @@ func start(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
 		unit.current_path = path
-		game.unit[cb].start(unit, next_point)
+		var node:Behaviors = Behavior #hack
+		node[cb].start(unit, next_point)
 
 
 func next(unit):
@@ -101,7 +102,7 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
-	game.unit.move.smart(unit, lane_start, "move")
+	Behavior.move.smart(unit, lane_start, "move")
 
 
 
@@ -121,7 +122,8 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		game.unit[cb].start(unit, next_point)
+		var node:Behaviors = Behavior #hack, it comes back as that Behaviors is null if you array access it
+		node[cb].start(unit, next_point)
 
 
 
@@ -132,7 +134,7 @@ func teleport(unit, point):
 	game.control_state = "selection"
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
-	game.unit.move.stand(unit)
+	Behavior.move.stand(unit)
 	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
