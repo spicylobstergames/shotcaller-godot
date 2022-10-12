@@ -36,7 +36,3 @@ script = ExtResource( 2 )
 
 [node name="modifiers" type="Node" parent="."]
 script = ExtResource( 7 )
-
-[node name="abilities" type="Node" parent="."]
-
-[node name="item_passives" type="Node" parent="."]
