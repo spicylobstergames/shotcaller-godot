@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.unit.modifiers
+# self = Behavior.modifiers
 
 var extra_retreat_speed = 10
 
@@ -58,10 +58,10 @@ func get_speed(unit):
 	if unit.hunting:
 		default = unit.hunting_speed
 	elif unit.retreating:
-		var bonus = game.unit.skills.get_value(unit, "bonus_retreat_speed")
+		var bonus = Behavior.skills.get_value(unit, "bonus_retreat_speed")
 		default += extra_retreat_speed + bonus
 	
-	default += game.unit.orders.tactics_extra_speed[unit.tactics]
+	default += Behavior.orders.tactics_extra_speed[unit.tactics]
 	
 	return default
 

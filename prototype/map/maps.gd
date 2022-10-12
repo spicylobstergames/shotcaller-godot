@@ -52,7 +52,7 @@ func setup_lanes():
 		var line = game.map.get_node("lanes/"+ lane)
 		game.map.lanes_paths[lane] = line_to_array(line)
 	
-	game.unit.orders.build_lanes()
+	Behavior.orders.build_lanes()
 
 
 func line_to_array(line):
@@ -97,13 +97,13 @@ func setup_buildings():
 
 
 func create(template, lane, team, mode, point):
-	var unit = game.unit.spawn.spawn_unit(template.instance(), lane, team, mode, point)
+	var unit = Behavior.spawn.spawn_unit(template.instance(), lane, team, mode, point)
 	game.map.add_child(unit)
 	unit.reset_unit()
 	game.all_units.append(unit)
 	game.selection.setup_selection(unit)
 	game.collision.setup(unit)
-	game.unit.move.setup_timer(unit)
+	Behavior.move.setup_timer(unit)
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
 		if team == game.player_team:
