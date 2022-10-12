@@ -17,6 +17,7 @@ func _ready():
 func hide_hpbars():
 	for unit in game.all_units:
 		if (unit != game.selected_unit and 
+				unit.has_node('hpbar') and
 				Hud and
 				unit.type != "leader" and
 				unit.current_hp == Behavior.modifiers.get_value(unit, "hp") ):
