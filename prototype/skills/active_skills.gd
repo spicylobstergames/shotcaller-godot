@@ -34,7 +34,7 @@ func _get_point_target():
 	var point = yield(self, "point")
 	self._waiting_for_point = false
 	return point
-# ^ ^ ^
+
 
 # Example how to write AOE skills
 func rollo_basic():

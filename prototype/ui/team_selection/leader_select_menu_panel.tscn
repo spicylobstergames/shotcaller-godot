@@ -94,7 +94,7 @@ script = ExtResource( 5 )
 [node name="sprite" type="Sprite" parent="HBoxContainer/button"]
 material = SubResource( 30 )
 position = Vector2( 18, 18 )
-scale = Vector2( 0.3, 0.3 )
+scale = Vector2( 0.45, 0.45 )
 texture = ExtResource( 6 )
 hframes = 12
 script = ExtResource( 4 )
