@@ -82,8 +82,7 @@ script = ExtResource( 1 )
 
 [node name="sprite" type="Sprite" parent="."]
 material = SubResource( 30 )
-position = Vector2( 49, 48 )
-scale = Vector2( 0.9, 0.9 )
+position = Vector2( 48, 48 )
 texture = ExtResource( 3 )
 hframes = 12
 script = ExtResource( 4 )
