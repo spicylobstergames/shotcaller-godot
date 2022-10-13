@@ -27,17 +27,6 @@ class ActiveSkill:
 	func on_cooldown():
 		return self.current_cooldown > 0
 
-# "Bulding blocks" to write code for skills
-# V V V
-# Gets all units in unit radius, for AOE skills
-func _get_units_in_radius(unit, radius):
-	var unit_position = unit.global_position + unit.collision_position
-	var units_in_near_blocks = _game.map.blocks.get_units_in_radius(unit_position, 2) # todo: maybe 1
-	var units_in_radius = []
-	for another_unit in units_in_near_blocks:
-		if unit.global_position.distance_to(another_unit.global_position) <= radius:
-			units_in_radius.append(another_unit)
-	return units_in_radius
 
 # Async func to get player point target
 func _get_point_target():
@@ -52,7 +41,7 @@ func rollo_basic():
 	var leader = _game.selected_leader
 	
 	var targets = []
-	for unit in _get_units_in_radius(leader, 100):
+	for unit in _game.map.blocks.get_units_in_radius(leader, 100):
 		if unit.team != leader.team:
 			if unit.type == "leader" or unit.type == "pawn":
 				targets.append(unit)
