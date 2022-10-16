@@ -1,8 +1,8 @@
 extends ItemList
-
 onready var _game: Node = get_tree().get_current_scene()
 onready var _skill_buttons = $placeholder.get_children()
 onready var _tip = $tip
+var sprite = preload("res://assets/ui/abilities/aura_of_courage_small.png")
 
 var player_leaders_skills = {}
 var enemy_leaders_skills = {}
@@ -41,7 +41,7 @@ func rollo_basic():
 	var leader = _game.selected_leader
 	
 	var targets = []
-	for unit in _game.map.blocks.get_units_in_radius(leader, 100):
+	for unit in _game.map.blocks.get_units_in_radius(leader.global_position, 100):
 		if unit.team != leader.team:
 			if unit.type == "leader" or unit.type == "pawn":
 				targets.append(unit)
@@ -67,7 +67,29 @@ func robin_special():
 	# return true, means skill was used and we need to apply cooldown
 	return true
 
-
+func bokuden_special():
+	
+	var leader = _game.selected_leader
+	var speed_modifier = 10
+	var range_of_aura = 100
+	var targets = []
+	
+	for unit in _game.map.blocks.get_units_in_radius(leader.global_position, range_of_aura):
+		if unit.team == leader.team and unit.type != "building":
+			targets.append(unit)
+			Behavior.modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
+			unit.status_effects["battle_call"] = {
+				icon = sprite,
+				hint = "Battle call: Increases speed by %d" % (speed_modifier * leader.level)
+			}
+	return true
+	yield(get_tree().create_timer(5.0), "timeout")		
+			
+	for unit in targets:
+		Behavior.modifiers.remove(unit, "speed", "battle_call")
+		targets.erase(unit)
+		unit.status_effects.erase("battle_call")
+	
 var active_skills = {
 	"rollo": [
 		ActiveSkill.new(
@@ -97,7 +119,14 @@ var active_skills = {
 	"takoda": [],
 	"arthur": [],
 	"lorne": [],
-	"bokuden": [],
+	"bokuden": [
+		ActiveSkill.new(
+			"Battle Call",
+			"The hero leads allies on a furious offensive, increasing their movement speed by by 10 * his level for 5 seconds.",
+			600,
+			[funcref(self, "bokuden_special")]
+		)
+	],
 	"sida": [],
 	"tomyris": [],
 	"nagato": [],
