@@ -18,6 +18,7 @@ onready var portrait_sprite = panel.get_node("portrait/sprite")
 onready var level_label : Label = get_node("panel/portrait/CenterContainer/level_label")
 onready var exp_bar : ProgressBar = get_node("panel/portrait/CenterContainer/exp_bar")
 onready var status_effect_display = $status_effect_display
+onready var active_skills = $active_skills
 
 
 func _ready():
@@ -54,11 +55,13 @@ func update():
 			level_label.text = "Level %d" % unit.level
 			exp_bar.value = unit.experience
 			exp_bar.max_value = unit.experience_needed()
+			active_skills.show()
 		else:
 			gold.visible = false
 			gold_sprite.visible = false
 			level_label.visible = false
 			exp_bar.visible = false
+			active_skills.hide()
 		status_effect_display.prepare(unit.status_effects)
 
 

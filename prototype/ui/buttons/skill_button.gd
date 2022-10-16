@@ -18,7 +18,6 @@ func setup(_skill):
 	_name.text = self.skill.display_name
 	self.hint_tooltip = _skill.description
 
-
 func reset():
 	self.icon = null
 	self._name.text = ""
@@ -55,6 +54,7 @@ func _physics_process(delta):
 		return
 	# We shoudln't see enemy skill's cooldowns
 	if _game.selected_unit.team != _game.player_team:
+		self.disabled = true
 		return
 	if self.skill.on_cooldown():
 		self.disabled = true
