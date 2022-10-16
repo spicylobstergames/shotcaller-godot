@@ -82,14 +82,13 @@ func bokuden_special():
 				icon = sprite,
 				hint = "Battle call: Increases speed by %d" % (speed_modifier * leader.level)
 			}
+	return true
 	yield(get_tree().create_timer(5.0), "timeout")		
 			
 	for unit in targets:
 		Behavior.modifiers.remove(unit, "speed", "battle_call")
 		targets.erase(unit)
 		unit.status_effects.erase("battle_call")
-		
-	return true
 	
 var active_skills = {
 	"rollo": [
