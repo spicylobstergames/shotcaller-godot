@@ -20,6 +20,7 @@ export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
+var agent = GoapAgent.new()
 
 # SELECTION
 export var selectable:bool = false
@@ -127,6 +128,7 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	current_modifiers = Behavior.modifiers.new_modifiers()
 
 	if type == "leader":
 		# save units around for items and exp
@@ -141,6 +143,12 @@ func _ready():
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
+	if find_node("goals"):
+		var goals = []
+		for goal in find_node("goals").goals:
+			goals.push_back(GoapGoals.get_goal(goal))
+		agent.init(self, goals)
+		add_child(agent)
 
 func gain_experience(value):
 	experience += value

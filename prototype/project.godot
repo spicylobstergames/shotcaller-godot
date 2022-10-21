@@ -9,10 +9,40 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "GoapAction",
+"class": "AdvanceOnEnemy",
+"language": "GDScript",
+"path": "res://goap/actions/advance_on_enemy.gd"
+}, {
+"base": "GoapGoal",
+"class": "AttackEnemyGoal",
+"language": "GDScript",
+"path": "res://goap/goals/attack_enemy.gd"
+}, {
 "base": "Node",
 "class": "Behaviors",
 "language": "GDScript",
 "path": "res://unit/behavior.gd"
+}, {
+"base": "Node",
+"class": "GoapAction",
+"language": "GDScript",
+"path": "res://goap/action.gd"
+}, {
+"base": "Node",
+"class": "GoapActionPlanner",
+"language": "GDScript",
+"path": "res://goap/action_planner.gd"
+}, {
+"base": "Node",
+"class": "GoapAgent",
+"language": "GDScript",
+"path": "res://goap/agent.gd"
+}, {
+"base": "Node",
+"class": "GoapGoal",
+"language": "GDScript",
+"path": "res://goap/goal.gd"
 }, {
 "base": "Node",
 "class": "Unit",
@@ -25,7 +55,13 @@ _global_script_classes=[ {
 "path": "res://map/maps/base_map.gd"
 } ]
 _global_script_class_icons={
+"AdvanceOnEnemy": "",
+"AttackEnemyGoal": "",
 "Behaviors": "",
+"GoapAction": "",
+"GoapActionPlanner": "",
+"GoapAgent": "",
+"GoapGoal": "",
 "Unit": "",
 "base_map": ""
 }
@@ -47,6 +83,9 @@ EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
 Behavior="*res://unit/behavior.tscn"
 Hud="*res://ui/hud.tscn"
+WorldState="*res://world/world_state.gd"
+Goap="*res://goap/goap.gd"
+GoapGoals="*res://goap/GoapGoals.gd"
 
 [debug]
 

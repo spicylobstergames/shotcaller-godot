@@ -1,9 +1,48 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/infantry_red.png" type="Texture" id=2]
 [ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=4]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=5]
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 3 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 4 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 2 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=35]
+animations = [ {
+"frames": [ SubResource( 34 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 37 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 61 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -519,44 +558,6 @@ tracks/7/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 3 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 4 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=61]
-atlas = ExtResource( 2 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="SpriteFrames" id=35]
-animations = [ {
-"frames": [ SubResource( 34 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 37 ) ],
-"loop": true,
-"name": "neutral",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 61 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
-
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
 regen = 1
@@ -573,23 +574,12 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="0"]
 scale = Vector2( 10, 10 )
 
 [node name="symbol_border" parent="symbol" index="0"]
 position = Vector2( 0, 2.98023e-08 )
 scale = Vector2( 1.6, 1.6 )
-
-[node name="state" parent="hud" index="0"]
-margin_top = -34.0
-margin_bottom = -18.0
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
 
 [node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
 visible = false
@@ -607,3 +597,14 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
+[node name="goals" type="Node" parent="." index="6"]
+script = ExtResource( 5 )
+goals = [ "AttackEnemyGoal" ]
