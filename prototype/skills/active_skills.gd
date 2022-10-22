@@ -48,7 +48,7 @@ func rollo_basic():
 	
 	if targets.size() >= 3:
 		for unit in targets:
-			Behavior.attack.spell_hit(leader, unit, 100)
+			Behavior.attack.take_hit(leader, unit, null, { "damage": 100 })
 	
 	return true
 
@@ -67,8 +67,8 @@ func robin_special():
 	# return true, means skill was used and we need to apply cooldown
 	return true
 
+
 func bokuden_special():
-	
 	var leader = _game.selected_leader
 	var speed_modifier = 10
 	var range_of_aura = 100
@@ -83,18 +83,19 @@ func bokuden_special():
 				hint = "Battle call: Increases speed by %d" % (speed_modifier * leader.level)
 			}
 	return true
-	yield(get_tree().create_timer(5.0), "timeout")		
-			
+	yield(get_tree().create_timer(5.0), "timeout")
+	
 	for unit in targets:
 		Behavior.modifiers.remove(unit, "speed", "battle_call")
 		targets.erase(unit)
 		unit.status_effects.erase("battle_call")
-	
+
+
 var active_skills = {
 	"rollo": [
 		ActiveSkill.new(
 			"Wolf's teeth",
-			"Deals damage in an AOE around it for 100 damage whenever >3 units are within range",
+			"Deals damage in an AOE around it for 100 damage whenever >=3 units are within range",
 			120,
 			[funcref(self, "rollo_basic")]
 		)
