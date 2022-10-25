@@ -23,14 +23,6 @@ func get_effects() -> Dictionary:
 	}
 
 func perform(agent, delta) -> bool:
-	#if agent.get_unit().team == "blue":
-	#	Behavior.advance.point(agent.get_unit(),agent.get_unit().game.map.find_node("red_castle").global_position)
-	#var path = agent.get_unit().game.maps.new_path(agent.get_unit().lane, agent.get_unit().team)
-	#Behavior.follow.path(agent.get_unit(), path.follow, "advance")
-	#else:
-	#	Behavior.advance.point(agent.get_unit(),agent.get_unit().game.map.find_node("blue_castle").global_position)
-	
-
 	return false
 
 func enter(agent):

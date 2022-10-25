@@ -64,3 +64,5 @@ func enter(_agent):
 	
 func exit(_agent) :
 	pass
+func on_every_second(_agent) :
+	pass
