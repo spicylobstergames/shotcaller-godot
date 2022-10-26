@@ -2,7 +2,7 @@ extends ItemList
 onready var _game: Node = get_tree().get_current_scene()
 onready var _skill_buttons = $placeholder.get_children()
 onready var _tip = $tip
-var sprite = preload("res://assets/ui/abilities/aura_of_courage_small.png")
+var aura_sprite = preload("res://assets/ui/abilities/aura_of_courage_small.png")
 
 var player_leaders_skills = {}
 var enemy_leaders_skills = {}
@@ -70,25 +70,34 @@ func robin_special():
 
 func bokuden_special():
 	var leader = _game.selected_leader
+	var aura_duration = 5
 	var speed_modifier = 10
 	var range_of_aura = 100
 	var targets = []
+	var battle_call_timer := Timer.new()
+	
+	##timer for aura
+	leader.add_child(battle_call_timer)
+	battle_call_timer.wait_time = aura_duration
+	battle_call_timer.connect("timeout", self, "battle_call_remove", [targets])
+	
 	
 	for unit in _game.map.blocks.get_units_in_radius(leader.global_position, range_of_aura):
 		if unit.team == leader.team and unit.type != "building":
 			targets.append(unit)
+			battle_call_timer.start()
 			Behavior.modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
 			unit.status_effects["battle_call"] = {
-				icon = sprite,
+				icon = aura_sprite,
 				hint = "Battle call: Increases speed by %d" % (speed_modifier * leader.level)
 			}
 	return true
-	yield(get_tree().create_timer(5.0), "timeout")
 	
-	for unit in targets:
-		Behavior.modifiers.remove(unit, "speed", "battle_call")
-		targets.erase(unit)
-		unit.status_effects.erase("battle_call")
+func battle_call_remove(targets):
+		for unit in targets:
+			Behavior.modifiers.remove(unit, "speed", "battle_call")
+			targets.erase(unit)
+			unit.status_effects.erase("battle_call")
 
 
 var active_skills = {
