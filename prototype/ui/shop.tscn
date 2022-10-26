@@ -294,12 +294,18 @@ columns = 3
 [node name="item_button" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/consumable_items/item_button" index="0"]
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button" index="3"]
+visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button" index="3"]
+[node name="item_button4" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
+margin_left = 52.0
+margin_right = 100.0
+focus_mode = 2
+
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button4" index="3"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -310,28 +316,71 @@ margin_left = 56.0
 margin_right = 108.0
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/consumable_items/item_button2" index="0"]
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="sell_button" parent="scroll_container/container/consumable_items/item_button2" index="3"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="item_button3" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
-margin_left = 112.0
-margin_right = 164.0
+[node name="separator3" type="HSeparator" parent="scroll_container/container"]
+margin_top = 338.0
+margin_right = 186.0
+margin_bottom = 342.0
+
+[node name="throwable" type="Label" parent="scroll_container/container"]
+margin_top = 346.0
+margin_right = 186.0
+margin_bottom = 362.0
+custom_fonts/font = SubResource( 3 )
+text = "Throwable"
+
+[node name="throwable_items" type="GridContainer" parent="scroll_container/container"]
+margin_top = 366.0
+margin_right = 186.0
+margin_bottom = 414.0
+columns = 3
+
+[node name="item_button3" parent="scroll_container/container/throwable_items" instance=ExtResource( 3 )]
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/consumable_items/item_button3" index="0"]
+[node name="name" parent="scroll_container/container/throwable_items/item_button3" index="0"]
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button3" index="3"]
+[node name="sell_button" parent="scroll_container/container/throwable_items/item_button3" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button5" parent="scroll_container/container/throwable_items" instance=ExtResource( 3 )]
+margin_left = 52.0
+margin_right = 100.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/throwable_items/item_button5" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/throwable_items/item_button5" index="3"]
+visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item_button6" parent="scroll_container/container/throwable_items" instance=ExtResource( 3 )]
+margin_left = 104.0
+margin_right = 152.0
+focus_mode = 2
+
+[node name="name" parent="scroll_container/container/throwable_items/item_button6" index="0"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sell_button" parent="scroll_container/container/throwable_items/item_button6" index="3"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -350,5 +399,8 @@ __meta__ = {
 [editable path="scroll_container/container/equip_items/item_button11"]
 [editable path="scroll_container/container/equip_items/item_button12"]
 [editable path="scroll_container/container/consumable_items/item_button"]
+[editable path="scroll_container/container/consumable_items/item_button4"]
 [editable path="scroll_container/container/consumable_items/item_button2"]
-[editable path="scroll_container/container/consumable_items/item_button3"]
+[editable path="scroll_container/container/throwable_items/item_button3"]
+[editable path="scroll_container/container/throwable_items/item_button5"]
+[editable path="scroll_container/container/throwable_items/item_button6"]
