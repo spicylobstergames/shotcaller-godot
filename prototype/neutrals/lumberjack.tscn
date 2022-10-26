@@ -3,6 +3,34 @@
 [ext_resource path="res://assets/unit/lumberjack_blue.png" type="Texture" id=1]
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=2]
 
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 1 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=38]
+animations = [ {
+"frames": [ SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -517,34 +545,6 @@ tracks/7/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 1 )
-region = Rect2( 24, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 24, 24 )
-
-[sub_resource type="SpriteFrames" id=38]
-animations = [ {
-"frames": [ SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
-
 [node name="lumberjack" instance=ExtResource( 2 )]
 hp = 180
 regen = 1
@@ -562,23 +562,9 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="0"]
+position = Vector2( 5, 5 )
 scale = Vector2( 10, 10 )
-
-[node name="symbol_border" parent="symbol" index="0"]
-position = Vector2( 0, 2.98023e-08 )
-scale = Vector2( 1.6, 1.6 )
-
-[node name="state" parent="hud" index="0"]
-margin_top = -34.0
-margin_bottom = -18.0
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 38 )
@@ -601,3 +587,10 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )

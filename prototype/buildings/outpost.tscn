@@ -7,6 +7,77 @@
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture" id=6]
 
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 3 )
+region = Rect2( 203, 0, 34, 88 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 6 )
+region = Rect2( 203, 0, 34, 88 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 4 )
+region = Rect2( 203, 0, 34, 88 )
+
+[sub_resource type="SpriteFrames" id=47]
+animations = [ {
+"frames": [ SubResource( 44 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 45 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 46 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 2 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 2 )
+region = Rect2( 192, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=41]
+animations = [ {
+"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=42]
+animations = [ {
+"frames": [ SubResource( 36 ), SubResource( 37 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=28]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 45.0
+
+[sub_resource type="CircleShape2D" id=43]
+radius = 180.0
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -111,77 +182,6 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 3 )
-region = Rect2( 203, 0, 34, 88 )
-
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 6 )
-region = Rect2( 203, 0, 34, 88 )
-
-[sub_resource type="AtlasTexture" id=46]
-atlas = ExtResource( 4 )
-region = Rect2( 203, 0, 34, 88 )
-
-[sub_resource type="SpriteFrames" id=47]
-animations = [ {
-"frames": [ SubResource( 44 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 45 ) ],
-"loop": true,
-"name": "neutral",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 46 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 2 )
-region = Rect2( 160, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=41]
-animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=42]
-animations = [ {
-"frames": [ SubResource( 36 ), SubResource( 37 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=28]
-radius = 16.0
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 45.0
-
-[sub_resource type="CircleShape2D" id=43]
-radius = 180.0
-
 [node name="outpost" instance=ExtResource( 1 )]
 hp = 2000
 regen = 10
@@ -199,37 +199,16 @@ defense = 15
 projectile_speed = 220.0
 lane = ""
 
-[node name="symbol" parent="." index="1"]
-scale = Vector2( 16, 16 )
-
-[node name="symbol_border" parent="symbol" index="0"]
-scale = Vector2( 1.5, 1.5 )
-
-[node name="state" parent="hud" index="0"]
-margin_top = -99.0
-margin_bottom = -81.0
-
-[node name="selection" parent="hud" index="1"]
-position = Vector2( 0, 0 )
-scale = Vector2( 2.38462, 5.33333 )
-
-[node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -84 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+[node name="symbol" parent="." index="0"]
+position = Vector2( 10, 0 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
 [node name="body" parent="sprites" index="1"]
-visible = true
 use_parent_material = false
 position = Vector2( 0, 11 )
 frames = SubResource( 47 )
-animation = "default"
 offset = Vector2( 0, -44 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
@@ -269,3 +248,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -20 )
 shape = SubResource( 43 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )

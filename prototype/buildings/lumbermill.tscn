@@ -7,6 +7,58 @@
 [ext_resource path="res://assets/buildings/neutral_red.png" type="Texture" id=5]
 [ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture" id=6]
 
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 3 )
+region = Rect2( 299, 20, 64, 68 )
+
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 6 )
+region = Rect2( 299, 20, 64, 68 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 5 )
+region = Rect2( 299, 20, 64, 68 )
+
+[sub_resource type="SpriteFrames" id=45]
+animations = [ {
+"frames": [ SubResource( 42 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 43 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 44 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 2 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 2 )
+region = Rect2( 192, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=41]
+animations = [ {
+"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=28]
+radius = 48.0
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 64.0
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -111,58 +163,6 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=42]
-atlas = ExtResource( 3 )
-region = Rect2( 299, 20, 64, 68 )
-
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 6 )
-region = Rect2( 299, 20, 64, 68 )
-
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 5 )
-region = Rect2( 299, 20, 64, 68 )
-
-[sub_resource type="SpriteFrames" id=45]
-animations = [ {
-"frames": [ SubResource( 42 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 43 ) ],
-"loop": true,
-"name": "neutral",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 44 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 2 )
-region = Rect2( 160, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=41]
-animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=28]
-radius = 48.0
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 64.0
-
 [node name="lumbermill" instance=ExtResource( 1 )]
 hp = 1200
 regen = 10
@@ -178,38 +178,15 @@ defense = 10
 projectile_speed = 0.0
 lane = ""
 
-[node name="symbol" parent="." index="1"]
-position = Vector2( 0, -1.78814e-07 )
-
-[node name="symbol_border" parent="symbol" index="0"]
-scale = Vector2( 1.4, 1.4 )
-
-[node name="state" parent="hud" index="0"]
-margin_left = -27.0
-margin_top = -74.0
-margin_right = 48.0
-margin_bottom = -56.0
-
-[node name="selection" parent="hud" index="1"]
-position = Vector2( 0, 0 )
-scale = Vector2( 3.46154, 5.66667 )
-
-[node name="hpbar" parent="hud" index="2"]
-position = Vector2( 10, -61 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+[node name="symbol" parent="." index="0"]
+position = Vector2( 10, 0 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
 [node name="body" parent="sprites" index="1"]
-visible = true
 use_parent_material = false
 frames = SubResource( 45 )
-animation = "default"
 offset = Vector2( 0, -30 )
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
@@ -238,3 +215,8 @@ shape = SubResource( 28 )
 [node name="select" parent="collisions" index="1"]
 position = Vector2( 0, -20 )
 shape = SubResource( 29 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
