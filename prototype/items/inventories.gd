@@ -211,7 +211,13 @@ func add_delivery(leader, item):
 				new_delivery.index = index
 				new_delivery.button = inventory.consumable_item_buttons[index]
 				break
-
+	elif item.type == "throwable":
+		for index in range(consumable_items_max):
+			if inventory.consumable_items[index] == null:
+				new_delivery.index = index
+				new_delivery.button = inventory.consumable_item_buttons[index]
+				break
+				
 	new_delivery.label = new_delivery.button.price_label
 	delivery_timer(new_delivery)
 
@@ -225,6 +231,7 @@ func delivery_timer(delivery):
 		else:
 			match delivery.item.type:
 				"consumable": give_item(delivery)
+				"throwable": give_item(delivery)
 				"equip":
 					if game.ui.shop.close_to_blacksmith(delivery.leader):
 						give_item(delivery)
@@ -266,7 +273,9 @@ func give_item(delivery):
 		"consumable":
 			inventory.consumable_items[index] = item
 			inventory.consumable_item_buttons[index].setup(item)
-
+		"throwable":
+			inventory.consumable_items[index] = item
+			inventory.consumable_item_buttons[index].setup(item)
 	item.delivered = true
 
 	Hud.update_hpbar(leader)
@@ -288,6 +297,9 @@ func remove_item(leader, index):
 
 	elif item.type == "consumable":
 		inventory.consumable_items[index - equip_items_max] = null
+		
+	elif item.type == "throwable":
+		inventory.consumable_items[index - equip_items_max] = null
 
 	Hud.update_hpbar(leader)
 
@@ -296,15 +308,21 @@ func remove_item(leader, index):
 
 
 	# Disable potion if full heath
+	# Disable poison if no target
+
 func update_consumables(leader):
 	var inventory = get_leader_inventory(leader)
 	var counter = 0
+	
 	for item in inventory.consumable_items:
 		var item_button = inventory.consumable_item_buttons[counter]
-		item_button.disabled = (leader.current_hp >= Behavior.modifiers.get_value(leader, "hp"))
-		counter += 1
-
-
+		if item != null and item.type == "consumable":
+			item_button.disabled = (leader.current_hp >= Behavior.modifiers.get_value(leader, "hp"))
+			counter += 1
+		elif item != null and item.type  == "throwable":
+			var enemy_leaders_on_sight = leader.get_enemy_leaders_on_sight(leader)
+			item_button.disabled = (enemy_leaders_on_sight.empty())
+			print(enemy_leaders_on_sight)
 
 func update_buttons():
 	for leader in game.player_leaders + game.enemy_leaders:
