@@ -301,7 +301,6 @@ func remove_item(leader, index):
 	elif item.type == "throwable":
 		inventory.consumable_items[index - equip_items_max] = null
 
-	#leader.get_node("hud").update_hpbar(leader)
 	Hud.update_hpbar(leader)
 
 	return item
