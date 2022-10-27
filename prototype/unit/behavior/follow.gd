@@ -82,11 +82,19 @@ func next(unit):
 
 
 func draw_path(unit):
-	if unit and unit.current_path:
+	if unit and (unit.current_path or unit.current_destiny or unit.objective):
 		path_line.visible = true
 		var pool = PoolVector2Array()
+		# start
 		pool.push_back(unit.global_position)
-		pool.append_array(unit.current_path)
+		 # end
+		if unit.current_path:
+			pool.append_array(unit.current_path)
+		elif unit.current_path:
+			pool.push_back(unit.current_path)
+		elif unit.objective:
+			pool.push_back(unit.objective)
+			
 		if unit.team == "blue":
 			path_line.default_color = Color(0.4,0.6,1, 0.3)
 		else: path_line.default_color = Color(1,0.3,0.3, 0.3)
