@@ -38,7 +38,7 @@ func create_block(x, y):
 	var half = game.map.half_tile_size
 	block.selectable = false
 	block.moves = false
-	block.attacks = true
+	block.attacks = false
 	block.collide = true
 	block.global_position = Vector2(half + x * size, half + y * size)
 	game.map.blocks.add_child(block)
