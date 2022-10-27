@@ -116,20 +116,20 @@ func _build_plans(step, blackboard):
 			for p in preconditions:
 				desired_state[p] = preconditions[p]
 
-		var s = {
-			"action": action,
-			"state": desired_state,
-			"children": []
-			}
+			var s = {
+				"action": action,
+				"state": desired_state,
+				"children": []
+				}
 
-		# if desired state is empty, it means this action
-		# can be included in the graph.
-		# if it's not empty, _build_plans is called again (recursively) so
-		# it can try to find actions to satisfy this current state. In case
-		# it can't find anything, this action won't be included in the graph.
-		if desired_state.empty() or _build_plans(s, blackboard.duplicate()):
-			step.children.push_back(s)
-			has_followup = true
+			# if desired state is empty, it means this action
+			# can be included in the graph.
+			# if it's not empty, _build_plans is called again (recursively) so
+			# it can try to find actions to satisfy this current state. In case
+			# it can't find anything, this action won't be included in the graph.
+			if desired_state.empty() or _build_plans(s, blackboard.duplicate()):
+				step.children.push_back(s)
+				has_followup = true
 
 	return has_followup
 
