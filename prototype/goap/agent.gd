@@ -56,6 +56,7 @@ func _process(delta):
 			_current_goal = goal
 			if _current_plan != null and _current_plan.size() > 0:
 				_current_plan[_current_plan_step].exit(self) #untested
+			print(goal.get_class())
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
 			_current_plan_step = 0
 			_current_plan[0].enter(self)#works!
@@ -106,3 +107,7 @@ func _follow_plan(plan, delta):
 func on_every_second() :
 	if(_current_plan != null):
 		_current_plan[_current_plan_step].on_every_second(self)
+
+func on_arrive():
+	if(_current_plan != null):
+		_current_plan[_current_plan_step].on_arrive(self)

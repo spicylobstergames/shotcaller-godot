@@ -31,7 +31,6 @@ var rng = RandomNumberGenerator.new()
 
 onready var maps = get_node("maps")
 onready var camera = get_node("camera")
-onready var unit = get_node("unit")
 onready var collision = get_node("collision")
 onready var ui = get_node("ui")
 onready var selection = get_node("selection")

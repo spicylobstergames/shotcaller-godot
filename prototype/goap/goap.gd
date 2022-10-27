@@ -15,7 +15,9 @@ var _action_planner =  GoapActionPlanner.new()
 
 func _ready():
 	_action_planner.set_actions([
-	AdvanceOnEnemy.new()
+		AdvanceOnEnemy.new(),
+		GetLumber.new(),
+		ReturnLumber.new()
 	])
 
 

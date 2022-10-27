@@ -10,6 +10,4 @@ onready var follow = $follow
 onready var orders = $orders 
 onready var skills = $skills
 onready var modifiers = $modifiers
-onready var abilities = $abilities
-onready var item_passives = $item_passives
 

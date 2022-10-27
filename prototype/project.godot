@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://unit/behavior.gd"
 }, {
+"base": "GoapAction",
+"class": "GetLumber",
+"language": "GDScript",
+"path": "res://goap/actions/get_lumber.gd"
+}, {
 "base": "Node",
 "class": "GoapAction",
 "language": "GDScript",
@@ -44,6 +49,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://goap/goal.gd"
 }, {
+"base": "GoapGoal",
+"class": "NeedLumberGoal",
+"language": "GDScript",
+"path": "res://goap/goals/need_lumber.gd"
+}, {
+"base": "GoapAction",
+"class": "ReturnLumber",
+"language": "GDScript",
+"path": "res://goap/actions/return_lumber.gd"
+}, {
 "base": "Node",
 "class": "Unit",
 "language": "GDScript",
@@ -58,10 +73,13 @@ _global_script_class_icons={
 "AdvanceOnEnemy": "",
 "AttackEnemyGoal": "",
 "Behaviors": "",
+"GetLumber": "",
 "GoapAction": "",
 "GoapActionPlanner": "",
 "GoapAgent": "",
 "GoapGoal": "",
+"NeedLumberGoal": "",
+"ReturnLumber": "",
 "Unit": "",
 "base_map": ""
 }
