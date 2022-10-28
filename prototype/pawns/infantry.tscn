@@ -18,6 +18,7 @@ atlas = ExtResource( 2 )
 region = Rect2( 72, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=35]
+resource_name = "sword"
 animations = [ {
 "frames": [ SubResource( 34 ) ],
 "loop": true,
@@ -587,6 +588,9 @@ position = Vector2( 6, 2 )
 frames = SubResource( 35 )
 animation = "neutral"
 offset = Vector2( 2, -5 )
+
+[node name="stuck" parent="sprites" index="3"]
+visible = false
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

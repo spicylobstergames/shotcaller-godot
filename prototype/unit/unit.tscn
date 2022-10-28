@@ -50,6 +50,7 @@ atlas = ExtResource( 13 )
 region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=53]
+resource_name = "infantry"
 animations = [ {
 "frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ) ],
 "loop": true,
