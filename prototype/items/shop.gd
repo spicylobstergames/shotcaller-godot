@@ -163,10 +163,10 @@ const items = {
 		"name": "Small\nPoison",
 		"sprite": 15,
 		"tooltip": "Slows down and deals 10 damage per second for 5 seconds",
-		"attributes": {"dot": 1, "speed": -10},
-		"price": 1,
+		"attributes": {"dot": 10, "speed": -10},
+		"price": 75,
 		"type": "throwable",
-		"delivery_time": 1,
+		"delivery_time": 15,
 		"duration": 5
   },
 	"medium_poison_bomb": {

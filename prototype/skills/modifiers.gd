@@ -57,7 +57,8 @@ func get_dot(unit):
 		for modifier in unit.current_modifiers["dot"]:
 			dot_effects.append(modifier.value)
 		return dot_effects
-
+	else:
+		return null
 
 func get_speed(unit):
 	var default = unit.speed
