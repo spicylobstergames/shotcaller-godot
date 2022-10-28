@@ -137,6 +137,7 @@ func hp_regen_cycle(): # called every second  and
 			var is_neutral = (unit.team == "neutral")
 			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				set_regen(unit)
+				set_dot(unit)
 				if unit.type == "leader" and game.can_control(unit):
 					game.ui.inventories.update_consumables(unit)
 
@@ -147,6 +148,13 @@ func set_regen(unit):
 		unit.heal(regen)
 	else: unit.regen = 0
 
+
+func set_dot(unit):
+	if not unit.dead:
+		var dot_effects = Behavior.modifiers.get_dot(unit)
+		if dot_effects != null:
+			for dot in dot_effects:
+				Behavior.attack.take_hit(dot.attacker, unit, null, {"damage": dot.damage})
 
 
 func leaders_cycle(): # called every 4 sec

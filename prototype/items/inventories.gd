@@ -322,7 +322,6 @@ func update_consumables(leader):
 		elif item != null and item.type  == "throwable":
 			var enemy_leaders_on_sight = leader.get_enemy_leaders_on_sight(leader)
 			item_button.disabled = (enemy_leaders_on_sight.empty())
-			print(enemy_leaders_on_sight)
 
 func update_buttons():
 	for leader in game.player_leaders + game.enemy_leaders:
