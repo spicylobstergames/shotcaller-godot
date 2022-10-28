@@ -20,6 +20,7 @@ atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 96, 128 )
 
 [sub_resource type="SpriteFrames" id=46]
+resource_name = "castle"
 animations = [ {
 "frames": [ SubResource( 43 ) ],
 "loop": true,
@@ -46,6 +47,7 @@ atlas = ExtResource( 3 )
 region = Rect2( 192, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=41]
+resource_name = "arrow"
 animations = [ {
 "frames": [ SubResource( 39 ), SubResource( 40 ) ],
 "loop": true,
@@ -62,6 +64,7 @@ atlas = ExtResource( 3 )
 region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=42]
+resource_name = "bow"
 animations = [ {
 "frames": [ SubResource( 36 ), SubResource( 37 ) ],
 "loop": true,

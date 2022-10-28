@@ -32,6 +32,7 @@ atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 48, 48 )
 
 [sub_resource type="SpriteFrames" id=36]
+resource_name = "mounted"
 animations = [ {
 "frames": [ SubResource( 55 ), SubResource( 56 ), SubResource( 57 ) ],
 "loop": true,
@@ -53,6 +54,7 @@ atlas = ExtResource( 4 )
 region = Rect2( 120, 0, 40, 32 )
 
 [sub_resource type="SpriteFrames" id=62]
+resource_name = "double_axe"
 animations = [ {
 "frames": [ SubResource( 63 ) ],
 "loop": true,
@@ -592,6 +594,9 @@ position = Vector2( 1, -14 )
 rotation = -0.349066
 frames = SubResource( 62 )
 offset = Vector2( 5, -9 )
+
+[node name="stuck" parent="sprites" index="4"]
+visible = false
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )
