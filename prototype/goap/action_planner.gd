@@ -21,12 +21,12 @@ func set_actions(actions: Array):
 # Returns a list of actions to be executed.
 #
 func get_plan(agent, goal: GoapGoal, blackboard = {}) -> Array:
-	print("Goal: %s" % goal.get_class())
+	#print("Goal: %s" % goal.get_class())
 	WorldState.console_message("Goal: %s" % goal.get_class())
 	var desired_state = goal.get_desired_state(agent).duplicate()
 
-	if desired_state.empty():	return []
-
+	if desired_state.empty():	
+		return []
 	return _find_best_plan(goal, desired_state, blackboard)
 
 
@@ -164,5 +164,5 @@ func _print_plan(plan):
 	var actions = []
 	for a in plan.actions:
 		actions.push_back(a.get_class())
-	print({"cost": plan.cost, "actions": actions})
+	#print({"cost": plan.cost, "actions": actions})
 	WorldState.console_message({"cost": plan.cost, "actions": actions})

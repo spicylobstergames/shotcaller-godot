@@ -371,7 +371,8 @@ func on_arrive(): # when collides with destiny
 		Behavior.move.end(self)
 
 		if self.attacks: Behavior.advance.end(self)
-		if agent != null: agent.on_arrive()
+		if agent != null: 
+			agent.on_arrive()
 		
 		match self.after_arive:
 			"conquer": Behavior.orders.conquer_building(self)

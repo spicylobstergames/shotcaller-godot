@@ -420,7 +420,7 @@ func lumberjack_hire(orders, team):
 		lumberjack.origin = lumberjack.global_position
 		lumberjack.target = lumbermill
 		lumbermill.target = lumberjack
-	
+		
 	lumberjack.setup_team(team)
 	lumberjack.visible = true
 	
@@ -428,6 +428,7 @@ func lumberjack_hire(orders, team):
 	var leaders = game.player_leaders
 	if team == game.enemy_team: leaders = game.enemy_leaders
 	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
+
 """	
 	# start lumberjack wood cut cycle
 	lumber_start(lumberjack)

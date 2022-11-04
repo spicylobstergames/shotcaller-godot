@@ -50,13 +50,10 @@ func _process(delta):
 		for s in WorldState._state:
 			blackboard[s] = WorldState._state[s]
 		for s in _state:
-			blackboard[s] = WorldState._state[s]
+			blackboard[s] = _state[s]
 
 		if(goal != null):
 			_current_goal = goal
-			if _current_plan != null and _current_plan.size() > 0:
-				_current_plan[_current_plan_step].exit(self) #untested
-			print(goal.get_class())
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
 			_current_plan_step = 0
 			_current_plan[0].enter(self)#works!
@@ -99,10 +96,13 @@ func _follow_plan(plan, delta):
 		return
 
 	var is_step_complete = plan[_current_plan_step].perform(self, delta)
-	if is_step_complete and _current_plan_step < plan.size() - 1:
+	if is_step_complete:
 		_current_plan[_current_plan_step].exit(self) #untested
-		_current_plan_step += 1
-		_current_plan[_current_plan_step].enter(self) #untested
+		if _current_plan_step < plan.size() - 1:
+			_current_plan_step += 1
+			_current_plan[_current_plan_step].enter(self)
+		else:
+			_current_goal = null #trigger replan
 
 func on_every_second() :
 	if(_current_plan != null):

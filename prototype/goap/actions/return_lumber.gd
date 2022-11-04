@@ -18,23 +18,25 @@ func get_effects() -> Dictionary:
 	return {
 		"collected_wood": true,
 	}
+func exit(agent):
+    pass
 
 func perform(agent, delta) -> bool:
-    if agent.get_state("collected_wood"):
-        agent.set_state("collected_wood", false)
+    if agent.get_state("arrived"):
+        agent.set_state("arrived", false)
         return true
     return false
 
 func enter(agent):
-    Behavior.move.move(agent.unit, agent.unit.target.position)
+    Behavior.move.move(agent.get_unit(), Vector2(458,570))
 
-func lumber_arive(agent):
-    agent.set_state("collected_wood", true)
+func on_arrive(agent):
+    agent.set_state("arrived", true)
     agent.set_state("has_wood",false)
     # heal all player buildings
-    for building in agent.unit.game.all_buildings:
-        if agent.unit.team == building.team:
+    for building in agent.get_unit().game.all_buildings:
+        if agent.get_unit().team == building.team:
             building.heal(building.regen)
     
-    if agent.unit.team == "neutral":
-        agent.unit.visible = false
+    if agent.get_unit().team == "neutral":
+        agent.get_unit().visible = false

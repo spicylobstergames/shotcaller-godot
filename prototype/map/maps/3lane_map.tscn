@@ -759,3 +759,6 @@ default_color = Color( 1, 1, 1, 0.196078 )
 [node name="fog" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.392157, 0.392157, 0.392157, 1 )
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2( 458, 570 )
