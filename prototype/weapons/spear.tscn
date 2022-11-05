@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/leaders/sida_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/leaders/sida_red.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=39]
+resource_name = "spear"
+animations = [ {
+"frames": [ SubResource( 43 ), SubResource( 44 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="Node2D"]
+use_parent_material = true
+
+[node name="spear" type="AnimatedSprite" parent="."]
+use_parent_material = true
+position = Vector2( -8.1407, 2.05879 )
+rotation = -0.349066
+scale = Vector2( 1, 1.1 )
+frames = SubResource( 39 )
+animation = "red"
+offset = Vector2( 0, -5 )
+
+[node name="projectile" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2( 5, -2 )
+z_index = 1
+
+[node name="sprites" type="AnimatedSprite" parent="projectile"]
+visible = false
+use_parent_material = true
+position = Vector2( 0, 4.76837e-07 )
+scale = Vector2( 1, 1.1 )
+frames = SubResource( 39 )
+animation = "red"
+offset = Vector2( -13, -1 )

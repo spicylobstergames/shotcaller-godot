@@ -1,6 +1,7 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://weapons/shuriken.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/nagato_blue.png" type="Texture" id=4]
 [ext_resource path="res://assets/leaders/nagato_red.png" type="Texture" id=5]
@@ -40,27 +41,6 @@ animations = [ {
 "frames": [ SubResource( 46 ), SubResource( 47 ), SubResource( 48 ) ],
 "loop": true,
 "name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 4 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=41]
-animations = [ {
-"frames": [ SubResource( 45 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="SpriteFrames" id=39]
-resource_name = "shuriken"
-animations = [ {
-"frames": [ SubResource( 45 ), SubResource( 45 ) ],
-"loop": true,
-"name": "default",
 "speed": 5.0
 } ]
 
@@ -151,7 +131,7 @@ tracks/5/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/shuriken:visible")
+tracks/6/path = NodePath("sprites/weapon/shuriken:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -163,7 +143,7 @@ tracks/6/keys = {
 "values": [ true, false, false ]
 }
 tracks/7/type = "value"
-tracks/7/path = NodePath("sprites/shuriken:rotation_degrees")
+tracks/7/path = NodePath("sprites/weapon/shuriken:rotation_degrees")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -175,7 +155,7 @@ tracks/7/keys = {
 "values": [ -90.0, -100.0, -60.0, -90.0 ]
 }
 tracks/8/type = "value"
-tracks/8/path = NodePath("sprites/shuriken:modulate")
+tracks/8/path = NodePath("sprites/weapon/shuriken:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
@@ -266,7 +246,7 @@ tracks/5/keys = {
 "values": [ Vector2( 0, 9 ), Vector2( 0, 9 ), Vector2( 0, 5 ), Vector2( -1, 2 ), Vector2( 1, -3 ), Vector2( 0, -10 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/shuriken:visible")
+tracks/6/path = NodePath("sprites/weapon/shuriken:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -357,7 +337,7 @@ tracks/5/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/shuriken:visible")
+tracks/6/path = NodePath("sprites/weapon/shuriken:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -448,7 +428,7 @@ tracks/5/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/shuriken:visible")
+tracks/6/path = NodePath("sprites/weapon/shuriken:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -538,7 +518,7 @@ tracks/5/keys = {
 } ]
 }
 tracks/6/type = "value"
-tracks/6/path = NodePath("sprites/shuriken:visible")
+tracks/6/path = NodePath("sprites/weapon/shuriken:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -601,28 +581,7 @@ position = Vector2( 0, 9 )
 frames = SubResource( 36 )
 offset = Vector2( 0, -13 )
 
-[node name="shuriken" type="AnimatedSprite" parent="sprites" index="2"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-use_parent_material = true
-position = Vector2( -8, -6 )
-rotation = -1.5708
-frames = SubResource( 41 )
-
-[node name="weapon" type="Node2D" parent="sprites" index="3"]
-visible = false
-use_parent_material = true
-position = Vector2( 0, -8 )
-scale = Vector2( 1.0686, 1 )
-
-[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-visible = false
-use_parent_material = true
-z_index = 1
-
-[node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-use_parent_material = true
-frames = SubResource( 39 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

@@ -1,11 +1,10 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/mounted_red.png" type="Texture" id=2]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=3]
-[ext_resource path="res://assets/leaders/rollo_red.png" type="Texture" id=4]
+[ext_resource path="res://weapons/double_axe.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/pawns/mounted_blue.png" type="Texture" id=6]
-[ext_resource path="res://assets/leaders/rollo_blue.png" type="Texture" id=8]
 
 [sub_resource type="AtlasTexture" id=55]
 atlas = ExtResource( 6 )
@@ -40,33 +39,6 @@ animations = [ {
 "speed": 5.0
 }, {
 "frames": [ SubResource( 58 ), SubResource( 59 ), SubResource( 60 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=63]
-atlas = ExtResource( 8 )
-region = Rect2( 120, 0, 40, 32 )
-
-[sub_resource type="AtlasTexture" id=64]
-atlas = ExtResource( 4 )
-region = Rect2( 120, 0, 40, 32 )
-
-[sub_resource type="SpriteFrames" id=62]
-resource_name = "double_axe"
-animations = [ {
-"frames": [ SubResource( 63 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [  ],
-"loop": true,
-"name": "neutral",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 64 ) ],
 "loop": true,
 "name": "red",
 "speed": 5.0
@@ -586,14 +558,10 @@ texture = ExtResource( 3 )
 [node name="body" parent="sprites" index="2"]
 position = Vector2( 0, 8 )
 frames = SubResource( 36 )
-frame = 2
 offset = Vector2( 5, -24 )
 
-[node name="weapon" type="AnimatedSprite" parent="sprites" index="3"]
-position = Vector2( 1, -14 )
-rotation = -0.349066
-frames = SubResource( 62 )
-offset = Vector2( 5, -9 )
+[node name="weapon" parent="sprites" index="3" instance=ExtResource( 4 )]
+visible = false
 
 [node name="stuck" parent="sprites" index="4"]
 visible = false

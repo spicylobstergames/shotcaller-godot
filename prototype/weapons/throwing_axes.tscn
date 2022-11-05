@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 1 )
+region = Rect2( 120, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 1 )
+region = Rect2( 160, 0, 40, 32 )
+
+[sub_resource type="SpriteFrames" id=42]
+resource_name = "throwing_axes"
+animations = [ {
+"frames": [ SubResource( 40 ), SubResource( 41 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 1 )
+region = Rect2( 120, 0, 40, 32 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 1 )
+region = Rect2( 160, 0, 40, 32 )
+
+[sub_resource type="SpriteFrames" id=45]
+animations = [ {
+"frames": [ SubResource( 43 ), SubResource( 44 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="Node2D"]
+use_parent_material = true
+position = Vector2( 0, -8 )
+scale = Vector2( 1.0686, 1 )
+
+[node name="axe" type="AnimatedSprite" parent="."]
+use_parent_material = true
+position = Vector2( -7.48643, 4 )
+rotation = -1.51577
+scale = Vector2( 0.999785, 0.936033 )
+frames = SubResource( 42 )
+offset = Vector2( 6, -4 )
+
+[node name="projectile" type="Node2D" parent="."]
+visible = false
+use_parent_material = true
+z_index = 1
+
+[node name="sprites" type="AnimatedSprite" parent="projectile"]
+use_parent_material = true
+frames = SubResource( 45 )
