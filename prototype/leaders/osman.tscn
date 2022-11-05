@@ -1,9 +1,10 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/trader.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/osman_red.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/osman_blue.png" type="Texture" id=4]
+[ext_resource path="res://weapons/scimitar.tscn" type="PackedScene" id=5]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 4 )
@@ -38,28 +39,6 @@ animations = [ {
 "speed": 5.0
 }, {
 "frames": [ SubResource( 40 ), SubResource( 41 ), SubResource( 42 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 4 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 3 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=45]
-resource_name = "scimitar"
-animations = [ {
-"frames": [ SubResource( 43 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 44 ) ],
 "loop": true,
 "name": "red",
 "speed": 5.0
@@ -587,12 +566,8 @@ scale = Vector2( 1.30769, 1.37553 )
 frames = SubResource( 36 )
 offset = Vector2( -4, -15 )
 
-[node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 5 )]
 visible = false
-position = Vector2( 8, -2 )
-rotation = -1.02617
-frames = SubResource( 45 )
-offset = Vector2( 6, -2 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

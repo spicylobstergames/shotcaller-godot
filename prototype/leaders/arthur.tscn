@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/aura_of_courage.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/leaders/arthur_red.png" type="Texture" id=4]
 [ext_resource path="res://assets/ui/abilities/aura_of_courage.png" type="Texture" id=5]
 [ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=6]
+[ext_resource path="res://weapons/excalibur.tscn" type="PackedScene" id=7]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 3 )
@@ -40,28 +41,6 @@ animations = [ {
 "speed": 5.0
 }, {
 "frames": [ SubResource( 38 ), SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=62]
-atlas = ExtResource( 3 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="AtlasTexture" id=64]
-atlas = ExtResource( 4 )
-region = Rect2( 72, 0, 24, 24 )
-
-[sub_resource type="SpriteFrames" id=63]
-resource_name = "excalibur"
-animations = [ {
-"frames": [ SubResource( 62 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 64 ) ],
 "loop": true,
 "name": "red",
 "speed": 5.0
@@ -586,10 +565,7 @@ region_rect = Rect2( 31, 0, 14, 14 )
 frames = SubResource( 36 )
 offset = Vector2( -2, -12 )
 
-[node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
-position = Vector2( 6, 0 )
-frames = SubResource( 63 )
-offset = Vector2( 2, -4 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 7 )]
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

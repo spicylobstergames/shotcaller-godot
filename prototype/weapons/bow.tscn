@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 1 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 1 )
+region = Rect2( 192, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=41]
+resource_name = "arrow"
+animations = [ {
+"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=42]
+resource_name = "bow"
+animations = [ {
+"frames": [ SubResource( 36 ), SubResource( 37 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="Node2D"]
+use_parent_material = true
+position = Vector2( 0, -4 )
+scale = Vector2( 1.0686, 1 )
+
+[node name="projectile" type="Node2D" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+use_parent_material = true
+position = Vector2( 19.6519, 2 )
+
+[node name="sprites" type="AnimatedSprite" parent="projectile"]
+use_parent_material = true
+position = Vector2( -0.216076, 0 )
+frames = SubResource( 41 )
+offset = Vector2( -11, 0 )
+
+[node name="bow" type="AnimatedSprite" parent="."]
+use_parent_material = true
+position = Vector2( 0, 1 )
+frames = SubResource( 42 )
+offset = Vector2( 10, 0 )

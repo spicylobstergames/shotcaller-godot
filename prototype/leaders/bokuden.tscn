@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://weapons/katana.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/bokuden_red.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/bokuden_blue.png" type="Texture" id=4]
 
@@ -37,28 +38,6 @@ animations = [ {
 "speed": 5.0
 }, {
 "frames": [ SubResource( 45 ), SubResource( 46 ), SubResource( 47 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 4 )
-region = Rect2( 114, 0, 38, 38 )
-
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 3 )
-region = Rect2( 114, 0, 38, 38 )
-
-[sub_resource type="SpriteFrames" id=50]
-resource_name = "katana"
-animations = [ {
-"frames": [ SubResource( 48 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 49 ) ],
 "loop": true,
 "name": "red",
 "speed": 5.0
@@ -632,10 +611,7 @@ frames = SubResource( 44 )
 frame = 2
 offset = Vector2( -3, -16 )
 
-[node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
-position = Vector2( 7, 0 )
-frames = SubResource( 50 )
-offset = Vector2( 2, -7 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/leaders/lorne_red.png" type="Texture" id=1]
+[ext_resource path="res://assets/leaders/lorne_blue.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=60]
+atlas = ExtResource( 2 )
+region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 1 )
+region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=62]
+resource_name = "poleaxe"
+animations = [ {
+"frames": [ SubResource( 60 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 61 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="AnimatedSprite"]
+position = Vector2( -1, -16 )
+rotation = 0.440805
+frames = SubResource( 62 )
+offset = Vector2( 2, -4 )

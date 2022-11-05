@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://weapons/curved_sword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/raja_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/raja_red.png" type="Texture" id=4]
 
@@ -37,28 +38,6 @@ animations = [ {
 "speed": 5.0
 }, {
 "frames": [ SubResource( 38 ), SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 3 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=42]
-atlas = ExtResource( 4 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=43]
-resource_name = "scimitar"
-animations = [ {
-"frames": [ SubResource( 41 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 42 ) ],
 "loop": true,
 "name": "red",
 "speed": 5.0
@@ -580,13 +559,10 @@ region_rect = Rect2( 6, 4, 18, 19 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 36 )
-frame = 2
 offset = Vector2( 2, -15 )
 
-[node name="weapon" type="AnimatedSprite" parent="sprites" index="2"]
-position = Vector2( 6, 1 )
-frames = SubResource( 43 )
-offset = Vector2( 6, -6 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
+visible = false
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

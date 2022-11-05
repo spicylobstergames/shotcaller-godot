@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/pawns/infantry_red.png" type="Texture" id=2]
+[ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 1 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 3 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 2 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=62]
+resource_name = "sword"
+animations = [ {
+"frames": [ SubResource( 34 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 37 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 61 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="AnimatedSprite"]
+position = Vector2( 6, 2 )
+frames = SubResource( 62 )
+animation = "neutral"
+offset = Vector2( 2, -5 )

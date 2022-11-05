@@ -1,9 +1,10 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/multishot.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/robin_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/robin_red.png" type="Texture" id=4]
+[ext_resource path="res://weapons/leader_bow.tscn" type="PackedScene" id=5]
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 3 )
@@ -40,40 +41,6 @@ animations = [ {
 "frames": [ SubResource( 44 ), SubResource( 45 ), SubResource( 46 ) ],
 "loop": true,
 "name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 3 )
-region = Rect2( 160, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 3 )
-region = Rect2( 192, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=39]
-resource_name = "leader_arrow"
-animations = [ {
-"frames": [ SubResource( 37 ), SubResource( 38 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 3 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 3 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=42]
-resource_name = "leader_bow"
-animations = [ {
-"frames": [ SubResource( 40 ), SubResource( 41 ) ],
-"loop": true,
-"name": "default",
 "speed": 5.0
 } ]
 
@@ -694,30 +661,7 @@ frames = SubResource( 36 )
 frame = 1
 offset = Vector2( 0, -15 )
 
-[node name="weapon" type="Node2D" parent="sprites" index="2"]
-use_parent_material = true
-position = Vector2( 0, -4 )
-scale = Vector2( 1.0686, 1 )
-
-[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-use_parent_material = true
-position = Vector2( 22.1654, 1 )
-
-[node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-use_parent_material = true
-position = Vector2( 19.8074, 3 )
-frames = SubResource( 39 )
-offset = Vector2( -33, -3 )
-
-[node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
-visible = false
-use_parent_material = true
-position = Vector2( 0, 1 )
-rotation = 0.349066
-frames = SubResource( 42 )
-offset = Vector2( 10, 0 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 5 )]
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

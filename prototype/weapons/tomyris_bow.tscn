@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/leaders/robin_blue.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 1 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 1 )
+region = Rect2( 192, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=44]
+resource_name = "leader_arrow"
+animations = [ {
+"frames": [ SubResource( 37 ), SubResource( 38 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=45]
+resource_name = "leader_bow"
+animations = [ {
+"frames": [ SubResource( 40 ), SubResource( 41 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="Node2D"]
+use_parent_material = true
+position = Vector2( -8, -17 )
+scale = Vector2( 1.0686, 1 )
+
+[node name="projectile" type="Node2D" parent="."]
+visible = false
+use_parent_material = true
+position = Vector2( 26, 0 )
+
+[node name="sprites" type="AnimatedSprite" parent="projectile"]
+use_parent_material = true
+frames = SubResource( 44 )
+offset = Vector2( -13, -1 )
+
+[node name="bow" type="AnimatedSprite" parent="."]
+use_parent_material = true
+position = Vector2( 4.66035, 1.05636 )
+rotation = 0.349066
+frames = SubResource( 45 )
+offset = Vector2( 10, 0 )
