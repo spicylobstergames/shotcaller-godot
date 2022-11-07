@@ -50,6 +50,7 @@ var victory:String
 
 func _ready():
 	get_tree().paused = true
+	WorldState.set_state("is_game_active", false)
 
 
 func _process(delta: float) -> void:
@@ -69,6 +70,7 @@ func map_loaded():
 	if not started:
 		started = true
 		paused = false
+		WorldState.set_state("is_game_active", true)
 		
 		maps.setup_buildings()
 		map.blocks.setup_quadtree()

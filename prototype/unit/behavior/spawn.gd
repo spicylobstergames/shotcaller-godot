@@ -74,7 +74,7 @@ func leaders():
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
-			send_leader(leader_node, path.follow)
+			#send_leader(leader_node, path.follow)
 			counter += 1
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -133,7 +133,7 @@ func send_pawn(template, lane, team):
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
 	Behavior.orders.set_pawn(pawn)
-	Behavior.follow.path(pawn, path.follow, "advance")
+	#Behavior.follow.path(pawn, path.follow, "advance")
 
 
 
