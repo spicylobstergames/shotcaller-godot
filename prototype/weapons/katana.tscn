@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/leaders/bokuden_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/leaders/bokuden_red.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 1 )
+region = Rect2( 114, 0, 38, 38 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 2 )
+region = Rect2( 114, 0, 38, 38 )
+
+[sub_resource type="SpriteFrames" id=50]
+resource_name = "katana"
+animations = [ {
+"frames": [ SubResource( 48 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 49 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="AnimatedSprite"]
+position = Vector2( 7, 0 )
+frames = SubResource( 50 )
+offset = Vector2( 2, -7 )

@@ -50,6 +50,7 @@ atlas = ExtResource( 13 )
 region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=53]
+resource_name = "infantry"
 animations = [ {
 "frames": [ SubResource( 54 ), SubResource( 55 ), SubResource( 56 ) ],
 "loop": true,
@@ -82,6 +83,7 @@ visible = false
 modulate = Color( 0.32549, 0.584314, 0.709804, 1 )
 light_mask = 3
 material = SubResource( 57 )
+position = Vector2( 10, 10 )
 scale = Vector2( 20, 20 )
 z_index = 2
 texture = ExtResource( 2 )
@@ -92,7 +94,8 @@ region_rect = Rect2( 1, 1, 1, 1 )
 modulate = Color( 0, 0, 0, 1 )
 light_mask = 3
 use_parent_material = true
-scale = Vector2( 1.30769, 1.30769 )
+position = Vector2( 0.2, 0.2 )
+scale = Vector2( 1.4, 1.4 )
 z_index = -1
 texture = ExtResource( 2 )
 region_enabled = true

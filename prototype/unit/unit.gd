@@ -331,6 +331,16 @@ func get_units_on_sight(filters):
 	return targets
 
 
+func get_enemy_leaders_on_sight(unit):
+	var targets = []
+	var leaders_on_sight = unit.get_units_on_sight({"type": "leader"})
+	for leader in leaders_on_sight:
+		if leader.team != unit.team:
+			targets.append(leader)
+			
+	return targets
+	
+	
 func on_every_second():
 	self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
 	for i in units_in_radius:

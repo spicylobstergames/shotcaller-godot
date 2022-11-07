@@ -101,8 +101,13 @@ func secondary_projectile(attacker, target):
 
 
 func hit_modifiers(attacker, target, projectile, modifiers):
+	var damage
+	if modifiers.has("damage"): 
+		damage = modifiers.damage
+	else:
+		damage = Behavior.modifiers.get_value(attacker, "damage")
 	modifiers = {
-		"damage": Behavior.modifiers.get_value(attacker, "damage"),
+		"damage": damage,
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
 		"counter": false,

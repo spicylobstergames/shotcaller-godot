@@ -555,6 +555,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -577,7 +578,7 @@ position = Vector2( 400, 673 )
 
 [node name="blacksmith" parent="buildings/blue" instance=ExtResource( 24 )]
 material = SubResource( 57 )
-position = Vector2( 267, 390 )
+position = Vector2( 268, 390 )
 team = "neutral"
 
 [node name="red" type="YSort" parent="buildings"]
@@ -585,7 +586,7 @@ team = "neutral"
 [node name="red_castle" parent="buildings/red" instance=ExtResource( 11 )]
 unique_name_in_owner = true
 material = SubResource( 57 )
-position = Vector2( 954, 169 )
+position = Vector2( 956, 168 )
 team = "red"
 
 [node name="barrack" parent="buildings/red" instance=ExtResource( 10 )]

@@ -9,6 +9,7 @@ var cleared =false
 onready var container = get_node("scroll_container/container")
 onready var equip_items = container.get_node("equip_items")
 onready var consumable_items = container.get_node("consumable_items")
+onready var throwable_items = container.get_node("throwable_items")
 
 var blacksmiths
 
@@ -157,7 +158,37 @@ const items = {
 		"price": 125,
 		"type": "consumable",
 		"delivery_time": 20
-	}
+	},
+	"small_poison_bomb": {
+		"name": "Small\nPoison",
+		"sprite": 15,
+		"tooltip": "Slows down and deals 10 damage per second for 5 seconds",
+		"attributes": {"dot": 10, "speed": -10},
+		"price": 75,
+		"type": "throwable",
+		"delivery_time": 15,
+		"duration": 5
+  },
+	"medium_poison_bomb": {
+		"name": "Medium\nPoison",
+		"sprite": 16,
+		"tooltip": "Slows down and deals 15 damage per second for 5 seconds",
+		"attributes": {"dot": 15, "speed": -20},
+		"price": 100,
+		"type": "throwable",
+		"delivery_time": 30,
+		"duration": 5
+  },
+	"large_poison_bomb": {
+		"name": "Large\nPoison",
+		"sprite": 17,
+		"tooltip": "Slows down and deals 25 damage per second for 5 seconds",
+		"attributes": {"dot": 25, "speed": -30},
+		"price": 175,
+		"type": "throwable",
+		"delivery_time": 50,
+		"duration": 5
+  }
 }
 
 
@@ -188,6 +219,10 @@ func clear():
 		for placeholder_item in consumable_items.get_children():
 			consumable_items.remove_child(placeholder_item)
 			placeholder_item.queue_free()
+		
+		for placeholder_item in throwable_items.get_children():
+			throwable_items.remove_child(placeholder_item)
+			placeholder_item.queue_free()
 
 		cleared = true
 
@@ -197,12 +232,13 @@ func add_item(item):
 	var new_item_button = item_button_preload.instance()
 	new_item_button.shop_item = true
 	if item.type == "consumable": consumable_items.add_child(new_item_button)
+	elif item.type == "throwable":throwable_items.add_child(new_item_button)
 	else: equip_items.add_child(new_item_button)
 	new_item_button.setup(item)
 
 
 func disable_all():
-	for item_button in equip_items.get_children() + consumable_items.get_children():
+	for item_button in equip_items.get_children() + consumable_items.get_children() + throwable_items.get_children():
 		item_button.disabled = true
 
 
@@ -229,13 +265,13 @@ func update_buttons():
 		
 		# checks if leader has trader ability, updates price labels
 		if trader != null:
-			for item_button in equip_items.get_children() + consumable_items.get_children():
+			for item_button in equip_items.get_children() + consumable_items.get_children() + throwable_items.get_children():
 				var price = item_button.item.price
 				item_button.price_after_discount = price - price * (float(trader.VALUE * leader.level)/100)
 				item_button.price_after_discount = int(item_button.price_after_discount)
 				item_button.price_label.text = str(item_button.price_after_discount)
 		else:
-			for item_button in equip_items.get_children() + consumable_items.get_children():
+			for item_button in equip_items.get_children() + consumable_items.get_children() + throwable_items.get_children():
 				item_button.price_after_discount = item_button.item.price
 				item_button.price_label.text = str(item_button.price_after_discount)
 		
@@ -252,7 +288,7 @@ func update_buttons():
 		# enable/disable buttons on which leader don't have enough golds
 		var inventory = game.ui.inventories.get_leader_inventory(leader)
 		if leader and inventory:
-			for item_button in equip_items.get_children() + consumable_items.get_children():
+			for item_button in equip_items.get_children() + consumable_items.get_children() + throwable_items.get_children():
 				var item_price = item_button.item.price
 				item_button.disabled = (leader.gold < item_price)
 
@@ -263,5 +299,8 @@ func update_buttons():
 					item_button.disabled = true
 			if !game.ui.inventories.consumable_items_has_slots(leader):
 				for item_button in consumable_items.get_children():
+					item_button.disabled = true
+			if !game.ui.inventories.consumable_items_has_slots(leader):
+				for item_button in throwable_items.get_children():
 					item_button.disabled = true
 

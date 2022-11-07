@@ -7,6 +7,80 @@
 [ext_resource path="res://assets/buildings/buildings_blue.png" type="Texture" id=5]
 [ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture" id=6]
 
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 96, 128 )
+
+[sub_resource type="SpriteFrames" id=46]
+resource_name = "castle"
+animations = [ {
+"frames": [ SubResource( 43 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 45 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 44 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 3 )
+region = Rect2( 160, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 3 )
+region = Rect2( 192, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=41]
+resource_name = "arrow"
+animations = [ {
+"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 3 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 3 )
+region = Rect2( 128, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=42]
+resource_name = "bow"
+animations = [ {
+"frames": [ SubResource( 36 ), SubResource( 37 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=28]
+radius = 46.0
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 60.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 250.0
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -112,77 +186,6 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 0, 96, 128 )
-
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 96, 128 )
-
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 96, 128 )
-
-[sub_resource type="SpriteFrames" id=46]
-animations = [ {
-"frames": [ SubResource( 43 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 45 ) ],
-"loop": true,
-"name": "neutral",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 44 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 3 )
-region = Rect2( 160, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 3 )
-region = Rect2( 192, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=41]
-animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 3 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 3 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=42]
-animations = [ {
-"frames": [ SubResource( 36 ), SubResource( 37 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=28]
-radius = 46.0
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 60.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 250.0
-
 [node name="castle" instance=ExtResource( 1 )]
 hp = 2400
 regen = 10
@@ -198,30 +201,13 @@ damage = 80
 defense = 30
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="1"]
-position = Vector2( 0, -1.90735e-06 )
+[node name="symbol" parent="." index="0"]
+position = Vector2( 12, 0 )
 scale = Vector2( 24, 24 )
-offset = Vector2( 0, -1 )
 
 [node name="symbol_border" parent="symbol" index="0"]
-scale = Vector2( 1.33333, 1.33333 )
-offset = Vector2( 0, -0.75 )
-
-[node name="state" parent="hud" index="0"]
-margin_top = -118.0
-margin_bottom = -100.0
-
-[node name="selection" parent="hud" index="1"]
-position = Vector2( 0, 0 )
-scale = Vector2( 4.69231, 8 )
-
-[node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -106 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+position = Vector2( 0.18, 0.18 )
+scale = Vector2( 1.36, 1.36 )
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
@@ -282,3 +268,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -30 )
 shape = SubResource( 27 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/unit/lumberjack_blue.png" type="Texture" id=1]
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=2]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=3]
+[ext_resource path="res://weapons/jack_axe.tscn" type="PackedScene" id=3]
 
 [sub_resource type="AtlasTexture" id=35]
 atlas = ExtResource( 1 )
@@ -17,6 +17,7 @@ atlas = ExtResource( 1 )
 region = Rect2( 48, 0, 24, 24 )
 
 [sub_resource type="SpriteFrames" id=38]
+resource_name = "lumberjack"
 animations = [ {
 "frames": [ SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
 "loop": true,
@@ -82,7 +83,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 0.2, 0.3, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
-"values": [ 0.0, -40.0, 90.0, 0.0 ]
+"values": [ 0.0, -40.0, 85.0, 0.0 ]
 }
 tracks/4/type = "value"
 tracks/4/path = NodePath("sprites/weapon:visible")
@@ -564,23 +565,14 @@ defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="0"]
+position = Vector2( 5, 5 )
 scale = Vector2( 10, 10 )
-
-[node name="symbol_border" parent="symbol" index="0"]
-position = Vector2( 0, 2.98023e-08 )
-scale = Vector2( 1.6, 1.6 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 38 )
-frame = 2
 
-[node name="weapon" type="Sprite" parent="sprites" index="2"]
-use_parent_material = true
-position = Vector2( 7, 2 )
-texture = ExtResource( 1 )
-offset = Vector2( 6, -6 )
-region_enabled = true
-region_rect = Rect2( 82, 1, 12, 20 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 3 )]
+visible = false
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
@@ -598,7 +590,3 @@ anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
-
-[node name="goals" type="Node" parent="." index="6"]
-script = ExtResource( 3 )
-goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
