@@ -121,7 +121,8 @@ func build_leaders():
 		container.add_child(orders_container.node)
 		leader_orders[leader.name+leader.team] = orders_container
 		setup_leader_buttons(orders_container)
-		Behavior.orders.build_leaders()
+	
+	Behavior.orders.build_leaders()
 
 
 func setup_leader_buttons(orders_container):
