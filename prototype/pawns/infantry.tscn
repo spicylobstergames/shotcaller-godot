@@ -2,6 +2,7 @@
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/sword.tscn" type="PackedScene" id=2]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=3]
 
 [sub_resource type="CircleShape2D" id=32]
 
@@ -524,3 +525,7 @@ anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
+
+[node name="goals" type="Node" parent="." index="6"]
+script = ExtResource( 3 )
+goals = [ "AttackEnemyGoal" ]
