@@ -130,7 +130,7 @@ func _ready():
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 	current_modifiers = Behavior.modifiers.new_modifiers()
 
-	if type == "leader":
+	if type != "pawn":
 		# save units around for items and exp
 		get_units_timer.wait_time = 1
 		get_units_timer.autostart = true
@@ -333,7 +333,10 @@ func get_units_on_sight(filters):
 
 func on_every_second():
 	self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
-
+	for i in units_in_radius:
+		if i.team != "neutral" and i.type != "building" and i.team != self.team  and agent != null and type == "worker":
+			agent.set_state("is_threatened", true)
+			break
 
 func wait():
 	self.wait_time = game.rng.randi_range(1,4)

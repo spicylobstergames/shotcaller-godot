@@ -17,7 +17,8 @@ func _ready():
 	_action_planner.set_actions([
 		AdvanceOnEnemy.new(),
 		GetLumber.new(),
-		ReturnLumber.new()
+		ReturnLumber.new(),
+		Hide.new()
 	])
 
 

@@ -103,6 +103,7 @@ func _follow_plan(plan, delta):
 			_current_plan[_current_plan_step].enter(self)
 		else:
 			_current_goal = null #trigger replan
+			_current_plan = null
 
 func on_every_second() :
 	if(_current_plan != null):
