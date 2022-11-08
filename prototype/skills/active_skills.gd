@@ -79,6 +79,7 @@ func bokuden_special():
 	##timer for aura
 	leader.add_child(battle_call_timer)
 	battle_call_timer.wait_time = aura_duration
+# warning-ignore:return_value_discarded
 	battle_call_timer.connect("timeout", self, "battle_call_remove", [targets])
 	
 	
@@ -94,10 +95,10 @@ func bokuden_special():
 	return true
 	
 func battle_call_remove(targets):
-		for unit in targets:
-			Behavior.modifiers.remove(unit, "speed", "battle_call")
-			targets.erase(unit)
-			unit.status_effects.erase("battle_call")
+	for unit in targets:
+		Behavior.modifiers.remove(unit, "speed", "battle_call")
+		targets.erase(unit)
+		unit.status_effects.erase("battle_call")
 
 
 var active_skills = {
