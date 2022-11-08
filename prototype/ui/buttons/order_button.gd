@@ -82,7 +82,7 @@ func button_down():
 			self.disabled = true
 		
 		"lumberjack":
-			Behavior.orders.lumberjack_hire(self.orders, game.selected_unit.team)
+			Behavior.orders.lumberjack_hire(self.orders, game.player_team)
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		

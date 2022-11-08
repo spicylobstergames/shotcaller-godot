@@ -4,6 +4,7 @@
 [ext_resource path="res://assets/pawns/archer_red.png" type="Texture" id=2]
 [ext_resource path="res://weapons/bow.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=4]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=5]
 
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 4 )
@@ -663,3 +664,6 @@ anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
+[node name="goals" type="Node" parent="." index="6"]
+script = ExtResource( 5 )
+goals = [ "AttackEnemyGoal" ]

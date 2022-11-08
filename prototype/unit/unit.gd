@@ -20,6 +20,7 @@ export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
+var agent = GoapAgent.new()
 
 # SELECTION
 export var selectable:bool = false
@@ -127,8 +128,9 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	current_modifiers = Behavior.modifiers.new_modifiers()
 
-	if type == "leader":
+	if type != "pawn":
 		# save units around for items and exp
 		get_units_timer.wait_time = 1
 		get_units_timer.autostart = true
@@ -141,6 +143,12 @@ func _ready():
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
+	if find_node("goals"):
+		var goals = []
+		for goal in find_node("goals").goals:
+			goals.push_back(GoapGoals.get_goal(goal))
+		agent.init(self, goals)
+		add_child(agent)
 
 func gain_experience(value):
 	experience += value
@@ -335,7 +343,10 @@ func get_enemy_leaders_on_sight(unit):
 	
 func on_every_second():
 	self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
-
+	for i in units_in_radius:
+		if i.team != "neutral" and i.type != "building" and i.team != self.team  and agent != null and type == "worker":
+			agent.set_state("is_threatened", true)
+			break
 
 func wait():
 	self.wait_time = game.rng.randi_range(1,4)
@@ -373,11 +384,12 @@ func on_arrive(): # when collides with destiny
 		Behavior.move.end(self)
 
 		if self.attacks: Behavior.advance.end(self)
-
+		if agent != null: 
+			agent.on_arrive()
+		
 		match self.after_arive:
 			"conquer": Behavior.orders.conquer_building(self)
 			"pray": Behavior.orders.pray_in_church(self)
-			"cut": Behavior.orders.lumber_cut(self)
 			"lumber_arive": Behavior.orders.lumber_arive(self)
 
 

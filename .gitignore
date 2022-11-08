@@ -4,3 +4,5 @@ Prototype/export_presets.cfg
 *.import
 prototype/Shotcall.apk
 prototype/Shotcall.apk.idsig
+prototype/.mono/
+prototype/.vscode/settings.json
