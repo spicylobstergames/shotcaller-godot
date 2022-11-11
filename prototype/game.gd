@@ -51,6 +51,15 @@ var victory:String
 func _ready():
 	get_tree().paused = true
 	WorldState.set_state("is_game_active", false)
+	var timer = Timer.new()
+	timer.wait_time = 1
+	add_child(timer)
+	timer.start()
+	timer.connect("timeout", self, "_one_sec")
+
+#runs logic that is only run once per second
+func _one_sec():
+	EventMachine.register_event(Events.ONE_SEC, [])
 
 
 func _process(delta: float) -> void:

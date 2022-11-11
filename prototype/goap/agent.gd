@@ -14,7 +14,6 @@ var _goals
 var _current_goal
 var _current_plan
 var _current_plan_step = 0
-var _timer = Timer.new()
 var _unit
 var _state = {
 }
@@ -63,12 +62,8 @@ func _process(delta):
 
 func init(unit, goals: Array):
 	_unit = unit
-	_goals = goals		# save units around for items and exp
-	_timer.wait_time = 1
-	_timer.autostart = true
-# warning-ignore:return_value_discarded
-	_timer.connect("timeout", self, "on_every_second")#should replace with a signal later
-	add_child(_timer)
+	_goals = goals	
+	EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
 
 
 #

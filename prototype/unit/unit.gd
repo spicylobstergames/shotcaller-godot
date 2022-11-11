@@ -94,7 +94,6 @@ var sprites:Node
 var body:Node
 
 # Experience
-var get_units_timer : Timer = Timer.new()
 var experience_timer : Timer = Timer.new()
 var experience : float = 0
 var level : int = 1
@@ -131,18 +130,15 @@ func _ready():
 	current_modifiers = Behavior.modifiers.new_modifiers()
 
 	if type != "pawn":
-		# save units around for items and exp
-		get_units_timer.wait_time = 1
-		get_units_timer.autostart = true
-# warning-ignore:return_value_discarded
-		get_units_timer.connect("timeout", self, "on_every_second")
-		add_child(get_units_timer)
-
+		EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
+		
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
+	if type == "leader":
+		pass
 	if find_node("goals"):
 		var goals = []
 		for goal in find_node("goals").goals:
