@@ -42,7 +42,7 @@ func _find_best_plan(goal, desired_state, blackboard):
 
 	# build plans will populate root with children.
 	# In case it doesn't find a valid path, it will return false.
-	if _build_plans(root, blackboard.duplicate()):
+	if _build_plans(root, blackboard):
 		var plans = _transform_tree_into_array(root, blackboard)
 		return _get_cheapest_plan(plans)
 

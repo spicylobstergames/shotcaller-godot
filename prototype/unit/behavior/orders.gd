@@ -120,13 +120,7 @@ func build_leaders():
 		
 	for leader in game.enemy_leaders:
 		enemy_leaders_orders[leader.name] = new_orders()
-	
-	var timer := Timer.new()
-	timer.wait_time = 1
-	game.map.add_child(timer)
-	timer.start()
-# warning-ignore:return_value_discarded
-	timer.connect("timeout", self, "hp_regen_cycle")
+	EventMachine.register_listener(Events.ONE_SEC, self, "hp_regen_cycle")
 
 
 func hp_regen_cycle(): # called every second  and
@@ -437,46 +431,6 @@ func lumberjack_hire(orders, team):
 	if team == game.enemy_team: leaders = game.enemy_leaders
 	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
 
-"""	
-	# start lumberjack wood cut cycle
-	lumber_start(lumberjack)
-
-
-func lumber_start(lumberjack):
-	var cut_position = lumberjack.origin - Vector2(game.map.tile_size,0)
-	lumberjack.working = true
-	lumberjack.after_arive = "cut"
-	Behavior.move.move(lumberjack, cut_position)
-
-
-func lumber_cut(lumberjack):
-	lumberjack.after_arive = "stop"
-	lumberjack.set_state("attack")
-	if lumberjack.channeling_timer.time_left > 0: 
-		lumberjack.channeling_timer.stop()
-	lumberjack.channeling_timer.wait_time = cut_time
-	lumberjack.channeling_timer.start()
-	
-	# cut animation end
-	yield(lumberjack.channeling_timer, "timeout")
-	lumberjack.working = true
-	Behavior.move.move(lumberjack, lumberjack.origin)
-	lumberjack.after_arive = "lumber_arive"
-
-
-func lumber_arive(lumberjack):
-	# heal all player buildings
-	for building in game.all_buildings:
-		if lumberjack.team == building.team:
-			building.heal(building.regen)
-	
-	var lumbermill = lumberjack.target
-	if lumbermill.team == "neutral":
-		lumberjack.visible = false
-	else:	# restart lumberjack wood cut cycle
-		lumber_start(lumberjack)
-
-"""
 # TAXES
 
 func set_taxes(tax, team):

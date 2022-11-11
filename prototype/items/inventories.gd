@@ -71,14 +71,7 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-
-
-	var timer := Timer.new()
-	timer.wait_time = 1
-	game.ui.get_node("bot_mid").add_child(timer)
-	timer.start()
-# warning-ignore:return_value_discarded
-	timer.connect("timeout", self, "gold_update_cycle")
+	EventMachine.register_listener(Events.ONE_SEC, self, "gold_update_cycle")
 
 
 func get_leader_inventory(leader):
@@ -106,6 +99,8 @@ func get_leader_delivery(leader):
 			deliv = enemy_deliveries
 		if leader.name in deliv: return deliv[leader.name]
 
+func gold_timer(unit):
+	EventMachine.register_listener(Events.ONE_SEC, self, "gold_timer_timeout",[unit])
 
 func set_leader_delivery(leader, delivery):
 	if leader.type == 'leader':
@@ -126,7 +121,7 @@ func add_inventory(leader):
 	var inventory = new_inventory(leader)
 	add_child(inventory.container)
 	set_leader_inventory(leader, inventory)
-	gold_timer(leader)
+	EventMachine.register_listener(Events.ONE_SEC, self, "gold_timer_timeout",[leader])
 	var counter = 0
 	var item_button
 # warning-ignore:unused_variable
@@ -145,15 +140,6 @@ func add_inventory(leader):
 		item_button.index = counter
 		counter += 1
 		item_button.setup(null)
-
-
-func gold_timer(unit):
-	var timer := Timer.new()
-	timer.wait_time = 1
-	unit.add_child(timer)
-	timer.start()
-# warning-ignore:return_value_discarded
-	timer.connect("timeout", self, "gold_timer_timeout", [unit])
 
 
 func gold_timer_timeout(unit):
