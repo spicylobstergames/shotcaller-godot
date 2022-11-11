@@ -65,9 +65,7 @@ func init(unit, goals: Array):
 	_goals = goals	
 	EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
 
-func die():
-	EventMachine.deregister_listener(Events.ONE_SEC,self,"on_every_second")
-	queue_free()
+
 #
 # Returns the highest priority goal available.
 #

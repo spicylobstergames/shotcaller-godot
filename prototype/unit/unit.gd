@@ -131,7 +131,7 @@ func _ready():
 
 	if type != "pawn":
 		EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
-
+		
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
 # warning-ignore:return_value_discarded
@@ -478,6 +478,4 @@ func on_death_end():  # death animation end
 				if self.display_name == 'castle':
 					EventMachine.register_event(Events.GAME_END,
 							["ENEMY" if team == game.player_team else "PLAYER"])
-	game.all_units.erase(self)
-	agent.die()
-	EventMachine.deregister_listener(Events.ONE_SEC, self, "on_every_second")
+
