@@ -1,8 +1,56 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/archer_red.png" type="Texture" id=2]
+[ext_resource path="res://weapons/bow.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=4]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=5]
+
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 4 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 4 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=22]
+resource_name = "archer"
+animations = [ {
+"frames": [ SubResource( 42 ), SubResource( 34 ), SubResource( 35 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 43 ), SubResource( 44 ), SubResource( 45 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 140.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -240,10 +288,10 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/weapon/projectile:visible")
@@ -252,10 +300,10 @@ tracks/7/loop_wrap = true
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 
 [sub_resource type="Animation" id=25]
@@ -343,10 +391,10 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/weapon/projectile:visible")
@@ -355,10 +403,10 @@ tracks/7/loop_wrap = true
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 
 [sub_resource type="Animation" id=26]
@@ -446,10 +494,10 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 tracks/7/type = "value"
 tracks/7/path = NodePath("sprites/weapon/projectile:visible")
@@ -458,10 +506,10 @@ tracks/7/loop_wrap = true
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 
 [sub_resource type="Animation" id=33]
@@ -534,10 +582,10 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 tracks/6/type = "value"
 tracks/6/path = NodePath("sprites/weapon/bow:visible")
@@ -546,10 +594,10 @@ tracks/6/loop_wrap = true
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ false, false ]
+"values": [ false ]
 }
 tracks/7/type = "method"
 tracks/7/path = NodePath(".")
@@ -565,83 +613,6 @@ tracks/7/keys = {
 "method": "on_stun_end"
 } ]
 }
-
-[sub_resource type="AtlasTexture" id=42]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 4 )
-region = Rect2( 32, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 4 )
-region = Rect2( 64, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 2 )
-region = Rect2( 32, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 2 )
-region = Rect2( 64, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=22]
-animations = [ {
-"frames": [ SubResource( 42 ), SubResource( 34 ), SubResource( 35 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 43 ), SubResource( 44 ), SubResource( 45 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 4 )
-region = Rect2( 160, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 4 )
-region = Rect2( 192, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=41]
-animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 4 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 4 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=38]
-animations = [ {
-"frames": [ SubResource( 36 ), SubResource( 37 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 140.0
 
 [node name="archer" instance=ExtResource( 1 )]
 hp = 160
@@ -661,54 +632,22 @@ damage = 40
 defense = 2
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="0"]
+position = Vector2( 5, 5 )
 scale = Vector2( 10, 10 )
 
 [node name="symbol_border" parent="symbol" index="0"]
+position = Vector2( 0.3, 0.3 )
 scale = Vector2( 1.6, 1.6 )
 
-[node name="state" parent="hud" index="0"]
-margin_bottom = -19.0
-
-[node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -21 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
-
 [node name="body" parent="sprites" index="1"]
-visible = true
 frames = SubResource( 22 )
 offset = Vector2( 0, -15 )
 
-[node name="weapon" type="Node2D" parent="sprites" index="2"]
-use_parent_material = true
-position = Vector2( 0, -4 )
-scale = Vector2( 1.0686, 1 )
-
-[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+[node name="stuck" parent="sprites" index="2"]
 visible = false
-modulate = Color( 1, 1, 1, 0 )
-use_parent_material = true
-position = Vector2( 19.6519, 2 )
 
-[node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-use_parent_material = true
-position = Vector2( -0.216076, 0 )
-frames = SubResource( 41 )
-offset = Vector2( -11, 0 )
-
-[node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
-visible = false
-use_parent_material = true
-position = Vector2( 0, 1 )
-rotation = 0.349066
-frames = SubResource( 38 )
-offset = Vector2( 10, 0 )
+[node name="weapon" parent="sprites" index="3" instance=ExtResource( 3 )]
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
@@ -718,3 +657,13 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+[node name="goals" type="Node" parent="." index="6"]
+script = ExtResource( 5 )
+goals = [ "AttackEnemyGoal" ]

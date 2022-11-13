@@ -16,14 +16,14 @@ func _on_update_timer_timeout():
 	$update_timer.start()
 	for other_unit in affected_units.keys():
 		if (other_unit.global_position - unit.global_position).length() > RANGE:
-			other_unit.modifiers.remove(other_unit, "damage", "aura_of_courage")
+			Behavior.modifiers.remove(other_unit, "damage", "aura_of_courage")
 			affected_units.erase(other_unit)
 			other_unit.status_effects.erase("aura_of_courage")
 	
 	for other_unit in unit.units_in_radius:
 		if other_unit.team == unit.team and unit.type != "building":
-			other_unit.modifiers.remove(other_unit, "damage", "aura_of_courage")
-			other_unit.modifiers.add(other_unit, "damage", "aura_of_courage", VALUE * unit.level)
+			Behavior.modifiers.remove(other_unit, "damage", "aura_of_courage")
+			Behavior.modifiers.add(other_unit, "damage", "aura_of_courage", VALUE * unit.level)
 			affected_units[other_unit] = true
 			other_unit.status_effects["aura_of_courage"] = {
 				icon = status_effect_icon,

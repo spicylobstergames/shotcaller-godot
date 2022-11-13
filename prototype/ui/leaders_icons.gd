@@ -30,7 +30,7 @@ func build():
 		var sprite = autoload.leaders[leader.display_name]
 		var icon = button.get_node("sprite")
 		if game.player_team == "blue": icon.material = null
-		icon.region_rect.position.x = sprite * 96
+		icon.region_rect.position.x = sprite * 64
 		button.visible = true
 		button.leader =  leader
 	self.built = true

@@ -73,7 +73,8 @@ func path(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
 		unit.current_path = path
-		game.unit[cb].point(unit, next_point)
+		var node:Behaviors = Behavior #hack
+		node[cb].point(unit, next_point)
 
 
 func next(unit):
@@ -81,11 +82,19 @@ func next(unit):
 
 
 func draw_path(unit):
-	if unit and unit.current_path:
+	if unit and (unit.current_path or unit.current_destiny or unit.objective):
 		path_line.visible = true
 		var pool = PoolVector2Array()
+		# start
 		pool.push_back(unit.global_position)
-		pool.append_array(unit.current_path)
+		 # end
+		if unit.current_path:
+			pool.append_array(unit.current_path)
+		elif unit.current_path:
+			pool.push_back(unit.current_path)
+		elif unit.objective:
+			pool.push_back(unit.objective)
+			
 		if unit.team == "blue":
 			path_line.default_color = Color(0.4,0.6,1, 0.3)
 		else: path_line.default_color = Color(1,0.3,0.3, 0.3)
@@ -101,7 +110,7 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
-	game.unit.move.smart(unit, lane_start, "move")
+	Behavior.move.smart(unit, lane_start, "move")
 
 
 
@@ -121,7 +130,8 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		game.unit[cb].point(unit, next_point)
+		var node:Behaviors = Behavior #hack, it comes back as that Behaviors is null if you array access it
+		node[cb].point(unit, next_point)
 
 
 
@@ -132,7 +142,7 @@ func teleport(unit, point):
 	game.control_state = "selection"
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
-	game.unit.move.stand(unit)
+	Behavior.move.stand(unit)
 	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")

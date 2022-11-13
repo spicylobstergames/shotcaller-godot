@@ -6,6 +6,7 @@ var index = 0
 var saved_icon
 var shop_item = false
 var price_after_discount
+var poison = preload("res://items/potions/poison.tscn").instance()
 
 onready var name_label = get_node("name")
 onready var price_label = get_node("price")
@@ -60,12 +61,14 @@ func on_button_down():
 
 	else:
 		# use inventory item
-		for key in item.attributes.keys():
-			if key in leader:
-				leader[key] += item.attributes[key]
-		
+		if item.type == "throwable":
+			poison.poison_throw(leader, item)
+		elif item.type == "consumable":
+			for key in item.attributes.keys():
+				if key in leader:
+					leader[key] += item.attributes[key]
 		game.ui.inventories.remove_item(leader, index)
-
+		setup(null)
 
 
 func show_sell_button():
@@ -73,7 +76,6 @@ func show_sell_button():
 		sell_button.show()
 	else:
 		sell_button.hide()
-
 
 
 func on_sell_button_down():

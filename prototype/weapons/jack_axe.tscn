@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/unit/lumberjack_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/unit/lumberjack_red.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 1 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 2 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=41]
+resource_name = "jack_axe"
+animations = [ {
+"frames": [ SubResource( 39 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [  ],
+"loop": true,
+"name": "neutral",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 40 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[node name="weapon" type="AnimatedSprite"]
+position = Vector2( 7, 1 )
+frames = SubResource( 41 )
+offset = Vector2( 2, -5 )

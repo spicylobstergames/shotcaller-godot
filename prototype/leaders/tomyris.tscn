@@ -1,9 +1,72 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/leaders/robin_blue.png" type="Texture" id=3]
+[ext_resource path="res://weapons/tomyris_bow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/tomyris_blue.png" type="Texture" id=5]
 [ext_resource path="res://assets/leaders/tomyris_red.png" type="Texture" id=6]
+
+[sub_resource type="AtlasTexture" id=48]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=49]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=50]
+atlas = ExtResource( 5 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=51]
+atlas = ExtResource( 5 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=52]
+atlas = ExtResource( 5 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=53]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=54]
+atlas = ExtResource( 6 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=55]
+atlas = ExtResource( 6 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 6 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=57]
+atlas = ExtResource( 6 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=36]
+resource_name = "tomyris"
+animations = [ {
+"frames": [ SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 53 ), SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 57 ) ],
+"loop": true,
+"name": "red",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=46]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id=47]
+radius = 28.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 140.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -567,100 +630,6 @@ tracks/7/keys = {
 } ]
 }
 
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 5 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=50]
-atlas = ExtResource( 5 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=51]
-atlas = ExtResource( 5 )
-region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=52]
-atlas = ExtResource( 5 )
-region = Rect2( 192, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=53]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=54]
-atlas = ExtResource( 6 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=55]
-atlas = ExtResource( 6 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=56]
-atlas = ExtResource( 6 )
-region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=57]
-atlas = ExtResource( 6 )
-region = Rect2( 192, 0, 48, 48 )
-
-[sub_resource type="SpriteFrames" id=36]
-animations = [ {
-"frames": [ SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 53 ), SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 57 ) ],
-"loop": true,
-"name": "red",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 3 )
-region = Rect2( 160, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 3 )
-region = Rect2( 192, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=44]
-animations = [ {
-"frames": [ SubResource( 37 ), SubResource( 38 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 3 )
-region = Rect2( 96, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 3 )
-region = Rect2( 128, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=45]
-animations = [ {
-"frames": [ SubResource( 40 ), SubResource( 41 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-} ]
-
-[sub_resource type="CircleShape2D" id=46]
-radius = 14.0
-
-[sub_resource type="CircleShape2D" id=47]
-radius = 28.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 140.0
-
 [node name="tomyris" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
@@ -681,7 +650,7 @@ damage = 50
 defense = 5
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="0"]
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
@@ -704,20 +673,6 @@ offset = Vector2( 0, -5 )
 region_enabled = true
 region_rect = Rect2( 159, 10, 18, 22 )
 
-[node name="state" parent="hud" index="0"]
-margin_top = -57.0
-margin_bottom = -39.0
-
-[node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -42 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
-
 [node name="shadow" parent="sprites" index="0"]
 scale = Vector2( 1.4, 1.4 )
 
@@ -726,28 +681,7 @@ position = Vector2( 3, 9 )
 frames = SubResource( 36 )
 offset = Vector2( 2, -24 )
 
-[node name="weapon" type="Node2D" parent="sprites" index="2"]
-use_parent_material = true
-position = Vector2( -8, -17 )
-scale = Vector2( 1.0686, 1 )
-
-[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-visible = false
-use_parent_material = true
-position = Vector2( 26, 0 )
-
-[node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-use_parent_material = true
-frames = SubResource( 44 )
-offset = Vector2( -13, -1 )
-
-[node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
-visible = false
-use_parent_material = true
-position = Vector2( 4.66035, 1.05636 )
-rotation = 0.349066
-frames = SubResource( 45 )
-offset = Vector2( 10, 0 )
+[node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )
@@ -759,3 +693,10 @@ shape = SubResource( 47 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )

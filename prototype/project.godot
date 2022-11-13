@@ -9,6 +9,66 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "GoapAction",
+"class": "AdvanceOnEnemy",
+"language": "GDScript",
+"path": "res://goap/actions/advance_on_enemy.gd"
+}, {
+"base": "GoapGoal",
+"class": "AttackEnemyGoal",
+"language": "GDScript",
+"path": "res://goap/goals/attack_enemy.gd"
+}, {
+"base": "Node",
+"class": "Behaviors",
+"language": "GDScript",
+"path": "res://unit/behavior.gd"
+}, {
+"base": "GoapAction",
+"class": "GetLumber",
+"language": "GDScript",
+"path": "res://goap/actions/get_lumber.gd"
+}, {
+"base": "Node",
+"class": "GoapAction",
+"language": "GDScript",
+"path": "res://goap/action.gd"
+}, {
+"base": "Node",
+"class": "GoapActionPlanner",
+"language": "GDScript",
+"path": "res://goap/action_planner.gd"
+}, {
+"base": "Node",
+"class": "GoapAgent",
+"language": "GDScript",
+"path": "res://goap/agent.gd"
+}, {
+"base": "Node",
+"class": "GoapGoal",
+"language": "GDScript",
+"path": "res://goap/goal.gd"
+}, {
+"base": "GoapAction",
+"class": "Hide",
+"language": "GDScript",
+"path": "res://goap/actions/hide.gd"
+}, {
+"base": "GoapGoal",
+"class": "NeedLumberGoal",
+"language": "GDScript",
+"path": "res://goap/goals/need_lumber.gd"
+}, {
+"base": "GoapGoal",
+"class": "NeedSafetyGoal",
+"language": "GDScript",
+"path": "res://goap/goals/need_safety.gd"
+}, {
+"base": "GoapAction",
+"class": "ReturnLumber",
+"language": "GDScript",
+"path": "res://goap/actions/return_lumber.gd"
+}, {
 "base": "Node",
 "class": "Unit",
 "language": "GDScript",
@@ -20,6 +80,18 @@ _global_script_classes=[ {
 "path": "res://map/maps/base_map.gd"
 } ]
 _global_script_class_icons={
+"AdvanceOnEnemy": "",
+"AttackEnemyGoal": "",
+"Behaviors": "",
+"GetLumber": "",
+"GoapAction": "",
+"GoapActionPlanner": "",
+"GoapAgent": "",
+"GoapGoal": "",
+"Hide": "",
+"NeedLumberGoal": "",
+"NeedSafetyGoal": "",
+"ReturnLumber": "",
 "Unit": "",
 "base_map": ""
 }
@@ -39,6 +111,11 @@ config/icon="res://assets/icon.png"
 autoload="*res://autoload/autoload.gd"
 EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
+Behavior="*res://unit/behavior.tscn"
+Hud="*res://ui/hud.tscn"
+WorldState="*res://world/world_state.gd"
+Goap="*res://goap/goap.gd"
+GoapGoals="*res://goap/GoapGoals.gd"
 
 [debug]
 
@@ -134,6 +211,7 @@ common/enable_object_picking=false
 quality/driver/fallback_to_gles2=true
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1
+2d/snapping/use_gpu_pixel_snap=true
 threads/thread_model=2
 vram_compression/import_etc=true
 quality/reflections/texture_array_reflections=false

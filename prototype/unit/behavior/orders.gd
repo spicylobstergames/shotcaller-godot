@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.unit.orders
+# self = Behavior.orders
 
 const player_lanes_orders = {}
 const enemy_lanes_orders = {}
@@ -120,13 +120,7 @@ func build_leaders():
 		
 	for leader in game.enemy_leaders:
 		enemy_leaders_orders[leader.name] = new_orders()
-	
-	var timer := Timer.new()
-	timer.wait_time = 1
-	game.map.add_child(timer)
-	timer.start()
-# warning-ignore:return_value_discarded
-	timer.connect("timeout", self, "hp_regen_cycle")
+	EventMachine.register_listener(Events.ONE_SEC, self, "hp_regen_cycle")
 
 
 func hp_regen_cycle(): # called every second  and
@@ -137,16 +131,24 @@ func hp_regen_cycle(): # called every second  and
 			var is_neutral = (unit.team == "neutral")
 			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				set_regen(unit)
+				set_dot(unit)
 				if unit.type == "leader" and game.can_control(unit):
 					game.ui.inventories.update_consumables(unit)
 
 
 func set_regen(unit):
 	if not unit.dead:
-		var regen = game.unit.modifiers.get_value(unit, "regen")
+		var regen = Behavior.modifiers.get_value(unit, "regen")
 		unit.heal(regen)
 	else: unit.regen = 0
 
+
+func set_dot(unit):
+	if not unit.dead:
+		var dot_effects = Behavior.modifiers.get_dot(unit)
+		if dot_effects != null:
+			for dot in dot_effects:
+				Behavior.attack.take_hit(dot.attacker, unit, null, {"damage": dot.damage})
 
 
 func leaders_cycle(): # called every 4 sec
@@ -182,7 +184,7 @@ func set_leader(leader, orders):
 			not leader.retreating and 
 			not (game.can_control(leader) and game.ui.shop.close_to_blacksmith(leader)) ): 
 				
-		game.unit.follow.lane(leader)
+		Behavior.follow.lane(leader)
 
 
 
@@ -212,7 +214,7 @@ func select_target(unit, enemies):
 	var filtered = []
 	
 	for enemy in enemies:
-		if game.unit.attack.can_hit(unit, enemy): filtered.append(enemy)
+		if Behavior.attack.can_hit(unit, enemy): filtered.append(enemy)
 	
 	var n = filtered.size()
 	if n == 0: return
@@ -251,7 +253,7 @@ func conquer_building(unit):
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
 	if not unit.stunned and building:
-		var hp = float(game.unit.modifiers.get_value(building, "hp"))
+		var hp = float(Behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
 		if building.team == "neutral" and building_full_hp:
@@ -319,7 +321,7 @@ func pray_in_church(unit):
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	game.unit.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
+	Behavior.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
 
 # MINE
@@ -416,11 +418,11 @@ func lumberjack_hire(orders, team):
 	
 	# create lumberjack
 	if not lumberjack:
-		lumberjack = game.unit.spawn.next_to_building("lumberjack", lumbermill)
+		lumberjack = Behavior.spawn.next_to_building("lumberjack", lumbermill)
 		lumberjack.origin = lumberjack.global_position
 		lumberjack.target = lumbermill
 		lumbermill.target = lumberjack
-	
+		
 	lumberjack.setup_team(team)
 	lumberjack.visible = true
 	
@@ -428,45 +430,6 @@ func lumberjack_hire(orders, team):
 	var leaders = game.player_leaders
 	if team == game.enemy_team: leaders = game.enemy_leaders
 	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
-	
-	# start lumberjack wood cut cycle
-	lumber_start(lumberjack)
-
-
-func lumber_start(lumberjack):
-	var cut_position = lumberjack.origin - Vector2(game.map.tile_size,0)
-	lumberjack.working = true
-	lumberjack.after_arive = "cut"
-	game.unit.move.move(lumberjack, cut_position)
-
-
-func lumber_cut(lumberjack):
-	lumberjack.after_arive = "stop"
-	lumberjack.set_state("attack")
-	if lumberjack.channeling_timer.time_left > 0: 
-		lumberjack.channeling_timer.stop()
-	lumberjack.channeling_timer.wait_time = cut_time
-	lumberjack.channeling_timer.start()
-	
-	# cut animation end
-	yield(lumberjack.channeling_timer, "timeout")
-	lumberjack.working = true
-	game.unit.move.move(lumberjack, lumberjack.origin)
-	lumberjack.after_arive = "lumber_arive"
-
-
-func lumber_arive(lumberjack):
-	# heal all player buildings
-	for building in game.all_buildings:
-		if lumberjack.team == building.team:
-			building.heal(building.regen)
-	
-	var lumbermill = lumberjack.target
-	if lumbermill.team == "neutral":
-		lumberjack.visible = false
-	else:	# restart lumberjack wood cut cycle
-		lumber_start(lumberjack)
-
 
 # TAXES
 
@@ -499,7 +462,7 @@ func remove_tax(team):
 func take_hit_retreat(attacker, target):
 	match target.type:
 		"leader":
-			var hp = game.unit.modifiers.get_value(target, "hp")
+			var hp = Behavior.modifiers.get_value(target, "hp")
 			match target.tactics:
 				"escape":
 					retreat(target)
@@ -514,7 +477,7 @@ func take_hit_retreat(attacker, target):
 func retreat(unit):
 	unit.retreating = true
 	unit.current_path = []
-	game.unit.attack.set_target(unit, null)
+	Behavior.attack.set_target(unit, null)
 	var order
 	if unit.team == game.player_team:
 		order = player_leaders_orders[unit.name]
@@ -523,6 +486,6 @@ func retreat(unit):
 	var lane = unit.lane
 	var path = game.map.lanes_paths[lane].duplicate()
 	if unit.team == "blue": path.invert()
-	game.unit.follow.smart(unit, path, "move")
+	Behavior.follow.smart(unit, path, "move")
 	
 

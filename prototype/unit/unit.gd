@@ -20,6 +20,7 @@ export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
+var agent = GoapAgent.new()
 
 # SELECTION
 export var selectable:bool = false
@@ -91,17 +92,8 @@ var channeling_timer:Timer
 var hud:Node
 var sprites:Node
 var body:Node
-var spawn:Node
-var move:Node
-var attack:Node
-var advance:Node
-var follow:Node
-var orders:Node
-var skills:Node
-var modifiers:Node
 
 # Experience
-var get_units_timer : Timer = Timer.new()
 var experience_timer : Timer = Timer.new()
 var experience : float = 0
 var level : int = 1
@@ -130,33 +122,29 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 	if has_node("hud"): hud = get_node("hud")
-	if has_node("behavior/spawn"): spawn = get_node("behavior/spawn")
-	if has_node("behavior/move"): move = get_node("behavior/move")
-	if has_node("behavior/attack"): attack = get_node("behavior/attack")
-	if has_node("behavior/advance"): advance = get_node("behavior/advance")
-	if has_node("behavior/follow"): follow = get_node("behavior/follow")
-	if has_node("behavior/orders"): orders = get_node("behavior/orders")
-	if has_node("behavior/skills"): skills = get_node("behavior/skills")
-	if has_node("behavior/modifiers"): modifiers = get_node("behavior/modifiers")
 
 	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	current_modifiers = Behavior.modifiers.new_modifiers()
 
-	if type == "leader":
-		# save units around for items and exp
-		get_units_timer.wait_time = 1
-		get_units_timer.autostart = true
-# warning-ignore:return_value_discarded
-		get_units_timer.connect("timeout", self, "on_every_second")
-		add_child(get_units_timer)
-
+	if type != "pawn":
+		EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
+		
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
+	if type == "leader":
+		pass
+	if find_node("goals"):
+		var goals = []
+		for goal in find_node("goals").goals:
+			goals.push_back(GoapGoals.get_goal(goal))
+		agent.init(self, goals)
+		add_child(agent)
 
 func gain_experience(value):
 	experience += value
@@ -175,19 +163,19 @@ func reset_unit():
 	self.setup_team(self.team)
 
 	if self.type == "leader":
-		self.hud.state.visible = true
-		self.hud.hpbar.visible = true
+		Hud.state.visible = true
+		Hud.hpbar.visible = true
 
-	self.hud.state.text = self.display_name
+	Hud.state.text = self.display_name
 	self.current_hp = self.hp
-	self.current_modifiers = modifiers.new_modifiers()
+	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
 	self.stunned = false
 	self.hunting = false
 	self.channeling = false
 	self.retreating = false
 	self.working = false
-	self.hud.update_hpbar(self)
+	Hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
@@ -325,7 +313,7 @@ func get_collision_around(delta):
 
 
 func get_units_on_sight(filters):
-	var current_vision = game.unit.modifiers.get_value(self, "vision")
+	var current_vision = Behavior.modifiers.get_value(self, "vision")
 	var pos1 = self.global_position
 	var neighbors = game.map.blocks.get_units_in_radius(pos1, current_vision)
 	var targets = []
@@ -339,9 +327,22 @@ func get_units_on_sight(filters):
 	return targets
 
 
+func get_enemy_leaders_on_sight(unit):
+	var targets = []
+	var leaders_on_sight = unit.get_units_on_sight({"type": "leader"})
+	for leader in leaders_on_sight:
+		if leader.team != unit.team:
+			targets.append(leader)
+			
+	return targets
+	
+	
 func on_every_second():
 	self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
-
+	for i in units_in_radius:
+		if i.team != "neutral" and i.type != "building" and i.team != self.team  and agent != null and type == "worker":
+			agent.set_state("is_threatened", true)
+			break
 
 func wait():
 	self.wait_time = game.rng.randi_range(1,4)
@@ -349,60 +350,61 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	game.unit.advance.on_idle_end(self)
+	Behavior.advance.on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 
 
 func on_move(delta): # every frame if there's no collision
-	game.unit.move.step(self, delta)
+	Behavior.move.step(self, delta)
 
 
 func on_collision(delta):
 	if self.moves:
-		game.unit.move.on_collision(self, delta)
+		Behavior.move.on_collision(self, delta)
 		if self.attacks:
-			game.unit.advance.on_collision(self)
+			Behavior.advance.on_collision(self)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves and self.attacks: game.unit.advance.resume(self)
-	if self == game.selected_unit: game.unit.follow.draw_path(self)
+	if self.moves and self.attacks: Behavior.advance.resume(self)
+	if self == game.selected_unit: Behavior.follow.draw_path(self)
 
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		game.unit.follow.next(self)
+		Behavior.follow.next(self)
 	elif self.moves:
 		self.working = false
-		game.unit.move.end(self)
+		Behavior.move.end(self)
 
-		if self.attacks: game.unit.advance.end(self)
-
+		if self.attacks: Behavior.advance.end(self)
+		if agent != null: 
+			agent.on_arrive()
+		
 		match self.after_arive:
-			"conquer": game.unit.orders.conquer_building(self)
-			"pray": game.unit.orders.pray_in_church(self)
-			"cut": game.unit.orders.lumber_cut(self)
-			"lumber_arive": game.unit.orders.lumber_arive(self)
+			"conquer": Behavior.orders.conquer_building(self)
+			"pray": Behavior.orders.pray_in_church(self)
+			"lumber_arive": Behavior.orders.lumber_arive(self)
 
 
 func on_attack_release(): # every ranged projectile start
-	game.unit.attack.projectile_release(self)
-	game.unit.advance.resume(self)
+	Behavior.attack.projectile_release(self)
+	Behavior.advance.resume(self)
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
-		game.unit.attack.hit(self)
+		Behavior.attack.hit(self)
 		if self.moves:
-			game.unit.advance.resume(self)
+			Behavior.advance.resume(self)
 
 
 func heal(heal_hp):
 	self.current_hp += heal_hp
-	self.current_hp = int(min(self.current_hp, game.unit.modifiers.get_value(self, "hp")))
-	game.unit.hud.update_hpbar(self)
+	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
+	Hud.update_hpbar(self)
 	if self == game.selected_unit: game.ui.stats.update()
 
 
@@ -427,9 +429,9 @@ func on_stun_end():
 	else:
 		self.stunned = false
 		if self.behavior == "move":
-			game.unit.move.resume(self)
+			Behavior.move.resume(self)
 		if self.behavior == "advance":
-			game.unit.advance.resume(self)
+			Behavior.advance.resume(self)
 		if self.behavior == "stand" or self.behavior == "stop":
 			self.set_state("idle")
 
@@ -466,12 +468,12 @@ func on_death_end():  # death animation end
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
-	attack.clear_stuck(self)
+	Behavior.attack.clear_stuck(self)
 	if game.test.stress: game.test.respawn(self)
 	else:
 		match self.type:
-			"pawn": game.unit.spawn.cemitery_add_pawn(self)
-			"leader": game.unit.spawn.cemitery_add_leader(self)
+			"pawn": Behavior.spawn.cemitery_add_pawn(self)
+			"leader": Behavior.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == 'castle':
 					EventMachine.register_event(Events.GAME_END,

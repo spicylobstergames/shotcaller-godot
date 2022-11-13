@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.unit.modifiers
+# self = Behavior.modifiers
 
 var extra_retreat_speed = 10
 
@@ -26,7 +26,8 @@ func new_modifiers():
 		"damage": [],
 		"attack_range": [],
 		"attack_speed": [],
-		"defense": []
+		"defense": [],
+		"dot": []
 	}
 
 
@@ -37,7 +38,6 @@ func get_value(unit, mod_str):
 		"speed": default = get_speed(unit)
 		"regen": default = get_regen(unit)
 		"attack_range": default = get_att_range(unit)
-	
 	for modifier in unit.current_modifiers[mod_str]:
 		default += modifier.value
 	
@@ -48,9 +48,17 @@ func get_value(unit, mod_str):
 		"damage": level_bonus *= damage_per_level
 		"defense": level_bonus *= defense_per_level
 		"attack_speed": level_bonus *= attack_speed_per_level
-	
+		
 	return default + level_bonus
 
+func get_dot(unit):
+	var dot_effects = []
+	if not unit.current_modifiers["dot"].empty():
+		for modifier in unit.current_modifiers["dot"]:
+			dot_effects.append(modifier.value)
+		return dot_effects
+	else:
+		return null
 
 func get_speed(unit):
 	var default = unit.speed
@@ -58,10 +66,10 @@ func get_speed(unit):
 	if unit.hunting:
 		default = unit.hunting_speed
 	elif unit.retreating:
-		var bonus = game.unit.skills.get_value(unit, "bonus_retreat_speed")
+		var bonus = Behavior.skills.get_value(unit, "bonus_retreat_speed")
 		default += extra_retreat_speed + bonus
 	
-	default += game.unit.orders.tactics_extra_speed[unit.tactics]
+	default += Behavior.orders.tactics_extra_speed[unit.tactics]
 	
 	return default
 

@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.unit.skills
+# self = Behavior.skills
 
 
 const leader = {
@@ -70,7 +70,7 @@ const leader = {
 
 func get_value(unit, skill_name):
 	if unit.type == "leader":
-		var leader_skills = game.unit.skills.leader[unit.display_name]
+		var leader_skills = Behavior.skills.leader[unit.display_name]
 		if skill_name in leader_skills:
 			return leader_skills[skill_name]
 	return 0
@@ -81,35 +81,40 @@ func _ready():
 
 
 func projectile_release(attacker):
-	if attacker.display_name in game.unit.skills.leader:
-		var attacker_skills = game.unit.skills.leader[attacker.display_name]
+	if attacker.display_name in Behavior.skills.leader:
+		var attacker_skills = Behavior.skills.leader[attacker.display_name]
 		
 		if "multishot" in attacker_skills:
 			var enemies = attacker.get_units_on_sight({"team": attacker.oponent_team()})
 			var sorted = attacker.sort_by_distance(enemies)
 			for enemy in sorted:
 				if (enemy.unit != attacker.target and 
-					game.unit.attack.in_range(attacker, enemy.unit)):
+					Behavior.attack.in_range(attacker, enemy.unit)):
 					secondary_projectile(attacker, enemy.unit)
 
 
 func secondary_projectile(attacker, target):
 	var target_position = target.global_position + target.collision_position
 	attacker.weapon.look_at(target_position)
-	game.unit.attack.projectile_start(attacker, target)
+	Behavior.attack.projectile_start(attacker, target)
 
 
 
 func hit_modifiers(attacker, target, projectile, modifiers):
+	var damage
+	if modifiers.has("damage"): 
+		damage = modifiers.damage
+	else:
+		damage = Behavior.modifiers.get_value(attacker, "damage")
 	modifiers = {
-		"damage": game.unit.modifiers.get_value(attacker, "damage"),
+		"damage": damage,
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
 		"counter": false,
 		"pierce": false
 	}
-	if target and target.display_name in game.unit.skills.leader:
-		var target_skills = game.unit.skills.leader[target.display_name]
+	if target and target.display_name in Behavior.skills.leader:
+		var target_skills = Behavior.skills.leader[target.display_name]
 		
 		if "dodge" in target_skills:
 			modifiers.dodge = (randf() <  target_skills.dodge)
@@ -117,10 +122,10 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		if not modifiers.counter:
 			if "counter" in target_skills and not attacker.ranged:
 				modifiers.damage = target_skills.counter
-				game.unit.attack.take_hit(target, attacker, projectile, modifiers)
+				Behavior.attack.take_hit(target, attacker, projectile, modifiers)
 			
-	if attacker.display_name in game.unit.skills.leader:
-		var attacker_skills = game.unit.skills.leader[attacker.display_name]
+	if attacker.display_name in Behavior.skills.leader:
+		var attacker_skills = Behavior.skills.leader[attacker.display_name]
 		if not modifiers.counter:
 			if "stun" in attacker_skills and target.type != "building":
 				if randf() < attacker_skills.stun: 
@@ -142,7 +147,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 				modifiers.damage += attacker_skills.bleed * min(10, attacker.attack_count)
 			
 			if "agile" in attacker_skills:
-				game.unit.modifiers.remove(attacker, "attack_speed", "agile")
-				game.unit.modifiers.add(attacker, "attack_speed", "agile", attacker_skills.agile * min(10, attacker.attack_count))
+				Behavior.modifiers.remove(attacker, "attack_speed", "agile")
+				Behavior.modifiers.add(attacker, "attack_speed", "agile", attacker_skills.agile * min(10, attacker.attack_count))
 	
 	return modifiers

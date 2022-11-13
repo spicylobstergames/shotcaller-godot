@@ -49,16 +49,16 @@ func button_down():
 		"tactic":
 			clear_siblings(self)
 			if game.selected_unit.type == "leader":
-				game.unit.orders.set_leader_tactic(self.orders.tactic)
-			else: game.unit.orders.set_lane_tactic(self.orders.tactic)		
+				Behavior.orders.set_leader_tactic(self.orders.tactic)
+			else: Behavior.orders.set_lane_tactic(self.orders.tactic)		
 			self.disabled = true
 		
 		"priority":
 			if not is_first_child(self):
 				move_to_front(self)
 				if game.selected_leader:
-					game.unit.orders.set_leader_priority(self.orders.priority)
-				else: game.unit.orders.set_lane_priority(self.orders.priority)
+					Behavior.orders.set_leader_priority(self.orders.priority)
+				else: Behavior.orders.set_lane_priority(self.orders.priority)
 		
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
@@ -68,21 +68,21 @@ func button_down():
 				else: 
 					button.pressed = false
 					button.disabled = false
-			game.unit.orders.set_taxes(self.orders.taxes, game.selected_unit.team)
+			Behavior.orders.set_taxes(self.orders.taxes, game.selected_unit.team)
 			self.disabled = true
 		
 		"gold":
-			game.unit.orders.gold_order(self)
+			Behavior.orders.gold_order(self)
 			disable_siblings(self)
 			self.disabled = true
 		
 		"camp_hire":
 			clear_siblings(self)
-			game.unit.orders.camp_hire(self.orders.camp_hire, game.selected_unit.team)
+			Behavior.orders.camp_hire(self.orders.camp_hire, game.selected_unit.team)
 			self.disabled = true
 		
 		"lumberjack":
-			game.unit.orders.lumberjack_hire(self.orders, game.selected_unit.team)
+			Behavior.orders.lumberjack_hire(self.orders, game.player_team)
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		
@@ -91,11 +91,11 @@ func button_down():
 			self.disabled = true
 		
 		"pawn_upgrades":
-			game.unit.orders.pawn_upgrades(self.orders.pawn_upgrade)
+			Behavior.orders.pawn_upgrades(self.orders.pawn_upgrade)
 			self.disabled = true
 		
 		"tower_upgrades":
-			game.unit.orders.tower_upgrades(self.orders.pawn_upgrade)
+			Behavior.orders.tower_upgrades(self.orders.pawn_upgrade)
 			self.disabled = true
 
 

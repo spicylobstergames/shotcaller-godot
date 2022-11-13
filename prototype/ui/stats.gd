@@ -18,6 +18,7 @@ onready var portrait_sprite = panel.get_node("portrait/sprite")
 onready var level_label : Label = get_node("panel/portrait/CenterContainer/level_label")
 onready var exp_bar : ProgressBar = get_node("panel/portrait/CenterContainer/exp_bar")
 onready var status_effect_display = $status_effect_display
+onready var active_skills = $active_skills
 
 
 func _ready():
@@ -35,13 +36,13 @@ func update():
 		add_new_hpbar(unit)
 		# stats
 		unit_name.text = "%s" % [unit.display_name]
-		hp.text = "%s / %s" % [max(unit.current_hp,0), game.unit.modifiers.get_value(unit, "hp")]
-		if unit.regen: regen.text = "+%s" % [game.unit.modifiers.get_value(unit, "regen")]
+		hp.text = "%s / %s" % [max(unit.current_hp,0), Behavior.modifiers.get_value(unit, "hp")]
+		if unit.regen: regen.text = "+%s" % [Behavior.modifiers.get_value(unit, "regen")]
 		else: regen.text = ""
-		damage.text = "Damage: %s" % game.unit.modifiers.get_value(unit, "damage")
-		vision.text = "Vision: %s" % game.unit.modifiers.get_value(unit, "vision")
-		att_range.text = "Range: %s" % game.unit.modifiers.get_value(unit, "attack_range")
-		if unit.moves: speed.text = "Speed: %s" % game.unit.modifiers.get_value(unit, "speed")
+		damage.text = "Damage: %s" % Behavior.modifiers.get_value(unit, "damage")
+		vision.text = "Vision: %s" % Behavior.modifiers.get_value(unit, "vision")
+		att_range.text = "Range: %s" % Behavior.modifiers.get_value(unit, "attack_range")
+		if unit.moves: speed.text = "Speed: %s" % Behavior.modifiers.get_value(unit, "speed")
 		else: speed.text = ""
 		# gold
 		if ((game.can_control(unit) and unit.type == "leader")
@@ -54,11 +55,13 @@ func update():
 			level_label.text = "Level %d" % unit.level
 			exp_bar.value = unit.experience
 			exp_bar.max_value = unit.experience_needed()
+			active_skills.show()
 		else:
 			gold.visible = false
 			gold_sprite.visible = false
 			level_label.visible = false
 			exp_bar.visible = false
+			active_skills.hide()
 		status_effect_display.prepare(unit.status_effects)
 
 
@@ -88,8 +91,8 @@ func clear_old_hpbar():
 
 
 func add_new_hpbar(unit):
-	var red = unit.hud.get_node("hpbar/red").duplicate()
-	var green = unit.hud.get_node("hpbar/green").duplicate()
+	var red = Hud.get_node("hpbar/red").duplicate()
+	var green = Hud.get_node("hpbar/green").duplicate()
 	red.scale *= Vector2(11,11)
 	green.scale *= Vector2(11,11)
 	hpbar.add_child(red)

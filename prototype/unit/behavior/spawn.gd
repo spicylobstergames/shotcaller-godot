@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.unit.spawn
+# self = Behavior.spawn
 var timer:Timer
 var order_time = 8
 
@@ -45,7 +45,7 @@ func _ready():
 	timer = Timer.new()
 	timer.one_shot = true
 	timer.wait_time = order_time
-	game.unit.add_child(timer)
+	game.add_child(timer)
 
 func random_leader(team):
 	var team_list = team_random_list[team]
@@ -74,7 +74,7 @@ func leaders():
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
-			send_leader(leader_node, path.follow)
+			#send_leader(leader_node, path.follow)
 			counter += 1
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -85,7 +85,7 @@ func leaders():
 
 func send_leader(leader, path):
 	yield(get_tree(), "idle_frame")
-	game.unit.follow.path(leader, path, "advance")
+	Behavior.follow.path(leader, path, "advance")
 
 
 func pawns():
@@ -93,13 +93,13 @@ func pawns():
 
 
 func spawn_group_cycle():
-	game.unit.orders.lanes_cycle()
-	game.unit.orders.leaders_cycle()
-	game.unit.orders.update_taxes()
+	Behavior.orders.lanes_cycle()
+	Behavior.orders.leaders_cycle()
+	Behavior.orders.update_taxes()
 	
 	for team in autoload.teams:
-		var extra_unit = game.unit.orders.player_extra_unit
-		if team != game.player_team: extra_unit = game.unit.orders.enemy_extra_unit
+		var extra_unit = Behavior.orders.player_extra_unit
+		if team != game.player_team: extra_unit = Behavior.orders.enemy_extra_unit
 		for lane in game.map.lanes:
 			send_pawn("archer", lane, team)
 			for n in 2:
@@ -108,7 +108,7 @@ func spawn_group_cycle():
 	
 	timer.start()
 	yield(timer, "timeout")
-	game.unit.orders.leaders_cycle()
+	Behavior.orders.leaders_cycle()
 	
 	timer.start()
 	yield(timer, "timeout")
@@ -132,8 +132,8 @@ func send_pawn(template, lane, team):
 	if not pawn:
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
-	game.unit.orders.set_pawn(pawn)
-	game.unit.follow.path(pawn, path.follow, "advance")
+	Behavior.orders.set_pawn(pawn)
+	#Behavior.follow.path(pawn, path.follow, "advance")
 
 
 
@@ -170,9 +170,9 @@ func cemitery_add_pawn(unit):
 func cemitery_add_leader(leader):
 	match leader.team:
 		game.player_team:
-			game.unit.spawn.cemitery.player_leaders.append(leader)
+			Behavior.spawn.cemitery.player_leaders.append(leader)
 		game.enemy_team:
-			game.unit.spawn.cemitery.enemy_leaders.append(leader)
+			Behavior.spawn.cemitery.enemy_leaders.append(leader)
 	
 	var respawn_time = order_time * leader.respawn
 	yield(get_tree().create_timer(respawn_time), "timeout")
@@ -185,4 +185,4 @@ func cemitery_add_leader(leader):
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)
 	leader.reset_unit()
-	game.unit.follow.path(leader, path, "advance")
+	Behavior.follow.path(leader, path, "advance")

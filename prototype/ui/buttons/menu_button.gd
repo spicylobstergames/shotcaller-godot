@@ -103,7 +103,7 @@ func button_down():
 		"menu":
 			game.paused = true
 			get_tree().paused = true
-			game.unit.spawn.timer.paused = true
+			Behavior.spawn.timer.paused = true
 			game.ui.hide_all()
 			game.ui.get_node('mid').visible = true
 			game.ui.minimap.visible = false
@@ -143,7 +143,7 @@ func resume_game():
 	game.ui.main_menu_background.visible = false
 	game.paused = false
 	get_tree().paused = false
-	game.unit.spawn.timer.paused = false;
+	Behavior.spawn.timer.paused = false;
 	game.ui.show_all()
 	game.ui.get_node('mid').visible = false
 	game.ui.minimap.visible = true

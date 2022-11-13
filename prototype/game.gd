@@ -31,7 +31,6 @@ var rng = RandomNumberGenerator.new()
 
 onready var maps = get_node("maps")
 onready var camera = get_node("camera")
-onready var unit = get_node("unit")
 onready var collision = get_node("collision")
 onready var ui = get_node("ui")
 onready var selection = get_node("selection")
@@ -52,6 +51,18 @@ var victory:String
 func _ready():
 	get_tree().paused = true
 	randomize()
+  
+	WorldState.set_state("is_game_active", false)
+	var timer = Timer.new()
+	timer.wait_time = 1
+	add_child(timer)
+	timer.start()
+	timer.connect("timeout", self, "_one_sec")
+
+#runs logic that is only run once per second
+func _one_sec():
+	EventMachine.register_event(Events.ONE_SEC, [])
+
 
 
 func _process(delta: float) -> void:
@@ -71,6 +82,7 @@ func map_loaded():
 	if not started:
 		started = true
 		paused = false
+		WorldState.set_state("is_game_active", true)
 		
 		maps.setup_buildings()
 		map.blocks.setup_quadtree()
@@ -79,17 +91,18 @@ func map_loaded():
 		rng.randomize()
 		maps.setup_lanes()
 		ui.orders_menu.build()
-		unit.follow.setup_pathfind()
+		Behavior.follow.setup_pathfind()
 		
 		if test.unit:
 			test.spawn_unit()
 		elif test.stress:
 			test.spawn_random_units()
 		else: 
-			unit.spawn.pawns()
+			Behavior.spawn.pawns()
+
 			ui.get_node("score_board").visible = false
 			yield(get_tree().create_timer(4), "timeout")
-			unit.spawn.leaders()
+			Behavior.spawn.leaders()
 			maps.setup_leaders()
 
 

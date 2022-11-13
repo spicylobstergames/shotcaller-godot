@@ -39,8 +39,8 @@ func clear():
 
 func new_inventory(leader):
 	var extra_skill_gold = 0
-	if leader.display_name in game.unit.skills.leader:
-		var leader_skills = game.unit.skills.leader[leader.display_name]
+	if leader.display_name in Behavior.skills.leader:
+		var leader_skills = Behavior.skills.leader[leader.display_name]
 		if "extra_gold" in leader_skills:
 				extra_skill_gold = leader_skills.extra_gold
 
@@ -71,14 +71,7 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-
-
-	var timer := Timer.new()
-	timer.wait_time = 1
-	game.ui.get_node("bot_mid").add_child(timer)
-	timer.start()
-# warning-ignore:return_value_discarded
-	timer.connect("timeout", self, "gold_update_cycle")
+	EventMachine.register_listener(Events.ONE_SEC, self, "gold_update_cycle")
 
 
 func get_leader_inventory(leader):
@@ -106,6 +99,8 @@ func get_leader_delivery(leader):
 			deliv = enemy_deliveries
 		if leader.name in deliv: return deliv[leader.name]
 
+func gold_timer(unit):
+	EventMachine.register_listener(Events.ONE_SEC, self, "gold_timer_timeout",[unit])
 
 func set_leader_delivery(leader, delivery):
 	if leader.type == 'leader':
@@ -126,7 +121,7 @@ func add_inventory(leader):
 	var inventory = new_inventory(leader)
 	add_child(inventory.container)
 	set_leader_inventory(leader, inventory)
-	gold_timer(leader)
+	EventMachine.register_listener(Events.ONE_SEC, self, "gold_timer_timeout",[leader])
 	var counter = 0
 	var item_button
 # warning-ignore:unused_variable
@@ -145,15 +140,6 @@ func add_inventory(leader):
 		item_button.index = counter
 		counter += 1
 		item_button.setup(null)
-
-
-func gold_timer(unit):
-	var timer := Timer.new()
-	timer.wait_time = 1
-	unit.add_child(timer)
-	timer.start()
-# warning-ignore:return_value_discarded
-	timer.connect("timeout", self, "gold_timer_timeout", [unit])
 
 
 func gold_timer_timeout(unit):
@@ -211,7 +197,13 @@ func add_delivery(leader, item):
 				new_delivery.index = index
 				new_delivery.button = inventory.consumable_item_buttons[index]
 				break
-
+	elif item.type == "throwable":
+		for index in range(consumable_items_max):
+			if inventory.consumable_items[index] == null:
+				new_delivery.index = index
+				new_delivery.button = inventory.consumable_item_buttons[index]
+				break
+				
 	new_delivery.label = new_delivery.button.price_label
 	delivery_timer(new_delivery)
 
@@ -225,6 +217,7 @@ func delivery_timer(delivery):
 		else:
 			match delivery.item.type:
 				"consumable": give_item(delivery)
+				"throwable": give_item(delivery)
 				"equip":
 					if game.ui.shop.close_to_blacksmith(delivery.leader):
 						give_item(delivery)
@@ -258,7 +251,7 @@ func give_item(delivery):
 			inventory.equip_items[index] = item
 			inventory.equip_item_buttons[index].setup(item)
 			for key in item.attributes.keys():
-				game.unit.modifiers.add(leader, key, item.name, item.attributes[key])
+				Behavior.modifiers.add(leader, key, item.name, item.attributes[key])
 			if "passive" in item:
 				var item_scene = load(item.passive)
 				leader.get_node("behavior/item_passives").add_child(item_scene.instance())
@@ -266,10 +259,12 @@ func give_item(delivery):
 		"consumable":
 			inventory.consumable_items[index] = item
 			inventory.consumable_item_buttons[index].setup(item)
-
+		"throwable":
+			inventory.consumable_items[index] = item
+			inventory.consumable_item_buttons[index].setup(item)
 	item.delivered = true
 
-	game.unit.hud.update_hpbar(leader)
+	Hud.update_hpbar(leader)
 
 
 
@@ -282,29 +277,37 @@ func remove_item(leader, index):
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
 		for key in item.attributes.keys():
-			game.unit.modifiers.remove(leader, key, item.name, item.attributes[key])
+			Behavior.modifiers.remove(leader, key, item.name, item.attributes[key])
 
 		inventory.equip_items[index] = null
 
 	elif item.type == "consumable":
 		inventory.consumable_items[index - equip_items_max] = null
+		
+	elif item.type == "throwable":
+		inventory.consumable_items[index - equip_items_max] = null
 
-	leader.get_node("hud").update_hpbar(leader)
+	Hud.update_hpbar(leader)
 
 	return item
 
 
 
 	# Disable potion if full heath
+	# Disable poison if no target
+
 func update_consumables(leader):
 	var inventory = get_leader_inventory(leader)
 	var counter = 0
+	
 	for item in inventory.consumable_items:
 		var item_button = inventory.consumable_item_buttons[counter]
-		item_button.disabled = (leader.current_hp >= game.unit.modifiers.get_value(leader, "hp"))
-		counter += 1
-
-
+		if item != null and item.type == "consumable":
+			item_button.disabled = (leader.current_hp >= Behavior.modifiers.get_value(leader, "hp"))
+			counter += 1
+		elif item != null and item.type  == "throwable":
+			var enemy_leaders_on_sight = leader.get_enemy_leaders_on_sight(leader)
+			item_button.disabled = (enemy_leaders_on_sight.empty())
 
 func update_buttons():
 	for leader in game.player_leaders + game.enemy_leaders:
