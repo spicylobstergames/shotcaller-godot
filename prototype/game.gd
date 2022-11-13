@@ -51,6 +51,7 @@ var victory:String
 
 func _ready():
 	get_tree().paused = true
+	randomize()
 
 
 func _process(delta: float) -> void:
