@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://ui/hud.gd" type="Script" id=2]
+[ext_resource path="res://unit/hud.gd" type="Script" id=2]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=3]
 [ext_resource path="res://assets/unit/hpbar.png" type="Texture" id=4]
 
@@ -14,6 +14,7 @@ use_parent_material = true
 script = ExtResource( 2 )
 
 [node name="state" type="Label" parent="."]
+visible = false
 use_parent_material = true
 margin_left = -37.0
 margin_top = -37.0
@@ -22,11 +23,9 @@ margin_bottom = -21.0
 custom_fonts/font = SubResource( 1 )
 text = "unit"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="selection" type="Sprite" parent="."]
+visible = false
 modulate = Color( 0.117647, 1, 0.211765, 0.588235 )
 position = Vector2( 0, 8 )
 scale = Vector2( 1.6, 1.6 )
@@ -38,7 +37,6 @@ use_parent_material = true
 position = Vector2( 0, -19 )
 
 [node name="bar" type="Sprite" parent="hpbar"]
-visible = false
 modulate = Color( 0.168627, 0.160784, 0.227451, 0.862745 )
 use_parent_material = true
 texture = ExtResource( 4 )
@@ -46,7 +44,6 @@ region_enabled = true
 region_rect = Rect2( 2, 2, 22, 4 )
 
 [node name="red" type="Sprite" parent="hpbar"]
-visible = false
 modulate = Color( 0.682353, 0.172549, 0.172549, 1 )
 use_parent_material = true
 position = Vector2( -9, 0 )
@@ -57,7 +54,6 @@ region_enabled = true
 region_rect = Rect2( 4, 7, 18, 2 )
 
 [node name="green" type="Sprite" parent="hpbar"]
-visible = false
 modulate = Color( 0.0392157, 0.643137, 0.117647, 1 )
 use_parent_material = true
 position = Vector2( -9, 0 )
