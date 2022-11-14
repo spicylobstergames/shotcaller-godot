@@ -91,8 +91,8 @@ func clear_old_hpbar():
 
 
 func add_new_hpbar(unit):
-	var red = Hud.get_node("hpbar/red").duplicate()
-	var green = Hud.get_node("hpbar/green").duplicate()
+	var red = unit.hud.get_node("hpbar/red").duplicate()
+	var green = unit.hud.get_node("hpbar/green").duplicate()
 	red.scale *= Vector2(11,11)
 	green.scale *= Vector2(11,11)
 	hpbar.add_child(red)

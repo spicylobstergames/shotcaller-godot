@@ -163,10 +163,10 @@ func reset_unit():
 	self.setup_team(self.team)
 
 	if self.type == "leader":
-		Hud.state.visible = true
-		Hud.hpbar.visible = true
+		hud.state.visible = true
+		hud.hpbar.visible = true
 
-	Hud.state.text = self.display_name
+	hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
