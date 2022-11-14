@@ -40,3 +40,6 @@ script = ExtResource( 8 )
 
 [node name="test" type="Node" parent="."]
 script = ExtResource( 9 )
+
+[node name="transitions" type="CanvasLayer" parent="."]
+layer = 5

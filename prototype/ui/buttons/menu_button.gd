@@ -10,6 +10,9 @@ var small_map_button:Node
 var large_map_button:Node
 var play_button:Node
 
+onready var circle_transition_scene : PackedScene = preload("res://ui/circle_transition.tscn")
+onready var square_transition_scene : PackedScene = preload("res://ui/square_transition.tscn")
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -48,7 +51,6 @@ func button_down():
 				game.ui.get_node("mid/team_selection_menu").visible = true
 
 		"choose_leaders":
-			game.ui.main_menu_background.visible = false
 			var team_selection_menu = game.ui.get_node("mid/team_selection_menu")
 			team_selection_menu.visible = false
 			if game.player_team == "blue":
@@ -58,7 +60,19 @@ func button_down():
 				game.player_choose_leaders = team_selection_menu.get_red_team_leaders()
 				game.enemy_choose_leaders = team_selection_menu.get_blue_team_leaders()
 			game.maps.load_map(game.maps.current_map)
+			
+			var transition = [square_transition_scene, circle_transition_scene][randi() % 2].instance()
+			transition.pause_mode = Node.PAUSE_MODE_PROCESS
+			game.get_node("transitions").add_child(transition)
+			transition.start_transition()
+			yield(transition, "transition_completed")
+			game.ui.main_menu_background.visible = false
+			transition.queue_free()
+			# Transition backward not possible due to how minimap is generated
+			# transition.start_transition(true)
 			resume_game()
+			
+
 			
 		"blue":
 			game.player_team = "blue"
