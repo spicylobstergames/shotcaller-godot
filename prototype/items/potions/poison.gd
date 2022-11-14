@@ -10,6 +10,7 @@ func poison_throw(leader, item):
 	
 	closest_enemy_leader.add_child(poison_timer)
 	poison_timer.wait_time = item.duration
+# warning-ignore:return_value_discarded
 	poison_timer.connect("timeout", self, "poison_remove", [closest_enemy_leader])
 	
 	if closest_enemy_leader and Behavior.attack.can_hit(leader, closest_enemy_leader):
