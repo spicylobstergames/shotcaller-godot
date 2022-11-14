@@ -22,3 +22,4 @@ func prepare(leader):
 func empty():
 	for child in ability_container.get_children():
 		ability_container.remove_child(child)
+		child.queue_free()

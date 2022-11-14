@@ -4,7 +4,7 @@ var game:Node
 # self = game.test
 
 var unit = 0
-var stress = 0
+var stress = 1
 
 
 func _ready():

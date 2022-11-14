@@ -244,6 +244,7 @@ func projectile_stuck(attacker, target, projectile):
 	# stop projectile movement
 	attacker.projectiles.erase(projectile)
 	# remove projectile after 1.2 sec
+
 	yield(get_tree().create_timer(1.2), "timeout")
 	if is_instance_valid(stuck):
 		stuck.get_parent().remove_child(stuck)
