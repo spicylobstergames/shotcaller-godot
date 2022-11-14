@@ -9,6 +9,7 @@ func _ready():
 	for container in [team_red_container, team_blue_container]:
 		for child in container.get_children():
 			container.remove_child(child)
+			child.queue_free()
 	visible = false
 	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
 
