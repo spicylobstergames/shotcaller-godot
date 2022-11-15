@@ -5,7 +5,7 @@ class_name NeedSafetyGoal
 func get_class(): return "NeedSafetyGoal"
 
 func priority(agent) -> int:
-    return 50
+		return 50
 
 
 func get_desired_state(agent) -> Dictionary:
@@ -14,4 +14,4 @@ func get_desired_state(agent) -> Dictionary:
 	}
 
 func is_valid(agent) -> bool:
-    return agent.get_state("is_threatened")
+		return agent.get_state("is_threatened")

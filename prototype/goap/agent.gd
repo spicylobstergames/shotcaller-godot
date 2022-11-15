@@ -15,8 +15,7 @@ var _current_goal
 var _current_plan
 var _current_plan_step = 0
 var _unit
-var _state = {
-}
+var _state = {}
 
 func get_unit():
 	return _unit
@@ -37,7 +36,7 @@ func clear_state():
 # the highest priority. if it's not, it requests the action planner a new plan
 # for the new high priority goal.
 #
-func _process(delta):
+func process(delta):
 	var goal = _get_best_goal()
 	if _current_goal == null or goal != _current_goal:
 	# You can set in the blackboard any relevant information you want to use
@@ -62,7 +61,7 @@ func _process(delta):
 
 func init(unit, goals: Array):
 	_unit = unit
-	_goals = goals	
+	_goals = goals
 	EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
 
 

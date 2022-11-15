@@ -40,7 +40,7 @@ func update_hpbar(unit):
 		if leader_icon_hpbar:
 			leader_icon_hpbar.get_node("green").region_rect.size.x = 0
 	else:
-		if game.camera.zoom.x <= 1 and unit.hud:
+		if unit.hud:
 			var hp = Behavior.modifiers.get_value(unit, "hp")
 			unit.hud.hpbar.visible = true
 			var scale = float(unit.current_hp) / float(hp)
@@ -50,7 +50,7 @@ func update_hpbar(unit):
 			unit.hud.hpbar.get_node("green").region_rect.size.x = scale * size
 			if leader_icon_hpbar:
 				leader_icon_hpbar.get_node("green").region_rect.size.x = scale * size
-			if unit.type != "leader" and game.camera.zoom.x == 1 and unit.current_hp >= hp:
+			if unit.type != "leader" and unit.current_hp >= hp:
 					unit.hud.hpbar.hide()
 
 

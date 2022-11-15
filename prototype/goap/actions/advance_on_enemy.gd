@@ -1,4 +1,5 @@
 extends GoapAction
+var game:Node
 
 class_name AdvanceOnEnemy
 
@@ -26,5 +27,6 @@ func perform(agent, delta) -> bool:
 	return false
 
 func enter(agent):
-	var path = agent.get_unit().game.maps.new_path(agent.get_unit().lane, agent.get_unit().team)
-	Behavior.follow.path(agent.get_unit(), path.follow, "advance")
+	var unit = agent.get_unit()
+	var path = unit.game.maps.new_path(unit.lane, unit.team)
+	if path: Behavior.follow.path(unit, path.follow, "advance")

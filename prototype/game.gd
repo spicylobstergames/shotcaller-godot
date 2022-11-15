@@ -50,7 +50,7 @@ var victory:String
 
 func _ready():
 	get_tree().paused = true
-	randomize()
+#	randomize()
 	
 	WorldState.set_state("is_game_active", false)
 	var timer = Timer.new()
@@ -108,6 +108,9 @@ func map_loaded():
 
 func _physics_process(delta):
 	if started: collision.process(delta)
+	for unit1 in all_units:
+		if unit1.agent._goals:
+			unit1.agent.process(delta)
 
 
 func can_control(unit1):

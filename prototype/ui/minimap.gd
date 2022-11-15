@@ -133,11 +133,11 @@ func hide_view():
 
 
 func setup_symbol(unit):
-	if unit.has_node("symbol"):
+	if unit.has_node("symbol") and not unit.symbol:
 		var symbol = unit.get_node("symbol")
 		setup_unit_symbol(unit, symbol)
 		copy_symbol(unit, symbol)
-
+		unit.symbol = true
 
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)

@@ -77,14 +77,15 @@ func process(delta):
 			
 			# units1 > unit2 collision
 			
-			if (unit1.moves and unit1.collide and unit1.state == "move" and unit1.next_event != "arrive"):
+			if (unit1.moves and unit1.state == "move" and unit1.next_event != "arrive"):
 				unit1.next_event = "move"
-				for unit2 in unit1.get_collision_around(delta):
-					if not unit2.dead and unit2.collide and unit1 != unit2:
-						if unit1.check_collision(unit2, delta):
-							unit1.next_event = "collision"
-							unit1.collide_target = unit2
-							break
+				if unit1.collide:
+					for unit2 in unit1.get_collision_around(delta):
+						if not unit2.dead and unit2.collide and unit1 != unit2:
+							if unit1.check_collision(unit2, delta):
+								unit1.next_event = "collision"
+								unit1.collide_target = unit2
+								break
 		
 		# move or collide or stop
 		match unit1.next_event:
