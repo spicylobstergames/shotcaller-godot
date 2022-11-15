@@ -20,7 +20,8 @@ export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
-var agent = GoapAgent.new()
+var agent := GoapAgent.new()
+var symbol:bool = false
 
 # SELECTION
 export var selectable:bool = false

@@ -43,7 +43,7 @@ func spawn_unit():
 
 func spawn_random_units():
 	game.rng.randomize()
-	var n = 80
+	var n = 18
 	var s = Behavior.spawn
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
@@ -55,14 +55,15 @@ func spawn_random_units():
 
 func unit_wait_end(unit1):
 	if stress:
-		var o = 2000
+		var o = game.map.size
 		var d = Vector2(randf()*o,randf()*o)
-		if Behavior.moves: Behavior.advance.point(unit1, d)
+		if unit1.moves: Behavior.advance.point(unit1, d)
 
 
 func respawn(unit1):
 	if stress and unit1.type != "building":
 		yield(get_tree().create_timer(1), "timeout")
+		unit1.reset_unit()
 		Behavior.spawn.spawn_unit(unit1, unit1.lane, unit1.team, "random_map", Vector2.ZERO)
 
 
