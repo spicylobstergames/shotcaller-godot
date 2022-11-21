@@ -114,4 +114,4 @@ func _physics_process(delta):
 
 
 func can_control(unit1):
-	return (unit1 and not unit1.dead) # and unit.team == game.player_team 
+	return (unit1 and unit1.type == "leader" and not unit1.dead and unit1.team == player_team) 

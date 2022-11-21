@@ -59,7 +59,7 @@ size = 8
 font_data = ExtResource( 4 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 32 )
+extents = Vector2( 30, 30 )
 
 [sub_resource type="DynamicFont" id=22]
 size = 9
@@ -92,9 +92,6 @@ custom_fonts/font = SubResource( 15 )
 text = "Name"
 align = 1
 autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="touch_button" type="TouchScreenButton" parent="."]
 shape = SubResource( 1 )
@@ -112,9 +109,6 @@ custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 22 )
 text = "a"
 align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="pressed" from="." to="." method="button_down"]
 [connection signal="pressed" from="touch_button" to="." method="button_down"]
