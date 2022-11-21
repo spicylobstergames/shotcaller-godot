@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
 [ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=2]
@@ -22,6 +22,9 @@ size = 13
 font_data = ExtResource( 3 )
 
 [sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 32, 30 )
 
 [sub_resource type="StyleBoxEmpty" id=5]
 
@@ -122,6 +125,7 @@ text = "blue"
 
 [node name="touch_button" parent="container/menu_team_buttons/blue_team_button" index="1"]
 scale = Vector2( 2.5, 1 )
+shape = SubResource( 9 )
 
 [node name="hint" parent="container/menu_team_buttons/blue_team_button" index="2"]
 visible = false
@@ -144,6 +148,7 @@ text = "red"
 
 [node name="touch_button" parent="container/menu_team_buttons/red_team_button" index="1"]
 scale = Vector2( 2.5, 1 )
+shape = SubResource( 9 )
 
 [node name="hint" parent="container/menu_team_buttons/red_team_button" index="2"]
 visible = false
@@ -196,6 +201,7 @@ text = "blue"
 
 [node name="touch_button" parent="container/menu_map_buttons/small_map_button" index="1"]
 scale = Vector2( 2.5, 1 )
+shape = SubResource( 9 )
 
 [node name="hint" parent="container/menu_map_buttons/small_map_button" index="2"]
 visible = false
@@ -217,6 +223,7 @@ text = "red"
 
 [node name="touch_button" parent="container/menu_map_buttons/large_map_button" index="1"]
 scale = Vector2( 2.5, 1 )
+shape = SubResource( 9 )
 
 [node name="hint" parent="container/menu_map_buttons/large_map_button" index="2"]
 visible = false
@@ -251,6 +258,7 @@ text = "red"
 
 [node name="touch_button" parent="container/play_button" index="1"]
 scale = Vector2( 5.8, 1 )
+shape = SubResource( 9 )
 
 [node name="hint" parent="container/play_button" index="2"]
 visible = false
