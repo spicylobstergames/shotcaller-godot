@@ -120,35 +120,6 @@ func build_leaders():
 		
 	for leader in game.enemy_leaders:
 		enemy_leaders_orders[leader.name] = new_orders()
-	EventMachine.register_listener(Events.ONE_SEC, self, "hp_regen_cycle")
-
-
-func hp_regen_cycle(): # called every second  and
-	if not game.paused:
-		for unit in game.all_units:
-			var has_regen = (unit.regen > 0)
-			var is_building = (unit.type == "building")
-			var is_neutral = (unit.team == "neutral")
-			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
-				set_regen(unit)
-				set_dot(unit)
-				if unit.type == "leader" and game.can_control(unit):
-					game.ui.inventories.update_consumables(unit)
-
-
-func set_regen(unit):
-	if not unit.dead:
-		var regen = Behavior.modifiers.get_value(unit, "regen")
-		unit.heal(regen)
-	else: unit.regen = 0
-
-
-func set_dot(unit):
-	if not unit.dead:
-		var dot_effects = Behavior.modifiers.get_dot(unit)
-		if dot_effects != null:
-			for dot in dot_effects:
-				Behavior.attack.take_hit(dot.attacker, unit, null, {"damage": dot.damage})
 
 
 func leaders_cycle(): # called every 4 sec
@@ -157,7 +128,6 @@ func leaders_cycle(): # called every 4 sec
 		
 	for leader in game.enemy_leaders:
 		set_leader(leader, enemy_leaders_orders[leader.name])
-
 
 
 func set_leader(leader, orders):

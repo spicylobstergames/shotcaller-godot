@@ -130,35 +130,38 @@ func get_sel_unit_at_point(point):
 		if game.utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
 
+func no_delay(unit):
+	return unit.curr_control_delay <= 0 
+
 
 func advance(unit, point):
-	if unit and unit.attacks and unit.moves and game.can_control(unit):
+	if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.advance.smart(unit, order_point)
 
 func attack(unit, point):
-	if unit.attacks and game.can_control(unit):
+	if unit.attacks and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.attack.point(unit, order_point)
 
 
 func teleport(unit, point):
-	if unit.moves and game.can_control(unit):
+	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.follow.teleport(unit, order_point)
 
 func change_lane(unit, point):
-	if unit.moves and game.can_control(unit):
+	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.follow.change_lane(unit, order_point)
 
 func move(unit, point):
-	if unit.moves and game.can_control(unit):
+	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.move.smart(unit, order_point, "move")
 
 func stand(unit):
-	if game.can_control(unit):
+	if game.can_control(unit) and no_delay(unit):
 		order(unit, null)
 		Behavior.move.stand(unit)
 
@@ -167,6 +170,7 @@ func order(unit, point):
 	unit.working = true
 	unit.hunting = false
 	Behavior.attack.set_target(unit, null)
+	unit.start_control_delay()
 	if point:
 		var building = game.utils.get_building(point)
 		if building:

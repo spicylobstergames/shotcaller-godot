@@ -102,8 +102,10 @@ func map_loaded():
 
 			ui.get_node("score_board").visible = false
 			yield(get_tree().create_timer(4), "timeout")
+			
 			Behavior.spawn.leaders()
 			maps.setup_leaders()
+			EventMachine.register_listener(Events.ONE_SEC, self, "units_sec_cycle")
 
 
 func _physics_process(delta):
@@ -114,4 +116,18 @@ func _physics_process(delta):
 
 
 func can_control(unit1):
-	return (unit1 and unit1.type == "leader" and not unit1.dead and unit1.team == player_team) 
+	return (unit1 and unit1.type == "leader" and unit1.team == player_team and not unit1.dead) 
+
+
+func units_sec_cycle(): # called every second 
+	if not paused:
+		for unit1 in all_units:
+			var has_regen = (unit1.regen > 0)
+			var is_building = (unit1.type == "building")
+			var is_neutral = (unit1.team == "neutral")
+			if can_control(unit1):
+				unit1.set_delay()
+				ui.inventories.update_consumables(unit1)
+			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
+				unit1.set_regen()
+				unit1.set_dot()

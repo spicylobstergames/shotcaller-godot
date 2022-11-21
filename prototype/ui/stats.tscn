@@ -105,9 +105,6 @@ margin_bottom = 29.0
 custom_fonts/font = SubResource( 4 )
 text = "name"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="regen" type="Label" parent="panel"]
 margin_left = 240.0
@@ -169,6 +166,16 @@ margin_bottom = 48.0
 custom_fonts/font = SubResource( 4 )
 text = "vision"
 align = 1
+valign = 1
+
+[node name="control_delay" type="Label" parent="panel"]
+margin_left = 241.0
+margin_top = 34.0
+margin_right = 289.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 4 )
+text = "delay"
+align = 2
 valign = 1
 
 [node name="damage" type="Label" parent="panel"]

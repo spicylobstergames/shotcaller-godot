@@ -83,6 +83,8 @@ var wait_time:int = 0
 var gold = 0
 
 # ORDERS
+var control_delay = 3
+var curr_control_delay = 0
 var retreating = false
 var working = false
 var hunting = false
@@ -272,6 +274,31 @@ func sort_by_distance(array):
 func closest_unit(enemies):
 	var sorted = self.sort_by_distance(enemies)
 	return sorted[0].unit
+
+
+func start_control_delay():
+	self.curr_control_delay = self.control_delay
+	game.ui.stats.update()
+
+
+func set_delay():
+	if self.curr_control_delay > 0:
+		self.curr_control_delay -= 1
+
+
+func set_regen():
+	if not self.dead:
+		var regen_hp = Behavior.modifiers.get_value(self, "regen")
+		self.heal(regen_hp)
+	else: self.regen = 0
+
+
+func set_dot():
+	if not self.dead:
+		var dot_effects = Behavior.modifiers.get_dot(self)
+		if dot_effects != null:
+			for dot in dot_effects:
+				Behavior.attack.take_hit(dot.attacker, self, null, {"damage": dot.damage})
 
 
 func cut_path(path):
