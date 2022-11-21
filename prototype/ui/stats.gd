@@ -9,6 +9,7 @@ onready var unit_name = panel.get_node("name")
 onready var hp = panel.get_node("hp")
 onready var regen = panel.get_node("regen")
 onready var vision = panel.get_node("vision")
+onready var control_delay = panel.get_node("control_delay")
 onready var damage = panel.get_node("damage")
 onready var att_range = panel.get_node("range")
 onready var speed = panel.get_node("speed")
@@ -50,16 +51,23 @@ func update():
 			gold.text = "%s" % unit.gold
 			gold.visible = true
 			gold_sprite.visible = true
-			level_label.visible = true
-			exp_bar.visible = true
-			level_label.text = "Level %d" % unit.level
-			exp_bar.value = unit.experience
-			exp_bar.max_value = unit.experience_needed()
-			active_skills.show()
+			# xp
+			if unit.type == "leader": 
+				level_label.visible = true
+				exp_bar.visible = true
+				if unit.curr_control_delay > 0: control_delay.visible = true
+				else: control_delay.visible = false
+				control_delay.text = "%s" % unit.curr_control_delay
+				level_label.text = "Level %d" % unit.level
+				exp_bar.value = unit.experience
+				exp_bar.max_value = unit.experience_needed()
+				# skill
+				active_skills.show()
 		else:
 			gold.visible = false
 			gold_sprite.visible = false
 			level_label.visible = false
+			control_delay.visible = false
 			exp_bar.visible = false
 			active_skills.hide()
 		status_effect_display.prepare(unit.status_effects)
