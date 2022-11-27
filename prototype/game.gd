@@ -36,6 +36,7 @@ onready var ui = get_node("ui")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
+onready var pause_menu = $transitions/pause_menu
 
 var map:Node
 
@@ -131,3 +132,35 @@ func units_sec_cycle(): # called every second
 			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				unit1.set_regen()
 				unit1.set_dot()
+
+
+func resume():
+	pause_menu.visible = false
+	paused = false
+	get_tree().paused = false
+	Behavior.spawn.timer.paused = false;
+	ui.show_all()
+	ui.get_node('mid').visible = false
+	ui.minimap.visible = true
+	ui.get_node("score_board").visible = false
+
+
+func pause():
+	paused = false
+	get_tree().paused = true
+	pause_menu.visible = true
+	Behavior.spawn.timer.paused = true
+	ui.hide_all()
+	ui.get_node('mid').visible = true
+	ui.minimap.visible = false
+	ui.get_node("mid/team_selection_menu").visible = false
+
+func exit():
+	get_tree().quit(0)
+
+
+func reload():
+	EventMachine.reset()
+	get_tree().reload_current_scene()
+	Hud._ready()
+	Behavior._ready()
