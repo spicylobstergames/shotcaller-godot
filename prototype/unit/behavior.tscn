@@ -16,6 +16,8 @@ script = ExtResource( 9 )
 [node name="spawn" type="Node" parent="."]
 script = ExtResource( 3 )
 
+[node name="Timer" type="Timer" parent="spawn"]
+
 [node name="move" type="Node" parent="."]
 script = ExtResource( 8 )
 

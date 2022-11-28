@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/controls_menu.tscn" type="PackedScene" id=2]
@@ -10,10 +10,8 @@
 [ext_resource path="res://ui/buttons.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/stats.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/leaders_icons.tscn" type="PackedScene" id=12]
-[ext_resource path="res://ui/waterfall/main.tscn" type="PackedScene" id=17]
 [ext_resource path="res://ui/scoreboard/score_board.tscn" type="PackedScene" id=18]
 [ext_resource path="res://ui/cheat_console.gd" type="Script" id=19]
-[ext_resource path="res://ui/main_menu.tscn" type="PackedScene" id=20]
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
@@ -25,17 +23,6 @@ __meta__ = {
 "_edit_vertical_guides_": [ -366.0 ],
 "_editor_description_": "Prevents ui panning"
 }
-
-[node name="background" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-
-[node name="main" parent="background" instance=ExtResource( 17 )]
-pause_mode = 2
-position = Vector2( -528, -300 )
-scale = Vector2( 1.666, 1.666 )
 
 [node name="top_left" type="Control" parent="."]
 visible = false
@@ -94,9 +81,6 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-
-[node name="main_menu" parent="mid" instance=ExtResource( 20 )]
-unique_name_in_owner = true
 
 [node name="team_selection_menu" parent="mid" instance=ExtResource( 4 )]
 unique_name_in_owner = true

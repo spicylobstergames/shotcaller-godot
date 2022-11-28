@@ -35,8 +35,6 @@ func _ready():
 	minimap_container = get_node("%minimap_container")
 	minimap = minimap_container.get_node("minimap")
 	rect_layer = minimap_container.get_node("rect_layer")
-	main_menu = get_node("%main_menu")
-	main_menu_background = get_node("background/main")
 	buttons = get_node("%buttons")
 	orders_menu = get_node("%orders_menu")
 	controls_menu = get_node("%controls_menu")
@@ -68,17 +66,6 @@ func process():
 		if game.camera.zoom.x <= 1:
 			minimap.move_symbols()
 			minimap.follow_camera()
-
-	# scale vertical main menu background to fit height
-	var h = get_viewport().size.y
-	var ratio = get_viewport().size.x / h
-	if ratio < 1:
-		var s = 1/ratio
-		main_menu_background.scale = Vector2(s*1.666,s*1.666)
-		main_menu_background.position = Vector2(-528,-300*s)
-	else:
-		main_menu_background.scale = Vector2(1.666,1.666)
-		main_menu_background.position = Vector2(-528,-300)
 
 
 func count_time():
