@@ -1,17 +1,22 @@
 extends CanvasLayer
 
-onready var quick_start_button = $"%quick_start_button"
 onready var game = get_tree().get_current_scene()
+
+onready var quick_start_button = $"%quick_start_button"
 onready var exit_button = $"%exit_button"
+onready var new_game_button = $"%new_game_button"
+
 onready var circle_transition_scene : PackedScene = preload("res://ui/circle_transition.tscn")
 onready var square_transition_scene : PackedScene = preload("res://ui/square_transition.tscn")
 
 onready var menu_background = $waterfall_background
+onready var team_selection_menu = $team_selection_menu
 
 func _ready():
 	randomize()
 	quick_start_button.connect("pressed", self, "quick_start")
 	exit_button.connect("pressed", self, "quit")
+	new_game_button.connect("pressed", self, "show_new_game_menu")
 
 func quick_start():
 	game.maps.load_map(game.maps.current_map)
@@ -32,3 +37,6 @@ func quick_start():
 
 func quit():
 	game.exit()
+
+func show_new_game_menu():
+	team_selection_menu.visible = true

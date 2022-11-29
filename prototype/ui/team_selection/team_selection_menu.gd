@@ -1,10 +1,12 @@
-extends PanelContainer
+extends VBoxContainer
+
+onready var game = get_tree().get_current_scene()
 
 onready var leader_select_menu_panel = preload("res://ui/team_selection/leader_select_menu_panel.tscn")
 onready var leader_select_menu = preload("res://ui/team_selection/leader_select_panel.tscn")
 onready var red_team_container : VBoxContainer = $"%red_team_container"
 onready var blue_team_container : VBoxContainer = $"%blue_team_container"
-
+onready var frame_container = $resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer
 
 func _ready():
 	# clear containers (Dummy entries used for visualization)
@@ -34,7 +36,7 @@ func handle_add_leader(team):
 
 func handle_select_leader(panel_instance):
 	var menu = leader_select_menu.instance()
-	add_child(menu)
+	frame_container.add_child(menu)
 	if panel_instance.team == 'blue': menu.clear_color_remap()
 	menu.connect("leader_selected", self, "handle_leader_selected", [panel_instance, menu])
 
@@ -62,3 +64,21 @@ func get_red_team_leaders():
 
 func get_blue_team_leaders():
 	return get_leaders('blue')
+
+func get_selected_map():
+	if $"%1_lane_checkbox".pressed:
+		return 1
+	else:
+		return 3
+
+func get_player_team():
+	if $"%blue_team_checkbox".pressed:
+		return "blue"
+	return "red"
+
+func _on_start_game_button_pressed():
+	game.start(
+		get_red_team_leaders(),
+		get_blue_team_leaders(),
+		get_player_team(),
+		get_selected_map())

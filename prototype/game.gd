@@ -164,3 +164,22 @@ func reload():
 	get_tree().reload_current_scene()
 	Hud._ready()
 	Behavior._ready()
+
+
+func start(red_team_leaders, blue_team_leaders, _player_team, map):
+	player_team = _player_team
+	if player_team == "blue":
+		player_choose_leaders = blue_team_leaders
+		enemy_choose_leaders = red_team_leaders
+	else:
+		player_choose_leaders = red_team_leaders
+		enemy_choose_leaders = blue_team_leaders
+		
+	if map == 1:
+		maps.current_map = "1lane_map"
+	else:
+		maps.current_map = "3lane_map"
+	
+	maps.load_map(maps.current_map)
+	$main_menu.visible = false
+	resume()
