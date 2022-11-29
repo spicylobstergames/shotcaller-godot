@@ -72,7 +72,7 @@ func in_limits(p):
 func path(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
-		unit.current_path = path
+		unit.current_path = path# I don't think this is needed
 		var node:Behaviors = Behavior #hack
 		node[cb].point(unit, next_point)
 

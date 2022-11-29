@@ -57,10 +57,12 @@ func closest_enemy_unit(unit, enemies):
 func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
 	var att_rad = unit1.attack_hit_radius
+	var did_hit = false;
 	
 	# hit target
 	if can_hit(unit1, unit1.target) and in_range(unit1, unit1.target):
 		take_hit(unit1, unit1.target)
+		did_hit = true
 	
 	# melee cleave damage
 	if unit1.display_name in Behavior.skills.leader:
@@ -70,6 +72,7 @@ func hit(unit1):
 			for unit2 in neighbors:
 				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})
+	return did_hit
 
 
 func can_hit(attacker, target):
@@ -148,7 +151,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
 			Behavior.attack.set_target(attacker, null)
-			if "resume" in attacker.agent.get_current_action():
+			if attacker.agent.has_action_function("resume"):
 				attacker.agent.get_current_action().resume(attacker)
 
 

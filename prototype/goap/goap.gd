@@ -18,6 +18,7 @@ func _ready():
 		AdvanceOnEnemy.new(),
 		GetLumber.new(),
 		ReturnLumber.new(),
+		AttackEnemy.new(),
 		Hide.new()
 	])
 

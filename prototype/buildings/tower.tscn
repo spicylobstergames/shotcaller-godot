@@ -201,6 +201,14 @@ attack_speed = 1.2
 defense = 10
 projectile_speed = 220.0
 
+[node name="state" parent="hud" index="0"]
+margin_top = -80.0
+margin_bottom = -64.0
+text = "TTTTTTTTTTTTTT"
+
+[node name="hpbar" parent="hud" index="2"]
+position = Vector2( 0, -68 )
+
 [node name="symbol" parent="." index="1"]
 position = Vector2( 9, 0 )
 scale = Vector2( 18, 18 )
@@ -259,3 +267,5 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -20 )
 shape = SubResource( 27 )
+
+[editable path="hud"]

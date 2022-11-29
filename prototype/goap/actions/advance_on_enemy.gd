@@ -28,7 +28,10 @@ func perform(agent, delta) -> bool:
 func enter(agent):
 	var path = agent.get_unit().game.maps.new_path(agent.get_unit().lane, agent.get_unit().team)
 	if path != null:
-		Behavior.follow.path(agent.get_unit(), path.follow, "advance")
+		var new_path = agent.get_unit().cut_path(path.follow)
+		var next_point = new_path.pop_front()
+		agent.get_unit().current_path = new_path
+		point(agent.get_unit(), next_point)
 
 func point(unit, objective, smart_move = false): # move_and_attack
 	Behavior.attack.set_target(unit, null)
@@ -44,25 +47,24 @@ func point(unit, objective, smart_move = false): # move_and_attack
 		var at_objective = (unit.global_position.distance_to(unit.objective) < unit.game.map.half_tile_size)
 		var has_path = (unit.current_path.size() > 0)
 		if not enemies:
-			if not at_objective: move(unit, unit.objective, smart_move) 
-			elif has_path: Behavior.follow.path(unit, unit.current_path, "advance")
+			if not at_objective: Behavior.move.move(unit, unit.objective) 
+			elif has_path: point(unit, unit.current_path.pop_front())
 		else:
 			var target = Behavior.orders.select_target(unit, enemies)
 			if not target:
 				if not at_objective: move(unit, unit.objective, smart_move)
-				elif has_path: Behavior.follow.path(unit, unit.current_path, "advance")
+				elif has_path: point(unit, unit.current_path.pop_front())
 
 			else:
 				Behavior.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
 				if Behavior.attack.in_range(unit, target):
 					Behavior.attack.point(unit, target_position)
-				else: move(unit, target_position, smart_move) 	
+				else: Behavior.move.move(unit, target_position) 	
 
 func move(unit, objective, smart_move):
 	if unit.moves and objective:
-		if smart_move: Behavior.move.smart(unit, objective, "advance")
-		else : Behavior.move.move(unit, objective)
+		point(unit, objective,smart_move)
 	else: stop(unit)
 
 

@@ -152,3 +152,5 @@ shadow_item_cull_mask = 2
 [node name="abilities" type="Node" parent="behavior"]
 
 [node name="item_passives" type="Node" parent="behavior"]
+
+[editable path="hud"]

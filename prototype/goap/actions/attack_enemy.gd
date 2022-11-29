@@ -6,9 +6,9 @@ func get_class(): return "AttackEnemy"
 
 
 func is_valid(blackboard) -> bool:
-	return blackboard["enemy_active"]
+	return blackboard.has("enemy_active") and blackboard["enemy_active"]
 
-
+#presently a magic number... maybe use distance in the future
 func get_cost(blackboard) -> int:
 	return 3
 
@@ -23,15 +23,29 @@ func get_effects() -> Dictionary:
 	}
 
 func perform(agent, delta) -> bool:
+	if agent.get_unit().target == null or agent.get_unit().target.dead:
+		agent.set_state("enemy_active", agent.get_unit().get_units_on_sight({"team": agent.get_unit().oponent_team()}).size() > 0)
+		return true
+	if not agent.get_unit().stunned:
+		if Behavior.attack.in_range(agent.get_unit(),agent.get_unit().target) and agent.get_unit().state != "attack":
+			Behavior.move.stand(agent.get_unit())
+			agent.get_unit().set_state("attack")
+		#elif agent.get_unit().state != "moving":
+		#	move(agent.get_unit(), agent.get_unit().target.position, true)
+		pass
 	return false
 
 func enter(agent):
-	agent.set_state("target_enemy", agent.unit.closest_unit(agent.unit.get_units_on_sight({"team": agent.unit.oponent_team()})))
+	var enemies = agent.get_unit().get_units_on_sight({"team": agent.get_unit().oponent_team()})
+	if(enemies.size() > 0):
+		agent.get_unit().target = agent.get_unit().closest_unit(enemies)
+	else :
+		print('wat')
+	move(agent.get_unit(), agent.get_unit().target.position)
 
-func move(unit, objective, smart_move):
+func move(unit, objective):
 	if unit.moves and objective:
-		if smart_move: Behavior.move.smart(unit, objective, "advance")
-		else : Behavior.move.move(unit, objective)
+		Behavior.move.move(unit, objective)
 	else: stop(unit)
 
 
@@ -43,18 +57,20 @@ func on_collision(unit):
 
 
 func resume(unit):
-	point(unit, null)
+	move(unit, unit.target.position)
 
 
 func end(unit):
-	if unit.current_destiny != unit.objective:
-		point(unit, null)
-	else: 
-		stop(unit)
+	return
+	#if unit.current_destiny != unit.objective:
+	#	point(unit, null)
+	#else: 
+	#	stop(unit)
 
 
 func react(target, attacker):
-	point(target, attacker.global_position)
+	pass
+	#point(target, attacker.global_position)
 
 
 func ally_attacked(target, attacker):
@@ -69,10 +85,11 @@ func stop(unit):
 
 
 func on_idle_end(unit):
-	if unit.behavior == "advance" or unit.behavior == "stop":
-		if unit.attacks: point(unit, unit.global_position)
+	pass
+	#point(unit, unit.global_position)
 
 
 func smart(unit, objective):
-	point(unit, objective, true)
+	pass
+#	point(unit, objective, true)
 					
