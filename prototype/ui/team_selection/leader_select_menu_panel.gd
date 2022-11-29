@@ -4,6 +4,7 @@ var leader:String = "random"
 var team:String = 'red'
 
 signal select_leader()
+signal remove_leader()
 
 func prepare():
 	$HBoxContainer/button.prepare(leader)
@@ -17,3 +18,7 @@ func clear_color_remap():
 
 func _select_leader():
 	emit_signal("select_leader")
+
+
+func _on_x_button_pressed():
+	queue_free()

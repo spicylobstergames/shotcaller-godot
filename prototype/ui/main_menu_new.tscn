@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://ui/waterfall/waterfall_background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/ui/CompassProTitle.tres" type="DynamicFont" id=2]
 [ext_resource path="res://ui/Button.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/ui/EquipmentPro.tres" type="DynamicFont" id=4]
 [ext_resource path="res://ui/main_menu_new.gd" type="Script" id=5]
+[ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=6]
 
 [node name="main_menu" type="CanvasLayer"]
 pause_mode = 2
@@ -95,3 +96,14 @@ margin_left = -71.0
 margin_top = -14.0
 text = "version 0.4"
 align = 2
+
+[node name="team_selection_menu" parent="." instance=ExtResource( 6 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -230.0
+margin_top = -220.0
+margin_right = 230.0
+margin_bottom = 220.0
