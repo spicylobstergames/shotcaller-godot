@@ -378,7 +378,8 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	Behavior.advance.on_idle_end(self)
+	if self.agent.has_action_function("on_idle_end"):
+		self.agent.get_current_action.on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 
@@ -390,12 +391,14 @@ func on_move(delta): # every frame if there's no collision
 func on_collision(delta):
 	if self.moves:
 		Behavior.move.on_collision(self, delta)
-		if self.attacks:
-			Behavior.advance.on_collision(self)
+	if self.agent.has_action_function("on_collision"):
+		self.agent.get_current_action.on_collision(self)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves and self.attacks: Behavior.advance.resume(self)
+	if self.moves and self.attacks: 
+		if self.agent.has_action_function("resume"):
+			self.agent.get_current_action.resume(self)
 	if self == game.selected_unit: Behavior.follow.draw_path(self)
 
 
@@ -407,7 +410,8 @@ func on_arrive(): # when collides with destiny
 		self.working = false
 		Behavior.move.end(self)
 
-		if self.attacks: Behavior.advance.end(self)
+		if self.agent.has_action_function("end"):
+			self.agent.get_current_action.end(self)
 		if agent != null: 
 			agent.on_arrive()
 		
@@ -419,14 +423,16 @@ func on_arrive(): # when collides with destiny
 
 func on_attack_release(): # every ranged projectile start
 	Behavior.attack.projectile_release(self)
-	Behavior.advance.resume(self)
+	if self.agent.has_action_function("resume"):
+		self.agent.get_current_action.resume(self)
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
 		Behavior.attack.hit(self)
 		if self.moves:
-			Behavior.advance.resume(self)
+			if self.agent.has_action_function("resume"):
+				self.agent.get_current_action.resume(self)
 
 
 func heal(heal_hp):
@@ -456,12 +462,8 @@ func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
 		self.stunned = false
-		if self.behavior == "move":
-			Behavior.move.resume(self)
-		if self.behavior == "advance":
-			Behavior.advance.resume(self)
-		if self.behavior == "stand" or self.behavior == "stop":
-			self.set_state("idle")
+		if self.agent.has_action_function("resume"):
+			self.agent.get_current_action.resume(self)
 
 
 

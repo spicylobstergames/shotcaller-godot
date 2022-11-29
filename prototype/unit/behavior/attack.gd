@@ -26,7 +26,8 @@ func point(unit, point):
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 			
-		else: Behavior.advance.resume(unit)
+		elif "resume" in unit.agent.get_current_action(): 
+			unit.agent.get_current_action().resume(unit)
 
 
 func set_target(unit, target):
@@ -113,8 +114,10 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				target.assist_candidates[attacker] = OS.get_ticks_msec()
 			
 		if not modifiers.counter:
-			Behavior.advance.react(target, attacker)
-			Behavior.advance.ally_attacked(target, attacker)
+			if target.agent.has_action_function("react"):
+				target.agent.get_current_action().react(target, attacker)
+			if target.agent.has_action_function("ally_attacked"):
+				target.agent.get_current_action().ally_attacked(target, attacker)
 			
 		Behavior.orders.take_hit_retreat(attacker, target)
 		if target.hud: Hud.update_hpbar(target)
@@ -145,7 +148,8 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
 			Behavior.attack.set_target(attacker, null)
-			Behavior.advance.resume(attacker)
+			if "resume" in attacker.agent.get_current_action():
+				attacker.agent.get_current_action().resume(attacker)
 
 
 

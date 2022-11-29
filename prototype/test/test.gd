@@ -57,7 +57,7 @@ func unit_wait_end(unit1):
 	if stress:
 		var o = game.map.size
 		var d = Vector2(randf()*o,randf()*o)
-		if unit1.moves: Behavior.advance.point(unit1, d)
+		if unit1.agent.has_action_function("point"): unit1.agent.get_current_action().point(unit1, d)
 
 
 func respawn(unit1):

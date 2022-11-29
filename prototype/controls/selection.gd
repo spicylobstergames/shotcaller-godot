@@ -137,7 +137,8 @@ func no_delay(unit):
 func advance(unit, point):
 	if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
-		Behavior.advance.smart(unit, order_point)
+		if unit.agent.has_action_function("smart"): unit.agent.get_current_action().smart(unit, order_point)
+
 
 func attack(unit, point):
 	if unit.attacks and game.can_control(unit) and no_delay(unit):
