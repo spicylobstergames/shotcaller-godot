@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/buildings/buildings_red.png" type="Texture" id=4]
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture" id=6]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=7]
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 3 )
@@ -267,5 +268,9 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -20 )
 shape = SubResource( 27 )
+
+[node name="goals" type="Node" parent="." index="7"]
+script = ExtResource( 7 )
+goals = [ "SlayEnemiesGoal" ]
 
 [editable path="hud"]

@@ -240,7 +240,7 @@ func set_anim(new_team, sprite):
 			"neutral": sprite.animation = 'neutral'
 
 
-func oponent_team():
+func opponent_team():
 	match self.team:
 		"red": return "blue"
 		"blue": return "red"
@@ -379,7 +379,7 @@ func wait():
 
 func on_idle_end(): # every idle animation end (0.6s)
 	if self.agent.has_action_function("on_idle_end"):
-		self.agent.get_current_action.on_idle_end(self)
+		self.agent.get_current_action().on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 
@@ -392,26 +392,27 @@ func on_collision(delta):
 	if self.moves:
 		Behavior.move.on_collision(self, delta)
 	if self.agent.has_action_function("on_collision"):
-		self.agent.get_current_action.on_collision(self)
+		self.agent.get_current_action().on_collision(self)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves and self.attacks: 
 		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action.resume(self)
+			self.agent.get_current_action().resume(self)
 	if self == game.selected_unit: Behavior.follow.draw_path(self)
 
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		Behavior.follow.next(self)
+		if agent.has_action_function("point"):
+			agent.get_current_action().point(self, current_path.pop_front())
 	elif self.moves:
 		self.working = false
 		Behavior.move.end(self)
 
 		if self.agent.has_action_function("end"):
-			self.agent.get_current_action.end(self)
+			self.agent.get_current_action().end(self)
 		if agent != null: 
 			agent.on_arrive()
 		
@@ -424,7 +425,7 @@ func on_arrive(): # when collides with destiny
 func on_attack_release(): # every ranged projectile start
 	Behavior.attack.projectile_release(self)
 	if self.agent.has_action_function("resume"):
-		self.agent.get_current_action.resume(self)
+		self.agent.get_current_action().resume(self)
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
@@ -432,7 +433,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 		Behavior.attack.hit(self)
 		if self.moves:
 			if self.agent.has_action_function("resume"):
-				self.agent.get_current_action.resume(self)
+				self.agent.get_current_action().resume(self)
 
 
 func heal(heal_hp):
@@ -463,7 +464,7 @@ func on_stun_end():
 	else:
 		self.stunned = false
 		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action.resume(self)
+			self.agent.get_current_action().resume(self)
 
 
 

@@ -24,24 +24,25 @@ func get_effects() -> Dictionary:
 
 func perform(agent, delta) -> bool:
 	if agent.get_unit().target == null or agent.get_unit().target.dead:
-		agent.set_state("enemy_active", agent.get_unit().get_units_on_sight({"team": agent.get_unit().oponent_team()}).size() > 0)
+		agent.set_state("enemy_active", agent.get_unit().get_units_on_sight({"team": agent.get_unit().opponent_team()}).size() > 0)
 		return true
 	if not agent.get_unit().stunned:
 		if Behavior.attack.in_range(agent.get_unit(),agent.get_unit().target) and agent.get_unit().state != "attack":
-			Behavior.move.stand(agent.get_unit())
-			agent.get_unit().set_state("attack")
+			#Behavior.move.stand(agent.get_unit())
+			Behavior.attack.point(agent.get_unit(),agent.get_unit().target.position)
 		#elif agent.get_unit().state != "moving":
 		#	move(agent.get_unit(), agent.get_unit().target.position, true)
 		pass
 	return false
 
 func enter(agent):
-	var enemies = agent.get_unit().get_units_on_sight({"team": agent.get_unit().oponent_team()})
+	var enemies = agent.get_unit().get_units_on_sight({"team": agent.get_unit().opponent_team()})
 	if(enemies.size() > 0):
 		agent.get_unit().target = agent.get_unit().closest_unit(enemies)
+		move(agent.get_unit(), agent.get_unit().target.position)
 	else :
 		print('wat')
-	move(agent.get_unit(), agent.get_unit().target.position)
+	
 
 func move(unit, objective):
 	if unit.moves and objective:
@@ -57,7 +58,8 @@ func on_collision(unit):
 
 
 func resume(unit):
-	move(unit, unit.target.position)
+	if(unit.target):
+		move(unit, unit.target.position)
 
 
 func end(unit):

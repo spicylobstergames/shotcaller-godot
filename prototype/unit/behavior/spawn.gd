@@ -123,6 +123,7 @@ func recycle(template, lane, team, point):
 		var unit = cemitery[index].pop_back()
 		unit = spawn_unit(unit, lane, team, "point_random", point)
 		unit.reset_unit()
+		unit.agent.reset()
 		return unit
 
 

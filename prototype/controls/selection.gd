@@ -176,11 +176,11 @@ func order(unit, point):
 		var building = game.utils.get_building(point)
 		if building:
 			point.y += game.map.tile_size
-			var oponent = unit.oponent_team()
+			var opponent = unit.opponent_team()
 			match building.team:
 				"neutral": unit.after_arive = "conquer"
 				unit.team: unit.after_arive = "stop"
-				oponent: unit.after_arive = "attack"
+				opponent: unit.after_arive = "attack"
 			if building.display_name == "church":
 				unit.after_arive = "pray"
 		return point

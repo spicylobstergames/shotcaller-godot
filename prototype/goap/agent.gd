@@ -27,6 +27,10 @@ func get_state(state_name, default = null):
 func set_state(state_name, value):
 	_state[state_name] = value
 
+func reset():
+	clear_state()
+	_current_goal = null
+	_current_plan = null
 
 func clear_state():
 	_state = {}
@@ -38,7 +42,7 @@ func get_current_action():
 		return null
 		
 func has_action_function(func_name):
-	if get_current_action() != null and func_name in get_current_action():
+	if get_current_action() != null and get_current_action().has_method(func_name):
 		return true
 	else:
 		return false
