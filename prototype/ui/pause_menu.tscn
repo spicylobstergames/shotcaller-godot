@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/Button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/pause_menu.gd" type="Script" id=2]
+
+[node name="pause_menu" type="CenterContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 202.0
+margin_top = 218.0
+margin_right = 397.0
+margin_bottom = 382.0
+
+[node name="continue_button" parent="VBoxContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_right = 195.0
+margin_bottom = 38.0
+text = "Continue"
+
+[node name="options_button" parent="VBoxContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_top = 42.0
+margin_right = 195.0
+margin_bottom = 80.0
+text = "Options"
+
+[node name="exit_to_menu_button" parent="VBoxContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_top = 84.0
+margin_right = 195.0
+margin_bottom = 122.0
+text = "Exit to menu"
+
+[node name="exit_button" parent="VBoxContainer" instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_top = 126.0
+margin_right = 195.0
+margin_bottom = 164.0
+text = "Exit game"

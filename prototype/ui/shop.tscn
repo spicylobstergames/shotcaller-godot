@@ -42,7 +42,7 @@ rect_pivot_offset = Vector2( 290, 0 )
 
 [node name="container" type="VBoxContainer" parent="scroll_container"]
 margin_right = 186.0
-margin_bottom = 354.0
+margin_bottom = 414.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
@@ -68,7 +68,7 @@ text = "Equip"
 [node name="equip_items" type="GridContainer" parent="scroll_container/container"]
 margin_top = 50.0
 margin_right = 186.0
-margin_bottom = 270.0
+margin_bottom = 254.0
 columns = 3
 
 [node name="item_button" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
@@ -86,8 +86,8 @@ __meta__ = {
 }
 
 [node name="item_button2" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 56.0
-margin_right = 108.0
+margin_left = 52.0
+margin_right = 100.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button2" index="0"]
@@ -102,8 +102,8 @@ __meta__ = {
 }
 
 [node name="item_button3" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 112.0
-margin_right = 164.0
+margin_left = 104.0
+margin_right = 152.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button3" index="0"]
@@ -118,8 +118,8 @@ __meta__ = {
 }
 
 [node name="item_button4" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_top = 56.0
-margin_bottom = 108.0
+margin_top = 52.0
+margin_bottom = 100.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button4" index="0"]
@@ -134,10 +134,10 @@ __meta__ = {
 }
 
 [node name="item_button5" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 56.0
-margin_top = 56.0
-margin_right = 108.0
-margin_bottom = 108.0
+margin_left = 52.0
+margin_top = 52.0
+margin_right = 100.0
+margin_bottom = 100.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button5" index="0"]
@@ -152,10 +152,10 @@ __meta__ = {
 }
 
 [node name="item_button6" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 112.0
-margin_top = 56.0
-margin_right = 164.0
-margin_bottom = 108.0
+margin_left = 104.0
+margin_top = 52.0
+margin_right = 152.0
+margin_bottom = 100.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button6" index="0"]
@@ -170,8 +170,8 @@ __meta__ = {
 }
 
 [node name="item_button7" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_top = 112.0
-margin_bottom = 164.0
+margin_top = 104.0
+margin_bottom = 152.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button7" index="0"]
@@ -186,10 +186,10 @@ __meta__ = {
 }
 
 [node name="item_button8" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 56.0
-margin_top = 112.0
-margin_right = 108.0
-margin_bottom = 164.0
+margin_left = 52.0
+margin_top = 104.0
+margin_right = 100.0
+margin_bottom = 152.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button8" index="0"]
@@ -204,10 +204,10 @@ __meta__ = {
 }
 
 [node name="item_button9" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 112.0
-margin_top = 112.0
-margin_right = 164.0
-margin_bottom = 164.0
+margin_left = 104.0
+margin_top = 104.0
+margin_right = 152.0
+margin_bottom = 152.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button9" index="0"]
@@ -222,8 +222,8 @@ __meta__ = {
 }
 
 [node name="item_button10" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_top = 168.0
-margin_bottom = 220.0
+margin_top = 156.0
+margin_bottom = 204.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button10" index="0"]
@@ -238,10 +238,10 @@ __meta__ = {
 }
 
 [node name="item_button11" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 56.0
-margin_top = 168.0
-margin_right = 108.0
-margin_bottom = 220.0
+margin_left = 52.0
+margin_top = 156.0
+margin_right = 100.0
+margin_bottom = 204.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button11" index="0"]
@@ -256,10 +256,10 @@ __meta__ = {
 }
 
 [node name="item_button12" parent="scroll_container/container/equip_items" instance=ExtResource( 3 )]
-margin_left = 112.0
-margin_top = 168.0
-margin_right = 164.0
-margin_bottom = 220.0
+margin_left = 104.0
+margin_top = 156.0
+margin_right = 152.0
+margin_bottom = 204.0
 focus_mode = 2
 
 [node name="name" parent="scroll_container/container/equip_items/item_button12" index="0"]
@@ -274,21 +274,21 @@ __meta__ = {
 }
 
 [node name="separator2" type="HSeparator" parent="scroll_container/container"]
-margin_top = 274.0
+margin_top = 258.0
 margin_right = 186.0
-margin_bottom = 278.0
+margin_bottom = 262.0
 
 [node name="consumable" type="Label" parent="scroll_container/container"]
-margin_top = 282.0
+margin_top = 266.0
 margin_right = 186.0
-margin_bottom = 298.0
+margin_bottom = 282.0
 custom_fonts/font = SubResource( 3 )
 text = "Consumable"
 
 [node name="consumable_items" type="GridContainer" parent="scroll_container/container"]
-margin_top = 302.0
+margin_top = 286.0
 margin_right = 186.0
-margin_bottom = 354.0
+margin_bottom = 334.0
 columns = 3
 
 [node name="item_button" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
@@ -312,8 +312,8 @@ __meta__ = {
 }
 
 [node name="item_button2" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
-margin_left = 56.0
-margin_right = 108.0
+margin_left = 104.0
+margin_right = 152.0
 focus_mode = 2
 
 [node name="sell_button" parent="scroll_container/container/consumable_items/item_button2" index="3"]

@@ -1,171 +1,336 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ui/team_selection/leader_select_menu_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/team_selection/team_selection_menu.gd" type="Script" id=3]
-[ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/ui/EquipmentProLabel.tres" type="DynamicFont" id=4]
+[ext_resource path="res://ui/resizable_frame.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/resizable_panel.tscn" type="PackedScene" id=7]
+
+[sub_resource type="ButtonGroup" id=10]
+
+[sub_resource type="ButtonGroup" id=9]
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 32, 32 )
 
-[node name="team_selection_menu" type="PanelContainer"]
+[node name="team_selection_menu" type="VBoxContainer"]
 pause_mode = 2
-margin_right = 460.0
-margin_bottom = 440.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -43.0
+margin_bottom = -110.0
 script = ExtResource( 3 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 453.0
-margin_bottom = 433.0
+[node name="resizable_frame" parent="." instance=ExtResource( 6 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 557.0
+margin_bottom = 536.0
 
-[node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 446.0
-margin_bottom = 18.0
-custom_fonts/font = ExtResource( 1 )
+[node name="HBoxContainer" parent="resizable_frame" index="0"]
+margin_right = 557.0
+
+[node name="TextureRect2" parent="resizable_frame/HBoxContainer" index="1"]
+margin_right = 545.0
+
+[node name="TextureRect3" parent="resizable_frame/HBoxContainer" index="2"]
+margin_left = 545.0
+margin_right = 557.0
+
+[node name="HBoxContainer2" parent="resizable_frame" index="1"]
+margin_right = 557.0
+margin_bottom = 524.0
+
+[node name="TextureRect" parent="resizable_frame/HBoxContainer2" index="0"]
+margin_bottom = 512.0
+
+[node name="resizable_panel" parent="resizable_frame/HBoxContainer2" index="1" instance=ExtResource( 7 )]
+margin_right = 545.0
+margin_bottom = 512.0
+
+[node name="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel" index="0"]
+margin_right = 533.0
+
+[node name="TextureRect2" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer" index="1"]
+margin_right = 501.0
+
+[node name="TextureRect3" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer" index="2"]
+margin_left = 501.0
+margin_right = 533.0
+
+[node name="HBoxContainer2" parent="resizable_frame/HBoxContainer2/resizable_panel" index="1"]
+margin_right = 533.0
+margin_bottom = 480.0
+
+[node name="TextureRect" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2" index="0"]
+margin_bottom = 448.0
+
+[node name="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2" index="1"]
+margin_right = 501.0
+margin_bottom = 448.0
+
+[node name="TextureRect2" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer" index="0"]
+margin_right = 469.0
+margin_bottom = 448.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer" index="1"]
+margin_right = 469.0
+margin_bottom = 448.0
+
+[node name="Label" type="Label" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer"]
+margin_right = 469.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 4 )
 text = "Team selection"
 align = 1
 valign = 1
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 22.0
-margin_right = 446.0
-margin_bottom = 26.0
+[node name="HBoxContainer2" type="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer"]
+margin_top = 32.0
+margin_right = 469.0
+margin_bottom = 68.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 30.0
-margin_right = 446.0
-margin_bottom = 362.0
+[node name="Label" type="Label" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer2"]
+margin_top = 4.0
+margin_right = 115.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 4 )
+text = "select map:"
+
+[node name="3_lane_checkbox" type="CheckBox" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 119.0
+margin_right = 212.0
+margin_bottom = 36.0
+custom_fonts/font = ExtResource( 4 )
+group = SubResource( 10 )
+text = "3-lane"
+
+[node name="1_lane_checkbox" type="CheckBox" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+margin_left = 216.0
+margin_right = 309.0
+margin_bottom = 36.0
+custom_fonts/font = ExtResource( 4 )
+pressed = true
+group = SubResource( 10 )
+text = "1-lane"
+
+[node name="HSeparator" type="HSeparator" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer"]
+margin_top = 72.0
+margin_right = 469.0
+margin_bottom = 76.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer"]
+margin_top = 80.0
+margin_right = 469.0
+margin_bottom = 410.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-margin_right = 217.0
-margin_bottom = 332.0
+[node name="VBoxContainer" type="VBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer"]
+margin_right = 228.0
+margin_bottom = 330.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_right = 217.0
-margin_bottom = 18.0
-custom_fonts/font = ExtResource( 1 )
+[node name="HBoxContainer" type="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 228.0
+margin_bottom = 28.0
+
+[node name="Label" type="Label" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+margin_right = 99.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0.0235294, 0, 0.698039, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/line_spacing = 0
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 4 )
 text = "team blue"
 align = 1
 valign = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 22.0
-margin_right = 217.0
-margin_bottom = 282.0
+[node name="blue_team_checkbox" type="CheckBox" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 103.0
+margin_right = 127.0
+margin_bottom = 28.0
+pressed = true
+group = SubResource( 9 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 32.0
+margin_right = 228.0
+margin_bottom = 292.0
 rect_min_size = Vector2( 0, 260 )
 
-[node name="blue_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
+[node name="blue_team_container" type="VBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 217.0
+margin_right = 228.0
 margin_bottom = 260.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 2
 
-[node name="leader_select_menu_panel" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
+[node name="leader_select_menu_panel" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 217.0
-margin_bottom = 50.0
+margin_right = 228.0
+margin_bottom = 46.0
 
-[node name="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel" index="0"]
-margin_right = 210.0
+[node name="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel" index="0"]
+margin_right = 223.0
+margin_bottom = 41.0
 
-[node name="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel/HBoxContainer" index="1"]
-margin_right = 203.0
+[node name="Label" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel/HBoxContainer" index="1"]
+margin_right = 218.0
+margin_bottom = 36.0
 
-[node name="add_leader_blue" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 286.0
-margin_right = 217.0
-margin_bottom = 332.0
+[node name="VBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel" index="1"]
+margin_right = 223.0
+
+[node name="Button" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel/VBoxContainer" index="0"]
+margin_left = 208.0
+margin_right = 218.0
+
+[node name="add_leader_blue" type="Button" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 296.0
+margin_right = 228.0
+margin_bottom = 330.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 1 )
-text = "add character"
+custom_fonts/font = ExtResource( 4 )
+text = "Add character"
 
-[node name="touch_button" type="TouchScreenButton" parent="VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue"]
+[node name="touch_button" type="TouchScreenButton" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue"]
 scale = Vector2( 3.4, 0.7 )
 shape = SubResource( 8 )
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
-margin_left = 221.0
-margin_right = 225.0
-margin_bottom = 332.0
+[node name="VSeparator" type="VSeparator" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer"]
+margin_left = 232.0
+margin_right = 236.0
+margin_bottom = 330.0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-margin_left = 229.0
-margin_right = 446.0
-margin_bottom = 332.0
+[node name="VBoxContainer2" type="VBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer"]
+margin_left = 240.0
+margin_right = 469.0
+margin_bottom = 330.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
-margin_right = 217.0
-margin_bottom = 18.0
-custom_fonts/font = ExtResource( 1 )
+[node name="HBoxContainer" type="HBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 229.0
+margin_bottom = 28.0
+
+[node name="Label" type="Label" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+margin_right = 93.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0.745098, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+custom_fonts/font = ExtResource( 4 )
 text = "team red"
 align = 1
 valign = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 22.0
-margin_right = 217.0
-margin_bottom = 282.0
+[node name="red_team_checkbox" type="CheckBox" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 97.0
+margin_right = 121.0
+margin_bottom = 28.0
+group = SubResource( 9 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 32.0
+margin_right = 229.0
+margin_bottom = 292.0
 rect_min_size = Vector2( 0, 260 )
 
-[node name="red_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
+[node name="red_team_container" type="VBoxContainer" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 217.0
+margin_right = 229.0
 margin_bottom = 260.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 2
 
-[node name="leader_select_menu_panel" parent="VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
+[node name="leader_select_menu_panel" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 217.0
-margin_bottom = 50.0
+margin_right = 229.0
+margin_bottom = 46.0
 
-[node name="add_leader_red" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
-margin_top = 286.0
-margin_right = 217.0
-margin_bottom = 332.0
+[node name="add_leader_red" type="Button" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+margin_top = 296.0
+margin_right = 229.0
+margin_bottom = 330.0
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 1 )
-text = "add character"
+custom_fonts/font = ExtResource( 4 )
+text = "Add character"
 
-[node name="touch_button" type="TouchScreenButton" parent="VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red"]
+[node name="touch_button" type="TouchScreenButton" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red"]
 scale = Vector2( 3.4, 0.7 )
 shape = SubResource( 8 )
 
-[node name="menu_button" parent="VBoxContainer" instance=ExtResource( 4 )]
-margin_top = 366.0
-margin_right = 446.0
-margin_bottom = 426.0
-text = "Play"
-icon = null
-value = "choose_leaders"
+[node name="start_game_button" type="Button" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer"]
+margin_top = 414.0
+margin_right = 469.0
+margin_bottom = 448.0
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+text = "Start game"
 
-[node name="name" parent="VBoxContainer/menu_button" index="0"]
-visible = false
+[node name="TextureRect3" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2" index="2"]
+margin_left = 501.0
+margin_right = 533.0
+margin_bottom = 448.0
 
-[node name="touch_button" parent="VBoxContainer/menu_button" index="1"]
-scale = Vector2( 7, 1 )
+[node name="HBoxContainer3" parent="resizable_frame/HBoxContainer2/resizable_panel" index="2"]
+margin_top = 480.0
+margin_right = 533.0
+margin_bottom = 512.0
 
-[node name="hint" parent="VBoxContainer/menu_button" index="2"]
-visible = false
+[node name="TextureRect2" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer3" index="1"]
+margin_right = 501.0
 
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue" to="." method="handle_add_leader_blue"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue/touch_button" to="." method="handle_add_leader_blue"]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red" to="." method="handle_add_leader_red"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red/touch_button" to="." method="handle_add_leader_red"]
+[node name="TextureRect3" parent="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer3" index="2"]
+margin_left = 501.0
+margin_right = 533.0
 
-[editable path="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel"]
-[editable path="VBoxContainer/menu_button"]
+[node name="TextureRect3" parent="resizable_frame/HBoxContainer2" index="2"]
+margin_left = 545.0
+margin_right = 557.0
+margin_bottom = 512.0
+
+[node name="HBoxContainer3" parent="resizable_frame" index="2"]
+margin_top = 524.0
+margin_right = 557.0
+margin_bottom = 536.0
+
+[node name="TextureRect2" parent="resizable_frame/HBoxContainer3" index="1"]
+margin_right = 545.0
+
+[node name="TextureRect3" parent="resizable_frame/HBoxContainer3" index="2"]
+margin_left = 545.0
+margin_right = 557.0
+
+[connection signal="button_down" from="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue" to="." method="handle_add_leader_blue"]
+[connection signal="pressed" from="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue/touch_button" to="." method="handle_add_leader_blue"]
+[connection signal="button_down" from="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red" to="." method="handle_add_leader_red"]
+[connection signal="pressed" from="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red/touch_button" to="." method="handle_add_leader_red"]
+[connection signal="pressed" from="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/start_game_button" to="." method="_on_start_game_button_pressed"]
+
+[editable path="resizable_frame"]
+[editable path="resizable_frame/HBoxContainer2/resizable_panel"]
+[editable path="resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_menu_panel"]
