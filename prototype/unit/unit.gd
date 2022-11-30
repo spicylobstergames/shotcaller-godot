@@ -326,6 +326,8 @@ func point_collision(point, offset=0):
 		print(point)
 		print('unit position')
 		print(unit1_pos)
+		print("path")
+		print(current_path)
 	return game.utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
 
 

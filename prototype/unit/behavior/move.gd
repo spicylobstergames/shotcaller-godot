@@ -32,6 +32,8 @@ func in_bounds(p):
 func move(unit, destiny):
 	if unit.moves and not unit.stunned:
 		unit.current_destiny = destiny
+		print('move destiny')
+		print(unit.current_destiny)
 		calc_step(unit)
 		unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
