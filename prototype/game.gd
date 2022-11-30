@@ -86,7 +86,7 @@ func map_loaded():
 		
 		maps.setup_buildings()
 		map.blocks.setup_quadtree()
-		#Engine.time_scale = 3
+		Engine.time_scale = 2
 		
 		rng.randomize()
 		maps.setup_lanes()

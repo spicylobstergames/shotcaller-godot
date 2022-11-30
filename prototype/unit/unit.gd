@@ -321,6 +321,11 @@ func cut_path(path):
 
 func point_collision(point, offset=0):
 	var unit1_pos = self.global_position + self.collision_position
+	if self.retreating:
+		print('point')
+		print(point)
+		print('unit position')
+		print(unit1_pos)
 	return game.utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
 
 

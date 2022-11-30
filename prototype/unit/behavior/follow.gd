@@ -118,8 +118,6 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		print("follow smart")
-		print(path)
 		var node:Behaviors = Behavior #hack, it comes back as that Behaviors is null if you array access it
 		node[cb].point(unit, next_point)
 

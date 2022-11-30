@@ -19,7 +19,6 @@ func setup_timer(unit):
 
 func point(unit, destiny):
 	if unit.moves and not unit.stunned and in_bounds(destiny):
-		print("hit")
 		move(unit, destiny)
 
 
@@ -36,9 +35,6 @@ func move(unit, destiny):
 		calc_step(unit)
 		unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
-		if(unit.type == "leader"):
-			print("leader move")
-			print(unit.position)
 
 
 func calc_step(unit):

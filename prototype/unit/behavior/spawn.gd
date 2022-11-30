@@ -129,7 +129,6 @@ func send_pawn(template, lane, team):
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
 	Behavior.orders.set_pawn(pawn)
-	#Behavior.follow.path(pawn, path.follow, "advance")
 
 
 
