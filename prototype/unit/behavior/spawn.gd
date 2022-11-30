@@ -8,6 +8,7 @@ var order_time = 8
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
 var hongi:PackedScene = load("res://leaders/hongi.tscn")
+var joan:PackedScene = load("res://leaders/joan.tscn")
 var lorne:PackedScene = load("res://leaders/lorne.tscn")
 var nagato:PackedScene = load("res://leaders/nagato.tscn")
 var osman:PackedScene = load("res://leaders/osman.tscn")
