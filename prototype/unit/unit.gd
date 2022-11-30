@@ -74,7 +74,6 @@ var attack_hit_radius = 24
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
-var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat
@@ -182,6 +181,8 @@ func reset_unit():
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
+	if(agent):
+		agent.reset()
 
 func set_state(s):
 	if not self.dead:
@@ -189,9 +190,6 @@ func set_state(s):
 		self.get_node("animations").current_animation = s
 
 
-func set_behavior(s):
-	self.behavior = s
-	#self.get_node("hud/state").text = s
 
 
 func setup_team(new_team):
@@ -470,7 +468,6 @@ func on_stun_end():
 
 func die():  # hp <= 0
 	self.set_state("death")
-	self.set_behavior("stand")
 	self.dead = true
 	self.target = null
 	self.channeling = false

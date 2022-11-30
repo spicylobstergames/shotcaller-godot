@@ -74,7 +74,6 @@ func leaders():
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
 			leader_node.origin = path.start
-			#send_leader(leader_node, path.follow)
 			counter += 1
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -83,9 +82,6 @@ func leaders():
 	game.ui.get_node("score_board").initialize(red_leaders, blue_leaders)
 
 
-func send_leader(leader, path):
-	yield(get_tree(), "idle_frame")
-	Behavior.follow.path(leader, path, "advance")
 
 
 func pawns():
@@ -123,7 +119,6 @@ func recycle(template, lane, team, point):
 		var unit = cemitery[index].pop_back()
 		unit = spawn_unit(unit, lane, team, "point_random", point)
 		unit.reset_unit()
-		unit.agent.reset()
 		return unit
 
 
@@ -149,7 +144,6 @@ func spawn_unit(unit, l, t, mode, point):
 		point = game.utils.random_point()
 	unit.global_position = point
 	unit.set_state("idle")
-	unit.set_behavior("stop")
 	return unit
 
 
@@ -186,4 +180,3 @@ func cemitery_add_leader(leader):
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)
 	leader.reset_unit()
-	Behavior.follow.path(leader, path, "advance")

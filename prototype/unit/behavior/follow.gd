@@ -113,26 +113,15 @@ func change_lane(unit, point):
 	Behavior.move.smart(unit, lane_start, "move")
 
 
-
-func lane(unit):
-	if !unit.current_path:
-		var lane = unit.lane
-		var path = game.map.lanes_paths[lane].duplicate()
-		if unit.team == "red": path.invert()
-		if unit.type != 'leader': 
-			path(unit, path, "advance")
-		else: smart(unit, path, "advance")
-
-
-
 func smart(unit, path, cb):
 	if path and path.size():
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
+		print("follow smart")
+		print(path)
 		var node:Behaviors = Behavior #hack, it comes back as that Behaviors is null if you array access it
 		node[cb].point(unit, next_point)
-
 
 
 func teleport(unit, point):

@@ -122,7 +122,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			if target.agent.has_action_function("ally_attacked"):
 				target.agent.get_current_action().ally_attacked(target, attacker)
 			
-		Behavior.orders.take_hit_retreat(attacker, target)
+		#Behavior.orders.take_hit_retreat(attacker, target)#Moveing to a retreat action
 		if target.hud: Hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
 		

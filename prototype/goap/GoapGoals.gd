@@ -7,6 +7,7 @@ var _goals = {
 	"AttackEnemyGoal": AttackEnemyGoal.new(),
 	"NeedLumberGoal": NeedLumberGoal.new(),
 	"NeedSafetyGoal": NeedSafetyGoal.new(),
+	"RetreatGoal": RetreatGoal.new(),
 	"SlayEnemiesGoal": SlayEnemiesGoal.new()
 }
 

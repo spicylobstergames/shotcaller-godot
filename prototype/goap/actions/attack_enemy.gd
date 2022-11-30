@@ -23,25 +23,23 @@ func get_effects() -> Dictionary:
 	}
 
 func perform(agent, delta) -> bool:
-	if agent.get_unit().target == null or agent.get_unit().target.dead:
-		agent.set_state("enemy_active", agent.get_unit().get_units_on_sight({"team": agent.get_unit().opponent_team()}).size() > 0)
+	var unit = agent.get_unit()
+	if unit.target == null or unit.target.dead:
+		agent.set_state("enemy_active", unit.get_units_on_sight({"team": unit.opponent_team()}).size() > 0)
 		return true
-	if not agent.get_unit().stunned:
-		if Behavior.attack.in_range(agent.get_unit(),agent.get_unit().target) and agent.get_unit().state != "attack":
-			#Behavior.move.stand(agent.get_unit())
-			Behavior.attack.point(agent.get_unit(),agent.get_unit().target.position)
-		#elif agent.get_unit().state != "moving":
-		#	move(agent.get_unit(), agent.get_unit().target.position, true)
-		pass
+	if not unit.stunned and (unit.state != "attack" or unit.state != "idle") and  Behavior.attack.in_range(unit, unit.target):# basically, is not already attacking (idle/attack) and is it in range
+		Behavior.attack.point(unit, unit.target.position)
+
 	return false
 
 func enter(agent):
-	var enemies = agent.get_unit().get_units_on_sight({"team": agent.get_unit().opponent_team()})
+	var unit = agent.get_unit()
+	var enemies = unit.get_units_on_sight({"team": unit.opponent_team()})
 	if(enemies.size() > 0):
-		agent.get_unit().target = agent.get_unit().closest_unit(enemies)
-		move(agent.get_unit(), agent.get_unit().target.position)
+		unit.target = unit.closest_unit(enemies)
+		move(unit, unit.target.position)
 	else :
-		print('wat')
+		print('Enemy died? Race condition')
 	
 
 func move(unit, objective):
@@ -51,7 +49,7 @@ func move(unit, objective):
 
 
 func on_collision(unit):
-	if unit.behavior == "advance" and unit.collide_target == unit.target:
+	if unit.collide_target == unit.target:
 		var target_position = unit.target.global_position + unit.target.collision_position
 		Behavior.attack.point(unit, target_position)
 
@@ -81,17 +79,13 @@ func ally_attacked(target, attacker):
 
 
 func stop(unit):
-	if unit.behavior == "advance":
-		unit.set_behavior("stop")
-		Behavior.move.stop(unit)
+	Behavior.move.stop(unit)
 
 
-func on_idle_end(unit):
-	pass
-	#point(unit, unit.global_position)
-
-
-func smart(unit, objective):
-	pass
-#	point(unit, objective, true)
+func on_idle_end(unit):		
+	if not unit.stunned:
+		if Behavior.attack.in_range(unit, unit.target):
+			Behavior.attack.point(unit,unit.target.position)
+		#elif unit.state != "moving":
+		#	move(unit, unit.target.position)
 					

@@ -70,6 +70,16 @@ _global_script_classes=[ {
 "path": "res://goap/goals/need_safety.gd"
 }, {
 "base": "GoapAction",
+"class": "RetreatAction",
+"language": "GDScript",
+"path": "res://goap/actions/retreat_action.gd"
+}, {
+"base": "GoapGoal",
+"class": "RetreatGoal",
+"language": "GDScript",
+"path": "res://goap/goals/retreat_goal.gd"
+}, {
+"base": "GoapAction",
 "class": "ReturnLumber",
 "language": "GDScript",
 "path": "res://goap/actions/return_lumber.gd"
@@ -102,6 +112,8 @@ _global_script_class_icons={
 "Hide": "",
 "NeedLumberGoal": "",
 "NeedSafetyGoal": "",
+"RetreatAction": "",
+"RetreatGoal": "",
 "ReturnLumber": "",
 "SlayEnemiesGoal": "",
 "Unit": "",

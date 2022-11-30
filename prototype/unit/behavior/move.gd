@@ -19,7 +19,7 @@ func setup_timer(unit):
 
 func point(unit, destiny):
 	if unit.moves and not unit.stunned and in_bounds(destiny):
-		unit.set_behavior("move")
+		print("hit")
 		move(unit, destiny)
 
 
@@ -36,7 +36,9 @@ func move(unit, destiny):
 		calc_step(unit)
 		unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
-	
+		if(unit.type == "leader"):
+			print("leader move")
+			print(unit.position)
 
 
 func calc_step(unit):
@@ -82,14 +84,13 @@ func on_collision(unit, delta):
 
 
 func resume(unit):
-	if unit.behavior == "move" and not unit.stunned:
+	if not unit.stunned:
 		move(unit, unit.current_destiny)
 
 
 func end(unit):
-	if unit.behavior == "move": 
-		if unit.retreating: unit.retreating = false
-		stand(unit)
+	if unit.retreating: unit.retreating = false
+	stand(unit)
 	
 
 func stop(unit):
@@ -102,7 +103,6 @@ func stop(unit):
 func stand(unit):
 	unit.current_path = []
 	stop(unit)
-	unit.set_behavior("stand")
 
 
 
