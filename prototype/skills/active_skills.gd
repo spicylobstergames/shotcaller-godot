@@ -129,7 +129,6 @@ var active_skills = {
 	"osman": [],
 	"takoda": [],
 	"arthur": [],
-	"lorne": [],
 	"bokuden": [
 		ActiveSkill.new(
 			"Battle Call",
@@ -138,6 +137,8 @@ var active_skills = {
 			[funcref(self, "bokuden_special")]
 		)
 	],
+	"joan": [],
+	"lorne": [],
 	"sida": [],
 	"tomyris": [],
 	"nagato": [],
