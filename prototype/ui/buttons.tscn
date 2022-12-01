@@ -39,9 +39,6 @@ margin = Rect2( 2, 2, 0, 0 )
 margin_left = -150.0
 margin_top = -150.0
 custom_styles/bg = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="controls_button" parent="." instance=ExtResource( 3 )]
 margin_left = 11.0
