@@ -83,7 +83,7 @@ func stop(unit):
 
 
 func on_idle_end(unit):		
-	if not unit.stunned:
+	if not unit.stunned and unit.target:
 		if Behavior.attack.in_range(unit, unit.target):
 			Behavior.attack.point(unit,unit.target.position)
 		#elif unit.state != "moving":

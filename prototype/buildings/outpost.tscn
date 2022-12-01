@@ -72,15 +72,6 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=28]
-radius = 16.0
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 45.0
-
-[sub_resource type="CircleShape2D" id=43]
-radius = 180.0
-
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -185,6 +176,15 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=28]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 45.0
+
+[sub_resource type="CircleShape2D" id=43]
+radius = 180.0
+
 [node name="outpost" instance=ExtResource( 1 )]
 hp = 2000
 regen = 10
@@ -202,7 +202,7 @@ defense = 15
 projectile_speed = 220.0
 lane = ""
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
 
 [node name="shadow" parent="sprites" index="0"]
@@ -240,6 +240,11 @@ scale = Vector2( 0.85, 1.00033 )
 frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -6 )
 shape = SubResource( 28 )
@@ -252,7 +257,4 @@ shape = SubResource( 29 )
 position = Vector2( 0, -20 )
 shape = SubResource( 43 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+[editable path="hud"]

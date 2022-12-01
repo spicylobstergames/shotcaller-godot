@@ -23,13 +23,13 @@ func get_effects() -> Dictionary:
 	}
 
 func perform(agent, delta) -> bool:
-	var unit = agent.get_unit()
+	var unit = agent.get_unit()	
+	if !Behavior.orders.should_retreat(unit) and unit.point_collision(unit.position,unit.game.map.half_tile_size):
+		agent.set_state("is_retreating", false)
+		agent.get_unit().retreating = false
+		return true
 	return not agent.get_state("is_retreating")
 
 func enter(agent):
 	Behavior.orders.retreat(agent.get_unit())
-
-func on_arrive(agent):
-	agent.get_unit().retreating = false
-	agent.set_state("is_retreating", false)
 				

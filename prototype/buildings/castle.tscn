@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/buildings/buildings_red.png" type="Texture" id=4]
 [ext_resource path="res://assets/buildings/buildings_blue.png" type="Texture" id=5]
 [ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture" id=6]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=7]
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 5 )
@@ -71,15 +72,6 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 } ]
-
-[sub_resource type="CircleShape2D" id=28]
-radius = 46.0
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 60.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 250.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -186,6 +178,15 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=28]
+radius = 46.0
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 60.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 250.0
+
 [node name="castle" instance=ExtResource( 1 )]
 hp = 2400
 regen = 10
@@ -201,7 +202,7 @@ damage = 80
 defense = 30
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 12, 0 )
 scale = Vector2( 24, 24 )
 
@@ -257,6 +258,11 @@ scale = Vector2( 0.85, 1 )
 frames = SubResource( 42 )
 offset = Vector2( 10, 0 )
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -30 )
 shape = SubResource( 28 )
@@ -269,7 +275,8 @@ shape = SubResource( 29 )
 position = Vector2( 0, -30 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+[node name="goals" type="Node" parent="." index="7"]
+script = ExtResource( 7 )
+goals = [ "SlayEnemiesGoal" ]
+
+[editable path="hud"]

@@ -74,8 +74,6 @@ func process(delta):
 				else: # larger collision destiny for auto movement (avoids fighting over point)
 					if unit1.point_collision(unit1.current_destiny, game.map.half_tile_size):
 						unit1.next_event = "arrive"
-			if unit1.retreating:
-				print(unit1.state)
 			# units1 > unit2 collision
 			
 			if (unit1.moves and unit1.state == "move" and unit1.next_event != "arrive"):
@@ -87,10 +85,6 @@ func process(delta):
 								unit1.next_event = "collision"
 								unit1.collide_target = unit2
 								break
-		if unit1.retreating:
-			print(unit1.state)
-			print(unit1.next_event)
-			print(unit1.next_event)
 		# move or collide or stop
 		match unit1.next_event:
 			"move": unit1.on_move(delta)
