@@ -20,6 +20,7 @@ func _ready():
 		ReturnLumber.new(),
 		AttackEnemy.new(),
 		RetreatAction.new(),
+		WaitOut.new(),
 		Hide.new()
 	])
 

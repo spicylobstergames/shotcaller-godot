@@ -19,17 +19,21 @@ func get_preconditions() -> Dictionary:
 
 func get_effects() -> Dictionary:
 	return {
-		"is_retreating": false,
+		"arrived_at_retreat": true
 	}
 
 func perform(agent, delta) -> bool:
 	var unit = agent.get_unit()	
-	if !Behavior.orders.should_retreat(unit) and unit.point_collision(unit.position,unit.game.map.half_tile_size):
+	if !Behavior.orders.should_retreat(unit):
 		agent.set_state("is_retreating", false)
 		agent.get_unit().retreating = false
 		return true
-	return not agent.get_state("is_retreating")
+	return agent.get_state("arrived_at_retreat")
 
 func enter(agent):
 	Behavior.orders.retreat(agent.get_unit())
+	agent.set_state("retreat_pos", agent.get_unit().current_destiny)
+
+func on_arrive(agent):
+	agent.set_state("arrived_at_retreat", true)
 				

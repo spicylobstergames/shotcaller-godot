@@ -67,6 +67,7 @@ func process(delta):
 
 		if(goal != null):
 			_current_goal = goal
+			if(_current_plan): _current_plan[_current_plan_step].exit(self)
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
 			_current_plan_step = 0
 			_current_plan[0].enter(self)#works!
@@ -105,6 +106,7 @@ func _follow_plan(plan, delta):
 		return
 
 	var is_step_complete = plan[_current_plan_step].perform(self, delta)
+	_unit.hud.state.text = get_current_action().get_class()
 	if is_step_complete:
 		get_current_action().exit(self) #untested
 		if _current_plan_step < plan.size() - 1:

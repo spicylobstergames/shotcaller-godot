@@ -24,13 +24,15 @@ func get_effects() -> Dictionary:
 
 func perform(agent, delta) -> bool:
 	var unit = agent.get_unit()
-	if unit.target == null or unit.target.dead:
-		agent.set_state("enemy_active", unit.get_units_on_sight({"team": unit.opponent_team()}).size() > 0)
+	if unit.target == null or unit.target.dead or not unit.point_collision(unit.target.position, unit.vision):
 		return true
 	if not unit.stunned and (unit.state != "attack" or unit.state != "idle") and  Behavior.attack.in_range(unit, unit.target):# basically, is not already attacking (idle/attack) and is it in range
 		Behavior.attack.point(unit, unit.target.position)
 
 	return false
+func exit(agent):
+	var unit = agent.get_unit()
+	agent.set_state("enemy_active", unit.get_units_on_sight({"team": unit.opponent_team()}).size() > 0)
 
 func enter(agent):
 	var unit = agent.get_unit()

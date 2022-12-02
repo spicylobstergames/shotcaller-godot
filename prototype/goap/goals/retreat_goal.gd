@@ -11,12 +11,17 @@ func is_valid(agent) -> bool:
 		return true
 	if Behavior.orders.should_retreat(unit):
 		agent.set_state("is_retreating", true)
+		agent.set_state("arrived_at_retreat", false)
 		return true
 	return false
 
 
+#after it reaches the retreat point, it will bit able to switch goals up to 10 tiles away, then the priority goes back to full
 func priority(agent) -> int:
-	return 100
+	if(agent.get_state("arrived_at_retreat") and agent.get_state("retreat_pos") and agent.get_unit().point_collision(agent.get_state("retreat_pos"), agent.get_unit().game.map.tile_size*2)): 
+		return 15
+	else:
+		return 100
 
 
 func get_desired_state(agent) -> Dictionary:
