@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/ui/frames/frame-h.png" type="Texture" id=7]
+[ext_resource path="res://assets/ui/frames/square-corner.png" type="Texture" id=8]
+[ext_resource path="res://assets/ui/frames/frame-v.png" type="Texture" id=10]
+
+[node name="resizable_frame" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 11.0
+margin_bottom = -220.0
+custom_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 611.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+margin_right = 12.0
+margin_bottom = 12.0
+texture = ExtResource( 8 )
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer"]
+margin_left = 12.0
+margin_right = 599.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+texture = ExtResource( 7 )
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer"]
+margin_left = 599.0
+margin_right = 611.0
+margin_bottom = 12.0
+texture = ExtResource( 8 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+margin_top = 12.0
+margin_right = 611.0
+margin_bottom = 368.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer2"]
+margin_right = 12.0
+margin_bottom = 356.0
+texture = ExtResource( 10 )
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer2"]
+margin_left = 12.0
+margin_right = 24.0
+margin_bottom = 356.0
+texture = ExtResource( 10 )
+stretch_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="."]
+margin_top = 368.0
+margin_right = 611.0
+margin_bottom = 380.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer3"]
+margin_right = 12.0
+margin_bottom = 12.0
+texture = ExtResource( 8 )
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer3"]
+margin_left = 12.0
+margin_right = 599.0
+margin_bottom = 12.0
+size_flags_horizontal = 3
+texture = ExtResource( 7 )
+stretch_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer3"]
+margin_left = 599.0
+margin_right = 611.0
+margin_bottom = 12.0
+texture = ExtResource( 8 )

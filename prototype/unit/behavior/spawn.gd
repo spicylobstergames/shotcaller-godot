@@ -2,13 +2,13 @@ extends Node
 var game:Node
 
 # self = Behavior.spawn
-var timer:Timer
 var order_time = 8
 
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
 var hongi:PackedScene = load("res://leaders/hongi.tscn")
+var joan:PackedScene = load("res://leaders/joan.tscn")
 var lorne:PackedScene = load("res://leaders/lorne.tscn")
 var nagato:PackedScene = load("res://leaders/nagato.tscn")
 var osman:PackedScene = load("res://leaders/osman.tscn")
@@ -38,14 +38,14 @@ var cemitery = {
 
 var team_random_list = {"red": [], "blue": []}
 
+onready var timer : Timer = $Timer
+
 func _ready():
 	game = get_tree().get_current_scene()
 	yield(get_tree(), "idle_frame")
 	
-	timer = Timer.new()
 	timer.one_shot = true
 	timer.wait_time = order_time
-	game.add_child(timer)
 
 func random_leader(team):
 	var team_list = team_random_list[team]

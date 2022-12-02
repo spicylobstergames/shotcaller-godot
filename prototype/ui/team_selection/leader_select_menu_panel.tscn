@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ui/team_selection/leader_select_menu_panel.gd" type="Script" id=2]
@@ -7,7 +7,19 @@
 [ext_resource path="res://ui/team_selection/leader_select_menu_button.gd" type="Script" id=5]
 [ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=6]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=7]
-[ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=8]
+[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=9]
+
+[sub_resource type="StyleBoxFlat" id=34]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 11
@@ -62,18 +74,47 @@ shader_param/tolerance = 0.1
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 32, 32 )
 
+[sub_resource type="DynamicFont" id=35]
+font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=32]
+size = 13
+extra_spacing_top = -3
+extra_spacing_bottom = -3
+extra_spacing_char = -3
+extra_spacing_space = -3
+font_data = ExtResource( 9 )
+
+[sub_resource type="StyleBoxFlat" id=33]
+content_margin_left = 2.0
+bg_color = Color( 0.74902, 0.207843, 0.207843, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+expand_margin_top = 1.0
+expand_margin_bottom = 1.0
+
 [node name="leader_select_menu_panel" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -384.0
 margin_bottom = -550.0
+custom_styles/panel = SubResource( 34 )
 script = ExtResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 209.0
-margin_bottom = 43.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 211.0
+margin_bottom = 45.0
 
 [node name="button" type="Button" parent="HBoxContainer"]
 margin_right = 36.0
@@ -106,15 +147,38 @@ shape = SubResource( 8 )
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 margin_left = 40.0
-margin_right = 202.0
-margin_bottom = 36.0
+margin_right = 206.0
+margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
-custom_fonts/font = ExtResource( 8 )
+custom_fonts/font = SubResource( 35 )
 text = "LEADER NAME"
 align = 1
 valign = 1
 
+[node name="VBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 211.0
+margin_bottom = 15.0
+size_flags_vertical = 0
+alignment = 2
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_left = 196.0
+margin_right = 206.0
+margin_bottom = 10.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_constants/hseparation = 0
+custom_fonts/font = SubResource( 32 )
+custom_styles/hover = SubResource( 33 )
+custom_styles/pressed = SubResource( 33 )
+custom_styles/focus = SubResource( 33 )
+custom_styles/disabled = SubResource( 33 )
+custom_styles/normal = SubResource( 33 )
+text = "X"
+
 [connection signal="button_down" from="HBoxContainer/button" to="HBoxContainer/button" method="_button_down"]
 [connection signal="select_leader" from="HBoxContainer/button" to="." method="_select_leader"]
 [connection signal="pressed" from="HBoxContainer/button/touch_button" to="HBoxContainer/button" method="_button_down"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_x_button_pressed"]

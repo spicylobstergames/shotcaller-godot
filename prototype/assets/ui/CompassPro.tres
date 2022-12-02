@@ -1,0 +1,9 @@
+[gd_resource type="DynamicFont" load_steps=2 format=2]
+
+[ext_resource path="res://assets/ui/CompassPro.ttf" type="DynamicFontData" id=1]
+
+[resource]
+size = 53
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )

@@ -15,16 +15,21 @@ const leader = {
 		"critical": 0.2,
 		"description": "20% chance to double damage"
 	},
-	"lorne": {
-		"respawn reduction": 0.8,
-		"defense": 5,
-		"description": "Ignores extra 5 damage on hits"
+	"joan": {
+		"bonus hp": 100,
+		"counter": 10,
+		"description": "Returns 10 damage on melee hits"
 	},
 	"hongi": {
 		"bonus hp": 100,
 		"counter": 10,
 		"description": "Returns 10 damage on melee hits"
-	}, 
+	},
+	"lorne": {
+		"respawn reduction": 0.8,
+		"defense": 5,
+		"description": "Ignores extra 5 damage on hits"
+	},
 	"nagato": {
 		"bonus_retreat_speed": 10,
 		"clones": 2,
