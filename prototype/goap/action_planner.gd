@@ -23,7 +23,7 @@ func set_actions(actions: Array):
 func get_plan(agent, goal: GoapGoal, blackboard = {}) -> Array:
 	#print("Goal: %s" % goal.get_class())
 	WorldState.console_message("Goal: %s" % goal.get_class())
-	var desired_state = goal.get_desired_state(agent).duplicate()
+	var desired_state = goal.get_desired_state(agent)
 
 	if desired_state.empty():	
 		return []
@@ -127,7 +127,7 @@ func _build_plans(step, blackboard):
 			# if it's not empty, _build_plans is called again (recursively) so
 			# it can try to find actions to satisfy this current state. In case
 			# it can't find anything, this action won't be included in the graph.
-			if desired_state.empty() or _build_plans(s, blackboard.duplicate()):
+			if desired_state.empty() or _build_plans(s, blackboard):
 				step.children.push_back(s)
 				has_followup = true
 
