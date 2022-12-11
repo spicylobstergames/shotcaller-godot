@@ -101,6 +101,17 @@ __meta__ = {
 [node name="leaders_icons" parent="mid_left" instance=ExtResource( 12 )]
 unique_name_in_owner = true
 
+[node name="CheatConsole" type="TextEdit" parent="mid_left"]
+pause_mode = 2
+visible = false
+margin_left = 3.0
+margin_top = -210.0
+margin_right = 130.0
+margin_bottom = -193.0
+context_menu_enabled = false
+shortcut_keys_enabled = false
+script = ExtResource( 19 )
+
 [node name="bot_left" type="Control" parent="."]
 visible = false
 anchor_top = 1.0
@@ -142,13 +153,3 @@ unique_name_in_owner = true
 pause_mode = 2
 visible = false
 mouse_filter = 1
-
-[node name="CheatConsole" type="TextEdit" parent="."]
-pause_mode = 2
-margin_left = 3.0
-margin_top = 90.0
-margin_right = 130.0
-margin_bottom = 107.0
-context_menu_enabled = false
-shortcut_keys_enabled = false
-script = ExtResource( 19 )
