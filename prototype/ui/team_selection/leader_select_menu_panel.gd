@@ -4,6 +4,7 @@ var leader:String = "random"
 var team:String = 'red'
 
 signal select_leader()
+# warning-ignore:unused_signal
 signal remove_leader()
 
 func prepare():
