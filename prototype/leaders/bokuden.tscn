@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/katana.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/bokuden_red.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/bokuden_blue.png" type="Texture" id=4]
+[ext_resource path="res://skills/abilites/critical_slash.tscn" type="PackedScene" id=5]
 
 [sub_resource type="AtlasTexture" id=41]
 atlas = ExtResource( 4 )
@@ -42,14 +43,6 @@ animations = [ {
 "name": "red",
 "speed": 5.0
 } ]
-
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -565,6 +558,14 @@ tracks/7/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
+
 [node name="bokuden" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
@@ -583,7 +584,7 @@ attack_speed = 1.2
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
@@ -613,6 +614,13 @@ offset = Vector2( -3, -16 )
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
 
@@ -623,9 +631,4 @@ shape = SubResource( 29 )
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
+[node name="critical_slash" parent="behavior/abilities" index="0" instance=ExtResource( 5 )]

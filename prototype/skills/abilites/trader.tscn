@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://skills/abilites/trader.gd" type="Script" id=1]
+[ext_resource path="res://assets/ui/abilities/aura_of_courage.png" type="Texture" id=2]
+[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=3]
 
 [node name="trader" type="Node"]
 script = ExtResource( 1 )
+icon = ExtResource( 2 )
+status_effect_icon = ExtResource( 3 )

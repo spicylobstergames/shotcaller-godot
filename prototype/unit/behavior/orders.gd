@@ -222,7 +222,7 @@ func conquer_building(unit):
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
-	if not unit.stunned and building:
+	if not unit.stunned and not unit.command_casting and building:
 		var hp = float(Behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
@@ -274,7 +274,8 @@ func pray_in_church(unit):
 	if (building and building.team == unit.team 
 			and building.display_name == "church" 
 			and building.channeling == false 
-			and not unit.stunned):
+			and not unit.stunned
+			and not unit.command_casting):
 		building.channeling = true
 		unit.channel_start(pray_time)
 		yield(unit.channeling_timer, "timeout")

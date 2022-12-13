@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/aura_of_courage.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/ui/abilities/aura_of_courage.png" type="Texture" id=5]
 [ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=6]
 [ext_resource path="res://weapons/excalibur.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/animations/side_smoke_2.png" type="Texture" id=8]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 3 )
@@ -46,13 +47,36 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=32]
+[sub_resource type="Animation" id=68]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/cleave:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
+}
 
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
+[sub_resource type="Animation" id=67]
+resource_name = "arthur_special_cleave"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/cleave:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6 ]
+}
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -520,6 +544,14 @@ tracks/6/keys = {
 "values": [ false ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
+
 [node name="arthur" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
@@ -537,7 +569,7 @@ damage = 80
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
@@ -561,11 +593,32 @@ offset = Vector2( 0, -2 )
 region_enabled = true
 region_rect = Rect2( 31, 0, 14, 14 )
 
-[node name="body" parent="sprites" index="1"]
+[node name="cleave" type="Sprite" parent="sprites" index="1"]
+visible = false
+texture = ExtResource( 8 )
+centered = false
+offset = Vector2( 0, -20 )
+flip_h = true
+hframes = 8
+frame = 1
+
+[node name="body" parent="sprites" index="2"]
+rotation = -0.0617879
+scale = Vector2( 1, 0.945904 )
 frames = SubResource( 36 )
 offset = Vector2( -2, -12 )
 
-[node name="weapon" parent="sprites" index="2" instance=ExtResource( 7 )]
+[node name="weapon" parent="sprites" index="3" instance=ExtResource( 7 )]
+visible = false
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/RESET = SubResource( 68 )
+anims/arthur_special_cleave = SubResource( 67 )
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
@@ -577,12 +630,8 @@ shape = SubResource( 29 )
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
+[node name="light" parent="." index="5"]
+position = Vector2( 7, -5 )
 
 [node name="aura_of_courage" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
 icon = ExtResource( 5 )
