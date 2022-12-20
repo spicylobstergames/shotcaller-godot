@@ -13,6 +13,7 @@ func _ready():
 	for container in [blue_team_container, red_team_container]:
 		for child in container.get_children():
 			container.remove_child(child)
+			child.queue_free()
 
 
 func handle_add_leader_blue():
