@@ -36,5 +36,6 @@ func perform(agent, delta) -> bool:
 func exit(agent):
     agent.set_state("is_retreating", false)
     agent.set_state("arrived_at_retreat", false)
+    agent.set_state("command_retreat", false)
     agent.get_unit().retreating = false
     print("exit")

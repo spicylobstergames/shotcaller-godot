@@ -35,6 +35,11 @@ func move_button_down():
 	else: game.control_state = "selection"
 	buttons_update(move_button)
 
+func retreat_button_down():
+	game.selected_unit.agent.set_state("command_retreat",true)
+	game.selected_unit.agent.set_state("is_retreating", true)
+	game.selected_unit.agent.set_state("arrived_at_retreat", false)
+
 
 func attack_button_down():
 	if attack_button.pressed: game.control_state = "advance"

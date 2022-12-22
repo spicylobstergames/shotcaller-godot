@@ -24,11 +24,13 @@ func get_effects() -> Dictionary:
 
 func perform(agent, delta) -> bool:
 	var unit = agent.get_unit()	
-	if !Behavior.orders.should_retreat(unit):
+	if Behavior.orders.should_retreat(unit) or agent.get_state("command_retreat") != null and agent.get_state("command_retreat") == true:
+		return agent.get_state("arrived_at_retreat")
+	else:
 		agent.set_state("is_retreating", false)
+		agent.set_state("command_retreat", false)
 		agent.get_unit().retreating = false
 		return true
-	return agent.get_state("arrived_at_retreat")
 
 func enter(agent):
 	Behavior.orders.retreat(agent.get_unit())

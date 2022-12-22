@@ -7,7 +7,7 @@ func get_class(): return "RetreatGoal"
 #initially checks for enemies being around and being an attacking unit. If it becomes true, its sets the agent state and refers to it going forward
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	if(agent.get_state("is_retreating")):
+	if(agent.get_state("is_retreating") || agent.get_state("command_retreat")):
 		return true
 	if Behavior.orders.should_retreat(unit):
 		agent.set_state("is_retreating", true)
@@ -20,6 +20,8 @@ func is_valid(agent) -> bool:
 func priority(agent) -> int:
 	if(agent.get_state("arrived_at_retreat") and agent.get_state("retreat_pos") and agent.get_unit().point_collision(agent.get_state("retreat_pos"), agent.get_unit().game.map.tile_size*2)): 
 		return 15
+	elif agent.get_state("command_retreat"):
+		return 1000
 	else:
 		return 100
 

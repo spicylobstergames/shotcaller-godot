@@ -161,6 +161,7 @@ func move(unit, point):
 		var order_point = order(unit, point)
 		Behavior.move.smart(unit, order_point, "move")
 
+
 func stand(unit):
 	if game.can_control(unit) and no_delay(unit):
 		order(unit, null)

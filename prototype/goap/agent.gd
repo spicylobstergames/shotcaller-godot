@@ -123,3 +123,18 @@ func on_every_second() :
 func on_arrive():
 	if(_current_plan != null):
 		get_current_action().on_arrive(self)
+
+func clear_commands():
+	for s in _state:
+		if("command_" in s):
+			_state.remove(s)
+
+func clear_orders():
+	for s in _state:
+		if("order_" in s):
+			_state.remove(s)
+
+func clear_tactics():
+	for s in _state:
+		if("tactics_" in s):
+			_state.remove(s)
