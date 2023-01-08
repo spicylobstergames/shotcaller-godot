@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://skills/abilites/critical_slash.gd" type="Script" id=1]
+[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=2]
+[ext_resource path="res://assets/ui/abilities/aura_of_courage.png" type="Texture" id=3]
+
+[node name="critical_slash" type="Node"]
+script = ExtResource( 1 )
+icon = ExtResource( 3 )
+status_effect_icon = ExtResource( 2 )

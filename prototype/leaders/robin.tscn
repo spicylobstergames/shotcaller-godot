@@ -44,14 +44,6 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 140.0
-
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.8
@@ -614,6 +606,14 @@ tracks/7/keys = {
 } ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 140.0
+
 [node name="robin" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
@@ -633,7 +633,7 @@ damage = 50
 defense = 5
 projectile_speed = 360.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
@@ -663,6 +663,13 @@ offset = Vector2( 0, -15 )
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 5 )]
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
 
@@ -671,12 +678,5 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
 
 [node name="mutlishot" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]

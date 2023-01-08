@@ -18,7 +18,7 @@ func setup_timer(unit):
 
 
 func point(unit, destiny):
-	if unit.moves and not unit.stunned and in_bounds(destiny):
+	if unit.moves and not unit.stunned and not unit.command_casting and in_bounds(destiny):
 		unit.set_behavior("move")
 		move(unit, destiny)
 
@@ -31,7 +31,7 @@ func in_bounds(p):
 
 
 func move(unit, destiny):
-	if unit.moves and not unit.stunned:
+	if unit.moves and not unit.stunned and not unit.command_casting:
 		unit.current_destiny = destiny
 		calc_step(unit)
 		unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "speed") / unit.speed
@@ -82,7 +82,7 @@ func on_collision(unit, delta):
 
 
 func resume(unit):
-	if unit.behavior == "move" and not unit.stunned:
+	if unit.behavior == "move" and not unit.stunned and not unit.command_casting:
 		move(unit, unit.current_destiny)
 
 
@@ -107,7 +107,7 @@ func stand(unit):
 
 
 func smart(unit, point, cb):
-	if not unit.stunned:
+	if not unit.stunned and not unit.command_casting:
 		var path = Behavior.follow.find_path(unit.global_position, point)
 		if path: Behavior.follow.path(unit, path, cb)
 

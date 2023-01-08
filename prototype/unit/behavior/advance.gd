@@ -13,7 +13,7 @@ func point(unit, objective, smart_move = false): # move_and_attack
 
 	if objective: unit.objective = objective
 	if (unit.attacks and Behavior.move.in_bounds(unit.objective) and
-			not unit.retreating and not unit.stunned and not unit.channeling):
+			not unit.retreating and not unit.stunned and not unit.channeling and not unit.command_casting):
 		unit.set_behavior("advance")
 		if smart_move:
 			var path = Behavior.follow.find_path(unit.global_position, unit.objective)

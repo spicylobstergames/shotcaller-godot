@@ -52,6 +52,7 @@ var collision_timer:Timer
 export var attacks:bool = false
 export var ranged:bool = false
 var stunned:bool = false
+var command_casting:bool = false
 export var damage:int = 0
 export var attack_range:float = 1
 export var attack_speed:float = 1
@@ -174,6 +175,7 @@ func reset_unit():
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
 	self.stunned = false
+	self.command_casting = false
 	self.hunting = false
 	self.channeling = false
 	self.retreating = false
@@ -449,6 +451,7 @@ func stun_start():
 	self.wait_time = 2
 	self.stunned = true
 	self.channeling = false
+	self.command_casting = false
 	self.set_state("stun")
 
 
