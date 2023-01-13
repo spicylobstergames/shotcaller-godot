@@ -21,7 +21,8 @@ func _ready():
 		AttackEnemy.new(),
 		RetreatAction.new(),
 		WaitOut.new(),
-		Hide.new()
+		Hide.new(),
+		AdvanceOnPosition.new()
 	])
 
 

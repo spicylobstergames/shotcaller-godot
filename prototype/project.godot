@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://goap/actions/advance_on_enemy.gd"
 }, {
 "base": "GoapAction",
+"class": "AdvanceOnPosition",
+"language": "GDScript",
+"path": "res://goap/actions/advance_on_position.gd"
+}, {
+"base": "GoapAction",
 "class": "AttackEnemy",
 "language": "GDScript",
 "path": "res://goap/actions/attack_enemy.gd"
@@ -28,6 +33,16 @@ _global_script_classes=[ {
 "class": "Behaviors",
 "language": "GDScript",
 "path": "res://unit/behavior.gd"
+}, {
+"base": "GoapGoal",
+"class": "CommandAttackEnemyGoal",
+"language": "GDScript",
+"path": "res://goap/goals/command_attack_enemy.gd"
+}, {
+"base": "GoapGoal",
+"class": "CommandAttackGoal",
+"language": "GDScript",
+"path": "res://goap/goals/command_attack.gd"
 }, {
 "base": "GoapAction",
 "class": "GetLumber",
@@ -106,9 +121,12 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AdvanceOnEnemy": "",
+"AdvanceOnPosition": "",
 "AttackEnemy": "",
 "AttackEnemyGoal": "",
 "Behaviors": "",
+"CommandAttackEnemyGoal": "",
+"CommandAttackGoal": "",
 "GetLumber": "",
 "GoapAction": "",
 "GoapActionPlanner": "",

@@ -130,20 +130,35 @@ func get_sel_unit_at_point(point):
 		if game.utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
 
+func get_unit_at_point(point):
+	for unit in game.all_units:
+		var select_rad =  unit.selection_radius
+		var select_pos = unit.global_position + unit.selection_position
+		if game.utils.circle_point_collision(point, select_pos, select_rad):
+			return unit
 func no_delay(unit):
 	return unit.curr_control_delay <= 0 
 
-
+#depricated
 func advance(unit, point):
-	if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
-		var order_point = order(unit, point)
-		if unit.agent.has_action_function("smart"): unit.agent.get_current_action().smart(unit, order_point)
+	attack(unit,point)
+	return
+	
+	#if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
+	#	var order_point = order(unit, point)
+	#	if unit.agent.has_action_function("smart"): unit.agent.get_current_action().smart(unit, order_point)
 
 
 func attack(unit, point):
 	if unit.attacks and game.can_control(unit) and no_delay(unit):
-		var order_point = order(unit, point)
-		Behavior.attack.point(unit, order_point)
+		unit.agent.clear_commands()
+		var target = get_unit_at_point(point)
+		if(target != null):
+			unit.agent.set_state("command_target_enemy", target)
+		else:
+			unit.agent.set_state("command_target_attack_pos", point)
+		#var order_point = order(unit, point)
+		#Behavior.attack.point(unit, order_point)
 
 
 func teleport(unit, point):

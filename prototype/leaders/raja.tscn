@@ -584,6 +584,6 @@ shape = SubResource( 27 )
 
 [node name="goals" type="Node" parent="." index="7"]
 script = ExtResource( 5 )
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal" ]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

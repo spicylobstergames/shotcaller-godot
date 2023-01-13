@@ -113,6 +113,7 @@ func _follow_plan(plan, delta):
 			_current_plan_step += 1
 			get_current_action().enter(self)
 		else:
+			#clear_commands()
 			_current_goal = null #trigger replan
 			_current_plan = null
 
@@ -127,7 +128,9 @@ func on_arrive():
 func clear_commands():
 	for s in _state:
 		if("command_" in s):
-			_state.remove(s)
+			print("erased")
+			print(s)
+			_state.erase(s)
 
 func clear_orders():
 	for s in _state:

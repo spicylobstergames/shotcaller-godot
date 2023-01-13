@@ -20,11 +20,13 @@ func get_preconditions() -> Dictionary:
 func get_effects() -> Dictionary:
 	return {
 		"enemy_active": false,
+		"command_target_enemy": null,
 	}
 
 func perform(agent, delta) -> bool:
 	var unit = agent.get_unit()
-	if unit.target == null or unit.target.dead or not unit.point_collision(unit.target.position, unit.vision):
+	if unit.target == null or unit.target.dead or not unit.point_collision(unit.target.position, unit.vision):     
+		agent.clear_commands()                   
 		return true
 	if not unit.stunned and (unit.state != "attack" or unit.state != "idle") and  Behavior.attack.in_range(unit, unit.target):# basically, is not already attacking (idle/attack) and is it in range
 		Behavior.attack.point(unit, unit.target.position)
@@ -36,6 +38,11 @@ func exit(agent):
 
 func enter(agent):
 	var unit = agent.get_unit()
+	if agent.get_state("command_target_enemy") != null:
+		unit.target = agent.get_state("command_target_enemy")
+		move(unit, unit.target.position)
+		return
+
 	var enemies = unit.get_units_on_sight({"team": unit.opponent_team()})
 	if(enemies.size() > 0):
 		unit.target = unit.closest_unit(enemies)
