@@ -69,7 +69,6 @@ func setup_buildings():
 			building.reset_unit()
 			game.ui.minimap.setup_symbol(building)
 			building.set_state("idle")
-			building.set_behavior("stop")
 			game.selection.setup_selection(building)
 			game.collision.setup(building)
 			if building.team == game.player_team:

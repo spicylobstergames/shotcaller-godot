@@ -6,7 +6,11 @@ extends Node
 var _goals = {
 	"AttackEnemyGoal": AttackEnemyGoal.new(),
 	"NeedLumberGoal": NeedLumberGoal.new(),
-	"NeedSafetyGoal": NeedSafetyGoal.new()
+	"NeedSafetyGoal": NeedSafetyGoal.new(),
+	"RetreatGoal": RetreatGoal.new(),
+	"SlayEnemiesGoal": SlayEnemiesGoal.new(),
+	"CommandAttackEnemyGoal": CommandAttackEnemyGoal.new(),
+	"CommandAttackGoal": CommandAttackGoal.new()
 }
 
 func get_goal(goal_name, default = null):

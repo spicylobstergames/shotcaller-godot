@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://goap/actions/advance_on_enemy.gd"
 }, {
+"base": "GoapAction",
+"class": "AdvanceOnPosition",
+"language": "GDScript",
+"path": "res://goap/actions/advance_on_position.gd"
+}, {
+"base": "GoapAction",
+"class": "AttackEnemy",
+"language": "GDScript",
+"path": "res://goap/actions/attack_enemy.gd"
+}, {
 "base": "GoapGoal",
 "class": "AttackEnemyGoal",
 "language": "GDScript",
@@ -23,6 +33,16 @@ _global_script_classes=[ {
 "class": "Behaviors",
 "language": "GDScript",
 "path": "res://unit/behavior.gd"
+}, {
+"base": "GoapGoal",
+"class": "CommandAttackEnemyGoal",
+"language": "GDScript",
+"path": "res://goap/goals/command_attack_enemy.gd"
+}, {
+"base": "GoapGoal",
+"class": "CommandAttackGoal",
+"language": "GDScript",
+"path": "res://goap/goals/command_attack.gd"
 }, {
 "base": "GoapAction",
 "class": "GetLumber",
@@ -65,14 +85,34 @@ _global_script_classes=[ {
 "path": "res://goap/goals/need_safety.gd"
 }, {
 "base": "GoapAction",
+"class": "RetreatAction",
+"language": "GDScript",
+"path": "res://goap/actions/retreat_action.gd"
+}, {
+"base": "GoapGoal",
+"class": "RetreatGoal",
+"language": "GDScript",
+"path": "res://goap/goals/retreat_goal.gd"
+}, {
+"base": "GoapAction",
 "class": "ReturnLumber",
 "language": "GDScript",
 "path": "res://goap/actions/return_lumber.gd"
+}, {
+"base": "GoapGoal",
+"class": "SlayEnemiesGoal",
+"language": "GDScript",
+"path": "res://goap/goals/slay_enemies.gd"
 }, {
 "base": "Node",
 "class": "Unit",
 "language": "GDScript",
 "path": "res://unit/unit.gd"
+}, {
+"base": "GoapAction",
+"class": "WaitOut",
+"language": "GDScript",
+"path": "res://goap/actions/wait_out.gd"
 }, {
 "base": "YSort",
 "class": "base_map",
@@ -81,8 +121,12 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AdvanceOnEnemy": "",
+"AdvanceOnPosition": "",
+"AttackEnemy": "",
 "AttackEnemyGoal": "",
 "Behaviors": "",
+"CommandAttackEnemyGoal": "",
+"CommandAttackGoal": "",
 "GetLumber": "",
 "GoapAction": "",
 "GoapActionPlanner": "",
@@ -91,8 +135,12 @@ _global_script_class_icons={
 "Hide": "",
 "NeedLumberGoal": "",
 "NeedSafetyGoal": "",
+"RetreatAction": "",
+"RetreatGoal": "",
 "ReturnLumber": "",
+"SlayEnemiesGoal": "",
 "Unit": "",
+"WaitOut": "",
 "base_map": ""
 }
 
@@ -112,10 +160,10 @@ autoload="*res://autoload/autoload.gd"
 EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
 Behavior="*res://unit/behavior.tscn"
-Hud="*res://unit/hud.tscn"
 WorldState="*res://world/world_state.gd"
 Goap="*res://goap/goap.gd"
 GoapGoals="*res://goap/GoapGoals.gd"
+Hud="*res://unit/hud.tscn"
 
 [debug]
 

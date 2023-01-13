@@ -16,6 +16,7 @@ func get_effects() -> Dictionary:
 	return {"is_threatened": false}
 func exit(agent):
 		agent.get_unit().visible = true
+		agent.set_state("is_threatened", false)
 		pass
 
 func perform(agent, delta) -> bool:
@@ -28,7 +29,6 @@ func perform(agent, delta) -> bool:
 		if not agent.get_unit().visible and not is_scared:
 				agent.set_state("is_safe", agent.get_state("is_safe")+1)
 		if(not agent.get_unit().visible and agent.get_state("is_safe") > 200):
-				agent.set_state("is_threatened", false)
 				return true
 		return false
 

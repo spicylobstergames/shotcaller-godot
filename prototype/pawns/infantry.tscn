@@ -4,14 +4,6 @@
 [ext_resource path="res://weapons/sword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://goap/unitgoals.gd" type="Script" id=3]
 
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
-
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -478,6 +470,14 @@ tracks/6/keys = {
 "values": [ false ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
+
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
 regen = 1
@@ -494,7 +494,7 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
 scale = Vector2( 10, 10 )
 
@@ -502,12 +502,21 @@ scale = Vector2( 10, 10 )
 position = Vector2( 0.3, 0.3 )
 scale = Vector2( 1.6, 1.6 )
 
+[node name="body" parent="sprites" index="1"]
+frame = 2
+
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
-rotation = -0.674907
 animation = "default"
 
 [node name="stuck" parent="sprites" index="3"]
 visible = false
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
@@ -519,13 +528,8 @@ shape = SubResource( 29 )
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
-
 [node name="goals" type="Node" parent="." index="6"]
 script = ExtResource( 3 )
-goals = [ "AttackEnemyGoal" ]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
+
+[editable path="hud"]

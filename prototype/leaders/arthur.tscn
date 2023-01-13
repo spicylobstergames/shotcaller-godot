@@ -620,6 +620,13 @@ anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
 
@@ -637,3 +644,9 @@ position = Vector2( 7, -5 )
 icon = ExtResource( 5 )
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource( 6 )
+
+[node name="goals" type="Node" parent="." index="7"]
+script = ExtResource( 8 )
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
+
+[editable path="hud"]

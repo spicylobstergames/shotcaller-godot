@@ -26,7 +26,8 @@ func point(unit, point):
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 			
-		else: Behavior.advance.resume(unit)
+		elif "resume" in unit.agent.get_current_action(): 
+			unit.agent.get_current_action().resume(unit)
 
 
 func set_target(unit, target):
@@ -56,10 +57,12 @@ func closest_enemy_unit(unit, enemies):
 func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
 	var att_rad = unit1.attack_hit_radius
+	var did_hit = false;
 	
 	# hit target
 	if can_hit(unit1, unit1.target) and in_range(unit1, unit1.target):
 		take_hit(unit1, unit1.target)
+		did_hit = true
 	
 	# melee cleave damage
 	if unit1.display_name in Behavior.skills.leader:
@@ -69,6 +72,7 @@ func hit(unit1):
 			for unit2 in neighbors:
 				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})
+	return did_hit
 
 
 func can_hit(attacker, target):
@@ -113,10 +117,12 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				target.assist_candidates[attacker] = OS.get_ticks_msec()
 			
 		if not modifiers.counter:
-			Behavior.advance.react(target, attacker)
-			Behavior.advance.ally_attacked(target, attacker)
+			if target.agent.has_action_function("react"):
+				target.agent.get_current_action().react(target, attacker)
+			if target.agent.has_action_function("ally_attacked"):
+				target.agent.get_current_action().ally_attacked(target, attacker)
 			
-		Behavior.orders.take_hit_retreat(attacker, target)
+		#Behavior.orders.take_hit_retreat(attacker, target)#Moveing to a retreat action
 		if target.hud: Hud.update_hpbar(target)
 		if target == game.selected_unit: game.ui.stats.update()
 		
@@ -145,7 +151,8 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
 			Behavior.attack.set_target(attacker, null)
-			Behavior.advance.resume(attacker)
+			if attacker.agent.has_action_function("resume"):
+				attacker.agent.get_current_action().resume(attacker)
 
 
 

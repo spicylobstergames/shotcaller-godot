@@ -72,7 +72,7 @@ func in_limits(p):
 func path(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
-		unit.current_path = path
+		unit.current_path = path# I don't think this is needed
 		var node:Behaviors = Behavior #hack
 		node[cb].point(unit, next_point)
 
@@ -113,18 +113,6 @@ func change_lane(unit, point):
 	Behavior.move.smart(unit, lane_start, "move")
 
 
-
-func lane(unit):
-	if !unit.current_path:
-		var lane = unit.lane
-		var path = game.map.lanes_paths[lane].duplicate()
-		if unit.team == "red": path.invert()
-		if unit.type != 'leader': 
-			path(unit, path, "advance")
-		else: smart(unit, path, "advance")
-
-
-
 func smart(unit, path, cb):
 	if path and path.size():
 		var new_path = unit.cut_path(path)
@@ -132,7 +120,6 @@ func smart(unit, path, cb):
 		unit.current_path = new_path
 		var node:Behaviors = Behavior #hack, it comes back as that Behaviors is null if you array access it
 		node[cb].point(unit, next_point)
-
 
 
 func teleport(unit, point):

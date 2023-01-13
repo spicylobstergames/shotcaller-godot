@@ -18,10 +18,8 @@ func setup_timer(unit):
 
 
 func point(unit, destiny):
-	if unit.moves and not unit.stunned and not unit.command_casting and in_bounds(destiny):
-		unit.set_behavior("move")
+	if unit.moves and not unit.stunned and in_bounds(destiny):
 		move(unit, destiny)
-
 
 
 func in_bounds(p):
@@ -33,10 +31,11 @@ func in_bounds(p):
 func move(unit, destiny):
 	if unit.moves and not unit.stunned and not unit.command_casting:
 		unit.current_destiny = destiny
+		if(destiny == Vector2.ZERO):
+			print('NO!')
 		calc_step(unit)
 		unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
-	
 
 
 func calc_step(unit):
@@ -48,7 +47,8 @@ func calc_step(unit):
 		unit.look_at(unit.current_destiny)
 
 
-func step(unit, delta):
+
+func step(unit, delta):	
 	unit.global_position += unit.current_step * delta
 
 
@@ -77,19 +77,21 @@ func on_collision(unit, delta):
 			unit.collision_timer.stop() # first stops previous timers
 		unit.collision_timer.wait_time = 0.1 + randf() * 0.2
 		unit.collision_timer.start()
+		
 		yield(unit.collision_timer, "timeout")
-		move(unit, unit.current_destiny)
+		#current_destiny does have the potential to change in the time between
+		move(unit, unit.current_destiny)		
+
 
 
 func resume(unit):
-	if unit.behavior == "move" and not unit.stunned and not unit.command_casting:
+	if not unit.stunned:
 		move(unit, unit.current_destiny)
 
 
 func end(unit):
-	if unit.behavior == "move": 
-		if unit.retreating: unit.retreating = false
-		stand(unit)
+	if unit.retreating: unit.retreating = false
+	stand(unit)
 	
 
 func stop(unit):
@@ -97,12 +99,13 @@ func stop(unit):
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
 	unit.get_node("animations").playback_speed = 1
+	if unit.collision_timer and unit.collision_timer.time_left > 0: 
+		unit.collision_timer.stop() # first stops previous timers
 
 
 func stand(unit):
 	unit.current_path = []
 	stop(unit)
-	unit.set_behavior("stand")
 
 
 

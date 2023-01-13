@@ -27,7 +27,6 @@ func spawn_unit():
 		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(940,900))
 		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
 		var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(1020,650))
-		dummy.set_behavior("stand")
 		dummy.hp = 10000
 		dummy.current_hp = 10000
 		#game.maps.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
@@ -57,7 +56,7 @@ func unit_wait_end(unit1):
 	if stress:
 		var o = game.map.size
 		var d = Vector2(randf()*o,randf()*o)
-		if unit1.moves: Behavior.advance.point(unit1, d)
+		if unit1.agent.has_action_function("point"): unit1.agent.get_current_action().point(unit1, d)
 
 
 func respawn(unit1):

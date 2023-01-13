@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/poleaxe.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/lorne_blue.png" type="Texture" id=3]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=4]
 [ext_resource path="res://assets/leaders/lorne_red.png" type="Texture" id=5]
 
 [sub_resource type="AtlasTexture" id=48]
@@ -66,15 +67,6 @@ animations = [ {
 "name": "red",
 "speed": 5.0
 } ]
-
-[sub_resource type="CircleShape2D" id=46]
-radius = 14.0
-
-[sub_resource type="CircleShape2D" id=47]
-radius = 28.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 25.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -542,6 +534,15 @@ tracks/6/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=46]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id=47]
+radius = 28.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 25.0
+
 [node name="lorne" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
@@ -562,7 +563,7 @@ attack_speed = 0.8
 defense = 10
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
@@ -597,6 +598,13 @@ offset = Vector2( 4, -22 )
 visible = false
 rotation = 0.964946
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )
 shape = SubResource( 46 )
@@ -609,9 +617,8 @@ shape = SubResource( 47 )
 position = Vector2( 3, -10 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
+[node name="goals" type="Node" parent="." index="7"]
+script = ExtResource( 4 )
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
+
+[editable path="hud"]

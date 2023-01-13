@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/archer_red.png" type="Texture" id=2]
@@ -43,14 +43,6 @@ animations = [ {
 "name": "red",
 "speed": 5.0
 } ]
-
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 140.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -614,6 +606,14 @@ tracks/7/keys = {
 } ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 140.0
+
 [node name="archer" instance=ExtResource( 1 )]
 hp = 160
 regen = 1
@@ -632,7 +632,7 @@ damage = 40
 defense = 2
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
 scale = Vector2( 10, 10 )
 
@@ -649,6 +649,13 @@ visible = false
 
 [node name="weapon" parent="sprites" index="3" instance=ExtResource( 3 )]
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
 
@@ -658,12 +665,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
 [node name="goals" type="Node" parent="." index="6"]
 script = ExtResource( 5 )
-goals = [ "AttackEnemyGoal" ]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
+
+[editable path="hud"]

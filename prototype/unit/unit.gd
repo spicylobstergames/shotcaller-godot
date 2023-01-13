@@ -75,7 +75,6 @@ var attack_hit_radius = 24
 export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
-var behavior:String = "stand" # "move", "attack", "advance", "stop"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat
@@ -184,6 +183,8 @@ func reset_unit():
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
+	if(agent):
+		agent.reset()
 
 func set_state(s):
 	if not self.dead:
@@ -191,9 +192,6 @@ func set_state(s):
 		self.get_node("animations").current_animation = s
 
 
-func set_behavior(s):
-	self.behavior = s
-	#self.get_node("hud/state").text = s
 
 
 func setup_team(new_team):
@@ -242,7 +240,7 @@ func set_anim(new_team, sprite):
 			"neutral": sprite.animation = 'neutral'
 
 
-func oponent_team():
+func opponent_team():
 	match self.team:
 		"red": return "blue"
 		"blue": return "red"
@@ -380,7 +378,8 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	Behavior.advance.on_idle_end(self)
+	if self.agent.has_action_function("on_idle_end"):
+		self.agent.get_current_action().on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 
@@ -392,24 +391,28 @@ func on_move(delta): # every frame if there's no collision
 func on_collision(delta):
 	if self.moves:
 		Behavior.move.on_collision(self, delta)
-		if self.attacks:
-			Behavior.advance.on_collision(self)
+	if self.agent.has_action_function("on_collision"):
+		self.agent.get_current_action().on_collision(self)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves and self.attacks: Behavior.advance.resume(self)
+	if self.moves and self.attacks: 
+		if self.agent.has_action_function("resume"):
+			self.agent.get_current_action().resume(self)
 	if self == game.selected_unit: Behavior.follow.draw_path(self)
 
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		Behavior.follow.next(self)
+		if agent.has_action_function("point"):
+			agent.get_current_action().point(self, current_path.pop_front())
 	elif self.moves:
 		self.working = false
 		Behavior.move.end(self)
 
-		if self.attacks: Behavior.advance.end(self)
+		if self.agent.has_action_function("end"):
+			self.agent.get_current_action().end(self)
 		if agent != null: 
 			agent.on_arrive()
 		
@@ -421,14 +424,16 @@ func on_arrive(): # when collides with destiny
 
 func on_attack_release(): # every ranged projectile start
 	Behavior.attack.projectile_release(self)
-	Behavior.advance.resume(self)
+	if self.agent.has_action_function("resume"):
+		self.agent.get_current_action().resume(self)
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
 		Behavior.attack.hit(self)
 		if self.moves:
-			Behavior.advance.resume(self)
+			if self.agent.has_action_function("resume"):
+				self.agent.get_current_action().resume(self)
 
 
 func heal(heal_hp):
@@ -459,18 +464,13 @@ func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
 		self.stunned = false
-		if self.behavior == "move":
-			Behavior.move.resume(self)
-		if self.behavior == "advance":
-			Behavior.advance.resume(self)
-		if self.behavior == "stand" or self.behavior == "stop":
-			self.set_state("idle")
+		if self.agent.has_action_function("resume"):
+			self.agent.get_current_action().resume(self)
 
 
 
 func die():  # hp <= 0
 	self.set_state("death")
-	self.set_behavior("stand")
 	self.dead = true
 	self.target = null
 	self.channeling = false

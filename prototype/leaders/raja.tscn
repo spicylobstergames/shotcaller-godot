@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/curved_sword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/raja_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/raja_red.png" type="Texture" id=4]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=5]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 3 )
@@ -42,14 +43,6 @@ animations = [ {
 "name": "red",
 "speed": 5.0
 } ]
-
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -517,6 +510,14 @@ tracks/6/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
+
 [node name="raja" instance=ExtResource( 1 )]
 hp = 400
 regen = 2
@@ -534,7 +535,7 @@ damage = 60
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
 scale = Vector2( 10, 10 )
 
@@ -564,6 +565,13 @@ offset = Vector2( 2, -15 )
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 visible = false
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
 
@@ -574,9 +582,8 @@ shape = SubResource( 29 )
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
+[node name="goals" type="Node" parent="." index="7"]
+script = ExtResource( 5 )
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
+
+[editable path="hud"]

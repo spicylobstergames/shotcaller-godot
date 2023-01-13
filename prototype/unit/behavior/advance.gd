@@ -7,7 +7,6 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-
 func point(unit, objective, smart_move = false): # move_and_attack
 	Behavior.attack.set_target(unit, null)
 

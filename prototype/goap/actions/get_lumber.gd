@@ -7,7 +7,7 @@ func get_class(): return "GetLumber"
 
 const cut_time = 6
 
-func is_valid() -> bool:
+func is_valid(blackboard) -> bool:
 	return WorldState.get_state("is_game_active")
 
 

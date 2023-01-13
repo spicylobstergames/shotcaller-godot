@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/pawns/mounted_red.png" type="Texture" id=2]
@@ -44,15 +44,6 @@ animations = [ {
 "name": "red",
 "speed": 5.0
 } ]
-
-[sub_resource type="CircleShape2D" id=46]
-radius = 14.0
-
-[sub_resource type="CircleShape2D" id=47]
-radius = 28.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 25.0
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -520,6 +511,15 @@ tracks/6/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=46]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id=47]
+radius = 28.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 25.0
+
 [node name="mounted" instance=ExtResource( 1 )]
 hp = 250
 regen = 1
@@ -538,7 +538,7 @@ attack_speed = 0.6
 defense = 8
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 6, 3 )
 scale = Vector2( 12, 12 )
 
@@ -567,6 +567,13 @@ visible = false
 [node name="stuck" parent="sprites" index="4"]
 visible = false
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
+
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -10 )
 shape = SubResource( 46 )
@@ -579,12 +586,8 @@ shape = SubResource( 47 )
 position = Vector2( 3, -10 )
 shape = SubResource( 27 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
-[node name="goals" type="Node" parent="." index="6"]
+[node name="goals" type="Node" parent="." index="7"]
 script = ExtResource( 7 )
-goals = [ "AttackEnemyGoal" ]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
+
+[editable path="hud"]

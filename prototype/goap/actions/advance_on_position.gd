@@ -1,12 +1,12 @@
 extends GoapAction
 
-class_name AdvanceOnEnemy
+class_name AdvanceOnPosition
 
-func get_class(): return "AdvanceOnEnemy"
+func get_class(): return "AdvanceOnPosition"
 
 
 func is_valid(blackboard) -> bool:
-	return WorldState.get_state("is_game_active")
+	return true
 
 
 func get_cost(blackboard) -> int:
@@ -19,19 +19,14 @@ func get_preconditions() -> Dictionary:
 
 func get_effects() -> Dictionary:
 	return {
-		"is_game_active": false,
+		"arrived_at_target": true
 	}
 
 func perform(agent, delta) -> bool:
-	return false
+	return agent.get_state("arrived_at_target") != null and agent.get_state("arrived_at_target") 
 
 func enter(agent):
-	var path = agent.get_unit().game.maps.new_path(agent.get_unit().lane, agent.get_unit().team)
-	if path != null:
-		var new_path = agent.get_unit().cut_path(path.follow)
-		var next_point = new_path.pop_front()
-		agent.get_unit().current_path = new_path
-		point(agent.get_unit(), next_point)
+	point(agent.get_unit(), agent.get_state("command_target_attack_pos"))
 
 func point(unit, objective, smart_move = false): # move_and_attack
 	Behavior.attack.set_target(unit, null)
@@ -62,10 +57,8 @@ func resume(unit):
 
 
 func end(unit):
-	if unit.current_destiny != unit.objective:
-		point(unit, null)
-	else: 
-		stop(unit)
+    unit.agent.set_state("arrived_at_target", true)
+    stop(unit)
 
 
 func react(target, attacker):

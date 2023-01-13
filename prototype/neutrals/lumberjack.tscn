@@ -26,14 +26,6 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=32]
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id=27]
-radius = 20.0
-
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -548,6 +540,14 @@ tracks/7/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=32]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id=27]
+radius = 20.0
+
 [node name="lumberjack" instance=ExtResource( 2 )]
 hp = 180
 regen = 1
@@ -565,7 +565,7 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
 scale = Vector2( 10, 10 )
 
@@ -574,6 +574,13 @@ frames = SubResource( 38 )
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 4 )]
 visible = false
+
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+anims/move = SubResource( 26 )
+anims/stun = SubResource( 33 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
@@ -584,13 +591,6 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
 
 [node name="goals" type="Node" parent="." index="6"]
 script = ExtResource( 3 )

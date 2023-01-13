@@ -145,16 +145,6 @@ func set_leader(leader, orders):
 		"mounted": cost = 3
 	leader.gold -= cost
 	
-	# get back to lane 
-	if (not leader.after_arive == "conquer" and
-			not leader.after_arive == "attack" and
-			not leader.after_arive == "pray" and
-			not leader.working and
-			not leader.channeling and
-			not leader.retreating and 
-			not (game.can_control(leader) and game.ui.shop.close_to_blacksmith(leader)) ): 
-				
-		Behavior.follow.lane(leader)
 
 
 
@@ -456,7 +446,20 @@ func retreat(unit):
 	set_leader(unit, order)
 	var lane = unit.lane
 	var path = game.map.lanes_paths[lane].duplicate()
-	if unit.team == "blue": path.invert()
-	Behavior.follow.smart(unit, path, "move")
+	if unit.team == "red": 
+		path.invert()
+	Behavior.move.point(unit, path[0])
 	
 
+func should_retreat(unit):
+	var hp = Behavior.modifiers.get_value(unit, "hp")
+	match unit.tactics:
+		"escape":
+			return true
+		"defensive":
+			if unit.current_hp < hp / 2:
+				return true
+		"default":
+			if unit.current_hp < hp / 3:
+				return true
+	return false

@@ -27,10 +27,25 @@ func get_state(state_name, default = null):
 func set_state(state_name, value):
 	_state[state_name] = value
 
+func reset():
+	clear_state()
+	_current_goal = null
+	_current_plan = null
 
 func clear_state():
 	_state = {}
 
+func get_current_action():
+	if(_current_plan != null):
+		return _current_plan[_current_plan_step]
+	else:
+		return null
+		
+func has_action_function(func_name):
+	if get_current_action() != null and get_current_action().has_method(func_name):
+		return true
+	else:
+		return false
 #
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
@@ -52,6 +67,7 @@ func process(delta):
 
 		if(goal != null):
 			_current_goal = goal
+			if(_current_plan): _current_plan[_current_plan_step].exit(self)
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
 			_current_plan_step = 0
 			_current_plan[0].enter(self)#works!
@@ -90,19 +106,38 @@ func _follow_plan(plan, delta):
 		return
 
 	var is_step_complete = plan[_current_plan_step].perform(self, delta)
+	_unit.hud.state.text = get_current_action().get_class()
 	if is_step_complete:
-		_current_plan[_current_plan_step].exit(self) #untested
+		get_current_action().exit(self) #untested
 		if _current_plan_step < plan.size() - 1:
 			_current_plan_step += 1
-			_current_plan[_current_plan_step].enter(self)
+			get_current_action().enter(self)
 		else:
+			#clear_commands()
 			_current_goal = null #trigger replan
 			_current_plan = null
 
 func on_every_second() :
 	if(_current_plan != null):
-		_current_plan[_current_plan_step].on_every_second(self)
+		get_current_action().on_every_second(self)
 
 func on_arrive():
 	if(_current_plan != null):
-		_current_plan[_current_plan_step].on_arrive(self)
+		get_current_action().on_arrive(self)
+
+func clear_commands():
+	for s in _state:
+		if("command_" in s):
+			print("erased")
+			print(s)
+			_state.erase(s)
+
+func clear_orders():
+	for s in _state:
+		if("order_" in s):
+			_state.remove(s)
+
+func clear_tactics():
+	for s in _state:
+		if("tactics_" in s):
+			_state.remove(s)
