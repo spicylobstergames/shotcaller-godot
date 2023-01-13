@@ -36,7 +36,9 @@ onready var ui = get_node("ui")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
-onready var pause_menu = $transitions/pause_menu
+onready var background = $"%background"
+onready var main_menu = $menu/main_menu
+onready var pause_menu = $menu/pause_menu
 
 var map:Node
 
@@ -76,7 +78,7 @@ func build():
 		built = true
 		
 		if test.unit: # debug units
-			ui.main_menu.get_node("container/play_button").play_down()
+			resume()
 
 
 func map_loaded():
@@ -135,6 +137,7 @@ func units_sec_cycle(): # called every second
 
 
 func resume():
+	background.visible = false
 	pause_menu.visible = false
 	paused = false
 	get_tree().paused = false
@@ -182,5 +185,6 @@ func start(red_team_leaders, blue_team_leaders, _player_team, map_index):
 		maps.current_map = "3lane_map"
 	
 	maps.load_map(maps.current_map)
-	$main_menu.visible = false
+	main_menu.visible = false
+	background.visible = false
 	resume()

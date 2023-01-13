@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends Control
 
 onready var game = get_tree().get_current_scene()
 
@@ -9,7 +9,6 @@ onready var new_game_button = $"%new_game_button"
 onready var circle_transition_scene : PackedScene = preload("res://ui/circle_transition.tscn")
 onready var square_transition_scene : PackedScene = preload("res://ui/square_transition.tscn")
 
-onready var menu_background = $waterfall_background
 onready var team_selection_menu = $team_selection_menu
 
 func _ready():

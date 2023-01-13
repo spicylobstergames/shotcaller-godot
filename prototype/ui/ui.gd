@@ -13,8 +13,6 @@ var rect_layer: Node
 var shop:Node
 var controls_menu:Node
 var orders_menu:Node
-var main_menu:Node
-var main_menu_background:Node
 var leaders_icons:Node
 var orders_button:Node
 var shop_button:Node
