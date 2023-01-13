@@ -8,7 +8,7 @@ func _ready():
 
 
 func point(unit, point):
-	if unit.attacks and not unit.stunned and Behavior.move.in_bounds(point):
+	if unit.attacks and not unit.stunned and not unit.command_casting and Behavior.move.in_bounds(point):
 
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(point)

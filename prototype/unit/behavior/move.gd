@@ -22,7 +22,6 @@ func point(unit, destiny):
 		move(unit, destiny)
 
 
-
 func in_bounds(p):
 	var l = game.map.tile_size / 2
 	return p.x > l and p.y > l and p.x < game.map.size - l and p.y < game.map.size - l
@@ -30,7 +29,7 @@ func in_bounds(p):
 
 
 func move(unit, destiny):
-	if unit.moves and not unit.stunned:
+	if unit.moves and not unit.stunned and not unit.command_casting:
 		unit.current_destiny = destiny
 		if(destiny == Vector2.ZERO):
 			print('NO!')
@@ -111,7 +110,7 @@ func stand(unit):
 
 
 func smart(unit, point, cb):
-	if not unit.stunned:
+	if not unit.stunned and not unit.command_casting:
 		var path = Behavior.follow.find_path(unit.global_position, point)
 		if path: Behavior.follow.path(unit, path, cb)
 
