@@ -1,4 +1,4 @@
-extends CenterContainer
+extends Container
 
 onready var game = get_tree().get_current_scene()
 onready var continue_button : Button = $"%continue_button"
