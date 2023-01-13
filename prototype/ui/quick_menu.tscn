@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/ui/CompassProTitle.tres" type="DynamicFont" id=2]
 [ext_resource path="res://ui/Button.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/ui/EquipmentPro.tres" type="DynamicFont" id=4]
-[ext_resource path="res://ui/main_menu_new.gd" type="Script" id=5]
+[ext_resource path="res://ui/quick_menu.gd" type="Script" id=5]
 [ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=6]
 
 [node name="main_menu" type="CanvasLayer"]

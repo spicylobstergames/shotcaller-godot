@@ -140,9 +140,8 @@ func _ready():
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
-	if type == "leader":
-		pass
-	if find_node("goals"):
+	
+	if type != "leader" and find_node("goals") and find_node("goals").goals:
 		var goals = []
 		for goal in find_node("goals").goals:
 			goals.push_back(GoapGoals.get_goal(goal))
