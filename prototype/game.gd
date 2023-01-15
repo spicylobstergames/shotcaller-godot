@@ -158,7 +158,7 @@ func pause():
 	ui.hide_all()
 	ui.get_node('mid').visible = true
 	ui.minimap.visible = false
-	ui.get_node("mid/team_selection_menu").visible = false
+	team_selection_menu.visible = false
 
 func exit():
 	get_tree().quit(0)

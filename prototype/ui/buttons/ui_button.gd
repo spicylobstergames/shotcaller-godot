@@ -10,8 +10,8 @@ var small_map_button:Node
 var large_map_button:Node
 var play_button:Node
 
-onready var circle_transition_scene : PackedScene = preload("res://ui/circle_transition.tscn")
-onready var square_transition_scene : PackedScene = preload("res://ui/square_transition.tscn")
+onready var circle_transition_scene : PackedScene = preload("res://ui/transitions/circle_transition.tscn")
+onready var square_transition_scene : PackedScene = preload("res://ui/transitions/square_transition.tscn")
 
 
 func _ready():
