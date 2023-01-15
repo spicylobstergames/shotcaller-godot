@@ -107,8 +107,9 @@ margin_right = 160.0
 margin_bottom = 28.0
 
 [node name="Label" type="Label" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_right = 99.0
+margin_right = 130.0
 margin_bottom = 28.0
+rect_min_size = Vector2( 130, 0 )
 custom_colors/font_color = Color( 0.0235294, 0, 0.698039, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
@@ -122,8 +123,8 @@ valign = 1
 
 [node name="blue_team_checkbox" type="CheckBox" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 103.0
-margin_right = 127.0
+margin_left = 134.0
+margin_right = 158.0
 margin_bottom = 28.0
 pressed = true
 group = SubResource( 9 )
@@ -192,8 +193,9 @@ margin_right = 160.0
 margin_bottom = 28.0
 
 [node name="Label" type="Label" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
-margin_right = 93.0
+margin_right = 130.0
 margin_bottom = 28.0
+rect_min_size = Vector2( 130, 0 )
 custom_colors/font_color = Color( 0.745098, 0, 0, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
@@ -207,8 +209,8 @@ valign = 1
 
 [node name="red_team_checkbox" type="CheckBox" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 97.0
-margin_right = 121.0
+margin_left = 134.0
+margin_right = 158.0
 margin_bottom = 28.0
 group = SubResource( 9 )
 
