@@ -23,7 +23,6 @@ func _ready():
 	map_symbols = get_node("symbols")
 
 
-
 func _input(event):
 	if over_minimap(event):
 		# MOUSE CLICK

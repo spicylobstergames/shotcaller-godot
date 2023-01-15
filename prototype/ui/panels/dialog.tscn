@@ -1,21 +1,21 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://ui/dialog.gd" type="Script" id=1]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://ui/panels/dialog.gd" type="Script" id=2]
 [ext_resource path="res://assets/ui/portraits.png" type="Texture" id=3]
 
 [sub_resource type="DynamicFont" id=2]
 size = 13
-font_data = ExtResource( 2 )
+font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 11
-font_data = ExtResource( 2 )
+font_data = ExtResource( 1 )
 
 [node name="dialog" type="ItemList"]
 margin_right = 420.0
 margin_bottom = 140.0
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="panel" type="Panel" parent="."]
 margin_right = 420.0

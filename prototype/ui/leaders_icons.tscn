@@ -11,29 +11,24 @@ custom_constants/separation = 2
 script = ExtResource( 1 )
 
 [node name="leader_button" parent="." instance=ExtResource( 2 )]
-visible = false
 focus_mode = 2
 
 [node name="leader_button2" parent="." instance=ExtResource( 2 )]
-visible = false
 margin_top = 62.0
 margin_bottom = 122.0
 focus_mode = 2
 
 [node name="leader_button3" parent="." instance=ExtResource( 2 )]
-visible = false
 margin_top = 124.0
 margin_bottom = 184.0
 focus_mode = 2
 
 [node name="leader_button4" parent="." instance=ExtResource( 2 )]
-visible = false
 margin_top = 186.0
 margin_bottom = 246.0
 focus_mode = 2
 
 [node name="leader_button5" parent="." instance=ExtResource( 2 )]
-visible = false
 margin_top = 248.0
 margin_bottom = 308.0
 focus_mode = 2

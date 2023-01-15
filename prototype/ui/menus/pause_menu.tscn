@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://ui/Button.tscn" type="PackedScene" id=1]
-[ext_resource path="res://ui/pause_menu.gd" type="Script" id=2]
+[ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/menus/pause_menu.gd" type="Script" id=2]
 [ext_resource path="res://assets/ui/EquipmentPro.tres" type="DynamicFont" id=3]
 
 [node name="pause_menu" type="Container"]

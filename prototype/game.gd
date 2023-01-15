@@ -39,6 +39,7 @@ onready var test = get_node("test")
 onready var background = $"%background"
 onready var main_menu = $menu/main_menu
 onready var pause_menu = $menu/pause_menu
+onready var team_selection_menu = $menu/team_selection_menu
 
 var map:Node
 
@@ -53,6 +54,7 @@ var victory:String
 
 func _ready():
 	get_tree().paused = true
+	ui.show()
 #	randomize()
 	
 	WorldState.set_state("is_game_active", false)
@@ -156,7 +158,7 @@ func pause():
 	ui.hide_all()
 	ui.get_node('mid').visible = true
 	ui.minimap.visible = false
-	ui.get_node("mid/team_selection_menu").visible = false
+	team_selection_menu.visible = false
 
 func exit():
 	get_tree().quit(0)
@@ -186,5 +188,6 @@ func start(red_team_leaders, blue_team_leaders, _player_team, map_index):
 	
 	maps.load_map(maps.current_map)
 	main_menu.visible = false
+	team_selection_menu.visible = false
 	background.visible = false
 	resume()

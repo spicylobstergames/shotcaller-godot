@@ -1,0 +1,107 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://ui/buttons/ui_button.gd" type="Script" id=2]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=3]
+[ext_resource path="res://assets/ui/icons.png" type="Texture" id=4]
+
+[sub_resource type="DynamicFont" id=2]
+size = 11
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxTexture" id=23]
+texture = ExtResource( 3 )
+region_rect = Rect2( 105, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id=24]
+texture = ExtResource( 3 )
+region_rect = Rect2( 70, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id=25]
+texture = ExtResource( 3 )
+region_rect = Rect2( 140, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id=26]
+texture = ExtResource( 3 )
+region_rect = Rect2( 70, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 46, 46 )
+margin = Rect2( 5, 0, 0, 0 )
+
+[sub_resource type="DynamicFont" id=15]
+size = 8
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=22]
+size = 9
+font_data = ExtResource( 1 )
+
+[node name="menu_button" type="Button"]
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+focus_mode = 1
+custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 23 )
+custom_styles/pressed = SubResource( 24 )
+custom_styles/focus = SubResource( 25 )
+custom_styles/disabled = SubResource( 26 )
+custom_styles/normal = SubResource( 13 )
+toggle_mode = true
+icon = SubResource( 14 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="Label" parent="."]
+margin_top = 4.0
+margin_right = 60.0
+margin_bottom = 16.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 15 )
+text = "Name"
+align = 1
+autowrap = true
+
+[node name="hint" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -43.0
+margin_top = -13.0
+margin_right = -3.0
+margin_bottom = 1.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "a"
+align = 2
+
+[connection signal="pressed" from="." to="." method="button_down"]

@@ -168,7 +168,7 @@ const items = {
 		"type": "throwable",
 		"delivery_time": 15,
 		"duration": 5
-  },
+	},
 	"medium_poison_bomb": {
 		"name": "Medium\nPoison",
 		"sprite": 16,
@@ -178,7 +178,7 @@ const items = {
 		"type": "throwable",
 		"delivery_time": 30,
 		"duration": 5
-  },
+	},
 	"large_poison_bomb": {
 		"name": "Large\nPoison",
 		"sprite": 17,
@@ -188,7 +188,7 @@ const items = {
 		"type": "throwable",
 		"delivery_time": 50,
 		"duration": 5
-  }
+	}
 }
 
 

@@ -1,6 +1,6 @@
 extends CenterContainer
 
-onready var ability_preview_scene = preload("res://ui/leader_preview/ability_preview.tscn")
+onready var ability_preview_scene = preload("res://ui/panels/leader_preview/ability_preview.tscn")
 onready var ability_container = $PanelContainer/VBoxContainer/VBoxContainer
 
 func _ready():

@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=1]
-[ext_resource path="res://assets/ui/icons.png" type="Texture" id=2]
-[ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/buttons/ui_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
+[ext_resource path="res://assets/ui/icons.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxTexture" id=1]
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 region_rect = Rect2( 0, 35, 175, 86 )
 margin_left = 5.0
 margin_right = 5.0
@@ -16,31 +16,31 @@ modulate_color = Color( 1, 1, 1, 0.941176 )
 [sub_resource type="StyleBoxEmpty" id=2]
 
 [sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 2 )
+atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 2 )
+atlas = ExtResource( 3 )
 region = Rect2( 480, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
+atlas = ExtResource( 3 )
 region = Rect2( 624, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 2 )
+atlas = ExtResource( 3 )
 region = Rect2( 575, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
-[node name="buttons" type="ItemList"]
+[node name="ui_buttons" type="ItemList"]
 margin_left = -150.0
 margin_top = -150.0
 custom_styles/bg = SubResource( 1 )
 
-[node name="controls_button" parent="." instance=ExtResource( 3 )]
+[node name="controls_button" parent="." instance=ExtResource( 1 )]
 margin_left = 11.0
 margin_top = 11.0
 margin_right = 71.0
@@ -53,7 +53,7 @@ value = "controls"
 [node name="name" parent="controls_button" index="0"]
 text = "control"
 
-[node name="shop_button" parent="." instance=ExtResource( 3 )]
+[node name="shop_button" parent="." instance=ExtResource( 1 )]
 margin_left = 79.0
 margin_top = 11.0
 margin_right = 139.0
@@ -66,10 +66,10 @@ value = "shop"
 [node name="name" parent="shop_button" index="0"]
 text = "shop"
 
-[node name="hint" parent="shop_button" index="2"]
+[node name="hint" parent="shop_button" index="1"]
 text = "B"
 
-[node name="orders_button" parent="." instance=ExtResource( 3 )]
+[node name="orders_button" parent="." instance=ExtResource( 1 )]
 margin_left = 11.0
 margin_top = 79.0
 margin_right = 71.0
@@ -82,10 +82,10 @@ value = "orders"
 [node name="name" parent="orders_button" index="0"]
 text = "orders"
 
-[node name="hint" parent="orders_button" index="2"]
+[node name="hint" parent="orders_button" index="1"]
 text = "x"
 
-[node name="menu_button" parent="." instance=ExtResource( 3 )]
+[node name="menu_button" parent="." instance=ExtResource( 1 )]
 margin_left = 79.0
 margin_top = 79.0
 margin_right = 139.0
@@ -99,7 +99,7 @@ value = "menu"
 [node name="name" parent="menu_button" index="0"]
 text = "menu"
 
-[node name="hint" parent="menu_button" index="2"]
+[node name="hint" parent="menu_button" index="1"]
 text = "y"
 
 [editable path="controls_button"]

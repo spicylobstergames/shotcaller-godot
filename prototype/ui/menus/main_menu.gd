@@ -6,10 +6,9 @@ onready var quick_start_button = $"%quick_start_button"
 onready var exit_button = $"%exit_button"
 onready var new_game_button = $"%new_game_button"
 
-onready var circle_transition_scene : PackedScene = preload("res://ui/circle_transition.tscn")
-onready var square_transition_scene : PackedScene = preload("res://ui/square_transition.tscn")
+onready var circle_transition_scene : PackedScene = preload("res://ui/transitions/circle_transition.tscn")
+onready var square_transition_scene : PackedScene = preload("res://ui/transitions/square_transition.tscn")
 
-onready var team_selection_menu = $team_selection_menu
 
 func _ready():
 	randomize()
@@ -38,4 +37,6 @@ func quit():
 	game.exit()
 
 func show_new_game_menu():
-	team_selection_menu.visible = true
+	game.main_menu.visible = false
+	game.pause_menu.visible = false
+	game.team_selection_menu.visible = true

@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Container
 
 onready var game = get_tree().get_current_scene()
 
@@ -6,7 +6,7 @@ onready var leader_select_menu_panel = preload("res://ui/team_selection/leader_s
 onready var leader_select_menu = preload("res://ui/team_selection/leader_select_panel.tscn")
 onready var red_team_container : VBoxContainer = $"%red_team_container"
 onready var blue_team_container : VBoxContainer = $"%blue_team_container"
-onready var frame_container = $resizable_frame/HBoxContainer2/resizable_panel/HBoxContainer2/HBoxContainer
+onready var frame_container = $CenterContainer
 
 func _ready():
 	# clear containers (Dummy entries used for visualization)
