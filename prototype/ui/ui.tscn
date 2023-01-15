@@ -1,13 +1,12 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/controls_menu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/minimap_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://ui/orders_menu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ui/buttons.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/buttons/buttons.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/stats.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/dialog.tscn" type="PackedScene" id=10]
 [ext_resource path="res://ui/leaders_icons.tscn" type="PackedScene" id=12]
@@ -26,7 +25,6 @@ __meta__ = {
 }
 
 [node name="top_left" type="Control" parent="."]
-visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -42,7 +40,6 @@ text = "fps
 "
 
 [node name="top_mid" type="Control" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 
@@ -61,7 +58,6 @@ __meta__ = {
 }
 
 [node name="top_right" type="Control" parent="."]
-visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 __meta__ = {
@@ -83,16 +79,7 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 
-[node name="team_selection_menu" parent="mid" instance=ExtResource( 4 )]
-unique_name_in_owner = true
-visible = false
-margin_left = -229.0
-margin_top = -204.0
-margin_right = 231.0
-margin_bottom = 236.0
-
 [node name="mid_left" type="Control" parent="."]
-visible = false
 anchor_top = 0.5
 anchor_bottom = 0.5
 __meta__ = {
@@ -114,7 +101,6 @@ shortcut_keys_enabled = false
 script = ExtResource( 19 )
 
 [node name="bot_left" type="Control" parent="."]
-visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 
@@ -122,7 +108,6 @@ anchor_bottom = 1.0
 unique_name_in_owner = true
 
 [node name="bot_mid" type="Control" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -139,7 +124,6 @@ margin_right = 205.0
 margin_bottom = -200.0
 
 [node name="bot_right" type="Control" parent="."]
-visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -150,9 +134,11 @@ __meta__ = {
 
 [node name="orders_menu" parent="bot_right" instance=ExtResource( 7 )]
 unique_name_in_owner = true
+visible = false
 
 [node name="controls_menu" parent="bot_right" instance=ExtResource( 2 )]
 unique_name_in_owner = true
+visible = false
 
 [node name="buttons" parent="bot_right" instance=ExtResource( 8 )]
 unique_name_in_owner = true

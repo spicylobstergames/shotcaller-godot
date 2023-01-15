@@ -49,7 +49,8 @@ func _ready():
 	EventMachine.register_listener(Events.ONE_SEC, self, "count_time")
 	
 	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
-
+	
+	hide_all()
 
 func process():
 	# if opt.show.fps:

@@ -25,7 +25,7 @@ font_data = ExtResource( 4 )
 [node name="shop" type="Panel"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -228.0
+margin_left = -208.0
 margin_top = 16.0
 margin_bottom = 378.0
 custom_styles/panel = SubResource( 1 )
@@ -41,33 +41,33 @@ margin_bottom = -13.0
 rect_pivot_offset = Vector2( 290, 0 )
 
 [node name="container" type="VBoxContainer" parent="scroll_container"]
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 414.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
 [node name="shop_title" type="Label" parent="scroll_container/container"]
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 18.0
 custom_fonts/font = SubResource( 2 )
 text = "shop"
 
 [node name="separator" type="HSeparator" parent="scroll_container/container"]
 margin_top = 22.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 26.0
 
 [node name="equip" type="Label" parent="scroll_container/container"]
 margin_top = 30.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 46.0
 custom_fonts/font = SubResource( 3 )
 text = "Equip"
 
 [node name="equip_items" type="GridContainer" parent="scroll_container/container"]
 margin_top = 50.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 254.0
 columns = 3
 
@@ -275,19 +275,19 @@ __meta__ = {
 
 [node name="separator2" type="HSeparator" parent="scroll_container/container"]
 margin_top = 258.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 262.0
 
 [node name="consumable" type="Label" parent="scroll_container/container"]
 margin_top = 266.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 282.0
 custom_fonts/font = SubResource( 3 )
 text = "Consumable"
 
 [node name="consumable_items" type="GridContainer" parent="scroll_container/container"]
 margin_top = 286.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 334.0
 columns = 3
 
@@ -324,19 +324,19 @@ __meta__ = {
 
 [node name="separator3" type="HSeparator" parent="scroll_container/container"]
 margin_top = 338.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 342.0
 
 [node name="throwable" type="Label" parent="scroll_container/container"]
 margin_top = 346.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 362.0
 custom_fonts/font = SubResource( 3 )
 text = "Throwable"
 
 [node name="throwable_items" type="GridContainer" parent="scroll_container/container"]
 margin_top = 366.0
-margin_right = 186.0
+margin_right = 166.0
 margin_bottom = 414.0
 columns = 3
 

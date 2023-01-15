@@ -12,7 +12,8 @@ var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
 func _ready():
 	game = get_tree().get_current_scene()
 	hide()
-
+	for placeholder in get_children():
+		placeholder.hide()
 
 func build():
 	var index = 0
