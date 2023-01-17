@@ -31,7 +31,7 @@ func quick_start():
 	# Transition backward not possible due to how minimap is generated
 	# transition.start_transition(true)
 	visible = false
-	game.resume()
+	game.ui.minimap.update_map_texture = true
 
 func quit():
 	game.exit()

@@ -1,7 +1,10 @@
 extends Node2D
 var game:Node
 
-var current_map = '1lane_map'
+var current_map = 'one_lane_map'
+
+var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
+var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -12,9 +15,10 @@ func load_map(map_name):
 		game.map.visible = false
 		game.map.trees.occluder_light_mask = 0
 	current_map = map_name
-	game.map = game.maps.get_node(map_name)
+	game.map = self[map_name].instance()
+	self.add_child(game.map)
+	game.map.visible = false
 	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
-	game.map.visible = true
 	game.ui.minimap.map_loaded()
 
 

@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 # self = game
 
@@ -53,7 +53,7 @@ var victory:String
 
 
 func _ready():
-	get_tree().paused = true
+	#get_tree().paused = true
 	ui.show()
 #	randomize()
 	
@@ -86,7 +86,7 @@ func build():
 func map_loaded():
 	if not started:
 		started = true
-		paused = false
+		resume()
 		WorldState.set_state("is_game_active", true)
 		
 		maps.setup_buildings()
@@ -181,9 +181,9 @@ func start(red_team_leaders, blue_team_leaders, _player_team, map_index):
 		enemy_choose_leaders = blue_team_leaders
 		
 	if map_index == 1:
-		maps.current_map = "1lane_map"
+		maps.current_map = "one_lane_map"
 	else:
-		maps.current_map = "3lane_map"
+		maps.current_map = "three_lane_map"
 	
 	maps.load_map(maps.current_map)
 	main_menu.visible = false
