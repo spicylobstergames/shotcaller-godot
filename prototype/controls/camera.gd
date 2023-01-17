@@ -164,7 +164,7 @@ func _zoom_camera(dir):
 	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
 
 func process():
-	var ratio = get_viewport().size.x / get_viewport().size.y
+	#var ratio = get_viewport().size.x / get_viewport().size.y
 	
 	# APPLY MOUSE PAN
 	if is_panning: translate(pan_position * zoom.x)
@@ -183,23 +183,23 @@ func process():
 	pan_position = Vector2.ZERO
 	
 	# KEEP CAMERA PAN LIMITS
-	if global_position.x > margin: global_position.x = margin
-	if global_position.x < -margin: global_position.x = -margin
-	if global_position.y > margin: global_position.y = margin
-	if global_position.y < -margin: global_position.y = -margin
+#	if global_position.x > margin: global_position.x = margin
+#	if global_position.x < -margin: global_position.x = -margin
+#	if global_position.y > margin: global_position.y = margin
+#	if global_position.y < -margin: global_position.y = -margin
 	
 	# ADJUST CAMERA PAN LIMITS TO SCREEN RATIO
-	limit_top = -margin
-	limit_bottom = margin
-	limit_left = -margin
-	limit_right = margin
-	
-	var s = 0.65
-	if ratio >= 1 and zoom.x > 1:
-		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
-		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
-
-	if ratio < 1 and zoom.x > 1:
-		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
-		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
+#	limit_top = -margin
+#	limit_bottom = margin
+#	limit_left = -margin
+#	limit_right = margin
+#
+#	var s = 0.65
+#	if ratio >= 1 and zoom.x > 1:
+#		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+#		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+#
+#	if ratio < 1 and zoom.x > 1:
+#		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
+#		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
 	

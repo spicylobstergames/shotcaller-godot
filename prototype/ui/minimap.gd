@@ -59,7 +59,6 @@ func over_minimap(event):
 func map_loaded():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
-	game.ui.minimap.update_map_texture = true
 
 
 func get_map_texture():
@@ -71,6 +70,7 @@ func get_map_texture():
 	# hides units and ui
 	game.ui.hide_all()
 	self.visible = false
+	game.map.visible = true
 	game.ui.rect_layer.visible = false
 	game.maps.buildings_visibility(false)
 	yield(get_tree(), "idle_frame")

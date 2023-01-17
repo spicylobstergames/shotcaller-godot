@@ -65,7 +65,7 @@ func _update_distribution():
 			var t = Transform2D(0.0, v)
 			multi_mesh.set_instance_transform_2d(i, t)
 			
-			var dis2center = ellipse_distance(center_light - global_position, v,focal_size)*0.1
+			var dis2center = ellipse_distance(center_light - position, v,focal_size)*0.1
 			
 			var color_index = (1 / (focus*pow(dis2center, 2) + 1) * (1-noise_strength)) * (colors.size())
 			color_index += map_range(open_simplex_noise.get_noise_2d(v.x ,v.y), -1,1, 0, colors.size()) * noise_strength * (1- 1 / (focus*pow(dis2center, 2) + 1))
