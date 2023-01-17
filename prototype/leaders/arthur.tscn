@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/aura_of_courage.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=6]
 [ext_resource path="res://weapons/excalibur.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/animations/side_smoke_2.png" type="Texture" id=8]
+[ext_resource path="res://goap/unitgoals.gd" type="Script" id=9]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 3 )
@@ -46,37 +47,6 @@ animations = [ {
 "name": "red",
 "speed": 5.0
 } ]
-
-[sub_resource type="Animation" id=68]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/cleave:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1 ]
-}
-
-[sub_resource type="Animation" id=67]
-resource_name = "arthur_special_cleave"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/cleave:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6 ]
-}
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -544,6 +514,37 @@ tracks/6/keys = {
 "values": [ false ]
 }
 
+[sub_resource type="Animation" id=68]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/cleave:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
+}
+
+[sub_resource type="Animation" id=67]
+resource_name = "arthur_special_cleave"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/cleave:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6 ]
+}
+
 [sub_resource type="CircleShape2D" id=32]
 
 [sub_resource type="CircleShape2D" id=29]
@@ -612,15 +613,15 @@ offset = Vector2( -2, -12 )
 visible = false
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/RESET = SubResource( 68 )
-anims/arthur_special_cleave = SubResource( 67 )
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
+[node name="animations" type="AnimationPlayer" parent="." index="4"]
+anims/RESET = SubResource( 68 )
+anims/arthur_special_cleave = SubResource( 67 )
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
@@ -637,7 +638,7 @@ shape = SubResource( 29 )
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
-[node name="light" parent="." index="5"]
+[node name="light" parent="." index="6"]
 position = Vector2( 7, -5 )
 
 [node name="aura_of_courage" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
@@ -645,8 +646,8 @@ icon = ExtResource( 5 )
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource( 6 )
 
-[node name="goals" type="Node" parent="." index="7"]
-script = ExtResource( 8 )
+[node name="goals" type="Node" parent="." index="8"]
+script = ExtResource( 9 )
 goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

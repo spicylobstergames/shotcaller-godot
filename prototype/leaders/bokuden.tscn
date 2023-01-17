@@ -632,9 +632,10 @@ shape = SubResource( 29 )
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
+[node name="critical_slash" parent="behavior/abilities" index="0" instance=ExtResource( 6 )]
+
 [node name="goals" type="Node" parent="." index="7"]
 script = ExtResource( 5 )
 goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]
-[node name="critical_slash" parent="behavior/abilities" index="0" instance=ExtResource( 6 )]

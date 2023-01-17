@@ -141,12 +141,14 @@ func _ready():
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
 	
-	if type != "leader" and find_node("goals") and find_node("goals").goals:
+	if find_node("goals"):
 		var goals = []
-		for goal in find_node("goals").goals:
-			goals.push_back(GoapGoals.get_goal(goal))
-		agent.init(self, goals)
-		add_child(agent)
+		var unit_goals = find_node("goals")
+		if "goals" in unit_goals:
+			for goal in unit_goals.goals:
+				goals.push_back(GoapGoals.get_goal(goal))
+			agent.init(self, goals)
+			add_child(agent)
 
 func gain_experience(value):
 	experience += value

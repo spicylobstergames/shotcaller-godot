@@ -5,9 +5,9 @@ class_name CommandAttackEnemyGoal
 func get_class(): return "CommandAttackEnemyGoal"
 
 func is_valid(agent) -> bool:
-    if agent.get_state("command_target_enemy") != null:
-        return true
-    return false
+	if agent.get_state("command_target_enemy") != null:
+		return true
+	return false
 
 func priority(agent) -> int:
 	return 1000

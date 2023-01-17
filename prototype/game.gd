@@ -114,10 +114,9 @@ func map_loaded():
 
 
 func _physics_process(delta):
-	if started: collision.process(delta)
-	for unit1 in all_units:
-		if unit1.agent._goals:
-			unit1.agent.process(delta)
+	if started:
+		collision.process(delta)
+		GoapGoals.process(all_units, delta)
 
 
 func can_control(unit1):
