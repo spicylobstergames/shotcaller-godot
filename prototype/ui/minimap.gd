@@ -59,7 +59,8 @@ func over_minimap(event):
 func map_loaded():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
-
+	var r_size = 600 * size / game.map.size
+	cam_rect.rect_size = Vector2(r_size, r_size)
 
 func get_map_texture():
 	# set camera zoom and limits

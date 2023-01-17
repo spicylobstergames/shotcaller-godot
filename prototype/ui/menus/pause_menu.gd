@@ -12,3 +12,12 @@ func _ready():
 	exit_to_menu_button.connect("pressed", game, "reload")
 # warning-ignore:return_value_discarded
 	exit_button.connect("pressed", game, "exit")
+
+func show_all():
+	visible = true
+	find_node("CanvasLayer").visible = true
+	
+	
+func hide_all():
+	visible = false
+	find_node("CanvasLayer").visible = false

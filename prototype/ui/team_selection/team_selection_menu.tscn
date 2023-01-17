@@ -12,10 +12,8 @@
 
 [node name="team_selection_menu" type="Container"]
 pause_mode = 2
-margin_left = -300.0
-margin_top = -300.0
-margin_right = 300.0
-margin_bottom = 300.0
+margin_right = 600.0
+margin_bottom = 600.0
 script = ExtResource( 3 )
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
@@ -71,6 +69,7 @@ margin_left = 120.0
 margin_right = 213.0
 margin_bottom = 36.0
 custom_fonts/font = ExtResource( 4 )
+pressed = true
 group = SubResource( 10 )
 text = "3-lane"
 
@@ -80,7 +79,6 @@ margin_left = 217.0
 margin_right = 310.0
 margin_bottom = 36.0
 custom_fonts/font = ExtResource( 4 )
-pressed = true
 group = SubResource( 10 )
 text = "1-lane"
 

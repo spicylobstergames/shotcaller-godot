@@ -37,9 +37,9 @@ onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
 onready var background = $"%background"
-onready var main_menu = $menu/main_menu
-onready var pause_menu = $menu/pause_menu
-onready var team_selection_menu = $menu/team_selection_menu
+onready var main_menu = $"%main_menu"
+onready var pause_menu = $"%pause_menu"
+onready var team_selection_menu = $"%team_selection_menu"
 
 var map:Node
 
@@ -139,25 +139,26 @@ func units_sec_cycle(): # called every second
 
 func resume():
 	background.visible = false
-	pause_menu.visible = false
+	pause_menu.hide_all()
 	paused = false
 	get_tree().paused = false
 	Behavior.spawn.timer.paused = false;
 	ui.show_all()
-	ui.get_node('mid').visible = false
 	ui.minimap.visible = true
+	ui.rect_layer.visible = true
 	ui.get_node("score_board").visible = false
 
 
 func pause():
-	paused = false
+	paused = true
 	get_tree().paused = true
-	pause_menu.visible = true
+	pause_menu.show_all()
 	Behavior.spawn.timer.paused = true
 	ui.hide_all()
-	ui.get_node('mid').visible = true
 	ui.minimap.visible = false
+	ui.rect_layer.visible = false
 	team_selection_menu.visible = false
+	
 
 func exit():
 	get_tree().quit(0)
@@ -189,4 +190,5 @@ func start(red_team_leaders, blue_team_leaders, _player_team, map_index):
 	main_menu.visible = false
 	team_selection_menu.visible = false
 	background.visible = false
+	ui.minimap.update_map_texture = true
 	resume()
