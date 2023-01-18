@@ -38,4 +38,4 @@ func enter(agent):
 
 func on_arrive(agent):
 	agent.set_state("arrived_at_retreat", true)
-				
+

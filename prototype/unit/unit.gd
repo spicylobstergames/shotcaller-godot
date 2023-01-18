@@ -163,6 +163,7 @@ func on_experience_tick():
 func experience_needed():
 	return EXP_LEVEL_COEFFICIENT * level
 
+
 func reset_unit():
 	self.setup_team(self.team)
 
@@ -180,19 +181,18 @@ func reset_unit():
 	self.channeling = false
 	self.retreating = false
 	self.working = false
-	Hud.update_hpbar(self)
+	game.ui.hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
 	if(agent):
 		agent.reset()
 
+
 func set_state(s):
 	if not self.dead:
 		self.state = s
 		self.get_node("animations").current_animation = s
-
-
 
 
 func setup_team(new_team):
@@ -421,7 +421,6 @@ func on_arrive(): # when collides with destiny
 		match self.after_arive:
 			"conquer": Behavior.orders.conquer_building(self)
 			"pray": Behavior.orders.pray_in_church(self)
-			"lumber_arive": Behavior.orders.lumber_arive(self)
 
 
 func on_attack_release(): # every ranged projectile start
@@ -441,7 +440,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 func heal(heal_hp):
 	self.current_hp += heal_hp
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
-	Hud.update_hpbar(self)
+	game.ui.hud.update_hpbar(self)
 	if self == game.selected_unit: game.ui.stats.update()
 
 

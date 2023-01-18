@@ -57,8 +57,8 @@ func resume(unit):
 
 
 func end(unit):
-    unit.agent.set_state("arrived_at_target", true)
-    stop(unit)
+		unit.agent.set_state("arrived_at_target", true)
+		stop(unit)
 
 
 func react(target, attacker):

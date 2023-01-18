@@ -1,3 +1,4 @@
+# This class is an Autoload accessible globaly
 extends Node
 
 var _state = {

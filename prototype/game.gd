@@ -53,6 +53,7 @@ var victory:String
 
 
 func _ready():
+	#Engine.time_scale = 2
 	#get_tree().paused = true
 	ui.show()
 #	randomize()
@@ -91,7 +92,6 @@ func map_loaded():
 		
 		maps.setup_buildings()
 		map.blocks.setup_quadtree()
-		#Engine.time_scale = 2
 		
 		rng.randomize()
 		maps.setup_lanes()
@@ -168,7 +168,6 @@ func reload():
 	EventMachine.reset()
 # warning-ignore:return_value_discarded
 	get_tree().reload_current_scene()
-	Hud._ready()
 	Behavior._ready()
 
 

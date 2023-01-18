@@ -2,8 +2,9 @@ extends Node
 var game:Node
 
 # self = Behavior.spawn
-var order_time = 8
 
+var order_time = 8
+var lumberjack_cost = 100
 
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
@@ -24,6 +25,9 @@ var archer:PackedScene = load("res://pawns/archer.tscn")
 var mounted:PackedScene = load("res://pawns/mounted.tscn")
 
 var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
+
+var player_extra_unit = "infantry"
+var enemy_extra_unit = "infantry"
 
 var cemitery = {
 	"player_infantry": [],
@@ -94,8 +98,8 @@ func spawn_group_cycle():
 	Behavior.orders.update_taxes()
 	
 	for team in autoload.teams:
-		var extra_unit = Behavior.orders.player_extra_unit
-		if team != game.player_team: extra_unit = Behavior.orders.enemy_extra_unit
+		var extra_unit = player_extra_unit
+		if team != game.player_team: extra_unit = enemy_extra_unit
 		for lane in game.map.lanes:
 			send_pawn("archer", lane, team)
 			for n in 2:
@@ -148,8 +152,7 @@ func spawn_unit(unit, l, t, mode, point):
 
 func next_to_building(template, building):
 	var spawn_point = building.global_position
-	if building.team == "blue": spawn_point.x -= game.map.tile_size
-	else: spawn_point.x += game.map.tile_size
+	spawn_point.y += building.collision_radius + building.collision_position.y + 1
 	var unit_template = self[template]
 	return game.maps.create(unit_template, "", building.team, "point", spawn_point)
 
@@ -179,3 +182,41 @@ func cemitery_add_leader(leader):
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)
 	leader.reset_unit()
+
+
+
+# LUMBERMILL
+
+func lumberjack_hire(lumbermill, team):
+	var unit = lumbermill.target
+	if not unit: # create lumberjack
+		unit = Behavior.spawn.next_to_building("lumberjack", lumbermill)
+		unit.agent.set_state("lumbermill_position", unit.global_position)  
+		unit.agent.set_state("closest_tree", lumbermill.get_node("closest_tree").global_position)
+		lumbermill.target = unit
+		
+	unit.setup_team(team)
+	unit.visible = true
+	
+	# charge player
+	var leaders = game.player_leaders
+	if team == game.enemy_team: leaders = game.enemy_leaders
+	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
+
+
+# CAMP
+
+func camp_hire(unit, team):
+	if team == game.player_team:
+		player_extra_unit = unit
+	else: enemy_extra_unit = unit
+	
+	var cost
+	match unit:
+		"infantry": cost = 1
+		"archer": cost = 2
+		"mounted": cost = 3
+	
+	var leaders = game.player_leaders
+	if team == game.enemy_team: leaders = game.enemy_leaders
+	for leader in leaders: leader.gold -= cost

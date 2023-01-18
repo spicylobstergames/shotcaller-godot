@@ -555,7 +555,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
-frame = 1
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -580,6 +580,9 @@ position = Vector2( 400, 673 )
 material = SubResource( 57 )
 position = Vector2( 268, 390 )
 team = "neutral"
+
+[node name="closest_tree" type="Position2D" parent="buildings/blue/blacksmith"]
+position = Vector2( -69, 58 )
 
 [node name="red" type="YSort" parent="buildings"]
 

@@ -644,6 +644,9 @@ material = SubResource( 57 )
 position = Vector2( 479, 1016 )
 team = "neutral"
 
+[node name="closest_tree" type="Position2D" parent="buildings/blue/blacksmith"]
+position = Vector2( 138, 33 )
+
 [node name="lumbermill" parent="buildings/blue" instance=ExtResource( 25 )]
 material = SubResource( 57 )
 position = Vector2( 419, 566 )
@@ -731,6 +734,9 @@ team = "neutral"
 material = SubResource( 57 )
 position = Vector2( 1633, 1144 )
 team = "neutral"
+
+[node name="closest_tree" type="Position2D" parent="buildings/red/blacksmith"]
+position = Vector2( 37, 122 )
 
 [node name="lumbermill" parent="buildings/red" instance=ExtResource( 25 )]
 material = SubResource( 57 )

@@ -1,5 +1,5 @@
+# This class is an Autoload accessible globaly
 extends Node
-
 
 # one argument - victor ("PLAYER" or "ENEMY")
 const GAME_END = 0

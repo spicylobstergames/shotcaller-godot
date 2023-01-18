@@ -1,4 +1,4 @@
-#
+# This class is an Autoload accessible globaly.
 # Goal contract
 #
 extends Node

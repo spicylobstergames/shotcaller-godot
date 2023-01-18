@@ -503,9 +503,12 @@ position = Vector2( 0.3, 0.3 )
 scale = Vector2( 1.6, 1.6 )
 
 [node name="body" parent="sprites" index="1"]
+rotation = 0.0443854
+scale = Vector2( 1, 0.936423 )
 frame = 2
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
+rotation = 0.739757
 animation = "default"
 
 [node name="stuck" parent="sprites" index="3"]
