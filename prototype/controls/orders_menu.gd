@@ -138,7 +138,7 @@ func setup_leader_buttons(orders_container):
 # LANES
 
 func setup_lanes():
-	for team in autoload.teams:
+	for team in WorldState.teams:
 		for lane in game.map.lanes:
 			var orders_container = {
 				"node": VBoxContainer.new(),

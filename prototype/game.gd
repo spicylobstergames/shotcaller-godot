@@ -109,7 +109,6 @@ func map_loaded():
 			yield(get_tree().create_timer(4), "timeout")
 			
 			Behavior.spawn.leaders()
-			maps.setup_leaders()
 			EventMachine.register_listener(Events.ONE_SEC, self, "units_sec_cycle")
 
 

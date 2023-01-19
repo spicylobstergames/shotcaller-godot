@@ -156,11 +156,10 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-autoload="*res://autoload/autoload.gd"
+WorldState="*res://autoload/World_State.gd"
 EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
 Behavior="*res://unit/behavior.tscn"
-WorldState="*res://world/world_state.gd"
 Goap="*res://goap/goap.gd"
 GoapGoals="*res://goap/GoapGoals.gd"
 

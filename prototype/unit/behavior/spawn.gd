@@ -62,14 +62,14 @@ func random_leader(team):
 func leaders():
 	var red_leaders = []
 	var blue_leaders = []
-	for team in autoload.teams:
+	for team in WorldState.teams:
 		var counter = 0
 		var leaders = game.player_choose_leaders
 		if team != game.player_team: leaders = game.enemy_choose_leaders
 		for leader in leaders:
 			var leader_name = leader
 			if leader == "random":
-				leader_name = autoload.leaders.keys()[randi() % autoload.leaders.size()]
+				leader_name = WorldState.leaders.keys()[randi() % WorldState.leaders.size()]
 			var lane = game.map.lanes[0]
 			if game.map.lanes.size() == 3:
 				if counter < 2: lane = game.map.lanes[0]
@@ -84,8 +84,7 @@ func leaders():
 			else:
 				blue_leaders.append(leader_node)
 	game.ui.get_node("score_board").initialize(red_leaders, blue_leaders)
-
-
+	game.maps.setup_leaders()
 
 
 func pawns():
@@ -97,7 +96,7 @@ func spawn_group_cycle():
 	Behavior.orders.leaders_cycle()
 	Behavior.orders.update_taxes()
 	
-	for team in autoload.teams:
+	for team in WorldState.teams:
 		var extra_unit = player_extra_unit
 		if team != game.player_team: extra_unit = enemy_extra_unit
 		for lane in game.map.lanes:
@@ -133,7 +132,6 @@ func send_pawn(template, lane, team):
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
 	Behavior.orders.set_pawn(pawn)
-
 
 
 func spawn_unit(unit, l, t, mode, point):

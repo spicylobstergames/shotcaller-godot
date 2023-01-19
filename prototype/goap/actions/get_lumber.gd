@@ -33,7 +33,6 @@ func perform(agent, delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	#var cut_position = WorldState.get_closest_element("trees", agent.blackboard)
 	unit.working = true
 	unit.after_arive = "cut"
 	Behavior.move.point(unit, agent.get_state("closest_tree"))

@@ -11,7 +11,7 @@ func _ready():
 	for child in leader_grid.get_children():
 		leader_grid.remove_child(child)
 		child.queue_free()
-	for leader in autoload.leaders:
+	for leader in WorldState.leaders:
 		var button = leader_select_button.instance()
 		button.prepare(leader)
 		leader_grid.add_child(button)
