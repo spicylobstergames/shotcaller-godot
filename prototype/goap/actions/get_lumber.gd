@@ -1,4 +1,4 @@
-extends GoapAction
+extends "../Action.gd"
 
 class_name GetLumber
 
@@ -12,9 +12,9 @@ func is_valid(blackboard) -> bool:
 
 
 func get_cost(blackboard):
-	if blackboard.has("position"):
-		#var closest_tree = WorldState.get_closest_element("trees", blackboard)
-		return int(Vector2(515,562).distance_to(blackboard.position) / 7)
+	#if blackboard.has("position"):
+		#var closest_tree = agent.get_state("closest_tree")
+		#return int(tree_pos.distance_to(blackboard.position) / 7)
 	return 3
 
 
@@ -28,30 +28,29 @@ func get_effects() -> Dictionary:
 	}
 
 func perform(agent, delta) -> bool:
-	if agent.get_state("has_wood"):
-		return true
-	return false
+	return agent.get_state("has_wood")
+
 
 func enter(agent):
-	#var cut_position = WorldState.get_closest_element("trees", agent.blackboard)
-	agent.get_unit().working = true
-	agent.get_unit().after_arive = "cut"
-	Behavior.move.move(agent.get_unit(), Vector2(515,562))
+	var unit = agent.get_unit()
+	unit.working = true
+	unit.after_arive = "cut"
+	Behavior.move.point(unit, agent.get_state("closest_tree"))
 
-	
 
 
 func on_arrive(agent):
-	agent.get_unit().after_arive = "stop"
-	agent.get_unit().set_state("attack")
-	if agent.get_unit().channeling_timer.time_left > 0: 
-		agent.get_unit().channeling_timer.stop()
-	agent.get_unit().channeling_timer.wait_time = cut_time
-	agent.get_unit().channeling_timer.start()
+	var unit = agent.get_unit()
+	unit.after_arive = "stop"
+	unit.set_state("attack")
+	if unit.channeling_timer.time_left > 0: 
+		unit.channeling_timer.stop()
+	unit.channeling_timer.wait_time = cut_time
+	unit.channeling_timer.start()
 	
 	# cut animation end
-	yield(agent.get_unit().channeling_timer, "timeout")
-	agent.get_unit().working = true
+	yield(unit.channeling_timer, "timeout")
+	unit.working = true
 	agent.set_state("has_wood",true)
 
 

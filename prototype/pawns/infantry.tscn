@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/sword.tscn" type="PackedScene" id=2]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=3]
 
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
@@ -493,6 +492,7 @@ attacks = true
 damage = 50
 defense = 5
 projectile_speed = 0.0
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -503,9 +503,12 @@ position = Vector2( 0.3, 0.3 )
 scale = Vector2( 1.6, 1.6 )
 
 [node name="body" parent="sprites" index="1"]
+rotation = 0.0443854
+scale = Vector2( 1, 0.936423 )
 frame = 2
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
+rotation = 0.739757
 animation = "default"
 
 [node name="stuck" parent="sprites" index="3"]
@@ -527,9 +530,5 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
-
-[node name="goals" type="Node" parent="." index="6"]
-script = ExtResource( 3 )
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [editable path="hud"]

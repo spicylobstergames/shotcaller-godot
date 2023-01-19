@@ -1,4 +1,7 @@
-#
+extends Node
+
+# self = Goap.Agent
+
 # This script integrates the unit (NPC) with goap.
 # In your implementation you could have this logic
 # inside your NPC script.
@@ -6,9 +9,6 @@
 # As good practice, I suggest leaving it isolated like
 # this, so it makes re-use easy and it doesn't get tied
 # to unrelated implementation details (movement, collisions, etc)
-extends Node
-
-class_name GoapAgent
 
 var _goals
 var _current_goal
@@ -16,6 +16,7 @@ var _current_plan
 var _current_plan_step = 0
 var _unit
 var _state = {}
+
 
 func get_unit():
 	return _unit
@@ -36,7 +37,7 @@ func clear_state():
 	_state = {}
 
 func get_current_action():
-	if(_current_plan != null):
+	if(_current_plan != null and _current_plan.size() > 0):
 		return _current_plan[_current_plan_step]
 	else:
 		return null
@@ -70,14 +71,21 @@ func process(delta):
 			if(_current_plan): _current_plan[_current_plan_step].exit(self)
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
 			_current_plan_step = 0
-			_current_plan[0].enter(self)#works!
+			if(_current_plan.size() > 0):
+				_current_plan[0].enter(self)#works!
 	else:
 		_follow_plan(_current_plan, delta)#works!
 
 
-func init(unit, goals: Array):
+func init(unit):
 	_unit = unit
-	_goals = goals
+	_goals = []
+	
+	if unit.goals.size() > 0:
+		for goal in unit.goals:
+			_goals.push_back(Goap.get_goal(goal))
+		unit.add_child(self)
+	
 	EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
 
 
@@ -118,7 +126,7 @@ func _follow_plan(plan, delta):
 			_current_plan = null
 
 func on_every_second() :
-	if(_current_plan != null):
+	if(_current_plan != null and _current_plan.size() > 0):
 		get_current_action().on_every_second(self)
 
 func on_arrive():

@@ -1,10 +1,9 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/spear.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/sida_blue.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/sida_red.png" type="Texture" id=4]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=5]
 
 [sub_resource type="AtlasTexture" id=40]
 atlas = ExtResource( 3 )
@@ -560,6 +559,7 @@ ranged = true
 damage = 50
 defense = 5
 projectile_speed = 210.0
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -605,9 +605,5 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
-
-[node name="goals" type="Node" parent="." index="7"]
-script = ExtResource( 5 )
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

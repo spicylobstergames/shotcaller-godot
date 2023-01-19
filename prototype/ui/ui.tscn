@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/menus/controls_menu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/hud.gd" type="Script" id=4]
 [ext_resource path="res://ui/minimap_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://ui/menus/orders_menu.tscn" type="PackedScene" id=7]
@@ -147,3 +148,6 @@ unique_name_in_owner = true
 pause_mode = 2
 visible = false
 mouse_filter = 1
+
+[node name="hud" type="Control" parent="."]
+script = ExtResource( 4 )

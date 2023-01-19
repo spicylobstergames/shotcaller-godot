@@ -11,10 +11,7 @@ const enemy_leaders_orders = {}
 var player_tax = "low"
 var enemy_tax = "low"
 
-var player_extra_unit = "infantry"
-var enemy_extra_unit = "infantry"
 
-const lumberjack_cost = 100
 const conquer_time = 3
 const destroy_time = 5
 const collect_time = 16
@@ -135,9 +132,9 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 	
-	var extra_unit = player_extra_unit
+	var extra_unit = Behavior.spawn.player_extra_unit
 	if leader.team == game.enemy_team:
-		extra_unit = enemy_extra_unit
+		extra_unit = Behavior.spawn.enemy_extra_unit
 	var cost
 	match extra_unit:
 		"infantry": cost = 1
@@ -240,8 +237,8 @@ func lose_building(building):
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
 			if team == game.player_team:
-				player_extra_unit = "infantry"
-			else: enemy_extra_unit = "infantry"
+				 Behavior.spawn.player_extra_unit = "infantry"
+			else:  Behavior.spawn.enemy_extra_unit = "infantry"
 			building.attacks = false
 		
 		"outpost": building.attacks = false
@@ -352,45 +349,6 @@ func gold_destroy_counter(button):
 				game.ui.inventories.leaders[leader.name].extra_mine_gold = 0
 
 
-
-# CAMP
-
-func camp_hire(unit, team):
-	if team == game.player_team:
-		player_extra_unit = unit
-	else: enemy_extra_unit = unit
-	
-	var cost
-	match unit:
-		"infantry": cost = 1
-		"archer": cost = 2
-		"mounted": cost = 3
-	
-	var leaders = game.player_leaders
-	if team == game.enemy_team: leaders = game.enemy_leaders
-	for leader in leaders: leader.gold -= cost
-
-
-# LUMBERMILL
-
-func lumberjack_hire(orders, team):
-	var lumbermill = game.selected_unit
-	var lumberjack = lumbermill.target
-	
-	# create lumberjack
-	if not lumberjack:
-		lumberjack = Behavior.spawn.next_to_building("lumberjack", lumbermill)
-		lumberjack.origin = lumberjack.global_position
-		lumberjack.target = lumbermill
-		lumbermill.target = lumberjack
-		
-	lumberjack.setup_team(team)
-	lumberjack.visible = true
-	
-	# charge player
-	var leaders = game.player_leaders
-	if team == game.enemy_team: leaders = game.enemy_leaders
-	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
 
 # TAXES
 

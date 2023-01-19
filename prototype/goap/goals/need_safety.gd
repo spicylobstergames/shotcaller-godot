@@ -1,4 +1,4 @@
-extends GoapGoal
+extends "../Goal.gd"
 
 class_name NeedSafetyGoal
 

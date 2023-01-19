@@ -1,7 +1,8 @@
-#
-# Goal contract
-#
 extends Node
+
+# self = Goap.Goals
+
+# Lists all Goal contracts
 
 var _goals = {
 	"AttackEnemyGoal": AttackEnemyGoal.new(),
@@ -19,9 +20,3 @@ func get_goal(goal_name, default = null):
 
 func set_goal(goal_name, value):
 	_goals[goal_name] = value
-
-
-func process(units, delta):
-	for unit in units:
-		if unit.agent._goals:
-			unit.agent.process(delta)

@@ -1,4 +1,4 @@
-extends Control
+extends Container
 
 onready var game = get_tree().get_current_scene()
 

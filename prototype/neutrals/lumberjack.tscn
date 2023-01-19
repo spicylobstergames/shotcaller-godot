@@ -1,9 +1,9 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/unit/lumberjack_blue.png" type="Texture" id=1]
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=2]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=3]
 [ext_resource path="res://weapons/jack_axe.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/unit/lumberjack_red.png" type="Texture" id=5]
 
 [sub_resource type="AtlasTexture" id=35]
 atlas = ExtResource( 1 )
@@ -17,12 +17,29 @@ region = Rect2( 24, 0, 24, 24 )
 atlas = ExtResource( 1 )
 region = Rect2( 48, 0, 24, 24 )
 
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 5 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 5 )
+region = Rect2( 48, 0, 24, 24 )
+
 [sub_resource type="SpriteFrames" id=38]
 resource_name = "lumberjack"
 animations = [ {
 "frames": [ SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
 "loop": true,
 "name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 39 ), SubResource( 40 ), SubResource( 41 ) ],
+"loop": true,
+"name": "red",
 "speed": 5.0
 } ]
 
@@ -564,6 +581,7 @@ collide = true
 damage = 50
 defense = 5
 projectile_speed = 0.0
+goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -571,6 +589,7 @@ scale = Vector2( 10, 10 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 38 )
+animation = "red"
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 4 )]
 visible = false
@@ -592,6 +611,4 @@ shape = SubResource( 29 )
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
 
-[node name="goals" type="Node" parent="." index="6"]
-script = ExtResource( 3 )
-goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
+[editable path="hud"]

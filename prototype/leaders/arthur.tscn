@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/aura_of_courage.tscn" type="PackedScene" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=6]
 [ext_resource path="res://weapons/excalibur.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/animations/side_smoke_2.png" type="Texture" id=8]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=9]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 3 )
@@ -569,6 +568,7 @@ attacks = true
 damage = 80
 defense = 5
 projectile_speed = 0.0
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -645,9 +645,5 @@ position = Vector2( 7, -5 )
 icon = ExtResource( 5 )
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource( 6 )
-
-[node name="goals" type="Node" parent="." index="8"]
-script = ExtResource( 9 )
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

@@ -1,21 +1,18 @@
-#
-# Action Contract
-#
 extends Node
 
-class_name GoapAction
+# self = Goap.Action
 
-
+# Action Contract
 #
 # This indicates if the action should be considered or not.
 #
 # Currently I'm using this method only during planning, but it could
 # also be used during execution to abort the plan in case the world state
 # does not allow this action anymore.
-#
+
+
 func is_valid(blackboard) -> bool:
 	return true
-
 
 #
 # Action Cost. This is a function so it handles situational costs, when the world
@@ -55,16 +52,18 @@ func get_effects() -> Dictionary:
 #
 # Returns true when the task is complete.
 #
-#
+
 func perform(_agent, _delta) -> bool:
 	return false
 
 func enter(_agent):
 	pass
-	
+
 func exit(_agent) :
 	pass
+
 func on_every_second(_agent) :
 	pass
+
 func on_arrive(_agent):
 	pass

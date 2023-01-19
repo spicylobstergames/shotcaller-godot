@@ -28,7 +28,7 @@ func build():
 		name_label.text = leader.display_name
 		var hint_label = button.get_node("hint")
 		hint_label.text = str(index)
-		var sprite = autoload.leaders[leader.display_name]
+		var sprite = WorldState.leaders[leader.display_name]
 		var icon = button.get_node("sprite")
 		if game.player_team == "blue": icon.material = null
 		icon.region_rect.position.x = sprite * 64

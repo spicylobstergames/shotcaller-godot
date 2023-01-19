@@ -1,4 +1,4 @@
-extends GoapAction
+extends "../Action.gd"
 
 class_name AttackEnemy
 
@@ -6,7 +6,7 @@ func get_class(): return "AttackEnemy"
 
 
 func is_valid(blackboard) -> bool:
-	return blackboard.has("enemy_active") and blackboard["enemy_active"]
+	return blackboard.has("target_enemy_active") and blackboard["target_enemy_active"]
 
 #presently a magic number... maybe use distance in the future
 func get_cost(blackboard) -> int:
@@ -19,22 +19,27 @@ func get_preconditions() -> Dictionary:
 
 func get_effects() -> Dictionary:
 	return {
-		"enemy_active": false,
+		"target_enemy_active": false,
 		"command_target_enemy": null,
 	}
 
 func perform(agent, delta) -> bool:
 	var unit = agent.get_unit()
+	# if target gone, dead or out of sight
 	if unit.target == null or unit.target.dead or not unit.point_collision(unit.target.position, unit.vision):     
 		agent.clear_commands()                   
 		return true
-	if not unit.stunned and (unit.state != "attack" or unit.state != "idle") and  Behavior.attack.in_range(unit, unit.target):# basically, is not already attacking (idle/attack) and is it in range
+	# if unit is not stunned and not already attacking and target is in range
+	if not unit.stunned and unit.state != "attack" and Behavior.attack.in_range(unit, unit.target):
 		Behavior.attack.point(unit, unit.target.position)
 
 	return false
+
+
 func exit(agent):
 	var unit = agent.get_unit()
-	agent.set_state("enemy_active", unit.get_units_on_sight({"team": unit.opponent_team()}).size() > 0)
+	agent.set_state("target_enemy_active", unit.get_units_on_sight({"team": unit.opponent_team()}).size() > 0)
+
 
 func enter(agent):
 	var unit = agent.get_unit()

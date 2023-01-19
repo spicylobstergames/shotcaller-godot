@@ -1,4 +1,6 @@
-# This class is an Autoload accessible globaly.
+extends Node
+
+# This class is an Autoload accessible globally.
 # It initialises a GoapActionPlanner with the available
 # actions.
 #
@@ -8,10 +10,16 @@
 #
 # This example keeps things simple, creating only one planner
 # with pre-defined actions.
-#
-extends Node
 
-var _action_planner =  GoapActionPlanner.new()
+
+# self = Goap
+
+
+var _action_planner = preload("ActionPlanner.gd").new()
+var _goals = preload("Goals.gd").new()
+
+var agent = preload("../goap/Agent.gd")
+
 
 func _ready():
 	_action_planner.set_actions([
@@ -26,5 +34,21 @@ func _ready():
 	])
 
 
-func get_action_planner() -> GoapActionPlanner:
+func get_action_planner():
 	return _action_planner
+
+
+func get_goal(goal):
+	return _goals.get_goal(goal)
+
+
+func get_agent(unit):
+	var new_agent = agent.new()
+	new_agent.init(unit)
+	return new_agent
+
+
+func process(units, delta):
+	for unit in units:
+		if unit.agent._goals:
+			unit.agent.process(delta)

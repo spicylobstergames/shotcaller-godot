@@ -29,17 +29,18 @@ var enemy_team:String = "red"
 
 var rng = RandomNumberGenerator.new()
 
+onready var background = get_node("background")
 onready var maps = get_node("maps")
+onready var ui = get_node("ui")
 onready var camera = get_node("camera")
 onready var collision = get_node("collision")
-onready var ui = get_node("ui")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
-onready var background = $"%background"
-onready var main_menu = $menu/main_menu
-onready var pause_menu = $menu/pause_menu
-onready var team_selection_menu = $menu/team_selection_menu
+
+onready var main_menu = $"%main_menu"
+onready var pause_menu = $"%pause_menu"
+onready var team_selection_menu = $"%team_selection_menu"
 
 var map:Node
 
@@ -53,6 +54,8 @@ var victory:String
 
 
 func _ready():
+	
+	#Engine.time_scale = 2
 	#get_tree().paused = true
 	ui.show()
 #	randomize()
@@ -91,7 +94,6 @@ func map_loaded():
 		
 		maps.setup_buildings()
 		map.blocks.setup_quadtree()
-		#Engine.time_scale = 2
 		
 		rng.randomize()
 		maps.setup_lanes()
@@ -109,14 +111,13 @@ func map_loaded():
 			yield(get_tree().create_timer(4), "timeout")
 			
 			Behavior.spawn.leaders()
-			maps.setup_leaders()
 			EventMachine.register_listener(Events.ONE_SEC, self, "units_sec_cycle")
 
 
 func _physics_process(delta):
 	if started:
 		collision.process(delta)
-		GoapGoals.process(all_units, delta)
+		Goap.process(all_units, delta)
 
 
 func can_control(unit1):
@@ -139,25 +140,26 @@ func units_sec_cycle(): # called every second
 
 func resume():
 	background.visible = false
-	pause_menu.visible = false
+	pause_menu.hide_all()
 	paused = false
 	get_tree().paused = false
 	Behavior.spawn.timer.paused = false;
 	ui.show_all()
-	ui.get_node('mid').visible = false
 	ui.minimap.visible = true
+	ui.rect_layer.visible = true
 	ui.get_node("score_board").visible = false
 
 
 func pause():
-	paused = false
+	paused = true
 	get_tree().paused = true
-	pause_menu.visible = true
+	pause_menu.show_all()
 	Behavior.spawn.timer.paused = true
 	ui.hide_all()
-	ui.get_node('mid').visible = true
 	ui.minimap.visible = false
+	ui.rect_layer.visible = false
 	team_selection_menu.visible = false
+	
 
 func exit():
 	get_tree().quit(0)
@@ -167,7 +169,6 @@ func reload():
 	EventMachine.reset()
 # warning-ignore:return_value_discarded
 	get_tree().reload_current_scene()
-	Hud._ready()
 	Behavior._ready()
 
 
@@ -189,4 +190,5 @@ func start(red_team_leaders, blue_team_leaders, _player_team, map_index):
 	main_menu.visible = false
 	team_selection_menu.visible = false
 	background.visible = false
+	ui.minimap.update_map_texture = true
 	resume()

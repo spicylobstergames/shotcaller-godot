@@ -20,6 +20,7 @@ var controls_button:Node
 var menu_button:Node
 var inventories:Node
 var active_skills:Node
+var hud:Node
 
 var timer:Timer
 
@@ -38,6 +39,7 @@ func _ready():
 	controls_menu = get_node("%controls_menu")
 	leaders_icons = get_node("%leaders_icons")
 
+	hud = get_node("hud")
 	inventories = stats.get_node("inventories")
 
 	controls_button = buttons.get_node("controls_button")

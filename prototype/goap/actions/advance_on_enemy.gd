@@ -1,4 +1,4 @@
-extends GoapAction
+extends "../Action.gd"
 
 class_name AdvanceOnEnemy
 
@@ -25,6 +25,7 @@ func get_effects() -> Dictionary:
 func perform(agent, delta) -> bool:
 	return false
 
+
 func enter(agent):
 	var path = agent.get_unit().game.maps.new_path(agent.get_unit().lane, agent.get_unit().team)
 	if path != null:
@@ -32,6 +33,7 @@ func enter(agent):
 		var next_point = new_path.pop_front()
 		agent.get_unit().current_path = new_path
 		point(agent.get_unit(), next_point)
+
 
 func point(unit, objective, smart_move = false): # move_and_attack
 	Behavior.attack.set_target(unit, null)
@@ -87,4 +89,4 @@ func on_idle_end(unit):
 
 func smart(unit, objective):
 	point(unit, objective, true)
-					
+

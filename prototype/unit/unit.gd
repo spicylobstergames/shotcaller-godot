@@ -1,5 +1,9 @@
 extends Node
+
+
 class_name Unit
+
+
 var game:Node
 
 # self = game.unit
@@ -20,7 +24,6 @@ export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
-var agent := GoapAgent.new()
 var symbol:bool = false
 
 # SELECTION
@@ -120,6 +123,10 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
 
+# GOAP
+onready var agent = Goap.get_agent(self)
+export var goals = []
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -140,15 +147,7 @@ func _ready():
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
-	
-	if find_node("goals"):
-		var goals = []
-		var unit_goals = find_node("goals")
-		if "goals" in unit_goals:
-			for goal in unit_goals.goals:
-				goals.push_back(GoapGoals.get_goal(goal))
-			agent.init(self, goals)
-			add_child(agent)
+
 
 func gain_experience(value):
 	experience += value
@@ -162,6 +161,7 @@ func on_experience_tick():
 
 func experience_needed():
 	return EXP_LEVEL_COEFFICIENT * level
+
 
 func reset_unit():
 	self.setup_team(self.team)
@@ -180,19 +180,18 @@ func reset_unit():
 	self.channeling = false
 	self.retreating = false
 	self.working = false
-	Hud.update_hpbar(self)
+	game.ui.hud.update_hpbar(self)
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
 	if(agent):
 		agent.reset()
 
+
 func set_state(s):
 	if not self.dead:
 		self.state = s
 		self.get_node("animations").current_animation = s
-
-
 
 
 func setup_team(new_team):
@@ -421,7 +420,6 @@ func on_arrive(): # when collides with destiny
 		match self.after_arive:
 			"conquer": Behavior.orders.conquer_building(self)
 			"pray": Behavior.orders.pray_in_church(self)
-			"lumber_arive": Behavior.orders.lumber_arive(self)
 
 
 func on_attack_release(): # every ranged projectile start
@@ -441,7 +439,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 func heal(heal_hp):
 	self.current_hp += heal_hp
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
-	Hud.update_hpbar(self)
+	game.ui.hud.update_hpbar(self)
 	if self == game.selected_unit: game.ui.stats.update()
 
 

@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://ui/buttons/menu_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/ui/CompassProTitle.tres" type="DynamicFont" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=5]
@@ -23,4 +22,3 @@ custom_styles/pressed = SubResource( 1 )
 custom_styles/focus = SubResource( 4 )
 custom_styles/normal = SubResource( 2 )
 text = "New game"
-script = ExtResource( 1 )

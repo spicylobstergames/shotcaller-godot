@@ -16,31 +16,32 @@
 [node name="game" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="menu" type="Node2D" parent="."]
-
-[node name="background" parent="menu" instance=ExtResource( 13 )]
-unique_name_in_owner = true
-position = Vector2( 0, -30 )
+[node name="background" parent="." instance=ExtResource( 13 )]
 scale = Vector2( 1.5, 1.5 )
 
+[node name="menu" type="Node2D" parent="."]
+position = Vector2( -300, -300 )
+
 [node name="main_menu" parent="menu" instance=ExtResource( 5 )]
+unique_name_in_owner = true
 
 [node name="pause_menu" parent="menu" instance=ExtResource( 12 )]
 pause_mode = 2
-visible = false
+unique_name_in_owner = true
 
 [node name="team_selection_menu" parent="menu" instance=ExtResource( 14 )]
+unique_name_in_owner = true
 visible = false
 
 [node name="maps" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
+[node name="ui" parent="." instance=ExtResource( 4 )]
+visible = false
+
 [node name="camera" type="Camera2D" parent="."]
 current = true
 script = ExtResource( 3 )
-
-[node name="ui" parent="." instance=ExtResource( 4 )]
-visible = false
 
 [node name="collision" type="Node" parent="."]
 script = ExtResource( 10 )
