@@ -8,7 +8,7 @@
 # to unrelated implementation details (movement, collisions, etc)
 extends Node
 
-class_name GoapAgent
+#class_name GoapAgent
 
 var _goals
 var _current_goal

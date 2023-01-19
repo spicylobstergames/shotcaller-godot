@@ -1,5 +1,9 @@
 extends Node
+
+
 class_name Unit
+
+
 var game:Node
 
 # self = game.unit
@@ -20,7 +24,6 @@ export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
-var agent := GoapAgent.new()
 var symbol:bool = false
 
 # SELECTION
@@ -120,6 +123,9 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
 
+# goap
+const GoapAgent = preload("res://goap/GoapAgent.gd")
+var agent = GoapAgent.new()
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -141,6 +147,7 @@ func _ready():
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
 	
+	# goap
 	if find_node("goals"):
 		var goals = []
 		var unit_goals = find_node("goals")
@@ -149,6 +156,7 @@ func _ready():
 				goals.push_back(GoapGoals.get_goal(goal))
 			agent.init(self, goals)
 			add_child(agent)
+
 
 func gain_experience(value):
 	experience += value

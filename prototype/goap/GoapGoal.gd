@@ -3,7 +3,7 @@
 #
 extends Node
 
-class_name GoapGoal
+#class_name GoapGoal
 
 
 #

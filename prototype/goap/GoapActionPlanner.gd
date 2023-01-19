@@ -3,7 +3,8 @@
 #
 extends Node
 
-class_name GoapActionPlanner
+#class_name GoapActionPlanner
+
 
 var _actions: Array
 

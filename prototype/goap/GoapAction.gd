@@ -3,7 +3,7 @@
 #
 extends Node
 
-class_name GoapAction
+#class_name GoapAction
 
 
 #

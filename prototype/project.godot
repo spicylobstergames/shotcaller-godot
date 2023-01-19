@@ -49,26 +49,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://goap/actions/get_lumber.gd"
 }, {
-"base": "Node",
-"class": "GoapAction",
-"language": "GDScript",
-"path": "res://goap/action.gd"
-}, {
-"base": "Node",
-"class": "GoapActionPlanner",
-"language": "GDScript",
-"path": "res://goap/action_planner.gd"
-}, {
-"base": "Node",
-"class": "GoapAgent",
-"language": "GDScript",
-"path": "res://goap/agent.gd"
-}, {
-"base": "Node",
-"class": "GoapGoal",
-"language": "GDScript",
-"path": "res://goap/goal.gd"
-}, {
 "base": "GoapAction",
 "class": "Hide",
 "language": "GDScript",
@@ -128,10 +108,6 @@ _global_script_class_icons={
 "CommandAttackEnemyGoal": "",
 "CommandAttackGoal": "",
 "GetLumber": "",
-"GoapAction": "",
-"GoapActionPlanner": "",
-"GoapAgent": "",
-"GoapGoal": "",
 "Hide": "",
 "NeedLumberGoal": "",
 "NeedSafetyGoal": "",
@@ -156,12 +132,16 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-WorldState="*res://autoload/World_State.gd"
+Behavior="*res://unit/behavior.tscn"
 EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
-Behavior="*res://unit/behavior.tscn"
-Goap="*res://goap/goap.gd"
+GoapActionPlanner="*res://goap/GoapActionPlanner.gd"
+GoapAction="*res://goap/GoapAction.gd"
+GoapAgent="*res://goap/GoapAgent.gd"
 GoapGoals="*res://goap/GoapGoals.gd"
+GoapGoal="*res://goap/GoapGoal.gd"
+Goap="*res://goap/Goap.gd"
+WorldState="*res://world/World_State.gd"
 
 [debug]
 
