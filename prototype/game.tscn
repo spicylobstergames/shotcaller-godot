@@ -17,7 +17,6 @@
 script = ExtResource( 2 )
 
 [node name="background" parent="." instance=ExtResource( 13 )]
-unique_name_in_owner = true
 scale = Vector2( 1.5, 1.5 )
 
 [node name="menu" type="Node2D" parent="."]

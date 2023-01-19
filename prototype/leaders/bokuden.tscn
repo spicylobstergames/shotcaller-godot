@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/katana.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/bokuden_red.png" type="Texture" id=3]
 [ext_resource path="res://assets/leaders/bokuden_blue.png" type="Texture" id=4]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=5]
 [ext_resource path="res://skills/abilites/critical_slash.tscn" type="PackedScene" id=6]
 
 [sub_resource type="AtlasTexture" id=41]
@@ -584,6 +583,7 @@ damage = 60
 attack_speed = 1.2
 defense = 5
 projectile_speed = 0.0
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -633,9 +633,5 @@ position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
 [node name="critical_slash" parent="behavior/abilities" index="0" instance=ExtResource( 6 )]
-
-[node name="goals" type="Node" parent="." index="7"]
-script = ExtResource( 5 )
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

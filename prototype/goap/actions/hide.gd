@@ -1,4 +1,4 @@
-extends GoapAction
+extends "../Action.gd"
 
 class_name Hide
 
@@ -33,7 +33,7 @@ func perform(agent, delta) -> bool:
 		return false
 
 func enter(agent):
-		Behavior.move.move(agent.get_unit(), Vector2(458,570))
+		Behavior.move.point(agent.get_unit(), Vector2(458,570))
 		agent.set_state("is_safe",0)
 
 func on_arrive(agent):

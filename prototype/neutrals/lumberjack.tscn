@@ -1,8 +1,7 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/unit/lumberjack_blue.png" type="Texture" id=1]
 [ext_resource path="res://unit/unit.tscn" type="PackedScene" id=2]
-[ext_resource path="res://goap/unitgoals.gd" type="Script" id=3]
 [ext_resource path="res://weapons/jack_axe.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/unit/lumberjack_red.png" type="Texture" id=5]
 
@@ -582,6 +581,7 @@ collide = true
 damage = 50
 defense = 5
 projectile_speed = 0.0
+goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -610,9 +610,5 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
-
-[node name="goals" type="Node" parent="." index="6"]
-script = ExtResource( 3 )
-goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
 
 [editable path="hud"]

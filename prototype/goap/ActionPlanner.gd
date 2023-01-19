@@ -1,12 +1,14 @@
+extends Node
+
+# self = GoapActionPlanner
+
+
 #
 # Planner. Goap's heart.
 #
-extends Node
-
-#class_name GoapActionPlanner
-
 
 var _actions: Array
+
 
 
 #
@@ -21,7 +23,7 @@ func set_actions(actions: Array):
 # Receives a Goal and an optional blackboard.
 # Returns a list of actions to be executed.
 #
-func get_plan(agent, goal: GoapGoal, blackboard = {}) -> Array:
+func get_plan(agent, goal, blackboard = {}) -> Array:
 	#print("Goal: %s" % goal.get_class())
 	var desired_state = goal.get_desired_state(agent)
 
@@ -165,3 +167,4 @@ func _print_plan(plan):
 	for a in plan.actions:
 		actions.push_back(a.get_class())
 	print({"cost": plan.cost, "actions": actions})
+

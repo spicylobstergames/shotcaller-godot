@@ -1,4 +1,4 @@
-extends GoapAction
+extends "../Action.gd"
 
 class_name GetLumber
 

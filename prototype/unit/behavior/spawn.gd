@@ -148,11 +148,11 @@ func spawn_unit(unit, l, t, mode, point):
 	return unit
 
 
-func next_to_building(template, building):
+func next_to_building(template, building, team):
 	var spawn_point = building.global_position
 	spawn_point.y += building.collision_radius + building.collision_position.y + 1
 	var unit_template = self[template]
-	return game.maps.create(unit_template, "", building.team, "point", spawn_point)
+	return game.maps.create(unit_template, "", team or building.team, "point", spawn_point)
 
 
 func cemitery_add_pawn(unit):
@@ -188,7 +188,7 @@ func cemitery_add_leader(leader):
 func lumberjack_hire(lumbermill, team):
 	var unit = lumbermill.target
 	if not unit: # create lumberjack
-		unit = Behavior.spawn.next_to_building("lumberjack", lumbermill)
+		unit = Behavior.spawn.next_to_building("lumberjack", lumbermill, team)
 		unit.agent.set_state("lumbermill_position", unit.global_position)  
 		unit.agent.set_state("closest_tree", lumbermill.get_node("closest_tree").global_position)
 		lumbermill.target = unit

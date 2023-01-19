@@ -29,14 +29,15 @@ var enemy_team:String = "red"
 
 var rng = RandomNumberGenerator.new()
 
+onready var background = get_node("background")
 onready var maps = get_node("maps")
+onready var ui = get_node("ui")
 onready var camera = get_node("camera")
 onready var collision = get_node("collision")
-onready var ui = get_node("ui")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
-onready var background = $"%background"
+
 onready var main_menu = $"%main_menu"
 onready var pause_menu = $"%pause_menu"
 onready var team_selection_menu = $"%team_selection_menu"
@@ -53,6 +54,7 @@ var victory:String
 
 
 func _ready():
+	
 	#Engine.time_scale = 2
 	#get_tree().paused = true
 	ui.show()
@@ -115,7 +117,7 @@ func map_loaded():
 func _physics_process(delta):
 	if started:
 		collision.process(delta)
-		GoapGoals.process(all_units, delta)
+		Goap.process(all_units, delta)
 
 
 func can_control(unit1):

@@ -123,9 +123,10 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
 
-# goap
-const GoapAgent = preload("res://goap/GoapAgent.gd")
-var agent = GoapAgent.new()
+# GOAP
+onready var agent = Goap.get_agent(self)
+export var goals = []
+
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -146,16 +147,6 @@ func _ready():
 # warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
-	
-	# goap
-	if find_node("goals"):
-		var goals = []
-		var unit_goals = find_node("goals")
-		if "goals" in unit_goals:
-			for goal in unit_goals.goals:
-				goals.push_back(GoapGoals.get_goal(goal))
-			agent.init(self, goals)
-			add_child(agent)
 
 
 func gain_experience(value):
