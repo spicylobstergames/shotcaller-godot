@@ -1,10 +1,15 @@
 extends Node
-var game:Node
 
-# self = Behavior.move
+var game:Node
+var behavior:Node
+
+
+# self = behavior.move
+
 
 func _ready():
 	game = get_tree().get_current_scene()
+	behavior = get_parent()
 
 
 func setup_timer(unit):
@@ -34,12 +39,12 @@ func move(unit, destiny):
 		if(destiny == Vector2.ZERO):
 			print('NO!')
 		calc_step(unit)
-		unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "speed") / unit.speed
+		unit.get_node("animations").playback_speed = behavior.modifiers.get_value(unit, "speed") / unit.speed
 		unit.set_state("move")
 
 
 func calc_step(unit):
-	var speed = Behavior.modifiers.get_value(unit, "speed")
+	var speed = behavior.modifiers.get_value(unit, "speed")
 	if speed > 0:
 		var distance = unit.current_destiny - unit.global_position
 		unit.angle = distance.angle()
@@ -70,7 +75,7 @@ func on_collision(unit, delta):
 			unit.global_position -= pr.normalized()
 			a = randf()*2*PI # just try a random direction
 		unit.angle = a # change directioin
-		var s = Behavior.modifiers.get_value(unit, "speed")
+		var s = behavior.modifiers.get_value(unit, "speed")
 		unit.current_step = Vector2(s * cos(a), s * sin(a))
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
@@ -111,6 +116,6 @@ func stand(unit):
 
 func smart(unit, point, cb):
 	if not unit.stunned and not unit.command_casting:
-		var path = Behavior.follow.find_path(unit.global_position, point)
-		if path: Behavior.follow.path(unit, path, cb)
+		var path = behavior.follow.find_path(unit.global_position, point)
+		if path: behavior.follow.path(unit, path, cb)
 

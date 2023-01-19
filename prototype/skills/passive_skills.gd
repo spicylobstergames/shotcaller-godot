@@ -1,7 +1,10 @@
 extends Node
-var game:Node
 
-# self = Behavior.skills
+var game:Node
+var behavior:Node
+
+
+# self = behavior.skills
 
 
 const leader = {

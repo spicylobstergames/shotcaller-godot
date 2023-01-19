@@ -29,11 +29,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://goap/goals/attack_enemy.gd"
 }, {
-"base": "Node",
-"class": "Behaviors",
-"language": "GDScript",
-"path": "res://unit/behavior.gd"
-}, {
 "base": "",
 "class": "CommandAttackEnemyGoal",
 "language": "GDScript",
@@ -87,7 +82,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "Unit",
 "language": "GDScript",
-"path": "res://unit/unit.gd"
+"path": "res://unit/Unit.gd"
 }, {
 "base": "",
 "class": "WaitOut",
@@ -104,7 +99,6 @@ _global_script_class_icons={
 "AdvanceOnPosition": "",
 "AttackEnemy": "",
 "AttackEnemyGoal": "",
-"Behaviors": "",
 "CommandAttackEnemyGoal": "",
 "CommandAttackGoal": "",
 "GetLumber": "",
@@ -132,11 +126,11 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-Behavior="*res://unit/behavior.tscn"
+Behavior="*res://unit/Behavior.tscn"
 EventMachine="*res://utils/event_machine.gd"
 Events="*res://utils/events.gd"
 WorldState="*res://world/World_State.gd"
-Goap="*res://goap/Goap.tscn"
+Goap="*res://goap/Goap.gd"
 
 [debug]
 

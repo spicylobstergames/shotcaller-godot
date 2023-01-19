@@ -1,6 +1,8 @@
 extends Node
 
-class_name Behaviors
+# This class is an Autoload accessible globally.
+
+# self = Behavior
 
 onready var spawn = $spawn
 onready var move = $move
