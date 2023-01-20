@@ -1,11 +1,11 @@
 extends "../Goal.gd"
 
-class_name CommandAttackGoal
+#class_name CommandAttackGoal
 
 func get_class(): return "CommandAttackGoal"
 
 func is_valid(agent) -> bool:
-	return agent.get_state("command_target_attack_pos") != null
+	return agent.get_state("command_attack_point") != null
 
 
 func priority(agent) -> int:

@@ -1,6 +1,6 @@
 extends "../Action.gd"
 
-class_name Hide
+#class_name Hide
 
 func get_class(): return "Hide"
 

@@ -39,13 +39,13 @@ func update_hpbar():
 # STATE LABEL
 
 func hide_states():
-	for unit in game.all_units:
-		if unit != game.selected_unit:
-			if unit.hud: unit.hud.state.visible = false
+	for unit1 in game.all_units:
+		if unit1 != game.selected_unit:
+			if unit1.hud: unit1.hud.state.visible = false
 
 
 func show_states():
-	for unit in game.all_units:
-		if unit.hud and unit.type == "leader": 
-			unit.hud.hpbar.visible = true
+	for unit1 in game.all_units:
+		if unit1.hud and unit1.type == "leader": 
+			unit1.hud.hpbar.visible = true
 

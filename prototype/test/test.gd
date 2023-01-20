@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.test
 
-var unit = 1
+var unit = 0
 var stress = 0
 
 
@@ -22,7 +22,7 @@ func spawn_unit():
 #		inf.hp = 100
 #		inf.current_hp = 100
 		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(420,400))
-		leader.dead = true
+		#leader.dead = true
 		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
 		var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(480,400))
 		dummy.hp = 10000

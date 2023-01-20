@@ -1,6 +1,6 @@
 extends "../Action.gd"
 
-class_name AdvanceOnEnemy
+#class_name AdvanceOnEnemy
 
 func get_class(): return "AdvanceOnEnemy"
 

@@ -1,6 +1,6 @@
 extends "../Action.gd"
 
-class_name ReturnLumber
+#class_name ReturnLumber
 
 func get_class(): return "ReturnLumber"
 
