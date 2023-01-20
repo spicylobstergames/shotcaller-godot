@@ -264,7 +264,7 @@ func give_item(delivery):
 			inventory.consumable_item_buttons[index].setup(item)
 	item.delivered = true
 
-	game.ui.hud.update_hpbar(leader)
+	leader.hud.update_hpbar()
 
 
 
@@ -287,7 +287,7 @@ func remove_item(leader, index):
 	elif item.type == "throwable":
 		inventory.consumable_items[index - equip_items_max] = null
 
-	game.ui.hud.update_hpbar(leader)
+	leader.hud.update_hpbar()
 
 	return item
 

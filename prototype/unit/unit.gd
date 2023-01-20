@@ -180,7 +180,7 @@ func reset_unit():
 	self.channeling = false
 	self.retreating = false
 	self.working = false
-	game.ui.hud.update_hpbar(self)
+	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
@@ -439,7 +439,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 func heal(heal_hp):
 	self.current_hp += heal_hp
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
-	game.ui.hud.update_hpbar(self)
+	self.hud.update_hpbar()
 	if self == game.selected_unit: game.ui.stats.update()
 
 
