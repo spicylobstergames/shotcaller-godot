@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/menus/controls_menu.tscn" type="PackedScene" id=2]
@@ -10,7 +10,10 @@
 [ext_resource path="res://ui/menus/ui_buttons.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/stats.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/panels/dialog.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/menus/main_menu.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/leaders_icons.tscn" type="PackedScene" id=12]
+[ext_resource path="res://ui/menus/pause_menu.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=14]
 [ext_resource path="res://ui/scoreboard/score_board.tscn" type="PackedScene" id=18]
 [ext_resource path="res://ui/cheat_console.gd" type="Script" id=19]
 
@@ -19,9 +22,9 @@ size = 11
 font_data = ExtResource( 6 )
 
 [node name="ui" type="CanvasLayer"]
+layer = 2
 script = ExtResource( 1 )
 __meta__ = {
-"_edit_vertical_guides_": [ -366.0 ],
 "_editor_description_": "Prevents ui panning"
 }
 
@@ -79,6 +82,34 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+
+[node name="menu" type="CenterContainer" parent="mid"]
+margin_left = -600.0
+margin_top = -600.0
+
+[node name="main_menu" parent="mid/menu" instance=ExtResource( 11 )]
+unique_name_in_owner = true
+margin_left = 300.0
+margin_top = 300.0
+margin_right = 300.0
+margin_bottom = 300.0
+
+[node name="pause_menu" parent="mid/menu" instance=ExtResource( 13 )]
+pause_mode = 2
+unique_name_in_owner = true
+visible = false
+margin_left = 300.0
+margin_top = 300.0
+margin_right = 300.0
+margin_bottom = 300.0
+
+[node name="team_selection_menu" parent="mid/menu" instance=ExtResource( 14 )]
+unique_name_in_owner = true
+visible = false
+margin_left = 300.0
+margin_top = 300.0
+margin_right = 300.0
+margin_bottom = 300.0
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5

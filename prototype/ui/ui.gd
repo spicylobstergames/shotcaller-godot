@@ -22,6 +22,10 @@ var inventories:Node
 var active_skills:Node
 var hud:Node
 
+onready var main_menu = $"%main_menu"
+onready var pause_menu = $"%pause_menu"
+onready var team_selection_menu = $"%team_selection_menu"
+
 var timer:Timer
 
 func _ready():
@@ -46,13 +50,46 @@ func _ready():
 	shop_button = buttons.get_node("shop_button")
 	orders_button = buttons.get_node("orders_button")
 	
-	active_skills = $bot_mid/stats/active_skills
+	active_skills = stats.get_node("active_skills")
 	
 	EventMachine.register_listener(Events.ONE_SEC, self, "count_time")
 	
 	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
 	
 	hide_all()
+
+
+func show_main_menu():
+	hide_all()
+	show()
+	get_node("mid").visible = true
+	hide_menus()
+	main_menu.visible = true
+
+
+func show_pause_menu():
+	hide_all()
+	show()
+	get_node("mid").visible = true
+	minimap.visible = false
+	rect_layer.visible = false
+	hide_menus()
+	pause_menu.visible = true
+
+
+func show_team_selection():
+	hide_all()
+	show()
+	get_node("mid").visible = true
+	hide_menus()
+	game.ui.team_selection_menu.visible = true
+
+
+func hide_menus():
+	main_menu.visible = false
+	pause_menu.visible = false
+	team_selection_menu.visible = false
+
 
 func process():
 	# if opt.show.fps:
