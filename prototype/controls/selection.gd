@@ -7,7 +7,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func _unhandled_input(event):
+func input(event):
 	var point = game.camera.get_global_mouse_position()
 	
 	# KEYBOARD

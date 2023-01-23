@@ -10,7 +10,7 @@
 [ext_resource path="res://unit/collision.gd" type="Script" id=10]
 [ext_resource path="res://ui/waterfall/waterfall_background.tscn" type="PackedScene" id=13]
 
-[node name="game" type="Node2D"]
+[node name="game" type="Node"]
 script = ExtResource( 2 )
 
 [node name="background" parent="." instance=ExtResource( 13 )]
@@ -20,7 +20,6 @@ scale = Vector2( 1.5, 1.5 )
 script = ExtResource( 6 )
 
 [node name="ui" parent="." instance=ExtResource( 4 )]
-layer = 1
 __meta__ = {
 "_edit_vertical_guides_": [ -366.0 ],
 "_editor_description_": "Prevents ui panning"

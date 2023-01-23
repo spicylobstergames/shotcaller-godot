@@ -22,16 +22,12 @@ size = 11
 font_data = ExtResource( 6 )
 
 [node name="ui" type="CanvasLayer"]
-layer = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_editor_description_": "Prevents ui panning"
 }
 
 [node name="top_left" type="Control" parent="."]
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="fps" type="Label" parent="top_left"]
 unique_name_in_owner = true
@@ -64,9 +60,6 @@ __meta__ = {
 [node name="top_right" type="Control" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="shop" parent="top_right" instance=ExtResource( 3 )]
 unique_name_in_owner = true
@@ -114,9 +107,6 @@ margin_bottom = 300.0
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
 anchor_bottom = 0.5
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="leaders_icons" parent="mid_left" instance=ExtResource( 12 )]
 unique_name_in_owner = true
@@ -160,9 +150,6 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="orders_menu" parent="bot_right" instance=ExtResource( 7 )]
 unique_name_in_owner = true
@@ -175,10 +162,14 @@ visible = false
 [node name="buttons" parent="bot_right" instance=ExtResource( 8 )]
 unique_name_in_owner = true
 
-[node name="score_board" parent="." instance=ExtResource( 18 )]
-pause_mode = 2
-visible = false
-mouse_filter = 1
-
 [node name="hud" type="Control" parent="."]
 script = ExtResource( 4 )
+
+[node name="score_board" parent="." instance=ExtResource( 18 )]
+pause_mode = 2
+unique_name_in_owner = true
+visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 600.0
+margin_bottom = 600.0

@@ -417,8 +417,8 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves and self.attacks: 
 		if self.agent.has_action_function("resume"):
 			self.agent.get_current_action().resume(self)
-	if self == game.selected_unit: Behavior.follow.draw_path(self)
 	emit_signal("unit_move_ended")
+	if self == game.selected_unit: Behavior.follow.draw_path(self)
 
 
 func on_arrive(): # when collides with destiny

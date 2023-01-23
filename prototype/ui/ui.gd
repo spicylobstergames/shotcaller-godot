@@ -14,6 +14,7 @@ var shop:Node
 var controls_menu:Node
 var orders_menu:Node
 var leaders_icons:Node
+var scoreboard:Node
 var orders_button:Node
 var shop_button:Node
 var controls_button:Node
@@ -42,6 +43,7 @@ func _ready():
 	orders_menu = get_node("%orders_menu")
 	controls_menu = get_node("%controls_menu")
 	leaders_icons = get_node("%leaders_icons")
+	scoreboard = get_node("%score_board")
 
 	hud = get_node("hud")
 	inventories = stats.get_node("inventories")
@@ -59,38 +61,6 @@ func _ready():
 	hide_all()
 
 
-func show_main_menu():
-	hide_all()
-	show()
-	get_node("mid").visible = true
-	hide_menus()
-	main_menu.visible = true
-
-
-func show_pause_menu():
-	hide_all()
-	show()
-	get_node("mid").visible = true
-	minimap.visible = false
-	rect_layer.visible = false
-	hide_menus()
-	pause_menu.visible = true
-
-
-func show_team_selection():
-	hide_all()
-	show()
-	get_node("mid").visible = true
-	hide_menus()
-	game.ui.team_selection_menu.visible = true
-
-
-func hide_menus():
-	main_menu.visible = false
-	pause_menu.visible = false
-	team_selection_menu.visible = false
-
-
 func process():
 	# if opt.show.fps:
 	var f = Engine.get_frames_per_second()
@@ -106,6 +76,36 @@ func process():
 			minimap.follow_camera()
 
 
+func show_mid():
+	hide_all()
+	hide_menus()
+	show()
+	get_node("mid").visible = true
+
+
+func show_main_menu():
+	show_mid()
+	main_menu.visible = true
+
+
+func show_pause_menu():
+	show_mid()
+	pause_menu.visible = true
+
+
+func show_team_selection():
+	show_mid()
+	game.ui.team_selection_menu.visible = true
+
+
+func hide_menus():
+	get_node("mid").visible = false
+	main_menu.visible = false
+	pause_menu.visible = false
+	team_selection_menu.visible = false
+
+
+
 func count_time():
 	if not get_tree().paused:
 		game.time += 1
@@ -117,11 +117,15 @@ func count_time():
 
 
 func hide_all():
+	minimap.visible = false
+	rect_layer.visible = false
 	for panel in self.get_children():
 		panel.hide()
 
 
 func show_all():
+	minimap.visible = true
+	rect_layer.visible = true
 	for panel in self.get_children():
 		panel.show()
 

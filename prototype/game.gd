@@ -31,8 +31,8 @@ var rng = RandomNumberGenerator.new()
 
 onready var background = get_node("background")
 onready var maps = get_node("maps")
-onready var ui = get_node("ui")
 onready var camera = get_node("camera")
+onready var ui = get_node("ui")
 onready var collision = get_node("collision")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
@@ -143,7 +143,7 @@ func resume():
 	ui.hide_menus()
 	ui.minimap.visible = true
 	ui.rect_layer.visible = true
-	ui.get_node("score_board").visible = false
+	ui.scoreboard.visible = false
 
 
 func pause():

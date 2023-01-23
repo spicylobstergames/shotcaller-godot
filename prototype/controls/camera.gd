@@ -29,7 +29,7 @@ func _ready():
 	yield(get_tree(), "idle_frame")
 
 
-func _unhandled_input(event):
+func input(event):
 	# KEYBOARD
 	if event is InputEventKey:
 		
