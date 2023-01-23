@@ -16,22 +16,14 @@ extends Node
 
 
 var _action_planner = preload("ActionPlanner.gd").new()
+var _actions = preload("Actions.gd").new()
 var _goals = preload("Goals.gd").new()
 
 var agent = preload("../goap/Agent.gd")
 
 
 func _ready():
-	_action_planner.set_actions([
-		AdvanceOnEnemy.new(),
-		GetLumber.new(),
-		ReturnLumber.new(),
-		AttackEnemy.new(),
-		RetreatAction.new(),
-		WaitOut.new(),
-		Hide.new(),
-		AdvanceOnPosition.new()
-	])
+	_action_planner.set_actions(_actions.get_all_actions())
 
 
 func get_action_planner():

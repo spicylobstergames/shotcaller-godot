@@ -7,6 +7,7 @@
 [ext_resource path="res://ui/team_selection/leader_portrait.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=2]
+size = 14
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
@@ -26,16 +27,17 @@ size_flags_vertical = 3
 script = ExtResource( 4 )
 
 [node name="Panel" type="PanelContainer" parent="."]
-margin_right = 313.0
+margin_right = 271.0
 margin_bottom = 62.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 306.0
+margin_right = 264.0
 margin_bottom = 55.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/separation = 0
 
 [node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer"]
 margin_right = 48.0
@@ -44,21 +46,21 @@ rect_min_size = Vector2( 48, 48 )
 
 [node name="portrait" type="Sprite" parent="Panel/HBoxContainer/CenterContainer2"]
 unique_name_in_owner = true
-scale = Vector2( 0.5, 0.5 )
+scale = Vector2( 0.75, 0.75 )
 texture = ExtResource( 2 )
 centered = false
 script = ExtResource( 5 )
 
 [node name="separator4" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 52.0
-margin_right = 62.0
+margin_left = 48.0
+margin_right = 58.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="level" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 66.0
-margin_right = 79.0
+margin_left = 58.0
+margin_right = 70.0
 margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -68,15 +70,15 @@ align = 1
 valign = 1
 
 [node name="separator" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 83.0
-margin_right = 93.0
+margin_left = 70.0
+margin_right = 80.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="kda" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 97.0
-margin_right = 164.0
+margin_left = 80.0
+margin_right = 144.0
 margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -86,15 +88,15 @@ align = 1
 valign = 1
 
 [node name="separator2" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 168.0
-margin_right = 178.0
+margin_left = 144.0
+margin_right = 154.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="last_hits" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 182.0
-margin_right = 208.0
+margin_left = 154.0
+margin_right = 178.0
 margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -104,15 +106,15 @@ align = 1
 valign = 1
 
 [node name="separator3" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 212.0
-margin_right = 222.0
+margin_left = 178.0
+margin_right = 188.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="gold_amount" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 226.0
-margin_right = 265.0
+margin_left = 188.0
+margin_right = 227.0
 margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -122,16 +124,17 @@ align = 1
 valign = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer"]
-margin_left = 269.0
-margin_right = 299.0
+margin_left = 227.0
+margin_right = 257.0
 margin_bottom = 48.0
-size_flags_horizontal = 7
+size_flags_horizontal = 5
 size_flags_vertical = 3
 
 [node name="Sprite2" type="TextureRect" parent="Panel/HBoxContainer/CenterContainer"]
 margin_top = 9.0
 margin_right = 30.0
 margin_bottom = 39.0
+rect_pivot_offset = Vector2( 20, 20 )
 size_flags_horizontal = 12
 size_flags_vertical = 12
 texture = SubResource( 1 )

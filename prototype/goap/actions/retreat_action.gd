@@ -1,6 +1,6 @@
 extends "../Action.gd"
 
-class_name RetreatAction
+#class_name RetreatAction
 
 func get_class(): return "RetreatAction"
 

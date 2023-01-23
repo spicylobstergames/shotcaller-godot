@@ -1,11 +1,11 @@
 extends "../Goal.gd"
 
-class_name CommandAttackEnemyGoal
+#class_name CommandAttackEnemyGoal
 
 func get_class(): return "CommandAttackEnemyGoal"
 
 func is_valid(agent) -> bool:
-	if agent.get_state("command_target_enemy") != null:
+	if agent.get_state("command_attack_target") != null:
 		return true
 	return false
 
@@ -15,5 +15,5 @@ func priority(agent) -> int:
 
 func get_desired_state(agent) -> Dictionary:
 	return {
-		"command_target_enemy": null
+		"command_attack_target": null
 	}

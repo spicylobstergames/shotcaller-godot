@@ -1,7 +1,11 @@
 extends Node
-var game:Node
 
-# self = Behavior.spawn
+var game:Node
+var behavior:Node
+
+
+# self = behavior.spawn
+
 
 var order_time = 8
 var lumberjack_cost = 100
@@ -46,7 +50,9 @@ onready var timer : Timer = $Timer
 
 func _ready():
 	game = get_tree().get_current_scene()
-	yield(get_tree(), "idle_frame")
+	behavior = get_parent()
+	
+	#yield(get_tree(), "idle_frame")
 	
 	timer.one_shot = true
 	timer.wait_time = order_time
@@ -92,9 +98,9 @@ func pawns():
 
 
 func spawn_group_cycle():
-	Behavior.orders.lanes_cycle()
-	Behavior.orders.leaders_cycle()
-	Behavior.orders.update_taxes()
+	behavior.orders.lanes_cycle()
+	behavior.orders.leaders_cycle()
+	behavior.orders.update_taxes()
 	
 	for team in WorldState.teams:
 		var extra_unit = player_extra_unit
@@ -107,7 +113,7 @@ func spawn_group_cycle():
 	
 	timer.start()
 	yield(timer, "timeout")
-	Behavior.orders.leaders_cycle()
+	behavior.orders.leaders_cycle()
 	
 	timer.start()
 	yield(timer, "timeout")
@@ -131,7 +137,7 @@ func send_pawn(template, lane, team):
 	if not pawn:
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
-	Behavior.orders.set_pawn(pawn)
+	behavior.orders.set_pawn(pawn)
 
 
 func spawn_unit(unit, l, t, mode, point):
@@ -165,9 +171,9 @@ func cemitery_add_pawn(unit):
 func cemitery_add_leader(leader):
 	match leader.team:
 		game.player_team:
-			Behavior.spawn.cemitery.player_leaders.append(leader)
+			behavior.spawn.cemitery.player_leaders.append(leader)
 		game.enemy_team:
-			Behavior.spawn.cemitery.enemy_leaders.append(leader)
+			behavior.spawn.cemitery.enemy_leaders.append(leader)
 	
 	var respawn_time = order_time * leader.respawn
 	yield(get_tree().create_timer(respawn_time), "timeout")
@@ -188,7 +194,7 @@ func cemitery_add_leader(leader):
 func lumberjack_hire(lumbermill, team):
 	var unit = lumbermill.target
 	if not unit: # create lumberjack
-		unit = Behavior.spawn.next_to_building("lumberjack", lumbermill, team)
+		unit = next_to_building("lumberjack", lumbermill, team)
 		unit.agent.set_state("lumbermill_position", unit.global_position)  
 		unit.agent.set_state("closest_tree", lumbermill.get_node("closest_tree").global_position)
 		lumbermill.target = unit

@@ -1,5 +1,10 @@
 extends Node
+
 var game:Node
+var behavior:Node
+
+
+# self = behavior.follow
 
 
 var path_line
@@ -18,6 +23,7 @@ var path_finder
 
 func _ready():
 	game = get_tree().get_current_scene()
+	behavior = get_parent()
 	path_line = Line2D.new()
 
 
@@ -72,9 +78,8 @@ func in_limits(p):
 func path(unit, path, cb):
 	if path and path.size():
 		var next_point = path.pop_front()
-		unit.current_path = path# I don't think this is needed
-		var node:Behaviors = Behavior #hack
-		node[cb].point(unit, next_point)
+		unit.current_path = path
+		behavior[cb].point(unit, next_point)
 
 
 func next(unit):
@@ -110,7 +115,7 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.lane = lane
-	Behavior.move.smart(unit, lane_start, "move")
+	behavior.move.smart(unit, lane_start, "move")
 
 
 func smart(unit, path, cb):
@@ -118,8 +123,7 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		var node:Behaviors = Behavior #hack, it comes back as that Behaviors is null if you array access it
-		node[cb].point(unit, next_point)
+		behavior[cb].point(unit, next_point)
 
 
 func teleport(unit, point):
@@ -129,7 +133,7 @@ func teleport(unit, point):
 	game.control_state = "selection"
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
-	Behavior.move.stand(unit)
+	behavior.move.stand(unit)
 	unit.channeling = true
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")

@@ -16,6 +16,7 @@ func _ready():
 	exit_button.connect("pressed", self, "quit")
 	new_game_button.connect("pressed", self, "show_new_game_menu")
 
+
 func quick_start():
 	game.maps.load_map(game.maps.current_map)
 
@@ -37,6 +38,4 @@ func quit():
 	game.exit()
 
 func show_new_game_menu():
-	game.main_menu.visible = false
-	game.pause_menu.visible = false
-	game.team_selection_menu.visible = true
+	game.ui.show_team_selection()

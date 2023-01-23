@@ -1,7 +1,11 @@
 extends Node
-var game:Node
 
-# self = Behavior.modifiers
+var game:Node
+onready var behavior = get_parent()
+
+
+# self = behavior.modifiers
+
 
 var extra_retreat_speed = 10
 

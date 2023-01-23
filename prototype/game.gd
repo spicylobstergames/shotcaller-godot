@@ -31,16 +31,13 @@ var rng = RandomNumberGenerator.new()
 
 onready var background = get_node("background")
 onready var maps = get_node("maps")
-onready var ui = get_node("ui")
 onready var camera = get_node("camera")
+onready var ui = get_node("ui")
 onready var collision = get_node("collision")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
 
-onready var main_menu = $"%main_menu"
-onready var pause_menu = $"%pause_menu"
-onready var team_selection_menu = $"%team_selection_menu"
 
 var map:Node
 
@@ -57,7 +54,7 @@ func _ready():
 	
 	#Engine.time_scale = 2
 	#get_tree().paused = true
-	ui.show()
+	ui.show_main_menu()
 #	randomize()
 	
 	WorldState.set_state("is_game_active", false)
@@ -139,27 +136,22 @@ func units_sec_cycle(): # called every second
 
 
 func resume():
-	background.visible = false
-	pause_menu.hide_all()
 	paused = false
 	get_tree().paused = false
 	Behavior.spawn.timer.paused = false;
 	ui.show_all()
+	ui.hide_menus()
 	ui.minimap.visible = true
 	ui.rect_layer.visible = true
-	ui.get_node("score_board").visible = false
+	ui.scoreboard.visible = false
 
 
 func pause():
 	paused = true
 	get_tree().paused = true
-	pause_menu.show_all()
 	Behavior.spawn.timer.paused = true
-	ui.hide_all()
-	ui.minimap.visible = false
-	ui.rect_layer.visible = false
-	team_selection_menu.visible = false
-	
+	ui.show_pause_menu()
+
 
 func exit():
 	get_tree().quit(0)
@@ -187,8 +179,6 @@ func start(red_team_leaders, blue_team_leaders, _player_team, map_index):
 		maps.current_map = "three_lane_map"
 	
 	maps.load_map(maps.current_map)
-	main_menu.visible = false
-	team_selection_menu.visible = false
 	background.visible = false
 	ui.minimap.update_map_texture = true
 	resume()

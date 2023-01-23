@@ -1,6 +1,6 @@
 extends "../Goal.gd"
 
-class_name NeedSafetyGoal
+#class_name NeedSafetyGoal
 
 func get_class(): return "NeedSafetyGoal"
 

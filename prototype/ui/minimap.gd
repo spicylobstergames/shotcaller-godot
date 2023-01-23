@@ -45,7 +45,11 @@ func _input(event):
 			is_panning = event.is_pressed()
 		elif event is InputEventScreenDrag:
 			if is_panning: pan_position = event.position
-
+			
+	else:
+		game.selection.input(event)
+	
+	game.camera.input(event)
 
 func over_minimap(event):
 	return (

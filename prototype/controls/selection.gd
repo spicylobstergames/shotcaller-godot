@@ -7,7 +7,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func _unhandled_input(event):
+func input(event):
 	var point = game.camera.get_global_mouse_position()
 	
 	# KEYBOARD
@@ -154,9 +154,9 @@ func attack(unit, point):
 		unit.agent.clear_commands()
 		var target = get_unit_at_point(point)
 		if(target != null):
-			unit.agent.set_state("command_target_enemy", target)
+			unit.agent.set_state("command_attack_target", target)
 		else:
-			unit.agent.set_state("command_target_attack_pos", point)
+			unit.agent.set_state("command_attack_point", point)
 		#var order_point = order(unit, point)
 		#Behavior.attack.point(unit, order_point)
 

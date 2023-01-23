@@ -1,43 +1,29 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://game.gd" type="Script" id=2]
 [ext_resource path="res://controls/camera.gd" type="Script" id=3]
 [ext_resource path="res://ui/ui.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui/menus/main_menu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://map/maps.gd" type="Script" id=6]
 [ext_resource path="res://controls/selection.gd" type="Script" id=7]
 [ext_resource path="res://utils/utils.gd" type="Script" id=8]
 [ext_resource path="res://test/test.gd" type="Script" id=9]
 [ext_resource path="res://unit/collision.gd" type="Script" id=10]
-[ext_resource path="res://ui/menus/pause_menu.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/waterfall/waterfall_background.tscn" type="PackedScene" id=13]
-[ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=14]
 
-[node name="game" type="Node2D"]
+[node name="game" type="Node"]
 script = ExtResource( 2 )
 
 [node name="background" parent="." instance=ExtResource( 13 )]
 scale = Vector2( 1.5, 1.5 )
 
-[node name="menu" type="Node2D" parent="."]
-position = Vector2( -300, -300 )
-
-[node name="main_menu" parent="menu" instance=ExtResource( 5 )]
-unique_name_in_owner = true
-
-[node name="pause_menu" parent="menu" instance=ExtResource( 12 )]
-pause_mode = 2
-unique_name_in_owner = true
-
-[node name="team_selection_menu" parent="menu" instance=ExtResource( 14 )]
-unique_name_in_owner = true
-visible = false
-
 [node name="maps" type="Node2D" parent="."]
 script = ExtResource( 6 )
 
 [node name="ui" parent="." instance=ExtResource( 4 )]
-visible = false
+__meta__ = {
+"_edit_vertical_guides_": [ -366.0 ],
+"_editor_description_": "Prevents ui panning"
+}
 
 [node name="camera" type="Camera2D" parent="."]
 current = true

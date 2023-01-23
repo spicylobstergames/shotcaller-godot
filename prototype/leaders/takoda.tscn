@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=2]
 
-[ext_resource path="res://unit/unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://unit/Unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://weapons/takoda_axe.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/leaders/takoda_blue.png" type="Texture" id=5]
 [ext_resource path="res://assets/leaders/takoda_red.png" type="Texture" id=6]

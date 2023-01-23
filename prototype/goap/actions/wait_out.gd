@@ -1,6 +1,6 @@
 extends "../Action.gd"
 
-class_name WaitOut
+#class_name WaitOut
 
 func get_class(): return "WaitOut"
 

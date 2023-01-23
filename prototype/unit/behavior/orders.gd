@@ -1,7 +1,11 @@
 extends Node
-var game:Node
 
-# self = Behavior.orders
+var game:Node
+var behavior:Node
+
+
+# self = behavior.orders
+
 
 const player_lanes_orders = {}
 const enemy_lanes_orders = {}
@@ -58,6 +62,8 @@ func new_orders():
 
 func _ready():
 	game = get_tree().get_current_scene()
+	behavior = get_parent()
+
 
 # LANES
 
@@ -132,9 +138,9 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 	
-	var extra_unit = Behavior.spawn.player_extra_unit
+	var extra_unit = behavior.spawn.player_extra_unit
 	if leader.team == game.enemy_team:
-		extra_unit = Behavior.spawn.enemy_extra_unit
+		extra_unit = behavior.spawn.enemy_extra_unit
 	var cost
 	match extra_unit:
 		"infantry": cost = 1
@@ -171,7 +177,7 @@ func select_target(unit, enemies):
 	var filtered = []
 	
 	for enemy in enemies:
-		if Behavior.attack.can_hit(unit, enemy): filtered.append(enemy)
+		if behavior.attack.can_hit(unit, enemy): filtered.append(enemy)
 	
 	var n = filtered.size()
 	if n == 0: return
@@ -210,7 +216,7 @@ func conquer_building(unit):
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
 	if not unit.stunned and not unit.command_casting and building:
-		var hp = float(Behavior.modifiers.get_value(building, "hp"))
+		var hp = float(behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
 		if building.team == "neutral" and building_full_hp:
@@ -237,8 +243,8 @@ func lose_building(building):
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
 			if team == game.player_team:
-				 Behavior.spawn.player_extra_unit = "infantry"
-			else:  Behavior.spawn.enemy_extra_unit = "infantry"
+				 behavior.spawn.player_extra_unit = "infantry"
+			else:  behavior.spawn.enemy_extra_unit = "infantry"
 			building.attacks = false
 		
 		"outpost": building.attacks = false
@@ -279,7 +285,7 @@ func pray_in_church(unit):
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	Behavior.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
+	behavior.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
 
 # MINE
@@ -381,7 +387,7 @@ func remove_tax(team):
 func take_hit_retreat(attacker, target):
 	match target.type:
 		"leader":
-			var hp = Behavior.modifiers.get_value(target, "hp")
+			var hp = behavior.modifiers.get_value(target, "hp")
 			match target.tactics:
 				"escape":
 					retreat(target)
@@ -396,7 +402,7 @@ func take_hit_retreat(attacker, target):
 func retreat(unit):
 	unit.retreating = true
 	unit.current_path = []
-	Behavior.attack.set_target(unit, null)
+	behavior.attack.set_target(unit, null)
 	var order
 	if unit.team == game.player_team:
 		order = player_leaders_orders[unit.name]
@@ -406,11 +412,11 @@ func retreat(unit):
 	var path = game.map.lanes_paths[lane].duplicate()
 	if unit.team == "red": 
 		path.invert()
-	Behavior.move.point(unit, path[0])
+	behavior.move.point(unit, path[0])
 	
 
 func should_retreat(unit):
-	var hp = Behavior.modifiers.get_value(unit, "hp")
+	var hp = behavior.modifiers.get_value(unit, "hp")
 	match unit.tactics:
 		"escape":
 			return true

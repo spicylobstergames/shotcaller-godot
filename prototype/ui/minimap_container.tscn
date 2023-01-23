@@ -18,32 +18,16 @@ margin_right = 150.0
 custom_styles/bg = SubResource( 1 )
 
 [node name="minimap" parent="." instance=ExtResource( 2 )]
-visible = false
-offset = Vector2( 0, 600 )
-transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
 [node name="rect_layer" type="CanvasLayer" parent="."]
 layer = 2
 visible = false
-offset = Vector2( 0, 600 )
-transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
 [node name="cam_rect" type="ReferenceRect" parent="rect_layer"]
 margin_left = 50.0
 margin_top = -100.0
 margin_right = 94.0
 margin_bottom = -56.0
-rect_pivot_offset = Vector2( 22, 22 )
-border_color = Color( 1, 1, 1, 0.666667 )
-border_width = 2.0
-editor_only = false
-
-[node name="cam_rect2" type="ReferenceRect" parent="rect_layer"]
-visible = false
-margin_left = 52.0
-margin_top = 500.0
-margin_right = 96.0
-margin_bottom = 544.0
 rect_pivot_offset = Vector2( 22, 22 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0

@@ -58,7 +58,7 @@ func _find_best_plan(goal, desired_state, blackboard):
 func _get_cheapest_plan(plans):
 	var best_plan
 	for p in plans:
-		_print_plan(p)
+		#_print_plan(p)
 		if best_plan == null or p.cost < best_plan.cost:
 			best_plan = p
 	return best_plan.actions
@@ -166,5 +166,5 @@ func _print_plan(plan):
 	var actions = []
 	for a in plan.actions:
 		actions.push_back(a.get_class())
-	print({"cost": plan.cost, "actions": actions})
+	print("action_planner: ", {"cost": plan.cost, "actions": actions})
 

@@ -1,6 +1,6 @@
 extends "../Action.gd"
 
-class_name AdvanceOnPosition
+#class_name AdvanceOnPosition
 
 func get_class(): return "AdvanceOnPosition"
 
@@ -26,7 +26,7 @@ func perform(agent, delta) -> bool:
 	return agent.get_state("arrived_at_target") != null and agent.get_state("arrived_at_target") 
 
 func enter(agent):
-	point(agent.get_unit(), agent.get_state("command_target_attack_pos"))
+	point(agent.get_unit(), agent.get_state("command_attack_point"))
 
 func point(unit, objective, smart_move = false): # move_and_attack
 	Behavior.attack.set_target(unit, null)

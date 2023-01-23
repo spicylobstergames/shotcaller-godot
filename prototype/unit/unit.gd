@@ -8,6 +8,21 @@ var game:Node
 
 # self = game.unit
 
+# SIGNALS
+
+signal unit_died
+signal unit_idle_ended
+signal unit_collided
+signal unit_move_ended
+signal unit_arrived
+signal unit_started_channeling
+signal unit_attacked
+signal unit_ranged_attacked
+signal unit_melee_attacked
+signal unit_stuned
+signal unit_stun_ended
+
+
 export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 0
@@ -180,7 +195,7 @@ func reset_unit():
 	self.channeling = false
 	self.retreating = false
 	self.working = false
-	game.ui.hud.update_hpbar(self)
+	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
@@ -383,6 +398,7 @@ func on_idle_end(): # every idle animation end (0.6s)
 		self.agent.get_current_action().on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
+	emit_signal("unit_idle_ended")
 
 
 func on_move(delta): # every frame if there's no collision
@@ -394,19 +410,20 @@ func on_collision(delta):
 		Behavior.move.on_collision(self, delta)
 	if self.agent.has_action_function("on_collision"):
 		self.agent.get_current_action().on_collision(self)
+	emit_signal("unit_collided")
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves and self.attacks: 
 		if self.agent.has_action_function("resume"):
 			self.agent.get_current_action().resume(self)
+	emit_signal("unit_move_ended")
 	if self == game.selected_unit: Behavior.follow.draw_path(self)
-
 
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		if agent.has_action_function("point"):
+		if agent.has_action_function("point"): # ??? todo move all of this to signals
 			agent.get_current_action().point(self, current_path.pop_front())
 	elif self.moves:
 		self.working = false
@@ -420,17 +437,24 @@ func on_arrive(): # when collides with destiny
 		match self.after_arive:
 			"conquer": Behavior.orders.conquer_building(self)
 			"pray": Behavior.orders.pray_in_church(self)
+			
+		emit_signal("unit_arrived")
 
 
 func on_attack_release(): # every ranged projectile start
-	Behavior.attack.projectile_release(self)
-	if self.agent.has_action_function("resume"):
-		self.agent.get_current_action().resume(self)
+	if self.attacks:
+		Behavior.attack.projectile_release(self)
+		emit_signal("unit_attacked")
+		emit_signal("unit_ranged_attacked")
+		if self.agent.has_action_function("resume"):
+			self.agent.get_current_action().resume(self)
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
 		Behavior.attack.hit(self)
+		emit_signal("unit_attacked")
+		emit_signal("unit_melee_attacked")
 		if self.moves:
 			if self.agent.has_action_function("resume"):
 				self.agent.get_current_action().resume(self)
@@ -439,7 +463,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 func heal(heal_hp):
 	self.current_hp += heal_hp
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
-	game.ui.hud.update_hpbar(self)
+	self.hud.update_hpbar()
 	if self == game.selected_unit: game.ui.stats.update()
 
 
@@ -450,6 +474,7 @@ func channel_start(time):
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
 	self.channeling_timer.start()
+	emit_signal("unit_started_channeling")
 
 
 func stun_start():
@@ -458,7 +483,7 @@ func stun_start():
 	self.channeling = false
 	self.command_casting = false
 	self.set_state("stun")
-
+	emit_signal("unit_stuned")
 
 func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
@@ -466,7 +491,7 @@ func on_stun_end():
 		self.stunned = false
 		if self.agent.has_action_function("resume"):
 			self.agent.get_current_action().resume(self)
-
+	emit_signal("unit_stun_ended")
 
 
 func die():  # hp <= 0
@@ -499,7 +524,9 @@ func on_death_end():  # death animation end
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
+	
 	Behavior.attack.clear_stuck(self)
+	
 	if game.test.stress: game.test.respawn(self)
 	else:
 		match self.type:
@@ -509,4 +536,6 @@ func on_death_end():  # death animation end
 				if self.display_name == 'castle':
 					EventMachine.register_event(Events.GAME_END,
 							["ENEMY" if team == game.player_team else "PLAYER"])
+	
+	emit_signal("unit_died")
 

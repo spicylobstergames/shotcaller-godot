@@ -1,14 +1,19 @@
 extends Node
-var game:Node
 
-# self = Behavior.attack
+var game:Node
+var behavior:Node
+
+
+# self = behavior.attack
+
 
 func _ready():
 	game = get_tree().get_current_scene()
+	behavior = get_parent()
 
 
 func point(unit, point):
-	if unit.attacks and not unit.stunned and not unit.command_casting and Behavior.move.in_bounds(point):
+	if unit.attacks and not unit.stunned and not unit.command_casting and behavior.move.in_bounds(point):
 
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(point)
@@ -18,12 +23,12 @@ func point(unit, point):
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				if can_hit(unit, target) and in_range(unit, target):
-					Behavior.attack.set_target(unit, target)
+					behavior.attack.set_target(unit, target)
 		
 		if unit.target or game.test.unit:
 			unit.aim_point = point
 			unit.look_at(point)
-			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
+			unit.get_node("animations").playback_speed = behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 			
 		elif "resume" in unit.agent.get_current_action(): 
@@ -34,11 +39,11 @@ func set_target(unit, target):
 	if not target: 
 		unit.hunting = false
 		unit.attack_count = 0
-		Behavior.modifiers.remove(unit, "attack_speed", "agile")
+		behavior.modifiers.remove(unit, "attack_speed", "agile")
 	if target and unit.moves: unit.hunting = true
 	if unit.target != target:
 		unit.attack_count = 0
-		Behavior.modifiers.remove(unit, "attack_speed", "agile")
+		behavior.modifiers.remove(unit, "attack_speed", "agile")
 		unit.last_target = unit.target
 	unit.target = target
 
@@ -65,8 +70,8 @@ func hit(unit1):
 		did_hit = true
 	
 	# melee cleave damage
-	if unit1.display_name in Behavior.skills.leader:
-		var attacker_skills = Behavior.skills.leader[unit1.display_name]
+	if unit1.display_name in behavior.skills.leader:
+		var attacker_skills = behavior.skills.leader[unit1.display_name]
 		if "cleave" in attacker_skills:
 			var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
 			for unit2 in neighbors:
@@ -91,14 +96,14 @@ func can_hit(attacker, target):
 
 func in_range(attacker, target):
 	var att_pos = attacker.global_position + attacker.attack_hit_position
-	var att_rad = Behavior.modifiers.get_value(attacker, "attack_range")
+	var att_rad = behavior.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
 func take_hit(attacker, target, projectile = null, modifiers = {}):
-	modifiers = Behavior.skills.hit_modifiers(attacker, target, projectile, modifiers)
+	modifiers = behavior.skills.hit_modifiers(attacker, target, projectile, modifiers)
 	
 	if projectile:
 		if not modifiers.pierce: 
@@ -109,7 +114,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 	
 	if target and not target.dead and not target.immune:
 		if not modifiers.dodge:
-			var damage = max(1, modifiers.damage - Behavior.modifiers.get_value(target, "defense"))
+			var damage = max(1, modifiers.damage - behavior.modifiers.get_value(target, "defense"))
 			target.current_hp -= damage
 			attacker.attack_count += 1
 			if attacker.type == "leader":
@@ -122,24 +127,24 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			if target.agent.has_action_function("ally_attacked"):
 				target.agent.get_current_action().ally_attacked(target, attacker)
 			
-		#Behavior.orders.take_hit_retreat(attacker, target)#Moveing to a retreat action
-		if target.hud: game.ui.hud.update_hpbar(target)
+		#behavior.orders.take_hit_retreat(attacker, target)#Moveing to a retreat action
+		if target.hud: target.hud.update_hpbar()
 		if target == game.selected_unit: game.ui.stats.update()
 		
 		if (target.type == "building" and 
 				target.subtype == "backwood"):
 				
-				var hp = Behavior.modifiers.get_value(target, "hp")
+				var hp = behavior.modifiers.get_value(target, "hp")
 				var rate = float(target.current_hp)/float(hp)
 				
-				var tax = Behavior.orders.player_tax
+				var tax = behavior.orders.player_tax
 				if target.team == game.enemy_team:
-					tax = Behavior.orders.enemy_tax
+					tax = behavior.orders.enemy_tax
 					
-				var limit = Behavior.orders.tax_conquer_limit[tax]
+				var limit = behavior.orders.tax_conquer_limit[tax]
 				
 				if rate <= limit:
-					Behavior.orders.lose_building(target)
+					behavior.orders.lose_building(target)
 		
 		if target.current_hp <= 0: 
 			target.current_hp = 0
@@ -150,7 +155,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				if attacker.team == game.player_team: game.player_kills += 1
 				else: game.enemy_kills += 1
 			yield(get_tree().create_timer(0.6), "timeout")
-			Behavior.attack.set_target(attacker, null)
+			behavior.attack.set_target(attacker, null)
 			if attacker.agent.has_action_function("resume"):
 				attacker.agent.get_current_action().resume(attacker)
 
@@ -158,7 +163,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 func projectile_release(attacker):
 	projectile_start(attacker, attacker.target)
-	Behavior.skills.projectile_release(attacker)
+	behavior.skills.projectile_release(attacker)
 
 
 
@@ -167,7 +172,7 @@ func projectile_start(attacker, target):
 	if target:
 		target_position = target.global_position + target.collision_position
 		if target.dead or target.immune: return
-	if not Behavior.move.in_bounds(target_position): return
+	if not behavior.move.in_bounds(target_position): return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	game.map.add_child(projectile)
@@ -190,12 +195,12 @@ func projectile_start(attacker, target):
 	projectile.global_rotation = a
 	# piercing target array
 	var targets = null
-	if attacker.display_name in Behavior.skills.leader:
-		var attacker_skills = Behavior.skills.leader[attacker.display_name]
+	if attacker.display_name in behavior.skills.leader:
+		var attacker_skills = behavior.skills.leader[attacker.display_name]
 		if "pierce" in attacker_skills: 
 			target = null
 	if not target: targets = []
-	var radius = Behavior.modifiers.get_value(attacker, "attack_range") + 20
+	var radius = behavior.modifiers.get_value(attacker, "attack_range") + 20
 	attacker.projectiles.append({
 		"target": target,
 		"targets": targets,
