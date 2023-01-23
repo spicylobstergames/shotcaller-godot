@@ -301,14 +301,18 @@ position = Vector2( 0, -30 )
 script = ExtResource( 1 )
 
 [node name="background" type="Sprite" parent="."]
-self_modulate = Color( 0.435294, 0.591538, 0.772549, 1 )
 texture = ExtResource( 4 )
 
 [node name="waterfall" parent="." instance=ExtResource( 13 )]
+modulate = Color( 1, 1, 1, 0.270588 )
 position = Vector2( 170, -34 )
 
-[node name="large_particles" type="Particles2D" parent="waterfall"]
-position = Vector2( 0, 90 )
+[node name="waterfall2" parent="." instance=ExtResource( 13 )]
+position = Vector2( 170, -34 )
+scale = Vector2( 0.85, 1 )
+
+[node name="large_particles" type="Particles2D" parent="."]
+position = Vector2( 170, 50 )
 amount = 80
 lifetime = 2.0
 preprocess = 10.0
@@ -317,8 +321,8 @@ randomness = 1.0
 process_material = SubResource( 7 )
 texture = ExtResource( 2 )
 
-[node name="small_particles" type="Particles2D" parent="waterfall"]
-position = Vector2( 0, 100 )
+[node name="small_particles" type="Particles2D" parent="."]
+position = Vector2( 170, 50 )
 amount = 10
 lifetime = 3.0
 speed_scale = 2.0
@@ -326,13 +330,13 @@ explosiveness = 0.2
 randomness = 1.0
 process_material = SubResource( 28 )
 
-[node name="forefall" type="Sprite" parent="waterfall"]
-position = Vector2( -160, 50 )
+[node name="forefall" type="Sprite" parent="."]
+position = Vector2( 9, 14 )
 texture = ExtResource( 6 )
 centered = false
 
 [node name="scene" type="Node2D" parent="."]
-position = Vector2( -319, -164 )
+position = Vector2( -320, -160 )
 
 [node name="grass" parent="scene" instance=ExtResource( 12 )]
 position = Vector2( 0, 235 )
@@ -343,7 +347,7 @@ center_light = Vector2( 200, 280 )
 colors = [ Color( 0.086275, 0.352941, 0.298039, 1 ), Color( 0.137255, 0.564706, 0.388235, 1 ), Color( 0.117647, 0.737255, 0.45098, 1 ), Color( 0.568627, 0.858824, 0.411765, 1 ), Color( 0.803922, 0.87451, 0.423529, 1 ) ]
 
 [node name="axe" type="Sprite" parent="scene"]
-position = Vector2( 466, 244 )
+position = Vector2( 466, 235 )
 rotation = -1.13795
 scale = Vector2( -2.4, 2.4 )
 texture = ExtResource( 7 )
@@ -381,7 +385,7 @@ region_enabled = true
 region_rect = Rect2( 194, 14, 21, 5 )
 
 [node name="arrow4" type="Sprite" parent="scene"]
-position = Vector2( 377, 264 )
+position = Vector2( 370, 257 )
 rotation = 0.776672
 scale = Vector2( 2, 2 )
 texture = ExtResource( 10 )
@@ -426,7 +430,7 @@ process_material = SubResource( 19 )
 texture = ExtResource( 8 )
 
 [node name="front" type="Node2D" parent="."]
-position = Vector2( -322, -159 )
+position = Vector2( -320, -160 )
 
 [node name="grass2" parent="front" instance=ExtResource( 12 )]
 position = Vector2( 0, 295 )
