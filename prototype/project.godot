@@ -43,8 +43,6 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 Behavior="*res://unit/Behavior.tscn"
-EventMachine="*res://utils/event_machine.gd"
-Events="*res://utils/events.gd"
 WorldState="*res://world/World_State.gd"
 Goap="*res://goap/Goap.gd"
 

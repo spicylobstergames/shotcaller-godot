@@ -1,12 +1,16 @@
 extends Container
 
+# self = game.ui.team_selection_menu
+
 onready var game = get_tree().get_current_scene()
+
 
 onready var leader_select_menu_panel = preload("res://ui/team_selection/leader_select_menu_panel.tscn")
 onready var leader_select_menu = preload("res://ui/team_selection/leader_select_panel.tscn")
 onready var red_team_container : VBoxContainer = $"%red_team_container"
 onready var blue_team_container : VBoxContainer = $"%blue_team_container"
 onready var frame_container = $CenterContainer
+
 
 func _ready():
 	# clear containers (Dummy entries used for visualization)
@@ -66,20 +70,34 @@ func get_red_team_leaders():
 func get_blue_team_leaders():
 	return get_leaders('blue')
 
+
 func get_selected_map():
 	if $"%1_lane_checkbox".pressed:
-		return 1
+		return "one_lane_map"
 	else:
-		return 3
+		return "three_lane_map"
+
 
 func get_player_team():
 	if $"%blue_team_checkbox".pressed:
 		return "blue"
 	return "red"
 
+
 func _on_start_game_button_pressed():
-	game.start(
-		get_red_team_leaders(),
-		get_blue_team_leaders(),
-		get_player_team(),
-		get_selected_map())
+	game.maps.current_map = get_selected_map()
+	game.player_team = get_player_team()
+		
+	var blue_team_leaders = get_blue_team_leaders()
+	var red_team_leaders = get_red_team_leaders()
+	
+	if game.player_team == "blue":
+		game.enemy_team = "red"
+		game.player_choose_leaders = blue_team_leaders
+		game.enemy_choose_leaders = red_team_leaders
+	else:
+		game.enemy_team = "blue"
+		game.player_choose_leaders = red_team_leaders
+		game.enemy_choose_leaders = blue_team_leaders
+	
+	game.start()

@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://ui/scoreboard/score_board_entry.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/scoreboard/scoreboard_entry.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=2]
-[ext_resource path="res://ui/scoreboard/score_board.gd" type="Script" id=3]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://ui/scoreboard/scoreboard.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0901961, 0.101961, 0.305882, 1 )
@@ -23,16 +23,16 @@ border_color = Color( 0.423529, 0.0392157, 0.00392157, 1 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 40
-font_data = ExtResource( 4 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 32
-font_data = ExtResource( 4 )
+font_data = ExtResource( 3 )
 
-[node name="score_board" type="Control"]
+[node name="scoreboard" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchor_right = 1.0

@@ -3,7 +3,7 @@
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/ui/question_mark.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/icons.png" type="Texture" id=3]
-[ext_resource path="res://ui/scoreboard/score_board_entry.gd" type="Script" id=4]
+[ext_resource path="res://ui/scoreboard/scoreboard_entry.gd" type="Script" id=4]
 [ext_resource path="res://ui/team_selection/leader_portrait.gd" type="Script" id=5]
 
 [sub_resource type="DynamicFont" id=2]
@@ -17,7 +17,7 @@ font_data = ExtResource( 1 )
 atlas = ExtResource( 3 )
 region = Rect2( 680, 10, 30, 30 )
 
-[node name="score_board_entry" type="MarginContainer"]
+[node name="scoreboard_entry" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -380.0

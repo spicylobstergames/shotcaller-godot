@@ -85,8 +85,8 @@ func init(unit):
 		for goal in unit.goals:
 			_goals.push_back(Goap.get_goal(goal))
 		unit.add_child(self)
-	
-	EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
+		
+	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
 
 
 #

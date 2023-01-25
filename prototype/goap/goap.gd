@@ -24,6 +24,7 @@ var agent = preload("../goap/Agent.gd")
 
 func _ready():
 	_action_planner.set_actions(_actions.get_all_actions())
+	WorldState.set_state("is_game_active", false)
 
 
 func get_action_planner():

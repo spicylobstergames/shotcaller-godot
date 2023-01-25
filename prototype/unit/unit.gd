@@ -155,7 +155,7 @@ func _ready():
 	current_modifiers = Behavior.modifiers.new_modifiers()
 
 	if type != "pawn":
-		EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
+		WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
 		
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
@@ -388,6 +388,12 @@ func on_every_second():
 				agent.set_state("is_threatened", true)
 				break
 
+
+func gold_timer_timeout():
+	game.ui.inventories.gold_timer_timeout(self)
+
+
+
 func wait():
 	self.wait_time = game.rng.randi_range(1,4)
 	self.set_state("idle")
@@ -534,8 +540,7 @@ func on_death_end():  # death animation end
 			"leader": Behavior.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == 'castle':
-					EventMachine.register_event(Events.GAME_END,
-							["ENEMY" if team == game.player_team else "PLAYER"])
+					game.end(team == game.enemy_team)
 	
 	emit_signal("unit_died")
 

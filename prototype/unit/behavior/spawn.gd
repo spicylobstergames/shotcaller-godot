@@ -89,8 +89,8 @@ func leaders():
 				red_leaders.append(leader_node)
 			else:
 				blue_leaders.append(leader_node)
-	game.ui.get_node("score_board").initialize(red_leaders, blue_leaders)
-	game.maps.setup_leaders()
+	
+	game.maps.setup_leaders(red_leaders, blue_leaders)
 
 
 func pawns():

@@ -71,7 +71,7 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-	EventMachine.register_listener(Events.ONE_SEC, self, "gold_update_cycle")
+	WorldState.one_sec_timer.connect("timeout", self, "gold_update_cycle")
 
 
 func get_leader_inventory(leader):
@@ -99,8 +99,11 @@ func get_leader_delivery(leader):
 			deliv = enemy_deliveries
 		if leader.name in deliv: return deliv[leader.name]
 
+
 func gold_timer(unit):
-	EventMachine.register_listener(Events.ONE_SEC, self, "gold_timer_timeout",[unit])
+	WorldState.one_sec_timer.connect("timeout", unit, "gold_timer_timeout")
+
+
 
 func set_leader_delivery(leader, delivery):
 	if leader.type == 'leader':
@@ -121,7 +124,7 @@ func add_inventory(leader):
 	var inventory = new_inventory(leader)
 	add_child(inventory.container)
 	set_leader_inventory(leader, inventory)
-	EventMachine.register_listener(Events.ONE_SEC, self, "gold_timer_timeout",[leader])
+	gold_timer(leader)
 	var counter = 0
 	var item_button
 # warning-ignore:unused_variable

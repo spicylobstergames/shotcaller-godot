@@ -26,17 +26,21 @@ func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
 	game.map.trees.occluder_light_mask = 2
 	game.map.walls.occluder_light_mask = 2
+	setup_buildings()
+	setup_lanes()
+	game.map.blocks.setup_quadtree()
 	game.camera.map_loaded()
-	game.ui.buttons_update()
+	game.ui.map_loaded()
+	Behavior.follow.setup_pathfind()
 	game.map_loaded()
 
 
-func setup_leaders():
+func setup_leaders(red_leaders, blue_leaders):
+	game.ui.scoreboard.build(red_leaders, blue_leaders)
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
 	game.ui.orders_menu.build_leaders()
 	game.ui.active_skills.build_leaders()
-
 
 func new_path(lane, team):
 	if lane in game.map.lanes_paths:

@@ -9,8 +9,7 @@ var stress = 0
 
 func _ready():
 	game = get_tree().get_current_scene()
-	EventMachine.register_listener(Events.CHEAT_CODE, self, "apply_cheat_code")
-
+	
 
 func spawn_unit():
 	var s = Behavior.spawn
@@ -37,7 +36,7 @@ func spawn_unit():
 		
 		game.player_choose_leaders=[leader.name]
 		game.player_leaders=[leader]
-		game.maps.setup_leaders()
+		game.maps.setup_leaders([leader], [])
 	
 	if stress: spawn_random_units()
 
@@ -84,13 +83,3 @@ func spawn_leaders():
 		game.maps.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
 		game.maps.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
 
-
-func apply_cheat_code(code):
-	match code:
-		"SHADOW":
-			for unit1 in game.all_units:
-				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
-		"WIN":
-			EventMachine.register_event(Events.GAME_END, ["PLAYER"])
-		"LOSE":
-			EventMachine.register_event(Events.GAME_END, ["ENEMY"])
