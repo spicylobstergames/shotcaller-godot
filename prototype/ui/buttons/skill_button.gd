@@ -6,8 +6,9 @@ onready var _name = $name
 onready var _cooldown = $cooldown
 onready var _game: Node = get_tree().get_current_scene()
 var bribe_gold_cost = 10
+
+
 func _ready():
-# warning-ignore:return_value_discarded
 	connect("button_down", self, "_button_down")
 
 

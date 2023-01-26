@@ -42,6 +42,7 @@ func setup_leaders(red_leaders, blue_leaders):
 	game.ui.orders_menu.build_leaders()
 	game.ui.active_skills.build_leaders()
 
+
 func new_path(lane, team):
 	if lane in game.map.lanes_paths:
 		var path = game.map.lanes_paths[lane].duplicate()

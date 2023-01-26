@@ -10,24 +10,26 @@ var game:Node
 
 # SIGNALS
 
-signal unit_died
+signal unit_reseted
 signal unit_idle_ended
 signal unit_collided
 signal unit_move_ended
 signal unit_arrived
 signal unit_started_channeling
 signal unit_attacked
+signal unit_healed
+signal unit_leveled_up
 signal unit_ranged_attacked
 signal unit_melee_attacked
 signal unit_stuned
 signal unit_stun_ended
-
+signal unit_death_started
+signal unit_died
 
 export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 0
 export var vision:int = 100
-var current_modifiers = {}
 export var type:String = "pawn" # building leader
 export var subtype:String = "melee" # ranged base lane backwood
 export var display_name:String
@@ -40,6 +42,7 @@ var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
 var symbol:bool = false
+var current_modifiers = Behavior.modifiers.new_modifiers()
 
 # SELECTION
 export var selectable:bool = false
@@ -139,7 +142,7 @@ const ASSIST_TIME_IN_SECONDS = 3
 var status_effects = {}
 
 # GOAP
-onready var agent = Goap.get_agent(self)
+onready var agent = Goap.new_agent(self)
 export var goals = []
 
 
@@ -147,19 +150,15 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 	if has_node("hud"): hud = get_node("hud")
-
 	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
-	current_modifiers = Behavior.modifiers.new_modifiers()
 
-	if type != "pawn":
-		WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
-		
+
+func setup_leader_exp():
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
-# warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
 
@@ -169,6 +168,7 @@ func gain_experience(value):
 	if experience >= experience_needed():
 		experience -= experience_needed()
 		level += 1
+		emit_signal("unit_leveled_up")
 
 func on_experience_tick():
 	gain_experience(EXP_PER_5_SEC)
@@ -199,8 +199,7 @@ func reset_unit():
 	game.ui.minimap.setup_symbol(self)
 	assist_candidates = {}
 	last_attacker = null
-	if(agent):
-		agent.reset()
+	emit_signal("unit_reseted")
 
 
 func set_state(s):
@@ -380,18 +379,8 @@ func get_enemy_leaders_on_sight(unit):
 	return targets
 
 
-func on_every_second():
-	if game.started:
-		self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
-		for i in units_in_radius:
-			if i.team != "neutral" and i.type != "building" and i.team != self.team  and agent != null and type == "worker":
-				agent.set_state("is_threatened", true)
-				break
-
-
 func gold_timer_timeout():
 	game.ui.inventories.gold_timer_timeout(self)
-
 
 
 func wait():
@@ -400,8 +389,6 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	if self.agent.has_action_function("on_idle_end"):
-		self.agent.get_current_action().on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 	emit_signal("unit_idle_ended")
@@ -414,18 +401,13 @@ func on_move(delta): # every frame if there's no collision
 func on_collision(delta):
 	if self.moves:
 		Behavior.move.on_collision(self, delta)
-	if self.agent.has_action_function("on_collision"):
-		self.agent.get_current_action().on_collision(self)
 	emit_signal("unit_collided")
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves and self.attacks: 
-		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action().resume(self)
+	if self == game.selected_unit:
+		Behavior.follow.draw_path(self)
 	emit_signal("unit_move_ended")
-	if self == game.selected_unit: Behavior.follow.draw_path(self)
-
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
@@ -471,6 +453,7 @@ func heal(heal_hp):
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
 	self.hud.update_hpbar()
 	if self == game.selected_unit: game.ui.stats.update()
+	emit_signal("unit_healed")
 
 
 func channel_start(time):
@@ -490,6 +473,7 @@ func stun_start():
 	self.command_casting = false
 	self.set_state("stun")
 	emit_signal("unit_stuned")
+
 
 func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
@@ -523,6 +507,8 @@ func die():  # hp <= 0
 					attacker.assists += 1
 	elif type == 'pawn' and last_attacker != null:
 		last_attacker.last_hit_count += 1
+	
+	emit_signal("unit_death_started")
 
 
 func on_death_end():  # death animation end

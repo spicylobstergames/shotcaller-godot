@@ -22,7 +22,7 @@ func point(unit, objective, smart_move = false): # move_and_attack
 		if smart_move:
 			var path = behavior.follow.find_path(unit.global_position, unit.objective)
 			unit.current_path = path
-		var enemies = unit.get_units_on_sight({"team": unit.oponent_team()})
+		var enemies = unit.get_units_on_sight({"team": unit.opponent_team()})
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
 		var has_path = (unit.current_path.size() > 0)
 		if not enemies:

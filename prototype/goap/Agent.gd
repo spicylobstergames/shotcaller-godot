@@ -18,6 +18,23 @@ var _unit
 var _state = {}
 
 
+func init(unit):
+	_unit = unit
+	_goals = []
+	
+	if unit.goals.size() > 0:
+		for goal in unit.goals:
+			_goals.push_back(Goap.get_goal(goal))
+		unit.add_child(self)
+	
+	_unit.connect("unit_reseted", self, "reset")
+	_unit.connect("unit_idle_ended", self, "on_idle_end")
+	_unit.connect("unit_collided", self, "on_collision")
+	_unit.connect("unit_move_ended", self, "on_move_end")
+	
+	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
+
+
 func get_unit():
 	return _unit
 	
@@ -77,17 +94,6 @@ func process(delta):
 		_follow_plan(_current_plan, delta)#works!
 
 
-func init(unit):
-	_unit = unit
-	_goals = []
-	
-	if unit.goals.size() > 0:
-		for goal in unit.goals:
-			_goals.push_back(Goap.get_goal(goal))
-		unit.add_child(self)
-		
-	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
-
 
 #
 # Returns the highest priority goal available.
@@ -125,9 +131,26 @@ func _follow_plan(plan, delta):
 			_current_goal = null #trigger replan
 			_current_plan = null
 
+
+func on_idle_end():
+	if has_action_function("on_idle_end"):
+		get_current_action().on_idle_end(_unit)
+
+
+func on_move_end():
+	if has_action_function("on_move_end"):
+		get_current_action().on_move_end(_unit)
+
+
+func on_collision():
+	if has_action_function("on_collision"):
+		get_current_action().on_collision(_unit)
+
+
 func on_every_second() :
 	if(_current_plan != null and _current_plan.size() > 0):
 		get_current_action().on_every_second(self)
+
 
 func on_arrive():
 	if(_current_plan != null):

@@ -1,6 +1,6 @@
 [gd_scene load_steps=39 format=2]
 
-[ext_resource path="res://ui/waterfall/main.gd" type="Script" id=1]
+[ext_resource path="res://ui/waterfall/waterfall_main.gd" type="Script" id=1]
 [ext_resource path="res://assets/waterfall/circle.png" type="Texture" id=2]
 [ext_resource path="res://assets/waterfall/rock.png" type="Texture" id=3]
 [ext_resource path="res://assets/waterfall/background.png" type="Texture" id=4]

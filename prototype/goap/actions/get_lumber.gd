@@ -54,3 +54,10 @@ func on_arrive(agent):
 	agent.set_state("has_wood",true)
 
 
+func on_every_second(agent):
+	var unit = agent.get_unit()
+	var enemies_in_radius = unit.get_units_on_sight({"team": unit.opponent_team()})
+	for enemy in enemies_in_radius:
+		if enemy.type != "building" and unit.type == "worker":
+			agent.set_state("is_threatened", true)
+			break

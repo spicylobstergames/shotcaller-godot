@@ -618,15 +618,8 @@ anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
-
-[node name="animations" type="AnimationPlayer" parent="." index="4"]
 anims/RESET = SubResource( 68 )
 anims/arthur_special_cleave = SubResource( 67 )
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
-anims/move = SubResource( 26 )
-anims/stun = SubResource( 33 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )

@@ -35,7 +35,7 @@ func get_goal(goal):
 	return _goals.get_goal(goal)
 
 
-func get_agent(unit):
+func new_agent(unit):
 	var new_agent = agent.new()
 	new_agent.init(unit)
 	return new_agent

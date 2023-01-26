@@ -83,6 +83,7 @@ func leaders():
 				if counter > 2: lane = game.map.lanes[2]
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
+			leader_node.setup_leader_exp()
 			leader_node.origin = path.start
 			counter += 1
 			if team == "red":

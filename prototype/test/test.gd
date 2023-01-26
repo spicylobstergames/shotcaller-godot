@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.test
 
-var unit = 0
+var unit = 1
 var stress = 0
 
 
@@ -32,7 +32,7 @@ func spawn_unit():
 		#game.maps.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
 		#leader.hp = 100
 		#leader.current_hp = 100
-		#Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
+		Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
 		
 		game.player_choose_leaders=[leader.name]
 		game.player_leaders=[leader]
