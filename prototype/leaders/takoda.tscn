@@ -567,7 +567,6 @@ attack_speed = 0.9
 defense = 5
 projectile_speed = 200.0
 projectile_rotation = 20.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -618,5 +617,8 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

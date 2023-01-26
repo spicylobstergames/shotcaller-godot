@@ -630,7 +630,6 @@ ranged = true
 damage = 40
 defense = 2
 projectile_speed = 220.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -664,5 +663,8 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [editable path="hud"]

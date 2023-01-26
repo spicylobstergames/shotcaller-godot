@@ -116,6 +116,7 @@ var channeling_timer:Timer
 var hud:Node
 var sprites:Node
 var body:Node
+var agent:Node
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -141,10 +142,6 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
 
-# GOAP
-onready var agent = Goap.new_agent(self)
-export var goals = []
-
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -154,6 +151,7 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	if has_node("agent"): agent = get_node("agent")
 
 
 func setup_leader_exp():

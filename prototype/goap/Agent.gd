@@ -10,6 +10,8 @@ extends Node
 # this, so it makes re-use easy and it doesn't get tied
 # to unrelated implementation details (movement, collisions, etc)
 
+export var goals = []
+
 var _goals
 var _current_goal
 var _current_plan
@@ -18,14 +20,13 @@ var _unit
 var _state = {}
 
 
-func init(unit):
-	_unit = unit
+func _ready():
+	_unit = get_parent()
 	_goals = []
 	
-	if unit.goals.size() > 0:
-		for goal in unit.goals:
+	if goals.size() > 0:
+		for goal in goals:
 			_goals.push_back(Goap.get_goal(goal))
-		unit.add_child(self)
 	
 	_unit.connect("unit_reseted", self, "reset")
 	_unit.connect("unit_idle_ended", self, "on_idle_end")
@@ -37,7 +38,8 @@ func init(unit):
 
 func get_unit():
 	return _unit
-	
+
+
 func get_state(state_name, default = null):
 	return _state.get(state_name, default)
 
@@ -45,25 +47,30 @@ func get_state(state_name, default = null):
 func set_state(state_name, value):
 	_state[state_name] = value
 
+
+func clear_state():
+	_state = {}
+
+
 func reset():
 	clear_state()
 	_current_goal = null
 	_current_plan = null
 
-func clear_state():
-	_state = {}
 
 func get_current_action():
 	if(_current_plan != null and _current_plan.size() > 0):
 		return _current_plan[_current_plan_step]
 	else:
 		return null
-		
+
+
 func has_action_function(func_name):
 	if get_current_action() != null and get_current_action().has_method(func_name):
 		return true
 	else:
 		return false
+
 #
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
@@ -94,17 +101,16 @@ func process(delta):
 		_follow_plan(_current_plan, delta)#works!
 
 
-
 #
 # Returns the highest priority goal available.
 #
 func _get_best_goal():
 	var highest_priority
-
+	
 	for goal in _goals:
 		if goal.is_valid(self) and (highest_priority == null or goal.priority(self) > highest_priority.priority(self)):
 			highest_priority = goal
-
+	
 	return highest_priority
 
 

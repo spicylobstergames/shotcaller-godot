@@ -583,7 +583,6 @@ damage = 60
 attack_speed = 1.2
 defense = 5
 projectile_speed = 0.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -633,5 +632,8 @@ position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
 [node name="critical_slash" parent="behavior/abilities" index="0" instance=ExtResource( 6 )]
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

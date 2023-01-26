@@ -492,7 +492,6 @@ attacks = true
 damage = 50
 defense = 5
 projectile_speed = 0.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -530,5 +529,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [editable path="hud"]

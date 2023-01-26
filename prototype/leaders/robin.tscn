@@ -632,7 +632,6 @@ ranged = true
 damage = 50
 defense = 5
 projectile_speed = 360.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -681,5 +680,8 @@ shape = SubResource( 29 )
 shape = SubResource( 27 )
 
 [node name="mutlishot" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

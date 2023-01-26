@@ -47,6 +47,37 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="Animation" id=68]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/cleave:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
+}
+
+[sub_resource type="Animation" id=67]
+resource_name = "arthur_special_cleave"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprites/cleave:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6 ]
+}
+
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.8
@@ -513,37 +544,6 @@ tracks/6/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=68]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/cleave:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1 ]
-}
-
-[sub_resource type="Animation" id=67]
-resource_name = "arthur_special_cleave"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/cleave:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6 ]
-}
-
 [sub_resource type="CircleShape2D" id=32]
 
 [sub_resource type="CircleShape2D" id=29]
@@ -568,7 +568,6 @@ attacks = true
 damage = 80
 defense = 5
 projectile_speed = 0.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -613,13 +612,13 @@ offset = Vector2( -2, -12 )
 visible = false
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/RESET = SubResource( 68 )
+anims/arthur_special_cleave = SubResource( 67 )
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
 anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
-anims/RESET = SubResource( 68 )
-anims/arthur_special_cleave = SubResource( 67 )
 
 [node name="block" parent="collisions" index="0"]
 shape = SubResource( 32 )
@@ -631,12 +630,15 @@ shape = SubResource( 29 )
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
-[node name="light" parent="." index="6"]
+[node name="light" parent="." index="5"]
 position = Vector2( 7, -5 )
 
 [node name="aura_of_courage" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
 icon = ExtResource( 5 )
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource( 6 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

@@ -43,5 +43,5 @@ func new_agent(unit):
 
 func process(units, delta):
 	for unit in units:
-		if unit.agent._goals:
+		if unit.agent:
 			unit.agent.process(delta)
