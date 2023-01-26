@@ -7,7 +7,6 @@
 [ext_resource path="res://assets/buildings/neutral_red.png" type="Texture" id=5]
 [ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture" id=6]
 
-
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 3 )
 region = Rect2( 64, 23, 75, 65 )

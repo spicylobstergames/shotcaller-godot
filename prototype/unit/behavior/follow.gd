@@ -7,18 +7,14 @@ var behavior:Node
 # self = behavior.follow
 
 
-var path_line
-
 const teleport_time = 3
 const teleport_max_distance = 100
 
 
 # PATHFIND GRID
-const _GridGD = preload("../../map/pathfind/grid.gd")
-const _JumpPointFinderGD = preload("../../map/pathfind/jump_point_finder.gd")
 var path_grid
 var path_finder
-
+var path_line
 
 
 func _ready():
@@ -32,11 +28,11 @@ func setup_pathfind():
 	var walls_rect = game.map.walls.get_used_rect()
 	var walls_size =  walls_rect.size
 	#setup grid
-	var Grid = _GridGD.new().Grid
-	path_grid = Grid.new(walls_size.x, walls_size.y)
+	var grid = JumpPointFinder.GridGD.new().Grid
+	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
 	for cell in game.map.walls.get_used_cells():
-		game.map.blocks.create_block(cell.x, cell.y)
+		game.maps.blocks.create_block(cell.x, cell.y)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
 	# add building units
 	for building in game.player_buildings:
@@ -49,8 +45,7 @@ func setup_pathfind():
 		var pos = (building.global_position / game.map.tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
-	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
-	path_finder = Jpf.new()
+	path_finder = JumpPointFinder.JumpPointFinder.new()
 	
 	game.map.add_child(path_line)
 

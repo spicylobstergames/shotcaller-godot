@@ -349,16 +349,32 @@ func check_collision(unit2, delta):
 func get_collision_around(delta):
 	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
 	var unit1_rad = self.collision_radius
-	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+	return game.maps.blocks.get_units_in_radius(unit1_pos, unit1_rad)
 
 
-func get_units_on_sight(filters):
-	var current_vision = Behavior.modifiers.get_value(self, "vision")
+
+func get_units_in_radius(radius, filters = {}):
 	var pos1 = self.global_position
-	var neighbors = game.map.blocks.get_units_in_radius(pos1, current_vision)
+	var neighbors = game.maps.blocks.get_units_in_radius(pos1, radius)
 	var targets = []
 	for unit2 in neighbors:
-		if unit2.hp and self != unit2 and not unit2.dead and not unit2.immune:
+		if unit2.hp and self != unit2 and not unit2.dead:
+			if not filters: targets.append(unit2)
+			else:
+				for filter in filters:
+					if unit2[filter] == filters[filter]:
+						targets.append(unit2)
+	return targets
+
+
+
+func get_units_on_sight(filters = {}):
+	var current_vision = Behavior.modifiers.get_value(self, "vision")
+	var pos1 = self.global_position
+	var neighbors = game.maps.blocks.get_units_in_radius(pos1, current_vision)
+	var targets = []
+	for unit2 in neighbors:
+		if unit2.hp and self != unit2 and not unit2.dead:
 			if not filters: targets.append(unit2)
 			else:
 				for filter in filters:

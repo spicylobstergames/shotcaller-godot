@@ -19,7 +19,7 @@ func point(unit, point):
 			unit.weapon.look_at(point)
 		
 		if !unit.target:
-			var neighbors = game.map.blocks.get_units_in_radius(point, 1)
+			var neighbors = game.maps.blocks.get_units_in_radius(point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				if can_hit(unit, target) and in_range(unit, target):
@@ -73,7 +73,7 @@ func hit(unit1):
 	if unit1.display_name in behavior.skills.leader:
 		var attacker_skills = behavior.skills.leader[unit1.display_name]
 		if "cleave" in attacker_skills:
-			var neighbors = game.map.blocks.get_units_in_radius(att_pos, att_rad)
+			var neighbors = game.maps.blocks.get_units_in_radius(att_pos, att_rad)
 			for unit2 in neighbors:
 				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})

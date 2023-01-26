@@ -1,7 +1,7 @@
 extends Node
 
-onready var unit : Unit = get_parent().get_parent().get_parent()
-onready var game = get_tree().get_current_scene()
+onready var unit: Unit = get_parent().get_parent().get_parent()
+onready var game: Node = get_tree().get_current_scene()
 var affected_units = {}
 
 const RANGE = 100

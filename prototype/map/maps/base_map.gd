@@ -1,11 +1,12 @@
 extends YSort
+
 class_name base_map
+
 var game:Node
 
 
 # self = game.map
 
-onready var blocks = get_node("blocks")
 onready var walls = get_node("tiles/walls")
 onready var trees = get_node("tiles/trees")
 onready var fog = get_node("fog")

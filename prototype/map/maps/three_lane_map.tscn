@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://assets/map/grass.png" type="Texture" id=1]
 [ext_resource path="res://assets/map/brick.png" type="Texture" id=2]
@@ -16,7 +16,6 @@
 [ext_resource path="res://assets/map/mud.png" type="Texture" id=15]
 [ext_resource path="res://assets/map/brick_church.png" type="Texture" id=16]
 [ext_resource path="res://buildings/church.tscn" type="PackedScene" id=17]
-[ext_resource path="res://map/blocks/blocks.gd" type="Script" id=20]
 [ext_resource path="res://buildings/mine.tscn" type="PackedScene" id=21]
 [ext_resource path="res://buildings/camp.tscn" type="PackedScene" id=22]
 [ext_resource path="res://buildings/outpost.tscn" type="PackedScene" id=23]
@@ -551,7 +550,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -559,7 +558,6 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 448, 553 )
 frames = SubResource( 6 )
-frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -567,6 +565,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1664, 1577 )
 frames = SubResource( 6 )
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -743,9 +742,6 @@ material = SubResource( 57 )
 position = Vector2( 1693, 1591 )
 team = "neutral"
 
-[node name="blocks" type="Node2D" parent="."]
-script = ExtResource( 20 )
-
 [node name="lanes" type="Node2D" parent="."]
 visible = false
 
@@ -765,6 +761,3 @@ default_color = Color( 1, 1, 1, 0.196078 )
 [node name="fog" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.392157, 0.392157, 0.392157, 1 )
-
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2( 458, 570 )

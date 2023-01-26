@@ -56,8 +56,7 @@ func on_arrive(agent):
 
 func on_every_second(agent):
 	var unit = agent.get_unit()
-	var enemies_in_radius = unit.get_units_on_sight({"team": unit.opponent_team()})
-	for enemy in enemies_in_radius:
-		if enemy.type != "building" and unit.type == "worker":
+	for enemy in unit.get_units_on_sight({ "team": unit.opponent_team() }):
+		if enemy.attacks:
 			agent.set_state("is_threatened", true)
 			break

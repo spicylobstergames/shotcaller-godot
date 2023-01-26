@@ -25,14 +25,14 @@ func setup(unit):
 
 
 func process(delta):
-	game.map.blocks.quad.clear()
+	game.maps.blocks.quad.clear()
 	
 	# loop 1
 	for unit1 in game.all_units:
 		
 		# add units to quad
 		if unit1.collide and not unit1.dead:
-			game.map.blocks.quad.add_body(unit1)
+			game.maps.blocks.quad.add_body(unit1)
 	
 	
 	# loop 2: checks for collisions
@@ -53,7 +53,7 @@ func process(delta):
 							if projectile.target.point_collision(projectile_position):
 								Behavior.attack.take_hit(unit1, projectile.target, projectile)
 						else: # pierces
-							var targets = game.map.blocks.get_units_in_radius(projectile_position, 1) 
+							var targets = game.maps.blocks.get_units_in_radius(projectile_position, 1) 
 							for target in targets:
 								if (Behavior.attack.can_hit(unit1, target) and
 										projectile.targets.find(target) < 0 and

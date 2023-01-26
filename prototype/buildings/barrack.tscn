@@ -201,7 +201,6 @@ damage = 60
 attack_speed = 1.3
 defense = 20
 projectile_speed = 220.0
-goals = [ "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
@@ -256,5 +255,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -20 )
 shape = SubResource( 32 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "SlayEnemiesGoal" ]
 
 [editable path="hud"]

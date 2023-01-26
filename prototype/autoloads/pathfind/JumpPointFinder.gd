@@ -1,12 +1,13 @@
 extends Node
 
-const HeapGD = preload("heap.gd")
+const HeapGD = preload("Heap.gd")
+const GridGD = preload("Grid.gd")
 
 # @author imor / https://github.com/imor
 # ported to gdscript by rafaelcastrocouto
 
 class JumpPointFinder:
-	var Heap = HeapGD.new().Heap
+	var Heap = HeapGD.Heap
 	var openList
 	var startNode
 	var endNode

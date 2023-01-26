@@ -6,6 +6,8 @@ var current_map = 'one_lane_map'
 var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
 
+onready var blocks = get_node("blocks")
+
 func _ready():
 	game = get_tree().get_current_scene()
 
@@ -28,7 +30,7 @@ func map_loaded():
 	game.map.walls.occluder_light_mask = 2
 	setup_buildings()
 	setup_lanes()
-	game.map.blocks.setup_quadtree()
+	blocks.setup_quadtree()
 	game.camera.map_loaded()
 	game.ui.map_loaded()
 	Behavior.follow.setup_pathfind()
