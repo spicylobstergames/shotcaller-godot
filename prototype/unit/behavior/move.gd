@@ -36,15 +36,14 @@ func in_bounds(p):
 func move(unit, destiny):
 	if unit.moves and not unit.stunned and not unit.command_casting:
 		unit.current_destiny = destiny
-		if(destiny == Vector2.ZERO):
-			print('NO!')
-		calc_step(unit)
-		unit.get_node("animations").playback_speed = behavior.modifiers.get_value(unit, "speed") / unit.speed
+		var current_speed = behavior.modifiers.get_value(unit, "speed")
+		calc_step(unit, current_speed)
+		unit.get_node("animations").playback_speed = current_speed / unit.speed
 		unit.set_state("move")
 
 
-func calc_step(unit):
-	var speed = behavior.modifiers.get_value(unit, "speed")
+
+func calc_step(unit, speed):
 	if speed > 0:
 		var distance = unit.current_destiny - unit.global_position
 		unit.angle = distance.angle()

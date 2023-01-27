@@ -22,8 +22,9 @@ func point(unit, point):
 			var neighbors = game.maps.blocks.get_units_in_radius(point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
-				if can_hit(unit, target) and in_range(unit, target):
-					behavior.attack.set_target(unit, target)
+				if is_valid_target(unit, target):
+					set_target(unit, target)
+		
 		
 		if unit.target or game.test.unit:
 			unit.aim_point = point
@@ -31,8 +32,6 @@ func point(unit, point):
 			unit.get_node("animations").playback_speed = behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 			
-		elif "resume" in unit.agent.get_current_action(): 
-			unit.agent.get_current_action().resume(unit)
 
 
 func set_target(unit, target):
@@ -50,12 +49,9 @@ func set_target(unit, target):
 
 func closest_enemy_unit(unit, enemies):
 	var filtered = []
-	
 	for enemy in enemies:
 		if can_hit(unit, enemy): filtered.append(enemy)
-	
 	var sorted = unit.sort_by_distance(filtered)
-	
 	if sorted: return sorted[0].unit
 
 
@@ -102,6 +98,10 @@ func in_range(attacker, target):
 	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
+func is_valid_target(attacker, target):
+	return can_hit(attacker, target) and in_range(attacker, target)
+
+
 func take_hit(attacker, target, projectile = null, modifiers = {}):
 	modifiers = behavior.skills.hit_modifiers(attacker, target, projectile, modifiers)
 	
@@ -113,21 +113,18 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			projectile.targets.append(target)
 	
 	if target and not target.dead and not target.immune:
+		var damage = 0
 		if not modifiers.dodge:
-			var damage = max(1, modifiers.damage - behavior.modifiers.get_value(target, "defense"))
+			damage = max(1, modifiers.damage - behavior.modifiers.get_value(target, "defense"))
 			target.current_hp -= damage
 			attacker.attack_count += 1
 			if attacker.type == "leader":
 				target.last_attacker = attacker
 				target.assist_candidates[attacker] = OS.get_ticks_msec()
 			
-		if not modifiers.counter:
-			if target.agent.has_action_function("react"):
-				target.agent.get_current_action().react(target, attacker)
-			if target.agent.has_action_function("ally_attacked"):
-				target.agent.get_current_action().ally_attacked(target, attacker)
+		if not modifiers.counter: # avoid infinite reciprocal counters
+			target.was_attacked(attacker, damage)
 			
-		#behavior.orders.take_hit_retreat(attacker, target)#Moveing to a retreat action
 		if target.hud: target.hud.update_hpbar()
 		if target == game.selected_unit: game.ui.stats.update()
 		
@@ -149,16 +146,15 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if target.current_hp <= 0: 
 			target.current_hp = 0
 			target.die()
+			set_target(attacker, null)
 			if target.type == "leader":
 				if target.team == game.player_team: game.player_deaths += 1
 				else: game.enemy_deaths += 1
 				if attacker.team == game.player_team: game.player_kills += 1
 				else: game.enemy_kills += 1
-			yield(get_tree().create_timer(0.6), "timeout")
-			behavior.attack.set_target(attacker, null)
-			if attacker.agent.has_action_function("resume"):
-				attacker.agent.get_current_action().resume(attacker)
 
+
+# projectiles
 
 
 func projectile_release(attacker):

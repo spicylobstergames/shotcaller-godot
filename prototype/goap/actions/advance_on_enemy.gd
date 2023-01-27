@@ -1,6 +1,5 @@
 extends "../Action.gd"
 
-#class_name AdvanceOnEnemy
 
 func get_class(): return "AdvanceOnEnemy"
 
@@ -10,6 +9,7 @@ func is_valid(blackboard) -> bool:
 
 
 func get_cost(blackboard) -> int:
+	# cost of pursue should be higher than attacking
 	return 5
 
 
@@ -81,10 +81,6 @@ func ally_attacked(target, attacker):
 
 func stop(unit):
 	Behavior.move.stop(unit)
-
-
-func on_idle_end(unit):
-	point(unit, unit.global_position, true)
 
 
 func smart(unit, objective):

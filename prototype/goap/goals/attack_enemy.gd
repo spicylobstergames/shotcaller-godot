@@ -1,11 +1,12 @@
 extends "../Goal.gd"
 
-#class_name AttackEnemyGoal
 
 func get_class(): return "AttackEnemyGoal"
 
+
 func is_valid(agent) -> bool:
-	return WorldState.get_state("is_game_active")
+	var unit = agent.get_unit()
+	return agent.get_state("target_enemy_active") and Behavior.attack.is_valid_target(unit, unit.target)
 
 
 func priority(agent) -> int:
@@ -13,6 +14,4 @@ func priority(agent) -> int:
 
 
 func get_desired_state(agent) -> Dictionary:
-	return {
-		"is_game_active": false
-	}
+	return { "target_enemy_active": false }

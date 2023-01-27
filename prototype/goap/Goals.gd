@@ -9,7 +9,7 @@ var _goals = {
 	"NeedLumberGoal": preload("goals/need_lumber.gd").new(),
 	"NeedSafetyGoal": preload("goals/need_safety.gd").new(),
 	"RetreatGoal": preload("goals/retreat_goal.gd").new(),
-	"SlayEnemiesGoal": preload("goals/slay_enemies.gd").new(),
+	"PursueEnemiesGoal": preload("goals/pursue_enemies.gd").new(),
 	"CommandAttackEnemyGoal": preload("goals/command_attack_enemy.gd").new(),
 	"CommandAttackGoal": preload("goals/command_attack.gd").new()
 }

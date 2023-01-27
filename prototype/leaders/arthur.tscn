@@ -65,6 +65,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=67]
 resource_name = "arthur_special_cleave"
 length = 0.6
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("sprites/cleave:frame")
 tracks/0/interp = 1
@@ -149,11 +150,14 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.3, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_hit"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/6/type = "value"
@@ -603,13 +607,11 @@ hframes = 8
 frame = 1
 
 [node name="body" parent="sprites" index="2"]
-rotation = -0.0617879
-scale = Vector2( 1, 0.945904 )
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( -2, -12 )
 
 [node name="weapon" parent="sprites" index="3" instance=ExtResource( 7 )]
-visible = false
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/RESET = SubResource( 68 )
@@ -639,6 +641,6 @@ description = "Arthur inspires courage in nearby allies, increasing their attack
 status_effect_icon = ExtResource( 6 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
+goals = [ "AttackEnemyGoal", "PursueEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]

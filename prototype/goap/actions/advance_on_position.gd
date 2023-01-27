@@ -1,6 +1,5 @@
 extends "../Action.gd"
 
-#class_name AdvanceOnPosition
 
 func get_class(): return "AdvanceOnPosition"
 
@@ -72,10 +71,6 @@ func ally_attacked(target, attacker):
 
 func stop(unit):
 	Behavior.move.stop(unit)
-
-
-func on_idle_end(unit):
-	point(unit, unit.global_position, true)
 
 
 func smart(unit, objective):

@@ -3,12 +3,7 @@ extends Node
 # self = GoapActionPlanner
 
 
-#
-# Planner. Goap's heart.
-#
-
 var _actions: Array
-
 
 
 #
@@ -122,10 +117,9 @@ func _build_plans(step, blackboard):
 				"action": action,
 				"state": desired_state,
 				"children": []
-				}
+			}
 
-			# if desired state is empty, it means this action
-			# can be included in the graph.
+			# if desired state is empty, it means this action can be included
 			# if it's not empty, _build_plans is called again (recursively) so
 			# it can try to find actions to satisfy this current state. In case
 			# it can't find anything, this action won't be included in the graph.

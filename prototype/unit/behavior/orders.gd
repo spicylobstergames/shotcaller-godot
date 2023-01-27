@@ -382,48 +382,4 @@ func remove_tax(team):
 		inventory.extra_tax_gold = 0
 
 
-# RETREAT
 
-func take_hit_retreat(attacker, target):
-	match target.type:
-		"leader":
-			var hp = behavior.modifiers.get_value(target, "hp")
-			match target.tactics:
-				"escape":
-					retreat(target)
-				"defensive":
-					if target.current_hp < hp / 2:
-						retreat(target)
-				"default":
-					if target.current_hp < hp / 3:
-						retreat(target)
-
-
-func retreat(unit):
-	unit.retreating = true
-	unit.current_path = []
-	behavior.attack.set_target(unit, null)
-	var order
-	if unit.team == game.player_team:
-		order = player_leaders_orders[unit.name]
-	else: order = enemy_leaders_orders[unit.name]
-	set_leader(unit, order)
-	var lane = unit.lane
-	var path = game.map.lanes_paths[lane].duplicate()
-	if unit.team == "red": 
-		path.invert()
-	behavior.move.point(unit, path[0])
-	
-
-func should_retreat(unit):
-	var hp = behavior.modifiers.get_value(unit, "hp")
-	match unit.tactics:
-		"escape":
-			return true
-		"defensive":
-			if unit.current_hp < hp / 2:
-				return true
-		"default":
-			if unit.current_hp < hp / 3:
-				return true
-	return false

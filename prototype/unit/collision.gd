@@ -64,7 +64,7 @@ func process(delta):
 		
 		# units next event (move, arrive or collision)
 		
-		unit1.next_event  = ""
+		unit1.next_event  = "" # default no event
 		if not unit1.dead:
 			# units > destiny collision (arrive)
 			if unit1.moves and unit1.state == "move":

@@ -115,11 +115,14 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_hit"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/6/type = "value"
@@ -558,10 +561,10 @@ texture = ExtResource( 3 )
 [node name="body" parent="sprites" index="2"]
 position = Vector2( 0, 8 )
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( 5, -24 )
 
 [node name="weapon" parent="sprites" index="3" instance=ExtResource( 4 )]
-visible = false
 
 [node name="stuck" parent="sprites" index="4"]
 visible = false
@@ -586,6 +589,6 @@ position = Vector2( 3, -10 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
+goals = [ "AttackEnemyGoal", "PursueEnemiesGoal" ]
 
 [editable path="hud"]

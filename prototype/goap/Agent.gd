@@ -29,9 +29,14 @@ func _ready():
 			_goals.push_back(Goap.get_goal(goal))
 	
 	_unit.connect("unit_reseted", self, "reset")
-	_unit.connect("unit_idle_ended", self, "on_idle_end")
 	_unit.connect("unit_collided", self, "on_collision")
+	_unit.connect("unit_arrived_on_path", self, "on_path_arrive")
+	_unit.connect("unit_arrived", self, "on_arrive")
+	_unit.connect("unit_idle_ended", self, "on_idle_end")
+	_unit.connect("unit_stun_ended", self, "on_stun_end")
 	_unit.connect("unit_move_ended", self, "on_move_end")
+	_unit.connect("unit_attack_ended", self, "on_attack_end")
+	_unit.connect("unit_animation_ended", self, "on_animation_end")
 	
 	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
 
@@ -59,17 +64,15 @@ func reset():
 
 
 func get_current_action():
-	if(_current_plan != null and _current_plan.size() > 0):
+	if (_current_plan != null and _current_plan.size() > 0):
 		return _current_plan[_current_plan_step]
 	else:
 		return null
 
 
 func has_action_function(func_name):
-	if get_current_action() != null and get_current_action().has_method(func_name):
-		return true
-	else:
-		return false
+	return get_current_action() != null and get_current_action().has_method(func_name)
+
 
 #
 # On every loop this script checks if the current goal is still
@@ -90,15 +93,15 @@ func process(delta):
 		for s in _state:
 			blackboard[s] = _state[s]
 
-		if(goal != null):
+		if (goal != null):
 			_current_goal = goal
-			if(_current_plan): _current_plan[_current_plan_step].exit(self)
+			if (_current_plan): _current_plan[_current_plan_step].exit(self)
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
 			_current_plan_step = 0
-			if(_current_plan.size() > 0):
-				_current_plan[0].enter(self)#works!
+			if (_current_plan.size() > 0):
+				_current_plan[0].enter(self)
 	else:
-		_follow_plan(_current_plan, delta)#works!
+		_follow_plan(_current_plan, delta)
 
 
 #
@@ -106,7 +109,6 @@ func process(delta):
 #
 func _get_best_goal():
 	var highest_priority
-	
 	for goal in _goals:
 		if goal.is_valid(self) and (highest_priority == null or goal.priority(self) > highest_priority.priority(self)):
 			highest_priority = goal
@@ -126,7 +128,12 @@ func _follow_plan(plan, delta):
 		return
 
 	var is_step_complete = plan[_current_plan_step].perform(self, delta)
-	_unit.hud.state.text = get_current_action().get_class()
+	
+	# debug
+	if WorldState.game.test.unit: 
+		_unit.hud.state.text = get_current_action().get_class()
+		#_unit.hud.state.text = _get_best_goal().get_class()
+	
 	if is_step_complete:
 		get_current_action().exit(self) #untested
 		if _current_plan_step < plan.size() - 1:
@@ -140,27 +147,48 @@ func _follow_plan(plan, delta):
 
 func on_idle_end():
 	if has_action_function("on_idle_end"):
-		get_current_action().on_idle_end(_unit)
+		get_current_action().on_idle_end(self)
 
 
 func on_move_end():
 	if has_action_function("on_move_end"):
-		get_current_action().on_move_end(_unit)
+		get_current_action().on_move_end(self)
 
 
 func on_collision():
 	if has_action_function("on_collision"):
-		get_current_action().on_collision(_unit)
+		get_current_action().on_collision(self)
 
 
 func on_every_second() :
-	if(_current_plan != null and _current_plan.size() > 0):
+	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
 
 
+func on_stun_end():
+	if has_action_function("resume"):
+		get_current_action().resume(_unit)
+
+
+func on_attack_end():
+	if has_action_function("on_attack_end"):
+		get_current_action().on_attack_end(self)
+
+
+func on_animation_end():
+	if has_action_function("on_animation_end"):
+		get_current_action().on_animation_end(self)
+
+
+func on_path_arrive():
+	if has_action_function("point"):
+		get_current_action().point(_unit, _unit.current_path.pop_front())
+
+
 func on_arrive():
-	if(_current_plan != null):
+	if has_action_function("on_arrive"):
 		get_current_action().on_arrive(self)
+
 
 func clear_commands():
 	for s in _state:

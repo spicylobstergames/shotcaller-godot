@@ -19,8 +19,6 @@ var _action_planner = preload("ActionPlanner.gd").new()
 var _actions = preload("Actions.gd").new()
 var _goals = preload("Goals.gd").new()
 
-var agent = preload("../goap/Agent.gd")
-
 
 func _ready():
 	_action_planner.set_actions(_actions.get_all_actions())
@@ -33,12 +31,6 @@ func get_action_planner():
 
 func get_goal(goal):
 	return _goals.get_goal(goal)
-
-
-func new_agent(unit):
-	var new_agent = agent.new()
-	new_agent.init(unit)
-	return new_agent
 
 
 func process(units, delta):

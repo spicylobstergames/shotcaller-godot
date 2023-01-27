@@ -1,23 +1,25 @@
 extends "../Action.gd"
 
-#class_name Hide
 
 func get_class(): return "Hide"
 
 
 func get_cost(blackboard) -> int:
-		return 5
+	return 1
+
 
 func get_preconditions() -> Dictionary:
 	return {}
 
 
 func get_effects() -> Dictionary:
-	return {"is_threatened": false}
+	return { "is_threatened": false }
+
+
 func exit(agent):
-		agent.get_unit().visible = true
-		agent.set_state("is_threatened", false)
-		pass
+	agent.get_unit().visible = true
+	agent.set_state("is_threatened", false)
+
 
 func perform(agent, delta) -> bool:
 		var is_scared = false
@@ -32,9 +34,11 @@ func perform(agent, delta) -> bool:
 				return true
 		return false
 
+
 func enter(agent):
 		Behavior.move.point(agent.get_unit(), Vector2(458,570))
-		agent.set_state("is_safe",0)
+		agent.set_state("is_safe", false)
+
 
 func on_arrive(agent):
 		agent.get_unit().visible = false

@@ -193,13 +193,15 @@ func cemitery_add_leader(leader):
 # LUMBERMILL
 
 func lumberjack_hire(lumbermill, team):
-	var unit = lumbermill.target
+	var unit = lumbermill.agent.get_state("lumberjack")
 	if not unit: # create lumberjack
 		unit = next_to_building("lumberjack", lumbermill, team)
-		unit.agent.set_state("lumbermill_position", unit.global_position)  
-		unit.agent.set_state("closest_tree", lumbermill.get_node("closest_tree").global_position)
-		lumbermill.target = unit
-		
+		unit.agent.set_state("lumbermill", lumbermill)  
+		unit.agent.set_state("deliver_position", unit.global_position)
+		var closest_tree = lumbermill.get_node("closest_tree")
+		unit.agent.set_state("closest_tree", closest_tree.global_position)
+		lumbermill.agent.set_state("lumberjack", unit)
+	
 	unit.setup_team(team)
 	unit.visible = true
 	

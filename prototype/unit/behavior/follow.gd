@@ -28,7 +28,7 @@ func setup_pathfind():
 	var walls_rect = game.map.walls.get_used_rect()
 	var walls_size =  walls_rect.size
 	#setup grid
-	var grid = JumpPointFinder.GridGD.new().Grid
+	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
 	for cell in game.map.walls.get_used_cells():
@@ -45,7 +45,7 @@ func setup_pathfind():
 		var pos = (building.global_position / game.map.tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
-	path_finder = JumpPointFinder.JumpPointFinder.new()
+	path_finder = Finder.JumpPointFinder.new()
 	
 	game.map.add_child(path_line)
 

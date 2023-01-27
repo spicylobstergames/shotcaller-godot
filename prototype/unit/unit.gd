@@ -15,14 +15,17 @@ signal unit_idle_ended
 signal unit_collided
 signal unit_move_ended
 signal unit_arrived
+signal unit_arrived_on_path
 signal unit_started_channeling
-signal unit_attacked
 signal unit_healed
 signal unit_leveled_up
-signal unit_ranged_attacked
-signal unit_melee_attacked
+signal unit_attack_release # ranged projectile
+signal unit_attack_hitted # melee hit
+signal unit_attack_ended
+signal unit_attacked
 signal unit_stuned
 signal unit_stun_ended
+signal unit_animation_ended
 signal unit_death_started
 signal unit_died
 
@@ -180,10 +183,10 @@ func reset_unit():
 	self.setup_team(self.team)
 
 	if self.type == "leader":
-		hud.state.visible = true
-		hud.hpbar.visible = true
+		self.hud.state.visible = true
+		self.hud.hpbar.visible = true
 
-	hud.state.text = self.display_name
+	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
@@ -195,8 +198,8 @@ func reset_unit():
 	self.working = false
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
-	assist_candidates = {}
-	last_attacker = null
+	self.assist_candidates = {}
+	self.last_attacker = null
 	emit_signal("unit_reseted")
 
 
@@ -406,7 +409,7 @@ func on_idle_end(): # every idle animation end (0.6s)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 	emit_signal("unit_idle_ended")
-
+	emit_signal("unit_animation_ended")
 
 func on_move(delta): # every frame if there's no collision
 	Behavior.move.step(self, delta)
@@ -421,45 +424,42 @@ func on_collision(delta):
 func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self == game.selected_unit:
 		Behavior.follow.draw_path(self)
-	emit_signal("unit_move_ended")
+	if self.moves: emit_signal("unit_move_ended")
+	emit_signal("unit_animation_ended")
 
 func on_arrive(): # when collides with destiny
 	if self.current_path.size() > 0:
-		if agent.has_action_function("point"): # ??? todo move all of this to signals
-			agent.get_current_action().point(self, current_path.pop_front())
-	elif self.moves:
-		self.working = false
+		emit_signal("unit_arrived_on_path")
+	else:
 		Behavior.move.end(self)
-
-		if self.agent.has_action_function("end"):
-			self.agent.get_current_action().end(self)
-		if agent != null: 
-			agent.on_arrive()
 		
 		match self.after_arive:
 			"conquer": Behavior.orders.conquer_building(self)
 			"pray": Behavior.orders.pray_in_church(self)
-			
+		
 		emit_signal("unit_arrived")
 
 
 func on_attack_release(): # every ranged projectile start
 	if self.attacks:
 		Behavior.attack.projectile_release(self)
-		emit_signal("unit_attacked")
-		emit_signal("unit_ranged_attacked")
-		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action().resume(self)
+		emit_signal("unit_attack_release")
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
 		Behavior.attack.hit(self)
-		emit_signal("unit_attacked")
-		emit_signal("unit_melee_attacked")
-		if self.moves:
-			if self.agent.has_action_function("resume"):
-				self.agent.get_current_action().resume(self)
+		emit_signal("unit_attack_hitted")
+
+
+func was_attacked(attacker, damage):
+	emit_signal("unit_attacked", attacker, damage)
+
+
+func on_attack_end(): # animation end of all attacks
+	if self.attacks:
+		emit_signal("unit_attack_ended")
+	emit_signal("unit_animation_ended")
 
 
 func heal(heal_hp):
@@ -493,9 +493,8 @@ func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
 		self.stunned = false
-		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action().resume(self)
-	emit_signal("unit_stun_ended")
+		emit_signal("unit_stun_ended")
+		emit_signal("unit_animation_ended")
 
 
 func die():  # hp <= 0
@@ -525,11 +524,15 @@ func die():  # hp <= 0
 	emit_signal("unit_death_started")
 
 
-func on_death_end():  # death animation end
+func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
+
+
+func on_death_end():  # death animation end
+	self.hide_in_map()
 	
 	Behavior.attack.clear_stuck(self)
 	

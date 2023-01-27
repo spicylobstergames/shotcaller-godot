@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "",
-"class": "SlayEnemiesGoal",
-"language": "GDScript",
-"path": "res://goap/goals/slay_enemies.gd"
-}, {
 "base": "Node",
 "class": "Unit",
 "language": "GDScript",
@@ -25,7 +20,6 @@ _global_script_classes=[ {
 "path": "res://map/maps/base_map.gd"
 } ]
 _global_script_class_icons={
-"SlayEnemiesGoal": "",
 "Unit": "",
 "base_map": ""
 }
@@ -43,7 +37,7 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 Quadtree="*res://autoloads/Quadtree.gd"
-JumpPointFinder="*res://autoloads/pathfind/JumpPointFinder.gd"
+Finder="*res://autoloads/pathfind/JumpPointFinder.gd"
 Behavior="*res://unit/Behavior.tscn"
 WorldState="*res://autoloads/World_State.gd"
 Goap="*res://goap/Goap.gd"

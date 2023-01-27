@@ -11,14 +11,12 @@ func _ready():
 	game = get_tree().get_current_scene()
 	behavior = get_parent()
 
-
-func point(unit, objective, smart_move = false): # move_and_attack
+ # move_and_attack
+func point(unit, objective, smart_move = false):
 	behavior.attack.set_target(unit, null)
-
 	if objective: unit.objective = objective
 	if (unit.attacks and behavior.move.in_bounds(unit.objective) and
 			not unit.retreating and not unit.stunned and not unit.channeling and not unit.command_casting):
-		unit.set_behavior("advance")
 		if smart_move:
 			var path = behavior.follow.find_path(unit.global_position, unit.objective)
 			unit.current_path = path
@@ -33,7 +31,6 @@ func point(unit, objective, smart_move = false): # move_and_attack
 			if not target:
 				if not at_objective: move(unit, unit.objective, smart_move)
 				elif has_path: behavior.follow.path(unit, unit.current_path, "advance")
-
 			else:
 				behavior.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
@@ -50,27 +47,24 @@ func move(unit, objective, smart_move):
 
 
 func on_collision(unit):
-	if unit.behavior == "advance" and unit.collide_target == unit.target:
+	if unit.collide_target == unit.target:
 		var target_position = unit.target.global_position + unit.target.collision_position
 		behavior.attack.point(unit, target_position)
 
 
 
 func resume(unit):
-	if unit.behavior == "advance":
-		point(unit, null)
+	point(unit, null)
 
 
 func end(unit):
-	if unit.behavior == "advance":
-		if unit.current_destiny != unit.objective:
-			point(unit, null)
-		else: stop(unit)
+	if unit.current_destiny != unit.objective:
+		point(unit, null)
+	else: stop(unit)
 
 
 func react(target, attacker):
-	if target.behavior == "stop" or target.behavior == "advance":
-		point(target, attacker.global_position)
+	point(target, attacker.global_position)
 
 
 func ally_attacked(target, attacker):
@@ -79,15 +73,9 @@ func ally_attacked(target, attacker):
 
 
 func stop(unit):
-	if unit.behavior == "advance":
-		unit.set_behavior("stop")
-		behavior.move.stop(unit)
+	behavior.move.stop(unit)
 
 
-func on_idle_end(unit):
-	if unit.behavior == "advance" or unit.behavior == "stop":
-		if unit.attacks: point(unit, unit.global_position)
-
-
+# uses pathfinder
 func smart(unit, objective):
 	point(unit, objective, true)
