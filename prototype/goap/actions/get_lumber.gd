@@ -51,7 +51,7 @@ func on_arrive(agent):
 
 func on_animation_end(agent):
 	var unit = agent.get_unit()
-	for enemy in unit.get_units_on_sight({ "team": unit.opponent_team() }):
+	for enemy in unit.get_units_in_sight({ "team": unit.opponent_team() }):
 		if enemy.attacks:
 			agent.set_state("is_threatened", true)
 			break

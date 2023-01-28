@@ -568,7 +568,6 @@ radius = 20.0
 [node name="lumberjack" instance=ExtResource( 2 )]
 hp = 180
 regen = 1
-vision = 140
 type = "worker"
 display_name = "lumberjack"
 title = "hired worker"

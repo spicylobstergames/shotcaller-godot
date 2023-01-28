@@ -11,7 +11,7 @@ func is_valid(agent) -> bool:
 
 
 func get_cost(agent) -> int:
-	return 10
+	return 1
 
 
 func get_preconditions() -> Dictionary:

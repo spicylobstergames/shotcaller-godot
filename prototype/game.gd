@@ -68,7 +68,6 @@ func _ready():
 	else:
 		ui.main_menu.quick_start()
 	
-	
 	emit_signal("game_ready")
 
 

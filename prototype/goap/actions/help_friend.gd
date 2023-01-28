@@ -30,7 +30,7 @@ func enter(agent):
 
 
 func ally_attacked(target, attacker):
-	var allies = target.get_units_on_sight({"team": target.team})
+	var allies = target.get_units_in_sight({ "team": target.team })
 	for ally in allies:
 		if ally.state != "attack":
 			ally.agent.set_state("react_target", attacker)

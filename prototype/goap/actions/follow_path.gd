@@ -75,7 +75,7 @@ func react(target, attacker):
 
 
 func ally_attacked(target, attacker):
-	var allies = target.get_units_on_sight({"team": target.team})
+	var allies = target.get_units_in_sight({ "team": target.team })
 	for ally in allies: react(ally, attacker)
 
 

@@ -309,7 +309,7 @@ func update_consumables(leader):
 			item_button.disabled = (leader.current_hp >= Behavior.modifiers.get_value(leader, "hp"))
 			counter += 1
 		elif item != null and item.type  == "throwable":
-			var enemy_leaders_on_sight = leader.get_units_on_sight({
+			var enemy_leaders_on_sight = leader.get_units_in_sight({
 				"type": "leader",
 				"team": leader.opponent_team()
 			})

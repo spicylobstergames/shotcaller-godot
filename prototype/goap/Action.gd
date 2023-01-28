@@ -17,7 +17,7 @@ func is_valid(agent) -> bool:
 # Action Cost. This is a function so it handles situational costs, when the world
 # state is considered when calculating the cost.
 func get_cost(agent) -> int:
-	return 1000
+	return 1
 
 
 # Action requirements.

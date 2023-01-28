@@ -359,7 +359,7 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 	var neighbors = game.maps.blocks.get_units_in_radius(pos, radius)
 	var targets = []
 	for unit2 in neighbors:
-		if unit2.hp and self != unit2 and not unit2.dead:
+		if self != unit2 and not unit2.dead:
 			if not filters: targets.append(unit2)
 			else:
 				for filter in filters:
@@ -368,7 +368,7 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 	return targets
 
 
-func get_units_on_sight(filters = {}):
+func get_units_in_sight(filters = {}):
 	var current_vision = Behavior.modifiers.get_value(self, "vision")
 	return self.get_units_in_radius(current_vision, filters)
 

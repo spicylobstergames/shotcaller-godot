@@ -24,7 +24,7 @@ func spawn_unit():
 		#leader.dead = true
 		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
 		
-		var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(480,420))
+		var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(180,480))
 		dummy.hp = 10000
 		dummy.current_hp = 10000
 		#dummy.moves = false

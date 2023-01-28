@@ -4,7 +4,7 @@ onready var game = get_tree().get_current_scene()
 export var poison_sprite : Texture
 
 func poison_throw(leader, item):
-	var enemy_leaders_on_sight = leader.get_units_on_sight({
+	var enemy_leaders_on_sight = leader.get_units_in_sight({
 		"type": "leader",
 		"team": leader.opponent_team()
 	})

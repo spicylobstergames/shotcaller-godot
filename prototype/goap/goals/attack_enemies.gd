@@ -19,7 +19,7 @@ func is_valid(agent) -> bool:
 
 
 func priority(agent) -> int:
-	return 10
+	return 1
 
 
 func get_desired_state(agent) -> Dictionary:
