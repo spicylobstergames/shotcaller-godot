@@ -8,19 +8,16 @@ extends Node
 # Sometimes instead of changing the priority, it is easier to
 # not even consider the goal. i.e. Ignore combat related goals
 # when there are not enemies nearby.
-#
-
 func is_valid(agent) -> bool:
 	return true
 
-#
+
 # Returns goals priority. This priority can be dynamic. Check
 # `./goals/keep_fed.gd` for an example of dynamic priority.
-#
 func priority(agent) -> int:
 	return 1
 
-#
+
 # Plan's desired state. This is usually referred as desired world
 # state, but it doesn't need to match the raw world state.
 #

@@ -1,7 +1,11 @@
+extends Node
+
+
+# WorldState global class
+
 # This class is an Autoload accessible globaly
 # Access the autoload list in godot settings
 
-extends Node
 
 onready var game = get_tree().get_current_scene()
 

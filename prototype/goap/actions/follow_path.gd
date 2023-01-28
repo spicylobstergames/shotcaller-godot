@@ -1,7 +1,7 @@
 extends "../Action.gd"
 
 
-func get_class(): return "AdvanceOnEnemy"
+func get_class(): return "FollowPath"
 
 
 func is_valid(agent) -> bool:

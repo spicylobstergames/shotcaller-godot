@@ -10,9 +10,8 @@ func is_valid(agent) -> bool:
 	return command_attack or target_enemy
 
 
-#presently a magic number... maybe use distance in the future
 func get_cost(agent) -> int:
-	return 3
+	return 10
 
 
 func get_preconditions() -> Dictionary:
@@ -33,25 +32,18 @@ func perform(agent, delta) -> bool:
 func enter(agent):
 	#print("attack_enemy enter ", agent.get_unit())
 	var unit = agent.get_unit()
+	
 	if agent.get_state("command_attack_target"):
 		Behavior.attack.set_target(unit, agent.get_state("command_attack_target"))
 		Behavior.attack.point(unit, unit.target.position)
-		return
-
-	var enemies = unit.get_units_on_sight({"team": unit.opponent_team()})
-	if enemies.size() > 0:
-		var target = Behavior.orders.select_target(unit, enemies)
-		if Behavior.attack.is_valid_target(unit, target):
-			Behavior.attack.set_target(unit, target)
-			Behavior.attack.point(unit, target.global_position)
-	else :
-		print('Attack enemy action but no target')
+	
+	else:
+		Behavior.attack.point(unit, unit.target.global_position)
 
 
-
-func on_attack_end(agent):
+func on_animation_end(agent):
 	var unit = agent.get_unit()
-	var enemies = unit.get_units_in_radius(unit.attack_hit_radius, {"team": unit.opponent_team()})
+	var enemies = unit.get_units_in_attack_range({"team": unit.opponent_team()})
 	var has_targets = enemies.size() > 0
 	unit.agent.set_state("target_enemy_active", has_targets)
 	

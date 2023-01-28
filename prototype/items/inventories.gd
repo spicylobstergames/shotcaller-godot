@@ -114,7 +114,7 @@ func set_leader_delivery(leader, delivery):
 
 
 func gold_update_cycle():
-	if not game.paused:
+	if WorldState.get_state("is_game_active"):
 		game.ui.shop.update_buttons()
 		update_buttons()
 
@@ -146,7 +146,7 @@ func add_inventory(leader):
 
 
 func gold_timer_timeout(unit):
-	if not game.paused:
+	if WorldState.get_state("is_game_active"):
 		var inventory = get_leader_inventory(unit)
 		var gold_per_sec = 1
 		if inventory:
@@ -212,7 +212,7 @@ func add_delivery(leader, item):
 
 
 func delivery_timer(delivery):
-	if not game.paused:
+	if WorldState.get_state("is_game_active"):
 		delivery.label.show()
 		delivery.time -= 1
 		if delivery.time > 0:
@@ -309,7 +309,10 @@ func update_consumables(leader):
 			item_button.disabled = (leader.current_hp >= Behavior.modifiers.get_value(leader, "hp"))
 			counter += 1
 		elif item != null and item.type  == "throwable":
-			var enemy_leaders_on_sight = leader.get_enemy_leaders_on_sight(leader)
+			var enemy_leaders_on_sight = leader.get_units_on_sight({
+				"type": "leader",
+				"team": leader.opponent_team()
+			})
 			item_button.disabled = (enemy_leaders_on_sight.empty())
 
 func update_buttons():

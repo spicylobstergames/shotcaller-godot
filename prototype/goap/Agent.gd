@@ -74,11 +74,9 @@ func has_action_function(func_name):
 	return get_current_action() != null and get_current_action().has_method(func_name)
 
 
-#
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
 # for the new high priority goal.
-#
 func process(delta):
 	var goal = _get_best_goal()
 	if _current_goal == null or goal != _current_goal:
@@ -93,9 +91,7 @@ func process(delta):
 		_follow_plan(_current_plan, delta)
 
 
-#
 # Returns the highest priority goal available.
-#
 func _get_best_goal():
 	var highest_priority
 	for goal in _goals:
@@ -105,13 +101,11 @@ func _get_best_goal():
 	return highest_priority
 
 
-#
 # Executes plan. This function is called on every game loop.
 # "plan" is the current list of actions, and delta is the time since last loop.
 #
 # Every action exposes a function called perform, which will return true when
 # the job is complete, so the agent can jump to the next action in the list.
-#
 func _follow_plan(plan, delta):
 	if plan.size() > 0:
 		var is_step_complete = plan[_current_plan_step].perform(self, delta)

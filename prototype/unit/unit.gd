@@ -355,10 +355,8 @@ func get_collision_around(delta):
 	return game.maps.blocks.get_units_in_radius(unit1_pos, unit1_rad)
 
 
-
-func get_units_in_radius(radius, filters = {}):
-	var pos1 = self.global_position
-	var neighbors = game.maps.blocks.get_units_in_radius(pos1, radius)
+func get_units_in_radius(radius, filters = {}, pos = self.global_position):
+	var neighbors = game.maps.blocks.get_units_in_radius(pos, radius)
 	var targets = []
 	for unit2 in neighbors:
 		if unit2.hp and self != unit2 and not unit2.dead:
@@ -368,32 +366,17 @@ func get_units_in_radius(radius, filters = {}):
 					if unit2[filter] == filters[filter]:
 						targets.append(unit2)
 	return targets
-
 
 
 func get_units_on_sight(filters = {}):
 	var current_vision = Behavior.modifiers.get_value(self, "vision")
-	var pos1 = self.global_position
-	var neighbors = game.maps.blocks.get_units_in_radius(pos1, current_vision)
-	var targets = []
-	for unit2 in neighbors:
-		if unit2.hp and self != unit2 and not unit2.dead:
-			if not filters: targets.append(unit2)
-			else:
-				for filter in filters:
-					if unit2[filter] == filters[filter]:
-						targets.append(unit2)
-	return targets
+	return self.get_units_in_radius(current_vision, filters)
 
 
-func get_enemy_leaders_on_sight(unit):
-	var targets = []
-	var leaders_on_sight = unit.get_units_on_sight({"type": "leader"})
-	for leader in leaders_on_sight:
-		if leader.team != unit.team:
-			targets.append(leader)
-			
-	return targets
+func get_units_in_attack_range(filters = {}):
+	var current_range = Behavior.modifiers.get_value(self, "attack_range")
+	var pos = self.global_position + self.attack_hit_position
+	return self.get_units_in_radius(current_range, filters, pos)
 
 
 func gold_timer_timeout():

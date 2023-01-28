@@ -10,7 +10,7 @@ onready var selection = get_node("selection")
 
 
 func update_hpbar():
-	if game and game.started and not game.paused:
+	if WorldState.get_state("is_game_active"):
 		var player_leader = (unit.type == 'leader' and unit.team == game.player_team)
 		var leader_icon_hpbar
 		if player_leader and unit.name in game.ui.leaders_icons.buttons_name:

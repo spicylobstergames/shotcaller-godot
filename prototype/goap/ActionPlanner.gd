@@ -6,30 +6,25 @@ extends Node
 var _actions: Array
 
 
-#
 # set actions available for planning.
 # this can be changed in runtime for more dynamic options.
-#
 func set_actions(actions: Array):
 	_actions = actions
 
 
-#
 # Receives a Goal and returns a list of actions to be executed.
-#
 func get_plan(agent, goal) -> Array:
 	#print("Goal: %s" % goal.get_class())
 	var desired_state = goal.get_desired_state(agent)
 
-	if desired_state.empty():	
+	if desired_state.empty():
 		return []
 	return _find_best_plan(goal, desired_state, agent)
 
 
 
 func _find_best_plan(goal, desired_state, agent):
-	# goal is set as root action. It does feel weird
-	# but the code is simpler this way.
+	# goal is set as root action
 	var root = {
 		"action": goal,
 		"state": desired_state,
@@ -40,15 +35,18 @@ func _find_best_plan(goal, desired_state, agent):
 	# In case it doesn't find a valid path, it will return false.
 	if _build_plans(root, agent):
 		var plans = _transform_tree_into_array(root, agent)
+		
+		if plans.empty(): 
+			print("goap action planner error: no valid plans")
+			return []
+		
 		return _get_cheapest_plan(plans)
 
 	return []
 
 
-#
 # Compares plan's cost and returns
 # actions included in the cheapest one.
-#
 func _get_cheapest_plan(plans):
 	var best_plan
 	for p in plans:
@@ -58,11 +56,8 @@ func _get_cheapest_plan(plans):
 	return best_plan.actions
 
 
-#
-# Builds graph with actions. Only includes valid plans (plans
-# that achieve the goal).
-#
-# Returns true if the path has a solution.
+# Builds graph with actions.
+# Only includes valid plans that achieve the goal.
 #
 # This function uses recursion to build the graph. This is
 # necessary because any new action included in the graph may
@@ -70,9 +65,9 @@ func _get_cheapest_plan(plans):
 # by previously considered actions, meaning, on every step we
 # need to iterate from the beginning to find all solutions.
 #
-# Be aware that for simplicity, the current implementation is not protected from
-# circular dependencies. This is easy to implement though.
+# TODO: protected from circular dependencies
 #
+# Returns true if the path has a solution.
 func _build_plans(step, agent):
 	var has_followup = false
 
@@ -128,32 +123,28 @@ func _build_plans(step, agent):
 	return has_followup
 
 
-#
 # Transforms graph with actions into list of actions and calculates
 # the cost by summing actions' cost
 #
 # Returns list of plans.
-#
 func _transform_tree_into_array(p, agent):
 	var plans = []
-
-	if p.children.size() == 0:
+	
+	if p.children.size() == 0 and p.action.has_method("get_cost"):
 		plans.push_back({ "actions": [p.action], "cost": p.action.get_cost(agent) })
 		return plans
-
+	
 	for c in p.children:
 		for child_plan in _transform_tree_into_array(c, agent):
 			if p.action.has_method("get_cost"):
 				child_plan.actions.push_back(p.action)
 				child_plan.cost += p.action.get_cost(agent)
 			plans.push_back(child_plan)
-
+	
 	return plans
 
 
-#
 # Prints plan. Used for Debugging only.
-#
 func _print_plan(plan):
 	var actions = []
 	for a in plan.actions:

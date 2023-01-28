@@ -1,10 +1,18 @@
 extends Node
 
+# @author imor / https://github.com/imor
+# ported to gdscript by rafaelcastrocouto
+
+
+# Finder glocal class
+
+# This class is an Autoload accessible globally
+# Access the autoload list in godot settings
+
+
 const HeapGD = preload("Heap.gd")
 const GridGD = preload("Grid.gd")
 
-# @author imor / https://github.com/imor
-# ported to gdscript by rafaelcastrocouto
 
 class JumpPointFinder:
 	var Heap = HeapGD.Heap

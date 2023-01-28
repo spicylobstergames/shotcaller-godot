@@ -1,11 +1,12 @@
 extends Node
 
-
-
-# * QUADTREE CLASS
-#
 # @author https://github.com/AggressiveGaming/Godot-QuadTree
 
+
+# Quadtree global class
+
+# This class is an Autoload accessible globally
+# Access the autoload list in godot settings
 
 
 func create_quadtree(bounds, splitThreshold, splitLimit, currentSplit = 0):

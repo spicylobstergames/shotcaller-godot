@@ -27,7 +27,7 @@ func enter(agent):
 func perform(agent, delta) -> bool:
 	if !agent.get_state("should_retreat"):
 			return true
-	return not agent.get_state("is_retreating")
+	return false
 
 
 func exit(agent):
