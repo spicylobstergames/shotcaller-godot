@@ -452,8 +452,8 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 		emit_signal("unit_attack_hitted")
 
 
-func was_attacked(attacker, damage):
-	emit_signal("unit_attacked", attacker, damage)
+func was_attacked(attacker, _damage):
+	emit_signal("unit_attacked", attacker, _damage)
 
 
 func on_attack_end(): # animation end of all attacks

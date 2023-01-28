@@ -4,11 +4,11 @@ extends "../Action.gd"
 func get_class(): return "WaitOut"
 
 
-func is_valid(blackboard) -> bool:
+func is_valid(agent) -> bool:
 	return WorldState.get_state("is_game_active")
 
 
-func get_cost(blackboard) -> int:
+func get_cost(agent) -> int:
 	return 1
 
 
@@ -25,10 +25,9 @@ func enter(agent):
 
 
 func perform(agent, delta) -> bool:
-		var unit = agent.get_unit()	
-		if !agent.get_state("should_retreat"):
-				return true
-		return not agent.get_state("is_retreating")
+	if !agent.get_state("should_retreat"):
+			return true
+	return not agent.get_state("is_retreating")
 
 
 func exit(agent):

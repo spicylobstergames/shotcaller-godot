@@ -11,7 +11,7 @@ extends Node
 # does not allow this action anymore.
 
 
-func is_valid(blackboard) -> bool:
+func is_valid(agent) -> bool:
 	return true
 
 #
@@ -20,7 +20,7 @@ func is_valid(blackboard) -> bool:
 #
 # Check "./actions/chop_tree.gd" for a situational cost example.
 #
-func get_cost(_blackboard) -> int:
+func get_cost(agent) -> int:
 	return 1000
 
 #

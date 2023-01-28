@@ -7,11 +7,11 @@ func get_class(): return "GetLumber"
 const cut_time = 6
 
 
-func is_valid(blackboard) -> bool:
+func is_valid(agent) -> bool:
 	return WorldState.get_state("is_game_active")
 
 
-func get_cost(blackboard):
+func get_cost(agent):
 	# plans will sum up their actions costs and the lower cost plan is chosen
 	return 3
 

@@ -5,11 +5,11 @@ extends Node
 # Lists all Goal contracts
 
 var _goals = {
-	"AttackEnemyGoal": preload("goals/attack_enemy.gd").new(),
+	"AttackEnemiesGoal": preload("goals/attack_enemies.gd").new(),
+	"PursueEnemiesGoal": preload("goals/pursue_enemies.gd").new(),
 	"NeedLumberGoal": preload("goals/need_lumber.gd").new(),
 	"NeedSafetyGoal": preload("goals/need_safety.gd").new(),
 	"RetreatGoal": preload("goals/retreat_goal.gd").new(),
-	"PursueEnemiesGoal": preload("goals/pursue_enemies.gd").new(),
 	"CommandAttackEnemyGoal": preload("goals/command_attack_enemy.gd").new(),
 	"CommandAttackGoal": preload("goals/command_attack.gd").new()
 }

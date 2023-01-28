@@ -82,21 +82,10 @@ func has_action_function(func_name):
 func process(delta):
 	var goal = _get_best_goal()
 	if _current_goal == null or goal != _current_goal:
-	# You can set in the blackboard any relevant information you want to use
-	# when calculating action costs and status. I'm not sure here is the best
-	# place to leave it, but I kept here to keep things simple.
-		var blackboard = {
-			"position": _unit.position,
-		 }
-		for s in WorldState._state:
-			blackboard[s] = WorldState._state[s]
-		for s in _state:
-			blackboard[s] = _state[s]
-
 		if (goal != null):
 			_current_goal = goal
 			if (_current_plan): _current_plan[_current_plan_step].exit(self)
-			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal, blackboard)
+			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal)
 			_current_plan_step = 0
 			if (_current_plan.size() > 0):
 				_current_plan[0].enter(self)
@@ -124,25 +113,23 @@ func _get_best_goal():
 # the job is complete, so the agent can jump to the next action in the list.
 #
 func _follow_plan(plan, delta):
-	if plan.size() == 0:
-		return
-
-	var is_step_complete = plan[_current_plan_step].perform(self, delta)
-	
-	# debug
-	if WorldState.game.test.unit: 
-		_unit.hud.state.text = get_current_action().get_class()
-		#_unit.hud.state.text = _get_best_goal().get_class()
-	
-	if is_step_complete:
-		get_current_action().exit(self) #untested
-		if _current_plan_step < plan.size() - 1:
-			_current_plan_step += 1
-			get_current_action().enter(self)
-		else:
-			#clear_commands()
-			_current_goal = null #trigger replan
-			_current_plan = null
+	if plan.size() > 0:
+		var is_step_complete = plan[_current_plan_step].perform(self, delta)
+		
+		# debug
+		if WorldState.game.test.unit: 
+			_unit.hud.state.text = get_current_action().get_class()
+			#_unit.hud.state.text = _get_best_goal().get_class()
+		
+		if is_step_complete:
+			get_current_action().exit(self) #untested
+			if _current_plan_step < plan.size() - 1:
+				_current_plan_step += 1
+				get_current_action().enter(self)
+			else:
+				#clear_commands()
+				_current_goal = null #trigger replan
+				_current_plan = null
 
 
 func on_idle_end():

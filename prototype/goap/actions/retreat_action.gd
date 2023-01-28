@@ -4,11 +4,11 @@ extends "../Action.gd"
 func get_class(): return "RetreatAction"
 
 
-func is_valid(blackboard) -> bool:
+func is_valid(agent) -> bool:
 	return WorldState.get_state("is_game_active")
 
 
-func get_cost(blackboard) -> int:
+func get_cost(agent) -> int:
 	return 5
 
 

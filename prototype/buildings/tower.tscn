@@ -272,6 +272,6 @@ position = Vector2( 0, -20 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemyGoal" ]
+goals = [ "AttackEnemiesGoal" ]
 
 [editable path="hud"]

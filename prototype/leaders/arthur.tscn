@@ -641,6 +641,6 @@ description = "Arthur inspires courage in nearby allies, increasing their attack
 status_effect_icon = ExtResource( 6 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemyGoal", "PursueEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
+goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [editable path="hud"]
