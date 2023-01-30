@@ -5,7 +5,7 @@ func get_class(): return "AttackEnemy"
 
 
 func is_valid(agent) -> bool:
-	var target_enemy = agent.get_state("target_enemy_active")
+	var target_enemy = agent.get_state("has_attack_target")
 	var command_attack = agent.get_state("command_attack_target")
 	return command_attack or target_enemy
 
@@ -14,19 +14,15 @@ func get_cost(agent) -> int:
 	return 1
 
 
-func get_preconditions() -> Dictionary:
-	return {}
-
-
 func get_effects() -> Dictionary:
 	return {
-		"target_enemy_active": false,
+		"has_attack_target": false,
 		"command_attack_target": null,
 	}
 
 
 func perform(agent, delta) -> bool:
-	return not agent.get_state("target_enemy_active")
+	return not agent.get_state("has_attack_target")
 
 
 func enter(agent):
@@ -44,10 +40,10 @@ func enter(agent):
 func on_animation_end(agent):
 	var unit = agent.get_unit()
 	var enemies = unit.get_units_in_attack_range({"team": unit.opponent_team()})
-	var has_targets = enemies.size() > 0
-	unit.agent.set_state("target_enemy_active", has_targets)
+	var has_attack_targets = enemies.size() > 0
+	unit.agent.set_state("has_attack_target", has_attack_targets)
 	
-	if !has_targets:
+	if !has_attack_targets:
 		Behavior.move.stop(unit)
 	elif unit.target:      
 		Behavior.advance.point(unit, unit.target.global_position)

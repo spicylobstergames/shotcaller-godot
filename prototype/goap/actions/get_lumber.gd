@@ -13,7 +13,7 @@ func is_valid(agent) -> bool:
 
 func get_cost(agent):
 	# plans will sum up their actions costs and the lower cost plan is chosen
-	return 3
+	return 1
 
 
 func get_preconditions() -> Dictionary:
@@ -30,7 +30,7 @@ func perform(agent, delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	unit.working = true
+	unit.agent.set_state("is_working", true)
 	var closest_tree = agent.get_state("closest_tree")
 	Behavior.move.point(unit, closest_tree)
 
@@ -45,14 +45,7 @@ func on_arrive(agent):
 	unit.channeling_timer.start()
 	# cut animation end
 	yield(unit.channeling_timer, "timeout")
-	unit.working = true
+	unit.agent.set_state("is_working", true)
 	agent.set_state("has_wood",true)
 
-
-func on_animation_end(agent):
-	var unit = agent.get_unit()
-	for enemy in unit.get_units_in_sight({ "team": unit.opponent_team() }):
-		if enemy.attacks:
-			agent.set_state("is_threatened", true)
-			break
 

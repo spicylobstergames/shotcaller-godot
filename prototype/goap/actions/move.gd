@@ -48,14 +48,6 @@ func end(unit):
 		stop(unit)
 
 
-func react(target, attacker):
-	point(target, attacker.global_position)
-
-
-func ally_attacked(target, attacker):
-	var allies = target.get_units_in_sight({ "team": target.team })
-	for ally in allies: react(ally, attacker)
-
 
 func stop(unit):
 	Behavior.move.stop(unit)

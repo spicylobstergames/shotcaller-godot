@@ -13,8 +13,12 @@ func _ready():
 
 
 func point(unit, point):
-	if unit.attacks and not unit.stunned and not unit.command_casting and behavior.move.in_bounds(point):
-
+	if (
+		unit.attacks 
+		and not unit.agent.get_state("is_stunned")
+		and not unit.agent.get_state("command_casting") 
+		and behavior.move.in_bounds(point)
+	):
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(point)
 		
@@ -36,10 +40,10 @@ func point(unit, point):
 
 func set_target(unit, target):
 	if not target: 
-		unit.hunting = false
+		unit.agent.set_state("hunting", false)
 		unit.attack_count = 0
 		behavior.modifiers.remove(unit, "attack_speed", "agile")
-	if target and unit.moves: unit.hunting = true
+	if target and unit.moves: unit.agent.set_state("hunting", true)
 	if unit.target != target:
 		unit.attack_count = 0
 		behavior.modifiers.remove(unit, "attack_speed", "agile")

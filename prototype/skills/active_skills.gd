@@ -275,7 +275,7 @@ func arthur_special(effects, parameters, visualize):
 	var targets = []
 	var leader_hit = false
 	
-	leader.command_casting = true
+	leader.agent.set_state("command_casting", true)
 	for damage in damage_per_hit:
 		targets = enemies_in_polygon(leader, parameters.radius, polygon)
 		skill_animation_sprite.look_at(point_target)
@@ -355,7 +355,7 @@ func bokuden_active(effects, parameters, visualize):
 	leader.add_child(dash_tween)
 	dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, 0.5, Tween.TRANS_LINEAR)
 	leader.look_at(dash_point)
-	leader.command_casting = true
+	leader.agent.set_state("command_casting", true)
 	dash_tween.start()
 	yield(dash_tween, "tween_completed")
 	dash_tween.queue_free()

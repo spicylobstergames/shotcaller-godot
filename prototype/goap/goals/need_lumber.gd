@@ -5,11 +5,11 @@ func get_class(): return "NeedLumberGoal"
 
 
 func is_valid(agent) -> bool:
-	return WorldState.get_state("is_game_active")
+	return not agent.get_state("is_running") and not agent.get_state("is_hiding")
 
 
 func priority(agent) -> int:
-	return 10
+	return 1
 
 
 func get_desired_state(agent) -> Dictionary:

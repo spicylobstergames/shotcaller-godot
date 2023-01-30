@@ -12,7 +12,7 @@ func get_desired_state(agent) -> Dictionary:
 # If it becomes true, its sets the agent state and refers to it going forward
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	if (agent.get_state("is_retreating") || agent.get_state("command_retreat")):
+	if (agent.get_state("is_retreating") or agent.get_state("command_retreat")):
 		return true
 	if should_retreat(unit):
 		agent.set_state("is_retreating", true)

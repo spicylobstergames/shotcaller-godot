@@ -25,10 +25,11 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
+	print('enter retreat action')
 	var unit = agent.get_unit()
 	unit.agent.set_state("is_retreating", true)
 	agent.set_state("retreat_pos", agent.get_unit().current_destiny)
-	unit.current_path = []
+	agent.set_state("current_path", [])
 	Behavior.attack.set_target(unit, null)
 	var order = Behavior.orders.player_leaders_orders[unit.name]
 	if unit.team == WorldState.game.enemy_team:

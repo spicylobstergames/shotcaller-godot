@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.test
 
-var unit = 1
+var unit = 0
 var stress = 0
 
 
@@ -23,8 +23,9 @@ func spawn_unit():
 		#leader.attacks = false
 		#leader.dead = true
 		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
-		
-		var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(180,480))
+		var path = game.maps.new_path("mid", "blue")
+		var dummy = game.maps.create(s.infantry, "mid", "blue", "Vector2",  path.start)
+		Behavior.follow.setup_path(dummy, path.follow)
 		dummy.hp = 10000
 		dummy.current_hp = 10000
 		#dummy.moves = false

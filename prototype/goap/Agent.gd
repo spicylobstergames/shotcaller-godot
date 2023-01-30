@@ -30,7 +30,6 @@ func _ready():
 	
 	_unit.connect("unit_reseted", self, "reset")
 	_unit.connect("unit_collided", self, "on_collision")
-	_unit.connect("unit_arrived_on_path", self, "on_path_arrive")
 	_unit.connect("unit_arrived", self, "on_arrive")
 	_unit.connect("unit_idle_ended", self, "on_idle_end")
 	_unit.connect("unit_stun_ended", self, "on_stun_end")
@@ -112,8 +111,8 @@ func _follow_plan(plan, delta):
 		
 		# debug
 		if WorldState.game.test.unit: 
-			_unit.hud.state.text = get_current_action().get_class()
-			#_unit.hud.state.text = _get_best_goal().get_class()
+			#_unit.hud.state.text = get_current_action().get_class()
+			_unit.hud.state.text = _get_best_goal().get_class()
 		
 		if is_step_complete:
 			get_current_action().exit(self) #untested
@@ -162,8 +161,8 @@ func on_animation_end():
 
 
 func on_path_arrive():
-	if has_action_function("point"):
-		get_current_action().point(_unit, _unit.current_path.pop_front())
+	if has_action_function("on_path_arrive"):
+		get_current_action().on_path_arrive(self)
 
 
 func on_arrive():

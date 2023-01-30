@@ -74,6 +74,7 @@ func line_to_array(line):
 		array.append(point)
 	return array
 
+
 func setup_buildings():
 	for team in game.map.get_node("buildings").get_children():
 		for building in team.get_children():

@@ -69,7 +69,7 @@ func get_dot(unit):
 func get_speed(unit):
 	var default = unit.speed
 	
-	if unit.hunting and not unit.target.agent.get_state("is_retreating"):
+	if unit.agent.get_state("hunting") and not unit.target.agent.get_state("is_retreating"):
 		default = unit.hunting_speed
 		
 	if unit.agent.get_state("is_retreating"):
@@ -83,7 +83,8 @@ func get_speed(unit):
 
 func get_regen(unit):
 	var default = unit.regen
-	if unit.retreating: default += retreat_regen
+	if unit.agent.get_state("is_retreating"):
+		default += retreat_regen
 	return default
 
 

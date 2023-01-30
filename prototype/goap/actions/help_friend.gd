@@ -36,3 +36,8 @@ func ally_attacked(target, attacker):
 			ally.agent.set_state("react_target", attacker)
 
 
+
+func react(target, attacker):
+	Behavior.advance.point(target, attacker.global_position)
+
+

@@ -23,7 +23,7 @@ func setup_timer(unit):
 
 
 func point(unit, destiny):
-	if unit.moves and not unit.stunned and in_bounds(destiny):
+	if unit.moves and not unit.agent.get_state("is_stunned") and in_bounds(destiny):
 		move(unit, destiny)
 
 
@@ -34,7 +34,11 @@ func in_bounds(p):
 
 
 func move(unit, destiny):
-	if unit.moves and not unit.stunned and not unit.command_casting:
+	if (
+		unit.moves
+		and not unit.agent.get_state("is_stunned")
+		and not unit.agent.get_state("command_casting")
+	):
 		unit.current_destiny = destiny
 		var current_speed = behavior.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
@@ -89,12 +93,13 @@ func on_collision(unit, delta):
 
 
 func resume(unit):
-	if not unit.stunned:
+	if not unit.agent.get_state("is_stunned"):
 		move(unit, unit.current_destiny)
 
 
 func end(unit):
-	if unit.retreating: unit.retreating = false
+	if unit.agent.get_state("is_retreating"):
+		unit.agent.set_state("is_retreating", false)
 	stand(unit)
 	
 
@@ -108,13 +113,14 @@ func stop(unit):
 
 
 func stand(unit):
-	unit.current_path = []
+	var agent = unit.agent
+	agent.set_state("current_path", [])
 	stop(unit)
 
 
 
 func smart(unit, point, cb):
-	if not unit.stunned and not unit.command_casting:
+	if not unit.agent.get_state("stunned") and not unit.agent.get_state("command_casting"):
 		var path = behavior.follow.find_path(unit.global_position, point)
 		if path: behavior.follow.path(unit, path, cb)
 

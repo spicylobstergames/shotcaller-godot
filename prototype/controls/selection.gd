@@ -25,7 +25,7 @@ func input(event):
 					match event.scancode:
 						KEY_A: attack(game.selected_unit, point) 
 						KEY_S: stand(game.selected_unit)
-					
+				
 				Behavior.follow.draw_path(game.selected_unit)
 
 	# CLICK SELECTION
@@ -48,6 +48,7 @@ func input(event):
 						"advance": advance(game.selected_unit, point)
 						"move": move(game.selected_unit, point)
 						"lane": change_lane(game.selected_unit, point)
+			
 			Behavior.follow.draw_path(game.selected_unit)
 		
 		
@@ -184,8 +185,8 @@ func stand(unit):
 
 
 func order(unit, point):
-	unit.working = true
-	unit.hunting = false
+	unit.agent.set_state("is_working", true)
+	unit.agent.set_state("is_hunting", false)
 	Behavior.attack.set_target(unit, null)
 	unit.start_control_delay()
 	if point:

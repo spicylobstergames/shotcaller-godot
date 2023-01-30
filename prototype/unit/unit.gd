@@ -15,7 +15,6 @@ signal unit_idle_ended
 signal unit_collided
 signal unit_move_ended
 signal unit_arrived
-signal unit_arrived_on_path
 signal unit_started_channeling
 signal unit_healed
 signal unit_leveled_up
@@ -58,12 +57,10 @@ export var mounted:bool = false
 export var speed:float = 0
 export var hunting_speed:float = 0
 var angle:float = 0
-var origin:Vector2 = Vector2.ZERO
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
 var last_position2:Vector2 = Vector2.ZERO
-var current_path:Array = []
 
 # COLLISION
 export var collide:bool = false
@@ -75,8 +72,6 @@ var collision_timer:Timer
 # ATTACK
 export var attacks:bool = false
 export var ranged:bool = false
-var stunned:bool = false
-var command_casting:bool = false
 export var damage:int = 0
 export var attack_range:float = 1
 export var attack_speed:float = 1
@@ -109,10 +104,6 @@ var gold = 0
 # ORDERS
 var control_delay = 3
 var curr_control_delay = 0
-var retreating = false
-var working = false
-var hunting = false
-var channeling = false
 var channeling_timer:Timer
 
 # NODES
@@ -190,16 +181,18 @@ func reset_unit():
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
-	self.stunned = false
-	self.command_casting = false
-	self.hunting = false
-	self.channeling = false
-	self.retreating = false
-	self.working = false
+	self.agent.get_state("is_stunned", false)
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
 	self.assist_candidates = {}
 	self.last_attacker = null
+	
+	self.agent.set_state("command_casting", false)
+	self.agent.set_state("is_channeling", false)
+	self.agent.set_state("is_hunting", false)
+	self.agent.set_state("is_retreating", false)
+	self.agent.set_state("is_working", false)
+	
 	emit_signal("unit_reseted")
 
 
@@ -410,17 +403,13 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves: emit_signal("unit_move_ended")
 	emit_signal("unit_animation_ended")
 
+
 func on_arrive(): # when collides with destiny
-	if self.current_path.size() > 0:
-		emit_signal("unit_arrived_on_path")
-	else:
-		Behavior.move.end(self)
-		
-		match self.after_arive:
-			"conquer": Behavior.orders.conquer_building(self)
-			"pray": Behavior.orders.pray_in_church(self)
-		
-		emit_signal("unit_arrived")
+	match self.after_arive:
+		"conquer": Behavior.orders.conquer_building(self)
+		"pray": Behavior.orders.pray_in_church(self)
+	
+	emit_signal("unit_arrived")
 
 
 func on_attack_release(): # every ranged projectile start
@@ -454,8 +443,8 @@ func heal(heal_hp):
 
 
 func channel_start(time):
-	self.channeling = true
-	self.working = true
+	self.agent.set_state("is_channeling" , true)
+	self.agent.set_state("is_working", true)
 	if self.channeling_timer.time_left > 0:
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
@@ -465,9 +454,9 @@ func channel_start(time):
 
 func stun_start():
 	self.wait_time = 2
-	self.stunned = true
-	self.channeling = false
-	self.command_casting = false
+	self.agent.get_state("is_stunned", true)
+	self.agent.set_state("is_channeling", false)
+	self.agent.set_state("command_casting", false)
 	self.set_state("stun")
 	emit_signal("unit_stuned")
 
@@ -475,7 +464,7 @@ func stun_start():
 func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
-		self.stunned = false
+		self.agent.set_state("stunned", false)
 		emit_signal("unit_stun_ended")
 		emit_signal("unit_animation_ended")
 
@@ -484,8 +473,9 @@ func die():  # hp <= 0
 	self.set_state("death")
 	self.dead = true
 	self.target = null
-	self.channeling = false
-	self.working = false
+	
+	self.agent.set_state("is_channeling", false)
+	self.agent.set_state("is_working", false)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:

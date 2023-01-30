@@ -57,6 +57,7 @@ func _ready():
 	timer.one_shot = true
 	timer.wait_time = order_time
 
+
 func random_leader(team):
 	var team_list = team_random_list[team]
 	var index = floor(randf() * team_list.size())
@@ -83,13 +84,13 @@ func leaders():
 				if counter > 2: lane = game.map.lanes[2]
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
+			Behavior.follow.setup_path(leader_node, path.follow)
 			leader_node.setup_leader_exp()
-			leader_node.origin = path.start
-			counter += 1
 			if team == "red":
 				red_leaders.append(leader_node)
 			else:
 				blue_leaders.append(leader_node)
+			counter += 1
 	
 	game.maps.setup_leaders(red_leaders, blue_leaders)
 
@@ -138,6 +139,7 @@ func send_pawn(template, lane, team):
 	if not pawn:
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
+	Behavior.follow.setup_path(pawn, path.follow)
 	behavior.orders.set_pawn(pawn)
 
 
