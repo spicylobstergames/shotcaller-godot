@@ -18,6 +18,8 @@ margin_right = 150.0
 custom_styles/bg = SubResource( 1 )
 
 [node name="minimap" parent="." instance=ExtResource( 2 )]
+offset = Vector2( 0, 600 )
+transform = Transform2D( 1, 0, 0, 1, 0, 600 )
 
 [node name="rect_layer" type="CanvasLayer" parent="."]
 layer = 2

@@ -6,8 +6,9 @@ onready var _name = $name
 onready var _cooldown = $cooldown
 onready var _game: Node = get_tree().get_current_scene()
 var bribe_gold_cost = 10
+
+
 func _ready():
-# warning-ignore:return_value_discarded
 	connect("button_down", self, "_button_down")
 
 
@@ -38,14 +39,14 @@ func _button_down():
 		# wait for skill effect to be done, if it's async
 		if result is GDScriptFunctionState:
 			result = yield(result, "completed")
-			leader.command_casting = false
+			leader.agent.set_state("command_casting", false)
 		# if effect wasn't successful used, then we need to abort using skill
 		if !result:
 			self.pressed = false
 			return
 	self.pressed = false
 	skill.current_cooldown = skill.cooldown
-	leader.command_casting = false
+	leader.agent.set_state("command_casting", false)
 
 
 func _physics_process(delta):

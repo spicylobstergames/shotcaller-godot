@@ -568,7 +568,6 @@ radius = 20.0
 [node name="lumberjack" instance=ExtResource( 2 )]
 hp = 180
 regen = 1
-vision = 140
 type = "worker"
 display_name = "lumberjack"
 title = "hired worker"
@@ -581,7 +580,6 @@ collide = true
 damage = 50
 defense = 5
 projectile_speed = 0.0
-goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -610,5 +608,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "NeedLumberGoal", "NeedSafetyGoal" ]
 
 [editable path="hud"]

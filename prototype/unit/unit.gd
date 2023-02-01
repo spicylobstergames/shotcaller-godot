@@ -10,24 +10,28 @@ var game:Node
 
 # SIGNALS
 
-signal unit_died
+signal unit_reseted
 signal unit_idle_ended
 signal unit_collided
 signal unit_move_ended
 signal unit_arrived
 signal unit_started_channeling
+signal unit_healed
+signal unit_leveled_up
+signal unit_attack_release # ranged projectile
+signal unit_attack_hitted # melee hit
+signal unit_attack_ended
 signal unit_attacked
-signal unit_ranged_attacked
-signal unit_melee_attacked
 signal unit_stuned
 signal unit_stun_ended
-
+signal unit_animation_ended
+signal unit_death_started
+signal unit_died
 
 export var hp:int = 100
 var current_hp:int = 100
 export var regen:int = 0
 export var vision:int = 100
-var current_modifiers = {}
 export var type:String = "pawn" # building leader
 export var subtype:String = "melee" # ranged base lane backwood
 export var display_name:String
@@ -40,6 +44,7 @@ var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
 var symbol:bool = false
+var current_modifiers = Behavior.modifiers.new_modifiers()
 
 # SELECTION
 export var selectable:bool = false
@@ -52,12 +57,10 @@ export var mounted:bool = false
 export var speed:float = 0
 export var hunting_speed:float = 0
 var angle:float = 0
-var origin:Vector2 = Vector2.ZERO
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
 var last_position2:Vector2 = Vector2.ZERO
-var current_path:Array = []
 
 # COLLISION
 export var collide:bool = false
@@ -69,8 +72,6 @@ var collision_timer:Timer
 # ATTACK
 export var attacks:bool = false
 export var ranged:bool = false
-var stunned:bool = false
-var command_casting:bool = false
 export var damage:int = 0
 export var attack_range:float = 1
 export var attack_speed:float = 1
@@ -103,16 +104,13 @@ var gold = 0
 # ORDERS
 var control_delay = 3
 var curr_control_delay = 0
-var retreating = false
-var working = false
-var hunting = false
-var channeling = false
 var channeling_timer:Timer
 
 # NODES
 var hud:Node
 var sprites:Node
 var body:Node
+var agent:Node
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -138,28 +136,21 @@ const ASSIST_TIME_IN_SECONDS = 3
 
 var status_effects = {}
 
-# GOAP
-onready var agent = Goap.get_agent(self)
-export var goals = []
-
 
 func _ready():
 	game = get_tree().get_current_scene()
 
 	if has_node("hud"): hud = get_node("hud")
-
 	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
-	current_modifiers = Behavior.modifiers.new_modifiers()
+	if has_node("agent"): agent = get_node("agent")
 
-	if type != "pawn":
-		EventMachine.register_listener(Events.ONE_SEC, self, "on_every_second")
-		
+
+func setup_leader_exp():
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
-# warning-ignore:return_value_discarded
 		experience_timer.connect("timeout", self, "on_experience_tick")
 		add_child(experience_timer)
 
@@ -169,6 +160,7 @@ func gain_experience(value):
 	if experience >= experience_needed():
 		experience -= experience_needed()
 		level += 1
+		emit_signal("unit_leveled_up")
 
 func on_experience_tick():
 	gain_experience(EXP_PER_5_SEC)
@@ -182,25 +174,26 @@ func reset_unit():
 	self.setup_team(self.team)
 
 	if self.type == "leader":
-		hud.state.visible = true
-		hud.hpbar.visible = true
+		self.hud.state.visible = true
+		self.hud.hpbar.visible = true
 
-	hud.state.text = self.display_name
+	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
-	self.stunned = false
-	self.command_casting = false
-	self.hunting = false
-	self.channeling = false
-	self.retreating = false
-	self.working = false
+	self.agent.get_state("is_stunned", false)
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
-	assist_candidates = {}
-	last_attacker = null
-	if(agent):
-		agent.reset()
+	self.assist_candidates = {}
+	self.last_attacker = null
+	
+	self.agent.set_state("command_casting", false)
+	self.agent.set_state("is_channeling", false)
+	self.agent.set_state("is_hunting", false)
+	self.agent.set_state("is_retreating", false)
+	self.agent.set_state("is_working", false)
+	
+	emit_signal("unit_reseted")
 
 
 func set_state(s):
@@ -352,16 +345,14 @@ func check_collision(unit2, delta):
 func get_collision_around(delta):
 	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
 	var unit1_rad = self.collision_radius
-	return game.map.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+	return game.maps.blocks.get_units_in_radius(unit1_pos, unit1_rad)
 
 
-func get_units_on_sight(filters):
-	var current_vision = Behavior.modifiers.get_value(self, "vision")
-	var pos1 = self.global_position
-	var neighbors = game.map.blocks.get_units_in_radius(pos1, current_vision)
+func get_units_in_radius(radius, filters = {}, pos = self.global_position):
+	var neighbors = game.maps.blocks.get_units_in_radius(pos, radius)
 	var targets = []
 	for unit2 in neighbors:
-		if unit2.hp and self != unit2 and not unit2.dead and not unit2.immune:
+		if self != unit2 and not unit2.dead:
 			if not filters: targets.append(unit2)
 			else:
 				for filter in filters:
@@ -370,23 +361,20 @@ func get_units_on_sight(filters):
 	return targets
 
 
-func get_enemy_leaders_on_sight(unit):
-	var targets = []
-	var leaders_on_sight = unit.get_units_on_sight({"type": "leader"})
-	for leader in leaders_on_sight:
-		if leader.team != unit.team:
-			targets.append(leader)
-			
-	return targets
+func get_units_in_sight(filters = {}):
+	var current_vision = Behavior.modifiers.get_value(self, "vision")
+	return self.get_units_in_radius(current_vision, filters)
 
 
-func on_every_second():
-	if game.started:
-		self.units_in_radius = game.map.blocks.get_units_in_radius(self.global_position, EXP_RANGE);
-		for i in units_in_radius:
-			if i.team != "neutral" and i.type != "building" and i.team != self.team  and agent != null and type == "worker":
-				agent.set_state("is_threatened", true)
-				break
+func get_units_in_attack_range(filters = {}):
+	var current_range = Behavior.modifiers.get_value(self, "attack_range")
+	var pos = self.global_position + self.attack_hit_position
+	return self.get_units_in_radius(current_range, filters, pos)
+
+
+func gold_timer_timeout():
+	game.ui.inventories.gold_timer_timeout(self)
+
 
 func wait():
 	self.wait_time = game.rng.randi_range(1,4)
@@ -394,12 +382,10 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	if self.agent.has_action_function("on_idle_end"):
-		self.agent.get_current_action().on_idle_end(self)
 	if self.wait_time > 0: self.wait_time -= 1
 	else: game.test.unit_wait_end(self)
 	emit_signal("unit_idle_ended")
-
+	emit_signal("unit_animation_ended")
 
 func on_move(delta): # every frame if there's no collision
 	Behavior.move.step(self, delta)
@@ -408,56 +394,44 @@ func on_move(delta): # every frame if there's no collision
 func on_collision(delta):
 	if self.moves:
 		Behavior.move.on_collision(self, delta)
-	if self.agent.has_action_function("on_collision"):
-		self.agent.get_current_action().on_collision(self)
 	emit_signal("unit_collided")
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self.moves and self.attacks: 
-		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action().resume(self)
-	emit_signal("unit_move_ended")
-	if self == game.selected_unit: Behavior.follow.draw_path(self)
+	if self == game.selected_unit:
+		Behavior.follow.draw_path(self)
+	if self.moves: emit_signal("unit_move_ended")
+	emit_signal("unit_animation_ended")
 
 
 func on_arrive(): # when collides with destiny
-	if self.current_path.size() > 0:
-		if agent.has_action_function("point"): # ??? todo move all of this to signals
-			agent.get_current_action().point(self, current_path.pop_front())
-	elif self.moves:
-		self.working = false
-		Behavior.move.end(self)
-
-		if self.agent.has_action_function("end"):
-			self.agent.get_current_action().end(self)
-		if agent != null: 
-			agent.on_arrive()
-		
-		match self.after_arive:
-			"conquer": Behavior.orders.conquer_building(self)
-			"pray": Behavior.orders.pray_in_church(self)
-			
-		emit_signal("unit_arrived")
+	match self.after_arive:
+		"conquer": Behavior.orders.conquer_building(self)
+		"pray": Behavior.orders.pray_in_church(self)
+	
+	emit_signal("unit_arrived")
 
 
 func on_attack_release(): # every ranged projectile start
 	if self.attacks:
 		Behavior.attack.projectile_release(self)
-		emit_signal("unit_attacked")
-		emit_signal("unit_ranged_attacked")
-		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action().resume(self)
+		emit_signal("unit_attack_release")
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
 		Behavior.attack.hit(self)
-		emit_signal("unit_attacked")
-		emit_signal("unit_melee_attacked")
-		if self.moves:
-			if self.agent.has_action_function("resume"):
-				self.agent.get_current_action().resume(self)
+		emit_signal("unit_attack_hitted")
+
+
+func was_attacked(attacker, _damage):
+	emit_signal("unit_attacked", attacker, _damage)
+
+
+func on_attack_end(): # animation end of all attacks
+	if self.attacks:
+		emit_signal("unit_attack_ended")
+	emit_signal("unit_animation_ended")
 
 
 func heal(heal_hp):
@@ -465,11 +439,12 @@ func heal(heal_hp):
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
 	self.hud.update_hpbar()
 	if self == game.selected_unit: game.ui.stats.update()
+	emit_signal("unit_healed")
 
 
 func channel_start(time):
-	self.channeling = true
-	self.working = true
+	self.agent.set_state("is_channeling" , true)
+	self.agent.set_state("is_working", true)
 	if self.channeling_timer.time_left > 0:
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
@@ -479,27 +454,28 @@ func channel_start(time):
 
 func stun_start():
 	self.wait_time = 2
-	self.stunned = true
-	self.channeling = false
-	self.command_casting = false
+	self.agent.get_state("is_stunned", true)
+	self.agent.set_state("is_channeling", false)
+	self.agent.set_state("command_casting", false)
 	self.set_state("stun")
 	emit_signal("unit_stuned")
+
 
 func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
-		self.stunned = false
-		if self.agent.has_action_function("resume"):
-			self.agent.get_current_action().resume(self)
-	emit_signal("unit_stun_ended")
+		self.agent.set_state("stunned", false)
+		emit_signal("unit_stun_ended")
+		emit_signal("unit_animation_ended")
 
 
 func die():  # hp <= 0
 	self.set_state("death")
 	self.dead = true
 	self.target = null
-	self.channeling = false
-	self.working = false
+	
+	self.agent.set_state("is_channeling", false)
+	self.agent.set_state("is_working", false)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
@@ -517,13 +493,19 @@ func die():  # hp <= 0
 					attacker.assists += 1
 	elif type == 'pawn' and last_attacker != null:
 		last_attacker.last_hit_count += 1
+	
+	emit_signal("unit_death_started")
 
 
-func on_death_end():  # death animation end
+func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
 	self.state = 'dead'
 	self.get_node("animations").current_animation = "[stop]"
+
+
+func on_death_end():  # death animation end
+	self.hide_in_map()
 	
 	Behavior.attack.clear_stuck(self)
 	
@@ -534,8 +516,7 @@ func on_death_end():  # death animation end
 			"leader": Behavior.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == 'castle':
-					EventMachine.register_event(Events.GAME_END,
-							["ENEMY" if team == game.player_team else "PLAYER"])
+					game.end(team == game.enemy_team)
 	
 	emit_signal("unit_died")
 

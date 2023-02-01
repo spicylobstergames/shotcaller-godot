@@ -114,11 +114,14 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_hit"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/6/type = "value"
@@ -533,7 +536,6 @@ attacks = true
 damage = 60
 defense = 5
 projectile_speed = 0.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -560,10 +562,10 @@ region_rect = Rect2( 6, 4, 18, 19 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( 2, -15 )
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
-visible = false
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
@@ -581,5 +583,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 7, 0 )
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

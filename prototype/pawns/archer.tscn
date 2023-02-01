@@ -90,11 +90,14 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.3, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_release"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/4/type = "value"
@@ -630,7 +633,6 @@ ranged = true
 damage = 40
 defense = 2
 projectile_speed = 220.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -642,6 +644,7 @@ scale = Vector2( 1.6, 1.6 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 22 )
+frame = 2
 offset = Vector2( 0, -15 )
 
 [node name="stuck" parent="sprites" index="2"]
@@ -664,5 +667,8 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

@@ -55,6 +55,7 @@ func get_value(unit, mod_str):
 		
 	return default + level_bonus
 
+
 func get_dot(unit):
 	var dot_effects = []
 	if not unit.current_modifiers["dot"].empty():
@@ -64,12 +65,14 @@ func get_dot(unit):
 	else:
 		return null
 
+
 func get_speed(unit):
 	var default = unit.speed
 	
-	if unit.hunting:
+	if unit.agent.get_state("hunting") and not unit.target.agent.get_state("is_retreating"):
 		default = unit.hunting_speed
-	elif unit.retreating:
+		
+	if unit.agent.get_state("is_retreating"):
 		var bonus = Behavior.skills.get_value(unit, "bonus_retreat_speed")
 		default += extra_retreat_speed + bonus
 	
@@ -80,7 +83,8 @@ func get_speed(unit):
 
 func get_regen(unit):
 	var default = unit.regen
-	if unit.retreating: default += retreat_regen
+	if unit.agent.get_state("is_retreating"):
+		default += retreat_regen
 	return default
 
 

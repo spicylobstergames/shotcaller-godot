@@ -66,6 +66,7 @@ func map_loaded():
 	var r_size = 600 * size / game.map.size
 	cam_rect.rect_size = Vector2(r_size, r_size)
 
+
 func get_map_texture():
 	# set camera zoom and limits
 	game.camera.offset = game.map.mid

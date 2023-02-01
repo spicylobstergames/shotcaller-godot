@@ -9,8 +9,7 @@ var stress = 0
 
 func _ready():
 	game = get_tree().get_current_scene()
-	EventMachine.register_listener(Events.CHEAT_CODE, self, "apply_cheat_code")
-
+	
 
 func spawn_unit():
 	var s = Behavior.spawn
@@ -18,26 +17,27 @@ func spawn_unit():
 		
 #		var dummy = game.maps.create(s.arthur, "mid", "red", "Vector2", Vector2(930,900))
 #		var inf = game.maps.create(s.arthur, "mid", "red", "Vector2",  Vector2(900,900))
-#		inf.set_behavior("stand")
 #		inf.hp = 100
 #		inf.current_hp = 100
 		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(420,400))
+		#leader.attacks = false
 		#leader.dead = true
 		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
-		
-		#var dummy = game.maps.create(s.infantry, "mid", "red", "Vector2",  Vector2(480,400))
-		#dummy.hp = 10000
-		#dummy.current_hp = 10000
+		var path = game.maps.new_path("mid", "blue")
+		var dummy = game.maps.create(s.infantry, "mid", "blue", "Vector2",  path.start)
+		Behavior.follow.setup_path(dummy, path.follow)
+		dummy.hp = 10000
+		dummy.current_hp = 10000
 		#dummy.moves = false
 		
 		#game.maps.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
 		#leader.hp = 100
 		#leader.current_hp = 100
-		#Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
+		Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
 		
-		game.player_choose_leaders=[leader.name]
-		game.player_leaders=[leader]
-		game.maps.setup_leaders()
+		#game.player_choose_leaders=[leader.name]
+		#game.player_leaders=[leader]
+		game.maps.setup_leaders([], [])
 	
 	if stress: spawn_random_units()
 
@@ -84,13 +84,3 @@ func spawn_leaders():
 		game.maps.create(s.takoda, "mid", t1, "Vector2", Vector2(900,950))
 		game.maps.create(s.tomyris, "mid", t1, "Vector2", Vector2(900,1000))
 
-
-func apply_cheat_code(code):
-	match code:
-		"SHADOW":
-			for unit1 in game.all_units:
-				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
-		"WIN":
-			EventMachine.register_event(Events.GAME_END, ["PLAYER"])
-		"LOSE":
-			EventMachine.register_event(Events.GAME_END, ["ENEMY"])

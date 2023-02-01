@@ -1,7 +1,12 @@
 extends Node
 
+
+# Goap global class
+
 # This class is an Autoload accessible globally.
-# It initialises a GoapActionPlanner with the available
+# Access the autoload list in godot settings
+
+# Iitialises a GoapActionPlanner with all the available
 # actions.
 #
 # In your game, you might want to have different planners
@@ -12,18 +17,14 @@ extends Node
 # with pre-defined actions.
 
 
-# self = Goap
-
-
 var _action_planner = preload("ActionPlanner.gd").new()
 var _actions = preload("Actions.gd").new()
 var _goals = preload("Goals.gd").new()
 
-var agent = preload("../goap/Agent.gd")
-
 
 func _ready():
 	_action_planner.set_actions(_actions.get_all_actions())
+	WorldState.set_state("is_game_active", false)
 
 
 func get_action_planner():
@@ -34,13 +35,7 @@ func get_goal(goal):
 	return _goals.get_goal(goal)
 
 
-func get_agent(unit):
-	var new_agent = agent.new()
-	new_agent.init(unit)
-	return new_agent
-
-
 func process(units, delta):
 	for unit in units:
-		if unit.agent._goals:
+		if unit.agent:
 			unit.agent.process(delta)

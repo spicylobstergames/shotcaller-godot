@@ -83,11 +83,14 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_release"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/1/type = "value"
@@ -201,7 +204,6 @@ damage = 60
 attack_speed = 1.3
 defense = 20
 projectile_speed = 220.0
-goals = [ "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
@@ -256,5 +258,8 @@ shape = SubResource( 29 )
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 position = Vector2( 0, -20 )
 shape = SubResource( 32 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemiesGoal" ]
 
 [editable path="hud"]

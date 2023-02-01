@@ -164,42 +164,43 @@ func _zoom_camera(dir):
 	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
 
 func process():
-	var ratio = get_viewport().size.x / get_viewport().size.y
-	
-	# APPLY MOUSE PAN
-	if is_panning: translate(pan_position * zoom.x)
-	# APPLY KEYBOARD PAN
-	else: translate(arrow_keys_move)
-	
-	if(_touches.size()>0):
-		_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
-		if(_touches_info.last_radius != 0 && _touches.size() > 1):
-			_zoom_camera(pinch_sensitivity * (_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
-	
-	#RESET VARS AND SET LAST VARS
-	_touches_info.last_radius = _touches_info.radius
-	_touches_info.last_avg_pos = _touches_info.cur_avg_pos
-	_touches_info.num_touch_last_frame = _touches.size()
-	pan_position = Vector2.ZERO
-	
-	# KEEP CAMERA PAN LIMITS
-	if global_position.x > margin: global_position.x = margin
-	if global_position.x < -margin: global_position.x = -margin
-	if global_position.y > margin: global_position.y = margin
-	if global_position.y < -margin: global_position.y = -margin
-	
-	# ADJUST CAMERA PAN LIMITS TO SCREEN RATIO
-	limit_top = -margin
-	limit_bottom = margin
-	limit_left = -margin
-	limit_right = margin
-
-	var s = 0.65
-	if ratio >= 1 and zoom.x > 1:
-		limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
-		limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
-
-	if ratio < 1 and zoom.x > 1:
-		limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
-		limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
+	if game.started: 
+		var ratio = get_viewport().size.x / get_viewport().size.y
+		
+		# APPLY MOUSE PAN
+		if is_panning: translate(pan_position * zoom.x)
+		# APPLY KEYBOARD PAN
+		else: translate(arrow_keys_move)
+		
+		if(_touches.size()>0):
+			_touches_info.radius = abs(_touches.values()[0].current.position.x - _touches_info.cur_avg_pos.x) + abs(_touches.values()[0].current.position.y - _touches_info.cur_avg_pos.y)
+			if(_touches_info.last_radius != 0 && _touches.size() > 1):
+				_zoom_camera(pinch_sensitivity * (_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
+		
+		#RESET VARS AND SET LAST VARS
+		_touches_info.last_radius = _touches_info.radius
+		_touches_info.last_avg_pos = _touches_info.cur_avg_pos
+		_touches_info.num_touch_last_frame = _touches.size()
+		pan_position = Vector2.ZERO
+		
+		# KEEP CAMERA PAN LIMITS
+		if global_position.x > margin: global_position.x = margin
+		if global_position.x < -margin: global_position.x = -margin
+		if global_position.y > margin: global_position.y = margin
+		if global_position.y < -margin: global_position.y = -margin
+		
+		# ADJUST CAMERA PAN LIMITS TO SCREEN RATIO
+		limit_top = -margin
+		limit_bottom = margin
+		limit_left = -margin
+		limit_right = margin
+		
+		var s = 0.65
+		if ratio >= 1 and zoom.x > 1:
+			limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+			limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+		
+		if ratio < 1 and zoom.x > 1:
+			limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
+			limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
 

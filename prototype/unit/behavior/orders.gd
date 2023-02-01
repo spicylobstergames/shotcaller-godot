@@ -215,7 +215,11 @@ func conquer_building(unit):
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
-	if not unit.stunned and not unit.command_casting and building:
+	if (
+		not unit.agent.get_state("is_stunned") 
+		and not unit.agent.get_state("command_casting") 
+		and building
+	):
 		var hp = float(behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
@@ -223,10 +227,10 @@ func conquer_building(unit):
 			unit.channel_start(conquer_time)
 			yield(unit.channeling_timer, "timeout")
 			# conquer
-			if unit.channeling:
-				unit.channeling = false
-				unit.working = false
-				building.channeling = false
+			if unit.agent.get_state("is_channeling"):
+				unit.agent.get_state("is_channeling", false)
+				unit.agent.set_state("is_working", false)
+				building.agent.get_state("channeling", false)
 				building.setup_team(unit.team)
 				
 				match building.display_name:
@@ -264,22 +268,24 @@ func pray_in_church(unit):
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
-	if (building and building.team == unit.team 
-			and building.display_name == "church" 
-			and building.channeling == false 
-			and not unit.stunned
-			and not unit.command_casting):
-		building.channeling = true
+	if (
+		building and building.team == unit.team 
+		and building.display_name == "church" 
+		and not building.agent.get_state("is_channeling")
+		and not unit.agent.get_state("is_stunned")
+		and not unit.agent.get_state("command_casting") 
+	):
+		building.agent.set_state("is_channeling", true)
 		unit.channel_start(pray_time)
 		yield(unit.channeling_timer, "timeout")
-		if unit.channeling:
-			unit.channeling = false
-			unit.working = false
+		if unit.agent.get_state("is_channeling"):
+			unit.agent.get_state("is_channeling", false)
+			unit.agent.set_state("is_working", false)
 			pray(unit)
 			game.ui.show_select()
 			# Chruch pray cooldown <- temporary solution
 			yield(get_tree().create_timer(pray_cooldown), "timeout")
-			building.channeling = false
+			building.agent.set_state("channeling", false)
 
 
 
@@ -305,7 +311,7 @@ func gold_order(button):
 	mine.channeling_timer.stop()
 	mine.channeling_timer.wait_time = 1
 	mine.channeling_timer.start()
-	mine.channeling = true
+	mine.agent.set_state("is_channeling", true)
 	match button.orders.gold:
 		"collect":
 			button.counter = collect_time
@@ -327,8 +333,8 @@ func gold_collect_counter(button):
 	else:
 		mine.channeling_timer.stop()
 		button.disabled = false
-		if mine.channeling:
-			mine.channeling = false
+		if mine.agent.get_state("is_channeling"):
+			mine.agent.set_state("is_channeling", false)
 			var leaders = game.player_leaders
 			if mine.team == game.enemy_team: leaders = game.enemy_leaders
 			for leader in leaders:
@@ -346,8 +352,8 @@ func gold_destroy_counter(button):
 	else:
 		mine.channeling_timer.stop()
 		button.disabled = false
-		if mine.channeling:
-			mine.channeling = false
+		if mine.agent.get_state("is_channeling"):
+			mine.agent.set_state("channeling", false)
 			mine.gold = 0
 			mine.setup_team("neutral")
 			game.ui.show_select()
@@ -382,48 +388,4 @@ func remove_tax(team):
 		inventory.extra_tax_gold = 0
 
 
-# RETREAT
 
-func take_hit_retreat(attacker, target):
-	match target.type:
-		"leader":
-			var hp = behavior.modifiers.get_value(target, "hp")
-			match target.tactics:
-				"escape":
-					retreat(target)
-				"defensive":
-					if target.current_hp < hp / 2:
-						retreat(target)
-				"default":
-					if target.current_hp < hp / 3:
-						retreat(target)
-
-
-func retreat(unit):
-	unit.retreating = true
-	unit.current_path = []
-	behavior.attack.set_target(unit, null)
-	var order
-	if unit.team == game.player_team:
-		order = player_leaders_orders[unit.name]
-	else: order = enemy_leaders_orders[unit.name]
-	set_leader(unit, order)
-	var lane = unit.lane
-	var path = game.map.lanes_paths[lane].duplicate()
-	if unit.team == "red": 
-		path.invert()
-	behavior.move.point(unit, path[0])
-	
-
-func should_retreat(unit):
-	var hp = behavior.modifiers.get_value(unit, "hp")
-	match unit.tactics:
-		"escape":
-			return true
-		"defensive":
-			if unit.current_hp < hp / 2:
-				return true
-		"default":
-			if unit.current_hp < hp / 3:
-				return true
-	return false

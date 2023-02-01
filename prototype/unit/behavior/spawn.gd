@@ -57,6 +57,7 @@ func _ready():
 	timer.one_shot = true
 	timer.wait_time = order_time
 
+
 func random_leader(team):
 	var team_list = team_random_list[team]
 	var index = floor(randf() * team_list.size())
@@ -83,14 +84,15 @@ func leaders():
 				if counter > 2: lane = game.map.lanes[2]
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
-			leader_node.origin = path.start
-			counter += 1
+			Behavior.follow.setup_path(leader_node, path.follow)
+			leader_node.setup_leader_exp()
 			if team == "red":
 				red_leaders.append(leader_node)
 			else:
 				blue_leaders.append(leader_node)
-	game.ui.get_node("score_board").initialize(red_leaders, blue_leaders)
-	game.maps.setup_leaders()
+			counter += 1
+	
+	game.maps.setup_leaders(red_leaders, blue_leaders)
 
 
 func pawns():
@@ -137,6 +139,7 @@ func send_pawn(template, lane, team):
 	if not pawn:
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
+	Behavior.follow.setup_path(pawn, path.follow)
 	behavior.orders.set_pawn(pawn)
 
 
@@ -192,13 +195,15 @@ func cemitery_add_leader(leader):
 # LUMBERMILL
 
 func lumberjack_hire(lumbermill, team):
-	var unit = lumbermill.target
+	var unit = lumbermill.agent.get_state("lumberjack")
 	if not unit: # create lumberjack
 		unit = next_to_building("lumberjack", lumbermill, team)
-		unit.agent.set_state("lumbermill_position", unit.global_position)  
-		unit.agent.set_state("closest_tree", lumbermill.get_node("closest_tree").global_position)
-		lumbermill.target = unit
-		
+		unit.agent.set_state("lumbermill", lumbermill)  
+		unit.agent.set_state("deliver_position", unit.global_position)
+		var closest_tree = lumbermill.get_node("closest_tree")
+		unit.agent.set_state("closest_tree", closest_tree.global_position)
+		lumbermill.agent.set_state("lumberjack", unit)
+	
 	unit.setup_team(team)
 	unit.visible = true
 	

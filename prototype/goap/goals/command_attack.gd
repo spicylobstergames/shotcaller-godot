@@ -1,6 +1,5 @@
 extends "../Goal.gd"
 
-#class_name CommandAttackGoal
 
 func get_class(): return "CommandAttackGoal"
 
@@ -13,6 +12,4 @@ func priority(agent) -> int:
 
 
 func get_desired_state(agent) -> Dictionary:
-	return {
-		"arrived_at_target": true
-	}
+	return { "arrived_at_target": true } # and no target

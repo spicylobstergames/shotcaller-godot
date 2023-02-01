@@ -1,14 +1,12 @@
 extends Node2D
 var game:Node
 
-# self = game.map.blocks
+# self = game.maps.blocks
 
 
 # COLLISION QUADTREES
-const _QuadtreeGD = preload("quadtree.gd")
+
 var quad
-
-
 var block_template:PackedScene = load("res://map/blocks/block_template.tscn")
 
 
@@ -18,9 +16,8 @@ func _ready():
 
 
 func setup_quadtree():
-	var Quad = _QuadtreeGD.new()
 	var bound = Rect2(Vector2.ZERO, Vector2(game.map.size,game.map.size))
-	quad = Quad.create_quadtree(bound, 16, 16)
+	quad = Quadtree.create_quadtree(bound, 16, 16)
 
 
 func get_units_in_radius(pos, rad):
@@ -41,6 +38,6 @@ func create_block(x, y):
 	block.attacks = false
 	block.collide = true
 	block.global_position = Vector2(half + x * size, half + y * size)
-	game.map.blocks.add_child(block)
+	game.map.add_child(block)
 	game.collision.setup(block)
 	game.all_units.append(block)

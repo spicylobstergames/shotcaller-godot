@@ -14,7 +14,7 @@
 [ext_resource path="res://ui/leaders_icons.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/menus/pause_menu.tscn" type="PackedScene" id=13]
 [ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=14]
-[ext_resource path="res://ui/scoreboard/score_board.tscn" type="PackedScene" id=18]
+[ext_resource path="res://ui/scoreboard/scoreboard.tscn" type="PackedScene" id=18]
 [ext_resource path="res://ui/cheat_console.gd" type="Script" id=19]
 
 [sub_resource type="DynamicFont" id=17]

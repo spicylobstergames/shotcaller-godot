@@ -90,11 +90,14 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_release"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/4/type = "value"
@@ -559,7 +562,6 @@ ranged = true
 damage = 50
 defense = 5
 projectile_speed = 210.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
 
 [node name="symbol" parent="." index="1"]
 modulate = Color( 1, 1, 1, 1 )
@@ -586,6 +588,7 @@ region_rect = Rect2( 2, 4, 21, 19 )
 
 [node name="body" parent="sprites" index="1"]
 frames = SubResource( 36 )
+frame = 2
 offset = Vector2( 0, -15 )
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
@@ -605,5 +608,8 @@ shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

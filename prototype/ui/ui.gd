@@ -54,11 +54,10 @@ func _ready():
 	
 	active_skills = stats.get_node("active_skills")
 	
-	EventMachine.register_listener(Events.ONE_SEC, self, "count_time")
-	
-	EventMachine.register_listener(Events.GAME_END, self, "handle_game_end")
+	WorldState.one_sec_timer.connect("timeout", self, "count_time")
 	
 	hide_all()
+
 
 
 func process():
@@ -155,7 +154,7 @@ func buttons_update():
 	shop_button.set_pressed(shop.visible)
 	controls_button.set_pressed(controls_menu.visible)
 
-func handle_game_end(victor : String):
-	game.ended = true
-	game.victory = victor
-	get_tree().paused = true
+func map_loaded():
+	game.ui.buttons_update()
+	game.ui.orders_menu.build()
+

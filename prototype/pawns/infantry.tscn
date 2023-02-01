@@ -74,11 +74,14 @@ tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_hit"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/6/type = "value"
@@ -475,7 +478,7 @@ tracks/6/keys = {
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id=27]
-radius = 20.0
+radius = 16.0
 
 [node name="infantry" instance=ExtResource( 1 )]
 hp = 200
@@ -492,7 +495,6 @@ attacks = true
 damage = 50
 defense = 5
 projectile_speed = 0.0
-goals = [ "AttackEnemyGoal", "SlayEnemiesGoal" ]
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 5, 5 )
@@ -503,12 +505,9 @@ position = Vector2( 0.3, 0.3 )
 scale = Vector2( 1.6, 1.6 )
 
 [node name="body" parent="sprites" index="1"]
-rotation = 0.0443854
-scale = Vector2( 1, 0.936423 )
 frame = 2
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
-rotation = 0.739757
 animation = "default"
 
 [node name="stuck" parent="sprites" index="3"]
@@ -528,7 +527,10 @@ shape = SubResource( 32 )
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
-position = Vector2( 7, 0 )
+position = Vector2( 6, 0 )
 shape = SubResource( 27 )
+
+[node name="agent" parent="." index="7"]
+goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

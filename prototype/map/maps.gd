@@ -6,6 +6,8 @@ var current_map = 'one_lane_map'
 var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
 
+onready var blocks = get_node("blocks")
+
 func _ready():
 	game = get_tree().get_current_scene()
 
@@ -26,12 +28,17 @@ func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
 	game.map.trees.occluder_light_mask = 2
 	game.map.walls.occluder_light_mask = 2
+	setup_buildings()
+	setup_lanes()
+	blocks.setup_quadtree()
 	game.camera.map_loaded()
-	game.ui.buttons_update()
+	game.ui.map_loaded()
+	Behavior.follow.setup_pathfind()
 	game.map_loaded()
 
 
-func setup_leaders():
+func setup_leaders(red_leaders, blue_leaders):
+	game.ui.scoreboard.build(red_leaders, blue_leaders)
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
 	game.ui.orders_menu.build_leaders()
@@ -66,6 +73,7 @@ func line_to_array(line):
 	for point in line.points:
 		array.append(point)
 	return array
+
 
 func setup_buildings():
 	for team in game.map.get_node("buildings").get_children():

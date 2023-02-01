@@ -7,7 +7,6 @@
 [ext_resource path="res://assets/buildings/neutral_red.png" type="Texture" id=5]
 [ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture" id=6]
 
-
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 3 )
 region = Rect2( 299, 20, 64, 68 )
@@ -73,12 +72,6 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=28]
-radius = 48.0
-
-[sub_resource type="CircleShape2D" id=29]
-radius = 64.0
-
 [sub_resource type="Animation" id=24]
 resource_name = "attack"
 length = 0.6
@@ -90,11 +83,14 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0.4 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_release"
+}, {
+"args": [  ],
+"method": "on_attack_end"
 } ]
 }
 tracks/1/type = "value"
@@ -183,6 +179,12 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="CircleShape2D" id=28]
+radius = 48.0
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 64.0
+
 [node name="lumbermill" instance=ExtResource( 1 )]
 hp = 1200
 regen = 10
@@ -198,7 +200,7 @@ defense = 10
 projectile_speed = 0.0
 lane = ""
 
-[node name="symbol" parent="." index="0"]
+[node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
 
 [node name="shadow" parent="sprites" index="0"]
@@ -236,6 +238,11 @@ scale = Vector2( 0.79656, 0.998757 )
 frames = SubResource( 46 )
 offset = Vector2( 10, 0 )
 
+[node name="animations" type="AnimationPlayer" parent="." index="3"]
+anims/attack = SubResource( 24 )
+anims/death = SubResource( 31 )
+anims/idle = SubResource( 25 )
+
 [node name="block" parent="collisions" index="0"]
 position = Vector2( 0, -20 )
 shape = SubResource( 28 )
@@ -244,7 +251,4 @@ shape = SubResource( 28 )
 position = Vector2( 0, -20 )
 shape = SubResource( 29 )
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+[editable path="hud"]

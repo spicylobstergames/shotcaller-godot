@@ -7,18 +7,14 @@ var behavior:Node
 # self = behavior.follow
 
 
-var path_line
-
 const teleport_time = 3
 const teleport_max_distance = 100
 
 
 # PATHFIND GRID
-const _GridGD = preload("../../map/pathfind/grid.gd")
-const _JumpPointFinderGD = preload("../../map/pathfind/jump_point_finder.gd")
 var path_grid
 var path_finder
-
+var path_line
 
 
 func _ready():
@@ -32,11 +28,11 @@ func setup_pathfind():
 	var walls_rect = game.map.walls.get_used_rect()
 	var walls_size =  walls_rect.size
 	#setup grid
-	var Grid = _GridGD.new().Grid
-	path_grid = Grid.new(walls_size.x, walls_size.y)
+	var grid = Finder.GridGD.new().Grid
+	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
 	for cell in game.map.walls.get_used_cells():
-		game.map.blocks.create_block(cell.x, cell.y)
+		game.maps.blocks.create_block(cell.x, cell.y)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
 	# add building units
 	for building in game.player_buildings:
@@ -49,8 +45,7 @@ func setup_pathfind():
 		var pos = (building.global_position / game.map.tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
-	var Jpf = _JumpPointFinderGD.new().JumpPointFinder
-	path_finder = Jpf.new()
+	path_finder = Finder.JumpPointFinder.new()
 	
 	game.map.add_child(path_line)
 
@@ -75,28 +70,44 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-func path(unit, path, cb):
-	if path and path.size():
-		var next_point = path.pop_front()
-		unit.current_path = path
-		behavior[cb].point(unit, next_point)
+func setup_path(unit, path):
+	var agent = unit.agent
+	agent.set_state("current_path", path)
+
+
+func path(unit, new_path):
+	var agent = unit.agent
+	if new_path and not new_path.empty():
+		var next_point = new_path.pop_front()
+		agent.set_state("current_path", new_path)
+		Behavior.advance.point(unit, next_point)
 
 
 func next(unit):
-	path(unit, unit.current_path, unit.behavior)
+	var agent = unit.agent
+	path(unit, agent.get_state("current_path"))
 
 
 func draw_path(unit):
-	if unit and (unit.current_path or unit.current_destiny or unit.objective):
+	var should_draw = false
+	var has_path = false
+	var path = []
+	if unit:
+		var agent = unit.agent
+		has_path = agent.get_state("has_path")
+		path = agent.get_state("current_path")
+		should_draw = (has_path or unit.current_destiny or unit.objective)
+	
+	if should_draw:
 		path_line.visible = true
 		var pool = PoolVector2Array()
 		# start
 		pool.push_back(unit.global_position)
 		 # end
-		if unit.current_path:
-			pool.append_array(unit.current_path)
-		elif unit.current_path:
-			pool.push_back(unit.current_path)
+		if has_path:
+			pool.append_array(path)
+		elif unit.current_destiny:
+			pool.push_back(unit.current_destiny)
 		elif unit.objective:
 			pool.push_back(unit.objective)
 			
@@ -119,14 +130,16 @@ func change_lane(unit, point):
 
 
 func smart(unit, path, cb):
+	var agent = unit.agent
 	if path and path.size():
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
-		unit.current_path = new_path
+		agent.set_state("current_path", new_path)
 		behavior[cb].point(unit, next_point)
 
 
 func teleport(unit, point):
+	var agent = unit.agent
 	game.ui.controls_menu.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
@@ -134,12 +147,12 @@ func teleport(unit, point):
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
 	behavior.move.stand(unit)
-	unit.channeling = true
+	unit.agent.set_state("is_channeling", true)
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
-	if unit.channeling:
-		unit.working = false
-		unit.channeling = false
+	if unit.agent.get_state("is_channeling"):
+		unit.agent.set_state("is_working", false)
+		unit.agent.set_state("is_channeling", false)
 		var new_position = point
 		# prevent teleport into buildings
 		var min_distance = 2 * building.collision_radius + unit.collision_radius
@@ -153,4 +166,4 @@ func teleport(unit, point):
 
 		unit.global_position = new_position
 		unit.lane = building.lane
-		unit.current_path = []
+		agent.set_state("current_path", [])
