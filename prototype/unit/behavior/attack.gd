@@ -150,7 +150,6 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if target.current_hp <= 0: 
 			target.current_hp = 0
 			target.die()
-			set_target(attacker, null)
 			if target.type == "leader":
 				if target.team == game.player_team: game.player_deaths += 1
 				else: game.enemy_deaths += 1

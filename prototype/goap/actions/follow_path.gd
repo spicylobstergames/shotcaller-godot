@@ -5,7 +5,7 @@ func get_class(): return "FollowPath"
 
 
 func is_valid(agent) -> bool:
-	return agent.get_state("has_path")
+	return agent.get_unit().moves
 
 
 func get_cost(agent) -> int:
@@ -33,7 +33,8 @@ func enter(agent):
 
 func on_arrive(agent):
 	var unit = agent.get_unit()
-	Behavior.follow.next(unit)
-#	else:
-#		agent.set_state("completed_path", true)
+	if agent.get_state("has_path"):
+		Behavior.follow.next(unit)
+	else:
+		agent.set_state("completed_path", true)
 

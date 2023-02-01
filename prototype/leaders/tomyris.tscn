@@ -706,6 +706,6 @@ shape = SubResource( 47 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "CommandAttackEnemyGoal", "CommandAttackGoal" ]
+goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

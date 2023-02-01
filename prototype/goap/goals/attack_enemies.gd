@@ -14,6 +14,8 @@ func is_valid(agent) -> bool:
 	
 	if is_valid_target:
 		Behavior.attack.set_target(unit, target)
+	else:
+		Behavior.attack.set_target(unit, null)
 	
 	return agent.get_state("has_attack_target")
 
