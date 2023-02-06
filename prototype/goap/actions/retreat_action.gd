@@ -25,7 +25,7 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
-	print('enter retreat action')
+	print("enter retreat action")
 	var unit = agent.get_unit()
 	unit.agent.set_state("is_retreating", true)
 	agent.set_state("retreat_pos", agent.get_unit().current_destiny)
@@ -35,8 +35,10 @@ func enter(agent):
 	if unit.team == WorldState.game.enemy_team:
 		order = Behavior.orders.enemy_leaders_orders[unit.name]
 	Behavior.orders.set_leader(unit, order)
-	var lane = unit.lane
-	var path = WorldState.game.map.lanes_paths[lane].duplicate()
+	var lane = agent.get_state("lane")
+	
+	print(unit, lane)
+	var path = WorldState.lanes[lane].duplicate()
 	if unit.team == "red": 
 		path.invert()
 	Behavior.move.point(unit, path[0])

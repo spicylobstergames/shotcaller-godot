@@ -8,7 +8,7 @@ func _ready():
 	
 func prepare(leader):
 	empty()
-	if leader != 'random':
+	if leader != "random":
 		var leader_scene = load("res://leaders/%s.tscn" % leader)
 		var leader_instance = leader_scene.instance()
 		$"%leader_name".text = leader

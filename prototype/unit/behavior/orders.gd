@@ -68,13 +68,13 @@ func _ready():
 # LANES
 
 func build_lanes():
-	for lane in game.map.lanes:
-		player_lanes_orders[lane] = new_orders()
-		enemy_lanes_orders[lane] = new_orders()
+	for lane in game.map.get_node("lanes").get_children():
+		player_lanes_orders[lane.name] = new_orders()
+		enemy_lanes_orders[lane.name] = new_orders()
 
 
 func set_lane_tactic(tactic):
-	var lane = game.selected_unit.lane
+	var lane = game.selected_unit.agent.get_state("lane")
 	var lane_tactics
 	if game.selected_unit.team == game.player_team:
 		lane_tactics = player_lanes_orders[lane].tactics
@@ -84,7 +84,7 @@ func set_lane_tactic(tactic):
 
 
 func set_lane_priority(priority):
-	var lane = game.selected_unit.lane
+	var lane = game.selected_unit.agent.get_state("lane")
 	var lane_priority
 	if game.selected_unit.team == game.player_team:
 		lane_priority = player_lanes_orders[lane].priority
@@ -94,7 +94,7 @@ func set_lane_priority(priority):
 
 
 func set_pawn(pawn):
-	var lane = pawn.lane
+	var lane = pawn.agent.get_state("lane")
 	var lane_orders
 	if pawn.team == game.player_team:
 		lane_orders = player_lanes_orders[lane]
@@ -104,15 +104,13 @@ func set_pawn(pawn):
 
 
 func lanes_cycle(): # called every 8 sec
-	for building in game.player_buildings:
-		if building.lane:
-			var priority = player_lanes_orders[building.lane].priority.duplicate()
-			building.priority = priority
-			
-	for building in game.enemy_buildings:
-		if building.lane:
-			var priority = enemy_lanes_orders[building.lane].priority.duplicate()
-			building.priority = priority
+	for buildings in [game.player_buildings, game.enemy_buildings]:
+		for building in buildings:
+			var lane = building.agent.get_state("lane")
+			if lane:
+				var priority = player_lanes_orders[lane].priority.duplicate()
+				building.priority = priority
+
 
 
 # LEADERS

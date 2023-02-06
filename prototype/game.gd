@@ -59,14 +59,14 @@ var rng = RandomNumberGenerator.new()
 
 func _ready():
 	
-	#Engine.time_scale = 2
-	#get_tree().paused = true
+#	Engine.time_scale = 2
+#	get_tree().paused = true
 #	randomize()
 
-	if not test.unit:
-		ui.show_main_menu()
-	else:
+	if test.unit or test.stress:
 		ui.main_menu.quick_start()
+	else:
+		ui.show_main_menu()
 	
 	emit_signal("game_ready")
 
@@ -128,7 +128,6 @@ func map_loaded():
 		else: 
 			Behavior.spawn.pawns()
 
-			ui.get_node("score_board").visible = false
 			yield(get_tree().create_timer(4), "timeout")
 			
 			Behavior.spawn.leaders()

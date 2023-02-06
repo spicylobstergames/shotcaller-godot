@@ -19,7 +19,8 @@ func spawn_unit():
 #		var inf = game.maps.create(s.arthur, "mid", "red", "Vector2",  Vector2(900,900))
 #		inf.hp = 100
 #		inf.current_hp = 100
-		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(420,400))
+		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(520,400))
+		print(leader, leader.agent.get_state("lane") )
 		#leader.attacks = false
 		#leader.dead = true
 		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
@@ -44,14 +45,12 @@ func spawn_unit():
 
 func spawn_random_units():
 	game.rng.randomize()
-	var n = 18
+	var n = 100-26
 	var s = Behavior.spawn
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
 		game.maps.create(s.infantry, "top", t, "random_map", Vector2.ZERO)
-		game.maps.create(s.infantry, "mid", t, "random_map", Vector2.ZERO)
-		game.maps.create(s.archer, "bot", t, "random_map", Vector2.ZERO)
 
 
 func unit_wait_end(unit1):
@@ -65,7 +64,7 @@ func respawn(unit1):
 	if stress and unit1.type != "building":
 		yield(get_tree().create_timer(1), "timeout")
 		unit1.reset_unit()
-		Behavior.spawn.spawn_unit(unit1, unit1.lane, unit1.team, "random_map", Vector2.ZERO)
+		Behavior.spawn.spawn_unit(unit1, "mid", unit1.team, "random_map", Vector2.ZERO)
 
 
 func spawn_leaders():

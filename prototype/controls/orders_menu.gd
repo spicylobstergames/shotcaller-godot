@@ -139,15 +139,15 @@ func setup_leader_buttons(orders_container):
 
 func setup_lanes():
 	for team in WorldState.teams:
-		for lane in game.map.lanes:
+		for lane in game.map.get_node("lanes").get_children():
 			var orders_container = {
 				"node": VBoxContainer.new(),
 				"type": "lane",
-				"lane": lane,
+				"lane": lane.name,
 				"team": team
 			}
 			container.add_child(orders_container.node)
-			lane_orders[lane+team] = orders_container
+			lane_orders[lane.name+team] = orders_container
 			setup_lane_buttons(orders_container)
 
 
@@ -462,32 +462,29 @@ func update():
 	var unit = game.selected_unit
 	if game.can_control(unit):
 		if not unit.subtype == "backwood":
+			var lane_order = unit.agent.get_state("lane")+unit.team
 			match unit.type:
 				"pawn", "building": 
 					show_orders()
-					lane_orders[unit.lane+unit.team].node.show()
+					lane_orders[lane_order].node.show()
 				"leader": 
 					show_orders()
-					leader_orders[unit.name+unit.team].node.show()
+					leader_orders[lane_order].node.show()
 		
 		else:
-			var side = unit.get_parent().name
+			show_orders()
+			var neutral_order = unit.name+unit.get_parent().name
 			match unit.display_name:
 				"camp":
-					show_orders()
-					camp_orders[unit.name+side].node.show()
+					camp_orders[neutral_order].node.show()
 				"mine":
-					show_orders()
-					mine_orders[unit.name+side].node.show()
+					mine_orders[neutral_order].node.show()
 				"blacksmith":
-					show_orders()
-					blacksmith_orders[unit.name+side].node.show()
+					blacksmith_orders[neutral_order].node.show()
 				"lumbermill":
-					show_orders()
-					lumbermill_orders[unit.name+side].node.show()
+					lumbermill_orders[neutral_order].node.show()
 				"outpost":
-					show_orders()
-					outpost_orders[unit.name+side].node.show()
+					outpost_orders[neutral_order].node.show()
 			
 
 	else:

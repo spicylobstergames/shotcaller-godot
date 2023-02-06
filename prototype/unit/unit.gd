@@ -91,7 +91,6 @@ var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
 # BEHAVIOR
-export var lane:String = "mid"
 var next_event:String = "" # "on_arive" "on_move" "on_collision"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
@@ -171,8 +170,7 @@ func experience_needed():
 
 
 func reset_unit():
-	self.setup_team(self.team)
-
+	var lane = self.agent.get_state("lane")
 	if self.type == "leader":
 		self.hud.state.visible = true
 		self.hud.hpbar.visible = true
@@ -181,19 +179,17 @@ func reset_unit():
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.visible = true
-	self.agent.get_state("is_stunned", false)
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
 	self.assist_candidates = {}
 	self.last_attacker = null
 	
-	self.agent.set_state("command_casting", false)
-	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("is_hunting", false)
-	self.agent.set_state("is_retreating", false)
-	self.agent.set_state("is_working", false)
-	
 	emit_signal("unit_reseted")
+	
+	
+	self.agent.set_state("lane", lane)
+	self.setup_team(self.team)
+	
 
 
 func set_state(s):
@@ -243,9 +239,9 @@ func setup_team(new_team):
 func set_anim(new_team, sprite):
 	if new_team and sprite:
 		match new_team:
-			"blue": sprite.animation = 'default'
-			"red": sprite.animation = 'red'
-			"neutral": sprite.animation = 'neutral'
+			"blue": sprite.animation = "default"
+			"red": sprite.animation = "red"
+			"neutral": sprite.animation = "neutral"
 
 
 func opponent_team():
@@ -482,7 +478,7 @@ func die():  # hp <= 0
 		if neighbor.type == "leader" and neighbor.team != team:
 			neighbor.gain_experience(EXP_PER_KILL)
 
-	if type == 'leader':
+	if type == "leader":
 		if last_attacker:
 			last_attacker.kills += 1
 		deaths += 1
@@ -491,7 +487,7 @@ func die():  # hp <= 0
 				continue
 			if OS.get_ticks_msec() - assist_candidates[attacker] < ASSIST_TIME_IN_SECONDS * 1000:
 					attacker.assists += 1
-	elif type == 'pawn' and last_attacker != null:
+	elif type == "pawn" and last_attacker != null:
 		last_attacker.last_hit_count += 1
 	
 	emit_signal("unit_death_started")
@@ -500,7 +496,7 @@ func die():  # hp <= 0
 func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.visible = false
-	self.state = 'dead'
+	self.state = "dead"
 	self.get_node("animations").current_animation = "[stop]"
 
 
@@ -515,7 +511,7 @@ func on_death_end():  # death animation end
 			"pawn": Behavior.spawn.cemitery_add_pawn(self)
 			"leader": Behavior.spawn.cemitery_add_leader(self)
 			"building":
-				if self.display_name == 'castle':
+				if self.display_name == "castle":
 					game.end(team == game.enemy_team)
 	
 	emit_signal("unit_died")
