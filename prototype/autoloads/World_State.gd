@@ -17,6 +17,24 @@ enum pawns_list { infantry, archer, mounted }
 
 enum neutrals_list { lumberjack }
 
+var lanes = {}
+
+
+var _state = {}
+
+
+func get_state(state_name, default = null):
+	return _state.get(state_name, default)
+
+
+func set_state(state_name, value):
+	_state[state_name] = value
+
+
+func clear_state():
+	_state = {}
+
+
 
 #runs logic that is only run once per second
 var one_sec_timer = Timer.new()
@@ -38,21 +56,4 @@ func apply_cheat_code(code):
 			game.end(true)
 		"LOSE":
 			game.end(false)
-
-
-var _state = {}
-
-
-func get_state(state_name, default = null):
-	return _state.get(state_name, default)
-
-
-func set_state(state_name, value):
-	_state[state_name] = value
-
-
-func clear_state():
-	_state = {}
-
-
 

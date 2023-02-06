@@ -23,16 +23,25 @@ func quick_start():
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
 	
-	var transition = [square_transition_scene, circle_transition_scene][randi() % 2].instance()
-	transition.pause_mode = Node.PAUSE_MODE_PROCESS
-	game.get_node("transitions").add_child(transition)
-	transition.start_transition()
-	yield(transition, "transition_completed")
-	transition.queue_free()
+	if game.test.unit or game.test.stress:
+		on_transition_end()
+	else:
+		var transition = [square_transition_scene, circle_transition_scene][randi() % 2].instance()
+		transition.pause_mode = Node.PAUSE_MODE_PROCESS
+		game.get_node("transitions").add_child(transition)
+		transition.start_transition()
+		transition.connect("transition_completed", self, "on_transition_end", [transition])
+	
+
+func on_transition_end(transition = null):
+	if transition: transition.queue_free()
 	# Transition backward not possible due to how minimap is generated
 	# transition.start_transition(true)
 	visible = false
 	game.ui.minimap.update_map_texture = true
+
+
+
 
 func quit():
 	game.exit()

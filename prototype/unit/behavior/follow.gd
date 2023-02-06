@@ -122,10 +122,10 @@ func draw_path(unit):
 
 func change_lane(unit, point):
 	var lane = game.utils.closer_lane(point)
-	var path = game.map.lanes_paths[lane].duplicate()
+	var path = lane.duplicate()
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
-	unit.lane = lane
+	unit.agent.set_state("lane", lane)
 	behavior.move.smart(unit, lane_start, "move")
 
 
@@ -165,5 +165,5 @@ func teleport(unit, point):
 			new_position = building.global_position + (offset * teleport_max_distance)
 
 		unit.global_position = new_position
-		unit.lane = building.lane
+		unit.agent.set_state("lane", building.lane)
 		agent.set_state("current_path", [])

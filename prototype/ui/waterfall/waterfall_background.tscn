@@ -352,14 +352,14 @@ script = ExtResource( 1 )
 [node name="background" type="Sprite" parent="."]
 texture = ExtResource( 4 )
 
-[node name="waterfall" parent="." instance=ExtResource( 13 )]
+[node name="waterfall_back" parent="." instance=ExtResource( 13 )]
 modulate = Color( 1, 1, 1, 0.270588 )
 position = Vector2( 170, -34 )
 
-[node name="ColorRect" parent="waterfall" index="1"]
+[node name="ColorRect" parent="waterfall_back" index="1"]
 material = SubResource( 32 )
 
-[node name="waterfall2" parent="." instance=ExtResource( 13 )]
+[node name="waterfall_front" parent="." instance=ExtResource( 13 )]
 position = Vector2( 170, -34 )
 scale = Vector2( 0.85, 1 )
 
@@ -537,7 +537,4 @@ margin_right = 1000.0
 margin_bottom = 360.0
 color = Color( 0.180392, 0.133333, 0.184314, 1 )
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.05
-
-[editable path="waterfall"]
+[editable path="waterfall_back"]

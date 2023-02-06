@@ -1,7 +1,7 @@
 extends Node2D
 var game:Node
 
-var current_map = 'one_lane_map'
+var current_map = "one_lane_map"
 
 var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
@@ -46,8 +46,8 @@ func setup_leaders(red_leaders, blue_leaders):
 
 
 func new_path(lane, team):
-	if lane in game.map.lanes_paths:
-		var path = game.map.lanes_paths[lane].duplicate()
+	if lane in WorldState.lanes:
+		var path = WorldState.lanes[lane].duplicate()
 		if team == "blue": path.append(game.map.find_node("red_castle").global_position)
 		if team == "red": 
 			path.invert()
@@ -60,9 +60,8 @@ func new_path(lane, team):
 
 
 func setup_lanes():
-	for lane in game.map.lanes:
-		var line = game.map.get_node("lanes/"+ lane)
-		game.map.lanes_paths[lane] = line_to_array(line)
+	for lane in game.map.get_node("lanes").get_children():
+		WorldState.lanes[lane.name] = line_to_array(lane)
 	
 	Behavior.orders.build_lanes()
 
@@ -109,8 +108,9 @@ func setup_buildings():
 
 
 func create(template, lane, team, mode, point):
-	var unit = Behavior.spawn.spawn_unit(template.instance(), lane, team, mode, point)
+	var unit = template.instance()
 	game.map.add_child(unit)
+	Behavior.spawn.spawn_unit(unit, lane, team, mode, point)
 	unit.reset_unit()
 	game.all_units.append(unit)
 	game.selection.setup_selection(unit)

@@ -64,7 +64,7 @@ func process():
 	# if opt.show.fps:
 	var f = Engine.get_frames_per_second()
 	var n = game.all_units.size()
-	fps.set_text('fps: '+str(f)+' u:'+str(n))
+	fps.set_text("fps: "+str(f)+" u:"+str(n))
 
 	# minimap display update
 	if minimap:
@@ -109,7 +109,7 @@ func count_time():
 	if not get_tree().paused:
 		game.time += 1
 		if game.ended:
-			top_label.text = game.victory + ' WINS!'
+			top_label.text = game.victory + " WINS!"
 		else:
 			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
 			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array

@@ -75,7 +75,7 @@ func update():
 
 func set_portrait(portrait, unit):
 	var anim = unit.team
-	if unit.team == 'blue': anim = 'default'
+	if unit.team == "blue": anim = "default"
 	
 	var texture_data = unit.body.frames.get_frame(anim, 0)
 	portrait.texture = texture_data
@@ -83,7 +83,7 @@ func set_portrait(portrait, unit):
 	
 	var scale = Vector2(2.4,2.4)
 	if unit.mounted: scale = Vector2(1.5,1.5)
-	if unit.type == 'building': scale =  Vector2(1,1)
+	if unit.type == "building": scale =  Vector2(1,1)
 	match unit.display_name:
 		"barrack": scale = Vector2(0.8,0.8)
 		"castle": scale = Vector2(0.6,0.6)

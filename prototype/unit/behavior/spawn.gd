@@ -77,11 +77,11 @@ func leaders():
 			var leader_name = leader
 			if leader == "random":
 				leader_name = WorldState.leaders.keys()[randi() % WorldState.leaders.size()]
-			var lane = game.map.lanes[0]
-			if game.map.lanes.size() == 3:
-				if counter < 2: lane = game.map.lanes[0]
-				if counter == 2: lane = game.map.lanes[1]
-				if counter > 2: lane = game.map.lanes[2]
+			var lane = "mid"
+			if game.map.get_node("lanes").get_children().size() == 3:
+				if counter < 2: lane = "top"
+				if counter == 2: lane = "mid"
+				if counter > 2: lane = "bot"
 			var path = game.maps.new_path(lane, team)
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path.start)
 			Behavior.follow.setup_path(leader_node, path.follow)
@@ -107,11 +107,11 @@ func spawn_group_cycle():
 	for team in WorldState.teams:
 		var extra_unit = player_extra_unit
 		if team != game.player_team: extra_unit = enemy_extra_unit
-		for lane in game.map.lanes:
-			send_pawn("archer", lane, team)
+		for lane in game.map.get_node("lanes").get_children():
+			send_pawn("archer", lane.name, team)
 			for n in 2:
-				send_pawn("infantry", lane, team)
-			send_pawn(extra_unit, lane, team)
+				send_pawn("infantry", lane.name, team)
+			send_pawn(extra_unit, lane.name, team)
 	
 	timer.start()
 	yield(timer, "timeout")
@@ -140,12 +140,12 @@ func send_pawn(template, lane, team):
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", path.start)
 	Behavior.follow.setup_path(pawn, path.follow)
-	behavior.orders.set_pawn(pawn)
+	Behavior.orders.set_pawn(pawn)
 
 
-func spawn_unit(unit, l, t, mode, point):
-	unit.lane = l
-	unit.team = t
+func spawn_unit(unit, lane, team, mode, point):
+	unit.agent.set_state("lane", lane)
+	unit.setup_team(team)
 	unit.dead = false
 	unit.visible = true
 	if mode == "point_random":
@@ -183,8 +183,8 @@ func cemitery_add_leader(leader):
 	
 	# respawn leader
 	var team = leader.team
-	var lane = leader.lane
-	var path = game.map.lanes_paths[leader.lane].duplicate()
+	var lane = leader.agent.get_state("lane")
+	var path = WorldState.lanes[lane].duplicate()
 	if leader.team == "red": path.invert()
 	var start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", start)

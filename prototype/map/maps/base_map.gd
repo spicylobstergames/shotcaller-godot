@@ -19,9 +19,6 @@ var half_tile_size = tile_size / 2
 
 export var neutrals = ["blacksmith", "camp"]
 
-export var lanes:Array = ["mid"]
-var lanes_paths = {}
-
 export var fog_of_war:bool = true
 
 export var zoom_limit:Vector2 = Vector2(0.5,1.76)

@@ -1,7 +1,7 @@
 extends PanelContainer
 
 var leader:String = "random"
-var team:String = 'red'
+var team:String = "red"
 
 signal select_leader()
 # warning-ignore:unused_signal
@@ -13,7 +13,7 @@ func prepare():
 
 
 func clear_color_remap():
-	team = 'blue'
+	team = "blue"
 	$HBoxContainer/button/sprite.material = null
 
 
