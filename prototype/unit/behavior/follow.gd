@@ -1,10 +1,9 @@
 extends Node
 
 var game:Node
-var behavior:Node
 
 
-# self = behavior.follow
+# self = Behavior.follow
 
 
 const teleport_time = 3
@@ -19,7 +18,6 @@ var path_line
 
 func _ready():
 	game = get_tree().get_current_scene()
-	behavior = get_parent()
 	path_line = Line2D.new()
 
 
@@ -70,10 +68,6 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-func setup_path(unit, path):
-	var agent = unit.agent
-	agent.set_state("current_path", path)
-
 
 func path(unit, new_path):
 	var agent = unit.agent
@@ -81,6 +75,12 @@ func path(unit, new_path):
 		var next_point = new_path.pop_front()
 		agent.set_state("current_path", new_path)
 		Behavior.advance.point(unit, next_point)
+
+
+func resume(unit):
+	var lane = unit.agent.get_state("lane")
+	var new_path = game.maps.new_path(lane, unit.team)
+	path(unit, new_path)
 
 
 func next(unit):
@@ -126,7 +126,7 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.agent.set_state("lane", lane)
-	behavior.move.smart(unit, lane_start, "move")
+	Behavior.move.smart(unit, lane_start, "move")
 
 
 func smart(unit, path, cb):
@@ -135,7 +135,7 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		agent.set_state("current_path", new_path)
-		behavior[cb].point(unit, next_point)
+		Behavior.advance.point(unit, next_point)
 
 
 func teleport(unit, point):
@@ -146,7 +146,7 @@ func teleport(unit, point):
 	game.control_state = "selection"
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
-	behavior.move.stand(unit)
+	Behavior.move.stand(unit)
 	unit.agent.set_state("is_channeling", true)
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")

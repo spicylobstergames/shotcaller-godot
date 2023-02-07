@@ -78,8 +78,7 @@ func setup_selection(unit):
 
 func select(point):
 	var unit_at_point = get_sel_unit_at_point(Vector2(point))
-	if unit_at_point:
-		select_unit(unit_at_point)
+	if unit_at_point: select_unit(unit_at_point)
 
 
 func select_unit(unit):

@@ -17,7 +17,7 @@ func get_preconditions() -> Dictionary:
 
 
 func get_effects() -> Dictionary:
-	return { "is_retreating": false }
+	return { "ready_to_fight": true }
 
 
 func enter(agent):
@@ -25,13 +25,14 @@ func enter(agent):
 
 
 func perform(agent, delta) -> bool:
-	if !agent.get_state("should_retreat"):
-			return true
-	return false
+	var unit = agent.get_unit()
+	var hp = Behavior.modifiers.get_value(unit, "hp")
+	var ready_to_fight = unit.current_hp > hp * 0.8
+	return ready_to_fight
 
 
 func exit(agent):
-		agent.set_state("is_retreating", false)
-		agent.set_state("arrived_at_retreat", false)
-		agent.set_state("command_retreat", false)
-		print("exit")
+	agent.set_state("is_retreating", false)
+	agent.set_state("command_retreat", false)
+	agent.set_state("ready_to_fight", true)
+	Behavior.follow.resume(agent.get_unit())

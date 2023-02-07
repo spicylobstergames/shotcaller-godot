@@ -1,25 +1,23 @@
 extends Node
 
 var game:Node
-var behavior:Node
 
 
-# self = behavior.advance
+# self = Behavior.advance
 
 
 func _ready():
 	game = get_tree().get_current_scene()
-	behavior = get_parent()
 
 
  # move_and_attack
 func point(unit, objective, smart_move = false):
 	var agent = unit.agent
-	behavior.attack.set_target(unit, null)
+	Behavior.attack.set_target(unit, null)
 	if objective: unit.objective = objective
 	if (
 		unit.attacks 
-		and behavior.move.in_bounds(unit.objective) 
+		and Behavior.move.in_bounds(unit.objective) 
 		and not unit.agent.get_state("is_retreating")
 		and not unit.agent.get_state("is_stunned")
 		and not unit.agent.get_state("is_channeling")
@@ -27,38 +25,38 @@ func point(unit, objective, smart_move = false):
 	):
 		var path = agent.get_state("current_path")
 		if smart_move:
-			path = behavior.follow.find_path(unit.global_position, unit.objective)
+			path = Behavior.follow.find_path(unit.global_position, unit.objective)
 			agent.set_state("current_path", path)
 		var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
 		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
 		var has_path = ( path and not path.empty() )
 		if not enemies:
 			if not at_objective: move(unit, unit.objective, smart_move) 
-			elif has_path: behavior.follow.path(unit, path, "advance")
+			elif has_path: Behavior.follow.path(unit, path, "advance")
 		else:
-			var target = behavior.orders.select_target(unit, enemies)
+			var target = Behavior.orders.select_target(unit, enemies)
 			if not target:
 				if not at_objective: move(unit, unit.objective, smart_move)
-				elif has_path: behavior.follow.path(unit, path, "advance")
+				elif has_path: Behavior.follow.path(unit, path, "advance")
 			else:
-				behavior.attack.set_target(unit, target)
+				Behavior.attack.set_target(unit, target)
 				var target_position = target.global_position + target.collision_position
-				if behavior.attack.in_range(unit, target):
-					behavior.attack.point(unit, target_position)
+				if Behavior.attack.in_range(unit, target):
+					Behavior.attack.point(unit, target_position)
 				else: move(unit, target_position, smart_move) 
 
 
 func move(unit, objective, smart_move):
 	if unit.moves and objective:
-		if smart_move: behavior.move.smart(unit, objective, "advance")
-		else : behavior.move.move(unit, objective)
+		if smart_move: Behavior.move.smart(unit, objective, "advance")
+		else : Behavior.move.move(unit, objective)
 	else: stop(unit)
 
 
 func on_collision(unit):
 	if unit.collide_target == unit.target:
 		var target_position = unit.target.global_position + unit.target.collision_position
-		behavior.attack.point(unit, target_position)
+		Behavior.attack.point(unit, target_position)
 
 
 
@@ -82,7 +80,7 @@ func ally_attacked(target, attacker):
 
 
 func stop(unit):
-	behavior.move.stop(unit)
+	Behavior.move.stop(unit)
 
 
 # uses pathfinder

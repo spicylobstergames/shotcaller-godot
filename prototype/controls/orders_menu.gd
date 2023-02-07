@@ -462,14 +462,14 @@ func update():
 	var unit = game.selected_unit
 	if game.can_control(unit):
 		if not unit.subtype == "backwood":
-			var lane_order = unit.agent.get_state("lane")+unit.team
+			show_orders()
 			match unit.type:
 				"pawn", "building": 
-					show_orders()
+					var lane_order = unit.agent.get_state("lane")+unit.team
 					lane_orders[lane_order].node.show()
 				"leader": 
-					show_orders()
-					leader_orders[lane_order].node.show()
+					var leader_order = unit.name+unit.team
+					leader_orders[leader_order].node.show()
 		
 		else:
 			show_orders()

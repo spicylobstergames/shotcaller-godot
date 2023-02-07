@@ -120,6 +120,7 @@ func map_loaded():
 		WorldState.start_one_sec_timer()
 		
 		rng.randomize()
+		WorldState.one_sec_timer.connect("timeout", self, "units_sec_cycle")
 		
 		if test.unit:
 			test.spawn_unit()
@@ -131,7 +132,6 @@ func map_loaded():
 			yield(get_tree().create_timer(4), "timeout")
 			
 			Behavior.spawn.leaders()
-			WorldState.one_sec_timer.connect("timeout", self, "units_sec_cycle")
 			
 	
 	emit_signal("game_map_loaded")
