@@ -18,7 +18,7 @@ func is_valid(agent) -> bool:
 
 
 func priority(agent) -> int:
-	return 1 # lower with unit curent_hp
+	return 3 # lower if unit curent_hp is low
 
 
 func get_desired_state(agent) -> Dictionary:

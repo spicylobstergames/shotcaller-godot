@@ -4,13 +4,8 @@ extends "../Action.gd"
 func get_class(): return "HelpFriend"
 
 
-func is_valid(agent) -> bool:
-	return WorldState.get_state("is_game_active")
-
-
 func get_cost(agent) -> int:
-	# cost of pursue should be higher than attacking
-	return 25
+	return 1
 
 
 func get_preconditions() -> Dictionary:
@@ -26,18 +21,7 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
-	ally_attacked(agent, null)
-
-
-func ally_attacked(target, attacker):
-	var allies = target.get_units_in_sight({ "team": target.team })
-	for ally in allies:
-		if ally.state != "attack":
-			ally.agent.set_state("react_target", attacker)
-
-
-
-func react(target, attacker):
-	Behavior.advance.point(target, attacker.global_position)
+	var position = agent.get_state("react_target").global_position
+	Behavior.advance.point(agent.get_unit(), position)
 
 

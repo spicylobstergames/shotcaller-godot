@@ -17,7 +17,6 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
-	print("enter retreat action")
 	var unit = agent.get_unit()
 	unit.agent.set_state("is_retreating", true)
 	# clear previous path and targets

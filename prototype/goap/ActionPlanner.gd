@@ -74,8 +74,14 @@ func _build_plans(step, agent):
 	# each node in the graph has it's own desired state.
 	var state = step.state.duplicate()
 	# checks if the current state is satisfied
+	
 	for s in step.state:
-		if state[s] == agent.get_state(s) or state[s] == WorldState.get_state(s):
+		var a = agent.get_state(s)
+		if a is Object: a = true
+		var w = WorldState.get_state(s)
+		if w is Object: w = true
+		var b = state[s]
+		if b == a or b == w:
 			state.erase(s)
 
 	# if the state is empty, it means this branch already

@@ -28,7 +28,9 @@ func priority(agent) -> int:
 	if agent.get_state("command_retreat"):
 		return 1000
 	else:
-		return 2
+		return 5
+		
+		# todo: dynamic priority
 
 
 func should_retreat(unit):

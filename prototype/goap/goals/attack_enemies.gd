@@ -21,7 +21,7 @@ func is_valid(agent) -> bool:
 
 
 func priority(agent) -> int:
-	return 1
+	return 4
 
 
 func get_desired_state(agent) -> Dictionary:

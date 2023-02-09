@@ -13,35 +13,28 @@ func _ready():
 
 func spawn_unit():
 	var s = Behavior.spawn
-	if unit: 
-		
-#		var dummy = game.maps.create(s.arthur, "mid", "red", "Vector2", Vector2(930,900))
-#		var inf = game.maps.create(s.arthur, "mid", "red", "Vector2",  Vector2(900,900))
-#		inf.hp = 100
-#		inf.current_hp = 100
-		var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(520,400))
+	if unit:
+		if stress: spawn_random_units()
+		else:
+			# TEST LEADER
+			var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(480,400))
+			#leader.attacks = false
+			game.player_choose_leaders=[leader.name]
+			game.player_leaders=[leader]
+			game.maps.setup_leaders([], [])
+			
+			# TEST LANE PAWN
+	#		var path = game.maps.new_path("mid", "blue")
+	#		var start = path.pop_front()
+			var dummy = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(460,400))
+	#		dummy.agent.set_state("current_path", path)
+	#		dummy.hp = 10000
+	#		dummy.current_hp = 10000
+	#		dummy.moves = false
+			
+			# TEST LUMBERJACK
+	#		Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
 
-		#leader.attacks = false
-		#leader.dead = true
-		#game.maps.create(s.archer, "mid", "blue", "Vector2",  Vector2(800,650))
-		var path = game.maps.new_path("mid", "blue")
-		var start = path.pop_front()
-		var dummy = game.maps.create(s.infantry, "mid", "blue", "Vector2",  start)
-		dummy.agent.set_state("current_path", path)
-		dummy.hp = 10000
-		dummy.current_hp = 10000
-		#dummy.moves = false
-		
-		#game.maps.create(s.takoda, "mid", "red", "Vector2",  Vector2(1000,900))
-		#leader.hp = 100
-		#leader.current_hp = 100
-		Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
-		
-		#game.player_choose_leaders=[leader.name]
-		#game.player_leaders=[leader]
-		game.maps.setup_leaders([], [])
-	
-	if stress: spawn_random_units()
 
 
 func spawn_random_units():

@@ -21,7 +21,7 @@ signal unit_leveled_up
 signal unit_attack_release # ranged projectile
 signal unit_attack_hitted # melee hit
 signal unit_attack_ended
-signal unit_attacked
+signal unit_was_attacked
 signal unit_stuned
 signal unit_stun_ended
 signal unit_animation_ended
@@ -421,7 +421,8 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 
 
 func was_attacked(attacker, _damage):
-	emit_signal("unit_attacked", attacker, _damage)
+	
+	emit_signal("unit_was_attacked", attacker, _damage)
 
 
 func on_attack_end(): # animation end of all attacks

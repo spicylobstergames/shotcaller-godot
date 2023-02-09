@@ -9,7 +9,7 @@ func is_valid(agent) -> bool:
 
 
 func get_cost(agent) -> int:
-	return 10
+	return 1
 
 
 func get_preconditions() -> Dictionary:
@@ -25,7 +25,7 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
-	point(agent.get_unit(), agent.get_state("command_attack_point"))
+	point(agent.get_unit(), agent.get_state("command_attack_point"), true)
 
 
 func point(unit, objective, smart_move = false): # move_and_attack
