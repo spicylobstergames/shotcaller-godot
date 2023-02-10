@@ -10,7 +10,7 @@ extends Node
 # this, so it makes re-use easy and it doesn't get tied
 # to unrelated implementation details (movement, collisions, etc)
 
-export var goals = []
+export var goals_list = []
 
 var _goals
 var _current_goal
@@ -27,8 +27,8 @@ func _ready():
 	_unit = get_parent()
 	_goals = []
 	
-	if goals.size() > 0:
-		for goal in goals:
+	if goals_list.size() > 0:
+		for goal in goals_list:
 			_goals.push_back(Goap.get_goal(goal))
 	
 	_unit.connect("unit_reseted", self, "reset")
@@ -136,11 +136,19 @@ func _follow_plan(plan, delta):
 				_current_plan = null
 
 
+func on_every_second() :
+	if has_action_function("on_every_second"):
+		get_current_action().on_every_second(self)
+	if has_goal_function("on_every_second"):
+		_get_best_goal().on_every_second(self)
+
+
 func on_idle_end():
 	if has_action_function("on_idle_end"):
 		get_current_action().on_idle_end(self)
 	if has_goal_function("on_idle_end"):
 		_get_best_goal().on_idle_end(self)
+
 
 func on_move_end():
 	if has_action_function("on_move_end"):
@@ -154,19 +162,6 @@ func on_collision():
 		get_current_action().on_collision(self)
 	if has_goal_function("on_collision"):
 		_get_best_goal().on_collision(self)
-
-
-func on_every_second() :
-	var being_attacked = self.get_state("being_attacked")
-	if being_attacked and being_attacked > 0:
-		being_attacked -= 1
-	else: self.set_state("attacker", null)
-	self.set_state("being_attacked", being_attacked)
-	
-	if has_action_function("on_every_second"):
-		get_current_action().on_every_second(self)
-	if has_goal_function("on_every_second"):
-		_get_best_goal().on_every_second(self)
 
 
 func on_stun_end():
@@ -183,7 +178,21 @@ func on_attack_end():
 		_get_best_goal().on_attack_end(self)
 
 
+func was_attacked(attacker, damage):
+	self.set_state("being_attacked", attacked_timer)
+	self.set_state("attacker", attacker)
+	if has_action_function("was_attacked"):
+		get_current_action().was_attacked(self, attacker, damage)
+	if has_goal_function("was_attacked"):
+		_get_best_goal().was_attacked(self, attacker, damage)
+
+
 func on_animation_end():
+	var being_attacked = self.get_state("being_attacked")
+	if being_attacked and being_attacked > 0:
+		being_attacked -= 1
+	else: self.set_state("attacker", null)
+	self.set_state("being_attacked", being_attacked)
 	if has_action_function("on_animation_end"):
 		get_current_action().on_animation_end(self)
 	if has_goal_function("on_animation_end"):
@@ -203,14 +212,6 @@ func on_arrive():
 	if has_goal_function("on_arrive"):
 		_get_best_goal().on_arrive(self)
 
-
-func was_attacked(attacker, damage):
-	self.set_state("being_attacked", attacked_timer)
-	self.set_state("attacker", attacker)
-	if has_action_function("was_attacked"):
-		get_current_action().was_attacked(self, attacker, damage)
-	if has_goal_function("was_attacked"):
-		_get_best_goal().was_attacked(self, attacker, damage)
 
 
 func clear_commands():

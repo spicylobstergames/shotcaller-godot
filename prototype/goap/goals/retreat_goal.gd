@@ -1,6 +1,9 @@
 extends "../Goal.gd"
 
 
+# leaders retreat behavior
+
+
 func get_class(): return "RetreatGoal"
 
 

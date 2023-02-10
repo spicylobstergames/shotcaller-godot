@@ -234,20 +234,20 @@ offset = Vector2( 0, -36 )
 position = Vector2( 1, -58 )
 
 [node name="weapon" type="Node2D" parent="sprites" index="3"]
+visible = false
 position = Vector2( 0, -24 )
 scale = Vector2( 1.0686, 1 )
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-position = Vector2( 19.6519, 2 )
+visible = false
+position = Vector2( 15, 2 )
 
 [node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
-visible = false
 position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
 
 [node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
-visible = false
 position = Vector2( -1.19209e-07, 0.999996 )
 rotation = 0.141846
 scale = Vector2( 0.85, 1 )
@@ -272,6 +272,6 @@ position = Vector2( 0, -20 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemiesGoal" ]
+goals_list = [ "AttackEnemiesGoal" ]
 
 [editable path="hud"]

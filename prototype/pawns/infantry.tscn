@@ -510,9 +510,6 @@ frame = 2
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 animation = "default"
 
-[node name="stuck" parent="sprites" index="3"]
-visible = false
-
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
@@ -531,6 +528,6 @@ position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "HelpFriendsGoal", "FollowPathGoal" ]
+goals_list = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "HelpFriendsGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

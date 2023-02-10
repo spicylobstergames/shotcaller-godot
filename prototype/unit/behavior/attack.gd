@@ -33,7 +33,7 @@ func point(unit, point):
 			unit.look_at(point)
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
-			
+
 
 
 func set_target(unit, target):
@@ -41,6 +41,9 @@ func set_target(unit, target):
 		unit.agent.set_state("hunting", false)
 		unit.attack_count = 0
 		Behavior.modifiers.remove(unit, "attack_speed", "agile")
+		unit.agent.set_state("has_attack_target", false)
+	else:
+		unit.agent.set_state("has_attack_target", true)
 	if target and unit.moves: unit.agent.set_state("hunting", true)
 	if unit.target != target:
 		unit.attack_count = 0
