@@ -25,9 +25,7 @@ func input(event):
 					match event.scancode:
 						KEY_A: attack(game.selected_unit, point) 
 						KEY_S: stand(game.selected_unit)
-				
-				Behavior.follow.draw_path(game.selected_unit)
-
+	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
 		if game.camera.zoom.x <= 1:
@@ -43,14 +41,11 @@ func input(event):
 				
 				BUTTON_RIGHT: 
 					match game.control_state:
-						"selection": advance(game.selected_unit, point)#unselect()
+						"selection": unselect()
 						"teleport": teleport(game.selected_unit, point)
 						"advance": advance(game.selected_unit, point)
 						"move": move(game.selected_unit, point)
 						"lane": change_lane(game.selected_unit, point)
-			
-			Behavior.follow.draw_path(game.selected_unit)
-		
 		
 		# MAP CLICK ZOOM IN
 		else: 
@@ -59,7 +54,6 @@ func input(event):
 					if(game.camera._touches_info.num_touch_last_frame < 1 and game.camera._touches.size() == 0): #prevent touches converted to clicks from triggering a zoom
 						game.camera.zoom_reset()
 						game.camera.global_position = point - game.map.mid
-	
 	
 	# TOUCH SELECTION
 	if event is InputEventScreenTouch and event.pressed: 
@@ -72,13 +66,22 @@ func input(event):
 				game.camera.zoom_reset()
 				game.camera.global_position = point - game.map.mid
 
+
 func setup_selection(unit):
 	if unit.selectable: game.selectable_units.append(unit)
 
 
 func select(point):
-	var unit_at_point = get_sel_unit_at_point(Vector2(point))
-	if unit_at_point: select_unit(unit_at_point)
+	var unit = get_sel_unit_at_point(Vector2(point))
+	if unit: 
+		select_unit(unit)
+		if unit.moves: 
+			if unit.attacks: 
+				game.control_state = "advance"
+			else:
+				game.control_state = "move"
+		elif unit.attacks:
+				game.control_state = "attack"
 
 
 func select_unit(unit):
@@ -95,7 +98,6 @@ func select_unit(unit):
 		game.selected_leader = null
 		game.ui.shop.disable_all()
 	
-	Behavior.follow.draw_path(unit)
 	game.ui.hud.show_selected(unit)
 	game.ui.show_select()
 	
@@ -117,7 +119,6 @@ func unselect():
 	var buttons = game.ui.leaders_icons.buttons_name
 	for all_leader_name in buttons: 
 		buttons[all_leader_name].pressed = false
-	Behavior.follow.draw_path(null)
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.hide_unselect()
@@ -136,29 +137,22 @@ func get_unit_at_point(point):
 		var select_pos = unit.global_position + unit.selection_position
 		if game.utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
+
+
 func no_delay(unit):
 	return unit.curr_control_delay <= 0 
 
-#depricated
+
 func advance(unit, point):
-	attack(unit,point)
-	return
-	
-	#if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
-	#	var order_point = order(unit, point)
-	#	if unit.agent.has_action_function("smart"): unit.agent.get_current_action().smart(unit, order_point)
+	if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
+		var order_point = order(unit, point)
+		Behavior.advance.smart(unit, order_point)
 
 
 func attack(unit, point):
 	if unit.attacks and game.can_control(unit) and no_delay(unit):
-		unit.agent.clear_commands()
-		var target = get_unit_at_point(point)
-		if(target != null):
-			unit.agent.set_state("command_attack_target", target)
-		else:
-			unit.agent.set_state("command_attack_point", point)
-		#var order_point = order(unit, point)
-		#Behavior.attack.point(unit, order_point)
+		var order_point = order(unit, point)
+		Behavior.attack.point(unit, order_point)
 
 
 func teleport(unit, point):
@@ -166,15 +160,17 @@ func teleport(unit, point):
 		var order_point = order(unit, point)
 		Behavior.follow.teleport(unit, order_point)
 
+
 func change_lane(unit, point):
 	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.follow.change_lane(unit, order_point)
 
+
 func move(unit, point):
 	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
-		Behavior.move.smart(unit, order_point, "move")
+		Behavior.move.smart(unit, order_point)
 
 
 func stand(unit):
@@ -184,19 +180,33 @@ func stand(unit):
 
 
 func order(unit, point):
-	unit.agent.set_state("is_working", true)
+	unit.agent.set_state("has_player_command", true)
 	unit.agent.set_state("is_hunting", false)
 	Behavior.attack.set_target(unit, null)
 	unit.start_control_delay()
 	if point:
 		var building = game.utils.get_building(point)
 		if building:
-			point.y += game.map.tile_size
 			var opponent = unit.opponent_team()
 			match building.team:
-				"neutral": unit.after_arive = "conquer"
-				unit.team: unit.after_arive = "stop"
+				# attack enemy buildings
 				opponent: unit.after_arive = "attack"
-			if building.display_name == "church":
-				unit.after_arive = "pray"
+				# conquer neutral buildings
+				"neutral":
+					point = front_door_point(building)
+					unit.after_arive = "conquer"
+				unit.team:
+					point = front_door_point(building)
+					# stop next to friendly buildings
+					unit.after_arive = "stop"
+					# pray on friendly churches
+					if building.display_name == "church":
+						unit.after_arive = "pray"
+		
 		return point
+
+
+func front_door_point(building):
+	var point = building.global_position
+	point.y += game.map.tile_size/2
+	return point

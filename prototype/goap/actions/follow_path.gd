@@ -38,3 +38,9 @@ func on_arrive(agent):
 	else:
 		agent.set_state("completed_path", true)
 
+
+func on_animation_end(agent):
+	# var limit = Behavior.follow.max_lane_distance
+	# var distance = distance_to_lane( agent.get_unit() )
+	# agent.set_state("close_to_path", distance < limit)
+	pass

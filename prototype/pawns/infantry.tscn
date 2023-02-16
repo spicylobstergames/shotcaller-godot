@@ -517,13 +517,18 @@ anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
+[node name="collisions" parent="." index="4"]
+visible = true
+
 [node name="block" parent="collisions" index="0"]
+visible = true
 shape = SubResource( 32 )
 
 [node name="select" parent="collisions" index="1"]
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+visible = false
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 

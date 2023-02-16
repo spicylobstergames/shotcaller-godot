@@ -14,7 +14,6 @@ func point(unit, point):
 	if (
 		unit.attacks 
 		and not unit.agent.get_state("is_stunned")
-		and not unit.agent.get_state("command_casting") 
 		and Behavior.move.in_bounds(point)
 	):
 		if unit.ranged and unit.weapon:

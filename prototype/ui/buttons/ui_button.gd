@@ -49,6 +49,6 @@ func button_down():
 				game.ui.shop.visible = false
 				game.ui.orders_menu.visible = false
 				game.ui.inventories.update_buttons() # hide sell bt
-			else: game.control_state = "selection"
+			
 			game.ui.buttons_update()
 

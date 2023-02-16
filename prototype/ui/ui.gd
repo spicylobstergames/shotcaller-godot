@@ -65,7 +65,7 @@ func process():
 	var f = Engine.get_frames_per_second()
 	var n = game.all_units.size()
 	fps.set_text("fps: "+str(f)+" u:"+str(n))
-
+	
 	# minimap display update
 	if minimap:
 		if minimap.update_map_texture:

@@ -26,12 +26,6 @@ func perform(agent, delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	
-#	if agent.get_state("command_attack_target"):
-#		Behavior.attack.set_target(unit, agent.get_state("command_attack_target"))
-#		Behavior.advance.point(unit, unit.target.position)
-#
-#	else:
 	Behavior.advance.point(unit, unit.target.global_position)
 
 

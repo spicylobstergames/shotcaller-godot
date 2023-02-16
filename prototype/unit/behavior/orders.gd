@@ -211,11 +211,7 @@ func conquer_building(unit):
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
-	if (
-		not unit.agent.get_state("is_stunned") 
-		and not unit.agent.get_state("command_casting") 
-		and building
-	):
+	if not unit.agent.get_state("is_stunned") and building:
 		var hp = float(Behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
@@ -225,7 +221,7 @@ func conquer_building(unit):
 			# conquer
 			if unit.agent.get_state("is_channeling"):
 				unit.agent.get_state("is_channeling", false)
-				unit.agent.set_state("is_working", false)
+				unit.agent.set_state("has_player_command", false)
 				building.agent.get_state("channeling", false)
 				building.setup_team(unit.team)
 				
@@ -269,14 +265,13 @@ func pray_in_church(unit):
 		and building.display_name == "church" 
 		and not building.agent.get_state("is_channeling")
 		and not unit.agent.get_state("is_stunned")
-		and not unit.agent.get_state("command_casting") 
 	):
 		building.agent.set_state("is_channeling", true)
 		unit.channel_start(pray_time)
 		yield(unit.channeling_timer, "timeout")
 		if unit.agent.get_state("is_channeling"):
 			unit.agent.get_state("is_channeling", false)
-			unit.agent.set_state("is_working", false)
+			unit.agent.set_state("has_player_command", false)
 			pray(unit)
 			game.ui.show_select()
 			# Chruch pray cooldown <- temporary solution

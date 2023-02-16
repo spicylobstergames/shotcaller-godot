@@ -68,7 +68,7 @@ func process(delta):
 		if not unit1.dead:
 			# units > destiny collision (arrive)
 			if unit1.moves and unit1.state == "move":
-				if unit1.target or unit1.agent.get_state("is_working"):
+				if unit1.target or unit1.agent.get_state("has_player_command"):
 					# unit thas target point destiny
 					if unit1.point_collision(unit1.current_destiny):
 						unit1.next_event = "arrive"

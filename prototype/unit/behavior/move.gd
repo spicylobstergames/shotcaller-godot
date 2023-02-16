@@ -35,7 +35,6 @@ func move(unit, destiny):
 	if (
 		unit.moves
 		and not unit.agent.get_state("is_stunned")
-		and not unit.agent.get_state("command_casting")
 	):
 		unit.current_destiny = destiny
 		var current_speed = Behavior.modifiers.get_value(unit, "speed")
@@ -117,8 +116,8 @@ func stand(unit):
 
 
 
-func smart(unit, point, cb):
-	if not unit.agent.get_state("stunned") and not unit.agent.get_state("command_casting"):
+func smart(unit, point):
+	if not unit.agent.get_state("stunned"):
 		var path = Behavior.follow.find_path(unit.global_position, point)
-		if path: Behavior.follow.path(unit, path, cb)
+		if path: Behavior.follow.path(unit, path)
 

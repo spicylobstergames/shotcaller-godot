@@ -56,10 +56,10 @@ func find_path(g1, g2):
 	if in_limits(p1) and in_limits(p2):
 		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
 		# path to global_position
-		# int array[x,y] to float dict Vector2(x,y)float 
 		var path = []
 		for i in range(1, solved_path.size()):
 			var item = solved_path[i]
+		# int array[x,y] to float dict Vector2(x,y)
 			path.append(Vector2(half + (item[0] * cell_size), half + (item[1] * cell_size)))
 		return path
 
@@ -68,10 +68,18 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-
 func path(unit, new_path):
 	var agent = unit.agent
 	if new_path and not new_path.empty():
+		var next_point = new_path.pop_front()
+		agent.set_state("current_path", new_path)
+		Behavior.advance.point(unit, next_point)
+
+
+func smart(unit, path, cb):
+	var agent = unit.agent
+	if path and path.size():
+		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		agent.set_state("current_path", new_path)
 		Behavior.advance.point(unit, next_point)
@@ -91,11 +99,9 @@ func next(unit):
 func draw_path(unit):
 	var should_draw = false
 	var has_path = false
-	var path = []
-	if unit:
-		var agent = unit.agent
-		has_path = agent.get_state("has_path")
-		path = agent.get_state("current_path")
+	
+	if unit and unit.agent:
+		has_path = unit.agent.get_state("has_path")
 		should_draw = (has_path or unit.current_destiny or unit.objective)
 	
 	if should_draw:
@@ -105,6 +111,7 @@ func draw_path(unit):
 		pool.push_back(unit.global_position)
 		 # end
 		if has_path:
+			var path = unit.agent.get_state("current_path")
 			pool.append_array(path)
 		elif unit.current_destiny:
 			pool.push_back(unit.current_destiny)
@@ -126,16 +133,8 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.agent.set_state("lane", lane)
-	Behavior.move.smart(unit, lane_start, "move")
-
-
-func smart(unit, path, cb):
-	var agent = unit.agent
-	if path and path.size():
-		var new_path = unit.cut_path(path)
-		var next_point = new_path.pop_front()
-		agent.set_state("current_path", new_path)
-		Behavior.advance.point(unit, next_point)
+	# unit.agent.set_state("order_behavior", "move")
+	Behavior.move.smart(unit, lane_start)
 
 
 func teleport(unit, point):
@@ -143,15 +142,14 @@ func teleport(unit, point):
 	game.ui.controls_menu.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
-	game.control_state = "selection"
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
-	Behavior.move.stand(unit)
+	Behavior.move.stop(unit)
 	unit.agent.set_state("is_channeling", true)
 	
 	yield(get_tree().create_timer(teleport_time), "timeout")
 	if unit.agent.get_state("is_channeling"):
-		unit.agent.set_state("is_working", false)
+		unit.agent.set_state("has_player_command", false)
 		unit.agent.set_state("is_channeling", false)
 		var new_position = point
 		# prevent teleport into buildings

@@ -586,6 +586,8 @@ frame = 2
 offset = Vector2( 0, -13 )
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
+position = Vector2( -2, -10 )
+scale = Vector2( 1, 1 )
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )

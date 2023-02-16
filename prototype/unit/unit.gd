@@ -383,6 +383,7 @@ func on_idle_end(): # every idle animation end (0.6s)
 	emit_signal("unit_idle_ended")
 	emit_signal("unit_animation_ended")
 
+
 func on_move(delta): # every frame if there's no collision
 	Behavior.move.step(self, delta)
 
@@ -394,8 +395,6 @@ func on_collision(delta):
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self == game.selected_unit:
-		Behavior.follow.draw_path(self)
 	if self.moves: emit_signal("unit_move_ended")
 	emit_signal("unit_animation_ended")
 
@@ -441,7 +440,7 @@ func heal(heal_hp):
 
 func channel_start(time):
 	self.agent.set_state("is_channeling" , true)
-	self.agent.set_state("is_working", true)
+	self.agent.set_state("has_player_command", true)
 	if self.channeling_timer.time_left > 0:
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
@@ -453,7 +452,6 @@ func stun_start():
 	self.wait_time = 2
 	self.agent.get_state("is_stunned", true)
 	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("command_casting", false)
 	self.set_state("stun")
 	emit_signal("unit_stuned")
 
@@ -472,7 +470,7 @@ func die():  # hp <= 0
 	self.target = null
 	
 	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("is_working", false)
+	self.agent.set_state("has_player_command", false)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
@@ -484,10 +482,9 @@ func die():  # hp <= 0
 			last_attacker.kills += 1
 		deaths += 1
 		for attacker in assist_candidates.keys():
-			if attacker == last_attacker:
-				continue
-			if OS.get_ticks_msec() - assist_candidates[attacker] < ASSIST_TIME_IN_SECONDS * 1000:
-					attacker.assists += 1
+			var in_time = OS.get_ticks_msec() - assist_candidates[attacker] < ASSIST_TIME_IN_SECONDS * 1000
+			if attacker != last_attacker and in_time:
+				attacker.assists += 1
 	elif type == "pawn" and last_attacker != null:
 		last_attacker.last_hit_count += 1
 	

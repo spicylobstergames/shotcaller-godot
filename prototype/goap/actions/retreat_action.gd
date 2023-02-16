@@ -22,7 +22,7 @@ func enter(agent):
 	# clear previous path and targets
 	agent.set_state("current_path", [])
 	Behavior.attack.set_target(unit, null)
-	# update lane data in case of commands
+	# update lane data in case of lane change
 	var order = Behavior.orders.player_leaders_orders[unit.name]
 	if unit.team == WorldState.game.enemy_team:
 		order = Behavior.orders.enemy_leaders_orders[unit.name]

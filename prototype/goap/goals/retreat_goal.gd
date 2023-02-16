@@ -13,10 +13,7 @@ func get_desired_state(agent) -> Dictionary:
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	var already_retreating = (
-		agent.get_state("is_retreating") 
-		or agent.get_state("command_retreat")
-	)
+	var already_retreating = agent.get_state("is_retreating")
 	if already_retreating: return true
 	if should_retreat(unit):
 		agent.set_state("is_retreating", true)
@@ -28,12 +25,8 @@ func is_valid(agent) -> bool:
 
 
 func priority(agent) -> int:
-	if agent.get_state("command_retreat"):
-		return 1000
-	else:
-		return 5
-		
-		# todo: dynamic priority
+	return 5
+	# todo: dynamic priority
 
 
 func should_retreat(unit):

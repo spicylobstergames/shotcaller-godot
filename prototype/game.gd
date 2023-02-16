@@ -77,9 +77,8 @@ func units_sec_cycle(): # called every second
 			var has_regen = (unit1.regen > 0)
 			var is_building = (unit1.type == "building")
 			var is_neutral = (unit1.team == "neutral")
-			if can_control(unit1):
-				unit1.set_delay()
-				ui.inventories.update_consumables(unit1)
+			if unit1.type == "leader": ui.inventories.update_consumables(unit1)
+			if can_control(unit1): unit1.set_delay()
 			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				unit1.set_regen()
 				unit1.set_dot()
@@ -88,11 +87,16 @@ func units_sec_cycle(): # called every second
 func _physics_process(delta):
 	if started:
 		collision.process(delta)
-		Goap.process(all_units, delta)
+		Behavior.follow.draw_path(selected_unit)
+		#Goap.process(all_units, delta)
 
 
 func can_control(unit1):
-	return (unit1 and unit1.type == "leader" and unit1.team == player_team and not unit1.dead) 
+	return (unit1 
+		and unit1.team == player_team 
+		and not unit1.dead
+		and (test.unit or unit1.type == "leader")
+	) 
 
 
 

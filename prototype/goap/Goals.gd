@@ -6,8 +6,6 @@ extends Node
 
 var _goals = {
 	"AttackEnemiesGoal": preload("goals/attack_enemies.gd").new(),
-	"CommandAttackGoal": preload("goals/command_attack.gd").new(),
-	"CommandAttackEnemyGoal": preload("goals/command_attack_enemy.gd").new(),
 	"FollowPathGoal": preload("goals/follow_path.gd").new(),
 	"HelpFriendsGoal": preload("goals/help_friends.gd").new(),
 	"NeedLumberGoal": preload("goals/need_lumber.gd").new(),
