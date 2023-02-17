@@ -88,7 +88,7 @@ func _physics_process(delta):
 	if started:
 		collision.process(delta)
 		Behavior.path.draw(selected_unit)
-		#Goap.process(all_units, delta)
+		Goap.process(all_units, delta)
 
 
 func can_control(unit1):
