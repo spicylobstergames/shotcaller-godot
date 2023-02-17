@@ -124,9 +124,9 @@ func draw(unit):
 		 # end
 		if has_path:
 			pool.append_array(unit.current_path)
-		elif unit.current_destiny:
+		elif unit.current_destiny and unit.current_destiny != Vector2.ZERO:
 			pool.push_back(unit.current_destiny)
-		elif unit.final_destiny:
+		elif unit.final_destiny and unit.final_destiny != Vector2.ZERO:
 			pool.push_back(unit.final_destiny)
 			
 		if unit.team == "blue":

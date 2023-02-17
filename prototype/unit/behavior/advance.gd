@@ -61,12 +61,6 @@ func resume(unit):
 	point(unit, null)
 
 
-func end(unit):
-	if unit.current_destiny != unit.final_destiny:
-		point(unit, null)
-	else: stop(unit)
-
-
 func react(target, attacker):
 	point(target, attacker.global_position)
 

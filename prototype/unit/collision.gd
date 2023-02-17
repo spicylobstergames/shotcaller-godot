@@ -68,9 +68,9 @@ func process(delta):
 		if not unit1.dead:
 			# units > destiny collision (arrive)
 			if unit1.moves and unit1.state == "move":
-				# larger collision destiny for auto movement (avoids fighting over point)
+				# offset creates larger collision destiny to avoid fighting over point
 				var offset = 0
-				if not unit1.target or unit1.agent.get_state("has_player_command"):
+				if not unit1.target and not unit1.agent.get_state("has_player_command"):
 					offset = game.map.half_tile_size
 				if unit1.point_collision(unit1.current_destiny, offset):
 					unit1.next_event = "arrive"
@@ -85,6 +85,7 @@ func process(delta):
 								unit1.next_event = "collision"
 								unit1.collide_target = unit2
 								break
+		
 		# move or collide or stop
 		match unit1.next_event:
 			"move": unit1.on_move(delta)

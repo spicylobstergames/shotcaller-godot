@@ -59,6 +59,7 @@ export var hunting_speed:float = 0
 var angle:float = 0
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
+var final_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
 var last_position2:Vector2 = Vector2.ZERO
 var current_path:Array = []
@@ -97,7 +98,6 @@ var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat
-var final_destiny:Vector2 = Vector2.ZERO
 var wait_time:int = 0
 var gold = 0
 
