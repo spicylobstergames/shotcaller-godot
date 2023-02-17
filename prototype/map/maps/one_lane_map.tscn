@@ -562,8 +562,7 @@ offset = Vector2( 0, -12 )
 
 [node name="blue" type="YSort" parent="buildings"]
 
-[node name="blue_castle" parent="buildings/blue" instance=ExtResource( 11 )]
-unique_name_in_owner = true
+[node name="castle" parent="buildings/blue" instance=ExtResource( 11 )]
 material = SubResource( 57 )
 position = Vector2( 126, 984 )
 
@@ -585,8 +584,7 @@ position = Vector2( -69, 58 )
 
 [node name="red" type="YSort" parent="buildings"]
 
-[node name="red_castle" parent="buildings/red" instance=ExtResource( 11 )]
-unique_name_in_owner = true
+[node name="castle" parent="buildings/red" instance=ExtResource( 11 )]
 material = SubResource( 57 )
 position = Vector2( 956, 168 )
 team = "red"
