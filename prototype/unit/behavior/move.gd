@@ -1,15 +1,13 @@
 extends Node
 
 var game:Node
-var behavior:Node
 
 
-# self = behavior.move
+# self = Behavior.move
 
 
 func _ready():
 	game = get_tree().get_current_scene()
-	behavior = get_parent()
 
 
 func setup_timer(unit):
@@ -37,10 +35,9 @@ func move(unit, destiny):
 	if (
 		unit.moves
 		and not unit.agent.get_state("is_stunned")
-		and not unit.agent.get_state("command_casting")
 	):
 		unit.current_destiny = destiny
-		var current_speed = behavior.modifiers.get_value(unit, "speed")
+		var current_speed = Behavior.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
 		unit.get_node("animations").playback_speed = current_speed / unit.speed
 		unit.set_state("move")
@@ -78,7 +75,7 @@ func on_collision(unit, delta):
 			unit.global_position -= pr.normalized()
 			a = randf()*2*PI # just try a random direction
 		unit.angle = a # change directioin
-		var s = behavior.modifiers.get_value(unit, "speed")
+		var s = Behavior.modifiers.get_value(unit, "speed")
 		unit.current_step = Vector2(s * cos(a), s * sin(a))
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
@@ -105,6 +102,8 @@ func end(unit):
 
 func stop(unit):
 	unit.current_step = Vector2.ZERO
+	if unit.current_destiny == unit.final_destiny:
+		unit.final_destiny = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
 	unit.get_node("animations").playback_speed = 1
@@ -113,14 +112,13 @@ func stop(unit):
 
 
 func stand(unit):
-	var agent = unit.agent
-	agent.set_state("current_path", [])
+	unit.current_path = []
 	stop(unit)
 
 
 
-func smart(unit, point, cb):
-	if not unit.agent.get_state("stunned") and not unit.agent.get_state("command_casting"):
-		var path = behavior.follow.find_path(unit.global_position, point)
-		if path: behavior.follow.path(unit, path, cb)
+func smart(unit, point):
+	if not unit.agent.get_state("stunned"):
+		var path = Behavior.path.find(unit.global_position, point)
+		if path: Behavior.path.start(unit, path)
 

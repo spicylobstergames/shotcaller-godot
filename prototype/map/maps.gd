@@ -33,7 +33,7 @@ func map_loaded():
 	blocks.setup_quadtree()
 	game.camera.map_loaded()
 	game.ui.map_loaded()
-	Behavior.follow.setup_pathfind()
+	Behavior.path.setup_pathfind()
 	game.map_loaded()
 
 
@@ -48,15 +48,12 @@ func setup_leaders(red_leaders, blue_leaders):
 func new_path(lane, team):
 	if lane in WorldState.lanes:
 		var path = WorldState.lanes[lane].duplicate()
-		if team == "blue": path.append(game.map.find_node("red_castle").global_position)
+		if team == "blue":
+			path.append(game.map.find_node("red_castle").global_position)
 		if team == "red": 
 			path.invert()
 			path.append(game.map.find_node("blue_castle").global_position)
-		var start = path.pop_front()
-		return {
-			"start": start,
-			"follow": path
-		}
+		return path
 
 
 func setup_lanes():

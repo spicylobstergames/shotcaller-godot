@@ -1,10 +1,9 @@
 extends Node
 
 var game:Node
-var behavior:Node
 
 
-# self = behavior.orders
+# self = Behavior.orders
 
 
 const player_lanes_orders = {}
@@ -62,7 +61,6 @@ func new_orders():
 
 func _ready():
 	game = get_tree().get_current_scene()
-	behavior = get_parent()
 
 
 # LANES
@@ -136,9 +134,9 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 	
-	var extra_unit = behavior.spawn.player_extra_unit
+	var extra_unit = Behavior.spawn.player_extra_unit
 	if leader.team == game.enemy_team:
-		extra_unit = behavior.spawn.enemy_extra_unit
+		extra_unit = Behavior.spawn.enemy_extra_unit
 	var cost
 	match extra_unit:
 		"infantry": cost = 1
@@ -175,7 +173,7 @@ func select_target(unit, enemies):
 	var filtered = []
 	
 	for enemy in enemies:
-		if behavior.attack.can_hit(unit, enemy): filtered.append(enemy)
+		if Behavior.attack.can_hit(unit, enemy): filtered.append(enemy)
 	
 	var n = filtered.size()
 	if n == 0: return
@@ -213,12 +211,8 @@ func conquer_building(unit):
 	var point = unit.global_position
 	point.y -= game.map.tile_size
 	var building = game.utils.get_building(point)
-	if (
-		not unit.agent.get_state("is_stunned") 
-		and not unit.agent.get_state("command_casting") 
-		and building
-	):
-		var hp = float(behavior.modifiers.get_value(building, "hp"))
+	if not unit.agent.get_state("is_stunned") and building:
+		var hp = float(Behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
 		if building.team == "neutral" and building_full_hp:
@@ -227,7 +221,7 @@ func conquer_building(unit):
 			# conquer
 			if unit.agent.get_state("is_channeling"):
 				unit.agent.get_state("is_channeling", false)
-				unit.agent.set_state("is_working", false)
+				unit.agent.set_state("has_player_command", false)
 				building.agent.get_state("channeling", false)
 				building.setup_team(unit.team)
 				
@@ -245,8 +239,8 @@ func lose_building(building):
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
 			if team == game.player_team:
-				 behavior.spawn.player_extra_unit = "infantry"
-			else:  behavior.spawn.enemy_extra_unit = "infantry"
+				 Behavior.spawn.player_extra_unit = "infantry"
+			else: Behavior.spawn.enemy_extra_unit = "infantry"
 			building.attacks = false
 		
 		"outpost": building.attacks = false
@@ -271,14 +265,13 @@ func pray_in_church(unit):
 		and building.display_name == "church" 
 		and not building.agent.get_state("is_channeling")
 		and not unit.agent.get_state("is_stunned")
-		and not unit.agent.get_state("command_casting") 
 	):
 		building.agent.set_state("is_channeling", true)
 		unit.channel_start(pray_time)
 		yield(unit.channeling_timer, "timeout")
 		if unit.agent.get_state("is_channeling"):
 			unit.agent.get_state("is_channeling", false)
-			unit.agent.set_state("is_working", false)
+			unit.agent.set_state("has_player_command", false)
 			pray(unit)
 			game.ui.show_select()
 			# Chruch pray cooldown <- temporary solution
@@ -289,7 +282,7 @@ func pray_in_church(unit):
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	behavior.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
+	Behavior.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
 
 # MINE

@@ -1,75 +1,64 @@
 extends Node
 
 var game:Node
-var behavior:Node
 
 
-# self = behavior.advance
+# self = Behavior.advance
 
 
 func _ready():
 	game = get_tree().get_current_scene()
-	behavior = get_parent()
+
+
+func smart(unit, final_destiny):
+	point(unit, final_destiny, true) # uses pathfinder
 
 
  # move_and_attack
-func point(unit, objective, smart_move = false):
-	var agent = unit.agent
-	behavior.attack.set_target(unit, null)
-	if objective: unit.objective = objective
-	if (
-		unit.attacks 
-		and behavior.move.in_bounds(unit.objective) 
-		and not unit.agent.get_state("is_retreating")
-		and not unit.agent.get_state("is_stunned")
-		and not unit.agent.get_state("is_channeling")
-		and not unit.agent.get_state("command_casting")
-	):
-		var path = agent.get_state("current_path")
-		if smart_move:
-			path = behavior.follow.find_path(unit.global_position, unit.objective)
-			agent.set_state("current_path", path)
-		var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-		var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
-		var has_path = ( path and not path.empty() )
-		if not enemies:
-			if not at_objective: move(unit, unit.objective, smart_move) 
-			elif has_path: behavior.follow.path(unit, path, "advance")
-		else:
-			var target = behavior.orders.select_target(unit, enemies)
-			if not target:
-				if not at_objective: move(unit, unit.objective, smart_move)
-				elif has_path: behavior.follow.path(unit, path, "advance")
+func point(unit, final_destiny, smart_move = false):
+	Behavior.attack.set_target(unit, null)
+	if final_destiny and Behavior.move.in_bounds(final_destiny):
+		unit.final_destiny = final_destiny
+		if unit.attacks and not unit.agent.get_state("is_stunned"):
+			var path = unit.current_path
+			if smart_move:
+				path = Behavior.path.find(unit.global_position, unit.final_destiny)
+				unit.current_path = path
+			var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
+			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < game.map.half_tile_size)
+			var has_path = ( path and not path.empty() )
+			if not enemies:
+				if not at_final_destination: move(unit, unit.final_destiny, smart_move) 
+				elif has_path: Behavior.path.start(unit, path)
 			else:
-				behavior.attack.set_target(unit, target)
-				var target_position = target.global_position + target.collision_position
-				if behavior.attack.in_range(unit, target):
-					behavior.attack.point(unit, target_position)
-				else: move(unit, target_position, smart_move) 
+				var target = Behavior.orders.select_target(unit, enemies)
+				if not target:
+					if not at_final_destination: move(unit, unit.final_destiny, smart_move)
+					elif has_path: Behavior.path.start(unit, path)
+				else:
+					Behavior.attack.set_target(unit, target)
+					var target_position = target.global_position + target.collision_position
+					if Behavior.attack.in_range(unit, target):
+						Behavior.attack.point(unit, target_position)
+					else: move(unit, target_position, smart_move) 
 
 
-func move(unit, objective, smart_move):
-	if unit.moves and objective:
-		if smart_move: behavior.move.smart(unit, objective, "advance")
-		else : behavior.move.move(unit, objective)
+func move(unit, final_destiny, smart_move):
+	if unit.moves and final_destiny:
+		if smart_move: Behavior.move.smart(unit, final_destiny)
+		else : Behavior.move.move(unit, final_destiny)
 	else: stop(unit)
 
 
 func on_collision(unit):
 	if unit.collide_target == unit.target:
 		var target_position = unit.target.global_position + unit.target.collision_position
-		behavior.attack.point(unit, target_position)
+		Behavior.attack.point(unit, target_position)
 
 
 
 func resume(unit):
 	point(unit, null)
-
-
-func end(unit):
-	if unit.current_destiny != unit.objective:
-		point(unit, null)
-	else: stop(unit)
 
 
 func react(target, attacker):
@@ -82,9 +71,6 @@ func ally_attacked(target, attacker):
 
 
 func stop(unit):
-	behavior.move.stop(unit)
+	Behavior.move.stop(unit)
 
 
-# uses pathfinder
-func smart(unit, objective):
-	point(unit, objective, true)

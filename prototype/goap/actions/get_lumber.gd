@@ -30,7 +30,7 @@ func perform(agent, delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	unit.agent.set_state("is_working", true)
+	unit.agent.set_state("has_player_command", true)
 	var closest_tree = agent.get_state("closest_tree")
 	Behavior.move.point(unit, closest_tree)
 
@@ -45,7 +45,7 @@ func on_arrive(agent):
 	unit.channeling_timer.start()
 	# cut animation end
 	yield(unit.channeling_timer, "timeout")
-	unit.agent.set_state("is_working", true)
+	unit.agent.set_state("has_player_command", true)
 	agent.set_state("has_wood",true)
 
 

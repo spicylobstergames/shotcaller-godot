@@ -10,7 +10,7 @@ extends Node
 # this, so it makes re-use easy and it doesn't get tied
 # to unrelated implementation details (movement, collisions, etc)
 
-export var goals = []
+export var goals_list = []
 
 var _goals
 var _current_goal
@@ -20,12 +20,15 @@ var _unit
 var _state = {}
 
 
+var attacked_timer = 2
+
+
 func _ready():
 	_unit = get_parent()
 	_goals = []
 	
-	if goals.size() > 0:
-		for goal in goals:
+	if goals_list.size() > 0:
+		for goal in goals_list:
 			_goals.push_back(Goap.get_goal(goal))
 	
 	_unit.connect("unit_reseted", self, "reset")
@@ -36,6 +39,7 @@ func _ready():
 	_unit.connect("unit_move_ended", self, "on_move_end")
 	_unit.connect("unit_attack_ended", self, "on_attack_end")
 	_unit.connect("unit_animation_ended", self, "on_animation_end")
+	_unit.connect("unit_was_attacked", self, "was_attacked")
 	
 	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
 
@@ -70,7 +74,14 @@ func get_current_action():
 
 
 func has_action_function(func_name):
-	return get_current_action() != null and get_current_action().has_method(func_name)
+	var action = get_current_action()
+	return action != null and action.has_method(func_name)
+
+
+func has_goal_function(func_name):
+	var goal = _get_best_goal()
+	return goal != null and goal.has_method(func_name)
+
 
 
 # On every loop this script checks if the current goal is still
@@ -120,67 +131,93 @@ func _follow_plan(plan, delta):
 				_current_plan_step += 1
 				get_current_action().enter(self)
 			else:
-				#clear_commands()
-				_current_goal = null #trigger replan
+				 #trigger replan
+				_current_goal = null
 				_current_plan = null
-
-
-func on_idle_end():
-	if has_action_function("on_idle_end"):
-		get_current_action().on_idle_end(self)
-
-
-func on_move_end():
-	if has_action_function("on_move_end"):
-		get_current_action().on_move_end(self)
-
-
-func on_collision():
-	if has_action_function("on_collision"):
-		get_current_action().on_collision(self)
 
 
 func on_every_second() :
 	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
+	if has_goal_function("on_every_second"):
+		_get_best_goal().on_every_second(self)
+
+
+func on_idle_end():
+	if has_action_function("on_idle_end"):
+		get_current_action().on_idle_end(self)
+	if has_goal_function("on_idle_end"):
+		_get_best_goal().on_idle_end(self)
+
+
+func on_move_end():
+	if has_action_function("on_move_end"):
+		get_current_action().on_move_end(self)
+	if has_goal_function("on_move_end"):
+		_get_best_goal().on_move_end(self)
+
+
+func on_collision():
+	if has_action_function("on_collision"):
+		get_current_action().on_collision(self)
+	if has_goal_function("on_collision"):
+		_get_best_goal().on_collision(self)
 
 
 func on_stun_end():
 	if has_action_function("resume"):
 		get_current_action().resume(_unit)
+	if has_goal_function("resume"):
+		_get_best_goal().resume(_unit)
 
 
 func on_attack_end():
 	if has_action_function("on_attack_end"):
 		get_current_action().on_attack_end(self)
+	if has_goal_function("on_attack_end"):
+		_get_best_goal().on_attack_end(self)
+
+
+func was_attacked(attacker, damage):
+	self.set_state("being_attacked", attacked_timer)
+	self.set_state("attacker", attacker)
+	if has_action_function("was_attacked"):
+		get_current_action().was_attacked(self, attacker, damage)
+	if has_goal_function("was_attacked"):
+		_get_best_goal().was_attacked(self, attacker, damage)
 
 
 func on_animation_end():
+	var being_attacked = self.get_state("being_attacked")
+	if being_attacked and being_attacked > 0:
+		being_attacked -= 1
+	else: self.set_state("attacker", null)
+	self.set_state("being_attacked", being_attacked)
 	if has_action_function("on_animation_end"):
 		get_current_action().on_animation_end(self)
+	if has_goal_function("on_animation_end"):
+		_get_best_goal().on_animation_end(self)
 
 
 func on_path_arrive():
 	if has_action_function("on_path_arrive"):
 		get_current_action().on_path_arrive(self)
+	if has_goal_function("on_path_arrive"):
+		_get_best_goal().on_path_arrive(self)
 
 
 func on_arrive():
 	if has_action_function("on_arrive"):
 		get_current_action().on_arrive(self)
+	if has_goal_function("on_arrive"):
+		_get_best_goal().on_arrive(self)
 
-
-func clear_commands():
-	for s in _state:
-		if("command_" in s):
-			print("erased")
-			print(s)
-			_state.erase(s)
 
 func clear_orders():
 	for s in _state:
 		if("order_" in s):
 			_state.remove(s)
+
 
 func clear_tactics():
 	for s in _state:

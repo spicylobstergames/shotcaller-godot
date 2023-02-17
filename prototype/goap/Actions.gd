@@ -8,7 +8,6 @@ var _actions = [
 	preload("actions/get_lumber.gd").new(),
 	preload("actions/help_friend.gd").new(),
 	preload("actions/hide.gd").new(),
-	preload("actions/move.gd").new(),
 	preload("actions/pursue_enemy.gd").new(),
 	preload("actions/retreat_action.gd").new(),
 	preload("actions/return_lumber.gd").new(),

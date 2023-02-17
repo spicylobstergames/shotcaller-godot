@@ -4,16 +4,8 @@ extends "../Action.gd"
 func get_class(): return "RetreatAction"
 
 
-func is_valid(agent) -> bool:
-	return WorldState.get_state("is_game_active")
-
-
 func get_cost(agent) -> int:
-	return 5
-
-
-func get_preconditions() -> Dictionary:
-	return {}
+	return 1
 
 
 func get_effects() -> Dictionary:
@@ -25,22 +17,21 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
-	print("enter retreat action")
 	var unit = agent.get_unit()
 	unit.agent.set_state("is_retreating", true)
-	agent.set_state("retreat_pos", agent.get_unit().current_destiny)
-	agent.set_state("current_path", [])
+	# clear previous path and targets
+	unit.current_path = []
 	Behavior.attack.set_target(unit, null)
-	var order = Behavior.orders.player_leaders_orders[unit.name]
-	if unit.team == WorldState.game.enemy_team:
+	# update lane data in case of lane change
+	var order
+	if unit.team == WorldState.game.player_team:
+		order = Behavior.orders.player_leaders_orders[unit.name]
+	else:
 		order = Behavior.orders.enemy_leaders_orders[unit.name]
 	Behavior.orders.set_leader(unit, order)
 	var lane = agent.get_state("lane")
-	
-	print(unit, lane)
 	var path = WorldState.lanes[lane].duplicate()
-	if unit.team == "red": 
-		path.invert()
+	if unit.team == "red": path.invert()
 	Behavior.move.point(unit, path[0])
 
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://unit/behavior/follow.gd" type="Script" id=1]
+[ext_resource path="res://unit/behavior/path.gd" type="Script" id=1]
 [ext_resource path="res://unit/behavior/attack.gd" type="Script" id=2]
 [ext_resource path="res://unit/behavior/orders.gd" type="Script" id=3]
 [ext_resource path="res://skills/passive_skills.gd" type="Script" id=4]
@@ -27,7 +27,7 @@ script = ExtResource( 2 )
 [node name="advance" type="Node" parent="."]
 script = ExtResource( 5 )
 
-[node name="follow" type="Node" parent="."]
+[node name="path" type="Node" parent="."]
 script = ExtResource( 1 )
 
 [node name="orders" type="Node" parent="."]

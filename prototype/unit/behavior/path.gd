@@ -1,10 +1,9 @@
 extends Node
 
 var game:Node
-var behavior:Node
 
 
-# self = behavior.follow
+# self = Behavior.path
 
 
 const teleport_time = 3
@@ -19,7 +18,6 @@ var path_line
 
 func _ready():
 	game = get_tree().get_current_scene()
-	behavior = get_parent()
 	path_line = Line2D.new()
 
 
@@ -46,11 +44,23 @@ func setup_pathfind():
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
 	path_finder = Finder.JumpPointFinder.new()
-	
+	# add movement line indicator
 	game.map.add_child(path_line)
 
 
-func find_path(g1, g2):
+func setup_unit_path(unit, path):
+	unit.current_path = path
+	unit.connect("unit_arrived", self, "on_arrive", [unit])
+
+
+func on_arrive(unit):
+	if unit.current_path.size() > 0:
+		next(unit)
+	else:
+		Behavior.move.end(unit)
+
+
+func find(g1, g2):
 	var cell_size = game.map.tile_size
 	var half = game.map.half_tile_size
 	var p1 = (g1 / cell_size).floor()
@@ -58,10 +68,10 @@ func find_path(g1, g2):
 	if in_limits(p1) and in_limits(p2):
 		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
 		# path to global_position
-		# int array[x,y] to float dict Vector2(x,y)float 
 		var path = []
 		for i in range(1, solved_path.size()):
 			var item = solved_path[i]
+		# int array[x,y] to float dict Vector2(x,y)
 			path.append(Vector2(half + (item[0] * cell_size), half + (item[1] * cell_size)))
 		return path
 
@@ -70,33 +80,41 @@ func in_limits(p):
 	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
 
 
-func setup_path(unit, path):
-	var agent = unit.agent
-	agent.set_state("current_path", path)
-
-
-func path(unit, new_path):
-	var agent = unit.agent
+func start(unit, new_path):
 	if new_path and not new_path.empty():
 		var next_point = new_path.pop_front()
-		agent.set_state("current_path", new_path)
+		unit.current_path = new_path
 		Behavior.advance.point(unit, next_point)
 
 
+func smart(unit, path, cb):
+	if path and path.size():
+		var new_path = unit.cut_path(path)
+		var next_point = new_path.pop_front()
+		unit.current_path = new_path
+		Behavior.advance.point(unit, next_point)
+
+
+func resume_lane(unit):
+	var lane = unit.agent.get_state("lane")
+	var new_path = game.maps.new_path(lane, unit.team)
+	start(unit, new_path)
+
+
 func next(unit):
-	var agent = unit.agent
-	path(unit, agent.get_state("current_path"))
+	if not unit.current_path.empty():
+		start(unit, unit.current_path)
+	else:
+		Behavior.move.stop(unit)
 
 
-func draw_path(unit):
+func draw(unit):
 	var should_draw = false
 	var has_path = false
-	var path = []
+	
 	if unit:
-		var agent = unit.agent
-		has_path = agent.get_state("has_path")
-		path = agent.get_state("current_path")
-		should_draw = (has_path or unit.current_destiny or unit.objective)
+		has_path = not unit.current_path.empty()
+		should_draw = (has_path or unit.final_destiny)
 	
 	if should_draw:
 		path_line.visible = true
@@ -105,11 +123,11 @@ func draw_path(unit):
 		pool.push_back(unit.global_position)
 		 # end
 		if has_path:
-			pool.append_array(path)
-		elif unit.current_destiny:
+			pool.append_array(unit.current_path)
+		elif unit.current_destiny and unit.current_destiny != Vector2.ZERO:
 			pool.push_back(unit.current_destiny)
-		elif unit.objective:
-			pool.push_back(unit.objective)
+		elif unit.final_destiny and unit.final_destiny != Vector2.ZERO:
+			pool.push_back(unit.final_destiny)
 			
 		if unit.team == "blue":
 			path_line.default_color = Color(0.4,0.6,1, 0.3)
@@ -126,16 +144,8 @@ func change_lane(unit, point):
 	if unit.team == "red": path.invert()
 	var lane_start = path.pop_front()
 	unit.agent.set_state("lane", lane)
-	behavior.move.smart(unit, lane_start, "move")
-
-
-func smart(unit, path, cb):
-	var agent = unit.agent
-	if path and path.size():
-		var new_path = unit.cut_path(path)
-		var next_point = new_path.pop_front()
-		agent.set_state("current_path", new_path)
-		behavior[cb].point(unit, next_point)
+	# unit.agent.set_state("order_behavior", "move")
+	Behavior.move.smart(unit, lane_start)
 
 
 func teleport(unit, point):
@@ -143,16 +153,15 @@ func teleport(unit, point):
 	game.ui.controls_menu.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
-	game.control_state = "selection"
 	game.ui.controls_menu.teleport_button.disabled = false
 	game.ui.controls_menu.teleport_button.pressed = false
-	behavior.move.stand(unit)
-	unit.agent.set_state("is_channeling", true)
-	
+	Behavior.move.stop(unit)
+	agent.set_state("is_channeling", true)
+	# todo move to timer
 	yield(get_tree().create_timer(teleport_time), "timeout")
-	if unit.agent.get_state("is_channeling"):
-		unit.agent.set_state("is_working", false)
-		unit.agent.set_state("is_channeling", false)
+	if agent.get_state("is_channeling"):
+		agent.set_state("has_player_command", false)
+		agent.set_state("is_channeling", false)
 		var new_position = point
 		# prevent teleport into buildings
 		var min_distance = 2 * building.collision_radius + unit.collision_radius
@@ -165,5 +174,6 @@ func teleport(unit, point):
 			new_position = building.global_position + (offset * teleport_max_distance)
 
 		unit.global_position = new_position
-		unit.agent.set_state("lane", building.lane)
-		agent.set_state("current_path", [])
+		# emit signal teleported
+		agent.set_state("lane", building.lane)
+		resume_lane(unit)

@@ -25,16 +25,22 @@ func perform(agent, delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	var path = agent.get_state("current_path")
+	var path = unit.current_path
 	var new_path = unit.cut_path(path)
 	if not new_path.empty():
-		Behavior.follow.path(unit, new_path)
+		Behavior.path.start(unit, new_path)
 
 
 func on_arrive(agent):
 	var unit = agent.get_unit()
 	if agent.get_state("has_path"):
-		Behavior.follow.next(unit)
+		Behavior.path.next(unit)
 	else:
 		agent.set_state("completed_path", true)
 
+
+func on_animation_end(agent):
+	# var limit = Behavior.follow.max_lane_distance
+	# var distance = distance_to_lane( agent.get_unit() )
+	# agent.set_state("close_to_path", distance < limit)
+	pass

@@ -6,20 +6,21 @@ func get_class(): return "PursueEnemiesGoal"
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-	var target = Behavior.orders.select_target(unit, enemies)
-	var should_pursue = Behavior.attack.can_hit(unit, target) and not Behavior.attack.in_range(unit, target)
-	agent.set_state("enemy_on_sight", should_pursue)
+	var target = agent.get_state("attacker")
+	var enemies = []
 	
-	if should_pursue:
-		Behavior.attack.set_target(unit, target)
+	if not target:
+		enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
+		target = Behavior.orders.select_target(unit, enemies)
 	
-	return agent.get_state("enemy_on_sight")
+	Behavior.attack.set_target(unit, target)
+	
+	return agent.get_state("has_attack_target")
 
 
 func priority(agent) -> int:
-	return 1 # lower with unit curent_hp
+	return 3 # lower if unit curent_hp is low
 
 
 func get_desired_state(agent) -> Dictionary:
-	return { "enemy_on_sight": false }
+	return { "has_attack_target": false }

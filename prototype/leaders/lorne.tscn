@@ -557,7 +557,7 @@ selectable = true
 moves = true
 mounted = true
 speed = 35.0
-hunting_speed = 120.0
+hunting_speed = 60.0
 collide = true
 attacks = true
 damage = 70
@@ -620,6 +620,6 @@ position = Vector2( 3, -10 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
+goals_list = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

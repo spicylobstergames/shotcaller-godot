@@ -21,7 +21,7 @@ signal unit_leveled_up
 signal unit_attack_release # ranged projectile
 signal unit_attack_hitted # melee hit
 signal unit_attack_ended
-signal unit_attacked
+signal unit_was_attacked
 signal unit_stuned
 signal unit_stun_ended
 signal unit_animation_ended
@@ -59,8 +59,10 @@ export var hunting_speed:float = 0
 var angle:float = 0
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
+var final_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
 var last_position2:Vector2 = Vector2.ZERO
+var current_path:Array = []
 
 # COLLISION
 export var collide:bool = false
@@ -96,7 +98,6 @@ var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat
-var objective:Vector2 = Vector2.ZERO
 var wait_time:int = 0
 var gold = 0
 
@@ -341,7 +342,7 @@ func check_collision(unit2, delta):
 func get_collision_around(delta):
 	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
 	var unit1_rad = self.collision_radius
-	return game.maps.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+	return game.maps.blocks.quad.get_units_in_radius(unit1_pos, unit1_rad)
 
 
 func get_units_in_radius(radius, filters = {}, pos = self.global_position):
@@ -383,6 +384,7 @@ func on_idle_end(): # every idle animation end (0.6s)
 	emit_signal("unit_idle_ended")
 	emit_signal("unit_animation_ended")
 
+
 func on_move(delta): # every frame if there's no collision
 	Behavior.move.step(self, delta)
 
@@ -394,8 +396,6 @@ func on_collision(delta):
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
-	if self == game.selected_unit:
-		Behavior.follow.draw_path(self)
 	if self.moves: emit_signal("unit_move_ended")
 	emit_signal("unit_animation_ended")
 
@@ -421,7 +421,8 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 
 
 func was_attacked(attacker, _damage):
-	emit_signal("unit_attacked", attacker, _damage)
+	
+	emit_signal("unit_was_attacked", attacker, _damage)
 
 
 func on_attack_end(): # animation end of all attacks
@@ -440,7 +441,7 @@ func heal(heal_hp):
 
 func channel_start(time):
 	self.agent.set_state("is_channeling" , true)
-	self.agent.set_state("is_working", true)
+	self.agent.set_state("has_player_command", true)
 	if self.channeling_timer.time_left > 0:
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
@@ -452,7 +453,6 @@ func stun_start():
 	self.wait_time = 2
 	self.agent.get_state("is_stunned", true)
 	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("command_casting", false)
 	self.set_state("stun")
 	emit_signal("unit_stuned")
 
@@ -471,7 +471,7 @@ func die():  # hp <= 0
 	self.target = null
 	
 	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("is_working", false)
+	self.agent.set_state("has_player_command", false)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
@@ -483,10 +483,9 @@ func die():  # hp <= 0
 			last_attacker.kills += 1
 		deaths += 1
 		for attacker in assist_candidates.keys():
-			if attacker == last_attacker:
-				continue
-			if OS.get_ticks_msec() - assist_candidates[attacker] < ASSIST_TIME_IN_SECONDS * 1000:
-					attacker.assists += 1
+			var in_time = OS.get_ticks_msec() - assist_candidates[attacker] < ASSIST_TIME_IN_SECONDS * 1000
+			if attacker != last_attacker and in_time:
+				attacker.assists += 1
 	elif type == "pawn" and last_attacker != null:
 		last_attacker.last_hit_count += 1
 	

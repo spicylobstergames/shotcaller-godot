@@ -593,6 +593,6 @@ shape = SubResource( 27 )
 [node name="trader" parent="behavior/abilities" index="0" instance=ExtResource( 2 )]
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
+goals_list = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

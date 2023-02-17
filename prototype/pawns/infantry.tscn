@@ -510,9 +510,6 @@ frame = 2
 [node name="weapon" parent="sprites" index="2" instance=ExtResource( 2 )]
 animation = "default"
 
-[node name="stuck" parent="sprites" index="3"]
-visible = false
-
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )
@@ -520,17 +517,22 @@ anims/idle = SubResource( 25 )
 anims/move = SubResource( 26 )
 anims/stun = SubResource( 33 )
 
+[node name="collisions" parent="." index="4"]
+visible = true
+
 [node name="block" parent="collisions" index="0"]
+visible = true
 shape = SubResource( 32 )
 
 [node name="select" parent="collisions" index="1"]
 shape = SubResource( 29 )
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+visible = false
 position = Vector2( 6, 0 )
 shape = SubResource( 27 )
 
 [node name="agent" parent="." index="7"]
-goals = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "FollowPathGoal" ]
+goals_list = [ "AttackEnemiesGoal", "PursueEnemiesGoal", "HelpFriendsGoal", "FollowPathGoal" ]
 
 [editable path="hud"]

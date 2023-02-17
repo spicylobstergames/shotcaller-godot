@@ -47,7 +47,6 @@ func start_one_sec_timer():
 
 
 func apply_cheat_code(code):
-	print(code)
 	match code:
 		"SHADOW":
 			for unit1 in game.all_units:
