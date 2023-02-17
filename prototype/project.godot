@@ -147,4 +147,3 @@ quality/shading/force_vertex_shading.mobile=false
 quality/shading/force_lambert_over_burley.mobile=false
 quality/shading/force_blinn_over_ggx.mobile=false
 environment/default_clear_color=Color( 0.180392, 0.133333, 0.184314, 1 )
-environment/default_environment="res://default_env.tres"

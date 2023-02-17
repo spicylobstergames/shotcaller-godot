@@ -34,4 +34,4 @@ func perform(agent, delta) -> bool:
 func exit(agent):
 	agent.set_state("is_retreating", false)
 	agent.set_state("ready_to_fight", true)
-	Behavior.follow.resume(agent.get_unit())
+	Behavior.path.resume_lane(agent.get_unit())

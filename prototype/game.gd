@@ -87,7 +87,7 @@ func units_sec_cycle(): # called every second
 func _physics_process(delta):
 	if started:
 		collision.process(delta)
-		Behavior.follow.draw_path(selected_unit)
+		Behavior.path.draw(selected_unit)
 		#Goap.process(all_units, delta)
 
 

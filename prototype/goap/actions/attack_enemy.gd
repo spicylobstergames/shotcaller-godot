@@ -21,7 +21,6 @@ func perform(agent, delta) -> bool:
 
 
 func enter(agent):
-	#print("attack_enemy enter ", agent.get_unit())
 	var unit = agent.get_unit()
 	var target = unit.target
 	

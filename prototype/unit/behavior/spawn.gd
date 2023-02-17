@@ -83,7 +83,7 @@ func leaders():
 			var path = game.maps.new_path(lane, team)
 			var start = path.pop_front()
 			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", start)
-			leader_node.agent.set_state("current_path", path)
+			Behavior.path.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -139,7 +139,7 @@ func send_pawn(template, lane, team):
 	if not pawn:
 		var unit_template = self[template]
 		pawn = game.maps.create(unit_template, lane, team, "point_random", start)
-	pawn.agent.set_state("current_path", path)
+	Behavior.path.setup_unit_path(pawn, path)
 	Behavior.orders.set_pawn(pawn)
 
 

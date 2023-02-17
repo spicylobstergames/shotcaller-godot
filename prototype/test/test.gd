@@ -19,18 +19,20 @@ func spawn_unit():
 			# TEST LEADER
 			var leader = game.maps.create(s.nagato, "mid", "blue", "Vector2", Vector2(400,400))
 			#leader.attacks = false
+			Behavior.path.setup_unit_path(leader, [])
 			game.player_choose_leaders=[leader.name]
 			game.player_leaders=[leader]
 			game.maps.setup_leaders([leader], [])
 			
 			# TEST LANE PAWN
-	#		var path = game.maps.new_path("mid", "blue")
-	#		var start = path.pop_front()
-			var dummy = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(400,440))
-	#		dummy.agent.set_state("current_path", path)
-#			dummy.hp = 10000
-#			dummy.current_hp = 10000
-	#		dummy.moves = false
+#			var path = game.maps.new_path("mid", "blue")
+#			var start = path.pop_front()
+#			var pawn = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(200,600))
+#			Behavior.path.setup_unit_path(pawn, path)
+#			Behavior.path.start(pawn, path)
+#			pawn.hp = 10000
+#			pawn.current_hp = 10000
+	#		pawn.moves = false
 			
 			# TEST LUMBERJACK
 	#		Behavior.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)

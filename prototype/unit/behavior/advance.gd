@@ -10,32 +10,31 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func smart(unit, objective):
-	point(unit, objective, true) # uses pathfinder
+func smart(unit, final_destiny):
+	point(unit, final_destiny, true) # uses pathfinder
 
 
  # move_and_attack
-func point(unit, objective, smart_move = false):
-	var agent = unit.agent
+func point(unit, final_destiny, smart_move = false):
 	Behavior.attack.set_target(unit, null)
-	if objective and Behavior.move.in_bounds(objective):
-		unit.objective = objective
+	if final_destiny and Behavior.move.in_bounds(final_destiny):
+		unit.final_destiny = final_destiny
 		if unit.attacks and not unit.agent.get_state("is_stunned"):
-			var path = agent.get_state("current_path")
+			var path = unit.current_path
 			if smart_move:
-				path = Behavior.follow.find_path(unit.global_position, unit.objective)
-				agent.set_state("current_path", path)
+				path = Behavior.path.find(unit.global_position, unit.final_destiny)
+				unit.current_path = path
 			var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-			var at_objective = (unit.global_position.distance_to(unit.objective) < game.map.half_tile_size)
+			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < game.map.half_tile_size)
 			var has_path = ( path and not path.empty() )
 			if not enemies:
-				if not at_objective: move(unit, unit.objective, smart_move) 
-				elif has_path: Behavior.follow.path(unit, path)
+				if not at_final_destination: move(unit, unit.final_destiny, smart_move) 
+				elif has_path: Behavior.path.start(unit, path)
 			else:
 				var target = Behavior.orders.select_target(unit, enemies)
 				if not target:
-					if not at_objective: move(unit, unit.objective, smart_move)
-					elif has_path: Behavior.follow.path(unit, path)
+					if not at_final_destination: move(unit, unit.final_destiny, smart_move)
+					elif has_path: Behavior.path.start(unit, path)
 				else:
 					Behavior.attack.set_target(unit, target)
 					var target_position = target.global_position + target.collision_position
@@ -44,10 +43,10 @@ func point(unit, objective, smart_move = false):
 					else: move(unit, target_position, smart_move) 
 
 
-func move(unit, objective, smart_move):
-	if unit.moves and objective:
-		if smart_move: Behavior.move.smart(unit, objective)
-		else : Behavior.move.move(unit, objective)
+func move(unit, final_destiny, smart_move):
+	if unit.moves and final_destiny:
+		if smart_move: Behavior.move.smart(unit, final_destiny)
+		else : Behavior.move.move(unit, final_destiny)
 	else: stop(unit)
 
 
@@ -63,7 +62,7 @@ func resume(unit):
 
 
 func end(unit):
-	if unit.current_destiny != unit.objective:
+	if unit.current_destiny != unit.final_destiny:
 		point(unit, null)
 	else: stop(unit)
 

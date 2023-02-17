@@ -61,6 +61,7 @@ var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var last_position:Vector2 = Vector2.ZERO
 var last_position2:Vector2 = Vector2.ZERO
+var current_path:Array = []
 
 # COLLISION
 export var collide:bool = false
@@ -96,7 +97,7 @@ var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
 var tactics:String = "default" # aggresive defensive retreat
-var objective:Vector2 = Vector2.ZERO
+var final_destiny:Vector2 = Vector2.ZERO
 var wait_time:int = 0
 var gold = 0
 
@@ -341,7 +342,7 @@ func check_collision(unit2, delta):
 func get_collision_around(delta):
 	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
 	var unit1_rad = self.collision_radius
-	return game.maps.blocks.get_units_in_radius(unit1_pos, unit1_rad)
+	return game.maps.blocks.quad.get_units_in_radius(unit1_pos, unit1_rad)
 
 
 func get_units_in_radius(radius, filters = {}, pos = self.global_position):

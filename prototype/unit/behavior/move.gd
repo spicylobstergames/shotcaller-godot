@@ -110,14 +110,13 @@ func stop(unit):
 
 
 func stand(unit):
-	var agent = unit.agent
-	agent.set_state("current_path", [])
+	unit.current_path = []
 	stop(unit)
 
 
 
 func smart(unit, point):
 	if not unit.agent.get_state("stunned"):
-		var path = Behavior.follow.find_path(unit.global_position, point)
-		if path: Behavior.follow.path(unit, path)
+		var path = Behavior.path.find(unit.global_position, point)
+		if path: Behavior.path.start(unit, path)
 

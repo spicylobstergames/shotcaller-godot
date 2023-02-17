@@ -33,7 +33,7 @@ func map_loaded():
 	blocks.setup_quadtree()
 	game.camera.map_loaded()
 	game.ui.map_loaded()
-	Behavior.follow.setup_pathfind()
+	Behavior.path.setup_pathfind()
 	game.map_loaded()
 
 

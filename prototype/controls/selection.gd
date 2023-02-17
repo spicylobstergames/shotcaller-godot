@@ -34,10 +34,6 @@ func input(event):
 				BUTTON_LEFT: 
 					match game.control_state:
 						"selection": select(point)
-						"teleport": teleport(game.selected_unit, point)
-						"advance": advance(game.selected_unit, point)
-						"move": move(game.selected_unit, point)
-						"lane": change_lane(game.selected_unit, point)
 				
 				BUTTON_RIGHT: 
 					match game.control_state:
@@ -158,13 +154,13 @@ func attack(unit, point):
 func teleport(unit, point):
 	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
-		Behavior.follow.teleport(unit, order_point)
+		Behavior.path.teleport(unit, order_point)
 
 
 func change_lane(unit, point):
 	if unit.moves and game.can_control(unit) and no_delay(unit):
 		var order_point = order(unit, point)
-		Behavior.follow.change_lane(unit, order_point)
+		Behavior.path.change_lane(unit, order_point)
 
 
 func move(unit, point):
@@ -181,7 +177,6 @@ func stand(unit):
 
 func order(unit, point):
 	unit.agent.set_state("has_player_command", true)
-	unit.agent.set_state("is_hunting", false)
 	Behavior.attack.set_target(unit, null)
 	unit.start_control_delay()
 	if point:

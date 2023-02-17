@@ -20,7 +20,7 @@ func enter(agent):
 	var unit = agent.get_unit()
 	unit.agent.set_state("is_retreating", true)
 	# clear previous path and targets
-	agent.set_state("current_path", [])
+	unit.current_path = []
 	Behavior.attack.set_target(unit, null)
 	# update lane data in case of lane change
 	var order = Behavior.orders.player_leaders_orders[unit.name]
