@@ -115,7 +115,7 @@ func draw(unit):
 	
 	if unit:
 		has_path = not unit.current_path.empty()
-		should_draw = (has_path or unit.final_destiny)
+		should_draw = game.can_control(unit) and (has_path or unit.final_destiny)
 	
 	if should_draw:
 		path_line.visible = true

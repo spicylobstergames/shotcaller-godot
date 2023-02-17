@@ -3,13 +3,17 @@ var game:Node
 
 # self = game.camera
 
-var _touches = {} # for pinch zoom and drag with multiple fingers
-var _touches_info = {"num_touch_last_frame":0, 
-					"radius":0,
-					"last_radius":0, 
-					"total_pan":0, 
-					"last_avg_pos":Vector2.ZERO, 
-					"cur_avg_pos":Vector2.ZERO}
+# for pinch zoom and drag with multiple fingers
+var _touches = {}
+var _touches_info = {
+	"num_touch_last_frame":0, 
+	"radius":0,
+	"last_radius":0, 
+	"total_pan":0, 
+	"last_avg_pos":Vector2.ZERO, 
+	"cur_avg_pos":Vector2.ZERO
+}
+
 var is_panning:bool = false
 var is_zooming:bool = false
 var pan_position:Vector2 = Vector2.ZERO
@@ -26,29 +30,21 @@ var default_zoom_sensitivity = .1
 func _ready():
 	game = get_tree().get_current_scene()
 	zoom = zoom_default
-	yield(get_tree(), "idle_frame")
 
 
 func input(event):
 	# KEYBOARD
 	if event is InputEventKey:
 		
-		# ARROW KEYS
 		match event.scancode:
-			
-			# cam zoom test
-#			KEY_Q: game.camera.zoom_out()
-#			KEY_W: game.camera.zoom_reset()
-#			KEY_E: game.camera.zoom_in()
-			
-			#
+			# LEADER KEYS
 			KEY_1: focus_leader(1)
 			KEY_2: focus_leader(2)
 			KEY_3: focus_leader(3)
 			KEY_4: focus_leader(4)
 			KEY_5: focus_leader(5)
 			
-			
+			# ARROW KEYS
 			KEY_LEFT:  arrow_keys_move.x = -arrow_keys_speed if event.is_pressed() else 0
 			KEY_RIGHT: arrow_keys_move.x =  arrow_keys_speed if event.is_pressed() else 0
 			KEY_UP:    arrow_keys_move.y = -arrow_keys_speed if event.is_pressed() else 0
@@ -57,7 +53,7 @@ func input(event):
 		# NUMBER KEYPAD
 		if not event.is_pressed():
 			var cam_move = null;
-			var x = position_limit*0.93
+			var x = position_limit
 			match event.scancode:
 				KEY_KP_1: cam_move = [-x, x]
 				KEY_KP_2: cam_move = [0, x]
@@ -119,7 +115,6 @@ func input(event):
 
 
 
-
 func map_loaded():
 	offset = game.map.mid
 	var h = offset.x
@@ -134,7 +129,7 @@ func focus_leader(index):
 	if game.player_leaders.size() >= index:
 		var leader = game.player_leaders[index-1]
 		if leader:
-			game.camera.global_position = leader.global_position - game.camera.offset
+			game.camera.global_position = leader.global_position - game.map.mid
 			game.selection.select_unit(leader)
 			var buttons = game.ui.leaders_icons.buttons_name
 			for all_leader_name in buttons: 
@@ -158,10 +153,11 @@ func full_zoom_out():
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 	game.ui.minimap.hide_view()
 
+
 func _zoom_camera(dir):
 	zoom += Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
 	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
-	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)	
+	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)
 
 func process():
 	if game.started: 
@@ -190,17 +186,17 @@ func process():
 		if global_position.y < -margin: global_position.y = -margin
 		
 		# ADJUST CAMERA PAN LIMITS TO SCREEN RATIO
-		limit_top = -margin
-		limit_bottom = margin
-		limit_left = -margin
-		limit_right = margin
-		
-		var s = 0.65
-		if ratio >= 1 and zoom.x > 1:
-			limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
-			limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
-		
-		if ratio < 1 and zoom.x > 1:
-			limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
-			limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
+#		limit_top = -margin
+#		limit_bottom = margin
+#		limit_left = -margin
+#		limit_right = margin
+#
+#		var s = 0.65
+#		if ratio >= 1 and zoom.x > 1:
+#			limit_left = -margin - (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+#			limit_right = margin + (margin * (ratio-1) * (zoom.x-zoom_limit.x) * s)
+#
+#		if ratio < 1 and zoom.x > 1:
+#			limit_top = -margin - (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x) * s)
+#			limit_bottom = margin + (margin * ((1/ratio)-1) * (zoom.x-zoom_limit.x)* s)
 

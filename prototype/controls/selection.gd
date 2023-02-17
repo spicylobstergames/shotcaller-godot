@@ -31,11 +31,11 @@ func input(event):
 		if game.camera.zoom.x <= 1:
 			match event.button_index:
 				
-				BUTTON_LEFT: 
+				BUTTON_LEFT:
 					match game.control_state:
 						"selection": select(point)
 				
-				BUTTON_RIGHT: 
+				BUTTON_RIGHT:
 					match game.control_state:
 						"selection": unselect()
 						"teleport": teleport(game.selected_unit, point)
@@ -47,7 +47,11 @@ func input(event):
 		else: 
 			match event.button_index:
 				BUTTON_LEFT: 
-					if(game.camera._touches_info.num_touch_last_frame < 1 and game.camera._touches.size() == 0): #prevent touches converted to clicks from triggering a zoom
+					if (
+						game.camera._touches_info.num_touch_last_frame < 1 
+						and game.camera._touches.size() == 0
+					):
+						#prevent touches converted to clicks from triggering a zoom
 						game.camera.zoom_reset()
 						game.camera.global_position = point - game.map.mid
 	
