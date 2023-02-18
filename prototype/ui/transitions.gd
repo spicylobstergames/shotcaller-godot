@@ -20,6 +20,8 @@ func on_transition_end(transition = null):
 	game.ui.main_menu.visible = false
 	# prepare to screenshot the map
 	game.ui.minimap.update_map_texture = true
+	
+	yield(get_tree(), "idle_frame")
 	game.resume()
 
 
