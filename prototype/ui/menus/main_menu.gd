@@ -6,9 +6,6 @@ onready var quick_start_button = $"%quick_start_button"
 onready var exit_button = $"%exit_button"
 onready var new_game_button = $"%new_game_button"
 
-onready var circle_transition_scene : PackedScene = preload("res://ui/transitions/circle_transition.tscn")
-onready var square_transition_scene : PackedScene = preload("res://ui/transitions/square_transition.tscn")
-
 
 func _ready():
 	randomize()
@@ -18,29 +15,9 @@ func _ready():
 
 
 func quick_start():
-	game.maps.load_map(game.maps.current_map)
-
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
-	
-	if game.test.unit or game.test.stress:
-		on_transition_end()
-	else:
-		var transition = [square_transition_scene, circle_transition_scene][randi() % 2].instance()
-		transition.pause_mode = Node.PAUSE_MODE_PROCESS
-		game.get_node("transitions").add_child(transition)
-		transition.start_transition()
-		transition.connect("transition_completed", self, "on_transition_end", [transition])
-	
-
-func on_transition_end(transition = null):
-	if transition: transition.queue_free()
-	# Transition backward not possible due to how minimap is generated
-	# transition.start_transition(true)
-	visible = false
-	game.ui.minimap.update_map_texture = true
-
-
+	game.start()
 
 
 func quit():

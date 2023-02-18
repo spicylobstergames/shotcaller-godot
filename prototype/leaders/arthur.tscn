@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://unit/Unit.tscn" type="PackedScene" id=1]
 [ext_resource path="res://skills/abilites/aura_of_courage.tscn" type="PackedScene" id=2]
@@ -47,21 +47,6 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="Animation" id=68]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("sprites/cleave:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1 ]
-}
-
 [sub_resource type="Animation" id=67]
 resource_name = "arthur_special_cleave"
 length = 0.6
@@ -77,6 +62,18 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 0, 1, 2, 3, 4, 5, 6 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("sprites/cleave:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2, 0.7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
 }
 
 [sub_resource type="Animation" id=24]
@@ -604,7 +601,7 @@ centered = false
 offset = Vector2( 0, -20 )
 flip_h = true
 hframes = 8
-frame = 1
+frame = 6
 
 [node name="body" parent="sprites" index="2"]
 frames = SubResource( 36 )
@@ -614,7 +611,6 @@ offset = Vector2( -2, -12 )
 [node name="weapon" parent="sprites" index="3" instance=ExtResource( 7 )]
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/RESET = SubResource( 68 )
 anims/arthur_special_cleave = SubResource( 67 )
 anims/attack = SubResource( 24 )
 anims/death = SubResource( 31 )

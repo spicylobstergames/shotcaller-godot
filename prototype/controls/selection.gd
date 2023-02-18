@@ -32,8 +32,7 @@ func input(event):
 			match event.button_index:
 				
 				BUTTON_LEFT:
-					match game.control_state:
-						"selection": select(point)
+					select(point)
 				
 				BUTTON_RIGHT:
 					match game.control_state:
@@ -73,8 +72,17 @@ func setup_selection(unit):
 
 func select(point):
 	var unit = get_sel_unit_at_point(Vector2(point))
-	if unit: 
+	if unit:
 		select_unit(unit)
+	else:
+		unselect()
+
+
+func select_unit(unit):
+	unselect()
+	game.selected_unit = unit
+	
+	if game.can_control(unit):
 		if unit.moves: 
 			if unit.attacks: 
 				game.control_state = "advance"
@@ -82,12 +90,7 @@ func select(point):
 				game.control_state = "move"
 		elif unit.attacks:
 				game.control_state = "attack"
-
-
-func select_unit(unit):
-	unselect()
-	game.selected_unit = unit
-	
+					
 	if game.can_control(unit) and unit.type == "leader":
 		game.selected_leader = unit
 		game.ui.shop.update_buttons()
@@ -117,8 +120,12 @@ func unselect():
 			game.ui.shop_button.button_down()
 	
 	var buttons = game.ui.leaders_icons.buttons_name
+	
+	# move to UI
 	for all_leader_name in buttons: 
 		buttons[all_leader_name].pressed = false
+		
+	
 	game.selected_unit = null
 	game.selected_leader = null
 	game.ui.hide_unselect()

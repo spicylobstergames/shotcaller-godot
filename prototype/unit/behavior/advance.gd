@@ -23,7 +23,7 @@ func point(unit, final_destiny, smart_move = false):
 			var path = unit.current_path
 			if smart_move:
 				path = Behavior.path.find(unit.global_position, unit.final_destiny)
-				unit.current_path = path
+				if path: unit.current_path = path
 			var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
 			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < game.map.half_tile_size)
 			var has_path = ( path and not path.empty() )

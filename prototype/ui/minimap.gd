@@ -51,14 +51,18 @@ func _input(event):
 	
 	game.camera.input(event)
 
+
 func over_minimap(event):
+	var viewport = get_viewport()
+	var screen = viewport.get_size_override()
 	return (
 		self.get_parent().visible and
 		self.visible and 
 		"position" in event and 
 		event.position.x < size and 
-		event.position.y > get_viewport().size.y - size
+		event.position.y > screen.y - size
 	)
+
 
 func map_loaded():
 	map_sprite = game.map.get_node("zoom_out_sprite")
@@ -144,6 +148,7 @@ func setup_symbol(unit):
 		copy_symbol(unit, symbol)
 		unit.symbol = true
 
+
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)
 	if unit.type == "building":
@@ -182,21 +187,21 @@ func copy_symbol(unit, symbol):
 
 
 func follow_camera():
-	var window_height = get_viewport().size.y
-	var view_height = get_viewport().get_size_override().y
-	self.offset.y = view_height
-	game.ui.rect_layer.offset.y = view_height
 	if self.visible:
+		var view_height = get_viewport().get_size_override().y
+		# stick to the bottom (todo: replace with godot viewports)
+		self.offset.y = view_height
+		game.ui.rect_layer.offset.y = view_height
 		var half = game.map.size / 2
-		var s = float(game.map.size) / float(size)
-		var pos = Vector2( -half+(pan_position.x * s), half + ((pan_position.y - window_height) * s)  )
+		var map_scale = float(game.map.size) / float(size)
+		var pos = Vector2( -half+(pan_position.x * map_scale), half + ((pan_position.y - view_height) * map_scale)  )
 		var offset = (size - cam_rect.rect_size.y) / 2
 		if is_panning: game.camera.position = pos
-		cam_rect.rect_position = Vector2(offset,offset-size) + game.camera.position / s
-		if cam_rect.rect_position.x < 0: cam_rect.rect_position.x = 0
-		if cam_rect.rect_position.x > offset*2: cam_rect.rect_position.x = offset*2
-		if cam_rect.rect_position.y < -size: cam_rect.rect_position.y = -size
-		if cam_rect.rect_position.y > -cam_rect.rect_size.y: cam_rect.rect_position.y = -cam_rect.rect_size.y
+		# update minimap cam rectangle position
+		cam_rect.rect_position = Vector2(offset,offset-size) + game.camera.position / map_scale
+		cam_rect.rect_position.x = clamp(cam_rect.rect_position.x, 0, offset*2)
+		cam_rect.rect_position.y = clamp(cam_rect.rect_position.y, -size, -cam_rect.rect_size.y)
+
 
 
 func move_symbols():

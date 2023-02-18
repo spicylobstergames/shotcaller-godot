@@ -264,34 +264,27 @@ func rollo_basic():
 func arthur_special(effects, parameters, visualize):
 	var leader = game.selected_leader
 	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
-	if point_target == null:
-		return false
-	var animations = leader.get_node("animations")
-	var skill_animation_sprite = leader.get_node("sprites").get_node("cleave")
-	
-	var damage_per_hit = [10, 20, 30]
-	
-	var polygon = generate_arc_poly(parameters.angle, parameters.radius, leader.global_position, point_target, parameters.color)
-	var targets = []
-	var leader_hit = false
-	
-	for damage in damage_per_hit:
-		targets = enemies_in_polygon(leader, parameters.radius, polygon)
+	if point_target != null:
+		var animations = leader.get_node("animations")
+		var skill_animation_sprite = leader.get_node("sprites/cleave")
+		var polygon = generate_arc_poly(parameters.angle, parameters.radius, leader.global_position, point_target, parameters.color)
+		var targets = enemies_in_polygon(leader, parameters.radius, polygon)
 		skill_animation_sprite.look_at(point_target)
 		skill_animation_sprite.visible = true
 		animations.play("arthur_special_cleave")
-		yield(animations, "animation_finished")
-		skill_animation_sprite.visible = false
-		if targets.empty():
-			return true
-		for unit in targets:
-			Behavior.attack.take_hit(leader, unit, null, { "damage": damage * leader.level })
-			if unit.type == "leader":
-				leader_hit = true
-		if leader_hit:
-			leader_hit = false
-		else: return true
-	return true
+		# damage targets
+		if not targets.empty():
+			for unit in targets:
+				var damage = parameters.damage * leader.level
+				Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
+
+
+
+func arthur_special_end():
+	var leader = null
+	var skill_animation_sprite = leader.get_node("sprites/cleave")
+	skill_animation_sprite.visible = false
+
 
 
 func arthur_active(effects, parameters, visualize):
@@ -405,6 +398,7 @@ func _input(event):
 					emit_signal("point", game.camera.get_global_mouse_position())
 		elif Input.is_action_pressed("ui_cancel"):
 			emit_signal("point", null)
+	return false
 
 
 func _ready():
@@ -441,7 +435,6 @@ func _physics_process(delta):
 	
 	if self._waiting_for_point == true:
 		for polygon in visualization:
-			var leader = game.selected_leader
 			var mouse_position =  game.camera.get_global_mouse_position()
 			polygon.look_at(mouse_position)
 			

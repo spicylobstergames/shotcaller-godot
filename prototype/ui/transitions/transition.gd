@@ -12,6 +12,7 @@ func _ready():
 	if get_tree().current_scene == self:
 		start_transition()
 
+
 func start_transition(backwards = false):
 	visible = true
 	var start = 0.0 if not backwards else 2.0
