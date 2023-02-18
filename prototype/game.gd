@@ -88,6 +88,7 @@ func units_sec_cycle(): # called every second
 func start():
 	maps.load_map(maps.current_map)
 	if test.unit or test.stress:
+		yield(get_tree(), "idle_frame")
 		transitions.on_transition_end()
 	else:
 		transitions.start()

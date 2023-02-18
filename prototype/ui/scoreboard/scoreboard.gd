@@ -41,9 +41,7 @@ func update():
 
 func _unhandled_input(event):
 	if event is InputEventKey:
-		if event.echo:
-			return
-		if event.scancode == KEY_TAB and is_ready:
+		if not event.echo and event.scancode == KEY_TAB and is_ready:
 			visible = event.is_pressed()
 
 

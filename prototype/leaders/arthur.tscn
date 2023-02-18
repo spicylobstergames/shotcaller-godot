@@ -49,8 +49,7 @@ animations = [ {
 
 [sub_resource type="Animation" id=67]
 resource_name = "arthur_special_cleave"
-length = 0.6
-loop = true
+length = 0.7
 tracks/0/type = "value"
 tracks/0/path = NodePath("sprites/cleave:frame")
 tracks/0/interp = 1

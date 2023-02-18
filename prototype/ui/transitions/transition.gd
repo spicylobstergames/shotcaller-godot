@@ -23,5 +23,6 @@ func start_transition(backwards = false):
 					 Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
 
+
 func transition_done():
 	emit_signal("transition_completed")

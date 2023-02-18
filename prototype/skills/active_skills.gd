@@ -275,7 +275,7 @@ func arthur_special(effects, parameters, visualize):
 		# damage targets
 		if not targets.empty():
 			for unit in targets:
-				var damage = parameters.damage * leader.level
+				var damage = 100 * leader.level
 				Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
 
 
@@ -390,7 +390,7 @@ func bribe_remove(targets):
 		else: targets.erase(unit)
 
 
-func _input(event):
+func _input_event(event):
 	if self._waiting_for_point:
 		if event is InputEventMouseButton:
 			if event.pressed:
@@ -398,7 +398,7 @@ func _input(event):
 					emit_signal("point", game.camera.get_global_mouse_position())
 		elif Input.is_action_pressed("ui_cancel"):
 			emit_signal("point", null)
-	return false
+	
 
 
 func _ready():
