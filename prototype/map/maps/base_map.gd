@@ -21,4 +21,5 @@ export var neutrals = ["blacksmith", "camp"]
 
 export var fog_of_war:bool = true
 
+export var camera_limit = Vector2(225,225)
 export var zoom_limit:Vector2 = Vector2(0.5,1.76)

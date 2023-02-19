@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.test
 
-var unit = 1
+var unit = 0
 var stress = 0
 
 
@@ -27,7 +27,7 @@ func spawn_unit():
 			# TEST LANE PAWN
 #			var path = game.maps.new_path("mid", "blue")
 #			var start = path.pop_front()
-#			var pawn = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(200,600))
+			var pawn = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(200,600))
 #			Behavior.path.setup_unit_path(pawn, path)
 #			Behavior.path.start(pawn, path)
 #			pawn.hp = 10000

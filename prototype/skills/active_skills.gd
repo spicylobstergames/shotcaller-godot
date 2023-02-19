@@ -390,7 +390,7 @@ func bribe_remove(targets):
 		else: targets.erase(unit)
 
 
-func _input_event(event):
+func _input(event):
 	if self._waiting_for_point:
 		if event is InputEventMouseButton:
 			if event.pressed:

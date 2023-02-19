@@ -126,10 +126,8 @@ func focus_leader(index):
 		if leader:
 			game.camera.global_position = leader.global_position - game.map.mid
 			game.selection.select_unit(leader)
-			var buttons = game.ui.leaders_icons.buttons_name
-			for all_leader_name in buttons: 
-				buttons[all_leader_name].pressed = false
-			buttons[leader.name].pressed = true
+			game.ui.leaders_icons.buttons_focus(leader)
+
 
 
 func zoom_reset(): 
@@ -176,8 +174,8 @@ func process():
 		pan_position = Vector2.ZERO
 		
 		# KEEP CAMERA PAN LIMITS
-		var x = game.map.mid.x/2
-		var y = game.map.mid.y/2
+		var x = game.map.camera_limit.x
+		var y = game.map.camera_limit.y
 		global_position.x = clamp(global_position.x, -x, x)
 		global_position.y = clamp(global_position.y, -y, y)
 		

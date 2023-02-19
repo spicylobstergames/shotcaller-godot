@@ -202,7 +202,6 @@ collide = true
 damage = 40
 defense = 10
 projectile_speed = 220.0
-lane = ""
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )

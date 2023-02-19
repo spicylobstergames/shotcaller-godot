@@ -554,7 +554,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
-frame = 3
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -565,14 +565,17 @@ offset = Vector2( 0, -12 )
 [node name="castle" parent="buildings/blue" instance=ExtResource( 11 )]
 material = SubResource( 57 )
 position = Vector2( 102, 1000 )
+subtype = "mid"
 
 [node name="barrack" parent="buildings/blue" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 222, 868 )
+subtype = "mid"
 
 [node name="tower" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 416, 674 )
+subtype = "mid"
 
 [node name="blacksmith" parent="buildings/blue" instance=ExtResource( 24 )]
 material = SubResource( 57 )
@@ -587,16 +590,19 @@ position = Vector2( -94, 75 )
 [node name="castle" parent="buildings/red" instance=ExtResource( 11 )]
 material = SubResource( 57 )
 position = Vector2( 981, 109 )
+subtype = "mid"
 team = "red"
 
 [node name="barrack" parent="buildings/red" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 864, 233 )
+subtype = "mid"
 team = "red"
 
 [node name="tower" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 605, 418 )
+subtype = "mid"
 team = "red"
 
 [node name="camp" parent="buildings/red" instance=ExtResource( 14 )]

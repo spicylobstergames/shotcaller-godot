@@ -15,6 +15,7 @@ func _ready():
 
 
 func quick_start():
+	hide()
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
 	game.start()
@@ -22,6 +23,7 @@ func quick_start():
 
 func quit():
 	game.exit()
+
 
 func show_new_game_menu():
 	game.ui.show_team_selection()

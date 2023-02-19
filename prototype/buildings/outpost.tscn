@@ -203,7 +203,6 @@ damage = 50
 attack_speed = 1.2
 defense = 15
 projectile_speed = 220.0
-lane = ""
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )

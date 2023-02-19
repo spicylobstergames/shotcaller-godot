@@ -74,8 +74,6 @@ func select(point):
 	var unit = get_sel_unit_at_point(Vector2(point))
 	if unit:
 		select_unit(unit)
-	else:
-		unselect()
 
 
 func select_unit(unit):
@@ -97,6 +95,7 @@ func select_unit(unit):
 		game.ui.inventories.update_buttons()
 		game.ui.controls_button.disabled = false
 		game.ui.active_skills.update_buttons()
+		game.ui.leaders_icons.buttons_focus(unit)
 	else:
 		game.selected_leader = null
 		game.ui.shop.disable_all()
@@ -119,12 +118,7 @@ func unselect():
 		if unit.display_name == "blacksmith" and game.ui.shop.visible: 
 			game.ui.shop_button.button_down()
 	
-	var buttons = game.ui.leaders_icons.buttons_name
-	
-	# move to UI
-	for all_leader_name in buttons: 
-		buttons[all_leader_name].pressed = false
-		
+	game.ui.leaders_icons.buttons_unfocus()
 	
 	game.selected_unit = null
 	game.selected_leader = null
