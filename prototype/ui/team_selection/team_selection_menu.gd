@@ -85,6 +85,8 @@ func get_player_team():
 
 
 func _on_start_game_button_pressed():
+	hide()
+	
 	game.maps.current_map = get_selected_map()
 	game.player_team = get_player_team()
 		

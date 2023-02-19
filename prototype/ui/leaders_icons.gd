@@ -37,3 +37,12 @@ func build():
 	self.built = true
 	self.visible = true
 
+
+func buttons_focus(leader):
+	buttons_unfocus()
+	buttons_name[leader.name].pressed = true
+
+
+func buttons_unfocus():
+	for all_leader_name in buttons_name: 
+		buttons_name[all_leader_name].pressed = false

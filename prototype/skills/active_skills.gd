@@ -1,6 +1,6 @@
 extends ItemList
 
-onready var _game: Node = get_tree().get_current_scene()
+onready var game: Node = get_tree().get_current_scene()
 onready var _skill_buttons = $placeholder.get_children()
 onready var _tip = $tip
 
@@ -232,7 +232,7 @@ func enemies_in_polygon(leader, radius, polygon):
 
 # Example how to write code for point target skill
 func robin_special(effects, parameters, visualize):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	# Wait for player to click on map to get x and y position
 	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
 	# If player did not clicked then return false, means skill wasn't used and 
@@ -246,7 +246,7 @@ func robin_special(effects, parameters, visualize):
 
 
 func rollo_basic():
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	var range_of_effect = 100
 	var damage = 100
 	
@@ -262,40 +262,33 @@ func rollo_basic():
 
 
 func arthur_special(effects, parameters, visualize):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
-	if point_target == null:
-		return false
-	var animations = leader.get_node("animations")
-	var skill_animation_sprite = leader.get_node("sprites").get_node("cleave")
-	
-	var damage_per_hit = [10, 20, 30]
-	
-	var polygon = generate_arc_poly(parameters.angle, parameters.radius, leader.global_position, point_target, parameters.color)
-	var targets = []
-	var leader_hit = false
-	
-	for damage in damage_per_hit:
-		targets = enemies_in_polygon(leader, parameters.radius, polygon)
+	if point_target != null:
+		var animations = leader.get_node("animations")
+		var skill_animation_sprite = leader.get_node("sprites/cleave")
+		var polygon = generate_arc_poly(parameters.angle, parameters.radius, leader.global_position, point_target, parameters.color)
+		var targets = enemies_in_polygon(leader, parameters.radius, polygon)
 		skill_animation_sprite.look_at(point_target)
 		skill_animation_sprite.visible = true
 		animations.play("arthur_special_cleave")
-		yield(animations, "animation_finished")
-		skill_animation_sprite.visible = false
-		if targets.empty():
-			return true
-		for unit in targets:
-			Behavior.attack.take_hit(leader, unit, null, { "damage": damage * leader.level })
-			if unit.type == "leader":
-				leader_hit = true
-		if leader_hit:
-			leader_hit = false
-		else: return true
-	return true
+		# damage targets
+		if not targets.empty():
+			for unit in targets:
+				var damage = 100 * leader.level
+				Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
+
+
+
+func arthur_special_end():
+	var leader = null
+	var skill_animation_sprite = leader.get_node("sprites/cleave")
+	skill_animation_sprite.visible = false
+
 
 
 func arthur_active(effects, parameters, visualize):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
 	if point_target == null:
 		return false
@@ -311,7 +304,7 @@ func arthur_active(effects, parameters, visualize):
 
 
 func bokuden_special(effects, parameters, visualize):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	var aura_duration = 5
 	var speed_modifier = 10
 	var range_of_aura = 100
@@ -344,7 +337,7 @@ func battle_call_remove(_targets):
 
 
 func bokuden_active(effects, parameters, visualize):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
 	if point_target == null:
 		return false
@@ -361,7 +354,7 @@ func bokuden_active(effects, parameters, visualize):
 
 
 func osman_special(effects, parameters, visualize):
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	var bribe_gold_cost = 10
 	var effect_duration = 2
 	var range_of_effect = 100
@@ -402,9 +395,10 @@ func _input(event):
 		if event is InputEventMouseButton:
 			if event.pressed:
 				if event.button_index == 1:
-					emit_signal("point", _game.get_global_mouse_position())
+					emit_signal("point", game.camera.get_global_mouse_position())
 		elif Input.is_action_pressed("ui_cancel"):
 			emit_signal("point", null)
+	
 
 
 func _ready():
@@ -420,7 +414,7 @@ func clear():
 func update_buttons():
 	clear()
 	show()
-	var leader = _game.selected_leader
+	var leader = game.selected_leader
 	for index in active_skills[leader.display_name].size():
 		_skill_buttons[index].setup(active_skills[leader.display_name][index])
 
@@ -430,9 +424,9 @@ func new_skills(leader, skills_storage):
 
 
 func build_leaders():
-	for leader in _game.player_leaders:
+	for leader in game.player_leaders:
 		new_skills(leader, player_leaders_skills)
-	for leader in _game.enemy_leaders:
+	for leader in game.enemy_leaders:
 		new_skills(leader, enemy_leaders_skills)
 
 
@@ -441,8 +435,7 @@ func _physics_process(delta):
 	
 	if self._waiting_for_point == true:
 		for polygon in visualization:
-			var leader = _game.selected_leader
-			var mouse_position =  leader.get_global_mouse_position()
+			var mouse_position =  game.camera.get_global_mouse_position()
 			polygon.look_at(mouse_position)
 			
 	for skills in player_leaders_skills.values() + enemy_leaders_skills.values():

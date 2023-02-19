@@ -49,10 +49,10 @@ func new_path(lane, team):
 	if lane in WorldState.lanes:
 		var path = WorldState.lanes[lane].duplicate()
 		if team == "blue":
-			path.append(game.map.find_node("red_castle").global_position)
+			path.append(game.map.get_node("buildings/red/castle").global_position)
 		if team == "red": 
 			path.invert()
-			path.append(game.map.find_node("blue_castle").global_position)
+			path.append(game.map.get_node("buildings/blue/castle").global_position)
 		return path
 
 
@@ -77,6 +77,7 @@ func setup_buildings():
 			building.reset_unit()
 			game.ui.minimap.setup_symbol(building)
 			building.set_state("idle")
+			building.agent.set_state("lane", building.subtype)
 			game.selection.setup_selection(building)
 			game.collision.setup(building)
 			if building.team == game.player_team:

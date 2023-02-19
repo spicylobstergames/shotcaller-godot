@@ -198,7 +198,6 @@ selectable = true
 collide = true
 defense = 10
 projectile_speed = 0.0
-lane = ""
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )

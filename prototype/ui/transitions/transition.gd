@@ -12,6 +12,7 @@ func _ready():
 	if get_tree().current_scene == self:
 		start_transition()
 
+
 func start_transition(backwards = false):
 	visible = true
 	var start = 0.0 if not backwards else 2.0
@@ -21,6 +22,7 @@ func start_transition(backwards = false):
 					 start, end, 2, 
 					 Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
+
 
 func transition_done():
 	emit_signal("transition_completed")

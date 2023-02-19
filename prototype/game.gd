@@ -53,6 +53,7 @@ onready var collision = get_node("collision")
 onready var selection = get_node("selection")
 onready var utils = get_node("utils")
 onready var test = get_node("test")
+onready var transitions = get_node("transitions")
 
 var rng = RandomNumberGenerator.new()
 
@@ -84,34 +85,13 @@ func units_sec_cycle(): # called every second
 				unit1.set_dot()
 
 
-func _physics_process(delta):
-	if started:
-		collision.process(delta)
-		Behavior.path.draw(selected_unit)
-		Goap.process(all_units, delta)
-
-
-func can_control(unit1):
-	return (unit1 
-		and unit1.team == player_team 
-		and not unit1.dead
-		and (test.unit or unit1.type == "leader")
-	) 
-
-
-
 func start():
-	background.visible = false
 	maps.load_map(maps.current_map)
-	# takes map snapshop for minimap
-	ui.minimap.update_map_texture = true
-	
-	resume()
-
-
-func _process(delta: float) -> void:
-	camera.process()
-	ui.process()
+	if test.unit or test.stress:
+		yield(get_tree(), "idle_frame")
+		transitions.on_transition_end()
+	else:
+		transitions.start()
 
 
 func map_loaded():
@@ -163,6 +143,26 @@ func pause():
 	emit_signal("game_paused")
 
 
+func _process(delta: float) -> void:
+	camera.process()
+	ui.process()
+
+
+func _physics_process(delta):
+	if started:
+		collision.process(delta)
+		Behavior.path.draw(selected_unit)
+		Goap.process(all_units, delta)
+
+
+func can_control(unit1):
+	return (unit1 
+		and unit1.team == player_team 
+		and not unit1.dead
+		and (test.unit or unit1.type == "leader")
+	) 
+
+
 func end(winner: bool):
 	paused = true
 	get_tree().paused = true
@@ -172,7 +172,6 @@ func end(winner: bool):
 	victory = winner
 	ui.scoreboard.handle_game_end(winner)
 	emit_signal("game_ended")
-
 
 
 func exit():

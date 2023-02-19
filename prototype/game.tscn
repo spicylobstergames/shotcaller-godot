@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://map/blocks/blocks.gd" type="Script" id=1]
 [ext_resource path="res://game.gd" type="Script" id=2]
 [ext_resource path="res://controls/camera.gd" type="Script" id=3]
 [ext_resource path="res://ui/ui.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/transitions.gd" type="Script" id=5]
 [ext_resource path="res://map/maps.gd" type="Script" id=6]
 [ext_resource path="res://controls/selection.gd" type="Script" id=7]
 [ext_resource path="res://utils/utils.gd" type="Script" id=8]
@@ -47,3 +48,4 @@ script = ExtResource( 9 )
 
 [node name="transitions" type="CanvasLayer" parent="."]
 layer = 5
+script = ExtResource( 5 )

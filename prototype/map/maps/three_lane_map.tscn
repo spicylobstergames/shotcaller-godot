@@ -385,6 +385,7 @@ light_mode = 2
 script = ExtResource( 13 )
 size = 2112
 neutrals = [ "mine", "blacksmith", "lumbermill", "camp", "outpost" ]
+camera_limit = Vector2( 760, 760 )
 zoom_limit = Vector2( 0.5, 3.32 )
 
 [node name="zoom_out_sprite" type="Sprite" parent="."]
@@ -549,7 +550,6 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 252.5, 41.5914 )
 frames = SubResource( 6 )
-frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -557,7 +557,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 448, 553 )
 frames = SubResource( 6 )
-frame = 2
+frame = 3
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -565,7 +565,7 @@ offset = Vector2( 0, -12 )
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1664, 1577 )
 frames = SubResource( 6 )
-frame = 1
+frame = 2
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -573,45 +573,55 @@ offset = Vector2( 0, -12 )
 
 [node name="blue" type="YSort" parent="buildings"]
 
-[node name="blue_castle" parent="buildings/blue" instance=ExtResource( 11 )]
+[node name="castle" parent="buildings/blue" instance=ExtResource( 11 )]
 material = SubResource( 57 )
 position = Vector2( 160, 1977 )
+subtype = "mid"
 
 [node name="barrack_top" parent="buildings/blue" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 160, 1777 )
+subtype = "top"
 
 [node name="barrack_mid" parent="buildings/blue" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 288, 1841 )
+subtype = "mid"
 
 [node name="barrack_bot" parent="buildings/blue" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 352, 1969 )
+subtype = "bot"
 
 [node name="tower_top_1" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 224, 412 )
+subtype = "top"
 
 [node name="tower_top_2" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 160, 1058 )
+subtype = "top"
 
 [node name="tower_mid_1" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 864, 1116 )
+subtype = "mid"
 
 [node name="tower_mid_2" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 480, 1636 )
+subtype = "mid"
 
 [node name="tower_bot_1" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1696, 1948 )
+subtype = "bot"
 
 [node name="tower_bot_2" parent="buildings/blue" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1056, 1956 )
+subtype = "bot"
 
 [node name="church" parent="buildings/blue" instance=ExtResource( 17 )]
 material = SubResource( 57 )
@@ -647,54 +657,64 @@ team = "neutral"
 
 [node name="red" type="YSort" parent="buildings"]
 
-[node name="red_castle" parent="buildings/red" instance=ExtResource( 11 )]
+[node name="castle" parent="buildings/red" instance=ExtResource( 11 )]
 material = SubResource( 57 )
 position = Vector2( 1952, 169 )
+subtype = "mid"
 team = "red"
 
 [node name="barrack_top" parent="buildings/red" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 1760, 161 )
+subtype = "top"
 team = "red"
 
 [node name="barrack_mid" parent="buildings/red" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 1824, 289 )
+subtype = "mid"
 team = "red"
 
 [node name="barrack_bot" parent="buildings/red" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 1952, 353 )
+subtype = "bot"
 team = "red"
 
 [node name="tower_bot_1" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1888, 1700 )
+subtype = "bot"
 team = "red"
 
 [node name="tower_bot_2" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1952, 1052 )
+subtype = "bot"
 team = "red"
 
 [node name="tower_mid_1" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1248, 996 )
+subtype = "mid"
 team = "red"
 
 [node name="tower_mid_2" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1632, 476 )
+subtype = "mid"
 team = "red"
 
 [node name="tower_top_1" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 416, 164 )
+subtype = "top"
 team = "red"
 
 [node name="tower_top_2" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
 position = Vector2( 1056, 157 )
+subtype = "top"
 team = "red"
 
 [node name="church" parent="buildings/red" instance=ExtResource( 17 )]

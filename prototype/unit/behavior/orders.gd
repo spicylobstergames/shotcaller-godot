@@ -105,7 +105,7 @@ func lanes_cycle(): # called every 8 sec
 	for buildings in [game.player_buildings, game.enemy_buildings]:
 		for building in buildings:
 			var lane = building.agent.get_state("lane")
-			if lane:
+			if lane in player_lanes_orders:
 				var priority = player_lanes_orders[lane].priority.duplicate()
 				building.priority = priority
 
