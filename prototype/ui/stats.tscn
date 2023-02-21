@@ -132,14 +132,15 @@ position = Vector2( 34, 34 )
 scale = Vector2( 2, 2 )
 region_enabled = true
 
-[node name="CenterContainer" type="MarginContainer" parent="panel/portrait"]
-margin_top = 54.0
-margin_right = 72.0
-margin_bottom = 72.0
+[node name="level_container" type="MarginContainer" parent="panel"]
+margin_left = 10.0
+margin_top = 73.0
+margin_right = 86.0
+margin_bottom = 87.0
 
-[node name="exp_bar" type="ProgressBar" parent="panel/portrait/CenterContainer"]
-margin_right = 72.0
-margin_bottom = 18.0
+[node name="exp_bar" type="ProgressBar" parent="panel/level_container"]
+margin_right = 76.0
+margin_bottom = 14.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -149,10 +150,9 @@ custom_styles/bg = SubResource( 6 )
 value = 50.0
 percent_visible = false
 
-[node name="level_label" type="Label" parent="panel/portrait/CenterContainer"]
-margin_top = 2.0
-margin_right = 72.0
-margin_bottom = 15.0
+[node name="level_label" type="Label" parent="panel/level_container"]
+margin_right = 76.0
+margin_bottom = 14.0
 custom_fonts/font = SubResource( 7 )
 text = "level 1"
 align = 1
@@ -289,8 +289,8 @@ margin_bottom = 60.0
 
 [node name="status_effect_display" parent="." instance=ExtResource( 7 )]
 margin_left = 4.0
-margin_top = -99.0
+margin_top = -88.0
 margin_right = 76.0
-margin_bottom = -75.0
+margin_bottom = -64.0
 
 [connection signal="gui_input" from="panel" to="." method="stats_down"]
