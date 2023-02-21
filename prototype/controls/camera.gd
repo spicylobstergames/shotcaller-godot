@@ -129,7 +129,6 @@ func focus_leader(index):
 			game.ui.leaders_icons.buttons_focus(leader)
 
 
-
 func zoom_reset(): 
 	zoom = zoom_default
 	game.ui.minimap.corner_view()

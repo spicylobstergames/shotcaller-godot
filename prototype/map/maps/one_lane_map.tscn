@@ -564,7 +564,7 @@ offset = Vector2( 0, -12 )
 
 [node name="castle" parent="buildings/blue" instance=ExtResource( 11 )]
 material = SubResource( 57 )
-position = Vector2( 102, 1000 )
+position = Vector2( 104, 1000 )
 subtype = "mid"
 
 [node name="barrack" parent="buildings/blue" instance=ExtResource( 10 )]
@@ -589,7 +589,7 @@ position = Vector2( -94, 75 )
 
 [node name="castle" parent="buildings/red" instance=ExtResource( 11 )]
 material = SubResource( 57 )
-position = Vector2( 981, 109 )
+position = Vector2( 980, 110 )
 subtype = "mid"
 team = "red"
 

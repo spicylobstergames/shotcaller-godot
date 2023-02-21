@@ -15,7 +15,8 @@ func update_hpbar():
 		var player_leader = (unit.type == "leader" and unit.team == game.player_team)
 		var leader_icon_hpbar
 		if player_leader and unit.name in game.ui.leaders_icons.buttons_name:
-			leader_icon_hpbar = game.ui.leaders_icons.buttons_name[unit.name].hpbar
+			var leader_icon = game.ui.leaders_icons.buttons_name[unit.name]
+			leader_icon_hpbar = leader_icon.get_node("hpbar")
 		if unit.current_hp <= 0:
 			unit.current_hp = 0
 			hpbar.get_node("green").region_rect.size.x = 0
