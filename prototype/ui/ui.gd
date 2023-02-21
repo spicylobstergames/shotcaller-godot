@@ -21,7 +21,6 @@ var unit_controls_button:Node
 var menu_button:Node
 var inventories:Node
 var active_skills:Node
-var hud:Node
 
 onready var main_menu = $"%main_menu"
 onready var pause_menu = $"%pause_menu"
@@ -45,7 +44,6 @@ func _ready():
 	leaders_icons = get_node("%leaders_icons")
 	scoreboard = get_node("%score_board")
 
-	hud = get_node("hud")
 	inventories = stats.get_node("inventories")
 
 	unit_controls_button = control_panel.get_node("unit_controls_button")

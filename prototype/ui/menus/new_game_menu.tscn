@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/menus/new_game_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/leader_selection/leader_select_item.tscn" type="PackedScene" id=2]
@@ -9,6 +9,10 @@
 [sub_resource type="ButtonGroup" id=9]
 
 [sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 80, 16 )
+
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 166, 16 )
 
 [node name="team_selection_menu" type="Container"]
 pause_mode = 2
@@ -115,7 +119,7 @@ custom_constants/shadow_offset_x = 1
 custom_constants/line_spacing = 0
 custom_constants/shadow_as_outline = 1
 custom_fonts/font = ExtResource( 3 )
-text = "team blue"
+text = "Blue team"
 align = 1
 valign = 1
 
@@ -146,21 +150,6 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 160.0
 margin_bottom = 46.0
-
-[node name="HBoxContainer" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_item" index="0"]
-margin_right = 155.0
-margin_bottom = 41.0
-
-[node name="Label" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_item/HBoxContainer" index="1"]
-margin_right = 150.0
-margin_bottom = 36.0
-
-[node name="VBoxContainer" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_item" index="1"]
-margin_right = 155.0
-
-[node name="Button" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_item/VBoxContainer" index="0"]
-margin_left = 140.0
-margin_right = 150.0
 
 [node name="add_leader_blue" type="Button" parent="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_top = 296.0
@@ -201,7 +190,7 @@ custom_constants/shadow_offset_x = 2
 custom_constants/shadow_offset_y = 1
 custom_constants/shadow_as_outline = 1
 custom_fonts/font = ExtResource( 3 )
-text = "team red"
+text = "Red team"
 align = 1
 valign = 1
 
@@ -251,10 +240,12 @@ size_flags_vertical = 3
 custom_fonts/font = ExtResource( 3 )
 text = "Start game"
 
+[node name="touch_button" type="TouchScreenButton" parent="CenterContainer/ItemList/VBoxContainer/start_game_button"]
+shape = SubResource( 11 )
+
 [connection signal="button_down" from="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue" to="." method="handle_add_leader_blue"]
 [connection signal="pressed" from="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue/touch_button" to="." method="handle_add_leader_blue"]
 [connection signal="button_down" from="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red" to="." method="handle_add_leader_red"]
 [connection signal="pressed" from="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red/touch_button" to="." method="handle_add_leader_red"]
 [connection signal="pressed" from="CenterContainer/ItemList/VBoxContainer/start_game_button" to="." method="_on_start_game_button_pressed"]
-
-[editable path="CenterContainer/ItemList/VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container/leader_select_item"]
+[connection signal="pressed" from="CenterContainer/ItemList/VBoxContainer/start_game_button/touch_button" to="." method="handle_add_leader_blue"]

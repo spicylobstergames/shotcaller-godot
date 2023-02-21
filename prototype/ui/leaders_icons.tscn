@@ -32,3 +32,9 @@ focus_mode = 2
 margin_top = 248.0
 margin_bottom = 308.0
 focus_mode = 2
+
+[connection signal="pressed" from="leader_button" to="." method="button_down"]
+[connection signal="pressed" from="leader_button2" to="." method="button_down"]
+[connection signal="pressed" from="leader_button3" to="." method="button_down"]
+[connection signal="pressed" from="leader_button4" to="." method="button_down"]
+[connection signal="pressed" from="leader_button5" to="." method="button_down"]

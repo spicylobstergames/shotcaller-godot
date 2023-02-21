@@ -46,3 +46,11 @@ func buttons_focus(leader):
 func buttons_unfocus():
 	for all_leader_name in buttons_name: 
 		buttons_name[all_leader_name].pressed = false
+
+
+func button_down():
+	var leader = game.selected_leader
+	if leader:
+		game.camera.global_position = leader.global_position - game.camera.offset
+		game.selection.select_unit(leader)
+		game.ui.leaders_icons.buttons_focus(leader)

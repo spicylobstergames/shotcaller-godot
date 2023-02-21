@@ -3,7 +3,7 @@
 [ext_resource path="res://ui/buttons/leader_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=3]
-[ext_resource path="res://assets/unit/hpbar.png" type="Texture" id=4]
+[ext_resource path="res://hud/hpbar.tscn" type="PackedScene" id=4]
 [ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 
@@ -115,49 +115,17 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -43.0
-margin_top = -13.0
+margin_top = -14.0
 margin_right = -3.0
-margin_bottom = 1.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 9 )
 text = "1"
 align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="hpbar" type="Node2D" parent="."]
-visible = false
-use_parent_material = true
-position = Vector2( 28, 52 )
-scale = Vector2( 2, 1.5 )
-
-[node name="bar" type="Sprite" parent="hpbar"]
-modulate = Color( 0.101961, 0.109804, 0.14902, 1 )
-use_parent_material = true
-texture = ExtResource( 4 )
-region_enabled = true
-region_rect = Rect2( 2, 2, 22, 4 )
-
-[node name="red" type="Sprite" parent="hpbar"]
-modulate = Color( 0.682353, 0.172549, 0.172549, 1 )
-use_parent_material = true
-position = Vector2( -9, 0 )
-texture = ExtResource( 4 )
-centered = false
-offset = Vector2( 0, -1 )
-region_enabled = true
-region_rect = Rect2( 4, 7, 18, 2 )
-
-[node name="green" type="Sprite" parent="hpbar"]
-modulate = Color( 0.0392157, 0.643137, 0.117647, 1 )
-use_parent_material = true
-position = Vector2( -9, 0 )
-texture = ExtResource( 4 )
-centered = false
-offset = Vector2( 0, -1 )
-region_enabled = true
-region_rect = Rect2( 4, 7, 18, 2 )
+[node name="hpbar" parent="." instance=ExtResource( 4 )]
+visible = true
+position = Vector2( 28, 51 )
+scale = Vector2( 2, 2 )
 
 [connection signal="pressed" from="." to="." method="button_down"]
 [connection signal="pressed" from="touch_button" to="." method="button_down"]
