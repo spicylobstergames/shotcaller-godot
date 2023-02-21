@@ -1,15 +1,12 @@
 extends Node
 
-
 class_name Unit
-
 
 var game:Node
 
 # self = game.unit
 
 # SIGNALS
-
 signal unit_reseted
 signal unit_idle_ended
 signal unit_collided

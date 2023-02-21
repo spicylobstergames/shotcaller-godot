@@ -9,6 +9,10 @@ extends Node
 
 onready var game = get_tree().get_current_scene()
 
+#runs logic that is only run once per second
+var one_sec_timer = Timer.new()
+var time:int = 0
+
 enum teams { red, blue }
 
 enum leaders { arthur, bokuden, hongi, joan, lorne, nagato, osman, raja, robin , rollo , sida , takoda , tomyris }
@@ -18,7 +22,6 @@ enum pawns_list { infantry, archer, mounted }
 enum neutrals_list { lumberjack }
 
 var lanes = {}
-
 
 var _state = {}
 
@@ -33,17 +36,6 @@ func set_state(state_name, value):
 
 func clear_state():
 	_state = {}
-
-
-
-#runs logic that is only run once per second
-var one_sec_timer = Timer.new()
-
-func start_one_sec_timer():
-	one_sec_timer.wait_time = 1
-	add_child(one_sec_timer)
-	one_sec_timer.start()
-
 
 
 func apply_cheat_code(code):

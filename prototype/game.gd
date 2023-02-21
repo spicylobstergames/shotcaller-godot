@@ -3,10 +3,10 @@ extends Node
 # self = game
 
 
-signal game_ready
 signal game_started
 signal game_map_loaded
 signal game_resumed
+signal game_one_sec_cycle
 signal game_paused
 signal game_ended
 
@@ -18,11 +18,11 @@ var paused:bool = true
 var victory:bool
 
 
-var time:int = 0
 var player_kills:int = 0
 var player_deaths:int = 0
 var enemy_kills:int = 0
 var enemy_deaths:int = 0
+
 
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
@@ -63,26 +63,12 @@ func _ready():
 #	Engine.time_scale = 2
 #	get_tree().paused = true
 #	randomize()
-
+	
 	if test.unit or test.stress:
 		ui.main_menu.quick_start()
 	else:
 		ui.show_main_menu()
-	
-	emit_signal("game_ready")
-
-
-func units_sec_cycle(): # called every second 
-	if not paused:
-		for unit1 in all_units:
-			var has_regen = (unit1.regen > 0)
-			var is_building = (unit1.type == "building")
-			var is_neutral = (unit1.team == "neutral")
-			if unit1.type == "leader": ui.inventories.update_consumables(unit1)
-			if can_control(unit1): unit1.set_delay()
-			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
-				unit1.set_regen()
-				unit1.set_dot()
+		
 
 
 func start():
@@ -96,15 +82,14 @@ func start():
 
 func map_loaded():
 	if not started:
-		emit_signal("game_started")
 		started = true
+		WorldState.set_state("is_game_active", true)
+		rng.randomize()
 		
 		resume()
-		WorldState.set_state("is_game_active", true)
-		WorldState.start_one_sec_timer()
+		start_one_sec_timer()
 		
-		rng.randomize()
-		WorldState.one_sec_timer.connect("timeout", self, "units_sec_cycle")
+		emit_signal("game_started")
 		
 		if test.unit:
 			test.spawn_unit()
@@ -112,7 +97,7 @@ func map_loaded():
 			test.spawn_random_units()
 		else: 
 			Behavior.spawn.pawns()
-
+			
 			yield(get_tree().create_timer(4), "timeout")
 			
 			Behavior.spawn.leaders()
@@ -143,6 +128,37 @@ func pause():
 	emit_signal("game_paused")
 
 
+func start_one_sec_timer():
+	WorldState.one_sec_timer.wait_time = 1
+	add_child(WorldState.one_sec_timer)
+	WorldState.one_sec_timer.connect("timeout", self, "one_sec_cycle")
+	WorldState.one_sec_timer.start()
+
+
+func one_sec_cycle(): # called every second 
+	if not paused:
+		WorldState.time += 1
+		
+		if not ended:
+			var array = [player_kills, player_deaths, WorldState.time, enemy_kills, enemy_deaths]
+			ui.top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
+			ui.scoreboard.update()
+		else:
+			ui.top_label.hide()
+			
+		for unit1 in all_units:
+			var has_regen = (unit1.regen > 0)
+			var is_building = (unit1.type == "building")
+			var is_neutral = (unit1.team == "neutral")
+			if unit1.type == "leader": ui.inventories.update_consumables(unit1)
+			if can_control(unit1): unit1.set_delay()
+			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
+				unit1.set_regen()
+				unit1.set_dot()
+		
+		emit_signal("game_one_sec_cycle")
+
+
 func _process(delta: float) -> void:
 	camera.process()
 	ui.process()
@@ -161,6 +177,7 @@ func can_control(unit1):
 		and not unit1.dead
 		and (test.unit or unit1.type == "leader")
 	) 
+
 
 
 func end(winner: bool):

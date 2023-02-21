@@ -54,10 +54,12 @@ func _ready():
 	
 	active_skills = stats.get_node("active_skills")
 	
-	WorldState.one_sec_timer.connect("timeout", self, "count_time")
-	
 	hide_all()
 
+
+func map_loaded():
+	game.ui.buttons_update()
+	game.ui.orders_menu.build()
 
 
 func process():
@@ -105,16 +107,6 @@ func hide_menus():
 
 
 
-func count_time():
-	if not get_tree().paused:
-		game.time += 1
-		if game.ended:
-			top_label.text = game.victory + " WINS!"
-		else:
-			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
-			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
-
-
 func hide_all():
 	minimap.visible = false
 	rect_layer.visible = false
@@ -153,8 +145,4 @@ func buttons_update():
 	orders_button.set_pressed(orders_menu.visible)
 	shop_button.set_pressed(shop.visible)
 	controls_button.set_pressed(controls_menu.visible)
-
-func map_loaded():
-	game.ui.buttons_update()
-	game.ui.orders_menu.build()
 

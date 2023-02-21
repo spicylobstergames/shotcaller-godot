@@ -158,9 +158,6 @@ margin_top = 264.0
 margin_right = 271.0
 margin_bottom = 326.0
 
-[node name="update_timer" type="Timer" parent="."]
-autostart = true
-
 [node name="CenterContainer2" type="CenterContainer" parent="."]
 anchor_right = 1.0
 margin_bottom = 18.0
@@ -194,5 +191,4 @@ margin_bottom = 21.0
 custom_fonts/font = SubResource( 4 )
 text = "Restart"
 
-[connection signal="timeout" from="update_timer" to="." method="_on_update_timer_timeout"]
 [connection signal="pressed" from="CenterContainer3/restart_button" to="." method="_on_restart_button_pressed"]

@@ -28,11 +28,6 @@ func build(red_leaders : Array, blue_leaders : Array):
 	update()
 
 
-func _on_update_timer_timeout():
-	$update_timer.start()
-	update()
-
-
 func update():
 	for container in [team_red_container, team_blue_container]:
 		for child in container.get_children():

@@ -113,7 +113,7 @@ func create(template, lane, team, mode, point):
 	game.all_units.append(unit)
 	game.selection.setup_selection(unit)
 	game.collision.setup(unit)
-	Behavior.move.setup_timer(unit)
+	Behavior.move.setup_timer(unit) # collision reaction timer
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
 		if team == game.player_team:
