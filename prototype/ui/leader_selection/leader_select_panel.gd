@@ -26,7 +26,7 @@ var selected_leader = ""
 func _leader_selected(leader):
 	selected_leader = leader[0]
 	$Description.prepare(leader[0])
-	$Description.visible = true
+	$Description.show()
 	
 
 
@@ -37,5 +37,5 @@ func clear_color_remap():
 
 
 func _on_description_confirm():
-	$Description.visible = false
+	$Description.hide()
 	emit_signal("leader_selected", selected_leader)

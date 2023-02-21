@@ -25,14 +25,14 @@ script = ExtResource( 6 )
 [node name="blocks" type="Node2D" parent="maps"]
 script = ExtResource( 1 )
 
+[node name="hud" type="Node2D" parent="."]
+script = ExtResource( 11 )
+
 [node name="ui" parent="." instance=ExtResource( 4 )]
 __meta__ = {
 "_edit_vertical_guides_": [ -366.0 ],
 "_editor_description_": "Prevents ui panning"
 }
-
-[node name="hud" type="Node2D" parent="."]
-script = ExtResource( 11 )
 
 [node name="camera" type="Camera2D" parent="."]
 current = true

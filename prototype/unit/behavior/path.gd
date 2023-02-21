@@ -118,7 +118,7 @@ func draw(unit):
 		should_draw = game.can_control(unit) and (has_path or unit.final_destiny)
 	
 	if should_draw:
-		path_line.visible = true
+		path_line.show()
 		var pool = PoolVector2Array()
 		# start
 		pool.push_back(unit.global_position)
@@ -136,7 +136,7 @@ func draw(unit):
 		path_line.points = pool
 	# todo add line shader
 	# https://www.reddit.com/r/godot/comments/btsrxc/shaders_for_line2d_are_tricky_does_anyone_use_them/
-	else: path_line.visible = false
+	else: path_line.hide()
 
 
 func change_lane(unit, point):

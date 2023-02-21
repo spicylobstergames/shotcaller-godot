@@ -49,14 +49,14 @@ func update():
 		if ((game.can_control(unit) and unit.type == "leader")
 				or unit.display_name == "mine"):
 			gold.text = "%s" % unit.gold
-			gold.visible = true
-			gold_sprite.visible = true
+			gold.show()
+			gold_sprite.show()
 			# xp
 			if unit.type == "leader": 
-				level_label.visible = true
-				exp_bar.visible = true
-				if unit.curr_control_delay > 0: control_delay.visible = true
-				else: control_delay.visible = false
+				level_label.show()
+				exp_bar.show()
+				if unit.curr_control_delay > 0: control_delay.show()
+				else: control_delay.hide()
 				control_delay.text = "%s" % unit.curr_control_delay
 				level_label.text = "Level %d" % unit.level
 				exp_bar.value = unit.experience
@@ -64,11 +64,11 @@ func update():
 				# skill
 				active_skills.show()
 		else:
-			gold.visible = false
-			gold_sprite.visible = false
-			level_label.visible = false
-			control_delay.visible = false
-			exp_bar.visible = false
+			gold.hide()
+			gold_sprite.hide()
+			level_label.hide()
+			control_delay.hide()
+			exp_bar.hide()
 			active_skills.hide()
 		status_effect_display.prepare(unit.status_effects)
 

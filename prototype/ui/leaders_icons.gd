@@ -20,7 +20,7 @@ func build():
 	var buttons_array = self.get_children()
 	for leader in game.player_leaders:
 		var button = buttons_array[index]
-		button.hpbar.visible = true
+		button.hpbar.show()
 		index += 1
 		button.name = leader.name
 		buttons_name[leader.name] = button
@@ -32,10 +32,10 @@ func build():
 		var icon = button.get_node("sprite")
 		if game.player_team == "blue": icon.material = null
 		icon.region_rect.position.x = sprite * 64
-		button.visible = true
+		button.show()
 		button.leader =  leader
 	self.built = true
-	self.visible = true
+	self.show()
 
 
 func buttons_focus(leader):

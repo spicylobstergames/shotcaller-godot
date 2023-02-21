@@ -79,38 +79,38 @@ func show_mid():
 	hide_all()
 	hide_menus()
 	show()
-	get_node("mid").visible = true
+	get_node("mid").show()
 
 
 func show_main_menu():
 	show_mid()
-	main_menu.visible = true
+	main_menu.show()
 
 
 func show_pause_menu():
 	show_mid()
-	pause_menu.visible = true
+	pause_menu.show()
 
 
 
 func hide_menus():
-	get_node("mid").visible = false
-	main_menu.visible = false
-	pause_menu.visible = false
-	new_game_menu.visible = false
+	get_node("mid").hide()
+	main_menu.hide()
+	pause_menu.hide()
+	new_game_menu.hide()
 
 
 
 func hide_all():
-	minimap.visible = false
-	rect_layer.visible = false
+	minimap.hide()
+	rect_layer.hide()
 	for panel in self.get_children():
 		panel.hide()
 
 
 func show_all():
-	minimap.visible = true
-	rect_layer.visible = true
+	minimap.show()
+	rect_layer.show()
 	for panel in self.get_children():
 		panel.show()
 

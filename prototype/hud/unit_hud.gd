@@ -23,7 +23,7 @@ func update_hpbar():
 				leader_icon_hpbar.get_node("green").region_rect.size.x = 0
 		else:
 			var hp = Behavior.modifiers.get_value(unit, "hp")
-			hpbar.visible = true
+			hpbar.show()
 			var scale = float(unit.current_hp) / float(hp)
 			if scale < 0: scale = 0
 			if scale > 1: scale = 1
@@ -31,7 +31,9 @@ func update_hpbar():
 			hpbar.get_node("green").region_rect.size.x = scale * size
 			if leader_icon_hpbar:
 				leader_icon_hpbar.get_node("green").region_rect.size.x = scale * size
-			if unit.type != "leader" and unit.current_hp >= hp:
+			if (unit.type != "leader" 
+				and unit.current_hp >= hp 
+				and not unit == game.selected_unit):
 				hpbar.hide()
 
 # STATE LABEL
@@ -39,11 +41,11 @@ func update_hpbar():
 func hide_states():
 	for unit1 in game.all_units:
 		if unit1 != game.selected_unit:
-			if unit1.hud: unit1.hud.state.visible = false
+			if unit1.hud: unit1.hud.state.hide()
 
 
 func show_states():
 	for unit1 in game.all_units:
 		if unit1.hud and unit1.type == "leader": 
-			unit1.hud.hpbar.visible = true
+			unit1.hud.hpbar.show()
 

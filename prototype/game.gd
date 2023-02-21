@@ -69,7 +69,6 @@ func _ready():
 		ui.main_menu.quick_start()
 	else:
 		ui.show_main_menu()
-		
 
 
 func start():
@@ -114,9 +113,9 @@ func resume():
 	Behavior.spawn.timer.paused = false
 	ui.show_all()
 	ui.hide_menus()
-	ui.minimap.visible = true
-	ui.rect_layer.visible = true
-	ui.scoreboard.visible = false
+	ui.minimap.show()
+	ui.rect_layer.show()
+	ui.scoreboard.hide()
 	emit_signal("game_resumed")
 
 
@@ -178,7 +177,6 @@ func can_control(unit1):
 		and not unit1.dead
 		and (test.unit or unit1.type == "leader")
 	) 
-
 
 
 func end(winner: bool):

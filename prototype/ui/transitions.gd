@@ -16,8 +16,8 @@ func start():
 func on_transition_end(transition = null):
 	# clears transition
 	if transition: transition.queue_free()
-	game.background.visible = false
-	game.ui.main_menu.visible = false
+	game.background.hide()
+	game.ui.main_menu.hide()
 	# prepare to screenshot the map
 	game.ui.minimap.update_map_texture = true
 	

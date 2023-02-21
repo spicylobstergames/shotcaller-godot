@@ -177,8 +177,8 @@ func projectile_start(attacker, target):
 	game.map.add_child(projectile)
 	var projectile_sprite = projectile.get_node("sprites")
 	projectile.global_position = attacker.projectile.global_position
-	projectile.visible = true
-	projectile_sprite.visible = true
+	projectile.show()
+	projectile_sprite.show()
 	# speed
 	var a = attacker.weapon.global_rotation
 	var speed = attacker.projectile_speed

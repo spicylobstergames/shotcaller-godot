@@ -14,12 +14,12 @@ func _ready():
 
 func load_map(map_name):
 	if game.map:
-		game.map.visible = false
+		game.map.hide()
 		game.map.trees.occluder_light_mask = 0
 	current_map = map_name
 	game.map = self[map_name].instance()
 	self.add_child(game.map)
-	game.map.visible = false
+	game.map.hide()
 	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
 	game.ui.minimap.map_loaded()
 

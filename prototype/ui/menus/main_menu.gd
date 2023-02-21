@@ -16,8 +16,8 @@ func quick_start():
 
 
 func show_new_game_menu():
-	game.ui.main_menu.visible = false
-	game.ui.new_game_menu.visible = true
+	game.ui.main_menu.hide()
+	game.ui.new_game_menu.show()
 	
 
 func campaign_start():
