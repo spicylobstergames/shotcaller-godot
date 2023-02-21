@@ -1,18 +1,17 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://ui/team_selection/leader_select_button.gd" type="Script" id=1]
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
-[ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=3]
-[ext_resource path="res://ui/team_selection/leader_portrait.gd" type="Script" id=4]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=5]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://ui/leader_selection/leader_select_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=3]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 11
-font_data = ExtResource( 6 )
+font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxTexture" id=2]
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 105, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -20,7 +19,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=3]
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 70, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -30,7 +29,7 @@ margin_bottom = 3.0
 [sub_resource type="StyleBoxEmpty" id=31]
 
 [sub_resource type="StyleBoxTexture" id=5]
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 145, 37, 33, 33 )
 margin_left = 2.0
 margin_right = 2.0
@@ -38,7 +37,7 @@ margin_top = 2.0
 margin_bottom = 2.0
 
 [sub_resource type="StyleBoxTexture" id=6]
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 0, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -46,7 +45,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 5 )
+shader = ExtResource( 3 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
@@ -57,9 +56,29 @@ shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
 shader_param/new4 = Color( 0.462745, 0.219608, 0.294118, 1 )
 shader_param/tolerance = 0.1
 
+[sub_resource type="GDScript" id=32]
+script/source = "extends Sprite
+
+
+var question_mark = preload(\"res://assets/ui/question_mark.png\")
+var leader_icons = preload(\"res://assets/ui/leaders_icons.png\")
+
+
+func prepare(leader):
+	if leader == \"random\":
+		texture = question_mark
+		hframes = 1
+		frame = 0
+	else:
+		texture = leader_icons
+		var sprite_index = WorldState.leaders[leader]
+		hframes = WorldState.leaders.size()
+		frame = sprite_index
+"
+
 [sub_resource type="DynamicFont" id=7]
 size = 8
-font_data = ExtResource( 6 )
+font_data = ExtResource( 2 )
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 32, 32 )
@@ -83,9 +102,9 @@ script = ExtResource( 1 )
 [node name="sprite" type="Sprite" parent="."]
 material = SubResource( 30 )
 position = Vector2( 48, 48 )
-texture = ExtResource( 3 )
+texture = ExtResource( 5 )
 hframes = 12
-script = ExtResource( 4 )
+script = SubResource( 32 )
 
 [node name="name" type="Label" parent="."]
 margin_top = 2.0

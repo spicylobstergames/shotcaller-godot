@@ -1,13 +1,13 @@
 [gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://ui/team_selection/leader_select_menu_panel.gd" type="Script" id=2]
-[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=3]
-[ext_resource path="res://ui/team_selection/leader_portrait.gd" type="Script" id=4]
-[ext_resource path="res://ui/team_selection/leader_select_menu_button.gd" type="Script" id=5]
-[ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=6]
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=7]
-[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://map/tool/color_replace.tres" type="Shader" id=2]
+[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=5]
+[ext_resource path="res://ui/leader_selection/leader_portrait.gd" type="Script" id=6]
+[ext_resource path="res://ui/leader_selection/leader_select_menu_button.gd" type="Script" id=7]
+[ext_resource path="res://ui/leader_selection/leader_select_item.gd" type="Script" id=8]
 
 [sub_resource type="StyleBoxFlat" id=34]
 content_margin_left = 5.0
@@ -26,7 +26,7 @@ size = 11
 font_data = ExtResource( 1 )
 
 [sub_resource type="StyleBoxTexture" id=2]
-texture = ExtResource( 7 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 105, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -34,7 +34,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=3]
-texture = ExtResource( 7 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 70, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -44,7 +44,7 @@ margin_bottom = 3.0
 [sub_resource type="StyleBoxEmpty" id=31]
 
 [sub_resource type="StyleBoxTexture" id=5]
-texture = ExtResource( 7 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 145, 37, 33, 33 )
 margin_left = 2.0
 margin_right = 2.0
@@ -52,7 +52,7 @@ margin_top = 2.0
 margin_bottom = 2.0
 
 [sub_resource type="StyleBoxTexture" id=6]
-texture = ExtResource( 7 )
+texture = ExtResource( 4 )
 region_rect = Rect2( 0, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -60,7 +60,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="ShaderMaterial" id=30]
-shader = ExtResource( 3 )
+shader = ExtResource( 2 )
 shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
 shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
 shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
@@ -75,7 +75,7 @@ shader_param/tolerance = 0.1
 extents = Vector2( 32, 32 )
 
 [sub_resource type="DynamicFont" id=35]
-font_data = ExtResource( 9 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=32]
 size = 13
@@ -83,7 +83,7 @@ extra_spacing_top = -3
 extra_spacing_bottom = -3
 extra_spacing_char = -3
 extra_spacing_space = -3
-font_data = ExtResource( 9 )
+font_data = ExtResource( 3 )
 
 [sub_resource type="StyleBoxFlat" id=33]
 content_margin_left = 2.0
@@ -108,7 +108,7 @@ anchor_bottom = 1.0
 margin_right = -384.0
 margin_bottom = -550.0
 custom_styles/panel = SubResource( 34 )
-script = ExtResource( 2 )
+script = ExtResource( 8 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 5.0
@@ -130,15 +130,15 @@ custom_styles/focus = SubResource( 31 )
 custom_styles/disabled = SubResource( 5 )
 custom_styles/normal = SubResource( 6 )
 expand_icon = true
-script = ExtResource( 5 )
+script = ExtResource( 7 )
 
 [node name="sprite" type="Sprite" parent="HBoxContainer/button"]
 material = SubResource( 30 )
 position = Vector2( 18, 18 )
 scale = Vector2( 0.45, 0.45 )
-texture = ExtResource( 6 )
+texture = ExtResource( 5 )
 hframes = 12
-script = ExtResource( 4 )
+script = ExtResource( 6 )
 
 [node name="touch_button" type="TouchScreenButton" parent="HBoxContainer/button"]
 position = Vector2( -3, -3 )

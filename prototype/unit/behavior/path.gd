@@ -154,8 +154,8 @@ func teleport(unit, point):
 	game.ui.controls_menu.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
-	game.ui.controls_menu.teleport_button.disabled = false
-	game.ui.controls_menu.teleport_button.pressed = false
+	game.ui.unit_controls_panel.teleport_button.disabled = false
+	game.ui.unit_controls_panel.teleport_button.pressed = false
 	Behavior.move.stop(unit)
 	agent.set_state("is_channeling", true)
 	# todo move to timer

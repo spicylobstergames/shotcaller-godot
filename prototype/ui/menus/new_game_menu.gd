@@ -1,12 +1,12 @@
 extends Container
 
-# self = game.ui.team_selection_menu
+# self = game.ui.new_game_menu
 
 onready var game = get_tree().get_current_scene()
 
 
-onready var leader_select_menu_panel = preload("res://ui/team_selection/leader_select_menu_panel.tscn")
-onready var leader_select_menu = preload("res://ui/team_selection/leader_select_panel.tscn")
+onready var leader_select_item = preload("res://ui/leader_selection/leader_select_item.tscn")
+onready var leader_select_menu = preload("res://ui/leader_selection/leader_select_panel.tscn")
 onready var red_team_container : VBoxContainer = $"%red_team_container"
 onready var blue_team_container : VBoxContainer = $"%blue_team_container"
 onready var frame_container = $CenterContainer
@@ -28,7 +28,7 @@ func handle_add_leader_red():
 
 
 func handle_add_leader(team):
-	var panel_instance = leader_select_menu_panel.instance()
+	var panel_instance = leader_select_item.instance()
 	panel_instance.connect("select_leader", self, "handle_select_leader", [panel_instance])
 	match team:
 		"red":

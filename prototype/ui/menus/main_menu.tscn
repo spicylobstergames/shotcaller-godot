@@ -15,9 +15,9 @@ margin_bottom = 600.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 margin_left = 219.0
-margin_top = 189.0
+margin_top = 173.0
 margin_right = 380.0
-margin_bottom = 411.0
+margin_bottom = 427.0
 custom_constants/separation = 60
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
@@ -37,7 +37,7 @@ valign = 1
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
 margin_top = 98.0
 margin_right = 161.0
-margin_bottom = 222.0
+margin_bottom = 254.0
 
 [node name="quick_start_button" parent="CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
@@ -53,19 +53,27 @@ margin_right = 161.0
 margin_bottom = 60.0
 custom_fonts/font = ExtResource( 4 )
 
-[node name="options_button" parent="CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+[node name="campaign_button" parent="CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
 margin_top = 64.0
 margin_right = 161.0
 margin_bottom = 92.0
 custom_fonts/font = ExtResource( 4 )
-text = "Options"
+text = "Campaign"
 
-[node name="exit_button" parent="CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+[node name="options_button" parent="CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
 margin_top = 96.0
 margin_right = 161.0
 margin_bottom = 124.0
+custom_fonts/font = ExtResource( 4 )
+text = "Options"
+
+[node name="exit_button" parent="CenterContainer/VBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_top = 128.0
+margin_right = 161.0
+margin_bottom = 156.0
 custom_fonts/font = ExtResource( 4 )
 text = "Exit"
 
@@ -78,3 +86,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "version 0.6"
 align = 2
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBoxContainer/quick_start_button" to="." method="quick_start"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBoxContainer/new_game_button" to="." method="show_new_game_menu"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/VBoxContainer/campaign_button" to="." method="campaign_start"]

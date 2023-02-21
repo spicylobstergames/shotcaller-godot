@@ -1,14 +1,12 @@
 extends ItemList
 var game:Node
 
-# self = game.ui.controls_menu
+# self = game.ui.unit_controls_panel
 
-onready var controls_buttons = get_node("scroll_container/container/controls_buttons")
-
-onready var teleport_button = controls_buttons.get_node("teleport_button")
-onready var lane_button = controls_buttons.get_node("lane_button")
-onready var move_button = controls_buttons.get_node("move_button")
-onready var attack_button = controls_buttons.get_node("attack_button")
+onready var teleport_button = get_node("%teleport_button")
+onready var lane_button = get_node("%lane_button")
+onready var move_button = get_node("%move_button")
+onready var attack_button = get_node("%attack_button")
 
 
 func _ready():

@@ -5,13 +5,7 @@ onready var game = get_tree().get_current_scene()
 onready var quick_start_button = $"%quick_start_button"
 onready var exit_button = $"%exit_button"
 onready var new_game_button = $"%new_game_button"
-
-
-func _ready():
-	randomize()
-	quick_start_button.connect("pressed", self, "quick_start")
-	exit_button.connect("pressed", self, "quit")
-	new_game_button.connect("pressed", self, "show_new_game_menu")
+onready var campaign_button = $"%campaign_button"
 
 
 func quick_start():
@@ -21,9 +15,15 @@ func quick_start():
 	game.start()
 
 
+func show_new_game_menu():
+	game.ui.main_menu.visible = false
+	game.ui.new_game_menu.visible = true
+	
+
+func campaign_start():
+	hide()
+	game.start()
+
+
 func quit():
 	game.exit()
-
-
-func show_new_game_menu():
-	game.ui.show_team_selection()

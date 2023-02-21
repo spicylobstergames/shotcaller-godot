@@ -3,7 +3,7 @@ extends Control
 signal leader_selected(leader)
 
 
-onready var leader_select_button = preload("res://ui/team_selection/leader_select_button.tscn")
+onready var leader_select_button = preload("res://ui/leader_selection/leader_select_button.tscn")
 onready var leader_grid = $VBoxContainer/CenterContainer/GridContainer
 
 

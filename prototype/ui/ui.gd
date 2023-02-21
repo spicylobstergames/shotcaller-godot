@@ -5,19 +5,19 @@ var game:Node
 
 var fps:Node
 var top_label:Node
-var buttons:Node
 var stats:Node
 var minimap:Node
 var minimap_container:Node
 var rect_layer: Node
 var shop:Node
-var controls_menu:Node
-var orders_menu:Node
+var control_panel:Node
+var unit_controls_panel:Node
+var orders_panel:Node
 var leaders_icons:Node
 var scoreboard:Node
 var orders_button:Node
 var shop_button:Node
-var controls_button:Node
+var unit_controls_button:Node
 var menu_button:Node
 var inventories:Node
 var active_skills:Node
@@ -25,7 +25,7 @@ var hud:Node
 
 onready var main_menu = $"%main_menu"
 onready var pause_menu = $"%pause_menu"
-onready var team_selection_menu = $"%team_selection_menu"
+onready var new_game_menu = $"%new_game_menu"
 
 var timer:Timer
 
@@ -39,18 +39,18 @@ func _ready():
 	minimap_container = get_node("%minimap_container")
 	minimap = minimap_container.get_node("minimap")
 	rect_layer = minimap_container.get_node("rect_layer")
-	buttons = get_node("%buttons")
-	orders_menu = get_node("%orders_menu")
-	controls_menu = get_node("%controls_menu")
+	orders_panel = get_node("%orders_panel")
+	unit_controls_panel = get_node("%unit_controls_panel")
+	control_panel = get_node("%control_panel")
 	leaders_icons = get_node("%leaders_icons")
 	scoreboard = get_node("%score_board")
 
 	hud = get_node("hud")
 	inventories = stats.get_node("inventories")
 
-	controls_button = buttons.get_node("controls_button")
-	shop_button = buttons.get_node("shop_button")
-	orders_button = buttons.get_node("orders_button")
+	unit_controls_button = control_panel.get_node("unit_controls_button")
+	shop_button = control_panel.get_node("shop_button")
+	orders_button = control_panel.get_node("orders_button")
 	
 	active_skills = stats.get_node("active_skills")
 	
@@ -59,7 +59,7 @@ func _ready():
 
 func map_loaded():
 	game.ui.buttons_update()
-	game.ui.orders_menu.build()
+	game.ui.orders_panel.build()
 
 
 func process():
@@ -94,16 +94,12 @@ func show_pause_menu():
 	pause_menu.visible = true
 
 
-func show_team_selection():
-	show_mid()
-	game.ui.team_selection_menu.visible = true
-
 
 func hide_menus():
 	get_node("mid").visible = false
 	main_menu.visible = false
 	pause_menu.visible = false
-	team_selection_menu.visible = false
+	new_game_menu.visible = false
 
 
 
@@ -125,16 +121,16 @@ func show_select():
 	stats.update()
 	if game.can_control(game.selected_unit):
 		orders_button.disabled = false
-	orders_menu.update()
-	controls_menu.update()
+	orders_panel.update()
+	unit_controls_panel.update()
 
 
 func hide_unselect():
 	stats.update()
-	controls_menu.hide()
-	orders_menu.hide()
-	controls_button.disabled = true
+	orders_panel.hide()
 	orders_button.disabled = true
+	unit_controls_panel.hide()
+	unit_controls_button.disabled = true
 	inventories.hide()
 	shop.update_buttons()
 	buttons_update()
@@ -142,7 +138,7 @@ func hide_unselect():
 
 
 func buttons_update():
-	orders_button.set_pressed(orders_menu.visible)
+	orders_button.set_pressed(orders_panel.visible)
 	shop_button.set_pressed(shop.visible)
-	controls_button.set_pressed(controls_menu.visible)
+	unit_controls_button.set_pressed(unit_controls_panel.visible)
 
