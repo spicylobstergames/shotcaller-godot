@@ -4,17 +4,17 @@ var leader:String = "random"
 var team:String = "red"
 
 signal select_leader()
-# warning-ignore:unused_signal
-signal remove_leader()
 
 func prepare():
-	$HBoxContainer/button.prepare(leader)
-	$HBoxContainer/Label.text = leader
+	var button = $HBoxContainer/leader_button
+	var sprite = button.get_node("sprite")
+	
+	$HBoxContainer/leader_name.text = leader
 
 
 func clear_color_remap():
 	team = "blue"
-	$HBoxContainer/button/sprite.material = null
+	$HBoxContainer/leader_button/sprite.material = null
 
 
 func _select_leader():

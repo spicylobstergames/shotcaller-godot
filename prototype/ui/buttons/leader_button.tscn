@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/leaders_icons.png" type="Texture" id=3]
@@ -60,9 +60,6 @@ shader_param/tolerance = 0.1
 size = 8
 font_data = ExtResource( 6 )
 
-[sub_resource type="RectangleShape2D" id=32]
-extents = Vector2( 30, 30 )
-
 [sub_resource type="DynamicFont" id=9]
 size = 9
 font_data = ExtResource( 6 )
@@ -104,9 +101,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="touch_button" type="TouchScreenButton" parent="."]
-shape = SubResource( 32 )
-
 [node name="hint" type="Label" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
@@ -124,5 +118,3 @@ align = 2
 visible = true
 position = Vector2( 26, 51 )
 scale = Vector2( 2, 2 )
-
-[connection signal="pressed" from="touch_button" to="." method="button_down"]

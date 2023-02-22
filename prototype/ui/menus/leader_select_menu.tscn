@@ -1,0 +1,129 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ui/leader_preview/leader_preview.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/leader_selection/leader_select_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://ui/menus/leader_select_menu.gd" type="Script" id=4]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=5]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 35, 175, 86 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+modulate_color = Color( 1, 1, 1, 0.941176 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 32
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[node name="leader_select_menu" type="ItemList"]
+pause_mode = 2
+anchor_bottom = 1.0
+margin_right = 412.0
+margin_bottom = -250.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 1 )
+script = ExtResource( 4 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 403.0
+margin_bottom = 347.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 396.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 2 )
+text = "Select leader"
+align = 1
+valign = 1
+
+[node name="leaders_container" type="GridContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 36.0
+margin_right = 396.0
+margin_bottom = 332.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+columns = 4
+
+[node name="leader_select_button" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_right = 96.0
+
+[node name="leader_select_button2" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 100.0
+margin_right = 196.0
+
+[node name="leader_select_button3" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 200.0
+margin_right = 296.0
+
+[node name="leader_select_button4" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 300.0
+margin_right = 396.0
+
+[node name="leader_select_button5" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_top = 100.0
+margin_right = 96.0
+margin_bottom = 196.0
+
+[node name="leader_select_button6" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 100.0
+margin_top = 100.0
+margin_right = 196.0
+margin_bottom = 196.0
+
+[node name="leader_select_button7" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 200.0
+margin_top = 100.0
+margin_right = 296.0
+margin_bottom = 196.0
+
+[node name="leader_select_button8" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 300.0
+margin_top = 100.0
+margin_right = 396.0
+margin_bottom = 196.0
+
+[node name="leader_select_button9" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_top = 200.0
+margin_right = 96.0
+margin_bottom = 296.0
+
+[node name="leader_select_button10" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 100.0
+margin_top = 200.0
+margin_right = 196.0
+margin_bottom = 296.0
+
+[node name="leader_select_button11" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 200.0
+margin_top = 200.0
+margin_right = 296.0
+margin_bottom = 296.0
+
+[node name="leader_select_button12" parent="VBoxContainer/leaders_container" instance=ExtResource( 2 )]
+margin_left = 300.0
+margin_top = 200.0
+margin_right = 396.0
+margin_bottom = 296.0
+
+[node name="leader_preview" parent="." instance=ExtResource( 1 )]
+visible = false
+
+[node name="PanelContainer" parent="leader_preview" index="0"]
+margin_left = 191.0
+margin_top = 156.0
+margin_right = 205.0
+margin_bottom = 170.0
+
+[connection signal="pressed" from="leader_preview/PanelContainer/VBoxContainer/Button" to="." method="_on_description_confirm"]
+
+[editable path="leader_preview"]

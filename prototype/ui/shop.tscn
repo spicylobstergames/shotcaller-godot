@@ -22,13 +22,252 @@ font_data = ExtResource( 4 )
 size = 13
 font_data = ExtResource( 4 )
 
-[node name="shop" type="Panel"]
+[node name="shop" type="ItemList"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -208.0
 margin_top = 16.0
 margin_bottom = 378.0
-custom_styles/panel = SubResource( 1 )
+custom_styles/bg = SubResource( 1 )
+items = {
+"axe": {
+"attributes": {
+"damage": 25
+},
+"delivery_time": 20,
+"name": "Axe",
+"price": 250,
+"sprite": 0,
+"tooltip": "Used to chop wood, now used for war
+Damage +25",
+"type": "equip"
+},
+"boots": {
+"attributes": {
+"speed": 15
+},
+"delivery_time": 15,
+"name": "Boots",
+"price": 300,
+"sprite": 5,
+"tooltip": "Protect your feet from the ground
+Speed +15",
+"type": "equip"
+},
+"bow": {
+"attributes": {
+"attack_range": 0.4,
+"attack_speed": 0.25,
+"damage": 20
+},
+"delivery_time": 30,
+"name": "Elven
+Bow",
+"price": 500,
+"sprite": 2,
+"tooltip": "
+Damage +20, Attack speed +25% Range +40%",
+"type": "equip"
+},
+"eye": {
+"attributes": {
+"speed": 10,
+"vision": 100
+},
+"delivery_time": 30,
+"name": "Oligan's
+Eye",
+"price": 350,
+"sprite": 11,
+"tooltip": "The Eye has helped heroes navigate the battlefield for centuries
+Vision +100 Speed +10",
+"type": "equip"
+},
+"feather": {
+"attributes": {
+"regen": 2,
+"speed": 5
+},
+"delivery_time": 15,
+"name": "Magic
+Feather",
+"passive": "res://items/passives/feather.tscn",
+"price": 350,
+"sprite": 10,
+"tooltip": "A feather imbued with magical force
+Regen +2 Speed +15",
+"type": "equip"
+},
+"great_helm": {
+"attributes": {
+"defense": 5,
+"hp": 200
+},
+"delivery_time": 20,
+"name": "Great
+Helm",
+"price": 500,
+"sprite": 4,
+"tooltip": "Adds 150 HP Defense +5",
+"type": "equip"
+},
+"helmet": {
+"attributes": {
+"hp": 150
+},
+"delivery_time": 20,
+"name": "Helmet",
+"price": 300,
+"sprite": 3,
+"tooltip": "Adds 150 HP",
+"type": "equip"
+},
+"holy_shield": {
+"attributes": {
+"hp": 150,
+"vision": 50
+},
+"delivery_time": 30,
+"name": "Holy
+Shield",
+"passive": "res://items/passives/holy_shield.tscn",
+"price": 450,
+"sprite": 7,
+"tooltip": "Magically reinforced, stronger than steel
+Health +200 Vision +50",
+"type": "equip"
+},
+"large_hp": {
+"attributes": {
+"current_hp": 250
+},
+"delivery_time": 20,
+"name": "Large
+Health",
+"price": 125,
+"sprite": 14,
+"tooltip": "Restore 250 HP",
+"type": "consumable"
+},
+"large_poison_bomb": {
+"attributes": {
+"dot": 25,
+"speed": -30
+},
+"delivery_time": 50,
+"duration": 5,
+"name": "Large
+Poison",
+"price": 175,
+"sprite": 17,
+"tooltip": "Slows down and deals 25 damage per second for 5 seconds",
+"type": "throwable"
+},
+"medium_hp": {
+"attributes": {
+"current_hp": 150
+},
+"delivery_time": 15,
+"name": "Medium
+Health",
+"price": 75,
+"sprite": 13,
+"tooltip": "Restore 150 HP",
+"type": "consumable"
+},
+"medium_poison_bomb": {
+"attributes": {
+"dot": 15,
+"speed": -20
+},
+"delivery_time": 30,
+"duration": 5,
+"name": "Medium
+Poison",
+"price": 100,
+"sprite": 16,
+"tooltip": "Slows down and deals 15 damage per second for 5 seconds",
+"type": "throwable"
+},
+"scale": {
+"attributes": {
+"defense": 4,
+"hp": 300,
+"speed": -10
+},
+"delivery_time": 30,
+"name": "Dragon
+scale",
+"price": 500,
+"sprite": 8,
+"tooltip": "No dragons were harmed in the making of this armor
+Health +300 Defense +4 Speed -10",
+"type": "equip"
+},
+"shield": {
+"attributes": {
+"hp": 100
+},
+"delivery_time": 30,
+"name": "Shield",
+"price": 200,
+"sprite": 6,
+"tooltip": "Wooden shield
+Health +50",
+"type": "equip"
+},
+"small_hp": {
+"attributes": {
+"current_hp": 100
+},
+"delivery_time": 10,
+"name": "Small
+Health",
+"price": 50,
+"sprite": 12,
+"tooltip": "Restore 100 HP",
+"type": "consumable"
+},
+"small_poison_bomb": {
+"attributes": {
+"dot": 10,
+"speed": -10
+},
+"delivery_time": 15,
+"duration": 5,
+"name": "Small
+Poison",
+"price": 75,
+"sprite": 15,
+"tooltip": "Slows down and deals 10 damage per second for 5 seconds",
+"type": "throwable"
+},
+"sword": {
+"attributes": {
+"attack_speed": 0.5,
+"damage": 50
+},
+"delivery_time": 30,
+"name": "Sword",
+"price": 500,
+"sprite": 1,
+"tooltip": "Forged of pure high-carbon steel
+Damage +50 Attack speed +50%",
+"type": "equip"
+},
+"torch": {
+"attributes": {
+"vision": 50
+},
+"delivery_time": 15,
+"name": "Torch",
+"price": 150,
+"sprite": 9,
+"tooltip": "This torch will never burn out
+Vision +50",
+"type": "equip"
+}
+}
 script = ExtResource( 2 )
 
 [node name="scroll_container" type="ScrollContainer" parent="."]
@@ -79,7 +318,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -95,7 +334,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button2" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button2" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -111,7 +350,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button3" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button3" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -127,7 +366,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button4" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button4" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -145,7 +384,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button5" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button5" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -163,7 +402,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button6" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button6" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -179,7 +418,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button7" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button7" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -197,7 +436,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button8" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button8" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -215,7 +454,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button9" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button9" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -231,7 +470,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button10" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button10" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -249,7 +488,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button11" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button11" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -267,7 +506,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button12" index="3"]
+[node name="sell_button" parent="scroll_container/container/equip_items/item_button12" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -294,7 +533,7 @@ columns = 3
 [node name="item_button" parent="scroll_container/container/consumable_items" instance=ExtResource( 3 )]
 focus_mode = 2
 
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button" index="3"]
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -305,7 +544,7 @@ margin_left = 52.0
 margin_right = 100.0
 focus_mode = 2
 
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button4" index="3"]
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button4" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -316,7 +555,7 @@ margin_left = 104.0
 margin_right = 152.0
 focus_mode = 2
 
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button2" index="3"]
+[node name="sell_button" parent="scroll_container/container/consumable_items/item_button2" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -348,7 +587,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/throwable_items/item_button3" index="3"]
+[node name="sell_button" parent="scroll_container/container/throwable_items/item_button3" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -364,7 +603,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/throwable_items/item_button5" index="3"]
+[node name="sell_button" parent="scroll_container/container/throwable_items/item_button5" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -380,7 +619,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sell_button" parent="scroll_container/container/throwable_items/item_button6" index="3"]
+[node name="sell_button" parent="scroll_container/container/throwable_items/item_button6" index="2"]
 visible = false
 __meta__ = {
 "_edit_use_anchors_": false

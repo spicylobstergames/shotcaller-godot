@@ -3,7 +3,7 @@
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/panels/unit_controls_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=3]
-[ext_resource path="res://hud/hud.gd" type="Script" id=4]
+[ext_resource path="res://ui/menus/leader_select_menu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/minimap_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://ui/panels/orders_panel.tscn" type="PackedScene" id=7]
@@ -70,35 +70,41 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 
-[node name="mid" type="Control" parent="."]
+[node name="mid" type="CenterContainer" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+margin_left = -300.0
+margin_top = -300.0
+margin_right = 300.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 600, 600 )
 
 [node name="main_menu" parent="mid" instance=ExtResource( 11 )]
 unique_name_in_owner = true
-margin_left = -300.0
-margin_top = -300.0
-margin_right = -300.0
-margin_bottom = -300.0
+margin_left = 205.0
+margin_top = 159.0
+margin_right = 394.0
+margin_bottom = 440.0
 
 [node name="pause_menu" parent="mid" instance=ExtResource( 13 )]
 pause_mode = 2
 unique_name_in_owner = true
 visible = false
-margin_left = -300.0
-margin_top = -300.0
-margin_right = -300.0
-margin_bottom = -300.0
 
 [node name="new_game_menu" parent="mid" instance=ExtResource( 14 )]
 unique_name_in_owner = true
 visible = false
-margin_left = -300.0
-margin_top = -300.0
-margin_right = -300.0
-margin_bottom = -300.0
+
+[node name="leader_select_menu" parent="mid" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+visible = false
+anchor_bottom = 0.0
+margin_left = 300.0
+margin_top = 300.0
+margin_right = 300.0
+margin_bottom = 300.0
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
@@ -158,9 +164,6 @@ visible = false
 
 [node name="control_panel" parent="bot_right" instance=ExtResource( 8 )]
 unique_name_in_owner = true
-
-[node name="hud" type="Control" parent="."]
-script = ExtResource( 4 )
 
 [node name="score_board" parent="." instance=ExtResource( 18 )]
 pause_mode = 2
