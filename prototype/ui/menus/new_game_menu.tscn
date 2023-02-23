@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/menus/new_game_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/leader_selection/leader_select_item.tscn" type="PackedScene" id=2]
@@ -24,6 +24,40 @@ font_data = ExtResource( 4 )
 [sub_resource type="ButtonGroup" id=10]
 
 [sub_resource type="ButtonGroup" id=9]
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 5 )
+region_rect = Rect2( 105, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id=3]
+texture = ExtResource( 5 )
+region_rect = Rect2( 70, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
+
+[sub_resource type="StyleBoxEmpty" id=31]
+
+[sub_resource type="StyleBoxTexture" id=5]
+texture = ExtResource( 5 )
+region_rect = Rect2( 145, 37, 33, 33 )
+margin_left = 2.0
+margin_right = 2.0
+margin_top = 2.0
+margin_bottom = 2.0
+
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 0, 35, 35 )
+margin_left = 3.0
+margin_right = 3.0
+margin_top = 3.0
+margin_bottom = 3.0
 
 [node name="new_game_menu" type="ItemList"]
 margin_left = 100.0
@@ -54,13 +88,13 @@ text = "Team selection"
 align = 1
 valign = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 36.0
 margin_right = 332.0
 margin_bottom = 68.0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 margin_left = 21.0
 margin_top = 4.0
 margin_right = 127.0
@@ -68,7 +102,7 @@ margin_bottom = 28.0
 custom_fonts/font = ExtResource( 3 )
 text = "Select map:"
 
-[node name="3_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2"]
+[node name="3_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 margin_left = 131.0
 margin_right = 219.0
@@ -78,7 +112,7 @@ pressed = true
 group = SubResource( 10 )
 text = "3-lane"
 
-[node name="1_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2"]
+[node name="1_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 margin_left = 223.0
 margin_right = 311.0
@@ -92,25 +126,25 @@ margin_top = 72.0
 margin_right = 332.0
 margin_bottom = 76.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 80.0
 margin_right = 332.0
 margin_bottom = 402.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
 margin_right = 160.0
 margin_bottom = 322.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
 margin_right = 160.0
 margin_bottom = 24.0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer"]
 margin_left = 1.0
 margin_right = 131.0
 margin_bottom = 24.0
@@ -121,7 +155,7 @@ text = "Blue team"
 align = 1
 valign = 1
 
-[node name="blue_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="blue_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 margin_left = 135.0
 margin_right = 159.0
@@ -129,13 +163,13 @@ margin_bottom = 24.0
 pressed = true
 group = SubResource( 9 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
 margin_top = 28.0
 margin_right = 160.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 0, 260 )
 
-[node name="blue_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer"]
+[node name="blue_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
 margin_right = 160.0
 margin_bottom = 260.0
@@ -143,39 +177,44 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 2
 
-[node name="leader_select_item" parent="VBoxContainer/HBoxContainer/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
+[node name="leader_select_item" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 160.0
 margin_bottom = 70.0
 
-[node name="add_leader_blue" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="add_leader_blue" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
 margin_top = 292.0
 margin_right = 160.0
 margin_bottom = 322.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 3 )
-text = "Add character"
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 31 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+text = "Add leader"
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer2"]
 margin_left = 164.0
 margin_right = 168.0
 margin_bottom = 322.0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
 margin_left = 172.0
 margin_right = 332.0
 margin_bottom = 322.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
 margin_right = 160.0
 margin_bottom = 24.0
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
 margin_left = 1.0
 margin_right = 131.0
 margin_bottom = 24.0
@@ -187,20 +226,20 @@ text = "Red team"
 align = 1
 valign = 1
 
-[node name="red_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="red_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 margin_left = 135.0
 margin_right = 159.0
 margin_bottom = 24.0
 group = SubResource( 9 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
 margin_top = 28.0
 margin_right = 160.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 0, 260 )
 
-[node name="red_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer"]
+[node name="red_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer"]
 unique_name_in_owner = true
 margin_right = 160.0
 margin_bottom = 260.0
@@ -208,19 +247,24 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 2
 
-[node name="leader_select_item" parent="VBoxContainer/HBoxContainer/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
+[node name="leader_select_item" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 160.0
 margin_bottom = 70.0
 
-[node name="add_leader_red" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="add_leader_red" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
 margin_top = 292.0
 margin_right = 160.0
 margin_bottom = 322.0
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 3 )
-text = "Add character"
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 31 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+text = "Add leader"
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
 margin_top = 406.0
@@ -234,8 +278,13 @@ margin_right = 332.0
 margin_bottom = 461.0
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 31 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
 text = "Start game"
 
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/add_leader_blue" to="." method="handle_add_leader" binds= [ "blue" ]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer2/add_leader_red" to="." method="handle_add_leader" binds= [ "red" ]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer2/VBoxContainer/add_leader_blue" to="." method="choose_leader" binds= [ "blue" ]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer2/VBoxContainer2/add_leader_red" to="." method="choose_leader" binds= [ "red" ]]
 [connection signal="pressed" from="VBoxContainer/start_game_button" to="." method="_on_start_game_button_pressed"]

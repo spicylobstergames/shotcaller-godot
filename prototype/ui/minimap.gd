@@ -110,7 +110,7 @@ func get_map_texture():
 	map_sprite.scale = game.camera.zoom
 	# reset cam
 	game.camera.zoom_reset()
-	# reset units and ui back again
+	# reset units and turn ui back on again
 	game.ui.show_all()
 	self.show()
 	game.ui.rect_layer.show()

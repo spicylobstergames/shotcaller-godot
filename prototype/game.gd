@@ -73,10 +73,12 @@ func _ready():
 
 func start():
 	maps.load_map(maps.current_map)
+	
 	if test.unit or test.stress:
 		yield(get_tree(), "idle_frame")
 		transitions.on_transition_end()
 	else:
+		ui.hide_version()
 		transitions.start()
 
 
@@ -99,9 +101,7 @@ func map_loaded():
 			Behavior.spawn.pawns()
 			
 			yield(get_tree().create_timer(4), "timeout")
-			
 			Behavior.spawn.leaders()
-			
 	
 	emit_signal("game_map_loaded")
 
@@ -113,8 +113,8 @@ func resume():
 	Behavior.spawn.timer.paused = false
 	ui.show_all()
 	ui.hide_menus()
-	ui.minimap.show()
-	ui.rect_layer.show()
+	ui.show_minimap()
+	ui.control_panel.show()
 	ui.scoreboard.hide()
 	emit_signal("game_resumed")
 

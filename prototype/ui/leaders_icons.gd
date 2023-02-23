@@ -20,18 +20,13 @@ func build():
 	var buttons_array = self.get_children()
 	for leader in game.player_leaders:
 		var button = buttons_array[index]
-		button.get_node("hpbar").show()
-		index += 1
-		button.name = leader.name
 		buttons_name[leader.name] = button
-		var name_label = button.get_node("name")
-		name_label.text = leader.display_name
-		var hint_label = button.get_node("hint")
-		hint_label.text = str(index)
-		var sprite = WorldState.leaders[leader.display_name]
-		var icon = button.get_node("sprite")
-		if game.player_team == "blue": icon.material = null
-		icon.region_rect.position.x = sprite * 64
+		button.hpbar.show()
+		button.name = leader.name
+		index += 1
+		button.hint.text = str(index)
+		if game.player_team == "blue": button.sprite.material = null
+		button.prepare(leader.display_name)
 		button.show()
 	self.built = true
 	self.show()

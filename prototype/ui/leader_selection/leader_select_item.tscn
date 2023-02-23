@@ -58,8 +58,10 @@ margin_right = 211.0
 margin_bottom = 65.0
 
 [node name="leader_button" parent="HBoxContainer" instance=ExtResource( 9 )]
+unique_name_in_owner = true
 
 [node name="leader_name" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
 margin_left = 64.0
 margin_right = 206.0
 margin_bottom = 60.0
@@ -69,6 +71,7 @@ custom_fonts/font = SubResource( 35 )
 text = "LEADER NAME"
 align = 1
 valign = 1
+uppercase = true
 
 [node name="VBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 5.0
@@ -93,4 +96,5 @@ custom_styles/disabled = SubResource( 33 )
 custom_styles/normal = SubResource( 33 )
 text = "X"
 
+[connection signal="pressed" from="HBoxContainer/leader_button" to="." method="change_leader_pressed"]
 [connection signal="pressed" from="VBoxContainer/delete_button" to="." method="_on_x_button_pressed"]

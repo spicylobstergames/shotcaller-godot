@@ -116,9 +116,6 @@ custom_fonts/font = SubResource( 3 )
 text = "+1"
 align = 2
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="portrait" type="Control" parent="panel"]
 margin_left = 12.0
@@ -152,7 +149,7 @@ percent_visible = false
 
 [node name="level_label" type="Label" parent="panel/level_container"]
 margin_right = 76.0
-margin_bottom = 14.0
+margin_bottom = 13.0
 custom_fonts/font = SubResource( 7 )
 text = "level 1"
 align = 1

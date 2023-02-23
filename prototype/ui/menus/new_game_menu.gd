@@ -4,9 +4,8 @@ extends Control
 
 onready var game = get_tree().get_current_scene()
 
-
 onready var leader_select_item = preload("res://ui/leader_selection/leader_select_item.tscn")
-onready var leader_select_menu = preload("res://ui/menus/leader_select_menu.tscn")
+
 onready var red_team_container : VBoxContainer = $"%red_team_container"
 onready var blue_team_container : VBoxContainer = $"%blue_team_container"
 
@@ -19,28 +18,24 @@ func _ready():
 			child.queue_free()
 
 
-func handle_add_leader(team):
-	var panel_instance = leader_select_item.instance()
-	panel_instance.connect("select_leader", self, "handle_select_leader", [panel_instance])
+func choose_leader(team):
+	var select_menu = game.ui.leader_select_menu
+	select_menu.color_remap(team)
+	hide()
+	select_menu.show()
+
+
+func add_leader(leader, team):
+	show()
+	var leader_item = leader_select_item.instance()
 	match team:
 		"red":
-			red_team_container.add_child(panel_instance)
+			red_team_container.add_child(leader_item)
 		"blue":
-			panel_instance.clear_color_remap()
-			blue_team_container.add_child(panel_instance)
-	panel_instance.prepare()
-
-
-func handle_select_leader(panel_instance):
-	var menu = game.ui.leader_select_menu
-	if panel_instance.team == "blue": menu.clear_color_remap()
-	menu.connect("leader_selected", self, "handle_leader_selected", [panel_instance, menu])
-
-
-func handle_leader_selected(leader, leader_select_panel_instance, menu):
-	menu.queue_free()
-	leader_select_panel_instance.leader = leader
-	leader_select_panel_instance.prepare()
+			blue_team_container.add_child(leader_item)
+	
+	leader_item.prepare(leader, team)
+	leader_item.connect("change_leader", self, "choose_leader", [team])
 
 
 func get_leaders(team):
@@ -53,7 +48,6 @@ func get_leaders(team):
 			for child in blue_team_container.get_children():
 				res.append(child.leader)
 	return res
-
 
 
 func get_selected_map():
@@ -89,3 +83,5 @@ func _on_start_game_button_pressed():
 		game.enemy_choose_leaders = blue_team_leaders
 	
 	game.start()
+
+
