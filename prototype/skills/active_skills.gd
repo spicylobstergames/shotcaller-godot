@@ -270,7 +270,7 @@ func arthur_special(effects, parameters, visualize):
 		var polygon = generate_arc_poly(parameters.angle, parameters.radius, leader.global_position, point_target, parameters.color)
 		var targets = enemies_in_polygon(leader, parameters.radius, polygon)
 		skill_animation_sprite.look_at(point_target)
-		skill_animation_sprite.visible = true
+		skill_animation_sprite.show()
 		animations.play("arthur_special_cleave")
 		# damage targets
 		if not targets.empty():
@@ -283,7 +283,7 @@ func arthur_special(effects, parameters, visualize):
 func arthur_special_end():
 	var leader = null
 	var skill_animation_sprite = leader.get_node("sprites/cleave")
-	skill_animation_sprite.visible = false
+	skill_animation_sprite.hide()
 
 
 

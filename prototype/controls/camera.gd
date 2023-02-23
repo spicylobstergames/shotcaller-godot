@@ -129,17 +129,16 @@ func focus_leader(index):
 			game.ui.leaders_icons.buttons_focus(leader)
 
 
-
 func zoom_reset(): 
 	zoom = zoom_default
 	game.ui.minimap.corner_view()
-	game.ui.hud.hide_hpbars()
+	game.hud.hide_hpbars()
 	
 	
 func full_zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	game.ui.minimap.corner_view()
-	game.ui.hud.show_hpbars()
+	game.hud.show_hpbars()
 	
 	
 func full_zoom_out(): 

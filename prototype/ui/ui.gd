@@ -5,29 +5,28 @@ var game:Node
 
 var fps:Node
 var top_label:Node
-var buttons:Node
 var stats:Node
 var minimap:Node
 var minimap_container:Node
 var rect_layer: Node
 var shop:Node
-var controls_menu:Node
-var orders_menu:Node
+var control_panel:Node
+var unit_controls_panel:Node
+var orders_panel:Node
 var leaders_icons:Node
 var scoreboard:Node
 var orders_button:Node
 var shop_button:Node
-var controls_button:Node
-var menu_button:Node
+var unit_controls_button:Node
 var inventories:Node
 var active_skills:Node
-var hud:Node
+var version_node:Node
 
 onready var main_menu = $"%main_menu"
 onready var pause_menu = $"%pause_menu"
-onready var team_selection_menu = $"%team_selection_menu"
+onready var new_game_menu = $"%new_game_menu"
+onready var leader_select_menu = $"%leader_select_menu"
 
-var timer:Timer
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -35,29 +34,94 @@ func _ready():
 	fps = get_node("%fps")
 	top_label = get_node("%main_label")
 	shop = get_node("%shop")
-	stats = get_node("%stats")
+	orders_panel = get_node("%orders_panel")
+	unit_controls_panel = get_node("%unit_controls_panel")
+	leaders_icons = get_node("%leaders_icons")
+	scoreboard = get_node("%score_board")
+	version_node = get_node("%version")
+	# minimap
 	minimap_container = get_node("%minimap_container")
 	minimap = minimap_container.get_node("minimap")
 	rect_layer = minimap_container.get_node("rect_layer")
-	buttons = get_node("%buttons")
-	orders_menu = get_node("%orders_menu")
-	controls_menu = get_node("%controls_menu")
-	leaders_icons = get_node("%leaders_icons")
-	scoreboard = get_node("%score_board")
-
-	hud = get_node("hud")
+	# stats
+	stats = get_node("%stats")
 	inventories = stats.get_node("inventories")
-
-	controls_button = buttons.get_node("controls_button")
-	shop_button = buttons.get_node("shop_button")
-	orders_button = buttons.get_node("orders_button")
-	
 	active_skills = stats.get_node("active_skills")
+	# controls
+	control_panel = get_node("%control_panel")
+	unit_controls_button = control_panel.get_node("unit_controls_button")
+	shop_button = control_panel.get_node("shop_button")
+	orders_button = control_panel.get_node("orders_button")
 	
-	WorldState.one_sec_timer.connect("timeout", self, "count_time")
+	leader_select_menu.connect("leader_selected", new_game_menu, "add_leader")
 	
 	hide_all()
 
+
+func show_mid():
+	hide_all()
+	hide_menus()
+	show()
+	get_node("mid").show()
+
+
+func show_main_menu():
+	show_mid()
+	show_version()
+	main_menu.show()
+
+
+func show_version():
+	var parent = version_node.get_parent()
+	for panel in parent.get_children():
+		panel.hide()
+	parent.show()
+	version_node.show()
+
+
+func hide_version():
+	version_node.hide()
+
+
+func show_pause_menu():
+	show_mid()
+	pause_menu.show()
+
+
+func hide_menus():
+	main_menu.hide()
+	pause_menu.hide()
+	new_game_menu.hide()
+	leader_select_menu.hide()
+	get_node("mid").hide()
+
+
+func hide_all():
+	hide_minimap()
+	hide_version()
+	for panel in self.get_children():
+		panel.hide()
+
+
+func show_all():
+	show_minimap()
+	for panel in self.get_children():
+		panel.show()
+
+
+func show_minimap():
+	minimap.show()
+	rect_layer.show()
+
+
+func hide_minimap():
+	minimap.hide()
+	rect_layer.hide()
+
+
+func map_loaded():
+	game.ui.buttons_update()
+	game.ui.orders_panel.build()
 
 
 func process():
@@ -75,86 +139,27 @@ func process():
 			minimap.follow_camera()
 
 
-func show_mid():
-	hide_all()
-	hide_menus()
-	show()
-	get_node("mid").visible = true
-
-
-func show_main_menu():
-	show_mid()
-	main_menu.visible = true
-
-
-func show_pause_menu():
-	show_mid()
-	pause_menu.visible = true
-
-
-func show_team_selection():
-	show_mid()
-	game.ui.team_selection_menu.visible = true
-
-
-func hide_menus():
-	get_node("mid").visible = false
-	main_menu.visible = false
-	pause_menu.visible = false
-	team_selection_menu.visible = false
-
-
-
-func count_time():
-	if not get_tree().paused:
-		game.time += 1
-		if game.ended:
-			top_label.text = game.victory + " WINS!"
-		else:
-			var array = [game.player_kills, game.player_deaths, game.time, game.enemy_kills, game.enemy_deaths]
-			top_label.text = "player: %s/%s - time: %s - enemy: %s/%s" % array
-
-
-func hide_all():
-	minimap.visible = false
-	rect_layer.visible = false
-	for panel in self.get_children():
-		panel.hide()
-
-
-func show_all():
-	minimap.visible = true
-	rect_layer.visible = true
-	for panel in self.get_children():
-		panel.show()
-
-
 func show_select():
 	stats.update()
 	if game.can_control(game.selected_unit):
 		orders_button.disabled = false
-	orders_menu.update()
-	controls_menu.update()
+	orders_panel.update()
+	unit_controls_panel.update()
 
 
 func hide_unselect():
 	stats.update()
-	controls_menu.hide()
-	orders_menu.hide()
-	controls_button.disabled = true
+	orders_panel.hide()
 	orders_button.disabled = true
+	unit_controls_panel.hide()
+	unit_controls_button.disabled = true
 	inventories.hide()
 	shop.update_buttons()
 	buttons_update()
 
 
-
 func buttons_update():
-	orders_button.set_pressed(orders_menu.visible)
+	orders_button.set_pressed(orders_panel.visible)
 	shop_button.set_pressed(shop.visible)
-	controls_button.set_pressed(controls_menu.visible)
-
-func map_loaded():
-	game.ui.buttons_update()
-	game.ui.orders_menu.build()
+	unit_controls_button.set_pressed(unit_controls_panel.visible)
 

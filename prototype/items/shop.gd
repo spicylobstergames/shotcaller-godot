@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 var game:Node
 
 # self = game.ui.shop

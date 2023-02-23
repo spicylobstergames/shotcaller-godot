@@ -14,12 +14,12 @@ func _ready():
 
 func load_map(map_name):
 	if game.map:
-		game.map.visible = false
+		game.map.hide()
 		game.map.trees.occluder_light_mask = 0
 	current_map = map_name
 	game.map = self[map_name].instance()
 	self.add_child(game.map)
-	game.map.visible = false
+	game.map.hide()
 	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
 	game.ui.minimap.map_loaded()
 
@@ -41,7 +41,7 @@ func setup_leaders(red_leaders, blue_leaders):
 	game.ui.scoreboard.build(red_leaders, blue_leaders)
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
-	game.ui.orders_menu.build_leaders()
+	game.ui.orders_panel.build_leaders()
 	game.ui.active_skills.build_leaders()
 
 
@@ -98,11 +98,11 @@ func setup_buildings():
 	# orders
 	for neutral in game.map.neutrals:
 		if game.map.has_node("buildings/blue/" + neutral):
-			game.ui.orders_menu[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
+			game.ui.orders_panel[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
 		if game.map.has_node("buildings/red/" + neutral):
-			game.ui.orders_menu[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+			game.ui.orders_panel[neutral].append( game.map.get_node("buildings/red/" + neutral) )
 	
-	game.ui.orders_menu.update()
+	game.ui.orders_panel.update()
 
 
 func create(template, lane, team, mode, point):
@@ -113,7 +113,7 @@ func create(template, lane, team, mode, point):
 	game.all_units.append(unit)
 	game.selection.setup_selection(unit)
 	game.collision.setup(unit)
-	Behavior.move.setup_timer(unit)
+	Behavior.move.setup_timer(unit) # collision reaction timer
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
 		if team == game.player_team:

@@ -12,7 +12,7 @@ func _ready():
 		for child in container.get_children():
 			container.remove_child(child)
 			child.queue_free()
-	visible = false
+	hide()
 
 
 func build(red_leaders : Array, blue_leaders : Array):
@@ -25,11 +25,6 @@ func build(red_leaders : Array, blue_leaders : Array):
 		team_blue_container.add_child(entry)
 		entry.initialize_blue_leader(blue_leaders[blue_leader_index])
 	is_ready = true
-	update()
-
-
-func _on_update_timer_timeout():
-	$update_timer.start()
 	update()
 
 
@@ -47,11 +42,11 @@ func _unhandled_input(event):
 
 func handle_game_end(winner):
 	is_ready = false
-	visible = true
+	show()
 	$update_timer.stop()
 	$"%result_label".text = "Victory" if winner else "DEFEAT"
-	$"%result_label".visible = true
-	$"%restart_button".visible = true
+	$"%result_label".show()
+	$"%restart_button".show()
 
 
 func _on_restart_button_pressed():

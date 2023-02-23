@@ -18,7 +18,7 @@ func _ready():
 
 
 func setup(new_item):
-	sell_button.visible = false
+	sell_button.hide()
 	
 	if new_item == null:
 		self.item = null
@@ -28,8 +28,8 @@ func setup(new_item):
 		self.icon = null
 		self.hint_tooltip = "Buy items in the Blacksmith"
 		self.disabled = true
-		name_label.visible = false
-		price_label.visible = false
+		name_label.hide()
+		price_label.hide()
 
 	else:
 		self.item = new_item

@@ -118,7 +118,7 @@ func draw(unit):
 		should_draw = game.can_control(unit) and (has_path or unit.final_destiny)
 	
 	if should_draw:
-		path_line.visible = true
+		path_line.show()
 		var pool = PoolVector2Array()
 		# start
 		pool.push_back(unit.global_position)
@@ -136,7 +136,7 @@ func draw(unit):
 		path_line.points = pool
 	# todo add line shader
 	# https://www.reddit.com/r/godot/comments/btsrxc/shaders_for_line2d_are_tricky_does_anyone_use_them/
-	else: path_line.visible = false
+	else: path_line.hide()
 
 
 func change_lane(unit, point):
@@ -154,8 +154,8 @@ func teleport(unit, point):
 	game.ui.controls_menu.teleport_button.disabled = true
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
-	game.ui.controls_menu.teleport_button.disabled = false
-	game.ui.controls_menu.teleport_button.pressed = false
+	game.ui.unit_controls_panel.teleport_button.disabled = false
+	game.ui.unit_controls_panel.teleport_button.pressed = false
 	Behavior.move.stop(unit)
 	agent.set_state("is_channeling", true)
 	# todo move to timer

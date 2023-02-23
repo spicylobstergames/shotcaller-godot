@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=2]
 
-[ext_resource path="res://unit/hud.tscn" type="PackedScene" id=1]
+[ext_resource path="res://hud/unit_hud.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=2]
 [ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture" id=3]
 [ext_resource path="res://goap/Agent.gd" type="Script" id=4]
@@ -140,6 +140,7 @@ shape = SubResource( 19 )
 disabled = true
 
 [node name="light" type="Light2D" parent="."]
+visible = false
 scale = Vector2( 6.25, 6.25 )
 texture = ExtResource( 16 )
 mode = 2

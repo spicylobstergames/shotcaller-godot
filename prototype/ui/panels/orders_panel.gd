@@ -1,7 +1,7 @@
 extends ItemList
 var game:Node
 
-# self = game.ui.orders_menu
+# self = game.ui.orders_panel
 
 var cleared = false
 

@@ -24,12 +24,12 @@ var attacked_timer = 2
 
 
 func _ready():
-	_unit = get_parent()
 	_goals = []
-	
 	if goals_list.size() > 0:
 		for goal in goals_list:
 			_goals.push_back(Goap.get_goal(goal))
+			
+	_unit = get_parent()
 	
 	_unit.connect("unit_reseted", self, "reset")
 	_unit.connect("unit_collided", self, "on_collision")
@@ -40,6 +40,7 @@ func _ready():
 	_unit.connect("unit_attack_ended", self, "on_attack_end")
 	_unit.connect("unit_animation_ended", self, "on_animation_end")
 	_unit.connect("unit_was_attacked", self, "was_attacked")
+	
 	
 	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
 

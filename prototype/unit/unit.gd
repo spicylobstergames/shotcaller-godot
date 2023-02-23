@@ -1,15 +1,12 @@
-extends Node
-
+extends Node2D
 
 class_name Unit
-
 
 var game:Node
 
 # self = game.unit
 
 # SIGNALS
-
 signal unit_reseted
 signal unit_idle_ended
 signal unit_collided
@@ -173,13 +170,13 @@ func experience_needed():
 func reset_unit():
 	var lane = self.agent.get_state("lane")
 	if self.type == "leader":
-		self.hud.state.visible = true
-		self.hud.hpbar.visible = true
+		self.hud.state.show()
+		self.hud.hpbar.show()
 
 	self.hud.state.text = self.display_name
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
-	self.visible = true
+	self.show()
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
 	self.assist_candidates = {}
@@ -205,8 +202,8 @@ func setup_team(new_team):
 	# fog setup
 	if game.map.fog_of_war and self.has_node("light"):
 		var light = get_node("light")
-		light.visible = false
-		if new_team == game.player_team: light.visible = true
+		light.hide()
+		if new_team == game.player_team: light.show()
 		var s = self.vision / 16
 		light.scale = Vector2(s,s)
 		sprites.use_parent_material = true
@@ -494,7 +491,7 @@ func die():  # hp <= 0
 
 func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
-	self.visible = false
+	self.hide()
 	self.state = "dead"
 	self.get_node("animations").current_animation = "[stop]"
 

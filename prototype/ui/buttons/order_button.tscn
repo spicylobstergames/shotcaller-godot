@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ui/buttons/order_button.gd" type="Script" id=2]
@@ -58,9 +58,6 @@ margin = Rect2( 2, 2, 0, 0 )
 size = 8
 font_data = ExtResource( 1 )
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 32 )
-
 [sub_resource type="DynamicFont" id=22]
 size = 9
 font_data = ExtResource( 1 )
@@ -93,9 +90,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="touch_button" type="TouchScreenButton" parent="."]
-shape = SubResource( 1 )
-
 [node name="hint" type="Label" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
@@ -114,4 +108,3 @@ __meta__ = {
 }
 
 [connection signal="pressed" from="." to="." method="button_down"]
-[connection signal="pressed" from="touch_button" to="." method="button_down"]

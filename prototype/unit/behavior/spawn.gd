@@ -147,7 +147,7 @@ func spawn_unit(unit, lane, team, mode, point):
 	unit.agent.set_state("lane", lane)
 	unit.setup_team(team)
 	unit.dead = false
-	unit.visible = true
+	unit.show()
 	if mode == "point_random":
 		point = game.utils.offset_point_random(point, 25)
 	if mode == "random_map":
@@ -207,7 +207,7 @@ func lumberjack_hire(lumbermill, team):
 		lumbermill.agent.set_state("lumberjack", unit)
 	
 	unit.setup_team(team)
-	unit.visible = true
+	unit.show()
 	
 	# charge player
 	var leaders = game.player_leaders

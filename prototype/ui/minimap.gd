@@ -79,9 +79,9 @@ func get_map_texture():
 	game.camera.zoom =  Vector2(zoom_out, zoom_out)
 	# hides units and ui
 	game.ui.hide_all()
-	self.visible = false
-	game.map.visible = true
-	game.ui.rect_layer.visible = false
+	hide()
+	game.map.show()
+	game.ui.rect_layer.hide()
 	game.maps.buildings_visibility(false)
 	yield(get_tree(), "idle_frame")
 	# take snapshop
@@ -110,10 +110,10 @@ func get_map_texture():
 	map_sprite.scale = game.camera.zoom
 	# reset cam
 	game.camera.zoom_reset()
-	# reset units and ui back again
+	# reset units and turn ui back on again
 	game.ui.show_all()
-	self.visible = true
-	game.ui.rect_layer.visible = true
+	self.show()
+	game.ui.rect_layer.show()
 	game.maps.buildings_visibility(true)
 	# turn off and callback
 	update_map_texture = false
@@ -121,24 +121,24 @@ func get_map_texture():
 
 
 func corner_view():
-	map_sprite.visible = false
-	#map_tiles.visible = true
+	map_sprite.hide()
+	#map_tiles.show()
 	for tile in map_tiles.get_children(): tile.show()
 	yield(get_tree(), "idle_frame")
-	self.visible = true
-	game.ui.rect_layer.visible = true
-	game.ui.get_node("bot_left").visible = true
+	show()
+	game.ui.rect_layer.show()
+	game.ui.get_node("bot_left").show()
 
 
 func hide_view():
-	map_sprite.visible = true
-	#map_tiles.visible = false
+	map_sprite.show()
+	#map_tiles.hide()
 	for tile in map_tiles.get_children(): tile.hide()
 	# avoid input messing up
 	yield(get_tree(), "idle_frame")
-	self.visible = false
-	game.ui.rect_layer.visible = false
-	game.ui.get_node("bot_left").visible = false
+	self.hide()
+	game.ui.rect_layer.hide()
+	game.ui.get_node("bot_left").hide()
 
 
 func setup_symbol(unit):
@@ -167,18 +167,18 @@ func setup_leader_icon(unit, symbol):
 		if unit.team == "red": 
 			icon = symbol.get_node("icon_red")
 			icon.scale.x = -1 * abs(icon.scale.x)
-		icon.visible = true;
+		icon.show();
 		icon.material = symbol.material
 		icon.light_mask = symbol.light_mask
 
 
 func copy_symbol(unit, symbol):
 	var sym = symbol.duplicate()
-	sym.visible = true
+	sym.show()
 	sym.scale *= 0.25
 	if unit.team == game.player_team:
 		var light = get_node("light_template").duplicate()
-		light.visible = true
+		light.show()
 		var s = float(unit.vision) * 2 / (game.map.size)
 		light.scale = Vector2(s,s)
 		sym.add_child(light)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/items/items.png" type="Texture" id=2]
@@ -49,9 +49,6 @@ font_data = ExtResource( 1 )
 size = 10
 font_data = ExtResource( 1 )
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 24, 24 )
-
 [sub_resource type="DynamicFont" id=22]
 size = 10
 font_data = ExtResource( 1 )
@@ -63,9 +60,6 @@ margin_left = 3.0
 margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
-
-[sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 24, 18 )
 
 [node name="item_button" type="Button"]
 margin_right = 48.0
@@ -106,9 +100,6 @@ custom_fonts/font = SubResource( 29 )
 text = "100"
 align = 2
 
-[node name="item_touch_button" type="TouchScreenButton" parent="."]
-shape = SubResource( 1 )
-
 [node name="sell_button" type="Button" parent="."]
 anchor_top = 1.0
 anchor_right = 1.0
@@ -124,10 +115,5 @@ custom_styles/disabled = SubResource( 26 )
 custom_styles/normal = SubResource( 27 )
 text = "sell"
 
-[node name="item_touch_button" type="TouchScreenButton" parent="sell_button"]
-shape = SubResource( 5 )
-
 [connection signal="pressed" from="." to="." method="on_button_down"]
-[connection signal="pressed" from="item_touch_button" to="." method="on_button_down"]
 [connection signal="pressed" from="sell_button" to="." method="on_sell_button_down"]
-[connection signal="pressed" from="sell_button/item_touch_button" to="." method="on_sell_button_down"]

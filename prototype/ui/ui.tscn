@@ -1,25 +1,31 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://ui/ui.gd" type="Script" id=1]
-[ext_resource path="res://ui/menus/controls_menu.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/panels/unit_controls_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ui/hud.gd" type="Script" id=4]
+[ext_resource path="res://ui/menus/leader_select_menu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://ui/minimap_container.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
-[ext_resource path="res://ui/menus/orders_menu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ui/menus/ui_buttons.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/panels/orders_panel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/panels/control_panel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://ui/stats.tscn" type="PackedScene" id=9]
-[ext_resource path="res://ui/panels/dialog.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/panels/dialog_panel.tscn" type="PackedScene" id=10]
 [ext_resource path="res://ui/menus/main_menu.tscn" type="PackedScene" id=11]
 [ext_resource path="res://ui/leaders_icons.tscn" type="PackedScene" id=12]
 [ext_resource path="res://ui/menus/pause_menu.tscn" type="PackedScene" id=13]
-[ext_resource path="res://ui/team_selection/team_selection_menu.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/menus/new_game_menu.tscn" type="PackedScene" id=14]
+[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://ui/scoreboard/scoreboard.tscn" type="PackedScene" id=18]
 [ext_resource path="res://ui/cheat_console.gd" type="Script" id=19]
 
 [sub_resource type="DynamicFont" id=17]
 size = 11
 font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=18]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 15 )
 
 [node name="ui" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -63,6 +69,245 @@ anchor_right = 1.0
 
 [node name="shop" parent="top_right" instance=ExtResource( 3 )]
 unique_name_in_owner = true
+items = {
+"axe": {
+"attributes": {
+"damage": 25
+},
+"delivery_time": 20,
+"name": "Axe",
+"price": 250,
+"sprite": 0,
+"tooltip": "Used to chop wood, now used for war
+Damage +25",
+"type": "equip"
+},
+"boots": {
+"attributes": {
+"speed": 15
+},
+"delivery_time": 15,
+"name": "Boots",
+"price": 300,
+"sprite": 5,
+"tooltip": "Protect your feet from the ground
+Speed +15",
+"type": "equip"
+},
+"bow": {
+"attributes": {
+"attack_range": 0.4,
+"attack_speed": 0.25,
+"damage": 20
+},
+"delivery_time": 30,
+"name": "Elven
+Bow",
+"price": 500,
+"sprite": 2,
+"tooltip": "
+Damage +20, Attack speed +25% Range +40%",
+"type": "equip"
+},
+"eye": {
+"attributes": {
+"speed": 10,
+"vision": 100
+},
+"delivery_time": 30,
+"name": "Oligan's
+Eye",
+"price": 350,
+"sprite": 11,
+"tooltip": "The Eye has helped heroes navigate the battlefield for centuries
+Vision +100 Speed +10",
+"type": "equip"
+},
+"feather": {
+"attributes": {
+"regen": 2,
+"speed": 5
+},
+"delivery_time": 15,
+"name": "Magic
+Feather",
+"passive": "res://items/passives/feather.tscn",
+"price": 350,
+"sprite": 10,
+"tooltip": "A feather imbued with magical force
+Regen +2 Speed +15",
+"type": "equip"
+},
+"great_helm": {
+"attributes": {
+"defense": 5,
+"hp": 200
+},
+"delivery_time": 20,
+"name": "Great
+Helm",
+"price": 500,
+"sprite": 4,
+"tooltip": "Adds 150 HP Defense +5",
+"type": "equip"
+},
+"helmet": {
+"attributes": {
+"hp": 150
+},
+"delivery_time": 20,
+"name": "Helmet",
+"price": 300,
+"sprite": 3,
+"tooltip": "Adds 150 HP",
+"type": "equip"
+},
+"holy_shield": {
+"attributes": {
+"hp": 150,
+"vision": 50
+},
+"delivery_time": 30,
+"name": "Holy
+Shield",
+"passive": "res://items/passives/holy_shield.tscn",
+"price": 450,
+"sprite": 7,
+"tooltip": "Magically reinforced, stronger than steel
+Health +200 Vision +50",
+"type": "equip"
+},
+"large_hp": {
+"attributes": {
+"current_hp": 250
+},
+"delivery_time": 20,
+"name": "Large
+Health",
+"price": 125,
+"sprite": 14,
+"tooltip": "Restore 250 HP",
+"type": "consumable"
+},
+"large_poison_bomb": {
+"attributes": {
+"dot": 25,
+"speed": -30
+},
+"delivery_time": 50,
+"duration": 5,
+"name": "Large
+Poison",
+"price": 175,
+"sprite": 17,
+"tooltip": "Slows down and deals 25 damage per second for 5 seconds",
+"type": "throwable"
+},
+"medium_hp": {
+"attributes": {
+"current_hp": 150
+},
+"delivery_time": 15,
+"name": "Medium
+Health",
+"price": 75,
+"sprite": 13,
+"tooltip": "Restore 150 HP",
+"type": "consumable"
+},
+"medium_poison_bomb": {
+"attributes": {
+"dot": 15,
+"speed": -20
+},
+"delivery_time": 30,
+"duration": 5,
+"name": "Medium
+Poison",
+"price": 100,
+"sprite": 16,
+"tooltip": "Slows down and deals 15 damage per second for 5 seconds",
+"type": "throwable"
+},
+"scale": {
+"attributes": {
+"defense": 4,
+"hp": 300,
+"speed": -10
+},
+"delivery_time": 30,
+"name": "Dragon
+scale",
+"price": 500,
+"sprite": 8,
+"tooltip": "No dragons were harmed in the making of this armor
+Health +300 Defense +4 Speed -10",
+"type": "equip"
+},
+"shield": {
+"attributes": {
+"hp": 100
+},
+"delivery_time": 30,
+"name": "Shield",
+"price": 200,
+"sprite": 6,
+"tooltip": "Wooden shield
+Health +50",
+"type": "equip"
+},
+"small_hp": {
+"attributes": {
+"current_hp": 100
+},
+"delivery_time": 10,
+"name": "Small
+Health",
+"price": 50,
+"sprite": 12,
+"tooltip": "Restore 100 HP",
+"type": "consumable"
+},
+"small_poison_bomb": {
+"attributes": {
+"dot": 10,
+"speed": -10
+},
+"delivery_time": 15,
+"duration": 5,
+"name": "Small
+Poison",
+"price": 75,
+"sprite": 15,
+"tooltip": "Slows down and deals 10 damage per second for 5 seconds",
+"type": "throwable"
+},
+"sword": {
+"attributes": {
+"attack_speed": 0.5,
+"damage": 50
+},
+"delivery_time": 30,
+"name": "Sword",
+"price": 500,
+"sprite": 1,
+"tooltip": "Forged of pure high-carbon steel
+Damage +50 Attack speed +50%",
+"type": "equip"
+},
+"torch": {
+"attributes": {
+"vision": 50
+},
+"delivery_time": 15,
+"name": "Torch",
+"price": 150,
+"sprite": 9,
+"tooltip": "This torch will never burn out
+Vision +50",
+"type": "equip"
+}
+}
 
 [node name="mid_right" type="Control" parent="."]
 anchor_left = 1.0
@@ -70,39 +315,40 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 
-[node name="mid" type="Control" parent="."]
+[node name="mid" type="CenterContainer" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-
-[node name="menu" type="CenterContainer" parent="mid"]
-margin_left = -600.0
-margin_top = -600.0
-
-[node name="main_menu" parent="mid/menu" instance=ExtResource( 11 )]
-unique_name_in_owner = true
-margin_left = 300.0
-margin_top = 300.0
+margin_left = -300.0
+margin_top = -300.0
 margin_right = 300.0
 margin_bottom = 300.0
+rect_min_size = Vector2( 600, 600 )
 
-[node name="pause_menu" parent="mid/menu" instance=ExtResource( 13 )]
+[node name="main_menu" parent="mid" instance=ExtResource( 11 )]
+unique_name_in_owner = true
+margin_left = 205.0
+margin_top = 159.0
+margin_right = 394.0
+margin_bottom = 440.0
+
+[node name="pause_menu" parent="mid" instance=ExtResource( 13 )]
 pause_mode = 2
 unique_name_in_owner = true
 visible = false
-margin_left = 300.0
-margin_top = 300.0
-margin_right = 300.0
-margin_bottom = 300.0
 
-[node name="team_selection_menu" parent="mid/menu" instance=ExtResource( 14 )]
+[node name="new_game_menu" parent="mid" instance=ExtResource( 14 )]
 unique_name_in_owner = true
 visible = false
-margin_left = 300.0
-margin_top = 300.0
-margin_right = 300.0
-margin_bottom = 300.0
+
+[node name="leader_select_menu" parent="mid" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+visible = false
+margin_left = 164.0
+margin_top = 145.0
+margin_right = 436.0
+margin_bottom = 455.0
 
 [node name="mid_left" type="Control" parent="."]
 anchor_top = 0.5
@@ -111,7 +357,7 @@ anchor_bottom = 0.5
 [node name="leaders_icons" parent="mid_left" instance=ExtResource( 12 )]
 unique_name_in_owner = true
 
-[node name="CheatConsole" type="TextEdit" parent="mid_left"]
+[node name="cheat_console" type="TextEdit" parent="mid_left"]
 pause_mode = 2
 visible = false
 margin_left = 3.0
@@ -139,6 +385,7 @@ anchor_bottom = 1.0
 unique_name_in_owner = true
 
 [node name="dialog" parent="bot_mid" instance=ExtResource( 10 )]
+unique_name_in_owner = true
 visible = false
 margin_left = -215.0
 margin_top = -340.0
@@ -150,20 +397,28 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
 
-[node name="orders_menu" parent="bot_right" instance=ExtResource( 7 )]
+[node name="orders_panel" parent="bot_right" instance=ExtResource( 7 )]
 unique_name_in_owner = true
 visible = false
 
-[node name="controls_menu" parent="bot_right" instance=ExtResource( 2 )]
+[node name="unit_controls_panel" parent="bot_right" instance=ExtResource( 2 )]
 unique_name_in_owner = true
 visible = false
 
-[node name="buttons" parent="bot_right" instance=ExtResource( 8 )]
+[node name="control_panel" parent="bot_right" instance=ExtResource( 8 )]
 unique_name_in_owner = true
 
-[node name="hud" type="Control" parent="."]
-script = ExtResource( 4 )
+[node name="version" type="Label" parent="bot_right"]
+unique_name_in_owner = true
+margin_left = -72.0
+margin_top = -17.0
+margin_right = -5.0
+margin_bottom = -1.0
+custom_fonts/font = SubResource( 18 )
+text = "version 0.6"
 
 [node name="score_board" parent="." instance=ExtResource( 18 )]
 pause_mode = 2

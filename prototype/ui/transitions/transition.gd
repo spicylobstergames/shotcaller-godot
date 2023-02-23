@@ -14,7 +14,7 @@ func _ready():
 
 
 func start_transition(backwards = false):
-	visible = true
+	show()
 	var start = 0.0 if not backwards else 2.0
 	var end = 2.0 if not backwards else 0.0
 	tween.interpolate_property(texture_rect.get_material(), 

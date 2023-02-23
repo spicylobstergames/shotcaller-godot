@@ -1,12 +1,12 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://controls/controls_menu.gd" type="Script" id=2]
-[ext_resource path="res://ui/buttons/order_button.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=4]
+[ext_resource path="res://ui/buttons/order_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/ui/design.png" type="Texture" id=3]
+[ext_resource path="res://ui/panels/unit_controls_panel.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxTexture" id=30]
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 0, 35, 175, 86 )
 margin_left = 5.0
 margin_right = 5.0
@@ -16,10 +16,10 @@ modulate_color = Color( 1, 1, 1, 0.941176 )
 
 [sub_resource type="DynamicFont" id=31]
 size = 13
-font_data = ExtResource( 1 )
+font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxTexture" id=32]
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 108, 0, 35, 35 )
 margin_left = 3.0
 margin_right = 3.0
@@ -27,7 +27,7 @@ margin_top = 3.0
 margin_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=33]
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 region_rect = Rect2( 145, 37, 33, 33 )
 margin_left = 2.0
 margin_right = 2.0
@@ -44,7 +44,7 @@ margin = Rect2( 2, 2, 0, 0 )
 
 [sub_resource type="DynamicFont" id=35]
 size = 8
-font_data = ExtResource( 1 )
+font_data = ExtResource( 2 )
 
 [sub_resource type="AtlasTexture" id=36]
 atlas = SubResource( 29 )
@@ -61,12 +61,12 @@ atlas = SubResource( 29 )
 region = Rect2( 336, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
-[node name="controls_menu" type="ItemList"]
+[node name="unit_controls_menu" type="ItemList"]
 margin_left = -286.0
 margin_top = -264.0
 margin_bottom = -154.0
 custom_styles/bg = SubResource( 30 )
-script = ExtResource( 2 )
+script = ExtResource( 4 )
 
 [node name="scroll_container" type="ScrollContainer" parent="."]
 margin_left = 16.0
@@ -91,26 +91,28 @@ margin_bottom = 16.0
 custom_fonts/font = SubResource( 31 )
 text = "controls"
 
-[node name="controls_buttons" type="HBoxContainer" parent="scroll_container/container"]
+[node name="buttons_container" type="HBoxContainer" parent="scroll_container/container"]
 margin_top = 20.0
 margin_right = 252.0
 margin_bottom = 80.0
 
-[node name="teleport_button" parent="scroll_container/container/controls_buttons" instance=ExtResource( 3 )]
+[node name="teleport_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
+unique_name_in_owner = true
 focus_mode = 2
 custom_styles/pressed = SubResource( 32 )
 custom_styles/disabled = SubResource( 33 )
 icon = SubResource( 34 )
 script = null
 
-[node name="name" parent="scroll_container/container/controls_buttons/teleport_button" index="0"]
+[node name="name" parent="scroll_container/container/buttons_container/teleport_button" index="0"]
 custom_fonts/font = SubResource( 35 )
 text = "teleport"
 
-[node name="hint" parent="scroll_container/container/controls_buttons/teleport_button" index="2"]
+[node name="hint" parent="scroll_container/container/buttons_container/teleport_button" index="2"]
 text = "q"
 
-[node name="lane_button" parent="scroll_container/container/controls_buttons" instance=ExtResource( 3 )]
+[node name="lane_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
+unique_name_in_owner = true
 margin_left = 64.0
 margin_right = 124.0
 focus_mode = 2
@@ -119,13 +121,14 @@ custom_styles/disabled = SubResource( 33 )
 icon = SubResource( 36 )
 script = null
 
-[node name="name" parent="scroll_container/container/controls_buttons/lane_button" index="0"]
+[node name="name" parent="scroll_container/container/buttons_container/lane_button" index="0"]
 text = "lane"
 
-[node name="hint" parent="scroll_container/container/controls_buttons/lane_button" index="2"]
+[node name="hint" parent="scroll_container/container/buttons_container/lane_button" index="2"]
 text = "w"
 
-[node name="move_button" parent="scroll_container/container/controls_buttons" instance=ExtResource( 3 )]
+[node name="move_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
+unique_name_in_owner = true
 margin_left = 128.0
 margin_right = 188.0
 focus_mode = 2
@@ -134,13 +137,14 @@ custom_styles/disabled = SubResource( 33 )
 icon = SubResource( 37 )
 script = null
 
-[node name="name" parent="scroll_container/container/controls_buttons/move_button" index="0"]
+[node name="name" parent="scroll_container/container/buttons_container/move_button" index="0"]
 text = "move"
 
-[node name="hint" parent="scroll_container/container/controls_buttons/move_button" index="2"]
+[node name="hint" parent="scroll_container/container/buttons_container/move_button" index="2"]
 text = "e"
 
-[node name="attack_button" parent="scroll_container/container/controls_buttons" instance=ExtResource( 3 )]
+[node name="attack_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
+unique_name_in_owner = true
 margin_left = 192.0
 margin_right = 252.0
 focus_mode = 2
@@ -149,18 +153,18 @@ custom_styles/disabled = SubResource( 33 )
 icon = SubResource( 38 )
 script = null
 
-[node name="name" parent="scroll_container/container/controls_buttons/attack_button" index="0"]
+[node name="name" parent="scroll_container/container/buttons_container/attack_button" index="0"]
 text = "attack"
 
-[node name="hint" parent="scroll_container/container/controls_buttons/attack_button" index="2"]
+[node name="hint" parent="scroll_container/container/buttons_container/attack_button" index="2"]
 text = "r"
 
-[connection signal="pressed" from="scroll_container/container/controls_buttons/teleport_button" to="." method="teleport_button_down"]
-[connection signal="pressed" from="scroll_container/container/controls_buttons/lane_button" to="." method="lane_button_down"]
-[connection signal="pressed" from="scroll_container/container/controls_buttons/move_button" to="." method="move_button_down"]
-[connection signal="pressed" from="scroll_container/container/controls_buttons/attack_button" to="." method="attack_button_down"]
+[connection signal="pressed" from="scroll_container/container/buttons_container/teleport_button" to="." method="teleport_button_down"]
+[connection signal="pressed" from="scroll_container/container/buttons_container/lane_button" to="." method="lane_button_down"]
+[connection signal="pressed" from="scroll_container/container/buttons_container/move_button" to="." method="move_button_down"]
+[connection signal="pressed" from="scroll_container/container/buttons_container/attack_button" to="." method="attack_button_down"]
 
-[editable path="scroll_container/container/controls_buttons/teleport_button"]
-[editable path="scroll_container/container/controls_buttons/lane_button"]
-[editable path="scroll_container/container/controls_buttons/move_button"]
-[editable path="scroll_container/container/controls_buttons/attack_button"]
+[editable path="scroll_container/container/buttons_container/teleport_button"]
+[editable path="scroll_container/container/buttons_container/lane_button"]
+[editable path="scroll_container/container/buttons_container/move_button"]
+[editable path="scroll_container/container/buttons_container/attack_button"]

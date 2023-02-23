@@ -25,7 +25,7 @@ func enter(agent):
 
 
 func on_arrive(agent):
-	agent.get_unit().visible = false
+	agent.get_unit().hide()
 	agent.set_state("is_running", false)
 	agent.set_state("is_hiding", true)
 	agent.set_state("hiding_counter", 0)
@@ -53,7 +53,7 @@ func perform(agent, delta) -> bool:
 
 
 func exit(agent):
-	agent.get_unit().visible = true
+	agent.get_unit().show()
 	agent.set_state("is_hiding", false)
 	agent.set_state("is_threatened", false)
 	agent.set_state("hiding_counter", 0)
