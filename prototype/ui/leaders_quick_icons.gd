@@ -15,6 +15,7 @@ func _ready():
 	for placeholder in get_children():
 		placeholder.hide()
 
+
 func build():
 	var index = 0
 	var buttons_array = self.get_children()
@@ -26,7 +27,7 @@ func build():
 		index += 1
 		button.hint.text = str(index)
 		if game.player_team == "blue": button.sprite.material = null
-		button.prepare(leader.display_name)
+		button.prepare(leader.display_name, game.player_team)
 		button.show()
 	self.built = true
 	self.show()

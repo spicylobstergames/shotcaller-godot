@@ -85,3 +85,6 @@ func _on_start_game_button_pressed():
 	game.start()
 
 
+func _on_back_button_pressed():
+	hide()
+	game.ui.show_main_menu()

@@ -51,9 +51,11 @@ func setup(new_item):
 
 func on_button_down():
 	var leader = game.selected_leader
-	
 	if self.shop_item:
 		# BUY ITEM
+		
+		# sell is only enabled if leader has enough gold
+		# no need to check here
 		leader.gold -= price_after_discount
 		
 		game.ui.inventories.add_delivery(leader, item)

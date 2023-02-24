@@ -13,6 +13,7 @@ var hint:Node
 var question_mark = preload("res://assets/ui/question_mark.png")
 var leader_icons = preload("res://assets/ui/leaders_icons.png")
 
+var red_material
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -21,6 +22,7 @@ func _ready():
 	hint = get_node("hint")
 	hpbar = get_node("hpbar")
 
+	red_material = sprite.material
 
 func prepare(new_leader_name, new_team = "red"):
 	# leader sprite
@@ -34,12 +36,12 @@ func prepare(new_leader_name, new_team = "red"):
 		var sprites_size = sprite.region_rect.size.x
 		sprite.region_rect.position.x = sprite_index * sprites_size
 	# button color
-	team = new_team
-	if team == "blue":
-		sprite.material = null
+	color_remap(new_team)
 
 
 func color_remap(new_team):
 	team = new_team
 	if team == "blue":
 		sprite.material = null
+	else:
+		sprite.material = red_material

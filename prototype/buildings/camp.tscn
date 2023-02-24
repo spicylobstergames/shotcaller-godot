@@ -203,6 +203,17 @@ damage = 40
 defense = 10
 projectile_speed = 220.0
 
+[node name="state" parent="hud" index="0"]
+margin_top = -71.0
+margin_bottom = -55.0
+
+[node name="selection" parent="hud" index="1"]
+position = Vector2( 0, 5 )
+scale = Vector2( 3, 2 )
+
+[node name="hpbar" parent="hud" index="2"]
+position = Vector2( 0, -57 )
+
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
 

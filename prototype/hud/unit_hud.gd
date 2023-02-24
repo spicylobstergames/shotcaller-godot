@@ -37,16 +37,20 @@ func update_hpbar():
 				and not unit == game.selected_unit):
 				hpbar.hide()
 
-# STATE LABEL
 
-func hide_states():
-	for unit1 in game.all_units:
-		if unit1 != game.selected_unit:
-			if unit1.hud: unit1.hud.state.hide()
+func show_selected():
+	unit.hud.state.show()
+	unit.hud.selection.show()
+	unit.hud.update_hpbar()
+	unit.hud.hpbar.show()
+	
+	
+
+func hide_unselect():
+	if unit.type != "leader":
+		unit.hud.state.hide()
+		unit.hud.hpbar.hide()
+	unit.hud.selection.hide()
 
 
-func show_states():
-	for unit1 in game.all_units:
-		if unit1.hud and unit1.type == "leader": 
-			unit1.hud.hpbar.show()
 

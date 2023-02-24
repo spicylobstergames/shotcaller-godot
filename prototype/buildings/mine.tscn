@@ -199,6 +199,17 @@ collide = true
 defense = 15
 projectile_speed = 0.0
 
+[node name="state" parent="hud" index="0"]
+margin_top = -66.0
+margin_bottom = -50.0
+
+[node name="selection" parent="hud" index="1"]
+position = Vector2( 0, 1 )
+scale = Vector2( 2.8, 2 )
+
+[node name="hpbar" parent="hud" index="2"]
+position = Vector2( 0, -52 )
+
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
 

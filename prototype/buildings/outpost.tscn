@@ -204,6 +204,17 @@ attack_speed = 1.2
 defense = 15
 projectile_speed = 220.0
 
+[node name="state" parent="hud" index="0"]
+margin_top = -94.0
+margin_bottom = -78.0
+
+[node name="selection" parent="hud" index="1"]
+position = Vector2( 0, 3 )
+scale = Vector2( 1.6, 2 )
+
+[node name="hpbar" parent="hud" index="2"]
+position = Vector2( 0, -80 )
+
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
 

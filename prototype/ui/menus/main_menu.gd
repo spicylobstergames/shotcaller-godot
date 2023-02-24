@@ -10,6 +10,7 @@ onready var campaign_button = $"%campaign_button"
 
 func quick_start():
 	hide()
+	game.maps.current_map = "one_lane_map"
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
 	game.start()
@@ -21,6 +22,8 @@ func show_new_game_menu():
 	
 
 func campaign_start():
+	game.player_choose_leaders = ["arthur"]
+	game.maps.current_map = "three_lane_map"
 	hide()
 	game.start()
 
