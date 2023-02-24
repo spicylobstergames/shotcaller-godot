@@ -23,7 +23,7 @@ var position_limit:int = 756
 var arrow_keys_speed:int = 4
 var arrow_keys_move:Vector2 = Vector2.ZERO
 var pinch_sensitivity = 3
-var default_zoom_sensitivity = .1
+var default_zoom_sensitivity = .5
 
 
 func _ready():
@@ -54,6 +54,7 @@ func input(event):
 			var cam_move = null;
 			var x = position_limit
 			match event.scancode:
+				# nine grid cam movement
 				KEY_KP_1: cam_move = [-x, x]
 				KEY_KP_2: cam_move = [0, x]
 				KEY_KP_3: cam_move = [x, x]
@@ -63,6 +64,9 @@ func input(event):
 				KEY_KP_7: cam_move = [-x, -x]
 				KEY_KP_8: cam_move = [0, -x]
 				KEY_KP_9: cam_move = [x, -x]
+				# full zoom
+				KEY_KP_SUBTRACT: full_zoom_out()
+				KEY_KP_ADD: full_zoom_in()
 			
 			if cam_move: 
 				zoom_reset()

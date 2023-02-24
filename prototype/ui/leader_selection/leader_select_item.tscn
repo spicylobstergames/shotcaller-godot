@@ -10,11 +10,11 @@ content_margin_right = 5.0
 content_margin_top = 5.0
 content_margin_bottom = 5.0
 draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 1, 1, 1, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.627451, 0.627451, 0.627451, 1 )
 
 [sub_resource type="DynamicFont" id=35]
 font_data = ExtResource( 3 )
@@ -47,7 +47,7 @@ expand_margin_bottom = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -384.0
-margin_bottom = -550.0
+margin_bottom = -560.0
 custom_styles/panel = SubResource( 34 )
 script = ExtResource( 8 )
 
@@ -55,16 +55,24 @@ script = ExtResource( 8 )
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 211.0
-margin_bottom = 65.0
+margin_bottom = 35.0
 
-[node name="leader_button" parent="HBoxContainer" instance=ExtResource( 9 )]
+[node name="ItemList" type="ItemList" parent="HBoxContainer"]
+margin_right = 30.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="leader_button" parent="HBoxContainer/ItemList" instance=ExtResource( 9 )]
 unique_name_in_owner = true
+rect_scale = Vector2( 0.5, 0.5 )
 
 [node name="leader_name" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 64.0
-margin_right = 206.0
-margin_bottom = 60.0
+margin_left = 34.0
+margin_right = 182.0
+margin_bottom = 30.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_fonts/font = SubResource( 35 )
@@ -73,19 +81,12 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="VBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 5.0
-margin_top = 5.0
-margin_right = 211.0
-margin_bottom = 21.0
-size_flags_vertical = 0
-alignment = 2
-
-[node name="delete_button" type="Button" parent="VBoxContainer"]
-margin_left = 190.0
+[node name="delete_button" type="Button" parent="HBoxContainer"]
+margin_left = 186.0
 margin_right = 206.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
+margin_bottom = 20.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_vertical = 0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_constants/hseparation = 0
 custom_fonts/font = SubResource( 36 )
@@ -96,5 +97,5 @@ custom_styles/disabled = SubResource( 33 )
 custom_styles/normal = SubResource( 33 )
 text = "X"
 
-[connection signal="pressed" from="HBoxContainer/leader_button" to="." method="change_leader_pressed"]
-[connection signal="pressed" from="VBoxContainer/delete_button" to="." method="_on_x_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/ItemList/leader_button" to="." method="change_leader_pressed"]
+[connection signal="pressed" from="HBoxContainer/delete_button" to="." method="_on_x_button_pressed"]

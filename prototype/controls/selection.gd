@@ -100,7 +100,7 @@ func select_unit(unit):
 		game.selected_leader = null
 		game.ui.shop.disable_all()
 	
-	game.hud.show_selected(unit)
+	unit.hud.show_selected()
 	game.ui.show_select()
 	
 	if unit.display_name == "blacksmith" and not game.ui.shop.visible: 
@@ -111,11 +111,10 @@ func unselect():
 	game.control_state = "selection"
 	
 	if game.selected_unit:
+		game.selected_unit.hud.hide_unselect()
 		
-		var unit = game.selected_unit
-		game.hud.hide_unselect(unit)
-				
-		if unit.display_name == "blacksmith" and game.ui.shop.visible: 
+		if (game.selected_unit.display_name == "blacksmith" 
+			and game.ui.shop.visible): 
 			game.ui.shop_button.button_down()
 	
 	game.ui.leaders_icons.buttons_unfocus()

@@ -198,6 +198,17 @@ selectable = true
 collide = true
 projectile_speed = 0.0
 
+[node name="state" parent="hud" index="0"]
+margin_top = -77.0
+margin_bottom = -61.0
+
+[node name="selection" parent="hud" index="1"]
+position = Vector2( 0, 5 )
+scale = Vector2( 3, 2.5 )
+
+[node name="hpbar" parent="hud" index="2"]
+position = Vector2( 0, -61 )
+
 [node name="symbol" parent="." index="1"]
 position = Vector2( 10, 0 )
 

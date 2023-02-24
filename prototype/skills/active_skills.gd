@@ -339,18 +339,16 @@ func battle_call_remove(_targets):
 func bokuden_active(effects, parameters, visualize):
 	var leader = game.selected_leader
 	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
-	if point_target == null:
-		return false
-	var dash_point = leader.global_position.direction_to(point_target)
-	dash_point = dash_point * parameters.lenght + leader.global_position
-	var dash_tween = Tween.new()
-	leader.add_child(dash_tween)
-	dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, 0.5, Tween.TRANS_LINEAR)
-	leader.look_at(dash_point)
-	dash_tween.start()
-	yield(dash_tween, "tween_completed")
-	dash_tween.queue_free()
-	return true
+	if point_target:
+		var dash_point = leader.global_position.direction_to(point_target)
+		dash_point = dash_point * parameters.lenght + leader.global_position
+		var dash_tween = Tween.new()
+		leader.add_child(dash_tween)
+		dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, 0.5, Tween.TRANS_LINEAR)
+		leader.look_at(dash_point)
+		dash_tween.start()
+		yield(dash_tween, "tween_completed")
+		dash_tween.queue_free()
 
 
 func osman_special(effects, parameters, visualize):
@@ -365,19 +363,17 @@ func osman_special(effects, parameters, visualize):
 	bribe_timer.wait_time = effect_duration * leader.level
 	# warning-ignore:return_value_discarded
 	bribe_timer.connect("timeout", self, "bribe_remove", [targets])
-	if leader.gold < bribe_gold_cost:
-		return false
-	for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
-		targets[unit] = unit.team
-		unit.setup_team(leader.team)
-		Behavior.orders.set_pawn(unit)
-		unit.status_effects["Bribed"] = {
-			icon = aura_sprite,
-			hint = "Bribed: Blinded by greed, defected to the side of the enemy"
-		}
-	leader.gold -= bribe_gold_cost
-	bribe_timer.start()
-	return true
+	if leader.gold >= bribe_gold_cost:
+		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
+			targets[unit] = unit.team
+			unit.setup_team(leader.team)
+			Behavior.orders.set_pawn(unit)
+			unit.status_effects["Bribed"] = {
+				icon = aura_sprite,
+				hint = "Bribed: Blinded by greed, defected to the side of the enemy"
+			}
+		leader.gold -= bribe_gold_cost
+		bribe_timer.start()
 
 
 func bribe_remove(targets):

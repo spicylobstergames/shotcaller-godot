@@ -5,7 +5,7 @@
 [ext_resource path="res://hud/unit_hud.gd" type="Script" id=3]
 [ext_resource path="res://assets/unit/shadow.png" type="Texture" id=4]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=17]
 size = 10
 font_data = ExtResource( 1 )
 
@@ -14,21 +14,21 @@ use_parent_material = true
 script = ExtResource( 3 )
 
 [node name="state" type="Label" parent="."]
-visible = false
 use_parent_material = true
 margin_left = -37.0
 margin_top = -37.0
 margin_right = 38.0
 margin_bottom = -21.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 17 )
 text = "unit"
 align = 1
 
 [node name="selection" type="Sprite" parent="."]
-visible = false
 modulate = Color( 0.117647, 1, 0.211765, 0.588235 )
+use_parent_material = true
 position = Vector2( 0, 8 )
 scale = Vector2( 1.6, 1.6 )
 texture = ExtResource( 4 )
 
 [node name="hpbar" parent="." instance=ExtResource( 2 )]
+visible = true

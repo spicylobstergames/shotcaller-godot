@@ -205,12 +205,15 @@ defense = 10
 projectile_speed = 220.0
 
 [node name="state" parent="hud" index="0"]
-margin_top = -80.0
-margin_bottom = -64.0
-text = "TTTTTTTTTTTTTT"
+margin_top = -84.0
+margin_bottom = -68.0
+
+[node name="selection" parent="hud" index="1"]
+position = Vector2( 0, 4 )
+scale = Vector2( 1.5, 2.5 )
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2( 0, -68 )
+position = Vector2( 0, -70 )
 
 [node name="symbol" parent="." index="1"]
 position = Vector2( 9, 0 )
