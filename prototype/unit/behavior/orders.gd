@@ -134,9 +134,9 @@ func set_leader(leader, orders):
 	leader.tactics = tactics.tactic
 	leader.priority = orders.priority.duplicate()
 	
-	var extra_unit = Behavior.spawn.player_extra_unit
+	var extra_unit = game.maps.spawn.player_extra_unit
 	if leader.team == game.enemy_team:
-		extra_unit = Behavior.spawn.enemy_extra_unit
+		extra_unit = game.maps.spawn.enemy_extra_unit
 	var cost
 	match extra_unit:
 		"infantry": cost = 1
@@ -239,8 +239,8 @@ func lose_building(building):
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
 			if team == game.player_team:
-				 Behavior.spawn.player_extra_unit = "infantry"
-			else: Behavior.spawn.enemy_extra_unit = "infantry"
+				 game.maps.spawn.player_extra_unit = "infantry"
+			else: game.maps.spawn.enemy_extra_unit = "infantry"
 			building.attacks = false
 		
 		"outpost": building.attacks = false

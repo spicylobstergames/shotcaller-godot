@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://map/blocks/blocks.gd" type="Script" id=1]
 [ext_resource path="res://game.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://test/test.gd" type="Script" id=9]
 [ext_resource path="res://unit/collision.gd" type="Script" id=10]
 [ext_resource path="res://hud/hud.gd" type="Script" id=11]
+[ext_resource path="res://map/spawn.gd" type="Script" id=12]
 [ext_resource path="res://ui/waterfall/waterfall_background.tscn" type="PackedScene" id=13]
 
 [node name="game" type="Node"]
@@ -21,6 +22,11 @@ scale = Vector2( 1.5, 1.5 )
 
 [node name="maps" type="Node2D" parent="."]
 script = ExtResource( 6 )
+
+[node name="spawn" type="Node" parent="maps"]
+script = ExtResource( 12 )
+
+[node name="timer" type="Timer" parent="maps/spawn"]
 
 [node name="blocks" type="Node2D" parent="maps"]
 script = ExtResource( 1 )

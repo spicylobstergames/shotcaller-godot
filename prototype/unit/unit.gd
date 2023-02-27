@@ -504,8 +504,8 @@ func on_death_end():  # death animation end
 	if game.test.stress: game.test.respawn(self)
 	else:
 		match self.type:
-			"pawn": Behavior.spawn.cemitery_add_pawn(self)
-			"leader": Behavior.spawn.cemitery_add_leader(self)
+			"pawn": game.maps.spawn.cemitery_add_pawn(self)
+			"leader": game.maps.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == "castle":
 					game.end(team == game.enemy_team)

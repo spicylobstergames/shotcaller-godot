@@ -305,6 +305,7 @@ custom_fonts/font = SubResource( 3 )
 text = "Equip"
 
 [node name="equip_items" type="GridContainer" parent="scroll_container/container"]
+unique_name_in_owner = true
 margin_top = 50.0
 margin_right = 166.0
 margin_bottom = 254.0
@@ -525,6 +526,7 @@ custom_fonts/font = SubResource( 3 )
 text = "Consumable"
 
 [node name="consumable_items" type="GridContainer" parent="scroll_container/container"]
+unique_name_in_owner = true
 margin_top = 286.0
 margin_right = 166.0
 margin_bottom = 334.0
@@ -574,6 +576,7 @@ custom_fonts/font = SubResource( 3 )
 text = "Throwable"
 
 [node name="throwable_items" type="GridContainer" parent="scroll_container/container"]
+unique_name_in_owner = true
 margin_top = 366.0
 margin_right = 166.0
 margin_bottom = 414.0

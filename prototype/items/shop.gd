@@ -4,14 +4,13 @@ var game:Node
 # self = game.ui.shop
 
 var item_button_preload = preload("res://ui/buttons/item_button.tscn")
-var cleared =false
+var cleared = false
 
-onready var container = get_node("scroll_container/container")
-onready var equip_items = container.get_node("equip_items")
-onready var consumable_items = container.get_node("consumable_items")
-onready var throwable_items = container.get_node("throwable_items")
+onready var equip_items = $"%equip_items"
+onready var consumable_items = $"%consumable_items"
+onready var throwable_items = $"%throwable_items"
 
-var blacksmiths
+var blacksmiths := []
 
 const items = {
 	# Offensive
@@ -207,7 +206,6 @@ func _ready():
 
 	disable_all()
 
-	yield(get_tree(), "idle_frame")
 
 
 func clear():

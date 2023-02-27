@@ -4,7 +4,6 @@ extends Node
 
 # self = Behavior
 
-onready var spawn = $spawn
 onready var move = $move
 onready var attack = $attack
 onready var advance = $advance

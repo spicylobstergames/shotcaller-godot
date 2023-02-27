@@ -3,7 +3,7 @@ extends Node
 var game:Node
 
 
-# self = Behavior.spawn
+# self = game.maps.spawn
 
 
 var order_time = 8
@@ -45,7 +45,7 @@ var cemitery = {
 
 var team_random_list = {"red": [], "blue": []}
 
-onready var timer : Timer = $Timer
+onready var timer:Timer = $timer
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -176,9 +176,9 @@ func cemitery_add_pawn(unit):
 func cemitery_add_leader(leader):
 	match leader.team:
 		game.player_team:
-			Behavior.spawn.cemitery.player_leaders.append(leader)
+			cemitery.player_leaders.append(leader)
 		game.enemy_team:
-			Behavior.spawn.cemitery.enemy_leaders.append(leader)
+			cemitery.enemy_leaders.append(leader)
 	
 	var respawn_time = order_time * leader.respawn
 	yield(get_tree().create_timer(respawn_time), "timeout")

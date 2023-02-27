@@ -1,22 +1,16 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://unit/behavior/path.gd" type="Script" id=1]
 [ext_resource path="res://unit/behavior/attack.gd" type="Script" id=2]
 [ext_resource path="res://unit/behavior/orders.gd" type="Script" id=3]
 [ext_resource path="res://skills/passive_skills.gd" type="Script" id=4]
 [ext_resource path="res://unit/behavior/advance.gd" type="Script" id=5]
-[ext_resource path="res://unit/behavior/spawn.gd" type="Script" id=6]
 [ext_resource path="res://unit/behavior/move.gd" type="Script" id=7]
 [ext_resource path="res://skills/modifiers.gd" type="Script" id=8]
 [ext_resource path="res://unit/Behavior.gd" type="Script" id=9]
 
 [node name="behavior" type="Node"]
 script = ExtResource( 9 )
-
-[node name="spawn" type="Node" parent="."]
-script = ExtResource( 6 )
-
-[node name="Timer" type="Timer" parent="spawn"]
 
 [node name="move" type="Node" parent="."]
 script = ExtResource( 7 )

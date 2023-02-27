@@ -19,6 +19,7 @@ var path_line
 func _ready():
 	game = get_tree().get_current_scene()
 	path_line = Line2D.new()
+	path_line.name = "unit_path_line"
 
 
 func setup_pathfind():
@@ -45,7 +46,7 @@ func setup_pathfind():
 	# setup finder
 	path_finder = Finder.JumpPointFinder.new()
 	# add movement line indicator
-	game.map.add_child(path_line)
+	game.map.add_child_below_node(game.map.fog, path_line)
 
 
 func setup_unit_path(unit, path):
@@ -130,10 +131,11 @@ func draw(unit):
 		elif unit.final_destiny and unit.final_destiny != Vector2.ZERO:
 			pool.push_back(unit.final_destiny)
 			
-		if unit.team == "blue":
-			path_line.default_color = Color(0.4,0.6,1, 0.3)
-		else: path_line.default_color = Color(1,0.3,0.3, 0.3)
 		path_line.points = pool
+		
+		if unit.team == "blue":
+			path_line.default_color = Color(0.4,0.6,1, 0.1)
+		else: path_line.default_color = Color(1,0.3,0.3, 0.1)
 	# todo add line shader
 	# https://www.reddit.com/r/godot/comments/btsrxc/shaders_for_line2d_are_tricky_does_anyone_use_them/
 	else: path_line.hide()

@@ -64,6 +64,7 @@ func _ready():
 #	Engine.time_scale = 2
 #	get_tree().paused = true
 #	randomize()
+	WorldState.one_sec_timer.name = "one_sec_timer"
 	
 	if test.unit or test.stress:
 		ui.main_menu.quick_start()
@@ -98,10 +99,10 @@ func map_loaded():
 		elif test.stress:
 			test.spawn_random_units()
 		else: 
-			Behavior.spawn.pawns()
+			maps.spawn.pawns()
 			
 			yield(get_tree().create_timer(4), "timeout")
-			Behavior.spawn.leaders()
+			maps.spawn.leaders()
 	
 	emit_signal("game_map_loaded")
 
@@ -110,7 +111,7 @@ func resume():
 	paused = false
 	get_tree().paused = false
 	WorldState.one_sec_timer.paused = false
-	Behavior.spawn.timer.paused = false
+	maps.spawn.timer.paused = false
 	ui.show_all()
 	ui.hide_menus()
 	ui.show_minimap()
@@ -123,15 +124,15 @@ func pause():
 	paused = true
 	get_tree().paused = true
 	WorldState.one_sec_timer.paused = true
-	Behavior.spawn.timer.paused = true
+	maps.spawn.timer.paused = true
 	ui.show_pause_menu()
 	emit_signal("game_paused")
 
 
 func start_one_sec_timer():
 	WorldState.one_sec_timer.wait_time = 1
-	add_child(WorldState.one_sec_timer)
 	WorldState.one_sec_timer.connect("timeout", self, "one_sec_cycle")
+	add_child(WorldState.one_sec_timer)
 	WorldState.one_sec_timer.start()
 
 
@@ -183,7 +184,7 @@ func end(winner: bool):
 	paused = true
 	get_tree().paused = true
 	WorldState.one_sec_timer.paused = true
-	Behavior.spawn.timer.paused = true
+	maps.spawn.timer.paused = true
 	ended = true
 	victory = winner
 	ui.scoreboard.handle_game_end(winner)
