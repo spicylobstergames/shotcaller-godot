@@ -82,7 +82,7 @@ func button_down():
 			self.disabled = true
 		
 		"lumberjack":
-			Behavior.spawn.lumberjack_hire(game.selected_unit, game.player_team)
+			game.maps.spawn.lumberjack_hire(game.selected_unit, game.player_team)
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		

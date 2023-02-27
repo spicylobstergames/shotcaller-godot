@@ -39,7 +39,7 @@ config/icon="res://assets/icon.png"
 Quadtree="*res://autoloads/Quadtree.gd"
 Finder="*res://autoloads/pathfind/JumpPointFinder.gd"
 Behavior="*res://unit/Behavior.tscn"
-WorldState="*res://autoloads/World_State.gd"
+WorldState="*res://autoloads/WorldState.gd"
 Goap="*res://goap/Goap.gd"
 
 [debug]

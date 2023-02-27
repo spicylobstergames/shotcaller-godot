@@ -4,7 +4,7 @@
 [ext_resource path="res://ui/panels/unit_controls_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/shop.tscn" type="PackedScene" id=3]
 [ext_resource path="res://ui/menus/leader_select_menu.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui/minimap_container.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/minimap.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://ui/panels/orders_panel.tscn" type="PackedScene" id=7]
 [ext_resource path="res://ui/panels/control_panel.tscn" type="PackedScene" id=8]
@@ -374,7 +374,7 @@ script = ExtResource( 19 )
 anchor_top = 1.0
 anchor_bottom = 1.0
 
-[node name="minimap_container" parent="bot_left" instance=ExtResource( 5 )]
+[node name="minimap" parent="bot_left" instance=ExtResource( 5 )]
 unique_name_in_owner = true
 
 [node name="bot_mid" type="Control" parent="."]

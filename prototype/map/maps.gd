@@ -6,7 +6,8 @@ var current_map = "one_lane_map"
 var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
 
-onready var blocks = get_node("blocks")
+onready var spawn = $spawn
+onready var blocks = $blocks
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -20,8 +21,18 @@ func load_map(map_name):
 	game.map = self[map_name].instance()
 	self.add_child(game.map)
 	game.map.hide()
+	create_container("unit_container")
+	create_container("block_container")
+	create_container("projectile_container")
 	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
 	game.ui.minimap.map_loaded()
+
+
+func create_container(container_name):
+	var container = Node2D.new()
+	game.map.add_child(container)
+	game.map.set(container_name, container)
+	container.name = container_name
 
 
 func map_loaded():
@@ -89,7 +100,7 @@ func setup_buildings():
 			game.all_buildings.append(building)
 	
 	# shop
-	game.ui.shop.blacksmiths = [];
+	game.ui.shop.blacksmiths = []
 	if game.map.has_node("buildings/blue/blacksmith"):
 		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/blue/blacksmith") )
 	if game.map.has_node("buildings/red/blacksmith"):
@@ -107,8 +118,8 @@ func setup_buildings():
 
 func create(template, lane, team, mode, point):
 	var unit = template.instance()
-	game.map.add_child(unit)
-	Behavior.spawn.spawn_unit(unit, lane, team, mode, point)
+	game.map.unit_container.add_child(unit)
+	game.maps.spawn.spawn_unit(unit, lane, team, mode, point)
 	unit.reset_unit()
 	game.all_units.append(unit)
 	game.selection.setup_selection(unit)

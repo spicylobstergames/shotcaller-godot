@@ -1,5 +1,5 @@
-extends CanvasLayer
-var game:Node
+extends ItemList
+onready var game:Node = get_tree().get_current_scene()
 
 # self = game.ui.minimap
 
@@ -9,19 +9,22 @@ var pan_position:Vector2 = Vector2.ZERO
 
 var map_sprite:Node
 var map_tiles:Node
-var cam_rect:Node
-var map_symbols:Node
+
+onready var minimap_container:Node = $"%minimap_container"
+onready var rect_layer:Node = $"%rect_layer"
+onready var cam_rect:Node = $"%cam_rect"
+onready var map_symbols:Node = $"%map_symbols"
+onready var light_template:Node = $"%light_template"
+
 var map_symbols_map = []
 
 var size:int = 150
 var border:int = 4
 var sprite_scale:float = 1.0
 
-func _ready():
-	game = get_tree().get_current_scene()
-	cam_rect = get_parent().get_node("rect_layer/cam_rect")
-	map_symbols = get_node("symbols")
 
+func _ready():
+	minimap_container.hide()
 
 func _input(event):
 	if over_minimap(event):
@@ -56,8 +59,7 @@ func over_minimap(event):
 	var viewport = get_viewport()
 	var screen = viewport.get_size_override()
 	return (
-		self.get_parent().visible and
-		self.visible and 
+		minimap_container.visible and 
 		"position" in event and 
 		event.position.x < size and 
 		event.position.y > screen.y - size
@@ -80,8 +82,8 @@ func get_map_texture():
 	# hides units and ui
 	game.ui.hide_all()
 	hide()
+	rect_layer.hide()
 	game.map.show()
-	game.ui.rect_layer.hide()
 	game.maps.buildings_visibility(false)
 	yield(get_tree(), "idle_frame")
 	# take snapshop
@@ -90,7 +92,7 @@ func get_map_texture():
 	var texture = ImageTexture.new()
 	texture.create_from_image(data, 1)
 	# set minimap texture
-	var minimap_sprite = self.get_node("sprite")
+	var minimap_sprite = $"%sprite"
 	minimap_sprite.set_texture(texture)
 	var w = float(texture.get_width())
 	var h = float(texture.get_height())
@@ -112,8 +114,8 @@ func get_map_texture():
 	game.camera.zoom_reset()
 	# reset units and turn ui back on again
 	game.ui.show_all()
-	self.show()
-	game.ui.rect_layer.show()
+	minimap_container.show()
+	rect_layer.show()
 	game.maps.buildings_visibility(true)
 	# turn off and callback
 	update_map_texture = false
@@ -126,7 +128,7 @@ func corner_view():
 	for tile in map_tiles.get_children(): tile.show()
 	yield(get_tree(), "idle_frame")
 	show()
-	game.ui.rect_layer.show()
+	rect_layer.show()
 	game.ui.get_node("bot_left").show()
 
 
@@ -136,8 +138,8 @@ func hide_view():
 	for tile in map_tiles.get_children(): tile.hide()
 	# avoid input messing up
 	yield(get_tree(), "idle_frame")
-	self.hide()
-	game.ui.rect_layer.hide()
+	minimap_container.hide()
+	rect_layer.hide()
 	game.ui.get_node("bot_left").hide()
 
 
@@ -177,7 +179,7 @@ func copy_symbol(unit, symbol):
 	sym.show()
 	sym.scale *= 0.25
 	if unit.team == game.player_team:
-		var light = get_node("light_template").duplicate()
+		var light = light_template.duplicate()
 		light.show()
 		var s = float(unit.vision) * 2 / (game.map.size)
 		light.scale = Vector2(s,s)
@@ -187,11 +189,11 @@ func copy_symbol(unit, symbol):
 
 
 func follow_camera():
-	if self.visible:
+	if minimap_container.visible and game.map:
 		var view_height = get_viewport().get_size_override().y
 		# stick to the bottom (todo: replace with godot viewports)
-		self.offset.y = view_height
-		game.ui.rect_layer.offset.y = view_height
+		minimap_container.offset.y = view_height
+		rect_layer.offset.y = view_height
 		var half = game.map.size / 2
 		var map_scale = float(game.map.size) / float(size)
 		var pos = Vector2( -half+(pan_position.x * map_scale), half + ((pan_position.y - view_height) * map_scale)  )
@@ -205,7 +207,7 @@ func follow_camera():
 
 
 func move_symbols():
-	if self.visible:
+	if minimap_container.visible:
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]

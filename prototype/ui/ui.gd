@@ -8,7 +8,6 @@ var top_label:Node
 var stats:Node
 var minimap:Node
 var minimap_container:Node
-var rect_layer: Node
 var shop:Node
 var control_panel:Node
 var unit_controls_panel:Node
@@ -39,10 +38,7 @@ func _ready():
 	leaders_icons = get_node("%leaders_icons")
 	scoreboard = get_node("%score_board")
 	version_node = get_node("%version")
-	# minimap
-	minimap_container = get_node("%minimap_container")
-	minimap = minimap_container.get_node("minimap")
-	rect_layer = minimap_container.get_node("rect_layer")
+	minimap = get_node("%minimap")
 	# stats
 	stats = get_node("%stats")
 	inventories = stats.get_node("inventories")
@@ -111,12 +107,12 @@ func show_all():
 
 func show_minimap():
 	minimap.show()
-	rect_layer.show()
+	minimap.rect_layer.show()
 
 
 func hide_minimap():
 	minimap.hide()
-	rect_layer.hide()
+	minimap.rect_layer.hide()
 
 
 func map_loaded():

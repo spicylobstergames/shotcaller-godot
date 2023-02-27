@@ -174,7 +174,7 @@ func projectile_start(attacker, target):
 	if not Behavior.move.in_bounds(target_position): return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
-	game.map.add_child(projectile)
+	game.map.projectile_container.add_child(projectile)
 	var projectile_sprite = projectile.get_node("sprites")
 	projectile.global_position = attacker.projectile.global_position
 	projectile.show()

@@ -38,6 +38,6 @@ func create_block(x, y):
 	block.attacks = false
 	block.collide = true
 	block.global_position = Vector2(half + x * size, half + y * size)
-	game.map.add_child(block)
+	game.map.block_container.add_child(block)
 	game.collision.setup(block)
 	game.all_units.append(block)

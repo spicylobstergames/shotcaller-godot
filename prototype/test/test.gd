@@ -12,7 +12,7 @@ func _ready():
 	
 
 func spawn_unit():
-	var s = Behavior.spawn
+	var s = game.maps.spawn
 	if unit:
 		if stress: spawn_random_units()
 		else:
@@ -42,7 +42,7 @@ func spawn_unit():
 func spawn_random_units():
 	game.rng.randomize()
 	var n = 100-26
-	var s = Behavior.spawn
+	var s = game.maps.spawn
 	for x in range(1, n+1):
 		yield(get_tree().create_timer(x/n), "timeout")
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
@@ -60,13 +60,13 @@ func respawn(unit1):
 	if stress and unit1.type != "building":
 		yield(get_tree().create_timer(1), "timeout")
 		unit1.reset_unit()
-		Behavior.spawn.spawn_unit(unit1, "mid", unit1.team, "random_map", Vector2.ZERO)
+		game.maps.spawn.spawn_unit(unit1, "mid", unit1.team, "random_map", Vector2.ZERO)
 
 
 func spawn_leaders():
 	var test_leaders = 0; # must build inventory and orders 
 	var t1 = game.player_team
-	var s = Behavior.spawn
+	var s = game.maps.spawn
 	if test_leaders:
 		game.maps.create(s.arthur, "mid", t1, "Vector2", Vector2(900,550))
 		game.maps.create(s.bokuden, "mid", t1, "Vector2", Vector2(900,600))
