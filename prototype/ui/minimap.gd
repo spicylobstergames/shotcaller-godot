@@ -79,6 +79,7 @@ func get_map_texture():
 	game.camera.zoom_limit = game.map.zoom_limit
 	var zoom_out = game.map.zoom_limit.y
 	game.camera.zoom =  Vector2(zoom_out, zoom_out)
+	game.camera.position = Vector2.ZERO
 	# hides units and ui
 	game.ui.hide_all()
 	hide()

@@ -43,8 +43,8 @@ const items = {
 	},
 
 	# Defensive
-	"helmet": {
-		"name": "Helmet",
+	"helm": {
+		"name": "Helm",
 		"sprite": 3,
 		"tooltip": "Adds 150 HP",
 		"attributes": {"hp": 150},
@@ -111,7 +111,7 @@ const items = {
 		"delivery_time": 15
 	},
 	"feather": {
-		"name": "Magic\nFeather",
+		"name": "Magic\nPlume",
 		"sprite": 10,
 		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
 		"attributes": {"regen": 2, "speed": 5}, # Other 10 comes from passive
@@ -121,7 +121,7 @@ const items = {
 		"passive": "res://items/passives/feather.tscn" # nearby units +10 speed
 	},
 	"eye": {
-		"name": "Oligan's\nEye",
+		"name": "Dragon\nEye",
 		"sprite": 11,
 		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100 Speed +10",
 		"attributes": {"vision": 100, "speed": 10},

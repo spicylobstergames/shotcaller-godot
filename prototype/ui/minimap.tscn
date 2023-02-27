@@ -41,6 +41,7 @@ color = Color( 0.392157, 0.392157, 0.392157, 1 )
 
 [node name="light_template" type="Light2D" parent="minimap_container"]
 unique_name_in_owner = true
+visible = false
 light_mask = 2
 texture = ExtResource( 3 )
 mode = 2
@@ -67,7 +68,7 @@ margin_left = 50.0
 margin_top = -100.0
 margin_right = 100.0
 margin_bottom = -50.0
-rect_pivot_offset = Vector2( 22, 22 )
+rect_pivot_offset = Vector2( 25, 25 )
 border_color = Color( 1, 1, 1, 0.666667 )
 border_width = 2.0
 editor_only = false

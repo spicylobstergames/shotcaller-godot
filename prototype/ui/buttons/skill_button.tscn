@@ -42,11 +42,11 @@ atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="DynamicFont" id=28]
-size = 9
+size = 8
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=29]
-size = 10
+size = 8
 font_data = ExtResource( 3 )
 
 [node name="skill_button" type="Button"]
@@ -66,9 +66,9 @@ script = ExtResource( 4 )
 
 [node name="name" type="Label" parent="."]
 margin_left = 3.0
-margin_top = 2.0
-margin_right = 61.0
-margin_bottom = 27.0
+margin_top = 3.0
+margin_right = 57.0
+margin_bottom = 33.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 28 )
 text = "name"
@@ -79,9 +79,9 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 3.0
 margin_top = -12.0
-margin_right = 43.0
-margin_bottom = 2.0
+margin_right = 57.0
+margin_bottom = -3.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 29 )
-text = "10 s."
+text = "10 sec"

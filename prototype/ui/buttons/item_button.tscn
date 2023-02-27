@@ -41,16 +41,16 @@ margin_bottom = 3.0
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="DynamicFont" id=28]
-size = 9
+[sub_resource type="DynamicFont" id=30]
+size = 8
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=29]
-size = 10
+size = 8
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=22]
-size = 10
+size = 8
 font_data = ExtResource( 1 )
 
 [sub_resource type="StyleBoxTexture" id=27]
@@ -77,11 +77,11 @@ script = ExtResource( 3 )
 
 [node name="name" type="Label" parent="."]
 margin_left = 3.0
-margin_top = 2.0
-margin_right = 35.909
-margin_bottom = 27.0
+margin_top = 3.0
+margin_right = 45.0
+margin_bottom = 33.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 28 )
+custom_fonts/font = SubResource( 30 )
 text = "name"
 autowrap = true
 
@@ -90,10 +90,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -42.0
+margin_left = -45.0
 margin_top = -12.0
-margin_right = -2.0
-margin_bottom = 2.0
+margin_right = -3.0
+margin_bottom = -3.0
 custom_colors/font_color = Color( 1, 0.796078, 0.243137, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 29 )

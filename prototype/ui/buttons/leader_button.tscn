@@ -92,8 +92,8 @@ region_rect = Rect2( 0, 0, 64, 64 )
 
 [node name="name_label" type="Label" parent="."]
 margin_top = 4.0
-margin_right = 60.0
-margin_bottom = 16.0
+margin_right = 61.0
+margin_bottom = 34.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 7 )
 text = "Name"
@@ -105,9 +105,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -44.0
+margin_left = -15.0
 margin_top = -14.0
 margin_right = -4.0
+margin_bottom = -3.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 9 )
 text = "1"
