@@ -13,20 +13,23 @@ func quick_start():
 	game.maps.current_map = "one_lane_map"
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
+	game.mode = "match"
 	game.start()
 
 
 func show_new_game_menu():
 	game.ui.main_menu.hide()
 	game.ui.new_game_menu.show()
+	game.mode = "match"
 	
 
 func campaign_start():
-	game.player_choose_leaders = ["joan"]
-	game.maps.current_map = "rect_test_map"
 	hide()
+	game.maps.current_map = "rect_test_map"
+	game.player_choose_leaders = ["joan"]
+	game.mode = "campaign"
 	game.start()
 
 
-func quit():
+func on_exit():
 	game.exit()

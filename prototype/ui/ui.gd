@@ -3,48 +3,38 @@ var game:Node
 
 # self = game.ui
 
-var fps:Node
-var top_label:Node
-var stats:Node
-var minimap:Node
-var minimap_container:Node
-var shop:Node
-var control_panel:Node
-var unit_controls_panel:Node
-var orders_panel:Node
-var leaders_icons:Node
-var scoreboard:Node
-var orders_button:Node
-var shop_button:Node
-var unit_controls_button:Node
-var inventories:Node
-var active_skills:Node
-var version_node:Node
-
-onready var main_menu = $"%main_menu"
-onready var pause_menu = $"%pause_menu"
-onready var new_game_menu = $"%new_game_menu"
-onready var leader_select_menu = $"%leader_select_menu"
+onready var fps := $"%fps"
+onready var top_label := $"%top_label"
+onready var shop := $"%shop"
+onready var leaders_icons := $"%leaders_icons"
+onready var minimap := $"%minimap"
+onready var dialog := $"%dialog"
+onready var version_node := $"%version"
+onready var scoreboard := $"%score_board"
+# STATS
+onready var stats := $"%stats"
+var inventories : Node
+var active_skills : Node
+# CONTROLS
+onready var orders_panel := $"%orders_panel"
+onready var unit_controls_panel := $"%unit_controls_panel"
+var orders_button : Node
+var shop_button : Node
+var unit_controls_button : Node
+onready var control_panel := $"%control_panel"
+# MENUS
+onready var main_menu := $"%main_menu"
+onready var pause_menu := $"%pause_menu"
+onready var new_game_menu := $"%new_game_menu"
+onready var leader_select_menu := $"%leader_select_menu"
 
 
 func _ready():
 	game = get_tree().get_current_scene()
-
-	fps = get_node("%fps")
-	top_label = get_node("%main_label")
-	shop = get_node("%shop")
-	orders_panel = get_node("%orders_panel")
-	unit_controls_panel = get_node("%unit_controls_panel")
-	leaders_icons = get_node("%leaders_icons")
-	scoreboard = get_node("%score_board")
-	version_node = get_node("%version")
-	minimap = get_node("%minimap")
 	# stats
-	stats = get_node("%stats")
 	inventories = stats.get_node("inventories")
 	active_skills = stats.get_node("active_skills")
 	# controls
-	control_panel = get_node("%control_panel")
 	unit_controls_button = control_panel.get_node("unit_controls_button")
 	shop_button = control_panel.get_node("shop_button")
 	orders_button = control_panel.get_node("orders_button")

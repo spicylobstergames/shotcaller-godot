@@ -29,7 +29,6 @@ func setup_pathfind():
 		floor(game.map.size.y / game.map.tile_size)+1
 	)
 	#setup grid
-	print(walls_size)
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
@@ -40,8 +39,6 @@ func setup_pathfind():
 	# add building units
 	for building in game.player_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()
-		print(building.global_position)
-		print(pos)
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	for building in game.enemy_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()
