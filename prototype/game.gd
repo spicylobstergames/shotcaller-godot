@@ -2,7 +2,6 @@ extends Node
 
 # self = game
 
-
 signal game_started
 signal game_map_loaded
 signal game_resumed
@@ -10,19 +9,16 @@ signal game_one_sec_cycle
 signal game_paused
 signal game_ended
 
-
 var built:bool = false
 var started:bool = false
 var ended:bool = false
 var paused:bool = true
 var victory:bool
 
-
 var player_kills:int = 0
 var player_deaths:int = 0
 var enemy_kills:int = 0
 var enemy_deaths:int = 0
-
 
 var player_choose_leaders:Array = []
 var player_leaders:Array = []
@@ -45,16 +41,16 @@ var player_team:String = "blue"
 var enemy_team:String = "red"
 var control_state:String = "selection"
 
-onready var background = get_node("background")
-onready var maps = get_node("maps")
-onready var camera = get_node("camera")
-onready var ui = get_node("ui")
-onready var hud = get_node("hud")
-onready var collision = get_node("collision")
-onready var selection = get_node("selection")
-onready var utils = get_node("utils")
-onready var test = get_node("test")
-onready var transitions = get_node("transitions")
+onready var background = $"%waterfall_background"
+onready var maps = $"%maps"
+onready var hud = $"%hud"
+onready var ui = $"%ui"
+onready var camera = $"%camera"
+onready var collision = $"%collision"
+onready var selection = $"%selection"
+onready var utils = $"%utils"
+onready var test = $"%test"
+onready var transitions = $"%transitions"
 
 var rng = RandomNumberGenerator.new()
 

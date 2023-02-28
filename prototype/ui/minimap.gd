@@ -3,6 +3,8 @@ onready var game:Node = get_tree().get_current_scene()
 
 # self = game.ui.minimap
 
+var default_screen := 600
+
 var update_map_texture:bool = false
 var is_panning:bool = false
 var pan_position:Vector2 = Vector2.ZERO
@@ -69,7 +71,7 @@ func over_minimap(event):
 func map_loaded():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
-	var r_size = 600 * size / game.map.size
+	var r_size = default_screen * size / max(game.map.size.x, game.map.size.y)
 	cam_rect.rect_size = Vector2(r_size, r_size)
 
 
@@ -81,6 +83,8 @@ func get_map_texture():
 	game.camera.zoom =  Vector2(zoom_out, zoom_out)
 	game.camera.position = Vector2.ZERO
 	# hides units and ui
+	map_sprite.hide()
+	game.background.hide()
 	game.ui.hide_all()
 	hide()
 	rect_layer.hide()
@@ -109,8 +113,8 @@ func get_map_texture():
 	minimap_sprite.region_rect.position = Vector2(h_diff+border/sprite_scale, v_diff+border/sprite_scale)
 	minimap_sprite.region_rect.size = Vector2((size-border)/sprite_scale, (size-border)/sprite_scale)
 	# set zoom out tile replace
-	map_sprite.set_texture(texture)
-	map_sprite.scale = game.camera.zoom
+	#map_sprite.set_texture(texture)
+	#map_sprite.scale = game.camera.zoom
 	# reset cam
 	game.camera.zoom_reset()
 	# reset units and turn ui back on again
@@ -124,7 +128,6 @@ func get_map_texture():
 
 
 func corner_view():
-	map_sprite.hide()
 	#map_tiles.show()
 	for tile in map_tiles.get_children(): tile.show()
 	yield(get_tree(), "idle_frame")
@@ -134,7 +137,7 @@ func corner_view():
 
 
 func hide_view():
-	map_sprite.show()
+	#map_sprite.show()
 	#map_tiles.hide()
 	for tile in map_tiles.get_children(): tile.hide()
 	# avoid input messing up
@@ -182,7 +185,7 @@ func copy_symbol(unit, symbol):
 	if unit.team == game.player_team:
 		var light = light_template.duplicate()
 		light.show()
-		var s = float(unit.vision) * 2 / (game.map.size)
+		var s = float(unit.vision) * 2 / max(game.map.size.x, game.map.size.y)
 		light.scale = Vector2(s,s)
 		sym.add_child(light)
 	map_symbols_map.append(unit)
@@ -195,9 +198,9 @@ func follow_camera():
 		# stick to the bottom (todo: replace with godot viewports)
 		minimap_container.offset.y = view_height
 		rect_layer.offset.y = view_height
-		var half = game.map.size / 2
-		var map_scale = float(game.map.size) / float(size)
-		var pos = Vector2( -half+(pan_position.x * map_scale), half + ((pan_position.y - view_height) * map_scale)  )
+		var half = game.map.mid
+		var map_scale = float(max(game.map.size.x, game.map.size.y)) / float(size)
+		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale)  )
 		var offset = (size - cam_rect.rect_size.y) / 2
 		if is_panning: game.camera.position = pos
 		# update minimap cam rectangle position
@@ -212,5 +215,5 @@ func move_symbols():
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = map_symbols_map[i].global_position / game.map.size * size
+			symbol.position = map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * size
 

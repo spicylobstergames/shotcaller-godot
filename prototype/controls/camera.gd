@@ -3,7 +3,20 @@ var game:Node
 
 # self = game.camera
 
-# for pinch zoom and drag with multiple fingers
+# PAN
+var is_panning:bool = false
+var pan_position:Vector2 = Vector2.ZERO
+# ZOOM
+var is_zooming:bool = false
+var zoom_default:Vector2 = Vector2.ONE
+var zoom_limit:Vector2 = Vector2.ONE
+var default_zoom_sensitivity := .5
+var zoom_in_limit := .5
+# KEYBOARD
+var arrow_keys_move:Vector2 = Vector2.ZERO
+var arrow_keys_speed := 4
+# TOUCH
+var pinch_sensitivity := 3
 var _touches = {}
 var _touches_info = {
 	"num_touch_last_frame":0, 
@@ -13,18 +26,6 @@ var _touches_info = {
 	"last_avg_pos":Vector2.ZERO, 
 	"cur_avg_pos":Vector2.ZERO
 }
-
-var is_panning:bool = false
-var is_zooming:bool = false
-var pan_position:Vector2 = Vector2.ZERO
-var zoom_default:Vector2 = Vector2.ONE
-var zoom_limit:Vector2 = Vector2.ONE
-var position_limit:int = 756
-var arrow_keys_speed:int = 4
-var arrow_keys_move:Vector2 = Vector2.ZERO
-var pinch_sensitivity = 3
-var default_zoom_sensitivity = .5
-
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -52,7 +53,7 @@ func input(event):
 		# NUMBER KEYPAD
 		if not event.is_pressed():
 			var cam_move = null;
-			var x = position_limit
+			var x = game.map.mid.x
 			match event.scancode:
 				# nine grid cam movement
 				KEY_KP_1: cam_move = [-x, x]
@@ -64,7 +65,7 @@ func input(event):
 				KEY_KP_7: cam_move = [-x, -x]
 				KEY_KP_8: cam_move = [0, -x]
 				KEY_KP_9: cam_move = [x, -x]
-				# full zoom
+				# ZOOM KEYS
 				KEY_KP_SUBTRACT: full_zoom_out()
 				KEY_KP_ADD: full_zoom_in()
 			
@@ -108,7 +109,6 @@ func input(event):
 				avg_touch /= _touches.size()
 				_touches_info.cur_avg_pos = avg_touch
 				pan_position = Vector2(-1 * (_touches_info.cur_avg_pos - _touches_info.last_avg_pos))
-			
 		
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
@@ -135,30 +135,34 @@ func focus_leader(index):
 
 func zoom_reset(): 
 	zoom = zoom_default
-	game.ui.minimap.corner_view()
-	game.hud.hide_hpbars()
 	
 	
 func full_zoom_in(): 
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
-	game.ui.minimap.corner_view()
-	game.hud.show_hpbars()
 	
 	
 func full_zoom_out(): 
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
-	game.ui.minimap.hide_view()
 
 
 func _zoom_camera(dir):
-	zoom += Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
-	zoom.x = clamp(zoom.x, zoom_limit.x, zoom_limit.y)
-	zoom.y = clamp(zoom.y, zoom_limit.x, zoom_limit.y)
+	var new_zoom = zoom + Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
+	
+	var zoom_out_limit = zoom_limit.y
+	
+	new_zoom.x = clamp(new_zoom.x, zoom_in_limit, zoom_out_limit)
+	new_zoom.y = clamp(new_zoom.y, zoom_in_limit, zoom_out_limit)
+	
+	zoom = new_zoom
+	
+#	TODO: fix map zoom and remove zoom limits from the map
+#	var size = get_viewport().size
+#	var max_size = max(size.x, size.y)
+#	var zoom_out_limit = game.map.size / max_size
 
 
 func process():
 	if game.started: 
-		#var ratio = get_viewport().size.x / get_viewport().size.y
 		
 		# APPLY MOUSE PAN
 		if is_panning: translate(pan_position * zoom.x)
@@ -170,7 +174,7 @@ func process():
 			if(_touches_info.last_radius != 0 && _touches.size() > 1):
 				_zoom_camera(pinch_sensitivity * (_touches_info["last_radius"] - _touches_info["radius"]) / _touches_info["last_radius"])
 		
-		#RESET VARS AND SET LAST VARS
+		# RESET VARS AND SET LAST VARS
 		_touches_info.last_radius = _touches_info.radius
 		_touches_info.last_avg_pos = _touches_info.cur_avg_pos
 		_touches_info.num_touch_last_frame = _touches.size()

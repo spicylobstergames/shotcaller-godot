@@ -67,7 +67,7 @@ func limit_angle(a):
 
 func random_point():
 	var o = 50
-	return Vector2(o+randf()*(game.map.size-o*2), o+randf()*(game.map.size-o*2))
+	return Vector2(o+randf()*(game.map.size.x-o*2), o+randf()*(game.map.size.y-o*2))
 
 
 func offset_point_random(point, offset):

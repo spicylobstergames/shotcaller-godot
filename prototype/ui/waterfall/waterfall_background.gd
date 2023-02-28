@@ -1,12 +1,14 @@
 extends Node2D
 
 
+var current_frame = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# _capture()
 	pass
 
-var current_frame = 0
+
 func _capture():
 	get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
 	# Wait until the frame has finished before getting the texture.
