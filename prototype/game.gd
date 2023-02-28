@@ -39,18 +39,19 @@ var selected_leader:Node2D
 
 var player_team:String = "blue"
 var enemy_team:String = "red"
+var mode:String = "match" # campaign
 var control_state:String = "selection"
 
-onready var background = $"%waterfall_background"
-onready var maps = $"%maps"
-onready var hud = $"%hud"
-onready var ui = $"%ui"
-onready var camera = $"%camera"
-onready var collision = $"%collision"
-onready var selection = $"%selection"
-onready var utils = $"%utils"
-onready var test = $"%test"
-onready var transitions = $"%transitions"
+onready var background := $"%waterfall_background"
+onready var maps := $"%maps"
+onready var hud := $"%hud"
+onready var ui := $"%ui"
+onready var camera := $"%camera"
+onready var collision := $"%collision"
+onready var selection := $"%selection"
+onready var utils := $"%utils"
+onready var test := $"%test"
+onready var transitions := $"%transitions"
 
 var rng = RandomNumberGenerator.new()
 
@@ -82,25 +83,15 @@ func start():
 func map_loaded():
 	if not started:
 		started = true
+		resume()
+		emit_signal("game_map_loaded")
+		
 		WorldState.set_state("is_game_active", true)
 		rng.randomize()
-		
-		resume()
 		start_one_sec_timer()
+		maps.spawn.start()
 		
 		emit_signal("game_started")
-		
-		if test.unit:
-			test.spawn_unit()
-		elif test.stress:
-			test.spawn_random_units()
-		else: 
-			maps.spawn.pawns()
-			
-			yield(get_tree().create_timer(4), "timeout")
-			maps.spawn.leaders()
-	
-	emit_signal("game_map_loaded")
 
 
 func resume():

@@ -549,7 +549,7 @@ visible = false
 
 [node name="mid" type="Line2D" parent="lanes"]
 position = Vector2( 0, 2 )
-points = PoolVector2Array( 256, 315, 373, 138, 504, 85, 595, -30 )
+points = PoolVector2Array( 256, 315, 373, 138, 504, 85, 568, 2 )
 default_color = Color( 1, 1, 1, 0.196078 )
 
 [node name="fog" type="CanvasModulate" parent="."]

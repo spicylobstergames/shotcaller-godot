@@ -21,7 +21,8 @@ script = ExtResource( 3 )
 margin_right = 420.0
 margin_bottom = 140.0
 
-[node name="name" type="Label" parent="panel"]
+[node name="display_name" type="Label" parent="panel"]
+unique_name_in_owner = true
 margin_left = 8.0
 margin_top = 114.0
 margin_right = 115.0
@@ -42,12 +43,24 @@ rect_scale = Vector2( 1.5, 1.5 )
 rect_clip_content = true
 
 [node name="sprite" type="Sprite" parent="panel/portrait"]
+unique_name_in_owner = true
 position = Vector2( 32, 32 )
 texture = ExtResource( 2 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 64, 64 )
 
+[node name="msg" type="Label" parent="panel"]
+unique_name_in_owner = true
+margin_left = 122.0
+margin_top = 13.0
+margin_right = 410.0
+margin_bottom = 109.0
+custom_fonts/font = SubResource( 3 )
+text = "lorem ipsum lorem hey  ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem hi ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum etc"
+autowrap = true
+
 [node name="control_delay" type="Label" parent="panel"]
+unique_name_in_owner = true
 margin_left = 258.0
 margin_top = 117.0
 margin_right = 402.0
@@ -56,12 +69,3 @@ custom_fonts/font = SubResource( 3 )
 text = "press to continue..."
 align = 2
 valign = 1
-
-[node name="msg" type="Label" parent="panel"]
-margin_left = 122.0
-margin_top = 13.0
-margin_right = 410.0
-margin_bottom = 109.0
-custom_fonts/font = SubResource( 3 )
-text = "lorem ipsum lorem hey  ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem hi ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum etc"
-autowrap = true

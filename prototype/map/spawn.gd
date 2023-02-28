@@ -56,6 +56,17 @@ func _ready():
 	timer.wait_time = order_time
 
 
+func start():
+	if game.test.unit:
+		game.test.spawn_unit()
+	elif game.test.stress:
+		game.test.spawn_random_units()
+	else: 
+		pawns()
+		yield(get_tree().create_timer(4), "timeout")
+		leaders()
+
+
 func random_leader(team):
 	var team_list = team_random_list[team]
 	var index = floor(randf() * team_list.size())
