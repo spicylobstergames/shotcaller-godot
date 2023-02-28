@@ -319,34 +319,36 @@ func update_buttons():
 	for leader in game.player_leaders + game.enemy_leaders:
 		var inventory = get_leader_inventory(leader)
 		var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
-		inventory.container.hide()
-		# deliver ready items
-		if close_to_blacksmith:
-			for item in inventory.equip_items:
-				if item and item.ready and not item.delivered:
-					var delivery = get_leader_delivery(leader)
-					give_item(delivery)
-
-	if game.selected_leader:
-		var inventory = get_leader_inventory(game.selected_leader)
-		var leader = game.selected_leader
-		var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
-
-		show()
-		inventory.container.show()
-		update_consumables(leader)
-
-		# toggle sell buttons
-		if game.ui.shop.visible and close_to_blacksmith:
-			var counter = 0
-			for item in inventory.equip_items:
-				inventory.equip_item_buttons[counter].show_sell_button()
-				counter += 1
-			counter = 0
-			for item in inventory.consumable_items:
-				inventory.consumable_item_buttons[counter].show_sell_button()
-				counter += 1
-		else:
-			for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
-				item_button.sell_button.hide()
+		if inventory:
+			inventory.container.hide()
+			# deliver ready items
+			if close_to_blacksmith:
+				for item in inventory.equip_items:
+					if item and item.ready and not item.delivered:
+						var delivery = get_leader_delivery(leader)
+						give_item(delivery)
+	
+	var leader = game.selected_leader
+	if leader:
+		var inventory = get_leader_inventory(leader)
+		if inventory:
+			var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
+			
+			show()
+			inventory.container.show()
+			update_consumables(leader)
+			
+			# toggle sell buttons
+			if game.ui.shop.visible and close_to_blacksmith:
+				var counter = 0
+				for item in inventory.equip_items:
+					inventory.equip_item_buttons[counter].show_sell_button()
+					counter += 1
+				counter = 0
+				for item in inventory.consumable_items:
+					inventory.consumable_item_buttons[counter].show_sell_button()
+					counter += 1
+			else:
+				for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
+					item_button.sell_button.hide()
 

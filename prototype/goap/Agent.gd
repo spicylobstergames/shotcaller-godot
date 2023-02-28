@@ -122,7 +122,7 @@ func _follow_plan(plan, delta):
 		var is_step_complete = plan[_current_plan_step].perform(self, delta)
 		
 		# debug
-		if WorldState.game.test.unit: 
+		if WorldState.game.test.debug: 
 			#_unit.hud.state.text = get_current_action().get_class()
 			_unit.hud.state.text = _get_best_goal().get_class()
 		

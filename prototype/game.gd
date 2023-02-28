@@ -63,7 +63,7 @@ func _ready():
 #	randomize()
 	WorldState.one_sec_timer.name = "one_sec_timer"
 	
-	if test.unit or test.stress:
+	if test.debug:
 		ui.main_menu.quick_start()
 	else:
 		ui.show_main_menu()
@@ -72,7 +72,7 @@ func _ready():
 func start():
 	maps.load_map(maps.current_map)
 	
-	if test.unit or test.stress:
+	if test.debug:
 		yield(get_tree(), "idle_frame")
 		transitions.on_transition_end()
 	else:
@@ -138,7 +138,8 @@ func one_sec_cycle(): # called every second
 			var has_regen = (unit1.regen > 0)
 			var is_building = (unit1.type == "building")
 			var is_neutral = (unit1.team == "neutral")
-			if unit1.type == "leader": ui.inventories.update_consumables(unit1)
+			if unit1.type == "leader" and not test.debug:
+				ui.inventories.update_consumables(unit1)
 			if can_control(unit1): unit1.set_delay()
 			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				unit1.set_regen()
@@ -163,7 +164,7 @@ func can_control(unit1):
 	return (unit1 
 		and unit1.team == player_team 
 		and not unit1.dead
-		and (test.unit or unit1.type == "leader")
+		and (test.debug or unit1.type == "leader")
 	) 
 
 

@@ -469,7 +469,8 @@ func update():
 					lane_orders[lane_order].node.show()
 				"leader": 
 					var leader_order = unit.name+unit.team
-					leader_orders[leader_order].node.show()
+					if leader_order in leader_orders:
+						leader_orders[leader_order].node.show()
 		
 		else:
 			show_orders()

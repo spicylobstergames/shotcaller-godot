@@ -1,11 +1,9 @@
 extends Node
 
-
 # WorldState global class
 
 # This class is an Autoload accessible globaly
 # Access the autoload list in godot settings
-
 
 onready var game = get_tree().get_current_scene()
 
@@ -13,17 +11,30 @@ onready var game = get_tree().get_current_scene()
 var one_sec_timer = Timer.new()
 var time:int = 0
 
-enum teams { red, blue }
+var lanes = {}
+var _state = {}
 
-enum leaders { arthur, bokuden, hongi, joan, lorne, nagato, osman, raja, robin , rollo , sida , takoda , tomyris }
+enum teams { red, blue }
 
 enum pawns_list { infantry, archer, mounted }
 
-enum neutrals_list { lumberjack }
+enum neutrals_list { mailboy, lumberjack }
 
-var lanes = {}
-
-var _state = {}
+enum leaders {
+	arthur, 
+	bokuden, 
+	hongi, 
+	joan, 
+	lorne, 
+	nagato, 
+	osman, 
+	raja, 
+	robin, 
+	rollo, 
+	sida, 
+	takoda, 
+	tomyris 
+}
 
 
 func get_state(state_name, default = null):
