@@ -138,7 +138,7 @@ func one_sec_cycle(): # called every second
 
 
 func _process(delta: float) -> void:
-	camera.process()
+	#camera.process()
 	ui.process()
 
 

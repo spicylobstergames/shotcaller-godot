@@ -117,12 +117,10 @@ func process():
 	fps.set_text("fps: "+str(f)+" u:"+str(n))
 	
 	# minimap display update
-	if minimap:
-		if minimap.update_map_texture:
-			minimap.get_map_texture()
-		if game.camera.zoom.x <= 1:
-			minimap.move_symbols()
-			minimap.follow_camera()
+	if not game.test.debug and minimap and minimap.update_map_texture:
+		minimap.get_map_texture()
+		minimap.move_symbols()
+		minimap.follow_camera()
 
 
 func show_select():

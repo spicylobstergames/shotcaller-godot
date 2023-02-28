@@ -25,7 +25,8 @@ func start():
 		game.mode = "match"
 		game.maps.load_map(game.maps.current_map)
 		game.transitions.on_transition_end()
-
+		
+		game.ui.minimap.get_map_texture()
 
 func spawn_unit():
 	if stress: spawn_random_units()

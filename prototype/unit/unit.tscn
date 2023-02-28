@@ -87,7 +87,6 @@ visible = false
 
 [node name="selection" parent="hud" index="1"]
 visible = false
-use_parent_material = true
 
 [node name="hpbar" parent="hud" index="2"]
 visible = false
@@ -154,7 +153,6 @@ visible = false
 scale = Vector2( 6.25, 6.25 )
 texture = ExtResource( 16 )
 mode = 2
-shadow_enabled = true
 shadow_filter = 1
 shadow_filter_smooth = 30.0
 shadow_item_cull_mask = 2
