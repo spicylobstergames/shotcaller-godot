@@ -28,42 +28,19 @@ func input(event):
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
-		if game.camera.zoom.x <= 1:
-			match event.button_index:
-				
-				BUTTON_LEFT:
-					select(point)
-				
-				BUTTON_RIGHT:
-					match game.control_state:
-						"selection": unselect()
-						"teleport": teleport(game.selected_unit, point)
-						"advance": advance(game.selected_unit, point)
-						"move": move(game.selected_unit, point)
-						"lane": change_lane(game.selected_unit, point)
-		
-		# MAP CLICK ZOOM IN
-		else: 
-			match event.button_index:
-				BUTTON_LEFT: 
-					if (
-						game.camera._touches_info.num_touch_last_frame < 1 
-						and game.camera._touches.size() == 0
-					):
-						#prevent touches converted to clicks from triggering a zoom
-						game.camera.zoom_reset()
-						game.camera.global_position = point - game.map.mid
+		match event.button_index:
+			BUTTON_LEFT:
+				select(point)
+			BUTTON_RIGHT:
+				control_state(point)
 	
 	# TOUCH SELECTION
-	if event is InputEventScreenTouch and event.pressed: 
-		if game.camera.zoom.x <= 1:
+	if event is InputEventScreenTouch and not event.pressed: 
+		if game.selected_unit:
+			control_state(event.position)
+		else:
 			select(event.position)
-		
-		# MAP TOUCH ZOOM IN
-		else: 
-			if(game.camera._touches_info.num_touch_last_frame < 1):#prevent weird warps from taking one figure off at a time
-				game.camera.zoom_reset()
-				game.camera.global_position = point - game.map.mid
+
 
 
 func setup_selection(unit):
@@ -131,6 +108,7 @@ func get_sel_unit_at_point(point):
 		if game.utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
 
+
 func get_unit_at_point(point):
 	for unit in game.all_units:
 		var select_rad =  unit.selection_radius
@@ -141,6 +119,15 @@ func get_unit_at_point(point):
 
 func no_delay(unit):
 	return unit.curr_control_delay <= 0 
+
+
+func control_state(point):
+	match game.control_state:
+		"selection": unselect()
+		"teleport": teleport(game.selected_unit, point)
+		"advance": advance(game.selected_unit, point)
+		"move": move(game.selected_unit, point)
+		"lane": change_lane(game.selected_unit, point)
 
 
 func advance(unit, point):

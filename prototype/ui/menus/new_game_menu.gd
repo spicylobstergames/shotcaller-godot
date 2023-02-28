@@ -4,7 +4,7 @@ extends Control
 
 onready var game = get_tree().get_current_scene()
 
-onready var leader_select_item = preload("res://ui/leader_selection/leader_select_item.tscn")
+onready var leader_select_item = preload("leader_selection/leader_select_item.tscn")
 
 onready var red_team_container : VBoxContainer = $"%red_team_container"
 onready var blue_team_container : VBoxContainer = $"%blue_team_container"

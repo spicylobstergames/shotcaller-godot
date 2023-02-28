@@ -52,7 +52,7 @@ func spawn_random_units():
 func unit_wait_end(unit1):
 	if stress:
 		var o = game.map.size
-		var d = Vector2(randf()*o,randf()*o)
+		var d = Vector2(randf()*o.x,randf()*o.y)
 		if unit1.agent.has_action_function("point"): unit1.agent.get_current_action().point(unit1, d)
 
 

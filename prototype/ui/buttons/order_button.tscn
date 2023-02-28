@@ -54,12 +54,12 @@ atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=27]
 size = 8
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=22]
-size = 9
+size = 8
 font_data = ExtResource( 1 )
 
 [node name="order_button" type="Button"]
@@ -78,11 +78,11 @@ icon = SubResource( 14 )
 script = ExtResource( 2 )
 
 [node name="name" type="Label" parent="."]
-margin_top = 4.0
+margin_top = 3.0
 margin_right = 60.0
-margin_bottom = 16.0
+margin_bottom = 33.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 27 )
 text = "Name"
 align = 1
 autowrap = true
@@ -95,16 +95,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -43.0
-margin_top = -13.0
+margin_left = -57.0
+margin_top = -12.0
 margin_right = -3.0
-margin_bottom = 1.0
+margin_bottom = -3.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 22 )
 text = "1"
 align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="pressed" from="." to="." method="button_down"]

@@ -5,6 +5,7 @@ var current_map = "one_lane_map"
 
 var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
+var rect_test_map:PackedScene = load("res://map/maps/rect_test_map.tscn")
 
 onready var spawn = $spawn
 onready var blocks = $blocks
@@ -24,7 +25,7 @@ func load_map(map_name):
 	create_container("unit_container")
 	create_container("block_container")
 	create_container("projectile_container")
-	game.map.mid = Vector2(game.map.size/2, game.map.size/2)
+	game.map.mid = Vector2(game.map.size.x/2, game.map.size.y/2)
 	game.ui.minimap.map_loaded()
 
 
@@ -59,9 +60,9 @@ func setup_leaders(red_leaders, blue_leaders):
 func new_path(lane, team):
 	if lane in WorldState.lanes:
 		var path = WorldState.lanes[lane].duplicate()
-		if team == "blue":
+		if team == "blue" and game.map.has_node("buildings/red/castle"):
 			path.append(game.map.get_node("buildings/red/castle").global_position)
-		if team == "red": 
+		if team == "red" and game.map.has_node("buildings/blue/castle"): 
 			path.invert()
 			path.append(game.map.get_node("buildings/blue/castle").global_position)
 		return path

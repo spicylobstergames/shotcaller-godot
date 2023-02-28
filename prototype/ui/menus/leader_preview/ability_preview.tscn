@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=2]
-[ext_resource path="res://ui/leader_preview/ability_preview.gd" type="Script" id=3]
+[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture" id=1]
+[ext_resource path="res://ui/menus/leader_preview/ability_preview.gd" type="Script" id=2]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=1]
@@ -15,13 +15,13 @@ font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 12
-font_data = ExtResource( 1 )
+font_data = ExtResource( 3 )
 
 [node name="ability_preview" type="PanelContainer"]
 margin_right = 270.0
 margin_bottom = 120.0
 custom_styles/panel = SubResource( 1 )
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_right = 270.0
@@ -35,7 +35,7 @@ margin_bottom = 120.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 2 )
+texture = ExtResource( 1 )
 expand = true
 stretch_mode = 5
 

@@ -89,7 +89,7 @@ func set_portrait(portrait, unit):
 		"castle": scale = Vector2(0.6,0.6)
 	portrait.scale = scale
 	var sx = abs(portrait.scale.x)
-	portrait.scale.x = -1 * sx if unit.mirror else sx
+	portrait.scale.x = -1 * sx if unit.team == "red" else sx
 
 
 func clear_old_hpbar():

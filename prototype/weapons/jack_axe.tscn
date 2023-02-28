@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/unit/lumberjack_blue.png" type="Texture" id=1]
-[ext_resource path="res://assets/unit/lumberjack_red.png" type="Texture" id=2]
+[ext_resource path="res://assets/neutrals/lumberjack_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/neutrals/lumberjack_red.png" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 1 )

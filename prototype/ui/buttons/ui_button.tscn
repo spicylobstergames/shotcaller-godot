@@ -59,7 +59,7 @@ size = 8
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=22]
-size = 9
+size = 8
 font_data = ExtResource( 1 )
 
 [node name="menu_button" type="Button"]
@@ -76,14 +76,11 @@ custom_styles/normal = SubResource( 13 )
 toggle_mode = true
 icon = SubResource( 14 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="name" type="Label" parent="."]
-margin_top = 4.0
+margin_top = 3.0
 margin_right = 60.0
-margin_bottom = 16.0
+margin_bottom = 30.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 15 )
 text = "Name"
@@ -95,10 +92,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -43.0
-margin_top = -13.0
+margin_left = -57.0
+margin_top = -12.0
 margin_right = -3.0
-margin_bottom = 1.0
+margin_bottom = -3.0
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 22 )
 text = "a"

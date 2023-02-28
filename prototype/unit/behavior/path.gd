@@ -24,18 +24,24 @@ func _ready():
 
 func setup_pathfind():
 	# get tiles
-	var walls_rect = game.map.walls.get_used_rect()
-	var walls_size =  walls_rect.size
+	var walls_size = Vector2(
+		floor(game.map.size.x / game.map.tile_size)+1,
+		floor(game.map.size.y / game.map.tile_size)+1
+	)
 	#setup grid
+	print(walls_size)
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
-	for cell in game.map.walls.get_used_cells():
+	var used_cells = game.map.walls.get_used_cells()
+	for cell in used_cells:
 		game.maps.blocks.create_block(cell.x, cell.y)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
 	# add building units
 	for building in game.player_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()
+		print(building.global_position)
+		print(pos)
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	for building in game.enemy_buildings:
 		var pos = (building.global_position / game.map.tile_size).floor()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://ui/leader_preview/leader_preview.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/menus/leader_preview/leader_preview.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/buttons/leader_button.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://ui/menus/leader_select_menu.gd" type="Script" id=4]

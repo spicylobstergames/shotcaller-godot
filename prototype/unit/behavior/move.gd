@@ -27,7 +27,7 @@ func point(unit, destiny):
 
 func in_bounds(p):
 	var l = game.map.tile_size / 2
-	return p.x > l and p.y > l and p.x < game.map.size - l and p.y < game.map.size - l
+	return p.x > l and p.y > l and p.x < game.map.size.x - l and p.y < game.map.size.y - l
 
 
 

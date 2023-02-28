@@ -2,7 +2,7 @@ extends PanelContainer
 
 signal preview_confirm
 
-onready var ability_preview_scene = preload("res://ui/leader_preview/ability_preview.tscn")
+onready var ability_preview_scene = preload("ability_preview.tscn")
 onready var abilities_preview_container = $"%abilities_preview_container"
 
 onready var leader_name_label = $"%leader_name"

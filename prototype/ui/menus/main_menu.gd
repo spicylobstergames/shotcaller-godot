@@ -22,8 +22,8 @@ func show_new_game_menu():
 	
 
 func campaign_start():
-	game.player_choose_leaders = ["arthur"]
-	game.maps.current_map = "three_lane_map"
+	game.player_choose_leaders = ["joan"]
+	game.maps.current_map = "rect_test_map"
 	hide()
 	game.start()
 

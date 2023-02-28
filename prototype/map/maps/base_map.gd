@@ -11,8 +11,8 @@ onready var walls = get_node("tiles/walls")
 onready var trees = get_node("tiles/trees")
 onready var fog = get_node("fog")
 
-export var size:int = 1056
-var mid = Vector2(size/2, size/2)
+export var size := Vector2(1056, 1056)
+var mid := Vector2(size.x/2, size.y/2)
 
 export var tile_size = 64
 var half_tile_size = tile_size / 2
