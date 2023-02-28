@@ -35,7 +35,8 @@ func build():
 
 func buttons_focus(leader):
 	buttons_unfocus()
-	buttons_name[leader.name].pressed = true
+	if leader.name in buttons_name:
+		buttons_name[leader.name].pressed = true
 
 
 func buttons_unfocus():

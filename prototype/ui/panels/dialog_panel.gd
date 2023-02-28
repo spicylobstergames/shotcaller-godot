@@ -18,9 +18,10 @@ func _ready():
 
 
 func campaign_start():
-	yield(get_tree().create_timer(5), "timeout")
-	var joan = game.player_leaders[0]
-	show_msg(joan, "We are under attack!")
+	if game.mode == "campaign":
+		yield(get_tree().create_timer(5), "timeout")
+		var joan = game.player_leaders[0]
+		show_msg(joan, "We are under attack!")
 
 
 func show_msg(leader, msg_text):

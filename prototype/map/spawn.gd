@@ -9,6 +9,13 @@ var game:Node
 var order_time = 8
 var lumberjack_cost = 1
 
+var infantry:PackedScene = load("res://pawns/infantry.tscn")
+var archer:PackedScene = load("res://pawns/archer.tscn")
+var mounted:PackedScene = load("res://pawns/mounted.tscn")
+
+var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
+var mailboy:PackedScene = load("res://neutrals/mailboy.tscn")
+
 var arthur:PackedScene = load("res://leaders/arthur.tscn")
 var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
 var hongi:PackedScene = load("res://leaders/hongi.tscn")
@@ -22,12 +29,6 @@ var rollo:PackedScene = load("res://leaders/rollo.tscn")
 var sida:PackedScene = load("res://leaders/sida.tscn")
 var takoda:PackedScene = load("res://leaders/takoda.tscn")
 var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
-
-var infantry:PackedScene = load("res://pawns/infantry.tscn")
-var archer:PackedScene = load("res://pawns/archer.tscn")
-var mounted:PackedScene = load("res://pawns/mounted.tscn")
-
-var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
 
 var player_extra_unit = "infantry"
 var enemy_extra_unit = "infantry"
@@ -57,10 +58,8 @@ func _ready():
 
 
 func start():
-	if game.test.unit:
+	if game.test.debug:
 		game.test.spawn_unit()
-	elif game.test.stress:
-		game.test.spawn_random_units()
 	else: 
 		pawns()
 		yield(get_tree().create_timer(4), "timeout")

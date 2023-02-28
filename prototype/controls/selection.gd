@@ -20,11 +20,9 @@ func input(event):
 					KEY_Q: teleport(game.selected_unit, point)
 					KEY_W: change_lane(game.selected_unit, point)
 				
-				if game.test.unit:
-					# attack test
-					match event.scancode:
-						KEY_A: attack(game.selected_unit, point) 
-						KEY_S: stand(game.selected_unit)
+				match event.scancode:
+					KEY_A: attack(game.selected_unit, point) 
+					KEY_S: stand(game.selected_unit)
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 

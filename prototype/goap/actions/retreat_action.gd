@@ -25,9 +25,11 @@ func enter(agent):
 	# update lane data in case of lane change
 	var order
 	if unit.team == WorldState.game.player_team:
-		order = Behavior.orders.player_leaders_orders[unit.name]
-	else:
-		order = Behavior.orders.enemy_leaders_orders[unit.name]
+		if unit.name in Behavior.orders.player_leaders_orders:
+			order = Behavior.orders.player_leaders_orders[unit.name]
+	elif unit.team == WorldState.game.enemy_team:
+		if unit.name in Behavior.orders.enemy_leaders_orders:
+			order = Behavior.orders.enemy_leaders_orders[unit.name]
 	Behavior.orders.set_leader(unit, order)
 	var lane = agent.get_state("lane")
 	var path = WorldState.lanes[lane].duplicate()

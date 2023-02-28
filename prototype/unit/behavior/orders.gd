@@ -130,21 +130,20 @@ func leaders_cycle(): # called every 4 sec
 
 
 func set_leader(leader, orders):
-	var tactics = orders.tactics
-	leader.tactics = tactics.tactic
-	leader.priority = orders.priority.duplicate()
-	
-	var extra_unit = game.maps.spawn.player_extra_unit
-	if leader.team == game.enemy_team:
-		extra_unit = game.maps.spawn.enemy_extra_unit
-	var cost
-	match extra_unit:
-		"infantry": cost = 1
-		"archer": cost = 2
-		"mounted": cost = 3
-	leader.gold -= cost
-	
-
+	if orders:
+		var tactics = orders.tactics
+		leader.tactics = tactics.tactic
+		leader.priority = orders.priority.duplicate()
+		
+		var extra_unit = game.maps.spawn.player_extra_unit
+		if leader.team == game.enemy_team:
+			extra_unit = game.maps.spawn.enemy_extra_unit
+		var cost
+		match extra_unit:
+			"infantry": cost = 1
+			"archer": cost = 2
+			"mounted": cost = 3
+		leader.gold -= cost
 
 
 func set_leader_tactic(tactic):

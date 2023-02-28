@@ -118,7 +118,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		"damage": damage,
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
-		"counter": false,
+		"counter": true,
 		"pierce": false
 	}
 	if target and target.display_name in Behavior.skills.leader:

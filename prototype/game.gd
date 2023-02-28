@@ -57,27 +57,16 @@ var rng = RandomNumberGenerator.new()
 
 
 func _ready():
-	
 #	Engine.time_scale = 2
-#	get_tree().paused = true
-#	randomize()
-	WorldState.one_sec_timer.name = "one_sec_timer"
-	
-	if test.unit or test.stress:
-		ui.main_menu.quick_start()
-	else:
-		ui.show_main_menu()
+	setup_one_sec_timer()
+	if test.debug: test.start()
+	else: ui.show_main_menu()
 
 
 func start():
 	maps.load_map(maps.current_map)
-	
-	if test.unit or test.stress:
-		yield(get_tree(), "idle_frame")
-		transitions.on_transition_end()
-	else:
-		ui.hide_version()
-		transitions.start()
+	ui.hide_version()
+	transitions.start()
 
 
 func map_loaded():
@@ -88,7 +77,7 @@ func map_loaded():
 		
 		WorldState.set_state("is_game_active", true)
 		rng.randomize()
-		start_one_sec_timer()
+		WorldState.one_sec_timer.start()
 		maps.spawn.start()
 		
 		emit_signal("game_started")
@@ -116,11 +105,11 @@ func pause():
 	emit_signal("game_paused")
 
 
-func start_one_sec_timer():
+func setup_one_sec_timer():
 	WorldState.one_sec_timer.wait_time = 1
+	WorldState.one_sec_timer.name = "one_sec_timer"
 	WorldState.one_sec_timer.connect("timeout", self, "one_sec_cycle")
 	add_child(WorldState.one_sec_timer)
-	WorldState.one_sec_timer.start()
 
 
 func one_sec_cycle(): # called every second 
@@ -138,7 +127,8 @@ func one_sec_cycle(): # called every second
 			var has_regen = (unit1.regen > 0)
 			var is_building = (unit1.type == "building")
 			var is_neutral = (unit1.team == "neutral")
-			if unit1.type == "leader": ui.inventories.update_consumables(unit1)
+			if unit1.type == "leader" and not test.debug:
+				ui.inventories.update_consumables(unit1)
 			if can_control(unit1): unit1.set_delay()
 			if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
 				unit1.set_regen()
@@ -153,7 +143,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta):
-	if started:
+	if false:#started:
 		collision.process(delta)
 		Behavior.path.draw(selected_unit)
 		Goap.process(all_units, delta)
@@ -163,7 +153,7 @@ func can_control(unit1):
 	return (unit1 
 		and unit1.team == player_team 
 		and not unit1.dead
-		and (test.unit or unit1.type == "leader")
+		and (test.debug or unit1.type == "leader")
 	) 
 
 

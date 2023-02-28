@@ -501,7 +501,7 @@ func on_death_end():  # death animation end
 	
 	Behavior.attack.clear_stuck(self)
 	
-	if game.test.stress: game.test.respawn(self)
+	if game.test.debug and game.test.stress: game.test.respawn(self)
 	else:
 		match self.type:
 			"pawn": game.maps.spawn.cemitery_add_pawn(self)

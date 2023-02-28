@@ -27,7 +27,7 @@ func point(unit, point):
 					set_target(unit, target)
 		
 		
-		if unit.target or game.test.unit:
+		if unit.target:
 			unit.aim_point = point
 			unit.look_at(point)
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
