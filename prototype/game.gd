@@ -57,27 +57,16 @@ var rng = RandomNumberGenerator.new()
 
 
 func _ready():
-	
 #	Engine.time_scale = 2
-#	get_tree().paused = true
-#	randomize()
-	WorldState.one_sec_timer.name = "one_sec_timer"
-	
-	if test.debug:
-		ui.main_menu.quick_start()
-	else:
-		ui.show_main_menu()
+	setup_one_sec_timer()
+	if test.debug: test.start()
+	else: ui.show_main_menu()
 
 
 func start():
 	maps.load_map(maps.current_map)
-	
-	if test.debug:
-		yield(get_tree(), "idle_frame")
-		transitions.on_transition_end()
-	else:
-		ui.hide_version()
-		transitions.start()
+	ui.hide_version()
+	transitions.start()
 
 
 func map_loaded():
@@ -88,7 +77,7 @@ func map_loaded():
 		
 		WorldState.set_state("is_game_active", true)
 		rng.randomize()
-		start_one_sec_timer()
+		WorldState.one_sec_timer.start()
 		maps.spawn.start()
 		
 		emit_signal("game_started")
@@ -116,11 +105,11 @@ func pause():
 	emit_signal("game_paused")
 
 
-func start_one_sec_timer():
+func setup_one_sec_timer():
 	WorldState.one_sec_timer.wait_time = 1
+	WorldState.one_sec_timer.name = "one_sec_timer"
 	WorldState.one_sec_timer.connect("timeout", self, "one_sec_cycle")
 	add_child(WorldState.one_sec_timer)
-	WorldState.one_sec_timer.start()
 
 
 func one_sec_cycle(): # called every second 
@@ -154,7 +143,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta):
-	if started:
+	if false:#started:
 		collision.process(delta)
 		Behavior.path.draw(selected_unit)
 		Goap.process(all_units, delta)

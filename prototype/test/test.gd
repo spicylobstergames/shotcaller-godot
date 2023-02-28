@@ -3,7 +3,7 @@ var game:Node
 
 # self = game.test
 
-var debug = 0
+var debug = 1
 
 var unit = 0
 var stress = 0
@@ -15,6 +15,16 @@ func _ready():
 	game = get_tree().get_current_scene()
 	yield(get_tree(), "idle_frame")
 	s = game.maps.spawn
+
+
+func start():
+	if debug:
+		game.maps.current_map = "three_lane_map"
+		game.player_choose_leaders = []
+		game.enemy_choose_leaders = []
+		game.mode = "match"
+		game.maps.load_map(game.maps.current_map)
+		game.transitions.on_transition_end()
 
 
 func spawn_unit():
@@ -68,7 +78,7 @@ func respawn(unit1):
 
 
 func spawn_leaders():
-	var leaders = [
+	var all_leaders = [
 		"arthur", 
 		"bokuden", 
 		"hongi", 
@@ -84,10 +94,7 @@ func spawn_leaders():
 		"tomyris" 
 	]
 	var y = 100
-	for leader in leaders:
+	for leader in all_leaders:
 		game.maps.create(s[leader], "mid", "blue", "Vector2", Vector2(400,y))
-		y += 60
-	y = 100
-	for leader in leaders:
 		game.maps.create(s[leader], "mid", "red", "Vector2", Vector2(630,y))
 		y += 60
