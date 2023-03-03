@@ -3,10 +3,13 @@
 [resource]
 code = "shader_type canvas_item;
 
+uniform sampler2D sampler;
+
 uniform vec4 origin:hint_color;
 uniform vec4 origin2:hint_color;
 uniform vec4 origin3:hint_color;
 uniform vec4 origin4:hint_color;
+
 uniform vec4 new:hint_color;
 uniform vec4 new2:hint_color;
 uniform vec4 new3:hint_color;
@@ -16,6 +19,11 @@ uniform float tolerance;
 
 void fragment() {
 	vec4 current_pixel = texture(TEXTURE, UV);
+	/*for (int i = 0; i < number_of_colors; i++) {
+		if (length(current_pixel - origin) < tolerance) {
+			
+		}
+	}*/
 	if (length(current_pixel - origin) < tolerance) COLOR = new;
 	else if (length(current_pixel - origin2) < tolerance) COLOR = new2;
 	else if (length(current_pixel - origin3) < tolerance) COLOR = new3;
