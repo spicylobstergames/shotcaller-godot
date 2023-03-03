@@ -47,18 +47,18 @@ func _button_down():
 	skill.current_cooldown = skill.cooldown
 
 
-func _physics_process(delta):
-	if not skill == null:
-		if game.selected_unit and game.selected_unit.team != game.player_team:
-			# We shoudln't see enemy skill's cooldowns
-			self.disabled = true
-		elif self.skill.on_cooldown():
-			self.disabled = true
-			var cooldown_text = str(ceil(self.skill.current_cooldown / 60.0)) + " sec"
-			self._cooldown.text = cooldown_text
-		else:
-			self.disabled = false
-			self._cooldown.text = ""
-		if skill.display_name == "Bribe" and game.selected_leader.gold < bribe_gold_cost:
-			self.disabled = true
+#func _physics_process(delta):
+#	if not skill == null:
+#		if game.selected_unit and game.selected_unit.team != game.player_team:
+#			# We shoudln't see enemy skill's cooldowns
+#			self.disabled = true
+#		elif self.skill.on_cooldown():
+#			self.disabled = true
+#			var cooldown_text = str(ceil(self.skill.current_cooldown / 60.0)) + " sec"
+#			self._cooldown.text = cooldown_text
+#		else:
+#			self.disabled = false
+#			self._cooldown.text = ""
+#		if skill.display_name == "Bribe" and game.selected_leader.gold < bribe_gold_cost:
+#			self.disabled = true
 

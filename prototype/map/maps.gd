@@ -25,12 +25,13 @@ func load_map(map_name):
 	create_container("unit_container")
 	create_container("block_container")
 	create_container("projectile_container")
-	game.map.mid = Vector2(game.map.size.x/2, game.map.size.y/2)
+	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
+	WorldState.set_state("map_mid", mid)
 	game.ui.minimap.map_loaded()
 
 
 func create_container(container_name):
-	var container = Node2D.new()
+	var container = YSort.new()
 	game.map.add_child(container)
 	game.map.set(container_name, container)
 	container.name = container_name
@@ -43,7 +44,7 @@ func map_loaded():
 	setup_buildings()
 	setup_lanes()
 	blocks.setup_quadtree()
-	game.camera.map_loaded()
+	Crafty_camera.map_loaded()
 	game.ui.map_loaded()
 	Behavior.path.setup_pathfind()
 	game.map_loaded()

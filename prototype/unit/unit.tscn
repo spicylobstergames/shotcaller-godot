@@ -87,7 +87,6 @@ visible = false
 
 [node name="selection" parent="hud" index="1"]
 visible = false
-use_parent_material = true
 
 [node name="hpbar" parent="hud" index="2"]
 visible = false

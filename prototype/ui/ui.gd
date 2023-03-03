@@ -1,7 +1,7 @@
 extends CanvasLayer
 var game:Node
 
-# self = game.ui
+class_name _ui
 
 onready var fps := $"%fps"
 onready var top_label := $"%top_label"
@@ -111,16 +111,16 @@ func map_loaded():
 
 
 func process():
-	# if opt.show.fps:
-	var f = Engine.get_frames_per_second()
-	var n = game.all_units.size()
-	fps.set_text("fps: "+str(f)+" u:"+str(n))
+	if WorldState.get_state("opt").show_fps:
+		var f = Engine.get_frames_per_second()
+		var n = game.all_units.size()
+		fps.set_text("fps: "+str(f)+" u:"+str(n))
 	
 	# minimap display update
 	if minimap:
 		if minimap.update_map_texture:
 			minimap.get_map_texture()
-		if game.camera.zoom.x <= 1:
+		else:
 			minimap.move_symbols()
 			minimap.follow_camera()
 

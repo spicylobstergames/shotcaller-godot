@@ -391,7 +391,7 @@ func _input(event):
 		if event is InputEventMouseButton:
 			if event.pressed:
 				if event.button_index == 1:
-					emit_signal("point", game.camera.get_global_mouse_position())
+					emit_signal("point", Crafty_camera.get_global_mouse_position())
 		elif Input.is_action_pressed("ui_cancel"):
 			emit_signal("point", null)
 	
@@ -426,14 +426,14 @@ func build_leaders():
 		new_skills(leader, enemy_leaders_skills)
 
 
-func _physics_process(delta):
-	_tip.visible = self._waiting_for_point
-	
-	if self._waiting_for_point == true:
-		for polygon in visualization:
-			var mouse_position =  game.camera.get_global_mouse_position()
-			polygon.look_at(mouse_position)
-			
-	for skills in player_leaders_skills.values() + enemy_leaders_skills.values():
-		for skill in skills:
-			skill.current_cooldown = clamp(skill.current_cooldown - 1, 0, skill.current_cooldown)
+#func _physics_process(delta):
+#	_tip.visible = self._waiting_for_point
+#
+#	if self._waiting_for_point == true:
+#		for polygon in visualization:
+#			var mouse_position =  Crafty_camera.get_global_mouse_position()
+#			polygon.look_at(mouse_position)
+#
+#	for skills in player_leaders_skills.values() + enemy_leaders_skills.values():
+#		for skill in skills:
+#			skill.current_cooldown = clamp(skill.current_cooldown - 1, 0, skill.current_cooldown)

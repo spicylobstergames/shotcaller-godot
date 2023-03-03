@@ -12,7 +12,11 @@ var one_sec_timer = Timer.new()
 var time:int = 0
 
 var lanes = {}
-var _state = {}
+var _state = {
+	"opt": {
+		"show_fps": true
+	}
+}
 
 enum teams { red, blue }
 

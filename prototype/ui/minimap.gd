@@ -36,7 +36,7 @@ func _input(event):
 				BUTTON_LEFT: 
 					is_panning = true
 					pan_position = event.position
-					game.camera.is_panning = false
+					Crafty_camera.is_panning = false
 		
 		# MOUSE PAN
 		if event.is_action("pan"):
@@ -54,7 +54,7 @@ func _input(event):
 	else:
 		game.selection.input(event)
 	
-	game.camera.input(event)
+	Crafty_camera.input(event)
 
 
 func over_minimap(event):
@@ -77,11 +77,11 @@ func map_loaded():
 
 func get_map_texture():
 	# set camera zoom and limits
-	game.camera.offset = game.map.mid
-	game.camera.zoom_limit = game.map.zoom_limit
+	Crafty_camera.offset = WorldState.get_state("map_mid")
+	Crafty_camera.zoom_limit = game.map.zoom_limit
 	var zoom_out = game.map.zoom_limit.y
-	game.camera.zoom =  Vector2(zoom_out, zoom_out)
-	game.camera.position = Vector2.ZERO
+	Crafty_camera.zoom =  Vector2(zoom_out, zoom_out)
+	Crafty_camera.position = Vector2.ZERO
 	# hides units and ui
 	map_sprite.hide()
 	game.background.hide()
@@ -114,9 +114,9 @@ func get_map_texture():
 	minimap_sprite.region_rect.size = Vector2((size-border)/sprite_scale, (size-border)/sprite_scale)
 	# set zoom out tile replace
 	#map_sprite.set_texture(texture)
-	#map_sprite.scale = game.camera.zoom
+	#map_sprite.scale = Crafty_camera.zoom
 	# reset cam
-	game.camera.zoom_reset()
+	Crafty_camera.zoom_reset()
 	# reset units and turn ui back on again
 	game.ui.show_all()
 	minimap_container.show()
@@ -198,13 +198,13 @@ func follow_camera():
 		# stick to the bottom (todo: replace with godot viewports)
 		minimap_container.offset.y = view_height
 		rect_layer.offset.y = view_height
-		var half = game.map.mid
+		var half = WorldState.get_state("map_mid")
 		var map_scale = float(max(game.map.size.x, game.map.size.y)) / float(size)
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale)  )
 		var offset = (size - cam_rect.rect_size.y) / 2
-		if is_panning: game.camera.position = pos
+		if is_panning: Crafty_camera.position = pos
 		# update minimap cam rectangle position
-		cam_rect.rect_position = Vector2(offset,offset-size) + game.camera.position / map_scale
+		cam_rect.rect_position = Vector2(offset,offset-size) + Crafty_camera.position / map_scale
 		cam_rect.rect_position.x = clamp(cam_rect.rect_position.x, 0, offset*2)
 		cam_rect.rect_position.y = clamp(cam_rect.rect_position.y, -size, -cam_rect.rect_size.y)
 
