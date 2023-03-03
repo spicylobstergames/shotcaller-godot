@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://ui/buttons/leader_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/ui/design.png" type="Texture" id=2]
@@ -45,17 +45,30 @@ margin_right = 3.0
 margin_top = 3.0
 margin_bottom = 3.0
 
+[sub_resource type="Gradient" id=32]
+interpolation_mode = 1
+offsets = PoolRealArray( 0, 0.25, 0.5, 0.75 )
+colors = PoolColorArray( 0.929412, 0.627451, 0.568627, 1, 0.843137, 0.396078, 0.396078, 1, 0.537255, 0.317647, 0.4, 1, 0.462745, 0.219608, 0.294118, 1 )
+
+[sub_resource type="GradientTexture" id=33]
+gradient = SubResource( 32 )
+width = 4
+
+[sub_resource type="Gradient" id=34]
+interpolation_mode = 1
+offsets = PoolRealArray( 0, 0.25, 0.5, 0.75 )
+colors = PoolColorArray( 0.47451, 0.803922, 0.819608, 1, 0.32549, 0.584314, 0.709804, 1, 0.305882, 0.388235, 0.52549, 1, 0.2, 0.266667, 0.380392, 1 )
+
+[sub_resource type="GradientTexture" id=35]
+gradient = SubResource( 34 )
+width = 4
+
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 5 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = Color( 0.2, 0.266667, 0.380392, 1 )
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = Color( 0.462745, 0.219608, 0.294118, 1 )
+shader_param/total_colors = 4
 shader_param/tolerance = 0.1
+shader_param/origin_colors = SubResource( 35 )
+shader_param/new_colors = SubResource( 33 )
 
 [sub_resource type="DynamicFont" id=7]
 size = 8

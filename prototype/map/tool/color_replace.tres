@@ -3,30 +3,26 @@
 [resource]
 code = "shader_type canvas_item;
 
-uniform sampler2D sampler;
-
-uniform vec4 origin:hint_color;
-uniform vec4 origin2:hint_color;
-uniform vec4 origin3:hint_color;
-uniform vec4 origin4:hint_color;
-
-uniform vec4 new:hint_color;
-uniform vec4 new2:hint_color;
-uniform vec4 new3:hint_color;
-uniform vec4 new4:hint_color;
-
+uniform sampler2D origin_colors;
+uniform sampler2D new_colors;
+uniform int total_colors;
 uniform float tolerance;
+
+vec4 get_color(sampler2D sampler, float position) {
+    return texture(sampler, vec2(position+tolerance, 0));
+}
+
+vec4 replace_color(vec4 current_color) {
+	for (int i = 0; i < total_colors; i++) {
+		float color_step = float(i)/float(total_colors);
+		if (length(current_color - get_color(origin_colors, color_step) ) < tolerance) {
+			return get_color(new_colors, color_step );
+		}
+	}
+	return current_color;
+}
 
 void fragment() {
 	vec4 current_pixel = texture(TEXTURE, UV);
-	/*for (int i = 0; i < number_of_colors; i++) {
-		if (length(current_pixel - origin) < tolerance) {
-			
-		}
-	}*/
-	if (length(current_pixel - origin) < tolerance) COLOR = new;
-	else if (length(current_pixel - origin2) < tolerance) COLOR = new2;
-	else if (length(current_pixel - origin3) < tolerance) COLOR = new3;
-	else if (length(current_pixel - origin4) < tolerance) COLOR = new4;
-	else COLOR = current_pixel;
+	COLOR = replace_color(current_pixel);
 }"
