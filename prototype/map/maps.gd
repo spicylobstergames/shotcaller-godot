@@ -31,7 +31,7 @@ func load_map(map_name):
 
 
 func create_container(container_name):
-	var container = Node2D.new()
+	var container = YSort.new()
 	game.map.add_child(container)
 	game.map.set(container_name, container)
 	container.name = container_name
