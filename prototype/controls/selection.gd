@@ -1,14 +1,14 @@
 extends Node
 var game:Node
 
-# self = game.selection
+# self = game.election
 
 func _ready():
 	game = get_tree().get_current_scene()
 
 
 func input(event):
-	var point = game.camera.get_global_mouse_position()
+	var point = Crafty_camera.get_global_mouse_position()
 	
 	# KEYBOARD
 	if event is InputEventKey:

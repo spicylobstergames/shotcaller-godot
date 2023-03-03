@@ -7,7 +7,7 @@ var game:Node
 # COLLISION QUADTREES
 
 var quad
-var block_template:PackedScene = load("res://map/blocks/block_template.tscn")
+var block_template:PackedScene = load("res://collision/blocks/block_template.tscn")
 
 
 func _ready():

@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://unit/Unit.gd"
 }, {
+"base": "CanvasLayer",
+"class": "_ui",
+"language": "GDScript",
+"path": "res://ui/ui.gd"
+}, {
 "base": "YSort",
 "class": "base_map",
 "language": "GDScript",
@@ -21,6 +26,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Unit": "",
+"_ui": "",
 "base_map": ""
 }
 
@@ -36,11 +42,12 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-Quadtree="*res://autoloads/Quadtree.gd"
-Finder="*res://autoloads/pathfind/JumpPointFinder.gd"
+Quadtree="*res://collision/Quadtree.gd"
+Finder="*res://map/pathfind/JumpPointFinder.gd"
 Behavior="*res://unit/Behavior.tscn"
-WorldState="*res://autoloads/WorldState.gd"
+WorldState="*res://goap/WorldState.gd"
 Goap="*res://goap/Goap.gd"
+Crafty_camera="*res://controls/Crafty_camera.tscn"
 
 [debug]
 

@@ -1,7 +1,8 @@
 extends Camera2D
-var game:Node
 
-# self = game.camera
+# self = Crafty_camera
+
+onready var game = get_tree().get_current_scene()
 
 # PAN
 var is_panning:bool = false
@@ -28,11 +29,11 @@ var _touches_info = {
 }
 
 func _ready():
-	game = get_tree().get_current_scene()
 	zoom = zoom_default
 
 
 func input(event):
+	var pressed = event.is_pressed()
 	# KEYBOARD
 	if event is InputEventKey:
 		
@@ -45,15 +46,15 @@ func input(event):
 			KEY_5: focus_leader(5)
 			
 			# ARROW KEYS
-			KEY_LEFT:  arrow_keys_move.x = -arrow_keys_speed if event.is_pressed() else 0
-			KEY_RIGHT: arrow_keys_move.x =  arrow_keys_speed if event.is_pressed() else 0
-			KEY_UP:    arrow_keys_move.y = -arrow_keys_speed if event.is_pressed() else 0
-			KEY_DOWN:  arrow_keys_move.y =  arrow_keys_speed if event.is_pressed() else 0
+			KEY_LEFT:  arrow_keys_move.x = -arrow_keys_speed if pressed else 0
+			KEY_RIGHT: arrow_keys_move.x =  arrow_keys_speed if pressed else 0
+			KEY_UP:    arrow_keys_move.y = -arrow_keys_speed if pressed else 0
+			KEY_DOWN:  arrow_keys_move.y =  arrow_keys_speed if pressed else 0
 		
 		# NUMBER KEYPAD
-		if not event.is_pressed():
+		if not pressed:
 			var cam_move = null;
-			var x = game.map.mid.x
+			var x = WorldState.map_mid.x
 			match event.scancode:
 				# nine grid cam movement
 				KEY_KP_1: cam_move = [-x, x]
@@ -84,7 +85,7 @@ func input(event):
 		
 		# TOUCH PAN AND ZOOM
 		if event is InputEventScreenTouch and not over_minimap:
-			if !event.is_pressed():
+			if not pressed:
 				_touches.erase(event.index)
 				if _touches.size() == 0:
 					_touches_info.last_radius = 0
@@ -118,17 +119,19 @@ func input(event):
 
 
 func map_loaded():
-	limit_left = -game.map.mid.x
-	limit_top = -game.map.mid.y
-	limit_right = game.map.mid.x
-	limit_bottom = game.map.mid.y
+	var mid = WorldState.get_state("map_mid")
+	limit_left = -mid.x
+	limit_top = -mid.y
+	limit_right = mid.x
+	limit_bottom = mid.y
 
 
 func focus_leader(index):
 	if game.player_leaders.size() >= index:
 		var leader = game.player_leaders[index-1]
 		if leader:
-			game.camera.global_position = leader.global_position - game.map.mid
+			var mid = WorldState.get_state("map_mid")
+			global_position = leader.global_position - mid
 			game.selection.select_unit(leader)
 			game.ui.leaders_icons.buttons_focus(leader)
 

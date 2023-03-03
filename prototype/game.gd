@@ -46,7 +46,6 @@ onready var background := $"%waterfall_background"
 onready var maps := $"%maps"
 onready var hud := $"%hud"
 onready var ui := $"%ui"
-onready var camera := $"%camera"
 onready var collision := $"%collision"
 onready var selection := $"%selection"
 onready var utils := $"%utils"
@@ -138,12 +137,12 @@ func one_sec_cycle(): # called every second
 
 
 func _process(delta: float) -> void:
-	#camera.process()
+	Crafty_camera.process()
 	ui.process()
 
 
-func _physics_process(delta):
-	if false:#started:
+func _physics_process(delta: float) -> void:
+	if started:
 		collision.process(delta)
 		Behavior.path.draw(selected_unit)
 		Goap.process(all_units, delta)

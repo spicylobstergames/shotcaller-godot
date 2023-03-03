@@ -47,6 +47,6 @@ func buttons_unfocus():
 func button_down(index):
 	var leader = game.player_leaders[index]
 	if leader:
-		game.camera.global_position = leader.global_position - game.camera.offset
+		Crafty_camera.global_position = leader.global_position - Crafty_camera.offset
 		game.selection.select_unit(leader)
 		game.ui.leaders_icons.buttons_focus(leader)
