@@ -4,19 +4,25 @@
 code = "shader_type canvas_item;
 
 uniform sampler2D origin_colors;
-uniform sampler2D new_colors;
-uniform int total_colors;
+uniform sampler2D replace_colors;
 uniform float tolerance;
 
-vec4 get_color(sampler2D sampler, float position) {
-    return texture(sampler, vec2(position+tolerance, 0));
+vec4 get_color(sampler2D sampler, int position, int size) {
+	float color_step = float(position) / float(size);
+	return texture(sampler, vec2(color_step, 0));
 }
 
-vec4 replace_color(vec4 current_color) {
-	for (int i = 0; i < total_colors; i++) {
-		float color_step = float(i)/float(total_colors);
-		if (length(current_color - get_color(origin_colors, color_step) ) < tolerance) {
-			return get_color(new_colors, color_step );
+bool similar_colors(vec4 color1, vec4 color2, float d) {
+	vec4 delta = abs(color1 - color2);
+	return (delta.r <= d && delta.g <= d && delta.b <= d && delta.a <= d);
+}
+
+vec4 replace_color(vec4 current_color, sampler2D old_colors, sampler2D new_colors, int size) {
+	for (int i = 0; i < size; i++) {
+		vec4 old_color = get_color(old_colors, i, size);
+		if ( similar_colors(current_color, old_color, tolerance) ) {
+			vec4 gradient_color = get_color(new_colors, i, size);
+			return gradient_color;
 		}
 	}
 	return current_color;
@@ -24,5 +30,6 @@ vec4 replace_color(vec4 current_color) {
 
 void fragment() {
 	vec4 current_pixel = texture(TEXTURE, UV);
-	COLOR = replace_color(current_pixel);
+	int size = textureSize(origin_colors, 0).x;
+	COLOR = replace_color(current_pixel, origin_colors, replace_colors, size);
 }"
