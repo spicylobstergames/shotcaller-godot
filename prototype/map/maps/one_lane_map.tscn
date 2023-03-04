@@ -513,6 +513,9 @@ material = SubResource( 57 )
 position = Vector2( 286, 373 )
 team = "neutral"
 
+[node name="body" parent="buildings/blue/blacksmith/sprites" index="1"]
+animation = "neutral"
+
 [node name="closest_tree" type="Position2D" parent="buildings/blue/blacksmith"]
 position = Vector2( -94, 67 )
 
@@ -524,11 +527,23 @@ position = Vector2( 980, 110 )
 subtype = "mid"
 team = "red"
 
+[node name="body" parent="buildings/red/castle/sprites" index="1"]
+animation = "red"
+
+[node name="flags" parent="buildings/red/castle/sprites" index="2"]
+material = SubResource( 30 )
+
 [node name="barrack" parent="buildings/red" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 864, 233 )
 subtype = "mid"
 team = "red"
+
+[node name="body" parent="buildings/red/barrack/sprites" index="1"]
+animation = "red"
+
+[node name="flags" parent="buildings/red/barrack/sprites" index="2"]
+material = SubResource( 30 )
 
 [node name="tower" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
@@ -536,10 +551,19 @@ position = Vector2( 605, 418 )
 subtype = "mid"
 team = "red"
 
+[node name="body" parent="buildings/red/tower/sprites" index="1"]
+animation = "red"
+
+[node name="flags" parent="buildings/red/tower/sprites" index="2"]
+material = SubResource( 30 )
+
 [node name="camp" parent="buildings/red" instance=ExtResource( 14 )]
 material = SubResource( 58 )
 position = Vector2( 798, 689 )
 team = "neutral"
+
+[node name="body" parent="buildings/red/camp/sprites" index="1"]
+animation = "neutral"
 
 [node name="lanes" type="Node2D" parent="."]
 visible = false
@@ -552,3 +576,14 @@ default_color = Color( 1, 1, 1, 0.196078 )
 [node name="fog" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.392157, 0.392157, 0.392157, 1 )
+
+[editable path="buildings/blue/blacksmith"]
+[editable path="buildings/blue/blacksmith/hud"]
+[editable path="buildings/red/castle"]
+[editable path="buildings/red/castle/hud"]
+[editable path="buildings/red/barrack"]
+[editable path="buildings/red/barrack/hud"]
+[editable path="buildings/red/tower"]
+[editable path="buildings/red/tower/hud"]
+[editable path="buildings/red/camp"]
+[editable path="buildings/red/camp/hud"]
