@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://assets/map/grass.png" type="Texture" id=1]
 [ext_resource path="res://assets/map/brick.png" type="Texture" id=2]
@@ -296,17 +296,28 @@ polygon = PoolVector2Array( 64, 48, 0, 48, 0, 8, 64, 8 )
 [sub_resource type="OccluderPolygon2D" id=56]
 polygon = PoolVector2Array( 48, 64, 16, 64, 16, 0, 48, 0 )
 
+[sub_resource type="Gradient" id=59]
+offsets = PoolRealArray( 0, 0.25, 0.5, 0.75 )
+colors = PoolColorArray( 0.47451, 0.803922, 0.819608, 1, 0.32549, 0.584314, 0.709804, 1, 0.305882, 0.388235, 0.52549, 1, 0.2, 0.266667, 0.380392, 1 )
+
+[sub_resource type="GradientTexture" id=60]
+gradient = SubResource( 59 )
+width = 4
+
+[sub_resource type="Gradient" id=61]
+interpolation_mode = 1
+offsets = PoolRealArray( 0, 0.25, 0.5, 0.75 )
+colors = PoolColorArray( 0.929412, 0.627451, 0.568627, 1, 0.843137, 0.396078, 0.396078, 1, 0.537255, 0.317647, 0.4, 1, 0.462745, 0.219608, 0.294118, 1 )
+
+[sub_resource type="GradientTexture" id=62]
+gradient = SubResource( 61 )
+width = 4
+
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 8 )
-shader_param/origin = Color( 0.305882, 0.388235, 0.52549, 1 )
-shader_param/origin2 = Color( 0.32549, 0.584314, 0.709804, 1 )
-shader_param/origin3 = Color( 0.47451, 0.803922, 0.819608, 1 )
-shader_param/origin4 = null
-shader_param/new = Color( 0.537255, 0.317647, 0.4, 1 )
-shader_param/new2 = Color( 0.843137, 0.396078, 0.396078, 1 )
-shader_param/new3 = Color( 0.929412, 0.627451, 0.568627, 1 )
-shader_param/new4 = null
 shader_param/tolerance = 0.1
+shader_param/origin_colors = SubResource( 60 )
+shader_param/replace_colors = SubResource( 62 )
 
 [sub_resource type="TileSet" id=11]
 0/name = "wall_blue"
@@ -474,7 +485,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 676, 739 )
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 offset = Vector2( 0, -12 )
 
@@ -502,6 +513,9 @@ material = SubResource( 57 )
 position = Vector2( 286, 373 )
 team = "neutral"
 
+[node name="body" parent="buildings/blue/blacksmith/sprites" index="1"]
+animation = "neutral"
+
 [node name="closest_tree" type="Position2D" parent="buildings/blue/blacksmith"]
 position = Vector2( -94, 67 )
 
@@ -513,11 +527,23 @@ position = Vector2( 980, 110 )
 subtype = "mid"
 team = "red"
 
+[node name="body" parent="buildings/red/castle/sprites" index="1"]
+animation = "red"
+
+[node name="flags" parent="buildings/red/castle/sprites" index="2"]
+material = SubResource( 30 )
+
 [node name="barrack" parent="buildings/red" instance=ExtResource( 10 )]
 material = SubResource( 57 )
 position = Vector2( 864, 233 )
 subtype = "mid"
 team = "red"
+
+[node name="body" parent="buildings/red/barrack/sprites" index="1"]
+animation = "red"
+
+[node name="flags" parent="buildings/red/barrack/sprites" index="2"]
+material = SubResource( 30 )
 
 [node name="tower" parent="buildings/red" instance=ExtResource( 12 )]
 material = SubResource( 57 )
@@ -525,10 +551,19 @@ position = Vector2( 605, 418 )
 subtype = "mid"
 team = "red"
 
+[node name="body" parent="buildings/red/tower/sprites" index="1"]
+animation = "red"
+
+[node name="flags" parent="buildings/red/tower/sprites" index="2"]
+material = SubResource( 30 )
+
 [node name="camp" parent="buildings/red" instance=ExtResource( 14 )]
 material = SubResource( 58 )
 position = Vector2( 798, 689 )
 team = "neutral"
+
+[node name="body" parent="buildings/red/camp/sprites" index="1"]
+animation = "neutral"
 
 [node name="lanes" type="Node2D" parent="."]
 visible = false
@@ -541,3 +576,14 @@ default_color = Color( 1, 1, 1, 0.196078 )
 [node name="fog" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.392157, 0.392157, 0.392157, 1 )
+
+[editable path="buildings/blue/blacksmith"]
+[editable path="buildings/blue/blacksmith/hud"]
+[editable path="buildings/red/castle"]
+[editable path="buildings/red/castle/hud"]
+[editable path="buildings/red/barrack"]
+[editable path="buildings/red/barrack/hud"]
+[editable path="buildings/red/tower"]
+[editable path="buildings/red/tower/hud"]
+[editable path="buildings/red/camp"]
+[editable path="buildings/red/camp/hud"]

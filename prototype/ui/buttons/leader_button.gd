@@ -1,5 +1,6 @@
 extends Button
-var game:Node
+
+class_name Leader_button
 
 var leader:Node
 var leader_name:String
@@ -16,7 +17,6 @@ var leader_icons = preload("res://assets/ui/leaders_icons.png")
 var red_material
 
 func _ready():
-	game = get_tree().get_current_scene()
 	sprite = get_node("sprite")
 	name_label = get_node("name_label")
 	hint = get_node("hint")

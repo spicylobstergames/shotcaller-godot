@@ -10,7 +10,6 @@ signal game_paused
 signal game_ended
 
 var built:bool = false
-var started:bool = false
 var ended:bool = false
 var paused:bool = true
 var victory:bool
@@ -68,9 +67,21 @@ func start():
 	transitions.start()
 
 
+func _input(event):
+	var over_minimap = ui.minimap.over_minimap(event) 
+	WorldState.set_state("over_minimap", over_minimap)
+	
+	if over_minimap:
+		ui.minimap.input(event)
+	else:
+		selection.input(event)
+	
+	Crafty_camera.input(event)
+
+
 func map_loaded():
-	if not started:
-		started = true
+	if not WorldState.get_state("game_started"):
+		WorldState.set_state("game_started", true)
 		resume()
 		emit_signal("game_map_loaded")
 		
@@ -142,7 +153,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if started:
+	if WorldState.get_state("game_started"):
 		collision.process(delta)
 		Behavior.path.draw(selected_unit)
 		Goap.process(all_units, delta)

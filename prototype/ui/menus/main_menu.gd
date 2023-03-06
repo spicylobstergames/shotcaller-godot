@@ -7,6 +7,14 @@ onready var exit_button = $"%exit_button"
 onready var new_game_button = $"%new_game_button"
 onready var campaign_button = $"%campaign_button"
 
+var once = true
+
+
+func _input(event):
+	if once and event is InputEventKey:
+		quick_start_button.grab_focus()
+		once = false
+
 
 func quick_start():
 	hide()
@@ -33,3 +41,4 @@ func campaign_start():
 
 func on_exit():
 	game.exit()
+

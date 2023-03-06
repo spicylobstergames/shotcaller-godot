@@ -6,7 +6,7 @@ var index = 0
 var saved_icon
 var shop_item = false
 var price_after_discount
-var poison = preload("res://items/potions/poison.tscn").instance()
+var poison = preload("res://item/potions/poison.tscn").instance()
 
 onready var name_label = get_node("name")
 onready var price_label = get_node("price")

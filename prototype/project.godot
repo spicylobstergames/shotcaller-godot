@@ -9,6 +9,21 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Button",
+"class": "Leader_button",
+"language": "GDScript",
+"path": "res://ui/buttons/leader_button.gd"
+}, {
+"base": "Button",
+"class": "Menu_button",
+"language": "GDScript",
+"path": "res://ui/buttons/menu_button.gd"
+}, {
+"base": "Resource",
+"class": "Shop_item",
+"language": "GDScript",
+"path": "res://item/Shop_item.gd"
+}, {
 "base": "Node2D",
 "class": "Unit",
 "language": "GDScript",
@@ -25,6 +40,9 @@ _global_script_classes=[ {
 "path": "res://map/maps/base_map.gd"
 } ]
 _global_script_class_icons={
+"Leader_button": "",
+"Menu_button": "",
+"Shop_item": "",
 "Unit": "",
 "_ui": "",
 "base_map": ""

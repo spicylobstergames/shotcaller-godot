@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://items/passives/holy_shield.gd" type="Script" id=1]
+[ext_resource path="res://item/passives/feather.gd" type="Script" id=1]
 
-[node name="holy_shield" type="Node"]
+
+[node name="feather" type="Node"]
 script = ExtResource( 1 )
 
 [node name="update_timer" type="Timer" parent="."]
