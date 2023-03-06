@@ -28,6 +28,7 @@ func show_msg(leader, msg_text):
 	show()
 	can_hide = false
 	game.selection.select_unit(leader)
+	Crafty_camera.focus_unit(leader)
 	# animate text
 	msg.text = msg_text
 	#var sprite = index of leader

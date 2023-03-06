@@ -28,33 +28,28 @@ var sprite_scale:float = 1.0
 func _ready():
 	minimap_container.hide()
 
-func _input(event):
-	if over_minimap(event):
-		# MOUSE CLICK
-		if event is InputEventMouseButton:
-			match event.button_index:
-				BUTTON_LEFT: 
-					is_panning = true
-					pan_position = event.position
-					Crafty_camera.is_panning = false
-		
-		# MOUSE PAN
-		if event.is_action("pan"):
-			is_panning = event.is_action_pressed("pan")
-		elif event is InputEventMouseMotion:
-			if is_panning: pan_position = event.position
-		
-		
-		# TOUCH PAN
-		if event is InputEventScreenTouch:
-			is_panning = event.is_pressed()
-		elif event is InputEventScreenDrag:
-			if is_panning: pan_position = event.position
-			
-	else:
-		game.selection.input(event)
+func input(event):
+	# MOUSE CLICK
+	if event is InputEventMouseButton:
+		match event.button_index:
+			BUTTON_LEFT: 
+				is_panning = true
+				pan_position = event.position
+				Crafty_camera.is_panning = false
 	
-	Crafty_camera.input(event)
+	# MOUSE PAN
+	if event.is_action("pan"):
+		is_panning = event.is_action_pressed("pan")
+	elif event is InputEventMouseMotion:
+		if is_panning: pan_position = event.position
+	
+	
+	# TOUCH PAN
+	if event is InputEventScreenTouch:
+		is_panning = event.is_pressed()
+	elif event is InputEventScreenDrag:
+		if is_panning: pan_position = event.position
+	
 
 
 func over_minimap(event):

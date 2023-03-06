@@ -27,6 +27,7 @@ func load_map(map_name):
 	create_container("projectile_container")
 	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
 	WorldState.set_state("map_mid", mid)
+	WorldState.set_state("map_camera_limit", game.map.camera_limit)
 	game.ui.minimap.map_loaded()
 
 

@@ -1,8 +1,8 @@
 extends Camera2D
 
+# Autoload
 # self = Crafty_camera
 
-onready var game = get_tree().get_current_scene()
 
 # PAN
 var is_panning:bool = false
@@ -27,15 +27,29 @@ var _touches_info = {
 	"last_avg_pos":Vector2.ZERO, 
 	"cur_avg_pos":Vector2.ZERO
 }
+var actions = InputMap.get_actions()
 
 func _ready():
 	zoom = zoom_default
 
 
+func get_action(event):
+	for action in actions:
+		if event.is_action_pressed(action) or event.is_action_released(action):
+			return action
+
+
 func input(event):
 	var pressed = event.is_pressed()
-	# KEYBOARD
-	if event is InputEventKey:
+	
+	match get_action(event):
+		"ui_left":  arrow_keys_move.x = -arrow_keys_speed if pressed else 0
+		"ui_right": arrow_keys_move.x =  arrow_keys_speed if pressed else 0
+		"ui_up":    arrow_keys_move.y = -arrow_keys_speed if pressed else 0
+		"ui_down":  arrow_keys_move.y =  arrow_keys_speed if pressed else 0
+
+		# KEYBOARD
+	if event is InputEventKey and WorldState.get_state("game_started"):
 		
 		match event.scancode:
 			# LEADER KEYS
@@ -44,17 +58,11 @@ func input(event):
 			KEY_3: focus_leader(3)
 			KEY_4: focus_leader(4)
 			KEY_5: focus_leader(5)
-			
-			# ARROW KEYS
-			KEY_LEFT:  arrow_keys_move.x = -arrow_keys_speed if pressed else 0
-			KEY_RIGHT: arrow_keys_move.x =  arrow_keys_speed if pressed else 0
-			KEY_UP:    arrow_keys_move.y = -arrow_keys_speed if pressed else 0
-			KEY_DOWN:  arrow_keys_move.y =  arrow_keys_speed if pressed else 0
 		
 		# NUMBER KEYPAD
 		if not pressed:
 			var cam_move = null;
-			var x = WorldState.map_mid.x
+			var x = WorldState.get_state("map_mid").x
 			match event.scancode:
 				# nine grid cam movement
 				KEY_KP_1: cam_move = [-x, x]
@@ -74,8 +82,8 @@ func input(event):
 				zoom_reset()
 				global_position = Vector2(cam_move[0], cam_move[1])
 	
-	if game:
-		var over_minimap = game.ui.minimap.over_minimap(event)
+	if WorldState.get_state("game_started"):
+		var over_minimap = WorldState.get_state("over_minimap")
 		# MOUSE PAN
 		if event.is_action("pan") and not over_minimap:
 			is_panning = event.is_action_pressed("pan")
@@ -127,13 +135,17 @@ func map_loaded():
 
 
 func focus_leader(index):
+	var game = get_tree().get_current_scene()
 	if game.player_leaders.size() >= index:
 		var leader = game.player_leaders[index-1]
 		if leader:
-			var mid = WorldState.get_state("map_mid")
-			global_position = leader.global_position - mid
+			focus_unit(leader)
 			game.selection.select_unit(leader)
 			game.ui.leaders_icons.buttons_focus(leader)
+
+func focus_unit(unit):
+	var mid = WorldState.get_state("map_mid")
+	global_position = unit.global_position - mid
 
 
 func zoom_reset(): 
@@ -161,11 +173,11 @@ func _zoom_camera(dir):
 #	TODO: fix map zoom and remove zoom limits from the map
 #	var size = get_viewport().size
 #	var max_size = max(size.x, size.y)
-#	var zoom_out_limit = game.map.size / max_size
+#	var zoom_out_limit = WorldState.get_state("map_size") / max_size
 
 
 func process():
-	if game.started: 
+	if WorldState.get_state("game_started"): 
 		
 		# APPLY MOUSE PAN
 		if is_panning: translate(pan_position * zoom.x)
@@ -184,8 +196,9 @@ func process():
 		pan_position = Vector2.ZERO
 		
 		# KEEP CAMERA PAN LIMITS
-		var x = game.map.camera_limit.x
-		var y = game.map.camera_limit.y
+		var camera_limit = WorldState.get_state("map_camera_limit")
+		var x = camera_limit.x
+		var y = camera_limit.y
 		global_position.x = clamp(global_position.x, -x, x)
 		global_position.y = clamp(global_position.y, -y, y)
 		

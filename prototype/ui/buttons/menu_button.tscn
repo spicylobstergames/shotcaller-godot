@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
+[ext_resource path="res://ui/buttons/menu_button.gd" type="Script" id=1]
 [ext_resource path="res://assets/ui/CompassProTitle.tres" type="DynamicFont" id=2]
 
 [sub_resource type="StyleBoxEmpty" id=5]
@@ -10,15 +11,22 @@
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
-[node name="Button" type="Button"]
+[node name="Menu_button" type="Button"]
 margin_right = 12.0
 margin_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_colors/font_color_hover = Color( 0.207843, 0.909804, 0.858824, 1 )
+custom_colors/font_color_disabled = Color( 0.580392, 0.580392, 0.580392, 1 )
+custom_colors/font_color_focus = Color( 0.207843, 0.909804, 0.858824, 1 )
 custom_fonts/font = ExtResource( 2 )
 custom_styles/hover = SubResource( 5 )
 custom_styles/pressed = SubResource( 1 )
 custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 4 )
 custom_styles/normal = SubResource( 2 )
 text = "New game"
+script = ExtResource( 1 )
+
+[connection signal="focus_entered" from="." to="." method="_on_Menu_button_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_Menu_button_focus_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_Menu_button_mouse_entered"]

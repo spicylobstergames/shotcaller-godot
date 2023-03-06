@@ -62,6 +62,7 @@ margin_top = 108.0
 margin_right = 189.0
 margin_bottom = 140.0
 custom_fonts/font = ExtResource( 4 )
+disabled = true
 text = "Options"
 
 [node name="exit_button" parent="VBoxContainer" instance=ExtResource( 3 )]
