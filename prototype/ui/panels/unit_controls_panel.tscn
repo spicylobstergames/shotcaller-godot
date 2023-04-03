@@ -1,40 +1,40 @@
 [gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ui/buttons/order_button.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=3]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=2]
+[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=3]
 [ext_resource path="res://ui/panels/unit_controls_panel.gd" type="Script" id=4]
 
 [sub_resource type="StyleBoxTexture" id=30]
 texture = ExtResource( 3 )
 region_rect = Rect2( 0, 35, 175, 86 )
-margin_left = 5.0
-margin_right = 5.0
-margin_top = 5.0
-margin_bottom = 5.0
+offset_left = 5.0
+offset_right = 5.0
+offset_top = 5.0
+offset_bottom = 5.0
 modulate_color = Color( 1, 1, 1, 0.941176 )
 
-[sub_resource type="DynamicFont" id=31]
+[sub_resource type="FontFile" id=31]
 size = 13
 font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxTexture" id=32]
 texture = ExtResource( 3 )
 region_rect = Rect2( 108, 0, 35, 35 )
-margin_left = 3.0
-margin_right = 3.0
-margin_top = 3.0
-margin_bottom = 3.0
+offset_left = 3.0
+offset_right = 3.0
+offset_top = 3.0
+offset_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=33]
 texture = ExtResource( 3 )
 region_rect = Rect2( 145, 37, 33, 33 )
-margin_left = 2.0
-margin_right = 2.0
-margin_top = 2.0
-margin_bottom = 2.0
+offset_left = 2.0
+offset_right = 2.0
+offset_top = 2.0
+offset_bottom = 2.0
 
-[sub_resource type="StreamTexture" id=29]
+[sub_resource type="CompressedTexture2D" id=29]
 load_path = "res://.import/icons.png-bee93322a617e5fe670331de2acd3918.stex"
 
 [sub_resource type="AtlasTexture" id=34]
@@ -42,7 +42,7 @@ atlas = SubResource( 29 )
 region = Rect2( 624, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
-[sub_resource type="DynamicFont" id=35]
+[sub_resource type="FontFile" id=35]
 size = 8
 font_data = ExtResource( 2 )
 
@@ -62,39 +62,39 @@ region = Rect2( 336, 0, 46, 46 )
 margin = Rect2( 2, 2, 0, 0 )
 
 [node name="unit_controls_menu" type="ItemList"]
-margin_left = -286.0
-margin_top = -264.0
-margin_bottom = -154.0
+offset_left = -286.0
+offset_top = -264.0
+offset_bottom = -154.0
 custom_styles/bg = SubResource( 30 )
 script = ExtResource( 4 )
 
 [node name="scroll_container" type="ScrollContainer" parent="."]
-margin_left = 16.0
-margin_top = 12.0
-margin_right = 278.0
-margin_bottom = 96.0
-rect_pivot_offset = Vector2( 290, 0 )
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 278.0
+offset_bottom = 96.0
+pivot_offset = Vector2( 290, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="container" type="VBoxContainer" parent="scroll_container"]
-margin_right = 252.0
-margin_bottom = 80.0
+offset_right = 252.0
+offset_bottom = 80.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="label" type="Label" parent="scroll_container/container"]
-margin_right = 252.0
-margin_bottom = 16.0
+offset_right = 252.0
+offset_bottom = 16.0
 custom_fonts/font = SubResource( 31 )
 text = "controls"
 
 [node name="buttons_container" type="HBoxContainer" parent="scroll_container/container"]
-margin_top = 20.0
-margin_right = 252.0
-margin_bottom = 80.0
+offset_top = 20.0
+offset_right = 252.0
+offset_bottom = 80.0
 
 [node name="teleport_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
 unique_name_in_owner = true
@@ -113,8 +113,8 @@ text = "q"
 
 [node name="lane_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
 unique_name_in_owner = true
-margin_left = 64.0
-margin_right = 124.0
+offset_left = 64.0
+offset_right = 124.0
 focus_mode = 2
 custom_styles/pressed = SubResource( 32 )
 custom_styles/disabled = SubResource( 33 )
@@ -129,8 +129,8 @@ text = "w"
 
 [node name="move_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
 unique_name_in_owner = true
-margin_left = 128.0
-margin_right = 188.0
+offset_left = 128.0
+offset_right = 188.0
 focus_mode = 2
 custom_styles/pressed = SubResource( 32 )
 custom_styles/disabled = SubResource( 33 )
@@ -145,8 +145,8 @@ text = "e"
 
 [node name="attack_button" parent="scroll_container/container/buttons_container" instance=ExtResource( 1 )]
 unique_name_in_owner = true
-margin_left = 192.0
-margin_right = 252.0
+offset_left = 192.0
+offset_right = 252.0
 focus_mode = 2
 custom_styles/pressed = SubResource( 32 )
 custom_styles/disabled = SubResource( 33 )

@@ -10,7 +10,7 @@ extends Node
 # this, so it makes re-use easy and it doesn't get tied
 # to unrelated implementation details (movement, collisions, etc)
 
-export var goals_list = []
+@export var goals_list = []
 
 var _goals
 var _current_goal
@@ -31,18 +31,18 @@ func _ready():
 			
 	_unit = get_parent()
 	
-	_unit.connect("unit_reseted", self, "reset")
-	_unit.connect("unit_collided", self, "on_collision")
-	_unit.connect("unit_arrived", self, "on_arrive")
-	_unit.connect("unit_idle_ended", self, "on_idle_end")
-	_unit.connect("unit_stun_ended", self, "on_stun_end")
-	_unit.connect("unit_move_ended", self, "on_move_end")
-	_unit.connect("unit_attack_ended", self, "on_attack_end")
-	_unit.connect("unit_animation_ended", self, "on_animation_end")
-	_unit.connect("unit_was_attacked", self, "was_attacked")
+	_unit.connect("unit_reseted",Callable(self,"reset"))
+	_unit.connect("unit_collided",Callable(self,"on_collision"))
+	_unit.connect("unit_arrived",Callable(self,"on_arrive"))
+	_unit.connect("unit_idle_ended",Callable(self,"on_idle_end"))
+	_unit.connect("unit_stun_ended",Callable(self,"on_stun_end"))
+	_unit.connect("unit_move_ended",Callable(self,"on_move_end"))
+	_unit.connect("unit_attack_ended",Callable(self,"on_attack_end"))
+	_unit.connect("unit_animation_ended",Callable(self,"on_animation_end"))
+	_unit.connect("unit_was_attacked",Callable(self,"was_attacked"))
 	
 	
-	WorldState.one_sec_timer.connect("timeout", self, "on_every_second")
+	WorldState.one_sec_timer.connect("timeout",Callable(self,"on_every_second"))
 
 
 func get_unit():

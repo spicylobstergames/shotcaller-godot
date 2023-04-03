@@ -1,10 +1,10 @@
 extends Node2D
 
-onready var game = get_tree().get_current_scene()
-onready var unit = get_parent()
-onready var state = get_node("state")
-onready var hpbar = get_node("hpbar")
-onready var selection = get_node("selection")
+@onready var game = get_tree().get_current_scene()
+@onready var unit = get_parent()
+@onready var state = get_node("state")
+@onready var hpbar = get_node("hpbar")
+@onready var selection = get_node("selection")
 
 
 # self = unit.hud

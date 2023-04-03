@@ -1,16 +1,16 @@
 extends CanvasLayer
 
-onready var circle_transition_scene : PackedScene = preload("res://ui/transitions/circle_transition.tscn")
-onready var square_transition_scene : PackedScene = preload("res://ui/transitions/square_transition.tscn")
+@onready var circle_transition_scene : PackedScene = preload("res://ui/transitions/circle_transition.tscn")
+@onready var square_transition_scene : PackedScene = preload("res://ui/transitions/square_transition.tscn")
 
-onready var game = get_tree().get_current_scene()
+@onready var game = get_tree().get_current_scene()
 
 
 func start():
 	var transition = random()
 	add_child(transition)
 	transition.start_transition()
-	transition.connect("transition_completed", self, "on_transition_end", [transition])
+	transition.connect("transition_completed",Callable(self,"on_transition_end").bind(transition))
 
 
 func on_transition_end(transition = null):
@@ -21,4 +21,4 @@ func on_transition_end(transition = null):
 
 
 func random():
-	return [square_transition_scene, circle_transition_scene][randi() % 2].instance()
+	return [square_transition_scene, circle_transition_scene][randi() % 2].instantiate()

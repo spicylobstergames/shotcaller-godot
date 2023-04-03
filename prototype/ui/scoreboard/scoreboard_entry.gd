@@ -1,9 +1,9 @@
 extends MarginContainer
-onready var kda_label: Label = $"%kda"
-onready var gold_label: Label = $"%gold_amount"
-onready var portrait: Sprite = $"%portrait"
-onready var last_hits_label: Label = $"%last_hits"
-onready var level_label: Label = $"%level"
+@onready var kda_label: Label = $"%kda"
+@onready var gold_label: Label = $"%gold_amount"
+@onready var portrait: Sprite2D = $"%portrait"
+@onready var last_hits_label: Label = $"%last_hits"
+@onready var level_label: Label = $"%level"
 var leader: Unit
 
 func initialize_red_leader(new_leader):

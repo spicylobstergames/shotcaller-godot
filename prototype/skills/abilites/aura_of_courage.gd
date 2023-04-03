@@ -1,16 +1,16 @@
 extends Node
 
-onready var unit: Unit = get_parent().get_parent().get_parent()
-onready var game:Node = get_tree().get_current_scene()
+@onready var unit: Unit = get_parent().get_parent().get_parent()
+@onready var game:Node = get_tree().get_current_scene()
 var affected_units = {}
 
 const RANGE = 100
 const VALUE = 2
 
-export var icon : Texture
-export var ability_name = "Aura of Courage"
-export(String, MULTILINE) var description = "Arthur inspires courage in nearby allies, increasing their attack by 2 * his level"
-export var status_effect_icon : Texture
+@export var icon : Texture2D
+@export var ability_name = "Aura of Courage"
+@export var description = "Arthur inspires courage in nearby allies, increasing their attack by 2 * his level" # (String, MULTILINE)
+@export var status_effect_icon : Texture2D
 
 func _on_update_timer_timeout():
 	$update_timer.start()

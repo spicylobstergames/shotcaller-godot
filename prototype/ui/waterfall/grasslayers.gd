@@ -1,22 +1,22 @@
-tool
+@tool
 
 extends MultiMeshInstance2D
 
-export var do_distribution := false setget _set_do_distribution
+@export var do_distribution := false : set = _set_do_distribution
 
-export(int) var in_a_rows = 1
-export(int) var row_distance = 10
+@export var in_a_rows: int = 1
+@export var row_distance: int = 10
 
-export(int) var random_range = 0
-export(int) var random_range_y = 0
+@export var random_range: int = 0
+@export var random_range_y: int = 0
 
-export(Vector2) var center_light = Vector2.ZERO
-export(Vector2) var focal_size = Vector2.ONE
+@export var center_light: Vector2 = Vector2.ZERO
+@export var focal_size: Vector2 = Vector2.ONE
 
-export(float,0,1) var noise_strength = 0.5 
-export(float,0,1,1e-9) var focus = 1.0
+@export var noise_strength = 0.5  # (float,0,1)
+@export var focus = 1.0 # (float,0,1,1e-9)
 
-export(Array) var colors = [
+@export var colors: Array = [
 	Color(0.086275, 0.352941, 0.298039, 1.0),
 	Color(0.137255, 0.564706, 0.388235, 1.0),
 	Color(0.117647, 0.737255, 0.450980, 1.0),
@@ -51,12 +51,12 @@ func _update_distribution():
 			var x = (i%in_a_rows)*((screen_size.x + 50)/in_a_rows)
 			vectors.append(Vector2(
 				int(
-					x + rand_range(-random_range,random_range)
+					x + randf_range(-random_range,random_range)
 				), 
 				int(current_row * row_distance + open_simplex_noise.get_noise_1d(x) * random_range_y)
 			))
 		
-		vectors.sort_custom(self, "sort_y")
+		vectors.sort_custom(Callable(self,"sort_y"))
 		
 		for index in vectors.size():
 			var v = vectors[index]

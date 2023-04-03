@@ -124,7 +124,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			attacker.attack_count += 1
 			if attacker.type == "leader":
 				target.last_attacker = attacker
-				target.assist_candidates[attacker] = OS.get_ticks_msec()
+				target.assist_candidates[attacker] = Time.get_ticks_msec()
 			
 		if not modifiers.counter: # avoid infinite reciprocal counters
 			target.was_attacked(attacker, damage)
@@ -161,7 +161,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 
 func projectile_release(attacker):
-	projectile_start(attacker, attacker.target)
+	projectile_start(Callable(attacker,attacker.target))
 	Behavior.skills.projectile_release(attacker)
 
 
@@ -256,7 +256,7 @@ func projectile_stuck(attacker, target, projectile):
 	attacker.projectiles.erase(projectile)
 	# remove projectile after 1.2 sec
 
-	yield(get_tree().create_timer(1.2), "timeout")
+	await get_tree().create_timer(1.2).timeout
 	if is_instance_valid(stuck):
 		stuck.get_parent().remove_child(stuck)
 		stuck.queue_free()

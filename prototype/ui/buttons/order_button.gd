@@ -2,8 +2,8 @@ extends Button
 var game:Node
 
 
-onready var name_label = get_node("name")
-onready var hint_label = get_node("hint")
+@onready var name_label = get_node("name")
+@onready var hint_label = get_node("hint")
 
 var orders
 var saved_icon
@@ -63,10 +63,10 @@ func button_down():
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
 				if button.orders.taxes == self.orders.taxes:
-					button.pressed = true
+					button.button_pressed = true
 					button.disabled = true
 				else: 
-					button.pressed = false
+					button.button_pressed = false
 					button.disabled = false
 			Behavior.orders.set_taxes(self.orders.taxes, game.selected_unit.team)
 			self.disabled = true
@@ -102,7 +102,7 @@ func button_down():
 func clear_siblings(button):
 	for child in button.get_parent().get_children():
 		if child != button: 
-			child.pressed = false
+			child.button_pressed = false
 			child.disabled = false
 
 

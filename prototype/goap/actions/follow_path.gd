@@ -27,8 +27,8 @@ func enter(agent):
 	var unit = agent.get_unit()
 	var path = unit.current_path
 	var new_path = unit.cut_path(path)
-	if not new_path.empty():
-		Behavior.path.start(unit, new_path)
+	if not new_path.is_empty():
+		Behavior.path.start(Callable(unit,new_path))
 
 
 func on_arrive(agent):

@@ -44,7 +44,7 @@ func on_arrive(agent):
 	unit.channeling_timer.wait_time = cut_time
 	unit.channeling_timer.start()
 	# cut animation end
-	yield(unit.channeling_timer, "timeout")
+	await unit.channeling_timer.timeout
 	unit.agent.set_state("has_player_command", true)
 	agent.set_state("has_wood",true)
 

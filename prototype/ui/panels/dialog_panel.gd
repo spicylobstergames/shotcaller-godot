@@ -5,21 +5,21 @@ var game:Node
 # self = game.ui.dialog
 
 
-onready var display_name := $"%display_name"
-onready var msg := $"%msg"
-onready var control_delay := $"%control_delay"
-onready var sprite := $"%sprite"
+@onready var display_name := $"%display_name"
+@onready var msg := $"%msg"
+@onready var control_delay := $"%control_delay"
+@onready var sprite := $"%sprite"
 
 var can_hide := false
 
 func _ready():
 	game = get_tree().get_current_scene()
-	game.connect("game_started", self, "campaign_start")
+	game.connect("game_started",Callable(self,"campaign_start"))
 
 
 func campaign_start():
 	if game.mode == "campaign":
-		yield(get_tree().create_timer(5), "timeout")
+		await get_tree().create_timer(5).timeout
 		var joan = game.player_leaders[0]
 		show_msg(joan, "We are under attack!")
 
@@ -34,7 +34,7 @@ func show_msg(leader, msg_text):
 	#var sprite = index of leader
 	#$panel/portrait/sprite.region_rect.position.x = sprite * 64
 	display_name.text = leader.name
-	yield(get_tree().create_timer(2), "timeout")
+	await get_tree().create_timer(2).timeout
 	can_hide = true
 
 

@@ -83,7 +83,7 @@ func on_collision(unit, delta):
 		unit.collision_timer.wait_time = 0.1 + randf() * 0.2
 		unit.collision_timer.start()
 		
-		yield(unit.collision_timer, "timeout")
+		await unit.collision_timer.timeout
 		#current_destiny does have the potential to change in the time between
 		move(unit, unit.current_destiny)		
 
@@ -120,5 +120,5 @@ func stand(unit):
 func smart(unit, point):
 	if not unit.agent.get_state("stunned"):
 		var path = Behavior.path.find(unit.global_position, point)
-		if path: Behavior.path.start(unit, path)
+		if path: Behavior.path.start(Callable(unit,path))
 

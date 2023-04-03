@@ -2,21 +2,21 @@ extends Button
 
 
 var skill = null
-onready var _name = $name
-onready var _cooldown = $cooldown
-onready var game: Node = get_tree().get_current_scene()
+@onready var _name = $name
+@onready var _cooldown = $cooldown
+@onready var game: Node = get_tree().get_current_scene()
 var bribe_gold_cost = 10
 
 
 func _ready():
-	connect("button_down", self, "_button_down")
+	connect("button_down",Callable(self,"_button_down"))
 
 
 func setup(_skill):
 	self.skill = _skill
 	self.disabled = self.skill.on_cooldown()
 	_name.text = self.skill.display_name
-	self.hint_tooltip = _skill.description
+	self.tooltip_text = _skill.description
 
 func reset():
 	self.icon = null
@@ -24,7 +24,7 @@ func reset():
 	self._cooldown.text = ""
 	self.disabled = true
 	self.skill = null
-	self.hint_tooltip = ""
+	self.tooltip_text = ""
 
 
 func _button_down():
@@ -38,12 +38,12 @@ func _button_down():
 		var result = effect.call_func(skill.effects, skill.parameters, skill.visualize)
 		# wait for skill effect to be done, if it's async
 		if result is GDScriptFunctionState:
-			result = yield(result, "completed")
+			result = await result.completed
 		# if effect wasn't successful used, then we need to abort using skill
 		if !result:
-			self.pressed = false
+			self.button_pressed = false
 			return
-	self.pressed = false
+	self.button_pressed = false
 	skill.current_cooldown = skill.cooldown
 
 

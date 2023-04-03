@@ -3,23 +3,23 @@ var game:Node
 
 # self = game.ui.stats
 
-onready var panel = get_node("panel")
-onready var hpbar = panel.get_node("hpbar")
-onready var unit_name = panel.get_node("name")
-onready var hp = panel.get_node("hp")
-onready var regen = panel.get_node("regen")
-onready var vision = panel.get_node("vision")
-onready var control_delay = panel.get_node("control_delay")
-onready var damage = panel.get_node("damage")
-onready var att_range = panel.get_node("range")
-onready var speed = panel.get_node("speed")
-onready var gold = panel.get_node("gold")
-onready var gold_sprite = panel.get_node("gold_sprite")
-onready var portrait_sprite = panel.get_node("portrait/sprite")
-onready var level_label : Label = get_node("panel/level_container/level_label")
-onready var exp_bar : ProgressBar = get_node("panel/level_container/exp_bar")
-onready var status_effect_display = $status_effect_display
-onready var active_skills = $active_skills
+@onready var panel = get_node("panel")
+@onready var hpbar = panel.get_node("hpbar")
+@onready var unit_name = panel.get_node("name")
+@onready var hp = panel.get_node("hp")
+@onready var regen = panel.get_node("regen")
+@onready var vision = panel.get_node("vision")
+@onready var control_delay = panel.get_node("control_delay")
+@onready var damage = panel.get_node("damage")
+@onready var att_range = panel.get_node("range")
+@onready var speed = panel.get_node("speed")
+@onready var gold = panel.get_node("gold")
+@onready var gold_sprite = panel.get_node("gold_sprite")
+@onready var portrait_sprite = panel.get_node("portrait/sprite")
+@onready var level_label : Label = get_node("panel/level_container/level_label")
+@onready var exp_bar : ProgressBar = get_node("panel/level_container/exp_bar")
+@onready var status_effect_display = $status_effect_display
+@onready var active_skills = $active_skills
 
 
 func _ready():
@@ -109,4 +109,4 @@ func add_new_hpbar(unit):
 
 func stats_down(event):
 	if event is InputEventMouseButton and not event.pressed: 
-		game.selection.unselect()
+		game.selection.deselect()

@@ -26,7 +26,7 @@ class _QuadTreeClass:
 	var _node = null
 	
 	
-	func _init(node, bounds, splitThreshold, maxSplits, currentSplit = 0):
+	func _init(node,bounds,splitThreshold,maxSplits,currentSplit = 0):
 		_node = node
 		_bounds = bounds
 		_splitThreshold = splitThreshold

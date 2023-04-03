@@ -36,12 +36,12 @@ func build():
 func buttons_focus(leader):
 	buttons_unfocus()
 	if leader.name in buttons_name:
-		buttons_name[leader.name].pressed = true
+		buttons_name[leader.name].button_pressed = true
 
 
 func buttons_unfocus():
 	for all_leader_name in buttons_name: 
-		buttons_name[all_leader_name].pressed = false
+		buttons_name[all_leader_name].button_pressed = false
 
 
 func button_down(index):

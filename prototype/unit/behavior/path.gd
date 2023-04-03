@@ -49,13 +49,13 @@ func setup_pathfind():
 	# setup finder
 	path_finder = Finder.JumpPointFinder.new()
 	# add movement line indicator
-	game.map.add_child_below_node(game.map.fog, path_line)
+	game.map.add_sibling(game.map.fog, path_line)
 
 
 func setup_unit_path(unit, path):
 	unit.current_path = path
-	if not unit.is_connected("unit_arrived", self, "on_arrive"):
-		unit.connect("unit_arrived", self, "on_arrive", [unit])
+	if not unit.is_connected("unit_arrived",Callable(self,"on_arrive")):
+		unit.connect("unit_arrived",Callable(self,"on_arrive").bind(unit))
 
 
 func on_arrive(unit):
@@ -86,7 +86,7 @@ func in_limits(p):
 
 
 func start(unit, new_path):
-	if new_path and not new_path.empty():
+	if new_path and not new_path.is_empty():
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
 		Behavior.advance.point(unit, next_point)
@@ -103,12 +103,12 @@ func smart(unit, path, cb):
 func resume_lane(unit):
 	var lane = unit.agent.get_state("lane")
 	var new_path = game.maps.new_path(lane, unit.team)
-	start(unit, new_path)
+	start(Callable(unit,new_path))
 
 
 func next(unit):
-	if not unit.current_path.empty():
-		start(unit, unit.current_path)
+	if not unit.current_path.is_empty():
+		start(Callable(unit,unit.current_path))
 	else:
 		Behavior.move.stop(unit)
 
@@ -118,12 +118,12 @@ func draw(unit):
 	var has_path = false
 	
 	if unit:
-		has_path = not unit.current_path.empty()
+		has_path = not unit.current_path.is_empty()
 		should_draw = game.can_control(unit) and (has_path or unit.final_destiny)
 	
 	if should_draw:
 		path_line.show()
-		var pool = PoolVector2Array()
+		var pool = PackedVector2Array()
 		# start
 		pool.push_back(unit.global_position)
 		 # end
@@ -160,11 +160,11 @@ func teleport(unit, point):
 	var building = game.utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
 	game.ui.unit_controls_panel.teleport_button.disabled = false
-	game.ui.unit_controls_panel.teleport_button.pressed = false
+	game.ui.unit_controls_panel.teleport_button.button_pressed = false
 	Behavior.move.stop(unit)
 	agent.set_state("is_channeling", true)
 	# todo move to timer
-	yield(get_tree().create_timer(teleport_time), "timeout")
+	await get_tree().create_timer(teleport_time).timeout
 	if agent.get_state("is_channeling"):
 		agent.set_state("has_player_command", false)
 		agent.set_state("is_channeling", false)

@@ -2,20 +2,20 @@
 
 [ext_resource path="res://ui/menus/new_game_menu.gd" type="Script" id=1]
 [ext_resource path="res://ui/menus/leader_selection/leader_select_item.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/ui/EquipmentProLabel.tres" type="DynamicFont" id=3]
-[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="DynamicFontData" id=4]
-[ext_resource path="res://assets/ui/design.png" type="Texture" id=5]
+[ext_resource path="res://assets/ui/EquipmentProLabel.tres" type="FontFile" id=3]
+[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="FontFile" id=4]
+[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=5]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 5 )
 region_rect = Rect2( 0, 35, 175, 86 )
-margin_left = 5.0
-margin_right = 5.0
-margin_top = 5.0
-margin_bottom = 5.0
+offset_left = 5.0
+offset_right = 5.0
+offset_top = 5.0
+offset_bottom = 5.0
 modulate_color = Color( 1, 1, 1, 0.941176 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="FontFile" id=12]
 size = 32
 outline_size = 3
 outline_color = Color( 0, 0, 0, 1 )
@@ -28,43 +28,43 @@ font_data = ExtResource( 4 )
 [sub_resource type="StyleBoxTexture" id=2]
 texture = ExtResource( 5 )
 region_rect = Rect2( 105, 0, 35, 35 )
-margin_left = 3.0
-margin_right = 3.0
-margin_top = 3.0
-margin_bottom = 3.0
+offset_left = 3.0
+offset_right = 3.0
+offset_top = 3.0
+offset_bottom = 3.0
 
 [sub_resource type="StyleBoxTexture" id=3]
 texture = ExtResource( 5 )
 region_rect = Rect2( 70, 0, 35, 35 )
-margin_left = 3.0
-margin_right = 3.0
-margin_top = 3.0
-margin_bottom = 3.0
+offset_left = 3.0
+offset_right = 3.0
+offset_top = 3.0
+offset_bottom = 3.0
 
 [sub_resource type="StyleBoxEmpty" id=31]
 
 [sub_resource type="StyleBoxTexture" id=5]
 texture = ExtResource( 5 )
 region_rect = Rect2( 145, 37, 33, 33 )
-margin_left = 2.0
-margin_right = 2.0
-margin_top = 2.0
-margin_bottom = 2.0
+offset_left = 2.0
+offset_right = 2.0
+offset_top = 2.0
+offset_bottom = 2.0
 
 [sub_resource type="StyleBoxTexture" id=6]
 texture = ExtResource( 5 )
 region_rect = Rect2( 0, 0, 35, 35 )
-margin_left = 3.0
-margin_right = 3.0
-margin_top = 3.0
-margin_bottom = 3.0
+offset_left = 3.0
+offset_right = 3.0
+offset_top = 3.0
+offset_bottom = 3.0
 
 [node name="new_game_menu" type="ItemList"]
-margin_left = 100.0
-margin_top = 40.0
-margin_right = 500.0
-margin_bottom = 500.0
-rect_min_size = Vector2( 400, 460 )
+offset_left = 100.0
+offset_top = 40.0
+offset_right = 500.0
+offset_bottom = 500.0
+custom_minimum_size = Vector2( 400, 460 )
 custom_styles/bg = SubResource( 1 )
 script = ExtResource( 1 )
 
@@ -73,14 +73,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -180.0
-margin_top = -214.0
-margin_right = 180.0
-margin_bottom = 206.0
+offset_left = -180.0
+offset_top = -214.0
+offset_right = 180.0
+offset_bottom = 206.0
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 360.0
-margin_bottom = 32.0
+offset_right = 360.0
+offset_bottom = 32.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 12 )
@@ -89,24 +89,24 @@ align = 1
 valign = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 36.0
-margin_right = 360.0
-margin_bottom = 68.0
+offset_top = 36.0
+offset_right = 360.0
+offset_bottom = 68.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_left = 35.0
-margin_top = 4.0
-margin_right = 141.0
-margin_bottom = 28.0
+offset_left = 35.0
+offset_top = 4.0
+offset_right = 141.0
+offset_bottom = 28.0
 custom_fonts/font = ExtResource( 3 )
 text = "Select map:"
 
 [node name="3_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 145.0
-margin_right = 233.0
-margin_bottom = 32.0
+offset_left = 145.0
+offset_right = 233.0
+offset_bottom = 32.0
 custom_fonts/font = ExtResource( 3 )
 pressed = true
 group = SubResource( 10 )
@@ -114,63 +114,63 @@ text = "3-lane"
 
 [node name="1_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 237.0
-margin_right = 325.0
-margin_bottom = 32.0
+offset_left = 237.0
+offset_right = 325.0
+offset_bottom = 32.0
 custom_fonts/font = ExtResource( 3 )
 group = SubResource( 10 )
 text = "1-lane"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 72.0
-margin_right = 360.0
-margin_bottom = 76.0
+offset_top = 72.0
+offset_right = 360.0
+offset_bottom = 76.0
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 80.0
-margin_right = 360.0
-margin_bottom = 380.0
+offset_top = 80.0
+offset_right = 360.0
+offset_bottom = 380.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
-margin_right = 174.0
-margin_bottom = 300.0
+offset_right = 174.0
+offset_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
-margin_right = 174.0
-margin_bottom = 32.0
+offset_right = 174.0
+offset_bottom = 32.0
 alignment = 1
 
 [node name="blue_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 25.0
-margin_right = 148.0
-margin_bottom = 32.0
+offset_left = 25.0
+offset_right = 148.0
+offset_bottom = 32.0
 custom_colors/font_color_disabled = Color( 0.258824, 0.52549, 0.65098, 1 )
 custom_colors/font_color_focus = Color( 0.258824, 0.52549, 0.65098, 1 )
 custom_colors/font_color_hover_pressed = Color( 0.258824, 0.52549, 0.65098, 1 )
 custom_colors/font_color = Color( 0.258824, 0.52549, 0.65098, 1 )
 custom_colors/font_color_hover = Color( 0.258824, 0.52549, 0.65098, 1 )
 custom_colors/font_color_pressed = Color( 0.258824, 0.52549, 0.65098, 1 )
-custom_constants/hseparation = 6
+custom_constants/h_separation = 6
 custom_fonts/font = ExtResource( 3 )
 pressed = true
 group = SubResource( 9 )
 text = "Blue Team"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
-margin_top = 36.0
-margin_right = 174.0
-margin_bottom = 266.0
-rect_min_size = Vector2( 0, 230 )
+offset_top = 36.0
+offset_right = 174.0
+offset_bottom = 266.0
+custom_minimum_size = Vector2( 0, 230 )
 
 [node name="blue_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 174.0
-margin_bottom = 230.0
+offset_right = 174.0
+offset_bottom = 230.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 2
@@ -178,41 +178,41 @@ custom_constants/separation = 2
 [node name="leader_select_item" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 174.0
-margin_bottom = 40.0
+offset_right = 174.0
+offset_bottom = 40.0
 
 [node name="leader_select_item2" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 42.0
-margin_right = 174.0
-margin_bottom = 82.0
+offset_top = 42.0
+offset_right = 174.0
+offset_bottom = 82.0
 
 [node name="leader_select_item3" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 84.0
-margin_right = 174.0
-margin_bottom = 124.0
+offset_top = 84.0
+offset_right = 174.0
+offset_bottom = 124.0
 
 [node name="leader_select_item4" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 126.0
-margin_right = 174.0
-margin_bottom = 166.0
+offset_top = 126.0
+offset_right = 174.0
+offset_bottom = 166.0
 
 [node name="leader_select_item5" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer/blue_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 168.0
-margin_right = 174.0
-margin_bottom = 208.0
+offset_top = 168.0
+offset_right = 174.0
+offset_bottom = 208.0
 
 [node name="add_leader_blue" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
-margin_top = 270.0
-margin_right = 174.0
-margin_bottom = 300.0
+offset_top = 270.0
+offset_right = 174.0
+offset_bottom = 300.0
 custom_fonts/font = ExtResource( 3 )
 custom_styles/hover = SubResource( 2 )
 custom_styles/pressed = SubResource( 3 )
@@ -222,48 +222,48 @@ custom_styles/normal = SubResource( 6 )
 text = "Add leader"
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 178.0
-margin_right = 182.0
-margin_bottom = 300.0
+offset_left = 178.0
+offset_right = 182.0
+offset_bottom = 300.0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 186.0
-margin_right = 360.0
-margin_bottom = 300.0
+offset_left = 186.0
+offset_right = 360.0
+offset_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
-margin_right = 174.0
-margin_bottom = 32.0
+offset_right = 174.0
+offset_bottom = 32.0
 alignment = 1
 
 [node name="red_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 28.0
-margin_right = 146.0
-margin_bottom = 32.0
+offset_left = 28.0
+offset_right = 146.0
+offset_bottom = 32.0
 custom_colors/font_color_disabled = Color( 0.788235, 0.305882, 0.305882, 1 )
 custom_colors/font_color_focus = Color( 0.788235, 0.305882, 0.305882, 1 )
 custom_colors/font_color_hover_pressed = Color( 0.788235, 0.305882, 0.305882, 1 )
 custom_colors/font_color = Color( 0.788235, 0.305882, 0.305882, 1 )
 custom_colors/font_color_hover = Color( 0.788235, 0.305882, 0.305882, 1 )
 custom_colors/font_color_pressed = Color( 0.788235, 0.305882, 0.305882, 1 )
-custom_constants/hseparation = 6
+custom_constants/h_separation = 6
 custom_fonts/font = ExtResource( 3 )
 group = SubResource( 9 )
 text = "Red Team"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
-margin_top = 36.0
-margin_right = 174.0
-margin_bottom = 266.0
-rect_min_size = Vector2( 0, 230 )
+offset_top = 36.0
+offset_right = 174.0
+offset_bottom = 266.0
+custom_minimum_size = Vector2( 0, 230 )
 
 [node name="red_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer"]
 unique_name_in_owner = true
-margin_right = 174.0
-margin_bottom = 230.0
+offset_right = 174.0
+offset_bottom = 230.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 2
@@ -271,41 +271,41 @@ custom_constants/separation = 2
 [node name="leader_select_item" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 174.0
-margin_bottom = 40.0
+offset_right = 174.0
+offset_bottom = 40.0
 
 [node name="leader_select_item2" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 42.0
-margin_right = 174.0
-margin_bottom = 82.0
+offset_top = 42.0
+offset_right = 174.0
+offset_bottom = 82.0
 
 [node name="leader_select_item3" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 84.0
-margin_right = 174.0
-margin_bottom = 124.0
+offset_top = 84.0
+offset_right = 174.0
+offset_bottom = 124.0
 
 [node name="leader_select_item4" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 126.0
-margin_right = 174.0
-margin_bottom = 166.0
+offset_top = 126.0
+offset_right = 174.0
+offset_bottom = 166.0
 
 [node name="leader_select_item5" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/red_team_container" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 168.0
-margin_right = 174.0
-margin_bottom = 208.0
+offset_top = 168.0
+offset_right = 174.0
+offset_bottom = 208.0
 
 [node name="add_leader_red" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
-margin_top = 270.0
-margin_right = 174.0
-margin_bottom = 300.0
+offset_top = 270.0
+offset_right = 174.0
+offset_bottom = 300.0
 custom_fonts/font = ExtResource( 3 )
 custom_styles/hover = SubResource( 2 )
 custom_styles/pressed = SubResource( 3 )
@@ -315,20 +315,20 @@ custom_styles/normal = SubResource( 6 )
 text = "Add leader"
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
-margin_top = 384.0
-margin_right = 360.0
-margin_bottom = 394.0
+offset_top = 384.0
+offset_right = 360.0
+offset_bottom = 394.0
 custom_constants/separation = 10
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 398.0
-margin_right = 360.0
-margin_bottom = 428.0
+offset_top = 398.0
+offset_right = 360.0
+offset_bottom = 428.0
 
 [node name="back_button" type="Button" parent="VBoxContainer/HBoxContainer3"]
-margin_right = 80.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 0 )
+offset_right = 80.0
+offset_bottom = 30.0
+custom_minimum_size = Vector2( 80, 0 )
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 3 )
 custom_styles/hover = SubResource( 2 )
@@ -339,9 +339,9 @@ custom_styles/normal = SubResource( 6 )
 text = "Back"
 
 [node name="start_game_button" type="Button" parent="VBoxContainer/HBoxContainer3"]
-margin_left = 84.0
-margin_right = 360.0
-margin_bottom = 30.0
+offset_left = 84.0
+offset_right = 360.0
+offset_bottom = 30.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 3 )

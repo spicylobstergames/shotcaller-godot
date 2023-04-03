@@ -1,16 +1,16 @@
 extends Node
 
-onready var unit : Unit = get_parent().get_parent().get_parent()
-onready var game = get_tree().get_current_scene()
+@onready var unit : Unit = get_parent().get_parent().get_parent()
+@onready var game = get_tree().get_current_scene()
 var affected_units = {}
 
 const RANGE = 100
 const VALUE = 50
 
-export var icon : Texture
-export var ability_name = "Holy Shield"
-export(String, MULTILINE) var description = "The magic aura protects your soldiers"
-export var status_effect_icon : Texture
+@export var icon : Texture2D
+@export var ability_name = "Holy Shield"
+@export var description = "The magic aura protects your soldiers" # (String, MULTILINE)
+@export var status_effect_icon : Texture2D
 
 func _on_update_timer_timeout():
 	$update_timer.start()

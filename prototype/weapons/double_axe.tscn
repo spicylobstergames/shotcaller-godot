@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/leaders/rollo_red.png" type="Texture" id=1]
-[ext_resource path="res://assets/leaders/rollo_blue.png" type="Texture" id=2]
+[ext_resource path="res://assets/leaders/rollo_red.png" type="Texture2D" id=1]
+[ext_resource path="res://assets/leaders/rollo_blue.png" type="Texture2D" id=2]
 
 [sub_resource type="AtlasTexture" id=63]
 atlas = ExtResource( 2 )
@@ -30,7 +30,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="weapon" type="AnimatedSprite"]
+[node name="weapon" type="AnimatedSprite2D"]
 position = Vector2( 1, -14 )
 rotation = -0.349066
 frames = SubResource( 62 )

@@ -2,10 +2,10 @@ extends Control
 
 signal leader_selected
 
-onready var leader_button = preload("res://ui/buttons/leader_button.tscn")
+@onready var leader_button = preload("res://ui/buttons/leader_button.tscn")
 
-onready var leaders_container = $"%leaders_container"
-onready var leader_preview = $"%leader_preview"
+@onready var leaders_container = $"%leaders_container"
+@onready var leader_preview = $"%leader_preview"
 
 var team := "red"
 
@@ -16,12 +16,12 @@ func _ready():
 		child.queue_free()
 	# creates leader buttons
 	for leader in WorldState.leaders:
-		var button = leader_button.instance()
+		var button = leader_button.instantiate()
 		leaders_container.add_child(button)
 		button.prepare(leader)
 		format_button(button)
 	# random leader button
-	var random_button = leader_button.instance()
+	var random_button = leader_button.instantiate()
 	leaders_container.add_child(random_button)
 	random_button.prepare("random")
 	format_button(random_button)
@@ -30,14 +30,14 @@ func _ready():
 func format_button(button):
 	button.hpbar.hide()
 	button.hint.hide()
-	button.connect("pressed", self, "show_preview", [button])
+	button.connect("pressed",Callable(self,"show_preview").bind(button))
 
 
 func show_preview(button):
 	var leader = button.name_label.text
 	leader_preview.prepare(leader)
 	leader_preview.show()
-	button.pressed = false
+	button.button_pressed = false
 
 
 func color_remap(new_team):

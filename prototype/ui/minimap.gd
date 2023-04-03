@@ -1,5 +1,5 @@
 extends ItemList
-onready var game:Node = get_tree().get_current_scene()
+@onready var game:Node = get_tree().get_current_scene()
 
 # self = game.ui.minimap
 
@@ -12,11 +12,11 @@ var pan_position:Vector2 = Vector2.ZERO
 var map_sprite:Node
 var map_tiles:Node
 
-onready var minimap_container:Node = $"%minimap_container"
-onready var rect_layer:Node = $"%rect_layer"
-onready var cam_rect:Node = $"%cam_rect"
-onready var map_symbols:Node = $"%map_symbols"
-onready var light_template:Node = $"%light_template"
+@onready var minimap_container:Node = $"%minimap_container"
+@onready var rect_layer:Node = $"%rect_layer"
+@onready var cam_rect:Node = $"%cam_rect"
+@onready var map_symbols:Node = $"%map_symbols"
+@onready var light_template:Node = $"%light_template"
 
 var map_symbols_map = []
 
@@ -32,7 +32,7 @@ func input(event):
 	# MOUSE CLICK
 	if event is InputEventMouseButton:
 		match event.button_index:
-			BUTTON_LEFT: 
+			MOUSE_BUTTON_LEFT: 
 				is_panning = true
 				pan_position = event.position
 				Crafty_camera.is_panning = false
@@ -54,7 +54,7 @@ func input(event):
 
 func over_minimap(event):
 	var viewport = get_viewport()
-	var screen = viewport.get_size_override()
+	var screen = viewport.get_size_2d_override()
 	return (
 		minimap_container.visible and 
 		"position" in event and 
@@ -67,7 +67,7 @@ func map_loaded():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
 	var r_size = default_screen * size / max(game.map.size.x, game.map.size.y)
-	cam_rect.rect_size = Vector2(r_size, r_size)
+	cam_rect.size = Vector2(r_size, r_size)
 
 
 func get_map_texture():
@@ -85,12 +85,12 @@ func get_map_texture():
 	rect_layer.hide()
 	game.map.show()
 	game.maps.buildings_visibility(false)
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	# take snapshop
 	var data = game.get_viewport().get_texture().get_data()
 	data.flip_y()
 	var texture = ImageTexture.new()
-	texture.create_from_image(data, 1)
+	texture.create_from_image(data) #,1
 	# set minimap texture
 	var minimap_sprite = $"%sprite"
 	minimap_sprite.set_texture(texture)
@@ -125,7 +125,7 @@ func get_map_texture():
 func corner_view():
 	#map_tiles.show()
 	for tile in map_tiles.get_children(): tile.show()
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	show()
 	rect_layer.show()
 	game.ui.get_node("bot_left").show()
@@ -136,7 +136,7 @@ func hide_view():
 	#map_tiles.hide()
 	for tile in map_tiles.get_children(): tile.hide()
 	# avoid input messing up
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	minimap_container.hide()
 	rect_layer.hide()
 	game.ui.get_node("bot_left").hide()
@@ -189,19 +189,19 @@ func copy_symbol(unit, symbol):
 
 func follow_camera():
 	if minimap_container.visible and game.map:
-		var view_height = get_viewport().get_size_override().y
+		var view_height = get_viewport().get_size_2d_override().y
 		# stick to the bottom (todo: replace with godot viewports)
 		minimap_container.offset.y = view_height
 		rect_layer.offset.y = view_height
 		var half = WorldState.get_state("map_mid")
 		var map_scale = float(max(game.map.size.x, game.map.size.y)) / float(size)
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale)  )
-		var offset = (size - cam_rect.rect_size.y) / 2
+		var offset = (size - cam_rect.size.y) / 2
 		if is_panning: Crafty_camera.position = pos
 		# update minimap cam rectangle position
-		cam_rect.rect_position = Vector2(offset,offset-size) + Crafty_camera.position / map_scale
-		cam_rect.rect_position.x = clamp(cam_rect.rect_position.x, 0, offset*2)
-		cam_rect.rect_position.y = clamp(cam_rect.rect_position.y, -size, -cam_rect.rect_size.y)
+		cam_rect.position = Vector2(offset,offset-size) + Crafty_camera.position / map_scale
+		cam_rect.position.x = clamp(cam_rect.position.x, 0, offset*2)
+		cam_rect.position.y = clamp(cam_rect.position.y, -size, -cam_rect.size.y)
 
 
 

@@ -51,7 +51,7 @@ func input(event):
 		# KEYBOARD
 	if event is InputEventKey and WorldState.get_state("game_started"):
 		
-		match event.scancode:
+		match event.keycode:
 			# LEADER KEYS
 			KEY_1: focus_leader(1)
 			KEY_2: focus_leader(2)
@@ -63,7 +63,7 @@ func input(event):
 		if not pressed:
 			var cam_move = null;
 			var x = WorldState.get_state("map_mid").x
-			match event.scancode:
+			match event.keycode:
 				# nine grid cam movement
 				KEY_KP_1: cam_move = [-x, x]
 				KEY_KP_2: cam_move = [0, x]

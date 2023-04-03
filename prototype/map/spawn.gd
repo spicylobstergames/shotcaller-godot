@@ -46,12 +46,12 @@ var cemitery = {
 
 var team_random_list = {"red": [], "blue": []}
 
-onready var timer:Timer = $timer
+@onready var timer:Timer = $timer
 
 func _ready():
 	game = get_tree().get_current_scene()
 	
-	#yield(get_tree(), "idle_frame")
+	#await get_tree().idle_frame
 	
 	timer.one_shot = true
 	timer.wait_time = order_time
@@ -62,7 +62,7 @@ func start():
 		game.test.spawn_unit()
 	else: 
 		pawns()
-		yield(get_tree().create_timer(4), "timeout")
+		await get_tree().create_timer(4).timeout
 		leaders()
 
 
@@ -123,11 +123,11 @@ func spawn_group_cycle():
 			send_pawn(extra_unit, lane.name, team)
 	
 	timer.start()
-	yield(timer, "timeout")
+	await timer.timeout
 	Behavior.orders.leaders_cycle()
 	
 	timer.start()
-	yield(timer, "timeout")
+	await timer.timeout
 	spawn_group_cycle()
 
 
@@ -191,7 +191,7 @@ func cemitery_add_leader(leader):
 			cemitery.enemy_leaders.append(leader)
 	
 	var respawn_time = order_time * leader.respawn
-	yield(get_tree().create_timer(respawn_time), "timeout")
+	await get_tree().create_timer(respawn_time).timeout
 	
 	# respawn leader
 	var team = leader.team

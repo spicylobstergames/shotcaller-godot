@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://assets/leaders/sida_blue.png" type="Texture" id=1]
-[ext_resource path="res://assets/leaders/sida_red.png" type="Texture" id=2]
+[ext_resource path="res://assets/leaders/sida_blue.png" type="Texture2D" id=1]
+[ext_resource path="res://assets/leaders/sida_red.png" type="Texture2D" id=2]
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 1 )
@@ -36,7 +36,7 @@ animations = [ {
 [node name="weapon" type="Node2D"]
 use_parent_material = true
 
-[node name="spear" type="AnimatedSprite" parent="."]
+[node name="spear" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
 position = Vector2( -8.1407, 2.05879 )
 rotation = -0.349066
@@ -50,7 +50,7 @@ use_parent_material = true
 position = Vector2( 5, -2 )
 z_index = 1
 
-[node name="sprites" type="AnimatedSprite" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
 visible = false
 use_parent_material = true
 position = Vector2( 0, 4.76837e-07 )

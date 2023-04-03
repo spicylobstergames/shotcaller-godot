@@ -1,12 +1,12 @@
 extends VBoxContainer
 
-onready var tween = $Tween
-onready var texture_rect = $TextureRect
+@onready var tween = $Tween
+@onready var texture_rect = $TextureRect
 signal transition_completed
 
 
 func _ready():
-	var err = tween.connect("tween_all_completed", self, "transition_done")
+	var err = tween.connect("tween_all_completed",Callable(self,"transition_done"))
 	assert(err == OK)
 	# For testing on its own
 	if get_tree().current_scene == self:

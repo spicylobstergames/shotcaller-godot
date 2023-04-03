@@ -1,11 +1,11 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/ui/CompassPro.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/ui/CompassPro.ttf" type="FontFile" id=1]
 [ext_resource path="res://ui/buttons/menu_button.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/ui/EquipmentPro.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/ui/EquipmentPro.tres" type="FontFile" id=4]
 [ext_resource path="res://ui/menus/main_menu.gd" type="Script" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 size = 48
 outline_size = 4
 outline_color = Color( 0, 0, 0, 1 )
@@ -16,8 +16,8 @@ custom_constants/separation = 60
 script = ExtResource( 5 )
 
 [node name="Label" type="Label" parent="."]
-margin_right = 189.0
-margin_bottom = 45.0
+offset_right = 189.0
+offset_bottom = 45.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
@@ -30,46 +30,46 @@ align = 1
 valign = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_top = 105.0
-margin_right = 189.0
-margin_bottom = 281.0
+offset_top = 105.0
+offset_right = 189.0
+offset_bottom = 281.0
 
 [node name="quick_start_button" parent="VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-margin_right = 189.0
-margin_bottom = 32.0
+offset_right = 189.0
+offset_bottom = 32.0
 custom_fonts/font = ExtResource( 4 )
 text = "Quick start"
 
 [node name="new_game_button" parent="VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-margin_top = 36.0
-margin_right = 189.0
-margin_bottom = 68.0
+offset_top = 36.0
+offset_right = 189.0
+offset_bottom = 68.0
 custom_fonts/font = ExtResource( 4 )
 
 [node name="campaign_button" parent="VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-margin_top = 72.0
-margin_right = 189.0
-margin_bottom = 104.0
+offset_top = 72.0
+offset_right = 189.0
+offset_bottom = 104.0
 custom_fonts/font = ExtResource( 4 )
 text = "Campaign"
 
 [node name="options_button" parent="VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-margin_top = 108.0
-margin_right = 189.0
-margin_bottom = 140.0
+offset_top = 108.0
+offset_right = 189.0
+offset_bottom = 140.0
 custom_fonts/font = ExtResource( 4 )
 disabled = true
 text = "Options"
 
 [node name="exit_button" parent="VBoxContainer" instance=ExtResource( 3 )]
 unique_name_in_owner = true
-margin_top = 144.0
-margin_right = 189.0
-margin_bottom = 176.0
+offset_top = 144.0
+offset_right = 189.0
+offset_bottom = 176.0
 custom_fonts/font = ExtResource( 4 )
 text = "Exit"
 

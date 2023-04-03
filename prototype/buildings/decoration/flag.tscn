@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/buildings/buildings_blue.png" type="Texture" id=1]
-[ext_resource path="res://assets/buildings/buildings_red.png" type="Texture" id=2]
-[ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture" id=3]
+[ext_resource path="res://assets/buildings/buildings_blue.png" type="Texture2D" id=1]
+[ext_resource path="res://assets/buildings/buildings_red.png" type="Texture2D" id=2]
+[ext_resource path="res://assets/buildings/buildings_gray.png" type="Texture2D" id=3]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
@@ -44,8 +44,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.4, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 0.4, 1 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 0, 0 ), Vector2( 0, -1 ), Vector2( 0, 0 ) ]
 }
@@ -56,8 +56,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.6, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 0.6, 1 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ 4.0, 0.0, 4.0 ]
 }
@@ -65,7 +65,7 @@ tracks/1/keys = {
 [node name="flag" type="Node2D"]
 use_parent_material = true
 
-[node name="sprites" type="AnimatedSprite" parent="."]
+[node name="sprites" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
 rotation = 0.0698132
 frames = SubResource( 5 )

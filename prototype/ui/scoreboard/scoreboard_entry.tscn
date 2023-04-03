@@ -1,16 +1,16 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://assets/ui/question_mark.png" type="Texture" id=2]
-[ext_resource path="res://assets/ui/icons.png" type="Texture" id=3]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=1]
+[ext_resource path="res://assets/ui/question_mark.png" type="Texture2D" id=2]
+[ext_resource path="res://assets/ui/icons.png" type="Texture2D" id=3]
 [ext_resource path="res://ui/scoreboard/scoreboard_entry.gd" type="Script" id=4]
 [ext_resource path="res://ui/scoreboard/leader_portrait.gd" type="Script" id=5]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="FontFile" id=2]
 size = 14
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="FontFile" id=3]
 font_data = ExtResource( 1 )
 
 [sub_resource type="AtlasTexture" id=1]
@@ -20,31 +20,31 @@ region = Rect2( 680, 10, 30, 30 )
 [node name="scoreboard_entry" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -380.0
-margin_bottom = -538.0
+offset_right = -380.0
+offset_bottom = -538.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
 
 [node name="Panel" type="PanelContainer" parent="."]
-margin_right = 271.0
-margin_bottom = 62.0
+offset_right = 271.0
+offset_bottom = 62.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 264.0
-margin_bottom = 55.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 264.0
+offset_bottom = 55.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
 
 [node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer"]
-margin_right = 48.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 48, 48 )
+offset_right = 48.0
+offset_bottom = 48.0
+custom_minimum_size = Vector2( 48, 48 )
 
-[node name="portrait" type="Sprite" parent="Panel/HBoxContainer/CenterContainer2"]
+[node name="portrait" type="Sprite2D" parent="Panel/HBoxContainer/CenterContainer2"]
 unique_name_in_owner = true
 scale = Vector2( 0.75, 0.75 )
 texture = ExtResource( 2 )
@@ -52,16 +52,16 @@ centered = false
 script = ExtResource( 5 )
 
 [node name="separator4" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 48.0
-margin_right = 58.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 10, 0 )
+offset_left = 48.0
+offset_right = 58.0
+offset_bottom = 48.0
+custom_minimum_size = Vector2( 10, 0 )
 
 [node name="level" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 58.0
-margin_right = 70.0
-margin_bottom = 48.0
+offset_left = 58.0
+offset_right = 70.0
+offset_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_fonts/font = SubResource( 2 )
@@ -70,16 +70,16 @@ align = 1
 valign = 1
 
 [node name="separator" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 70.0
-margin_right = 80.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 10, 0 )
+offset_left = 70.0
+offset_right = 80.0
+offset_bottom = 48.0
+custom_minimum_size = Vector2( 10, 0 )
 
 [node name="kda" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 80.0
-margin_right = 144.0
-margin_bottom = 48.0
+offset_left = 80.0
+offset_right = 144.0
+offset_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_fonts/font = SubResource( 2 )
@@ -88,16 +88,16 @@ align = 1
 valign = 1
 
 [node name="separator2" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 144.0
-margin_right = 154.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 10, 0 )
+offset_left = 144.0
+offset_right = 154.0
+offset_bottom = 48.0
+custom_minimum_size = Vector2( 10, 0 )
 
 [node name="last_hits" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 154.0
-margin_right = 178.0
-margin_bottom = 48.0
+offset_left = 154.0
+offset_right = 178.0
+offset_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_fonts/font = SubResource( 2 )
@@ -106,16 +106,16 @@ align = 1
 valign = 1
 
 [node name="separator3" type="Control" parent="Panel/HBoxContainer"]
-margin_left = 178.0
-margin_right = 188.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 10, 0 )
+offset_left = 178.0
+offset_right = 188.0
+offset_bottom = 48.0
+custom_minimum_size = Vector2( 10, 0 )
 
 [node name="gold_amount" type="Label" parent="Panel/HBoxContainer"]
 unique_name_in_owner = true
-margin_left = 188.0
-margin_right = 227.0
-margin_bottom = 48.0
+offset_left = 188.0
+offset_right = 227.0
+offset_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 custom_fonts/font = SubResource( 3 )
@@ -124,17 +124,17 @@ align = 1
 valign = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer"]
-margin_left = 227.0
-margin_right = 257.0
-margin_bottom = 48.0
+offset_left = 227.0
+offset_right = 257.0
+offset_bottom = 48.0
 size_flags_horizontal = 5
 size_flags_vertical = 3
 
 [node name="Sprite2" type="TextureRect" parent="Panel/HBoxContainer/CenterContainer"]
-margin_top = 9.0
-margin_right = 30.0
-margin_bottom = 39.0
-rect_pivot_offset = Vector2( 20, 20 )
+offset_top = 9.0
+offset_right = 30.0
+offset_bottom = 39.0
+pivot_offset = Vector2( 20, 20 )
 size_flags_horizontal = 12
 size_flags_vertical = 12
 texture = SubResource( 1 )

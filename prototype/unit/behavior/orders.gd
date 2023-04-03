@@ -216,7 +216,7 @@ func conquer_building(unit):
 		var building_full_hp = ( (current_hp / hp) == 1 )
 		if building.team == "neutral" and building_full_hp:
 			unit.channel_start(conquer_time)
-			yield(unit.channeling_timer, "timeout")
+			await unit.channeling_timer.timeout
 			# conquer
 			if unit.agent.get_state("is_channeling"):
 				unit.agent.get_state("is_channeling", false)
@@ -267,14 +267,14 @@ func pray_in_church(unit):
 	):
 		building.agent.set_state("is_channeling", true)
 		unit.channel_start(pray_time)
-		yield(unit.channeling_timer, "timeout")
+		await unit.channeling_timer.timeout
 		if unit.agent.get_state("is_channeling"):
 			unit.agent.get_state("is_channeling", false)
 			unit.agent.set_state("has_player_command", false)
 			pray(unit)
 			game.ui.show_select()
 			# Chruch pray cooldown <- temporary solution
-			yield(get_tree().create_timer(pray_cooldown), "timeout")
+			await get_tree().create_timer(pray_cooldown).timeout
 			building.agent.set_state("channeling", false)
 
 
@@ -315,7 +315,7 @@ func gold_order(button):
 
 func gold_collect_counter(button):
 	var mine = button.orders.order.mine
-	yield(mine.channeling_timer, "timeout")
+	await mine.channeling_timer.timeout
 	if button.counter > 0:
 		button.counter -= 1
 		button.hint_label.text = str(button.counter)
@@ -334,7 +334,7 @@ func gold_collect_counter(button):
 
 func gold_destroy_counter(button):
 	var mine = button.orders.order.mine
-	yield(mine.channeling_timer, "timeout")
+	await mine.channeling_timer.timeout
 	if button.counter > 0:
 		button.counter -= 1
 		button.hint_label.text = str(button.counter)

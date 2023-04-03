@@ -5,7 +5,7 @@
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 uniform float progress;
-uniform vec4 color : hint_color;
+uniform vec4 color : source_color;
 
 void fragment()
 {
@@ -32,7 +32,7 @@ script = ExtResource( 1 )
 
 [node name="TextureRect" type="ColorRect" parent="."]
 material = SubResource( 2 )
-margin_right = 600.0
-margin_bottom = 600.0
+offset_right = 600.0
+offset_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

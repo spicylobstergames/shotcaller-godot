@@ -7,7 +7,7 @@ func get_class(): return "FollowPathGoal"
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var path = unit.current_path
-	var has_path = not path.empty()
+	var has_path = not path.is_empty()
 	agent.set_state("has_path", has_path)
 	return has_path
 

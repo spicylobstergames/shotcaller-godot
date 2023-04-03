@@ -1,4 +1,4 @@
-extends Sprite
+extends Sprite2D
 
 
 var question_mark = preload("res://assets/ui/question_mark.png")

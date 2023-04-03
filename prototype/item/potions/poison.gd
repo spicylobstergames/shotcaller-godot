@@ -1,7 +1,7 @@
 extends Node
 
-onready var game = get_tree().get_current_scene()
-export var poison_sprite : Texture
+@onready var game = get_tree().get_current_scene()
+@export var poison_sprite : Texture2D
 
 func poison_throw(leader, item):
 	var enemy_leaders_on_sight = leader.get_units_in_sight({
@@ -14,7 +14,7 @@ func poison_throw(leader, item):
 	closest_enemy_leader.add_child(poison_timer)
 	poison_timer.wait_time = item.duration
 # warning-ignore:return_value_discarded
-	poison_timer.connect("timeout", self, "poison_remove", [closest_enemy_leader])
+	poison_timer.connect("timeout",Callable(self,"poison_remove").bind(closest_enemy_leader))
 	
 	if closest_enemy_leader and Behavior.attack.can_hit(leader, closest_enemy_leader):
 		poison_timer.start()
