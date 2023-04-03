@@ -4,7 +4,7 @@ extends "../Goal.gd"
 # blacksmith hide behavior
 
 
-func get_class(): return "NeedSafetyGoal"
+func get_class_name(): return "NeedSafetyGoal"
 
 
 func priority(agent) -> int:

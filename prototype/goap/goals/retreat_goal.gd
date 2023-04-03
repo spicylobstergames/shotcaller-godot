@@ -4,7 +4,7 @@ extends "../Goal.gd"
 # leaders retreat behavior
 
 
-func get_class(): return "RetreatGoal"
+func get_class_name(): return "RetreatGoal"
 
 
 func get_desired_state(agent) -> Dictionary:

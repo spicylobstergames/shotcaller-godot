@@ -87,11 +87,11 @@ func _ready():
 	game = get_tree().get_current_scene()
 	
 	hide()
-	clear()
+	clear_placeholder()
 
 
 
-func clear():
+func clear_placeholder():
 	if not cleared:
 		for placeholder in container.get_children():
 			container.remove_child(placeholder)

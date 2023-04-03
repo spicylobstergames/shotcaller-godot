@@ -123,8 +123,8 @@ func _follow_plan(plan, delta):
 		
 		# debug
 		if WorldState.game.test.debug: 
-			#_unit.hud.state.text = get_current_action().get_class()
-			_unit.hud.state.text = _get_best_goal().get_class()
+			#_unit.hud.state.text = get_current_action().get_class_name()
+			_unit.hud.state.text = _get_best_goal().get_class_name()
 		
 		if is_step_complete:
 			get_current_action().exit(self) #untested

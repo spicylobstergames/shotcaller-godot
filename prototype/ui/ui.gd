@@ -1,7 +1,7 @@
 extends CanvasLayer
 var game:Node
 
-class_name _ui
+#class_name _ui
 
 @onready var fps := $"%fps"
 @onready var top_label := $"%top_label"

@@ -29,7 +29,7 @@ func point(unit, point):
 		
 		if unit.target:
 			unit.aim_point = point
-			unit.look_at(point)
+			unit.mirror_look_at(point)
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 
@@ -161,7 +161,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 
 func projectile_release(attacker):
-	projectile_start(Callable(attacker,attacker.target))
+	projectile_start(attacker,attacker.target)
 	Behavior.skills.projectile_release(attacker)
 
 

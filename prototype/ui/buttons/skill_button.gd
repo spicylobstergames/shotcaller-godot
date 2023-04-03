@@ -35,10 +35,7 @@ func _button_down():
 		return
 	# Apply all skills effects
 	for effect in skill.effects:
-		var result = effect.call_func(skill.effects, skill.parameters, skill.visualize)
-		# wait for skill effect to be done, if it's async
-		if result is GDScriptFunctionState:
-			result = await result.completed
+		var result = await effect.call_func(skill.effects, skill.parameters, skill.visualize)
 		# if effect wasn't successful used, then we need to abort using skill
 		if !result:
 			self.button_pressed = false

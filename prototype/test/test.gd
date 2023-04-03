@@ -13,7 +13,7 @@ var s
 
 func _ready():
 	game = get_tree().get_current_scene()
-	await get_tree().idle_frame
+	await get_tree().process_frame # wait for idle frame
 	s = game.maps.spawn
 
 

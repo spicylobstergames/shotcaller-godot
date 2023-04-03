@@ -249,7 +249,7 @@ func opponent_team():
 		"neutral": return "all"
 
 
-func look_at(point):
+func mirror_look_at(point):
 	if self.type != "building":
 		self.mirror_toggle(point.x - self.global_position.x < 0)
 

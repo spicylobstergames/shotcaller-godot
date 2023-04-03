@@ -1,7 +1,7 @@
 extends "../Action.gd"
 
 
-func get_class(): return "AttackEnemy"
+func get_class_name(): return "AttackEnemy"
 
 
 func is_valid(agent) -> bool:

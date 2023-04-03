@@ -49,7 +49,7 @@ func calc_step(unit, speed):
 		var distance = unit.current_destiny - unit.global_position
 		unit.angle = distance.angle()
 		unit.current_step = Vector2(speed* cos(unit.angle), speed * sin(unit.angle))
-		unit.look_at(unit.current_destiny)
+		unit.mirror_look_at(unit.current_destiny)
 
 
 

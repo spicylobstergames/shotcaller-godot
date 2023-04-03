@@ -1,7 +1,7 @@
 extends "../Action.gd"
 
 
-func get_class(): return "WaitOut"
+func get_class_name(): return "WaitOut"
 
 
 func is_valid(agent) -> bool:

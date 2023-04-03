@@ -152,6 +152,6 @@ func _transform_tree_into_array(p, agent):
 func _print_plan(plan):
 	var actions = []
 	for a in plan.actions:
-		actions.push_back(a.get_class())
+		actions.push_back(a.get_class_name())
 	print("action_planner: ", {"cost": plan.cost, "actions": actions})
 

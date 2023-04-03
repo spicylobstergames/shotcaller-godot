@@ -24,15 +24,16 @@ extends MultiMeshInstance2D
 	Color(0.803922, 0.874510, 0.423529, 1.0)
 ]
 
-var open_simplex_noise = OpenSimplexNoise.new()
+var open_simplex_noise = FastNoiseLite.new()
 
 func _ready():
 	var noise_seed = randi()
+	open_simplex_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
+	open_simplex_noise.fractal_octaves = 4
+	open_simplex_noise.domain_warp_frequency  = 7
+	open_simplex_noise.fractal_gain = 0.5
+	open_simplex_noise.fractal_lacunarity = 2
 	open_simplex_noise.seed = noise_seed
-	open_simplex_noise.octaves = 4
-	open_simplex_noise.period = 7
-	open_simplex_noise.persistence = 0.5
-	open_simplex_noise.lacunarity = 2
 	
 	_update_distribution()
 

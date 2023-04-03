@@ -1,7 +1,7 @@
 extends "../Action.gd"
 
 
-func get_class(): return "Hide"
+func get_class_name(): return "Hide"
 
 
 const max_wait_seconds = 5

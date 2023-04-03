@@ -22,7 +22,6 @@ class _QuadTreeClass:
 	var _curSplit = 0
 	var _bodies = []
 	var _quadrants = []
-	var _drawMat = null
 	var _node = null
 	
 	
@@ -113,7 +112,6 @@ class _QuadTreeClass:
 			if(location.y > _bounds.position.y + _bounds.size.y / 2): 
 				return _quadrants[3]
 			return _quadrants[0]
-		pass
 	
 	
 	func get_rect_lines():

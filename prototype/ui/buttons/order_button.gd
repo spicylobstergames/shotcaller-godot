@@ -55,7 +55,7 @@ func button_down():
 		
 		"priority":
 			if not is_first_child(self):
-				move_to_front(self)
+				move_button_to_front(self)
 				if game.selected_leader:
 					Behavior.orders.set_leader_priority(self.orders.priority)
 				else: Behavior.orders.set_lane_priority(self.orders.priority)
@@ -116,7 +116,7 @@ func is_first_child(button):
 	return button.get_parent().get_children()[0] == button
 
 
-func move_to_front(button):
+func move_button_to_front(button):
 	var buttons = button.get_parent().get_children()
 	for sibling_button in buttons:
 		sibling_button.disabled = false

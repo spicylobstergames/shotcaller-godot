@@ -1,7 +1,7 @@
 extends "../Action.gd"
 
 
-func get_class(): return "RetreatAction"
+func get_class_name(): return "RetreatAction"
 
 
 func get_cost(agent) -> int:

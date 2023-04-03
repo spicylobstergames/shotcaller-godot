@@ -1,7 +1,7 @@
 extends "../Goal.gd"
 
 
-func get_class(): return "PursueEnemiesGoal"
+func get_class_name(): return "PursueEnemiesGoal"
 
 
 func is_valid(agent) -> bool:

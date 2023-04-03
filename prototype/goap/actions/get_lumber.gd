@@ -1,7 +1,7 @@
 extends "../Action.gd"
 
 
-func get_class(): return "GetLumber"
+func get_class_name(): return "GetLumber"
 
 
 const cut_time = 6
