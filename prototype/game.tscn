@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://collision/collision.gd" id="10"]
 [ext_resource type="Script" path="res://hud/hud.gd" id="11"]
 [ext_resource type="Script" path="res://map/spawn.gd" id="12"]
-[ext_resource type="PackedScene" path="res://ui/waterfall/waterfall_background.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://cy617y6pg38gd" path="res://ui/waterfall/waterfall_background.tscn" id="13"]
 
 [node name="game" type="Node2D"]
 script = ExtResource("2")

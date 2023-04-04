@@ -6,6 +6,7 @@ extends MultiMeshInstance2D
 
 @export var in_a_rows: int = 1
 @export var row_distance: int = 10
+@export var col_distance: int = 10
 
 @export var random_range: int = 0
 @export var random_range_y: int = 0
@@ -49,7 +50,7 @@ func _update_distribution():
 		var vectors = []
 		
 		for i in in_a_rows:
-			var x = (i%in_a_rows)*((screen_size.x + 50)/in_a_rows)
+			var x = (i%in_a_rows)*col_distance
 			vectors.append(Vector2(
 				int(
 					x + randf_range(-random_range,random_range)
@@ -71,10 +72,15 @@ func _update_distribution():
 			var color_index = (1 / (focus*pow(dis2center, 2) + 1) * (1-noise_strength)) * (colors.size())
 			color_index += map_range(open_simplex_noise.get_noise_2d(v.x ,v.y), -1,1, 0, colors.size()) * noise_strength * (1- 1 / (focus*pow(dis2center, 2) + 1))
 			
-			multi_mesh.set_instance_color(i, lerp_color(
-											colors[min(colors.size() - 1, floor(color_index))],
-											colors[min(colors.size() - 1, ceil(color_index))],
-											clamp((color_index - floor(color_index))/(ceil(color_index) - floor(color_index)),0,1)));
+			var instance_color =  lerp_color(
+				colors[min(colors.size() - 1, floor(color_index))],
+				colors[min(colors.size() - 1, ceil(color_index))],
+				clamp((color_index - floor(color_index))/(ceil(color_index) - floor(color_index)),0,1)
+			)
+			print(instance_color)
+			
+			multi_mesh.set_instance_color(i, instance_color)
+			
 		current_row += 1;
 
 func lerp_color(c1:Color, c2:Color, t:float):

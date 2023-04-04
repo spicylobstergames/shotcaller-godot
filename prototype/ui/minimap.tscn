@@ -1,60 +1,50 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://dbxqqihthhfid"]
 
-[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=1]
-[ext_resource path="res://ui/minimap.gd" type="Script" id=2]
-[ext_resource path="res://assets/map/light.png" type="Texture2D" id=3]
-[ext_resource path="res://assets/ui/minimap.png" type="Texture2D" id=4]
-
-[sub_resource type="StyleBoxTexture" id=1]
-texture = ExtResource( 1 )
-region_rect = Rect2( 0, 35, 175, 86 )
-offset_left = 5.0
-offset_right = 5.0
-offset_top = 5.0
-offset_bottom = 5.0
-modulate_color = Color( 1, 1, 1, 0.941176 )
+[ext_resource type="Script" path="res://ui/minimap.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dxaeee27miwov" path="res://assets/map/light.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://d4eyfpov18sce" path="res://assets/ui/minimap.png" id="4"]
 
 [node name="minimap" type="ItemList"]
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -150.0
 offset_right = 150.0
-custom_styles/bg = SubResource( 1 )
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="minimap_container" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 2
-offset = Vector2( 0, 600 )
-transform = Transform2D( 1, 0, 0, 1, 0, 600 )
+offset = Vector2(0, 600)
+transform = Transform2D(1, 0, 0, 1, 0, 600)
 
 [node name="sprite" type="Sprite2D" parent="minimap_container"]
 unique_name_in_owner = true
 light_mask = 2
-position = Vector2( 75, -75 )
-texture = ExtResource( 4 )
+position = Vector2(75, -75)
+texture = ExtResource("4")
 region_enabled = true
-region_rect = Rect2( 2, 2, 142, 142 )
+region_rect = Rect2(2, 2, 142, 142)
 
 [node name="fog" type="CanvasModulate" parent="minimap_container"]
-color = Color( 0.392157, 0.392157, 0.392157, 1 )
+visible = false
+color = Color(0.392157, 0.392157, 0.392157, 1)
 
 [node name="light_template" type="PointLight2D" parent="minimap_container"]
 unique_name_in_owner = true
 visible = false
 light_mask = 2
-texture = ExtResource( 3 )
-mode = 2
 range_layer_min = 2
 range_layer_max = 2
 range_item_cull_mask = 2
 shadow_filter = 1
 shadow_filter_smooth = 30.0
 shadow_item_cull_mask = 2
+texture = ExtResource("3")
 
 [node name="map_symbols" type="Node2D" parent="minimap_container"]
 unique_name_in_owner = true
-position = Vector2( 0, -150 )
+position = Vector2(0, -150)
 
 [node name="rect_layer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
@@ -62,13 +52,14 @@ layer = 2
 
 [node name="cam_rect" type="ReferenceRect" parent="rect_layer"]
 unique_name_in_owner = true
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 50.0
 offset_top = -100.0
 offset_right = 100.0
 offset_bottom = -50.0
-pivot_offset = Vector2( 25, 25 )
-border_color = Color( 1, 1, 1, 0.666667 )
+pivot_offset = Vector2(25, 25)
+border_color = Color(1, 1, 1, 0.666667)
 border_width = 2.0
 editor_only = false

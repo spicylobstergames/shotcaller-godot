@@ -23,7 +23,7 @@ mono_crash.*.json
 *.translation
 
 # VsCode ignores
-prototype/.vscode/*
+!.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
