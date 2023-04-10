@@ -87,12 +87,15 @@ func get_map_texture():
 	rect_layer.hide()
 	game.map.show()
 	game.maps.buildings_visibility(false)
-	await get_tree().idle_frame
+	
+	await RenderingServer.frame_post_draw
+	
 	# take snapshop
-	var data = game.get_viewport().get_texture().get_data()
-	data.flip_y()
-	var texture = ImageTexture.new()
-	texture.create_from_image(data) #,1
+	var texture = game.get_viewport().get_texture().get_image()
+	#data.flip_y()
+	#var texture = ImageTexture.new()
+	#texture.create_from_image(data) #,1
+	
 	# set minimap texture
 	var minimap_sprite = $"%sprite"
 	minimap_sprite.set_texture(texture)

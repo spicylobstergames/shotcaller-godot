@@ -77,7 +77,6 @@ func _update_distribution():
 				colors[min(colors.size() - 1, ceil(color_index))],
 				clamp((color_index - floor(color_index))/(ceil(color_index) - floor(color_index)),0,1)
 			)
-			print(instance_color)
 			
 			multi_mesh.set_instance_color(i, instance_color)
 			
