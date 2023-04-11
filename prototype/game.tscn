@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://collision/blocks/blocks.gd" id="1"]
 [ext_resource type="Script" path="res://game.gd" id="2"]
-[ext_resource type="PackedScene" path="res://ui/ui.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://buqduma2cqytp" path="res://ui/ui.tscn" id="4"]
 [ext_resource type="Script" path="res://ui/transitions.gd" id="5"]
 [ext_resource type="Script" path="res://map/maps.gd" id="6"]
 [ext_resource type="Script" path="res://controls/selection.gd" id="7"]
