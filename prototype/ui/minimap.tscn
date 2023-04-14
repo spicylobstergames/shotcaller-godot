@@ -10,15 +10,21 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -150.0
 offset_right = 150.0
+grow_vertical = 0
 script = ExtResource("2")
 
 [node name="minimap_container" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 2
-offset = Vector2(0, 600)
-transform = Transform2D(1, 0, 0, 1, 0, 600)
 
-[node name="sprite" type="Sprite2D" parent="minimap_container"]
+[node name="Control" type="Control" parent="minimap_container"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[node name="sprite" type="Sprite2D" parent="minimap_container/Control"]
 unique_name_in_owner = true
 light_mask = 2
 position = Vector2(75, -75)

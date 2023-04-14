@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dbxqqihthhfid" path="res://ui/minimap.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://ui/panels/orders_panel.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://beaxx58y8ho37" path="res://ui/panels/control_panel.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://ui/stats.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://ceq7l7wrpkgjb" path="res://ui/stats.tscn" id="9"]
 [ext_resource type="PackedScene" path="res://ui/panels/dialog_panel.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://bawe4co71ooc0" path="res://ui/menus/main_menu.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://ui/leaders_quick_icons.tscn" id="12"]
@@ -35,20 +35,22 @@ text = "fps
 
 [node name="top_mid" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
 
 [node name="top_label" type="Label" parent="top_mid"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = -150.0
-offset_top = 2.0
-offset_right = 150.0
-offset_bottom = 32.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 26.0
+grow_horizontal = 2
 text = "shotcaller
 "
+horizontal_alignment = 1
 
 [node name="top_right" type="Control" parent="."]
 layout_mode = 3
@@ -59,11 +61,9 @@ grow_horizontal = 0
 
 [node name="shop" parent="top_right" instance=ExtResource("3")]
 unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 0.0
-anchor_right = 0.0
-offset_left = 0.0
-offset_right = 182.0
+layout_mode = 1
+anchors_preset = 1
+grow_horizontal = 0
 
 [node name="mid_right" type="Control" parent="."]
 layout_mode = 3
@@ -77,15 +77,11 @@ grow_vertical = 2
 
 [node name="mid" type="CenterContainer" parent="."]
 custom_minimum_size = Vector2(600, 600)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -300.0
-offset_right = 300.0
-offset_bottom = 300.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="main_menu" parent="mid" instance=ExtResource("11")]
 unique_name_in_owner = true
@@ -116,18 +112,25 @@ grow_vertical = 2
 
 [node name="leaders_icons" parent="mid_left" instance=ExtResource("12")]
 unique_name_in_owner = true
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
 offset_top = 0.0
-offset_bottom = 308.0
+offset_right = 8.0
+offset_bottom = 0.0
+grow_vertical = 2
 
 [node name="cheat_console" type="TextEdit" parent="mid_left"]
 process_mode = 2
-visible = false
-layout_mode = 0
-offset_left = 3.0
-offset_top = -210.0
-offset_right = 130.0
-offset_bottom = -193.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 5.0
+offset_top = -180.0
+offset_right = 132.0
+offset_bottom = -163.0
+grow_vertical = 2
 context_menu_enabled = false
 shortcut_keys_enabled = false
 script = ExtResource("19")
@@ -141,12 +144,7 @@ grow_vertical = 0
 
 [node name="minimap" parent="bot_left" instance=ExtResource("5")]
 unique_name_in_owner = true
-layout_mode = 0
-anchors_preset = 0
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_bottom = 150.0
+layout_mode = 1
 
 [node name="bot_mid" type="Control" parent="."]
 layout_mode = 3
@@ -160,11 +158,14 @@ grow_vertical = 0
 
 [node name="stats" parent="bot_mid" instance=ExtResource("9")]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 300.0
-offset_bottom = 96.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [node name="dialog" parent="bot_mid" instance=ExtResource("10")]
 unique_name_in_owner = true
@@ -188,36 +189,55 @@ grow_vertical = 0
 [node name="orders_panel" parent="bot_right" instance=ExtResource("7")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 286.0
-offset_bottom = 200.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+offset_bottom = -190.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="unit_controls_panel" parent="bot_right" instance=ExtResource("2")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 286.0
-offset_bottom = 110.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -300.0
+offset_bottom = -190.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="control_panel" parent="bot_right" instance=ExtResource("8")]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 150.0
-offset_bottom = 150.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="version" type="Label" parent="bot_right"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = -72.0
-offset_top = -17.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -89.0
+offset_top = -26.0
 offset_right = -5.0
-offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "version 0.7"
 
 [node name="score_board" parent="." instance=ExtResource("18")]
@@ -225,8 +245,6 @@ unique_name_in_owner = true
 process_mode = 2
 visible = false
 layout_mode = 3
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_right = 600.0
-offset_bottom = 600.0
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2

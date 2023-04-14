@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 # self = game
 
