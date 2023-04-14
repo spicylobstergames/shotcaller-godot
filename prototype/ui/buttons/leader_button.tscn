@@ -64,9 +64,9 @@ width = 4
 
 [sub_resource type="ShaderMaterial" id=30]
 shader = ExtResource( 5 )
-shader_param/tolerance = 0.1
-shader_param/origin_colors = SubResource( 60 )
-shader_param/replace_colors = SubResource( 62 )
+shader_parameter/tolerance = 0.1
+shader_parameter/origin_colors = SubResource( 60 )
+shader_parameter/replace_colors = SubResource( 62 )
 
 [sub_resource type="FontFile" id=7]
 size = 8

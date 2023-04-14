@@ -14,16 +14,16 @@ func _ready():
 
 
 func setup_order_button():
-	var name = self.orders[self.orders.type]
-	name_label.text = name
+	var order_name = self.orders[self.orders.type]
+	name_label.text = order_name
 	var hint = str(get_index()+1)
 	if "hint" in self.orders: hint = orders.hint
 	hint_label.text = hint
 	var icon_ref = self.icon
 	if not icon_ref: icon_ref = self.saved_icon
-	var icon = icon_ref.duplicate()
+	icon = icon_ref.duplicate()
 	var sprite
-	match name:
+	match order_name:
 		"building","extra room": sprite = 0
 		"pawn","infantry": sprite = 1
 		"ranged","fire arrows": sprite = 2
@@ -40,8 +40,6 @@ func setup_order_button():
 		"order","teleport": sprite = 13
 		
 	icon.region.position.x = sprite * 48
-	
-	self.icon = icon
 
 
 func button_down():

@@ -40,13 +40,13 @@ func spawn_unit():
 		game.maps.setup_leaders([leader], [])
 		
 		# TEST LANE PAWN
-#			var path = game.maps.new_path("mid", "blue")
-#			var start = path.pop_front()
+#		var path = game.maps.new_path("mid", "blue")
+#		var start = path.pop_front()
 		var pawn = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(200,600))
-#			Behavior.path.setup_unit_path(pawn, path)
-#			Behavior.path.start(Callable(pawn,path))
-#			pawn.hp = 10000
-#			pawn.current_hp = 10000
+#		Behavior.path.setup_unit_path(pawn, path)
+#		Behavior.path.start(Callable(pawn,path))
+		pawn.hp = 10000
+		pawn.current_hp = 10000
 #		pawn.moves = false
 		
 		# TEST LUMBERJACK

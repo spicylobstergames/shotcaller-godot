@@ -79,9 +79,9 @@ func leaders():
 	var blue_leaders = []
 	for team in WorldState.teams:
 		var counter = 0
-		var leaders = game.player_choose_leaders
-		if team != game.player_team: leaders = game.enemy_choose_leaders
-		for leader in leaders:
+		var choose_leaders = game.player_choose_leaders
+		if team != game.player_team: choose_leaders = game.enemy_choose_leaders
+		for leader in choose_leaders:
 			var leader_name = leader
 			if leader == "random":
 				leader_name = WorldState.leaders.keys()[randi() % WorldState.leaders.size()]
@@ -91,8 +91,8 @@ func leaders():
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
 			var path = game.maps.new_path(lane, team)
-			var start = path.pop_front()
-			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", start)
+			var path_start = path.pop_front()
+			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path_start)
 			Behavior.path.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
@@ -144,11 +144,11 @@ func recycle(template, lane, team, point):
 
 func send_pawn(template, lane, team):
 	var path = game.maps.new_path(lane, team)
-	var start = path.pop_front()
-	var pawn = recycle(template, lane, team, start)
+	var path_start = path.pop_front()
+	var pawn = recycle(template, lane, team, path_start)
 	if not pawn:
 		var unit_template = self[template]
-		pawn = game.maps.create(unit_template, lane, team, "point_random", start)
+		pawn = game.maps.create(unit_template, lane, team, "point_random", path_start)
 	Behavior.path.setup_unit_path(pawn, path)
 	Behavior.orders.set_pawn(pawn)
 
@@ -198,8 +198,8 @@ func cemitery_add_leader(leader):
 	var lane = leader.agent.get_state("lane")
 	var path = WorldState.lanes[lane].duplicate()
 	if leader.team == "red": path.invert()
-	var start = path.pop_front()
-	leader = spawn_unit(leader, lane, team, "point_random", start)
+	var path_start = path.pop_front()
+	leader = spawn_unit(leader, lane, team, "point_random", path_start)
 	leader.reset_unit()
 
 
@@ -220,9 +220,9 @@ func lumberjack_hire(lumbermill, team):
 	unit.show()
 	
 	# charge player
-	var leaders = game.player_leaders
-	if team == game.enemy_team: leaders = game.enemy_leaders
-	for leader in leaders: leader.gold -= floor(lumberjack_cost/leaders.size())
+	var team_leaders = game.player_leaders
+	if team == game.enemy_team: team_leaders = game.enemy_leaders
+	for leader in team_leaders: leader.gold -= floor(lumberjack_cost/team_leaders.size())
 
 
 # CAMP
@@ -238,6 +238,6 @@ func camp_hire(unit, team):
 		"archer": cost = 2
 		"mounted": cost = 3
 	
-	var leaders = game.player_leaders
-	if team == game.enemy_team: leaders = game.enemy_leaders
-	for leader in leaders: leader.gold -= cost
+	var team_leaders = game.player_leaders
+	if team == game.enemy_team: team_leaders = game.enemy_leaders
+	for leader in team_leaders: leader.gold -= cost

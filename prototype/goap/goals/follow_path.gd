@@ -12,11 +12,11 @@ func is_valid(agent) -> bool:
 	return has_path
 
 
-func priority(agent) -> int:
+func priority(_agent) -> int:
 	return 1 # higher if unit is further from lane
 
 
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return { 
 		"close_to_path": true,
 		"completed_path": true

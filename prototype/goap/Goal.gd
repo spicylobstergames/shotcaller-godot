@@ -8,13 +8,13 @@ extends Node
 # Sometimes instead of changing the priority, it is easier to
 # not even consider the goal. i.e. Ignore combat related goals
 # when there are not enemies nearby.
-func is_valid(agent) -> bool:
+func is_valid(_agent) -> bool:
 	return true
 
 
 # Returns goals priority. This priority can be dynamic. Check
 # `./goals/keep_fed.gd` for an example of dynamic priority.
-func priority(agent) -> int:
+func priority(_agent) -> int:
 	return 1
 
 
@@ -23,5 +23,5 @@ func priority(agent) -> int:
 #
 # For example, in your world state you may store "hunger" as a number, but inside your
 # goap you can deal with it as "is_hungry".
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return {}

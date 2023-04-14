@@ -39,9 +39,8 @@ func setup(new_item):
 			self.disabled = (new_item.type != "consumable")
 		var icon_ref = self.icon
 		if not icon_ref: icon_ref = self.saved_icon
-		var icon = icon_ref.duplicate()
+		icon = icon_ref.duplicate()
 		icon.region.position.x = new_item.sprite * 32
-		self.icon = icon
 		name_label.text = self.name
 		var price = new_item.price
 		if not self.shop_item: price = new_item.sell_price

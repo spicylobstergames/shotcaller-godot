@@ -8,7 +8,7 @@ func is_valid(agent) -> bool:
 	return agent.get_unit().moves
 
 
-func get_cost(agent) -> int:
+func get_cost(_agent) -> int:
 	return 1
 
 
@@ -19,7 +19,7 @@ func get_effects() -> Dictionary:
 	}
 
 
-func perform(agent, delta) -> bool:
+func perform(agent, _delta) -> bool:
 	return agent.get_state("completed_path")
 
 
@@ -39,7 +39,7 @@ func on_arrive(agent):
 		agent.set_state("completed_path", true)
 
 
-func on_animation_end(agent):
+func on_animation_end(_agent):
 	# var limit = Behavior.follow.max_lane_distance
 	# var distance = distance_to_lane( agent.get_unit() )
 	# agent.set_state("close_to_path", distance < limit)

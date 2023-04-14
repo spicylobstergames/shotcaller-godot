@@ -81,13 +81,13 @@ func set_portrait(portrait, unit):
 	portrait.texture = texture_data
 	portrait.region_rect.size = texture_data.region.size
 	
-	var scale = Vector2(2.4,2.4)
-	if unit.mounted: scale = Vector2(1.5,1.5)
-	if unit.type == "building": scale =  Vector2(1,1)
+	var portrait_scale = Vector2(2.4,2.4)
+	if unit.mounted: portrait_scale = Vector2(1.5,1.5)
+	if unit.type == "building": portrait_scale =  Vector2(1,1)
 	match unit.display_name:
-		"barrack": scale = Vector2(0.8,0.8)
-		"castle": scale = Vector2(0.6,0.6)
-	portrait.scale = scale
+		"barrack": portrait_scale = Vector2(0.8,0.8)
+		"castle": portrait_scale = Vector2(0.6,0.6)
+	portrait.scale = portrait_scale
 	var sx = abs(portrait.scale.x)
 	portrait.scale.x = -1 * sx if unit.team == "red" else sx
 

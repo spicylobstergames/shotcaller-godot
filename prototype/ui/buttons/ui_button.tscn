@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=14 format=3]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=1]
-[ext_resource path="res://ui/buttons/ui_button.gd" type="Script" id=2]
-[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=3]
-[ext_resource path="res://assets/ui/icons.png" type="Texture2D" id=4]
+[ext_resource type="FontFile" uid="uid://c5hqgw64nmglt" path="res://assets/ui/kenvector_future.ttf" id="1"]
+[ext_resource type="Script" path="res://ui/buttons/ui_button.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="4"]
+
 
 [sub_resource type="FontFile" id=2]
 size = 11

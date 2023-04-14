@@ -14,6 +14,6 @@ func priority(agent) -> int:
 	return enemies.size() * 2
 
 
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return { "is_threatened": false }
 

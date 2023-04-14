@@ -7,11 +7,11 @@ func get_class_name(): return "GetLumber"
 const cut_time = 6
 
 
-func is_valid(agent) -> bool:
+func is_valid(_agent) -> bool:
 	return WorldState.get_state("is_game_active")
 
 
-func get_cost(agent):
+func get_cost(_agent):
 	# plans will sum up their actions costs and the lower cost plan is chosen
 	return 1
 
@@ -24,7 +24,7 @@ func get_effects() -> Dictionary:
 	return { "has_wood": true }
 
 
-func perform(agent, delta) -> bool:
+func perform(agent, _delta) -> bool:
 	return agent.get_state("has_wood")
 
 

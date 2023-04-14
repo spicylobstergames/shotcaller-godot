@@ -57,7 +57,7 @@ func step(unit, delta):
 	unit.global_position += unit.current_step * delta
 
 
-func on_collision(unit, delta):
+func on_collision(unit, _delta):
 	var target = unit.collide_target
 	if target and target != unit.target:
 		var a # new direction
@@ -117,8 +117,8 @@ func stand(unit):
 
 
 
-func smart(unit, point):
+func smart(unit, target_point):
 	if not unit.agent.get_state("stunned"):
-		var path = Behavior.path.find(unit.global_position, point)
-		if path: Behavior.path.start(Callable(unit,path))
+		var path = Behavior.path.find(unit.global_position, target_point)
+		if path: Behavior.path.start(unit, path)
 

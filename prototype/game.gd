@@ -147,7 +147,7 @@ func one_sec_cycle(): # called every second
 		emit_signal("game_one_sec_cycle")
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	Crafty_camera.process()
 	ui.process()
 

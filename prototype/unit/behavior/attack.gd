@@ -10,17 +10,17 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func point(unit, point):
+func point(unit, target_point):
 	if (
 		unit.attacks 
 		and not unit.agent.get_state("is_stunned")
-		and Behavior.move.in_bounds(point)
+		and Behavior.move.in_bounds(target_point)
 	):
 		if unit.ranged and unit.weapon:
-			unit.weapon.look_at(point)
+			unit.weapon.look_at(target_point)
 		
 		if !unit.target:
-			var neighbors = game.maps.blocks.get_units_in_radius(point, 1)
+			var neighbors = game.maps.blocks.get_units_in_radius(target_point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				if is_valid_target(unit, target):
@@ -28,8 +28,8 @@ func point(unit, point):
 		
 		
 		if unit.target:
-			unit.aim_point = point
-			unit.mirror_look_at(point)
+			unit.aim_point = target_point
+			unit.mirror_look_at(target_point)
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 

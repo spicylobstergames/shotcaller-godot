@@ -8,9 +8,9 @@ func is_valid(agent) -> bool:
 	return not agent.get_state("is_running") and not agent.get_state("is_hiding")
 
 
-func priority(agent) -> int:
+func priority(_agent) -> int:
 	return 1
 
 
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return { "collected_wood": true }

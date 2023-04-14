@@ -41,7 +41,6 @@ func _ready():
 func _update_distribution():
 	var multi_mesh = self.multimesh
 	multi_mesh.mesh = $silouet.mesh
-	var screen_size = get_viewport_rect().size
 	
 	var rows = ceil(multi_mesh.instance_count/in_a_rows)
 	var current_row = 0

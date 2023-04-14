@@ -7,7 +7,7 @@ extends "../Goal.gd"
 func get_class_name(): return "RetreatGoal"
 
 
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return { "ready_to_fight": true }
 
 
@@ -24,7 +24,7 @@ func is_valid(agent) -> bool:
 	return false
 
 
-func priority(agent) -> int:
+func priority(_agent) -> int:
 	return 5
 	# todo: dynamic priority
 

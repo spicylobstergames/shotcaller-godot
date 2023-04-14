@@ -1,14 +1,15 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=20 format=3]
 
-[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/ui/icons.png" type="Texture2D" id=2]
-[ext_resource path="res://ui/stats.gd" type="Script" id=3]
-[ext_resource path="res://item/inventories.gd" type="Script" id=4]
-[ext_resource path="res://ui/buttons/item_button.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=6]
-[ext_resource path="res://ui/status_effects/status_effects_display.tscn" type="PackedScene" id=7]
-[ext_resource path="res://ui/buttons/skill_button.tscn" type="PackedScene" id=8]
-[ext_resource path="res://skills/active_skills.gd" type="Script" id=9]
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2"]
+[ext_resource type="Script" path="res://ui/stats.gd" id="3"]
+[ext_resource type="Script" path="res://item/inventories.gd" id="4"]
+[ext_resource type="PackedScene" path="res://ui/buttons/item_button.tscn" id="5"]
+[ext_resource type="FontFile" uid="uid://c5hqgw64nmglt" path="res://assets/ui/kenvector_future.ttf" id="6"]
+[ext_resource type="PackedScene" path="res://ui/status_effects/status_effects_display.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://ui/buttons/skill_button.tscn" id="8"]
+[ext_resource type="Script" path="res://skills/active_skills.gd" id="9"]
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
