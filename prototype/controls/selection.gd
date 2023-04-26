@@ -14,22 +14,22 @@ func input(event):
 	if event is InputEventKey:
 		if not event.is_pressed():
 			if game.selected_unit:
-				match event.scancode:
+				match event.keycode:
 					KEY_E: move(game.selected_unit, point)
 					KEY_R: advance(game.selected_unit, point)
 					KEY_Q: teleport(game.selected_unit, point)
 					KEY_W: change_lane(game.selected_unit, point)
 				
-				match event.scancode:
+				match event.keycode:
 					KEY_A: attack(game.selected_unit, point) 
 					KEY_S: stand(game.selected_unit)
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.pressed: 
 		match event.button_index:
-			BUTTON_LEFT:
+			MOUSE_BUTTON_LEFT:
 				select(point)
-			BUTTON_RIGHT:
+			MOUSE_BUTTON_RIGHT:
 				control_state(point)
 	
 	# TOUCH SELECTION
@@ -52,7 +52,7 @@ func select(point):
 
 
 func select_unit(unit):
-	unselect()
+	deselect()
 	game.selected_unit = unit
 	
 	if game.can_control(unit):
@@ -82,7 +82,7 @@ func select_unit(unit):
 		game.ui.shop_button.button_down()
 
 
-func unselect():
+func deselect():
 	game.control_state = "selection"
 	
 	if game.selected_unit:
@@ -121,7 +121,7 @@ func no_delay(unit):
 
 func control_state(point):
 	match game.control_state:
-		"selection": unselect()
+		"selection": deselect()
 		"teleport": teleport(game.selected_unit, point)
 		"advance": advance(game.selected_unit, point)
 		"move": move(game.selected_unit, point)

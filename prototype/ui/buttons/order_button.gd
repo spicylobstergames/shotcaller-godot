@@ -2,8 +2,8 @@ extends Button
 var game:Node
 
 
-onready var name_label = get_node("name")
-onready var hint_label = get_node("hint")
+@onready var name_label = get_node("name")
+@onready var hint_label = get_node("hint")
 
 var orders
 var saved_icon
@@ -14,16 +14,16 @@ func _ready():
 
 
 func setup_order_button():
-	var name = self.orders[self.orders.type]
-	name_label.text = name
+	var order_name = self.orders[self.orders.type]
+	name_label.text = order_name
 	var hint = str(get_index()+1)
 	if "hint" in self.orders: hint = orders.hint
 	hint_label.text = hint
 	var icon_ref = self.icon
 	if not icon_ref: icon_ref = self.saved_icon
-	var icon = icon_ref.duplicate()
+	icon = icon_ref.duplicate()
 	var sprite
-	match name:
+	match order_name:
 		"building","extra room": sprite = 0
 		"pawn","infantry": sprite = 1
 		"ranged","fire arrows": sprite = 2
@@ -40,8 +40,6 @@ func setup_order_button():
 		"order","teleport": sprite = 13
 		
 	icon.region.position.x = sprite * 48
-	
-	self.icon = icon
 
 
 func button_down():
@@ -55,7 +53,7 @@ func button_down():
 		
 		"priority":
 			if not is_first_child(self):
-				move_to_front(self)
+				move_button_to_front(self)
 				if game.selected_leader:
 					Behavior.orders.set_leader_priority(self.orders.priority)
 				else: Behavior.orders.set_lane_priority(self.orders.priority)
@@ -63,10 +61,10 @@ func button_down():
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
 				if button.orders.taxes == self.orders.taxes:
-					button.pressed = true
+					button.button_pressed = true
 					button.disabled = true
 				else: 
-					button.pressed = false
+					button.button_pressed = false
 					button.disabled = false
 			Behavior.orders.set_taxes(self.orders.taxes, game.selected_unit.team)
 			self.disabled = true
@@ -102,7 +100,7 @@ func button_down():
 func clear_siblings(button):
 	for child in button.get_parent().get_children():
 		if child != button: 
-			child.pressed = false
+			child.button_pressed = false
 			child.disabled = false
 
 
@@ -116,7 +114,7 @@ func is_first_child(button):
 	return button.get_parent().get_children()[0] == button
 
 
-func move_to_front(button):
+func move_button_to_front(button):
 	var buttons = button.get_parent().get_children()
 	for sibling_button in buttons:
 		sibling_button.disabled = false

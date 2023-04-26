@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/leaders/hongi_blue.png" type="Texture2D" id=1]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 1 )
@@ -23,7 +23,7 @@ animations = [ {
 use_parent_material = true
 position = Vector2( 0, -25 )
 
-[node name="axe" type="AnimatedSprite" parent="."]
+[node name="axe" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
 position = Vector2( -7.1407, 5.0588 )
 rotation = -2.0944
@@ -37,6 +37,6 @@ use_parent_material = true
 position = Vector2( 2.20537e-06, 0 )
 z_index = 1
 
-[node name="sprites" type="AnimatedSprite" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
 use_parent_material = true
 frames = SubResource( 39 )

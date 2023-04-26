@@ -1,184 +1,111 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://cg8l45rky4pbj"]
 
-[ext_resource path="res://ui/scoreboard/scoreboard_entry.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/ui/kenvector_future.tres" type="DynamicFont" id=2]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://ui/scoreboard/scoreboard.gd" type="Script" id=4]
+[ext_resource type="PackedScene" path="res://ui/scoreboard/scoreboard_entry.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_wiv0b"]
+[ext_resource type="FontFile" path="res://assets/ui/CompassPro.tres" id="2_tovuh"]
+[ext_resource type="Script" path="res://ui/scoreboard/scoreboard.gd" id="4"]
 
-[sub_resource type="DynamicFont" id=3]
-size = 40
-font_data = ExtResource( 3 )
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ow8p1"]
+texture = ExtResource("1_wiv0b")
+region_rect = Rect2(105, 0, 35, 35)
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.0901961, 0.101961, 0.305882, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0.0117647, 0.117647, 0.372549, 1 )
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j6mul"]
+texture = ExtResource("1_wiv0b")
+region_rect = Rect2(0, 0, 35, 35)
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.341176, 0.0156863, 0.0156863, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0.423529, 0.0392157, 0.00392157, 1 )
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vwwxc"]
+texture = ExtResource("1_wiv0b")
+region_rect = Rect2(70, 0, 35, 35)
 
-[sub_resource type="DynamicFont" id=4]
-size = 32
-font_data = ExtResource( 3 )
+[sub_resource type="Theme" id="Theme_5805e"]
+Button/styles/hover = SubResource("StyleBoxTexture_ow8p1")
+Button/styles/normal = SubResource("StyleBoxTexture_j6mul")
+Button/styles/pressed = SubResource("StyleBoxTexture_vwwxc")
+Label/fonts/font = ExtResource("2_tovuh")
 
 [node name="scoreboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 4 )
+theme = SubResource("Theme_5805e")
+script = ExtResource("4")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 16.0
-margin_top = 69.0
-margin_right = 584.0
-margin_bottom = 530.0
+layout_mode = 2
 
 [node name="result_label" type="Label" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
-margin_right = 568.0
-margin_bottom = 45.0
-custom_fonts/font = SubResource( 3 )
+layout_mode = 2
 text = "DEFEAT"
-align = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
-margin_top = 49.0
-margin_right = 568.0
-margin_bottom = 415.0
-rect_pivot_offset = Vector2( 200, 200 )
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 561.0
-margin_bottom = 359.0
+layout_mode = 2
 
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-margin_right = 554.0
-margin_bottom = 18.0
-custom_fonts/font = ExtResource( 2 )
+layout_mode = 2
 text = "Score"
-align = 1
-valign = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-margin_top = 22.0
-margin_right = 554.0
-margin_bottom = 352.0
+layout_mode = 2
 
 [node name="Panel" type="PanelContainer" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_right = 275.0
-margin_bottom = 330.0
-custom_styles/panel = SubResource( 1 )
+layout_mode = 2
 
 [node name="team_blue_container" type="VBoxContainer" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel"]
 unique_name_in_owner = true
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 273.0
-margin_bottom = 328.0
+layout_mode = 2
 
-[node name="score_board_entry" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 271.0
-margin_bottom = 62.0
+[node name="score_board_entry" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry2" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 66.0
-margin_right = 271.0
-margin_bottom = 128.0
+[node name="score_board_entry2" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry3" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 132.0
-margin_right = 271.0
-margin_bottom = 194.0
+[node name="score_board_entry3" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry4" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 198.0
-margin_right = 271.0
-margin_bottom = 260.0
+[node name="score_board_entry4" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry5" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 264.0
-margin_right = 271.0
-margin_bottom = 326.0
+[node name="score_board_entry5" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel/team_blue_container" instance=ExtResource("1")]
+layout_mode = 2
 
 [node name="Panel2" type="PanelContainer" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 279.0
-margin_right = 554.0
-margin_bottom = 330.0
-custom_styles/panel = SubResource( 2 )
+layout_mode = 2
 
 [node name="team_red_container" type="VBoxContainer" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2"]
 unique_name_in_owner = true
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 273.0
-margin_bottom = 328.0
+layout_mode = 2
 size_flags_vertical = 0
 
-[node name="score_board_entry3" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 271.0
-margin_bottom = 62.0
+[node name="score_board_entry3" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry4" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 66.0
-margin_right = 271.0
-margin_bottom = 128.0
+[node name="score_board_entry4" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry5" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 132.0
-margin_right = 271.0
-margin_bottom = 194.0
+[node name="score_board_entry5" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry6" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 198.0
-margin_right = 271.0
-margin_bottom = 260.0
+[node name="score_board_entry6" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource("1")]
+layout_mode = 2
 
-[node name="score_board_entry" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 264.0
-margin_right = 271.0
-margin_bottom = 326.0
+[node name="score_board_entry" parent="CenterContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Panel2/team_red_container" instance=ExtResource("1")]
+layout_mode = 2
 
 [node name="restart_button" type="Button" parent="CenterContainer/VBoxContainer"]
 unique_name_in_owner = true
-margin_left = 183.0
-margin_top = 419.0
-margin_right = 384.0
-margin_bottom = 461.0
+layout_mode = 2
 size_flags_horizontal = 4
-custom_fonts/font = SubResource( 4 )
 text = "Restart"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/restart_button" to="." method="_on_restart_button_pressed"]

@@ -2,7 +2,7 @@ extends Button
 var game:Node
 
 
-export var value:String
+@export var value:String
 
 var blue_team_button:Node
 var red_team_button:Node

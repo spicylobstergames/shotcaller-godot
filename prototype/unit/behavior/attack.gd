@@ -10,17 +10,17 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func point(unit, point):
+func point(unit, target_point):
 	if (
 		unit.attacks 
 		and not unit.agent.get_state("is_stunned")
-		and Behavior.move.in_bounds(point)
+		and Behavior.move.in_bounds(target_point)
 	):
 		if unit.ranged and unit.weapon:
-			unit.weapon.look_at(point)
+			unit.weapon.look_at(target_point)
 		
 		if !unit.target:
-			var neighbors = game.maps.blocks.get_units_in_radius(point, 1)
+			var neighbors = game.maps.blocks.get_units_in_radius(target_point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				if is_valid_target(unit, target):
@@ -28,8 +28,8 @@ func point(unit, point):
 		
 		
 		if unit.target:
-			unit.aim_point = point
-			unit.look_at(point)
+			unit.aim_point = target_point
+			unit.mirror_look_at(target_point)
 			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 
@@ -124,7 +124,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			attacker.attack_count += 1
 			if attacker.type == "leader":
 				target.last_attacker = attacker
-				target.assist_candidates[attacker] = OS.get_ticks_msec()
+				target.assist_candidates[attacker] = Time.get_ticks_msec()
 			
 		if not modifiers.counter: # avoid infinite reciprocal counters
 			target.was_attacked(attacker, damage)
@@ -161,7 +161,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 
 func projectile_release(attacker):
-	projectile_start(attacker, attacker.target)
+	projectile_start(attacker,attacker.target)
 	Behavior.skills.projectile_release(attacker)
 
 
@@ -256,7 +256,7 @@ func projectile_stuck(attacker, target, projectile):
 	attacker.projectiles.erase(projectile)
 	# remove projectile after 1.2 sec
 
-	yield(get_tree().create_timer(1.2), "timeout")
+	await get_tree().create_timer(1.2).timeout
 	if is_instance_valid(stuck):
 		stuck.get_parent().remove_child(stuck)
 		stuck.queue_free()

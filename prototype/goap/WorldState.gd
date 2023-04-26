@@ -5,7 +5,7 @@ extends Node
 # This class is an Autoload accessible globaly
 # Access the autoload list in godot settings
 
-onready var game = get_tree().get_current_scene()
+@onready var game = get_tree().get_current_scene()
 
 #runs logic that is only run once per second
 var one_sec_timer = Timer.new()

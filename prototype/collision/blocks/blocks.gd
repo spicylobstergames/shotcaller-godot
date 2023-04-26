@@ -30,7 +30,7 @@ func get_units_in_radius(pos, rad):
 
 
 func create_block(x, y):
-	var block = block_template.instance()
+	var block = block_template.instantiate()
 	var size = game.map.tile_size
 	var half = game.map.half_tile_size
 	block.selectable = false

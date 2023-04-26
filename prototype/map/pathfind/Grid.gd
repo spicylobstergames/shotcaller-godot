@@ -26,7 +26,7 @@ class Grid:
 		"OnlyWhenNoObstacles": 4  # don't cross corners
 	}
 	
-	func _init(_width, _height, _matrix = []):
+	func _init(_width,_height,_matrix = []):
 		
 		if _matrix.size():
 			_height = _matrix.size()
@@ -69,7 +69,7 @@ class Grid:
 		if (!matrix):
 				return newNodes
 		
-		assert( matrix.size() != height or matrix[0].size() != width, "ERROR: Matrix size does not fit")
+		assert(matrix.size() != height or matrix[0].size() != width) #,"ERROR: Matrix size does not fit")
 		
 		
 		for i in range(height):
@@ -252,7 +252,7 @@ class GridNode:
 	var closed
 	var parent
 	
-	func _init(_x, _y, _walkable):
+	func _init(_x,_y,_walkable):
 		self.x = _x
 		self.y = _y
 		self.walkable = _walkable

@@ -1,11 +1,11 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=1]
 [ext_resource path="res://hud/hpbar.tscn" type="PackedScene" id=2]
 [ext_resource path="res://hud/unit_hud.gd" type="Script" id=3]
-[ext_resource path="res://assets/unit/shadow.png" type="Texture" id=4]
+[ext_resource path="res://assets/unit/shadow.png" type="Texture2D" id=4]
 
-[sub_resource type="DynamicFont" id=17]
+[sub_resource type="FontFile" id=17]
 size = 10
 font_data = ExtResource( 1 )
 
@@ -15,15 +15,15 @@ script = ExtResource( 3 )
 
 [node name="state" type="Label" parent="."]
 use_parent_material = true
-margin_left = -37.0
-margin_top = -37.0
-margin_right = 38.0
-margin_bottom = -21.0
+offset_left = -37.0
+offset_top = -37.0
+offset_right = 38.0
+offset_bottom = -21.0
 custom_fonts/font = SubResource( 17 )
 text = "unit"
 align = 1
 
-[node name="selection" type="Sprite" parent="."]
+[node name="selection" type="Sprite2D" parent="."]
 modulate = Color( 0.117647, 1, 0.211765, 0.588235 )
 use_parent_material = true
 position = Vector2( 0, 8 )

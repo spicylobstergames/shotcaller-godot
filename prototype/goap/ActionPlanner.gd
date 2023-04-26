@@ -16,7 +16,7 @@ func set_actions(actions: Array):
 func get_plan(agent, goal) -> Array:
 	var desired_state = goal.get_desired_state(agent)
 
-	if desired_state.empty():
+	if desired_state.is_empty():
 		return []
 	return _find_best_plan(goal, desired_state, agent)
 
@@ -35,7 +35,7 @@ func _find_best_plan(goal, desired_state, agent):
 	if _build_plans(root, agent):
 		var plans = _transform_tree_into_array(root, agent)
 		
-		if plans.empty(): 
+		if plans.is_empty(): 
 			push_error("goap action planner error: no valid plans")
 			return []
 		
@@ -85,7 +85,7 @@ func _build_plans(step, agent):
 	# if the state is empty, it means this branch already
 	# found the solution, so it doesn't need to look for
 	# more actions
-	if state.empty():
+	if state.is_empty():
 		return true
 
 	for action in _actions:
@@ -120,7 +120,7 @@ func _build_plans(step, agent):
 			# if it's not empty, _build_plans is called again (recursively) so
 			# it can try to find actions to satisfy this current state. In case
 			# it can't find anything, this action won't be included in the graph.
-			if desired_state.empty() or _build_plans(s, agent):
+			if desired_state.is_empty() or _build_plans(s, agent):
 				step.children.push_back(s)
 				has_followup = true
 
@@ -152,6 +152,6 @@ func _transform_tree_into_array(p, agent):
 func _print_plan(plan):
 	var actions = []
 	for a in plan.actions:
-		actions.push_back(a.get_class())
+		actions.push_back(a.get_class_name())
 	print("action_planner: ", {"cost": plan.cost, "actions": actions})
 

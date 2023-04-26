@@ -1,11 +1,11 @@
 extends Container
 
-onready var game = get_tree().get_current_scene()
+@onready var game = get_tree().get_current_scene()
 
-onready var quick_start_button = $"%quick_start_button"
-onready var exit_button = $"%exit_button"
-onready var new_game_button = $"%new_game_button"
-onready var campaign_button = $"%campaign_button"
+@onready var quick_start_button = $"%quick_start_button"
+@onready var exit_button = $"%exit_button"
+@onready var new_game_button = $"%new_game_button"
+@onready var campaign_button = $"%campaign_button"
 
 var once = true
 

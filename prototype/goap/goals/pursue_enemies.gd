@@ -1,7 +1,7 @@
 extends "../Goal.gd"
 
 
-func get_class(): return "PursueEnemiesGoal"
+func get_class_name(): return "PursueEnemiesGoal"
 
 
 func is_valid(agent) -> bool:
@@ -18,9 +18,9 @@ func is_valid(agent) -> bool:
 	return agent.get_state("has_attack_target")
 
 
-func priority(agent) -> int:
+func priority(_agent) -> int:
 	return 3 # lower if unit curent_hp is low
 
 
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return { "has_attack_target": false }

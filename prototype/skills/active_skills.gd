@@ -1,8 +1,8 @@
 extends ItemList
 
-onready var game: Node = get_tree().get_current_scene()
-onready var _skill_buttons = $placeholder.get_children()
-onready var _tip = $tip
+@onready var game: Node = get_tree().get_current_scene()
+@onready var _skill_buttons = $placeholder.get_children()
+#@onready var _tip = $tip
 
 var aura_sprite = preload("res://assets/ui/abilities/aura_of_courage_small.png")
 
@@ -22,7 +22,7 @@ var active_skills = {
 			120,
 			visualize_type.circle,
 			{},
-			[funcref(self, "rollo_basic")]
+			["rollo_basic"]
 		)
 	],
 	"raja": [
@@ -32,7 +32,7 @@ var active_skills = {
 			60,
 			visualize_type.none,
 			{},
-			[funcref(self, "raja_basic")]
+			["raja_basic"]
 		)
 	],
 	"robin": [
@@ -42,7 +42,7 @@ var active_skills = {
 			30,
 			visualize_type.circle,
 			{},
-			[funcref(self, "robin_special")]
+			["robin_special"]
 		)
 	],
 	"osman": [
@@ -52,7 +52,7 @@ var active_skills = {
 			120,
 			visualize_type.none,
 			{},
-			[funcref(self, "osman_special")]
+			["osman_special"]
 		)
 	],
 	"takoda": [],
@@ -63,7 +63,7 @@ var active_skills = {
 			100,
 			visualize_type.arc,
 			{"angle": 90, "radius": 50, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			[funcref(self, "arthur_special")]
+			["arthur_special"]
 		),
 		ActiveSkill.new(
 			"Cross-Guard hit",
@@ -71,7 +71,7 @@ var active_skills = {
 			100,
 			visualize_type.rectangle,
 			{"lenght": 25, "width": 10, "center_pos": Vector2(0, 8),  "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			[funcref(self, "arthur_active")]
+			["arthur_active"]
 		)
 	],
 	"bokuden": [
@@ -81,7 +81,7 @@ var active_skills = {
 			600,
 			visualize_type.none,
 			{},
-			[funcref(self, "bokuden_special")]
+			["bokuden_special"]
 		),
 		ActiveSkill.new(
 			"Dash",
@@ -89,7 +89,7 @@ var active_skills = {
 			100,
 			visualize_type.rectangle,
 			{"lenght": 50, "width": 5, "center_pos": Vector2(0, 8),  "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			[funcref(self, "bokuden_active")]
+			["bokuden_active"]
 		),
 	],
 	"joan": [],
@@ -110,7 +110,7 @@ class ActiveSkill:
 	var parameters: Dictionary # skill parameters: range, angle, color etc...
 	var effects: Array # array of skill effects, looks like [FuncRef, FuncRef, ..]
 	
-	func _init(_display_name, _description, _cooldown, _visualize, _parameters, _effects):
+	func _init(_display_name,_description,_cooldown,_visualize,_parameters,_effects):
 		self.display_name = _display_name
 		self.description = _description
 		self.cooldown = _cooldown
@@ -128,12 +128,14 @@ class ActiveSkill:
 func _get_point_target(leader, effects, parameters, visualize):
 	self._waiting_for_point = true
 	var visualization_node = aoe_vis_setup(leader, effects, parameters, visualize)
-	var point = yield(self, "point")
+	var point_target = await self.point
 	self._waiting_for_point = false
 	aoe_vis_clear(visualization_node)
-	return point
+	return point_target
+
+
 # Func to create visualisation if skill using _get_point_target()
-func aoe_vis_setup(leader, effects, parameters, visualize):
+func aoe_vis_setup(leader, _effects, parameters, visualize):
 	var polygon
 	match visualize:
 		visualize_type.arc:
@@ -160,13 +162,13 @@ func aoe_vis_clear(visualization_node):
 
 
 #Circle visualization polygon
-func generate_circle_poly(radius: float, num_sides: int, center: Vector2, color: Color) -> PoolVector2Array:
+func generate_circle_poly(radius: float, num_sides: int, center: Vector2, color: Color) -> PackedVector2Array:
 	var angle_delta: float = (PI * 2) / num_sides
 	var vector: Vector2 = Vector2(radius, 0)
 	var polygon = Polygon2D.new()
-	var _points: PoolVector2Array
+	var _points: PackedVector2Array = []
 	
-	for point in num_sides:
+	for _point in num_sides:
 		_points.append(vector + center)
 		vector = vector.rotated(angle_delta)
 	polygon.set_polygon(_points)
@@ -179,17 +181,17 @@ func generate_circle_poly(radius: float, num_sides: int, center: Vector2, color:
 func generate_arc_poly(angle, radius, start_position, finish_position, color: Color):
 	var arc_points = 30
 	var polygon = Polygon2D.new()
-	var _points: PoolVector2Array
+	var _points: PackedVector2Array = []
 	var direction = start_position.direction_to(finish_position) #get normilised direction
 	var central_point = direction * radius #get central Vector with radius lenght
-	var angle_delta: float = deg2rad(angle) / arc_points #calculating 1 step rotation angle
-	var compensate_angle: float = deg2rad(-angle) / 2
+	var angle_delta: float = deg_to_rad(angle) / arc_points #calculating 1 step rotation angle
+	var compensate_angle: float = deg_to_rad(-angle) / 2
 	var vector: Vector2 = central_point
 	
 	vector = vector.rotated(compensate_angle) #rotating to compensate starting point
 	_points.append(start_position)
 	
-	for point in arc_points:
+	for _point in arc_points:
 		_points.append(vector + start_position)
 		vector = vector.rotated(angle_delta) 
 	polygon.set_polygon(_points)
@@ -202,10 +204,10 @@ func generate_arc_poly(angle, radius, start_position, finish_position, color: Co
 func generate_rect_poly(lenght, width, start_position, finish_position, color: Color):
 	
 	var polygon = Polygon2D.new()
-	var _points: PoolVector2Array
+	var _points: PackedVector2Array = []
 	var direction = start_position.direction_to(finish_position)
 	var central_point = direction * lenght
-	var left_down = Vector2(direction * width).tangent()
+	var left_down = Vector2(direction * width).orthogonal()
 	var right_down = left_down.reflect(direction)
 	var left_top = left_down + central_point
 	var right_top = right_down + central_point
@@ -225,7 +227,7 @@ func generate_rect_poly(lenght, width, start_position, finish_position, color: C
 func enemies_in_polygon(leader, radius, polygon):
 	var targets = []
 	for unit in leader.get_units_in_radius(radius, { "team": leader.team }):
-		if unit.type != "building"and Geometry.is_point_in_polygon(unit.global_position, polygon.get_polygon()):
+		if unit.type != "building"and Geometry2D.is_point_in_polygon(unit.global_position, polygon.get_polygon()):
 			targets.append(unit)
 	return targets
 
@@ -234,7 +236,8 @@ func enemies_in_polygon(leader, radius, polygon):
 func robin_special(effects, parameters, visualize):
 	var leader = game.selected_leader
 	# Wait for player to click on map to get x and y position
-	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
+	var point_target = await _get_point_target(leader, effects, parameters, visualize)
+	
 	# If player did not clicked then return false, means skill wasn't used and 
 	# we didn't want to apply cooldown
 	if point_target == null:
@@ -263,7 +266,7 @@ func rollo_basic():
 
 func arthur_special(effects, parameters, visualize):
 	var leader = game.selected_leader
-	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
+	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target != null:
 		var animations = leader.get_node("animations")
 		var skill_animation_sprite = leader.get_node("sprites/cleave")
@@ -273,7 +276,7 @@ func arthur_special(effects, parameters, visualize):
 		skill_animation_sprite.show()
 		animations.play("arthur_special_cleave")
 		# damage targets
-		if not targets.empty():
+		if not targets.is_empty():
 			for unit in targets:
 				var damage = 100 * leader.level
 				Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
@@ -289,13 +292,13 @@ func arthur_special_end():
 
 func arthur_active(effects, parameters, visualize):
 	var leader = game.selected_leader
-	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
+	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target == null:
 		return false
 	var polygon = generate_rect_poly(parameters.lenght, parameters.width, leader.global_position, point_target, parameters.color)
 	var targets = enemies_in_polygon(leader, parameters.lenght, polygon)
 	var damage = 10 * leader.level
-	if targets.empty():
+	if targets.is_empty():
 		return true
 	for unit in targets:
 		Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
@@ -303,7 +306,7 @@ func arthur_active(effects, parameters, visualize):
 	return true
 
 
-func bokuden_special(effects, parameters, visualize):
+func bokuden_special(_effects, _parameters, _visualize):
 	var leader = game.selected_leader
 	var aura_duration = 5
 	var speed_modifier = 10
@@ -315,7 +318,7 @@ func bokuden_special(effects, parameters, visualize):
 	leader.add_child(battle_call_timer)
 	battle_call_timer.wait_time = aura_duration
 	# warning-ignore:return_value_discarded
-	battle_call_timer.connect("timeout", self, "battle_call_remove", [targets])
+	battle_call_timer.connect("timeout",Callable(self,"battle_call_remove").bind(targets))
 
 	for unit in leader.get_units_in_radius(range_of_aura, {"team": leader.team}):
 		if unit.type != "building":
@@ -338,20 +341,20 @@ func battle_call_remove(_targets):
 
 func bokuden_active(effects, parameters, visualize):
 	var leader = game.selected_leader
-	var point_target = yield(_get_point_target(leader, effects, parameters, visualize), "completed")
+	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target:
 		var dash_point = leader.global_position.direction_to(point_target)
 		dash_point = dash_point * parameters.lenght + leader.global_position
 		var dash_tween = Tween.new()
 		leader.add_child(dash_tween)
 		dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, 0.5, Tween.TRANS_LINEAR)
-		leader.look_at(dash_point)
+		leader.mirror_look_at(dash_point)
 		dash_tween.start()
-		yield(dash_tween, "tween_completed")
+		await dash_tween.finished
 		dash_tween.queue_free()
 
 
-func osman_special(effects, parameters, visualize):
+func osman_special(_effects, _parameters, _visualize):
 	var leader = game.selected_leader
 	var bribe_gold_cost = 10
 	var effect_duration = 2
@@ -362,7 +365,7 @@ func osman_special(effects, parameters, visualize):
 	leader.add_child(bribe_timer)
 	bribe_timer.wait_time = effect_duration * leader.level
 	# warning-ignore:return_value_discarded
-	bribe_timer.connect("timeout", self, "bribe_remove", [targets])
+	bribe_timer.connect("timeout",Callable(self,"bribe_remove").bind(targets))
 	if leader.gold >= bribe_gold_cost:
 		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
 			targets[unit] = unit.team
@@ -386,14 +389,14 @@ func bribe_remove(targets):
 		else: targets.erase(unit)
 
 
-func _input(event):
-	if self._waiting_for_point:
-		if event is InputEventMouseButton:
-			if event.pressed:
-				if event.button_index == 1:
-					emit_signal("point", Crafty_camera.get_global_mouse_position())
-		elif Input.is_action_pressed("ui_cancel"):
-			emit_signal("point", null)
+#func _input(event):
+#	if self._waiting_for_point:
+#		if event is InputEventMouseButton:
+#			if event.pressed:
+#				if event.button_index == 1:
+#					emit_signal("point", Crafty_camera.get_global_mouse_position())
+#		elif Input.is_action_pressed("ui_cancel"):
+#			emit_signal("point", null)
 	
 
 
@@ -402,13 +405,13 @@ func _ready():
 	clear()
 
 
-func clear():
+func reset_buttons():
 	for button in _skill_buttons:
 		button.reset()
 
 
 func update_buttons():
-	clear()
+	reset_buttons()
 	show()
 	var leader = game.selected_leader
 	for index in active_skills[leader.display_name].size():

@@ -1,10 +1,10 @@
 extends "../Action.gd"
 
 
-func get_class(): return "RetreatAction"
+func get_class_name(): return "RetreatAction"
 
 
-func get_cost(agent) -> int:
+func get_cost(_agent) -> int:
 	return 1
 
 
@@ -12,7 +12,7 @@ func get_effects() -> Dictionary:
 	return { "arrived_at_retreat": true }
 
 
-func perform(agent, delta) -> bool:
+func perform(agent, _delta) -> bool:
 	return agent.get_state("arrived_at_retreat")
 
 

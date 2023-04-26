@@ -1,11 +1,11 @@
 [gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://unit/Unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/pawns/archer_blue.png" type="Texture" id=2]
-[ext_resource path="res://assets/buildings/neutral_blue.png" type="Texture" id=3]
+[ext_resource path="res://assets/pawns/archer_blue.png" type="Texture2D" id=2]
+[ext_resource path="res://assets/buildings/neutral_blue.png" type="Texture2D" id=3]
 [ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/buildings/neutral_red.png" type="Texture" id=5]
-[ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture" id=6]
+[ext_resource path="res://assets/buildings/neutral_red.png" type="Texture2D" id=5]
+[ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture2D" id=6]
 
 [sub_resource type="AtlasTexture" id=42]
 atlas = ExtResource( 3 )
@@ -83,8 +83,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0.4, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0.4, 0.6 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_attack_release"
@@ -100,8 +100,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 0.6 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
@@ -116,8 +116,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 0.5, 0.6 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ Vector2( 1, 1 ), Vector2( 1, 0.2 ), Vector2( 1, 1 ) ]
 }
@@ -128,8 +128,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.147264, 0.5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 0.147264, 0.5 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 0 ) ]
 }
@@ -140,8 +140,8 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.6 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0.6 ),
+"transitions": PackedFloat32Array( 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_death_end"
@@ -159,8 +159,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0.6 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array( 0.6 ),
+"transitions": PackedFloat32Array( 1 ),
 "values": [ {
 "args": [  ],
 "method": "on_idle_end"
@@ -173,8 +173,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 0.6 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
 }
@@ -200,8 +200,8 @@ projectile_speed = 0.0
 
 [node name="state" parent="hud" index="0"]
 visible = true
-margin_top = -110.0
-margin_bottom = -94.0
+offset_top = -110.0
+offset_bottom = -94.0
 
 [node name="selection" parent="hud" index="1"]
 visible = true
@@ -242,13 +242,13 @@ scale = Vector2( 1.0686, 1 )
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
 position = Vector2( 19.6519, 2 )
 
-[node name="sprites" type="AnimatedSprite" parent="sprites/weapon/projectile" index="0"]
+[node name="sprites" type="AnimatedSprite2D" parent="sprites/weapon/projectile" index="0"]
 visible = false
 position = Vector2( -0.216076, 0 )
 frames = SubResource( 41 )
 offset = Vector2( -11, 0 )
 
-[node name="bow" type="AnimatedSprite" parent="sprites/weapon" index="1"]
+[node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1"]
 visible = false
 position = Vector2( -1.11556e-07, 44 )
 rotation = 0.151433

@@ -1,10 +1,10 @@
 extends Node2D
 
-onready var game = get_tree().get_current_scene()
-onready var unit = get_parent()
-onready var state = get_node("state")
-onready var hpbar = get_node("hpbar")
-onready var selection = get_node("selection")
+@onready var game = get_tree().get_current_scene()
+@onready var unit = get_parent()
+@onready var state = get_node("state")
+@onready var hpbar = get_node("hpbar")
+@onready var selection = get_node("selection")
 
 
 # self = unit.hud
@@ -25,13 +25,13 @@ func update_hpbar():
 		else:
 			var hp = Behavior.modifiers.get_value(unit, "hp")
 			hpbar.show()
-			var scale = float(unit.current_hp) / float(hp)
-			if scale < 0: scale = 0
-			if scale > 1: scale = 1
+			var h_scale = float(unit.current_hp) / float(hp)
+			if h_scale < 0: h_scale = 0
+			if h_scale > 1: h_scale = 1
 			var size = hpbar.get_node("red").region_rect.size.x 
-			hpbar.get_node("green").region_rect.size.x = scale * size
+			hpbar.get_node("green").region_rect.size.x = h_scale * size
 			if leader_icon_hpbar:
-				leader_icon_hpbar.get_node("green").region_rect.size.x = scale * size
+				leader_icon_hpbar.get_node("green").region_rect.size.x = h_scale * size
 			if (unit.type != "leader" 
 				and unit.current_hp >= hp 
 				and not unit == game.selected_unit):

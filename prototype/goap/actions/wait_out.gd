@@ -1,14 +1,14 @@
 extends "../Action.gd"
 
 
-func get_class(): return "WaitOut"
+func get_class_name(): return "WaitOut"
 
 
-func is_valid(agent) -> bool:
+func is_valid(_agent) -> bool:
 	return WorldState.get_state("is_game_active")
 
 
-func get_cost(agent) -> int:
+func get_cost(_agent) -> int:
 	return 1
 
 
@@ -24,7 +24,7 @@ func enter(agent):
 	Behavior.move.stop(agent.get_unit())
 
 
-func perform(agent, delta) -> bool:
+func perform(agent, _delta) -> bool:
 	var unit = agent.get_unit()
 	var hp = Behavior.modifiers.get_value(unit, "hp")
 	var ready_to_fight = unit.current_hp > hp * 0.8

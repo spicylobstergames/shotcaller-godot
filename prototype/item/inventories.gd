@@ -56,7 +56,7 @@ func new_inventory(leader):
 		"consumable_item_buttons": []
 	}
 
-	inventory.container.margin_top = sell_button_margin
+	inventory.container.offset_top = sell_button_margin
 # warning-ignore:unused_variable
 	for index in range(equip_items_max):
 		inventory.equip_items.append(null)
@@ -71,7 +71,7 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-	WorldState.one_sec_timer.connect("timeout", self, "gold_update_cycle")
+	WorldState.one_sec_timer.connect("timeout",Callable(self,"gold_update_cycle"))
 
 
 func get_leader_inventory(leader):
@@ -101,7 +101,7 @@ func get_leader_delivery(leader):
 
 
 func gold_timer(unit):
-	WorldState.one_sec_timer.connect("timeout", unit, "gold_timer_timeout")
+	WorldState.one_sec_timer.connect("timeout",Callable(unit,"gold_timer_timeout"))
 
 
 
@@ -129,7 +129,7 @@ func add_inventory(leader):
 	var item_button
 # warning-ignore:unused_variable
 	for i in range(equip_items_max):
-		item_button = item_button_preload.instance()
+		item_button = item_button_preload.instantiate()
 		inventory.equip_item_buttons.append(item_button)
 		inventory.container.add_child(item_button)
 		item_button.index = counter
@@ -137,7 +137,7 @@ func add_inventory(leader):
 		item_button.setup(null)
 # warning-ignore:unused_variable
 	for i in range(consumable_items_max):
-		item_button = item_button_preload.instance()
+		item_button = item_button_preload.instantiate()
 		inventory.consumable_item_buttons.append(item_button)
 		inventory.container.add_child(item_button)
 		item_button.index = counter
@@ -231,7 +231,7 @@ func delivery_timer(delivery):
 						delivery.item.ready = true
 						delivery.label.text = "ready"
 
-	yield(get_tree().create_timer(1), "timeout")
+	await get_tree().create_timer(1).timeout
 	if delivery.time > 0: delivery_timer(delivery)
 
 
@@ -257,7 +257,7 @@ func give_item(delivery):
 				Behavior.modifiers.add(leader, key, item.name, item.attributes[key])
 			if "passive" in item:
 				var item_scene = load(item.passive)
-				leader.get_node("behavior/item_passives").add_child(item_scene.instance())
+				leader.get_node("behavior/item_passives").add_child(item_scene.instantiate())
 
 		"consumable":
 			inventory.consumable_items[index] = item
@@ -313,7 +313,7 @@ func update_consumables(leader):
 				"type": "leader",
 				"team": leader.opponent_team()
 			})
-			item_button.disabled = (enemy_leaders_on_sight.empty())
+			item_button.disabled = (enemy_leaders_on_sight.is_empty())
 
 func update_buttons():
 	for leader in game.player_leaders + game.enemy_leaders:

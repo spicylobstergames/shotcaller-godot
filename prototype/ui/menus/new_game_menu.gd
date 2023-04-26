@@ -2,12 +2,12 @@ extends Control
 
 # self = game.ui.new_game_menu
 
-onready var game = get_tree().get_current_scene()
+@onready var game = get_tree().get_current_scene()
 
-onready var leader_select_item = preload("leader_selection/leader_select_item.tscn")
+@onready var leader_select_item = preload("leader_selection/leader_select_item.tscn")
 
-onready var red_team_container : VBoxContainer = $"%red_team_container"
-onready var blue_team_container : VBoxContainer = $"%blue_team_container"
+@onready var red_team_container : VBoxContainer = $"%red_team_container"
+@onready var blue_team_container : VBoxContainer = $"%blue_team_container"
 
 
 func _ready():
@@ -27,7 +27,7 @@ func choose_leader(team):
 
 func add_leader(leader, team):
 	show()
-	var leader_item = leader_select_item.instance()
+	var leader_item = leader_select_item.instantiate()
 	match team:
 		"red":
 			red_team_container.add_child(leader_item)
@@ -35,7 +35,7 @@ func add_leader(leader, team):
 			blue_team_container.add_child(leader_item)
 	
 	leader_item.prepare(leader, team)
-	leader_item.connect("change_leader", self, "choose_leader", [team])
+	leader_item.connect("change_leader",Callable(self,"choose_leader").bind(team))
 
 
 func get_leaders(team):

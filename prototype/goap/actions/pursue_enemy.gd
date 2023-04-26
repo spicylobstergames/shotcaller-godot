@@ -1,14 +1,14 @@
 extends "../Action.gd"
 
 
-func get_class(): return "PursueEnemy"
+func get_class_name(): return "PursueEnemy"
 
 
 func is_valid(agent) -> bool:
 	return agent.get_state("has_attack_target")
 
 
-func get_cost(agent) -> int:
+func get_cost(_agent) -> int:
 	return 1
 
 
@@ -20,7 +20,7 @@ func get_effects() -> Dictionary:
 	return { "has_attack_target": false }
 
 
-func perform(agent, delta) -> bool:
+func perform(agent, _delta) -> bool:
 	return not agent.get_unit().target
 
 

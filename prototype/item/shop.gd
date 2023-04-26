@@ -6,9 +6,9 @@ var game:Node
 var item_button_preload = preload("res://ui/buttons/item_button.tscn")
 var cleared = false
 
-onready var equip_items = $"%equip_items"
-onready var consumable_items = $"%consumable_items"
-onready var throwable_items = $"%throwable_items"
+@onready var equip_items = $"%equip_items"
+@onready var consumable_items = $"%consumable_items"
+@onready var throwable_items = $"%throwable_items"
 
 var blacksmiths := []
 
@@ -227,7 +227,7 @@ func clear():
 
 func add_item(item):
 	item.sell_price = floor(item.price / 2)
-	var new_item_button = item_button_preload.instance()
+	var new_item_button = item_button_preload.instantiate()
 	new_item_button.shop_item = true
 	if item.type == "consumable": consumable_items.add_child(new_item_button)
 	elif item.type == "throwable":throwable_items.add_child(new_item_button)

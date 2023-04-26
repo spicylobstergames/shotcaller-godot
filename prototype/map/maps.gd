@@ -7,8 +7,8 @@ var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
 var rect_test_map:PackedScene = load("res://map/maps/rect_test_map.tscn")
 
-onready var spawn = $spawn
-onready var blocks = $blocks
+@onready var spawn = $spawn
+@onready var blocks = $blocks
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -17,9 +17,9 @@ func _ready():
 func load_map(map_name):
 	if game.map:
 		game.map.hide()
-		game.map.trees.occluder_light_mask = 0
+		game.map.trees.light_mask = 0
 	current_map = map_name
-	game.map = self[map_name].instance()
+	game.map = self[map_name].instantiate()
 	self.add_child(game.map)
 	game.map.hide()
 	create_container("unit_container")
@@ -32,7 +32,7 @@ func load_map(map_name):
 
 
 func create_container(container_name):
-	var container = YSort.new()
+	var container = Node2D.new()
 	game.map.add_child(container)
 	game.map.set(container_name, container)
 	container.name = container_name
@@ -40,8 +40,11 @@ func create_container(container_name):
 
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
-	game.map.trees.occluder_light_mask = 2
-	game.map.walls.occluder_light_mask = 2
+	game.map.trees.light_mask = 2
+	game.map.walls.light_mask = 2
+	
+	await game.map.ready
+	
 	setup_buildings()
 	setup_lanes()
 	blocks.setup_quadtree()
@@ -78,7 +81,7 @@ func setup_lanes():
 
 
 func line_to_array(line):
-	# from PoolVector2Array to Array
+	# from PackedVector2Array to Array
 	var array = []
 	for point in line.points:
 		array.append(point)
@@ -120,7 +123,7 @@ func setup_buildings():
 
 
 func create(template, lane, team, mode, point):
-	var unit = template.instance()
+	var unit = template.instantiate()
 	game.map.unit_container.add_child(unit)
 	game.maps.spawn.spawn_unit(unit, lane, team, mode, point)
 	unit.reset_unit()

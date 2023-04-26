@@ -13,7 +13,7 @@ var s
 
 func _ready():
 	game = get_tree().get_current_scene()
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame # wait for idle frame
 	s = game.maps.spawn
 
 
@@ -40,13 +40,13 @@ func spawn_unit():
 		game.maps.setup_leaders([leader], [])
 		
 		# TEST LANE PAWN
-#			var path = game.maps.new_path("mid", "blue")
-#			var start = path.pop_front()
+#		var path = game.maps.new_path("mid", "blue")
+#		var start = path.pop_front()
 		var pawn = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(200,600))
-#			Behavior.path.setup_unit_path(pawn, path)
-#			Behavior.path.start(pawn, path)
-#			pawn.hp = 10000
-#			pawn.current_hp = 10000
+#		Behavior.path.setup_unit_path(pawn, path)
+#		Behavior.path.start(Callable(pawn,path))
+		pawn.hp = 10000
+		pawn.current_hp = 10000
 #		pawn.moves = false
 		
 		# TEST LUMBERJACK
@@ -58,7 +58,7 @@ func spawn_random_units():
 	game.rng.randomize()
 	var n = 100-26
 	for x in range(1, n+1):
-		yield(get_tree().create_timer(x/n), "timeout")
+		await get_tree().create_timer(x/n).timeout
 		var t = game.player_team if randf() > 0.5 else game.enemy_team
 		game.maps.create(s.infantry, "top", t, "random_map", Vector2.ZERO)
 
@@ -72,7 +72,7 @@ func unit_wait_end(unit1):
 
 func respawn(unit1):
 	if stress and unit1.type != "building":
-		yield(get_tree().create_timer(1), "timeout")
+		await get_tree().create_timer(1).timeout
 		unit1.reset_unit()
 		game.maps.spawn.spawn_unit(unit1, "mid", unit1.team, "random_map", Vector2.ZERO)
 

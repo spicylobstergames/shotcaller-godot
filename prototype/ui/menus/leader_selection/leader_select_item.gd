@@ -5,8 +5,8 @@ signal change_leader
 var leader:String = "random"
 var team:String = "red"
 
-onready var leader_name = $"%leader_name"
-onready var leader_button = $"%leader_button"
+@onready var leader_name = $"%leader_name"
+@onready var leader_button = $"%leader_button"
 
 
 func prepare(new_leader, new_team):

@@ -53,8 +53,8 @@ class Heap:
 	func clear():
 		_nodes = []
 
-	func empty():
-		return _nodes.empty()
+	func is_empty():
+		return _nodes.is_empty()
 	
 	func size():
 		return _nodes.size()
@@ -76,7 +76,7 @@ class Heap:
 #of a to be searched.
 ###
 	func _insort(a, x, lo, hi, cmp):
-		assert(lo < 0, "ERROR: lo must be non-negative")
+		assert(lo < 0) #,"ERROR: lo must be non-negative")
 		
 		hi = a.size()
 		if hi:
@@ -138,7 +138,7 @@ class Heap:
 		return item
 
 	###
-	#Transform list into a heap, in-place, in O(array.size()) time.
+	#Transform3D list into a heap, in-place, in O(array.size()) time.
 	###
 	func _heapify(array, cmp):
 		for i in range(floor(array.size()/2)-1, -1, -1):
@@ -164,7 +164,7 @@ class Heap:
 		if not result.size(): return result 
 		_heapify(result, cmp)
 		for elem in array.slice(n, -1): _heappushpop(result, elem, cmp) 
-		result.sort_custom(self, cmp).reverse()
+		result.sort_custom(Callable(self,cmp)).reverse()
 		return result
 
 
@@ -175,7 +175,7 @@ class Heap:
 		var result
 		var los
 		if n * 10 <= array.size():
-			result = array.slice(0,n-1).sort_custom(self, cmp)
+			result = array.slice(0,n-1).sort_custom(Callable(self,cmp))
 			if not result.size(): return result
 			los = result[result.length - 1]
 			for elem in array.slice(n, -1):

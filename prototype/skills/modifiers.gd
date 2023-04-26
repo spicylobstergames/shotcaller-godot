@@ -1,7 +1,7 @@
 extends Node
 
 var game:Node
-onready var behavior = get_parent()
+@onready var behavior = get_parent()
 
 
 # self = behavior.modifiers
@@ -11,11 +11,11 @@ var extra_retreat_speed = 10
 
 var retreat_regen = 10
 
-export var hp_per_level : float = 10
-export var regen_per_level : float = 2
-export var damage_per_level : float = 2.5
-export var defense_per_level : float = 2
-export var attack_speed_per_level : float = 0.05
+@export var hp_per_level : float = 10
+@export var regen_per_level : float = 2
+@export var damage_per_level : float = 2.5
+@export var defense_per_level : float = 2
+@export var attack_speed_per_level : float = 0.05
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -39,7 +39,7 @@ func get_value(unit, mod_str):
 	var default = unit[mod_str]
 
 	match mod_str:
-		"speed": default = get_speed(unit)
+		"speed": default = get_velocity(unit)
 		"regen": default = get_regen(unit)
 		"attack_range": default = get_att_range(unit)
 	for modifier in unit.current_modifiers[mod_str]:
@@ -58,7 +58,7 @@ func get_value(unit, mod_str):
 
 func get_dot(unit):
 	var dot_effects = []
-	if not unit.current_modifiers["dot"].empty():
+	if not unit.current_modifiers["dot"].is_empty():
 		for modifier in unit.current_modifiers["dot"]:
 			dot_effects.append(modifier.value)
 		return dot_effects
@@ -66,7 +66,7 @@ func get_dot(unit):
 		return null
 
 
-func get_speed(unit):
+func get_velocity(unit):
 	var default = unit.speed
 	
 	if unit.agent.get_state("hunting") and not unit.target.agent.get_state("is_retreating"):

@@ -1,32 +1,32 @@
 extends CanvasLayer
 var game:Node
 
-class_name _ui
+#class_name _ui
 
-onready var fps := $"%fps"
-onready var top_label := $"%top_label"
-onready var shop := $"%shop"
-onready var leaders_icons := $"%leaders_icons"
-onready var minimap := $"%minimap"
-onready var dialog := $"%dialog"
-onready var version_node := $"%version"
-onready var scoreboard := $"%score_board"
+@onready var fps := $"%fps"
+@onready var top_label := $"%top_label"
+@onready var shop := $"%shop"
+@onready var leaders_icons := $"%leaders_icons"
+@onready var minimap := $"%minimap"
+@onready var dialog := $"%dialog"
+@onready var version_node := $"%version"
+@onready var scoreboard := $"%score_board"
 # STATS
-onready var stats := $"%stats"
+@onready var stats := $"%stats"
 var inventories : Node
 var active_skills : Node
 # CONTROLS
-onready var orders_panel := $"%orders_panel"
-onready var unit_controls_panel := $"%unit_controls_panel"
+@onready var orders_panel := $"%orders_panel"
+@onready var unit_controls_panel := $"%unit_controls_panel"
 var orders_button : Node
 var shop_button : Node
 var unit_controls_button : Node
-onready var control_panel := $"%control_panel"
+@onready var control_panel := $"%control_panel"
 # MENUS
-onready var main_menu := $"%main_menu"
-onready var pause_menu := $"%pause_menu"
-onready var new_game_menu := $"%new_game_menu"
-onready var leader_select_menu := $"%leader_select_menu"
+@onready var main_menu := $"%main_menu"
+@onready var pause_menu := $"%pause_menu"
+@onready var new_game_menu := $"%new_game_menu"
+@onready var leader_select_menu := $"%leader_select_menu"
 
 
 func _ready():
@@ -39,7 +39,7 @@ func _ready():
 	shop_button = control_panel.get_node("shop_button")
 	orders_button = control_panel.get_node("orders_button")
 	
-	leader_select_menu.connect("leader_selected", new_game_menu, "add_leader")
+	leader_select_menu.connect("leader_selected",Callable(new_game_menu,"add_leader"))
 	
 	hide_all()
 

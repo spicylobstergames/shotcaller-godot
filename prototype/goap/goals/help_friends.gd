@@ -1,7 +1,7 @@
 extends "../Goal.gd"
 
 
-func get_class(): return "HelpFriendsGoal"
+func get_class_name(): return "HelpFriendsGoal"
 
 
 func is_valid(agent) -> bool:
@@ -10,12 +10,12 @@ func is_valid(agent) -> bool:
 	return attacker != null
 
 
-func priority(agent) -> int:
+func priority(_agent) -> int:
 	# higher if friend is low and self current hp is high
 	return 2
 
 
-func get_desired_state(agent) -> Dictionary:
+func get_desired_state(_agent) -> Dictionary:
 	return { "react_target": false }
 
 

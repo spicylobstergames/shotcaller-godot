@@ -48,7 +48,7 @@ class JumpPointFinder:
 		startNode.opened = true
 		
 		# while the open list is not empty
-		while (!openList.empty()):
+		while (!openList.is_empty()):
 			# pop the position of node which has the minimum `f` value.
 			node = openList.pop()
 			

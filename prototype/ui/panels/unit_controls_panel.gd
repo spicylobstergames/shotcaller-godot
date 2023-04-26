@@ -3,10 +3,10 @@ var game:Node
 
 # self = game.ui.unit_controls_panel
 
-onready var teleport_button = get_node("%teleport_button")
-onready var lane_button = get_node("%lane_button")
-onready var move_button = get_node("%move_button")
-onready var attack_button = get_node("%attack_button")
+@onready var teleport_button = get_node("%teleport_button")
+@onready var lane_button = get_node("%lane_button")
+@onready var move_button = get_node("%move_button")
+@onready var attack_button = get_node("%attack_button")
 
 
 func _ready():
@@ -51,5 +51,5 @@ func clear_siblings(button):
 	for child in button.get_parent().get_children():
 		counter += 1
 		if child != button and counter > 1: 
-			child.pressed = false
+			child.button_pressed = false
 			child.disabled = false

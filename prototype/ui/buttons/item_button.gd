@@ -6,11 +6,11 @@ var index = 0
 var saved_icon
 var shop_item = false
 var price_after_discount
-var poison = preload("res://item/potions/poison.tscn").instance()
+var poison = preload("res://item/potions/poison.tscn").instantiate()
 
-onready var name_label = get_node("name")
-onready var price_label = get_node("price")
-onready var sell_button = get_node("sell_button")
+@onready var name_label = get_node("name")
+@onready var price_label = get_node("price")
+@onready var sell_button = get_node("sell_button")
 
 
 func _ready():
@@ -26,7 +26,7 @@ func setup(new_item):
 		if not self.saved_icon:
 			self.saved_icon = self.icon
 		self.icon = null
-		self.hint_tooltip = "Buy items in the Blacksmith"
+		self.tooltip_text = "Buy items in the Blacksmith"
 		self.disabled = true
 		name_label.hide()
 		price_label.hide()
@@ -34,14 +34,13 @@ func setup(new_item):
 	else:
 		self.item = new_item
 		self.name = new_item.name
-		self.hint_tooltip = new_item.tooltip
+		self.tooltip_text = new_item.tooltip
 		if not self.shop_item:
 			self.disabled = (new_item.type != "consumable")
 		var icon_ref = self.icon
 		if not icon_ref: icon_ref = self.saved_icon
-		var icon = icon_ref.duplicate()
+		icon = icon_ref.duplicate()
 		icon.region.position.x = new_item.sprite * 32
-		self.icon = icon
 		name_label.text = self.name
 		var price = new_item.price
 		if not self.shop_item: price = new_item.sell_price

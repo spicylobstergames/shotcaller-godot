@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/leaders/nagato_blue.png" type="Texture" id=1]
+[ext_resource path="res://assets/leaders/nagato_blue.png" type="Texture2D" id=1]
 
 [sub_resource type="AtlasTexture" id=45]
 atlas = ExtResource( 1 )
@@ -28,7 +28,7 @@ use_parent_material = true
 position = Vector2( 0, -8 )
 scale = Vector2( 1.0686, 1 )
 
-[node name="shuriken" type="AnimatedSprite" parent="."]
+[node name="shuriken" type="AnimatedSprite2D" parent="."]
 modulate = Color( 1, 1, 1, 0.838745 )
 use_parent_material = true
 position = Vector2( -7.48643, 2 )
@@ -41,6 +41,6 @@ visible = false
 use_parent_material = true
 z_index = 1
 
-[node name="sprites" type="AnimatedSprite" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
 use_parent_material = true
 frames = SubResource( 39 )

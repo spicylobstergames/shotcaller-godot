@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 # self = game
 
@@ -41,15 +41,15 @@ var enemy_team:String = "red"
 var mode:String = "match" # campaign
 var control_state:String = "selection"
 
-onready var background := $"%waterfall_background"
-onready var maps := $"%maps"
-onready var hud := $"%hud"
-onready var ui := $"%ui"
-onready var collision := $"%collision"
-onready var selection := $"%selection"
-onready var utils := $"%utils"
-onready var test := $"%test"
-onready var transitions := $"%transitions"
+@onready var background := $"%waterfall_background"
+@onready var maps := $"%maps"
+@onready var hud := $"%hud"
+@onready var ui := $"%ui"
+@onready var collision := $"%collision"
+@onready var selection := $"%selection"
+@onready var utils := $"%utils"
+@onready var test := $"%test"
+@onready var transitions := $"%transitions"
 
 var rng = RandomNumberGenerator.new()
 
@@ -70,12 +70,12 @@ func start():
 func _input(event):
 	var over_minimap = ui.minimap.over_minimap(event) 
 	WorldState.set_state("over_minimap", over_minimap)
-	
+
 	if over_minimap:
 		ui.minimap.input(event)
 	else:
 		selection.input(event)
-	
+
 	Crafty_camera.input(event)
 
 
@@ -118,7 +118,7 @@ func pause():
 func setup_one_sec_timer():
 	WorldState.one_sec_timer.wait_time = 1
 	WorldState.one_sec_timer.name = "one_sec_timer"
-	WorldState.one_sec_timer.connect("timeout", self, "one_sec_cycle")
+	WorldState.one_sec_timer.connect("timeout",Callable(self,"one_sec_cycle"))
 	add_child(WorldState.one_sec_timer)
 
 
@@ -147,7 +147,7 @@ func one_sec_cycle(): # called every second
 		emit_signal("game_one_sec_cycle")
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	Crafty_camera.process()
 	ui.process()
 

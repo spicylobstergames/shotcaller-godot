@@ -4,9 +4,9 @@
 [ext_resource path="res://ui/leaders_quick_icons.gd" type="Script" id=2]
 
 [node name="leaders_icons" type="VBoxContainer"]
-margin_top = -162.0
-margin_right = 60.0
-margin_bottom = 146.0
+offset_top = -162.0
+offset_right = 60.0
+offset_bottom = 146.0
 custom_constants/separation = 2
 script = ExtResource( 2 )
 
@@ -14,23 +14,23 @@ script = ExtResource( 2 )
 focus_mode = 2
 
 [node name="leader_button1" parent="." instance=ExtResource( 1 )]
-margin_top = 62.0
-margin_bottom = 122.0
+offset_top = 62.0
+offset_bottom = 122.0
 focus_mode = 2
 
 [node name="leader_button2" parent="." instance=ExtResource( 1 )]
-margin_top = 124.0
-margin_bottom = 184.0
+offset_top = 124.0
+offset_bottom = 184.0
 focus_mode = 2
 
 [node name="leader_button3" parent="." instance=ExtResource( 1 )]
-margin_top = 186.0
-margin_bottom = 246.0
+offset_top = 186.0
+offset_bottom = 246.0
 focus_mode = 2
 
 [node name="leader_button4" parent="." instance=ExtResource( 1 )]
-margin_top = 248.0
-margin_bottom = 308.0
+offset_top = 248.0
+offset_bottom = 308.0
 focus_mode = 2
 
 [connection signal="pressed" from="leader_button0" to="." method="button_down" binds= [ 0 ]]

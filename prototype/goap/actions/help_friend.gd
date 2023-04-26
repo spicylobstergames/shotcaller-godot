@@ -1,10 +1,10 @@
 extends "../Action.gd"
 
 
-func get_class(): return "HelpFriend"
+func get_class_name(): return "HelpFriend"
 
 
-func get_cost(agent) -> int:
+func get_cost(_agent) -> int:
 	return 1
 
 
@@ -16,7 +16,7 @@ func get_effects() -> Dictionary:
 	return { "react_target": false }
 
 
-func perform(agent, delta) -> bool:
+func perform(_agent, _delta) -> bool:
 	return false
 
 

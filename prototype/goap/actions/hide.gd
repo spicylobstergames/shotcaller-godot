@@ -1,13 +1,13 @@
 extends "../Action.gd"
 
 
-func get_class(): return "Hide"
+func get_class_name(): return "Hide"
 
 
 const max_wait_seconds = 5
 
 
-func get_cost(agent) -> int:
+func get_cost(_agent) -> int:
 	return 1
 
 
@@ -47,7 +47,7 @@ func on_every_second(agent):
 		agent.set_state("hiding_counter", c+1)
 
 
-func perform(agent, delta) -> bool:
+func perform(agent, _delta) -> bool:
 	var hiding_counter = agent.get_state("hiding_counter")
 	return hiding_counter and hiding_counter > max_wait_seconds
 

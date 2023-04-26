@@ -49,7 +49,7 @@ func calc_step(unit, speed):
 		var distance = unit.current_destiny - unit.global_position
 		unit.angle = distance.angle()
 		unit.current_step = Vector2(speed* cos(unit.angle), speed * sin(unit.angle))
-		unit.look_at(unit.current_destiny)
+		unit.mirror_look_at(unit.current_destiny)
 
 
 
@@ -57,7 +57,7 @@ func step(unit, delta):
 	unit.global_position += unit.current_step * delta
 
 
-func on_collision(unit, delta):
+func on_collision(unit, _delta):
 	var target = unit.collide_target
 	if target and target != unit.target:
 		var a # new direction
@@ -83,7 +83,7 @@ func on_collision(unit, delta):
 		unit.collision_timer.wait_time = 0.1 + randf() * 0.2
 		unit.collision_timer.start()
 		
-		yield(unit.collision_timer, "timeout")
+		await unit.collision_timer.timeout
 		#current_destiny does have the potential to change in the time between
 		move(unit, unit.current_destiny)		
 
@@ -117,8 +117,8 @@ func stand(unit):
 
 
 
-func smart(unit, point):
+func smart(unit, target_point):
 	if not unit.agent.get_state("stunned"):
-		var path = Behavior.path.find(unit.global_position, point)
+		var path = Behavior.path.find(unit.global_position, target_point)
 		if path: Behavior.path.start(unit, path)
 
