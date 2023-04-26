@@ -389,14 +389,14 @@ func bribe_remove(targets):
 		else: targets.erase(unit)
 
 
-func _input(event):
-	if self._waiting_for_point:
-		if event is InputEventMouseButton:
-			if event.pressed:
-				if event.button_index == 1:
-					emit_signal("point", Crafty_camera.get_global_mouse_position())
-		elif Input.is_action_pressed("ui_cancel"):
-			emit_signal("point", null)
+#func _input(event):
+#	if self._waiting_for_point:
+#		if event is InputEventMouseButton:
+#			if event.pressed:
+#				if event.button_index == 1:
+#					emit_signal("point", Crafty_camera.get_global_mouse_position())
+#		elif Input.is_action_pressed("ui_cancel"):
+#			emit_signal("point", null)
 	
 
 

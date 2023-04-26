@@ -7,4 +7,4 @@ func _gui_input(event):
 			WorldState.apply_cheat_code(code)
 			text = ""
 			release_focus()
-			
+

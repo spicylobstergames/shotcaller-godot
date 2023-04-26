@@ -26,7 +26,7 @@ var sprite_scale:float = 1.0
 
 
 func _ready():
-	minimap_container.hide()
+	$minimap_container.hide()
 
 func input(event):
 	# MOUSE CLICK
@@ -194,7 +194,7 @@ func copy_symbol(unit, symbol):
 
 func follow_camera():
 	if minimap_container.visible and game.map:
-		var view_height = get_viewport().get_size_2d_override().y
+		var view_height = get_viewport().size.y
 		# stick to the bottom (todo: replace with godot viewports)
 		minimap_container.offset.y = view_height
 		rect_layer.offset.y = view_height

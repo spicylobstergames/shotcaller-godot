@@ -17,7 +17,7 @@ func _ready():
 func load_map(map_name):
 	if game.map:
 		game.map.hide()
-		game.map.trees.occluder_light_mask = 0
+		game.map.trees.light_mask = 0
 	current_map = map_name
 	game.map = self[map_name].instantiate()
 	self.add_child(game.map)
@@ -40,8 +40,11 @@ func create_container(container_name):
 
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
-	game.map.trees.occluder_light_mask = 2
-	game.map.walls.occluder_light_mask = 2
+	game.map.trees.light_mask = 2
+	game.map.walls.light_mask = 2
+	
+	await game.map.ready
+	
 	setup_buildings()
 	setup_lanes()
 	blocks.setup_quadtree()

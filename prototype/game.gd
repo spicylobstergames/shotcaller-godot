@@ -70,12 +70,12 @@ func start():
 func _input(event):
 	var over_minimap = ui.minimap.over_minimap(event) 
 	WorldState.set_state("over_minimap", over_minimap)
-	
+
 	if over_minimap:
 		ui.minimap.input(event)
 	else:
 		selection.input(event)
-	
+
 	Crafty_camera.input(event)
 
 
