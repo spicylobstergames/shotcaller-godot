@@ -1,77 +1,38 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://bo63dr5ay7r3l"]
 
-[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/items/items.png" type="Texture2D" id=2]
-[ext_resource path="res://ui/buttons/skill_button.gd" type="Script" id=4]
+[ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_8vksr"]
+[ext_resource type="Texture2D" uid="uid://ptu72k6uhxog" path="res://assets/items/items.png" id="2"]
+[ext_resource type="Script" path="res://ui/buttons/skill_button.gd" id="4"]
 
-
-[sub_resource type="StyleBoxTexture" id=23]
-texture = ExtResource( 1 )
-region_rect = Rect2( 105, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=26]
-texture = ExtResource( 1 )
-region_rect = Rect2( 70, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=25]
-texture = ExtResource( 1 )
-region_rect = Rect2( 140, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=13]
-texture = ExtResource( 1 )
-region_rect = Rect2( 0, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="14"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 32, 32)
 
 [node name="skill_button" type="Button"]
+custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 48.0
-custom_minimum_size = Vector2( 60, 60 )
 focus_mode = 0
-custom_styles/hover = SubResource( 23 )
-custom_styles/pressed = SubResource( 26 )
-custom_styles/focus = SubResource( 25 )
-custom_styles/disabled = SubResource( 26 )
-custom_styles/normal = SubResource( 13 )
+theme = ExtResource("1_8vksr")
 toggle_mode = true
-icon = SubResource( 14 )
+icon = SubResource("14")
 icon_alignment = 1
-script = ExtResource( 4 )
+script = ExtResource("4")
 
 [node name="name" type="Label" parent="."]
+layout_mode = 0
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 57.0
 offset_bottom = 33.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "name"
-autowrap = true
 
 [node name="cooldown" type="Label" parent="."]
+layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 3.0
 offset_top = -12.0
 offset_right = 57.0
 offset_bottom = -3.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "10 sec"

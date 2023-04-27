@@ -28,9 +28,13 @@ texture_margin_bottom = 3.0
 region_rect = Rect2(70, 0, 35, 35)
 
 [resource]
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 10
 Button/font_sizes/font_size = 24
 Button/fonts/font = ExtResource("2_iyn4k")
 Button/styles/hover = SubResource("StyleBoxTexture_ow8p1")
 Button/styles/normal = SubResource("StyleBoxTexture_j6mul")
 Button/styles/pressed = SubResource("StyleBoxTexture_vwwxc")
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 8
 Label/fonts/font = ExtResource("2_iyn4k")

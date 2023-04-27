@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://y7wlrfeyc2xp"]
+[gd_scene load_steps=5 format=3 uid="uid://y7wlrfeyc2xp"]
 
 [ext_resource type="PackedScene" uid="uid://b750he7nyjqqe" path="res://ui/menus/leader_preview/leader_preview.tscn" id="1"]
+[ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_wwfyp"]
 [ext_resource type="PackedScene" path="res://ui/buttons/leader_button.tscn" id="2"]
 [ext_resource type="Script" path="res://ui/menus/leader_select_menu.gd" id="4"]
 
@@ -13,6 +14,7 @@ offset_right = 434.0
 offset_bottom = 456.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_wwfyp")
 script = ExtResource("4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
