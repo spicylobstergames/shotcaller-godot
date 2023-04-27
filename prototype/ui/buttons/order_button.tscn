@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://m6qyqc7n5ksl"]
+[gd_scene load_steps=5 format=3 uid="uid://m6qyqc7n5ksl"]
 
+[ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_2qc3q"]
 [ext_resource type="Script" path="res://ui/buttons/order_button.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="4"]
 
@@ -13,6 +14,7 @@ custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 60.0
 focus_mode = 1
+theme = ExtResource("1_2qc3q")
 toggle_mode = true
 icon = SubResource("14")
 script = ExtResource("2")
@@ -23,17 +25,23 @@ offset_top = 3.0
 offset_right = 60.0
 offset_bottom = 33.0
 text = "Name"
+horizontal_alignment = 1
 
 [node name="hint" type="Label" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -57.0
-offset_top = -12.0
-offset_right = -3.0
-offset_bottom = -3.0
+offset_top = -20.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "1"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [connection signal="pressed" from="." to="." method="button_down"]

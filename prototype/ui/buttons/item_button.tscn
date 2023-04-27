@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjpaafpbxs87e"]
+[gd_scene load_steps=6 format=3 uid="uid://cjpaafpbxs87e"]
 
 [ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_cpals"]
 [ext_resource type="Texture2D" uid="uid://ptu72k6uhxog" path="res://assets/items/items.png" id="2"]
 [ext_resource type="Script" path="res://ui/buttons/item_button.gd" id="3"]
+[ext_resource type="Theme" uid="uid://d2qm6hv4jxkev" path="res://assets/ui/theme/sell_button_theme.tres" id="4_byu65"]
 
 [sub_resource type="AtlasTexture" id="14"]
 atlas = ExtResource("2")
@@ -20,32 +21,44 @@ script = ExtResource("3")
 
 [node name="name" type="Label" parent="."]
 layout_mode = 0
-offset_left = 3.0
 offset_top = 3.0
-offset_right = 45.0
+offset_right = 48.0
 offset_bottom = 33.0
-text = "name"
+text = "Name"
+horizontal_alignment = 1
 
 [node name="price" type="Label" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -45.0
-offset_top = -12.0
-offset_right = -3.0
-offset_bottom = -3.0
+offset_left = -44.0
+offset_top = -17.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.796078, 0.243137, 1)
+theme_override_font_sizes/font_size = 12
 text = "100"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="sell_button" type="Button" parent="."]
-layout_mode = 0
+visible = false
+layout_mode = 1
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -87.0
-offset_bottom = -51.0
-text = "sell"
+offset_top = -88.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_byu65")
+text = "Sell"
 
 [connection signal="pressed" from="." to="." method="on_button_down"]
 [connection signal="pressed" from="sell_button" to="." method="on_sell_button_down"]

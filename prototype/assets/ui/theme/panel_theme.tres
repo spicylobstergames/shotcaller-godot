@@ -1,0 +1,38 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://ca7fj8wdwjg0b"]
+
+[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_7v2i8"]
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_skma4"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wjtdq"]
+texture = ExtResource("1_skma4")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(0, 35, 175, 86)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vgqvv"]
+bg_color = Color(0.509804, 0.509804, 0.862745, 0.392157)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j74k"]
+bg_color = Color(0.211765, 0.392157, 0.8, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[resource]
+ItemList/styles/panel = SubResource("StyleBoxTexture_wjtdq")
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 8
+Label/fonts/font = ExtResource("1_7v2i8")
+ProgressBar/colors/font_color = Color(0.94902, 0.94902, 0.94902, 0)
+ProgressBar/font_sizes/font_size = 1
+ProgressBar/styles/background = SubResource("StyleBoxFlat_vgqvv")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_3j74k")

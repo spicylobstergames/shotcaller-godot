@@ -1,12 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://ceq7l7wrpkgjb"]
+[gd_scene load_steps=11 format=3 uid="uid://ceq7l7wrpkgjb"]
 
+[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_3je86"]
 [ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2_v6bh3"]
 [ext_resource type="Script" path="res://ui/stats.gd" id="3"]
 [ext_resource type="Script" path="res://item/inventories.gd" id="4"]
-[ext_resource type="PackedScene" path="res://ui/buttons/item_button.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://cjpaafpbxs87e" path="res://ui/buttons/item_button.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://ui/status_effects/status_effects_display.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://ui/buttons/skill_button.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://bo63dr5ay7r3l" path="res://ui/buttons/skill_button.tscn" id="8"]
 [ext_resource type="Script" path="res://skills/active_skills.gd" id="9"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xiva6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2hnuo"]
 
 [node name="stats" type="ItemList"]
 clip_contents = false
@@ -14,6 +19,7 @@ offset_left = -150.0
 offset_top = -96.0
 offset_right = 150.0
 pivot_offset = Vector2(-763, -347)
+theme = ExtResource("1_3je86")
 max_columns = 0
 script = ExtResource("3")
 
@@ -35,15 +41,18 @@ offset_left = 98.0
 offset_top = 12.0
 offset_right = 170.0
 offset_bottom = 28.0
+theme_override_font_sizes/font_size = 14
 text = "999/999"
 
 [node name="name" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 150.0
-offset_top = 13.0
+offset_top = 10.0
 offset_right = 265.0
-offset_bottom = 29.0
-text = "name"
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 20
+text = "Name"
+horizontal_alignment = 1
 
 [node name="regen" type="Label" parent="panel"]
 layout_mode = 0
@@ -51,7 +60,10 @@ offset_left = 240.0
 offset_top = 12.0
 offset_right = 284.0
 offset_bottom = 28.0
+theme_override_colors/font_color = Color(0.109804, 0.819608, 0.227451, 1)
+theme_override_font_sizes/font_size = 14
 text = "+1"
+horizontal_alignment = 2
 
 [node name="portrait" type="Control" parent="panel"]
 clip_contents = true
@@ -71,25 +83,29 @@ layout_mode = 0
 offset_left = 10.0
 offset_top = 68.0
 offset_right = 86.0
-offset_bottom = 95.0
+offset_bottom = 86.0
 
 [node name="exp_bar" type="ProgressBar" parent="panel/level_container"]
+custom_minimum_size = Vector2(75, 18)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 1
 value = 50.0
 
 [node name="level_label" type="Label" parent="panel/level_container"]
 layout_mode = 2
-text = "level 1"
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 14
+text = "Level 1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="vision" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 94.0
-offset_top = 34.0
-offset_right = 142.0
-offset_bottom = 48.0
-text = "vision"
+offset_top = 32.0
+offset_right = 160.0
+offset_bottom = 50.0
+text = "Vision: 160"
 
 [node name="control_delay" type="Label" parent="panel"]
 layout_mode = 0
@@ -97,39 +113,43 @@ offset_left = 241.0
 offset_top = 34.0
 offset_right = 289.0
 offset_bottom = 48.0
-text = "delay"
+text = "2"
+horizontal_alignment = 2
 
 [node name="damage" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 94.0
-offset_top = 48.0
-offset_right = 157.0
-offset_bottom = 62.0
-text = "damage"
+offset_top = 46.0
+offset_right = 167.0
+offset_bottom = 64.0
+text = "Damage: 100"
 
 [node name="range" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 94.0
-offset_top = 62.0
-offset_right = 144.0
-offset_bottom = 76.0
-text = "range"
+offset_top = 60.0
+offset_right = 153.0
+offset_bottom = 78.0
+text = "Range: 20"
 
 [node name="speed" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 94.0
-offset_top = 76.0
-offset_right = 144.0
-offset_bottom = 90.0
-text = "speed"
+offset_top = 74.0
+offset_right = 153.0
+offset_bottom = 92.0
+text = "Speed: 35"
 
 [node name="gold" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 188.0
-offset_top = 69.0
-offset_right = 264.0
-offset_bottom = 86.0
-text = "gold"
+offset_top = 65.0
+offset_right = 262.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(1, 0.796078, 0.243137, 1)
+theme_override_font_sizes/font_size = 22
+text = "100"
+horizontal_alignment = 2
 
 [node name="gold_sprite" type="Sprite2D" parent="panel"]
 position = Vector2(265, 62)
@@ -143,7 +163,8 @@ layout_mode = 0
 offset_left = 146.0
 offset_top = -90.0
 offset_right = 300.0
-offset_bottom = 2.0
+offset_bottom = -2.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_xiva6")
 script = ExtResource("4")
 
 [node name="placeholder" type="HBoxContainer" parent="inventories"]
@@ -156,20 +177,30 @@ offset_bottom = 88.0
 layout_mode = 2
 focus_mode = 2
 
+[node name="sell_button" parent="inventories/placeholder/item_button" index="2"]
+visible = true
+
 [node name="item_button2" parent="inventories/placeholder" instance=ExtResource("5")]
 layout_mode = 2
 focus_mode = 2
+
+[node name="sell_button" parent="inventories/placeholder/item_button2" index="2"]
+visible = true
 
 [node name="item_button3" parent="inventories/placeholder" instance=ExtResource("5")]
 layout_mode = 2
 focus_mode = 2
 
+[node name="sell_button" parent="inventories/placeholder/item_button3" index="2"]
+visible = true
+
 [node name="active_skills" type="ItemList" parent="."]
 layout_mode = 0
 offset_left = 3.0
 offset_top = -77.0
-offset_right = 143.0
+offset_right = 127.0
 offset_bottom = -2.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2hnuo")
 script = ExtResource("9")
 
 [node name="tip" type="Label" parent="active_skills"]
@@ -184,7 +215,7 @@ text = "PRESS ESC TO CANCEL"
 [node name="placeholder" type="HBoxContainer" parent="active_skills"]
 layout_mode = 0
 offset_top = 15.0
-offset_right = 182.0
+offset_right = 124.0
 offset_bottom = 75.0
 
 [node name="skill_button" parent="active_skills/placeholder" instance=ExtResource("8")]
@@ -201,3 +232,7 @@ offset_right = 76.0
 offset_bottom = -64.0
 
 [connection signal="gui_input" from="panel" to="." method="stats_down"]
+
+[editable path="inventories/placeholder/item_button"]
+[editable path="inventories/placeholder/item_button2"]
+[editable path="inventories/placeholder/item_button3"]

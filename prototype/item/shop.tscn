@@ -1,14 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8uav15456lm2"]
+[gd_scene load_steps=4 format=3 uid="uid://b8uav15456lm2"]
 
 [ext_resource type="Script" path="res://item/shop.gd" id="1"]
-[ext_resource type="PackedScene" path="res://ui/buttons/item_button.tscn" id="2"]
+[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_agkkn"]
+[ext_resource type="PackedScene" uid="uid://cjpaafpbxs87e" path="res://ui/buttons/item_button.tscn" id="2"]
 
 [node name="shop" type="ItemList"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -182.0
+offset_left = -204.0
 offset_bottom = 422.0
+grow_horizontal = 0
+theme = ExtResource("1_agkkn")
 script = ExtResource("1")
 
 [node name="scroll_container" type="ScrollContainer" parent="."]
@@ -29,7 +32,9 @@ alignment = 1
 
 [node name="shop_title" type="Label" parent="scroll_container/container"]
 layout_mode = 2
-text = "shop"
+theme_override_font_sizes/font_size = 28
+text = "Shop"
+horizontal_alignment = 1
 
 [node name="separator" type="HSeparator" parent="scroll_container/container"]
 layout_mode = 2
@@ -37,6 +42,7 @@ layout_mode = 2
 [node name="equip" type="Label" parent="scroll_container/container"]
 layout_mode = 2
 text = "Equip"
+horizontal_alignment = 1
 
 [node name="equip_items" type="GridContainer" parent="scroll_container/container"]
 unique_name_in_owner = true
@@ -47,389 +53,54 @@ columns = 3
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button2" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/equip_items/item_button2" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button2" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button2" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
 
 [node name="item_button3" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button3" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button3" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button3" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button4" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/equip_items/item_button4" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button4" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button4" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
 
 [node name="item_button5" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button5" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button5" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button5" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button6" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/equip_items/item_button6" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button6" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button6" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
 
 [node name="item_button7" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button7" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button7" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button7" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button8" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/equip_items/item_button8" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button8" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button8" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
 
 [node name="item_button9" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button9" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button9" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button9" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button10" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/equip_items/item_button10" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button10" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button10" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
 
 [node name="item_button11" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button11" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button11" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button11" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button12" parent="scroll_container/container/equip_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/equip_items/item_button12" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/equip_items/item_button12" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/equip_items/item_button12" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="consumable" type="Label" parent="scroll_container/container"]
 layout_mode = 2
 text = "Consumable"
+horizontal_alignment = 1
 
 [node name="consumable_items" type="GridContainer" parent="scroll_container/container"]
 unique_name_in_owner = true
@@ -440,101 +111,18 @@ columns = 3
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/consumable_items/item_button" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/consumable_items/item_button" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button4" parent="scroll_container/container/consumable_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/consumable_items/item_button4" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/consumable_items/item_button4" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button4" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
 
 [node name="item_button2" parent="scroll_container/container/consumable_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/consumable_items/item_button2" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/consumable_items/item_button2" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/consumable_items/item_button2" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="throwable" type="Label" parent="scroll_container/container"]
 layout_mode = 2
 text = "Throwable"
+horizontal_alignment = 1
 
 [node name="throwable_items" type="GridContainer" parent="scroll_container/container"]
 unique_name_in_owner = true
@@ -545,113 +133,10 @@ columns = 3
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/throwable_items/item_button3" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/throwable_items/item_button3" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/throwable_items/item_button3" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button5" parent="scroll_container/container/throwable_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="name" parent="scroll_container/container/throwable_items/item_button5" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/throwable_items/item_button5" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/throwable_items/item_button5" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
 [node name="item_button6" parent="scroll_container/container/throwable_items" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
-
-[node name="name" parent="scroll_container/container/throwable_items/item_button6" index="0"]
-layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 30.0
-
-[node name="price" parent="scroll_container/container/throwable_items/item_button6" index="1"]
-layout_mode = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 42.0
-offset_bottom = 23.0
-
-[node name="sell_button" parent="scroll_container/container/throwable_items/item_button6" index="2"]
-visible = false
-layout_mode = 0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 36.0
-
-[editable path="scroll_container/container/equip_items/item_button"]
-[editable path="scroll_container/container/equip_items/item_button2"]
-[editable path="scroll_container/container/equip_items/item_button3"]
-[editable path="scroll_container/container/equip_items/item_button4"]
-[editable path="scroll_container/container/equip_items/item_button5"]
-[editable path="scroll_container/container/equip_items/item_button6"]
-[editable path="scroll_container/container/equip_items/item_button7"]
-[editable path="scroll_container/container/equip_items/item_button8"]
-[editable path="scroll_container/container/equip_items/item_button9"]
-[editable path="scroll_container/container/equip_items/item_button10"]
-[editable path="scroll_container/container/equip_items/item_button11"]
-[editable path="scroll_container/container/equip_items/item_button12"]
-[editable path="scroll_container/container/consumable_items/item_button"]
-[editable path="scroll_container/container/consumable_items/item_button4"]
-[editable path="scroll_container/container/consumable_items/item_button2"]
-[editable path="scroll_container/container/throwable_items/item_button3"]
-[editable path="scroll_container/container/throwable_items/item_button5"]
-[editable path="scroll_container/container/throwable_items/item_button6"]
