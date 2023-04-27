@@ -1,0 +1,36 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://b5cac4xnqfgf3"]
+
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_k521r"]
+[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="2_iyn4k"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ow8p1"]
+texture = ExtResource("1_k521r")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(105, 0, 35, 35)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j6mul"]
+texture = ExtResource("1_k521r")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 0, 35, 35)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vwwxc"]
+texture = ExtResource("1_k521r")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(70, 0, 35, 35)
+
+[resource]
+Button/font_sizes/font_size = 24
+Button/fonts/font = ExtResource("2_iyn4k")
+Button/styles/hover = SubResource("StyleBoxTexture_ow8p1")
+Button/styles/normal = SubResource("StyleBoxTexture_j6mul")
+Button/styles/pressed = SubResource("StyleBoxTexture_vwwxc")
+Label/fonts/font = ExtResource("2_iyn4k")

@@ -1,71 +1,57 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dep3q4yi1ywcn"]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=1]
-[ext_resource path="res://assets/ui/portraits.png" type="Texture2D" id=2]
-[ext_resource path="res://ui/panels/dialog_panel.gd" type="Script" id=3]
-
-[sub_resource type="FontFile" id=2]
-size = 13
-font_data = ExtResource( 1 )
-
-[sub_resource type="FontFile" id=3]
-size = 11
-font_data = ExtResource( 1 )
+[ext_resource type="Texture2D" uid="uid://b3bjc227x04bf" path="res://assets/ui/portraits.png" id="2"]
+[ext_resource type="Script" path="res://ui/panels/dialog_panel.gd" id="3"]
 
 [node name="dialog_panel" type="ItemList"]
 offset_right = 420.0
 offset_bottom = 140.0
-script = ExtResource( 3 )
+script = ExtResource("3")
 
 [node name="panel" type="Panel" parent="."]
+layout_mode = 0
 offset_right = 420.0
 offset_bottom = 140.0
 
 [node name="display_name" type="Label" parent="panel"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 8.0
 offset_top = 114.0
 offset_right = 115.0
 offset_bottom = 131.0
-custom_colors/font_color = Color( 1, 0.796078, 0.243137, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 2 )
 text = "name"
-align = 1
-valign = 1
 
 [node name="portrait" type="Control" parent="panel"]
+clip_contents = true
+anchors_preset = 0
 offset_left = 12.0
 offset_top = 13.0
 offset_right = 76.0
 offset_bottom = 77.0
-scale = Vector2( 1.5, 1.5 )
-clip_contents = true
+scale = Vector2(1.5, 1.5)
 
 [node name="sprite" type="Sprite2D" parent="panel/portrait"]
 unique_name_in_owner = true
-position = Vector2( 32, 32 )
-texture = ExtResource( 2 )
+position = Vector2(32, 32)
+texture = ExtResource("2")
 region_enabled = true
-region_rect = Rect2( 0, 0, 64, 64 )
+region_rect = Rect2(0, 0, 64, 64)
 
 [node name="msg" type="Label" parent="panel"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 122.0
 offset_top = 13.0
 offset_right = 410.0
 offset_bottom = 109.0
-custom_fonts/font = SubResource( 3 )
 text = "lorem ipsum lorem hey  ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem hi ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum etc"
-autowrap = true
 
 [node name="control_delay" type="Label" parent="panel"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 258.0
 offset_top = 117.0
 offset_right = 402.0
 offset_bottom = 131.0
-custom_fonts/font = SubResource( 3 )
 text = "press to continue..."
-align = 2
-valign = 1

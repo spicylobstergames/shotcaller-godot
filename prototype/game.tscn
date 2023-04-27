@@ -1,10 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://cgwl1dkk3o30m"]
+[gd_scene load_steps=13 format=3 uid="uid://c3ge1hpb3mrip"]
 
 [ext_resource type="Script" path="res://collision/blocks/blocks.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_q0ooa"]
 [ext_resource type="Script" path="res://game.gd" id="2"]
-[ext_resource type="FontFile" path="res://assets/ui/CompassPro.tres" id="2_v5lgq"]
-[ext_resource type="PackedScene" uid="uid://buqduma2cqytp" path="res://ui/ui.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://ui/ui.tscn" id="4"]
 [ext_resource type="Script" path="res://map/maps.gd" id="6"]
 [ext_resource type="Script" path="res://controls/selection.gd" id="7"]
 [ext_resource type="Script" path="res://utils/utils.gd" id="8"]
@@ -15,24 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://cy617y6pg38gd" path="res://ui/waterfall/waterfall_background.tscn" id="13"]
 [ext_resource type="Script" path="res://ui/transitions/transitions.gd" id="14_dacea"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ow8p1"]
-texture = ExtResource("1_q0ooa")
-region_rect = Rect2(105, 0, 35, 35)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j6mul"]
-texture = ExtResource("1_q0ooa")
-region_rect = Rect2(0, 0, 35, 35)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vwwxc"]
-texture = ExtResource("1_q0ooa")
-region_rect = Rect2(70, 0, 35, 35)
-
-[sub_resource type="Theme" id="Theme_jiip7"]
-Button/styles/hover = SubResource("StyleBoxTexture_ow8p1")
-Button/styles/normal = SubResource("StyleBoxTexture_j6mul")
-Button/styles/pressed = SubResource("StyleBoxTexture_vwwxc")
-Label/fonts/font = ExtResource("2_v5lgq")
-
 [node name="game" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -41,7 +21,6 @@ anchor_bottom = 1.0
 offset_bottom = -48.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_jiip7")
 script = ExtResource("2")
 
 [node name="waterfall_background" parent="." instance=ExtResource("13")]

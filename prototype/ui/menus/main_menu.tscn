@@ -1,9 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://bawe4co71ooc0"]
+[gd_scene load_steps=4 format=3 uid="uid://bawe4co71ooc0"]
 
+[ext_resource type="Theme" uid="uid://cn18lpnkwwgu1" path="res://assets/ui/theme/menu_theme.tres" id="1_vi26l"]
 [ext_resource type="PackedScene" path="res://ui/buttons/menu_button.tscn" id="3"]
 [ext_resource type="Script" path="res://ui/menus/main_menu.gd" id="5"]
 
 [node name="main_menu" type="VBoxContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -126.0
+offset_right = 86.0
+offset_bottom = 126.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_vi26l")
+theme_override_constants/separation = 42
 script = ExtResource("5")
 
 [node name="Label" type="Label" parent="."]

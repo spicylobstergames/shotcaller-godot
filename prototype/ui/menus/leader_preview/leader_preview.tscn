@@ -1,122 +1,44 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://b750he7nyjqqe"]
 
-[ext_resource path="res://assets/ui/design.png" type="Texture2D" id=1]
-[ext_resource path="res://ui/menus/leader_preview/leader_preview.gd" type="Script" id=2]
-[ext_resource path="res://assets/ui/EquipmentProLabel.tres" type="FontFile" id=3]
-[ext_resource path="res://ui/menus/leader_preview/ability_preview.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="FontFile" id=5]
-
-[sub_resource type="StyleBoxTexture" id=1]
-texture = ExtResource( 1 )
-region_rect = Rect2( 0, 35, 175, 86 )
-offset_left = 5.0
-offset_right = 5.0
-offset_top = 5.0
-offset_bottom = 5.0
-modulate_color = Color( 1, 1, 1, 0.941176 )
-
-[sub_resource type="FontFile" id=32]
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 5 )
-
-[sub_resource type="StyleBoxTexture" id=2]
-texture = ExtResource( 1 )
-region_rect = Rect2( 105, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=3]
-texture = ExtResource( 1 )
-region_rect = Rect2( 70, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxEmpty" id=31]
-
-[sub_resource type="StyleBoxTexture" id=5]
-texture = ExtResource( 1 )
-region_rect = Rect2( 145, 37, 33, 33 )
-offset_left = 2.0
-offset_right = 2.0
-offset_top = 2.0
-offset_bottom = 2.0
-
-[sub_resource type="StyleBoxTexture" id=6]
-texture = ExtResource( 1 )
-region_rect = Rect2( 0, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
+[ext_resource type="Script" path="res://ui/menus/leader_preview/leader_preview.gd" id="2"]
+[ext_resource type="PackedScene" path="res://ui/menus/leader_preview/ability_preview.tscn" id="4"]
 
 [node name="leader_preview" type="PanelContainer"]
+custom_minimum_size = Vector2(272, 310)
 offset_right = 280.0
 offset_bottom = 310.0
-custom_minimum_size = Vector2( 272, 310 )
-custom_styles/panel = SubResource( 1 )
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_left = 5.0
-offset_top = 5.0
-offset_right = 275.0
-offset_bottom = 305.0
+layout_mode = 2
 
 [node name="leader_name" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
-offset_right = 270.0
-offset_bottom = 24.0
-custom_fonts/font = ExtResource( 3 )
+layout_mode = 2
 text = "Random leader"
-align = 1
-valign = 1
 uppercase = true
 
 [node name="abilities_preview_container" type="VBoxContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
-offset_top = 28.0
-offset_right = 270.0
-offset_bottom = 272.0
+layout_mode = 2
 
-[node name="ability_preview" parent="VBoxContainer/abilities_preview_container" instance=ExtResource( 4 )]
+[node name="ability_preview" parent="VBoxContainer/abilities_preview_container" instance=ExtResource("4")]
+layout_mode = 2
 
-[node name="ability_preview2" parent="VBoxContainer/abilities_preview_container" instance=ExtResource( 4 )]
-offset_top = 124.0
-offset_bottom = 244.0
+[node name="ability_preview2" parent="VBoxContainer/abilities_preview_container" instance=ExtResource("4")]
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-offset_top = 276.0
-offset_right = 270.0
-offset_bottom = 298.0
+layout_mode = 2
 
 [node name="cancel_button" type="Button" parent="VBoxContainer/HBoxContainer"]
-offset_right = 133.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 32 )
-custom_styles/hover = SubResource( 2 )
-custom_styles/pressed = SubResource( 3 )
-custom_styles/focus = SubResource( 31 )
-custom_styles/disabled = SubResource( 5 )
-custom_styles/normal = SubResource( 6 )
 text = "Back"
 
 [node name="confirm_button" type="Button" parent="VBoxContainer/HBoxContainer"]
-offset_left = 137.0
-offset_right = 270.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 32 )
-custom_styles/hover = SubResource( 2 )
-custom_styles/pressed = SubResource( 3 )
-custom_styles/focus = SubResource( 31 )
-custom_styles/disabled = SubResource( 5 )
-custom_styles/normal = SubResource( 6 )
 text = "OK"
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/cancel_button" to="." method="cancel_button_pressed"]

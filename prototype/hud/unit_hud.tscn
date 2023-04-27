@@ -1,17 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://b7os1aewnwora"]
 
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=1]
-[ext_resource path="res://hud/hpbar.tscn" type="PackedScene" id=2]
-[ext_resource path="res://hud/unit_hud.gd" type="Script" id=3]
-[ext_resource path="res://assets/unit/shadow.png" type="Texture2D" id=4]
-
-[sub_resource type="FontFile" id=17]
-size = 10
-font_data = ExtResource( 1 )
+[ext_resource type="PackedScene" path="res://hud/hpbar.tscn" id="1"]
+[ext_resource type="Script" path="res://hud/unit_hud.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://v8hb0egyiu54" path="res://assets/unit/shadow.png" id="4"]
 
 [node name="hud" type="Node2D"]
 use_parent_material = true
-script = ExtResource( 3 )
+script = ExtResource("3")
 
 [node name="state" type="Label" parent="."]
 use_parent_material = true
@@ -19,16 +14,14 @@ offset_left = -37.0
 offset_top = -37.0
 offset_right = 38.0
 offset_bottom = -21.0
-custom_fonts/font = SubResource( 17 )
 text = "unit"
-align = 1
 
 [node name="selection" type="Sprite2D" parent="."]
-modulate = Color( 0.117647, 1, 0.211765, 0.588235 )
+modulate = Color(0.117647, 1, 0.211765, 0.588235)
 use_parent_material = true
-position = Vector2( 0, 8 )
-scale = Vector2( 1.6, 1.6 )
-texture = ExtResource( 4 )
+position = Vector2(0, 8)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("4")
 
-[node name="hpbar" parent="." instance=ExtResource( 2 )]
+[node name="hpbar" parent="." instance=ExtResource("1")]
 visible = true
