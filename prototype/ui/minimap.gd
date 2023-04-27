@@ -53,15 +53,13 @@ func input(event):
 
 
 func over_minimap(event):
-	#var primary_screen_index = DisplayServer.get_primary_screen();
-	#var screen = DisplayServer.screen_get_size(primary_screen_index);
 	var viewport = get_viewport()
 	var screen = viewport.get_visible_rect()
 	return (
 		minimap_container.visible and 
 		"position" in event and 
 		event.position.x < minimap_size and 
-		event.position.y > screen.y - minimap_size
+		event.position.y > screen.end.y - minimap_size
 	)
 
 

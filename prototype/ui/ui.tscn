@@ -104,11 +104,11 @@ text = "fps
 
 [node name="top_mid" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 grow_horizontal = 2
-grow_vertical = 2
+size_flags_horizontal = 4
 theme = SubResource("Theme_hv5br")
 
 [node name="top_label" type="Label" parent="top_mid"]
@@ -149,11 +149,19 @@ theme = SubResource("Theme_8f306")
 
 [node name="mid" type="CenterContainer" parent="."]
 custom_minimum_size = Vector2(600, 600)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme = SubResource("Theme_dvhdi")
 
 [node name="main_menu" parent="mid" instance=ExtResource("11")]
@@ -176,22 +184,30 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
+[node name="score_board" parent="mid" instance=ExtResource("18")]
+unique_name_in_owner = true
+process_mode = 2
+visible = false
+layout_mode = 2
+
 [node name="mid_left" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
 theme = SubResource("Theme_i7u5j")
 
 [node name="leaders_icons" parent="mid_left" instance=ExtResource("12")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_top = 0.0
-offset_right = 8.0
-offset_bottom = 0.0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -158.0
+offset_bottom = 158.0
 grow_vertical = 2
 
 [node name="cheat_console" type="TextEdit" parent="mid_left"]
@@ -316,10 +332,3 @@ offset_right = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "version 0.7"
-
-[node name="score_board" parent="." instance=ExtResource("18")]
-unique_name_in_owner = true
-process_mode = 2
-visible = false
-grow_horizontal = 2
-grow_vertical = 2

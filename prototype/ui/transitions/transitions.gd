@@ -7,9 +7,9 @@ extends CanvasLayer
 
 
 func start():
-	var transition = random()
+	#var transition = random()
+	var transition = circle_transition_scene.instantiate()
 	add_child(transition)
-	transition.start_transition()
 	transition.connect("transition_completed",Callable(self,"on_transition_end").bind(transition))
 
 
