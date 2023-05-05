@@ -30,7 +30,7 @@ func _ready():
 func format_button(button):
 	button.hpbar.hide()
 	button.hint.hide()
-	button.connect("pressed",Callable(self,"show_preview").bind(button))
+	button.pressed.connect(show_preview.bind(button))
 
 
 func show_preview(button):

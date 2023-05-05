@@ -39,7 +39,7 @@ func _ready():
 	shop_button = control_panel.get_node("shop_button")
 	orders_button = control_panel.get_node("orders_button")
 	
-	leader_select_menu.connect("leader_selected",Callable(new_game_menu,"add_leader"))
+	leader_select_menu.leader_selected.connect(new_game_menu.add_leader)
 	
 	hide_all()
 

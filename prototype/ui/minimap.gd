@@ -17,16 +17,18 @@ var map_tiles:Node
 @onready var cam_rect:Node = $"%cam_rect"
 @onready var map_symbols:Node = $"%map_symbols"
 @onready var light_template:Node = $"%light_template"
+@onready var minimap_sprite = $"%sprite"
 
 var map_symbols_map = []
 
 var minimap_size:int = 150
-var border:int = 4
+var border:int = 5
 var sprite_scale:float = 1.0
 
 
 func _ready():
 	$minimap_container.hide()
+	pass
 
 func input(event):
 	# MOUSE CLICK
@@ -59,7 +61,9 @@ func over_minimap(event):
 		minimap_container.visible and 
 		"position" in event and 
 		event.position.x < minimap_size and 
-		event.position.y > screen.end.y - minimap_size
+		event.position.x > 0 and 
+		event.position.y > screen.end.y - minimap_size and
+		event.position.y < screen.end.y
 	)
 
 
@@ -68,13 +72,15 @@ func map_loaded():
 	map_tiles = game.map.get_node("tiles")
 	var r_size = default_screen * minimap_size / max(game.map.size.x, game.map.size.y)
 	cam_rect.size = Vector2(r_size, r_size)
+	update_map_texture = true
 
 
 func get_map_texture():
 	# set camera zoom and limits
-	Crafty_camera.offset = WorldState.get_state("map_mid")
 	Crafty_camera.zoom_limit = game.map.zoom_limit
-	var zoom_out = game.map.zoom_limit.y
+	var zoom_out = game.map.zoom_limit.x
+	print(zoom_out)
+	Crafty_camera.offset = WorldState.get_state("map_mid") * zoom_out
 	Crafty_camera.zoom =  Vector2(zoom_out, zoom_out)
 	Crafty_camera.position = Vector2.ZERO
 	# hides units and ui
@@ -86,21 +92,20 @@ func get_map_texture():
 	game.map.show()
 	game.maps.buildings_visibility(false)
 	
+	
 	await RenderingServer.frame_post_draw
 	
 	# take snapshop
-	var texture = game.get_viewport().get_texture().get_image()
-	#data.flip_y()
-	#var texture = ImageTexture.new()
-	#texture.create_from_image(data) #,1
-	
-	# set minimap texture
-	var minimap_sprite = $"%sprite"
+	var snapshop = game.get_viewport().get_texture().get_image()
+	var texture = ImageTexture.create_from_image(snapshop)
 	minimap_sprite.set_texture(texture)
+	
 	var w = float(texture.get_width())
 	var h = float(texture.get_height())
+	
 	var texture_size = min(w, h)
-	sprite_scale = float(minimap_size) / float(texture_size)
+	var minimap_sprite_size = minimap_size - (2 * border)
+	sprite_scale = float(minimap_sprite_size) / float(texture_size)
 	minimap_sprite.scale = Vector2(sprite_scale, sprite_scale)
 	# texture might be a rectangle so region_rect will clip it
 	var texture_ratio = w / h
@@ -110,9 +115,11 @@ func get_map_texture():
 	if texture_ratio < 1.0: v_diff = (h - texture_size) / 2
 	minimap_sprite.region_rect.position = Vector2(h_diff+border/sprite_scale, v_diff+border/sprite_scale)
 	minimap_sprite.region_rect.size = Vector2((minimap_size-border)/sprite_scale, (minimap_size-border)/sprite_scale)
+	
 	# set zoom out tile replace
 	#map_sprite.set_texture(texture)
 	#map_sprite.scale = Crafty_camera.zoom
+	
 	# reset cam
 	Crafty_camera.zoom_reset()
 	# reset units and turn ui back on again
@@ -191,7 +198,7 @@ func copy_symbol(unit, symbol):
 
 
 func follow_camera():
-	if minimap_container.visible and game.map:
+	if minimap_container.visible and game.map and false:
 		var view_height = get_viewport().size.y
 		# stick to the bottom (todo: replace with godot viewports)
 		minimap_container.offset.y = view_height

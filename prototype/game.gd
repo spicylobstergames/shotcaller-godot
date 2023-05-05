@@ -65,6 +65,7 @@ func start():
 	maps.load_map(maps.current_map)
 	ui.hide_version()
 	transitions.start()
+	transitions.transition_completed.connect(ui.minimap.map_loaded)
 
 
 func _input(event):
@@ -118,7 +119,7 @@ func pause():
 func setup_one_sec_timer():
 	WorldState.one_sec_timer.wait_time = 1
 	WorldState.one_sec_timer.name = "one_sec_timer"
-	WorldState.one_sec_timer.connect("timeout",Callable(self,"one_sec_cycle"))
+	WorldState.one_sec_timer.timeout.connect(one_sec_cycle)
 	add_child(WorldState.one_sec_timer)
 
 
@@ -176,6 +177,10 @@ func end(winner: bool):
 	victory = winner
 	ui.scoreboard.handle_game_end(winner)
 	emit_signal("game_ended")
+
+
+func reload():
+	get_tree().reload_current_scene()
 
 
 func exit():

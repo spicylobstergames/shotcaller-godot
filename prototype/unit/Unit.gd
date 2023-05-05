@@ -148,7 +148,7 @@ func _ready():
 func setup_leader_exp():
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
-		experience_timer.connect("timeout",Callable(self,"on_experience_tick"))
+		experience_timer.timeout.connect(on_experience_tick)
 		add_child(experience_timer)
 
 

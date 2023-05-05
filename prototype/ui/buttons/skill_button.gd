@@ -8,10 +8,6 @@ var skill = null
 var bribe_gold_cost = 10
 
 
-func _ready():
-	connect("button_down",Callable(self,"_button_down"))
-
-
 func setup(_skill):
 	self.skill = _skill
 	self.disabled = self.skill.on_cooldown()

@@ -54,8 +54,8 @@ func setup_pathfind():
 
 func setup_unit_path(unit, path):
 	unit.current_path = path
-	if not unit.is_connected("unit_arrived",Callable(self,"on_arrive")):
-		unit.connect("unit_arrived",Callable(self,"on_arrive").bind(unit))
+	if not unit.unit_arrived.is_connected(on_arrive):
+		unit.unit_arrived.connect(on_arrive.bind(unit))
 
 
 func on_arrive(unit):

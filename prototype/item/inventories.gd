@@ -71,7 +71,7 @@ func build_leaders():
 		add_inventory(leader)
 	for leader in game.enemy_leaders:
 		add_inventory(leader)
-	WorldState.one_sec_timer.connect("timeout",Callable(self,"gold_update_cycle"))
+	WorldState.one_sec_timer.timeout.connect(gold_update_cycle)
 
 
 func get_leader_inventory(leader):
@@ -101,7 +101,7 @@ func get_leader_delivery(leader):
 
 
 func gold_timer(unit):
-	WorldState.one_sec_timer.connect("timeout",Callable(unit,"gold_timer_timeout"))
+	WorldState.one_sec_timer.timeout.connect(unit.gold_timer_timeout)
 
 
 

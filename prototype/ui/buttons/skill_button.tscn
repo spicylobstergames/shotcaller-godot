@@ -40,3 +40,5 @@ grow_vertical = 0
 text = "10 sec"
 horizontal_alignment = 2
 vertical_alignment = 2
+
+[connection signal="button_down" from="." to="." method="_button_down"]

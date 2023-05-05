@@ -1,7 +1,6 @@
 [gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://ui/buttons/menu_button.gd" id="1"]
-[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassProTitle.tres" id="2"]
 
 
 [sub_resource type="StyleBoxEmpty" id=5]

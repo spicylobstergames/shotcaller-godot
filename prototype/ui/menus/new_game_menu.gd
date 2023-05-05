@@ -35,7 +35,7 @@ func add_leader(leader, team):
 			blue_team_container.add_child(leader_item)
 	
 	leader_item.prepare(leader, team)
-	leader_item.connect("change_leader",Callable(self,"choose_leader").bind(team))
+	leader_item.change_leader.connect(choose_leader.bind(team))
 
 
 func get_leaders(team):
