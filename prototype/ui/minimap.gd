@@ -79,7 +79,6 @@ func get_map_texture():
 	# set camera zoom and limits
 	Crafty_camera.zoom_limit = game.map.zoom_limit
 	var zoom_out = game.map.zoom_limit.x
-	print(zoom_out)
 	Crafty_camera.offset = WorldState.get_state("map_mid") * zoom_out
 	Crafty_camera.zoom =  Vector2(zoom_out, zoom_out)
 	Crafty_camera.position = Vector2.ZERO

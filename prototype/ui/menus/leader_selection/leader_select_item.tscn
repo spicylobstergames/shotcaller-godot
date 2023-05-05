@@ -1,18 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvmtml6sny3qf"]
+[gd_scene load_steps=5 format=3 uid="uid://cvmtml6sny3qf"]
 
 [ext_resource type="Script" path="res://ui/menus/leader_selection/leader_select_item.gd" id="1"]
-[ext_resource type="PackedScene" path="res://ui/buttons/leader_button.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://wk2cqft3xt70" path="res://ui/buttons/leader_button.tscn" id="2"]
+[ext_resource type="Theme" uid="uid://w6f0qhitj51d" path="res://assets/ui/theme/label_theme.tres" id="3_dlx6l"]
+[ext_resource type="Theme" uid="uid://kg27vl16eqx3" path="res://assets/ui/theme/close_button.tres" id="4_58kcy"]
 
 [node name="leader_select_item" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -384.0
-offset_bottom = -560.0
+offset_right = -400.0
+offset_bottom = -570.0
 script = ExtResource("1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="ItemList" type="ItemList" parent="HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
@@ -29,14 +32,15 @@ scale = Vector2(0.5, 0.5)
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "LEADER NAME"
-uppercase = true
+theme = ExtResource("3_dlx6l")
+text = "Leader Name"
 
 [node name="delete_button" type="Button" parent="HBoxContainer"]
-custom_minimum_size = Vector2(20, 20)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme = ExtResource("4_58kcy")
 text = "X"
 
 [connection signal="pressed" from="HBoxContainer/ItemList/leader_button" to="." method="change_leader_pressed"]

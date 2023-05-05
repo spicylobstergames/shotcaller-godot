@@ -2,91 +2,115 @@
 
 [ext_resource type="PackedScene" uid="uid://b750he7nyjqqe" path="res://ui/menus/leader_preview/leader_preview.tscn" id="1"]
 [ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_wwfyp"]
-[ext_resource type="PackedScene" path="res://ui/buttons/leader_button.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://wk2cqft3xt70" path="res://ui/buttons/leader_button.tscn" id="2"]
 [ext_resource type="Script" path="res://ui/menus/leader_select_menu.gd" id="4"]
 
-[node name="leader_select_menu" type="ItemList"]
-process_mode = 2
-custom_minimum_size = Vector2(272, 310)
-offset_left = 162.0
-offset_top = 146.0
-offset_right = 434.0
-offset_bottom = 456.0
+[node name="leader_select_menu" type="Panel"]
+custom_minimum_size = Vector2(350, 380)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -190.0
+offset_right = 160.0
+offset_bottom = 190.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_wwfyp")
 script = ExtResource("4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 6.0
-offset_right = 266.0
-offset_bottom = 223.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -180.0
+offset_right = 160.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "Select leader"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="leaders_container" type="GridContainer" parent="VBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="leaders_container" type="GridContainer" parent="VBoxContainer/Control"]
 unique_name_in_owner = true
 layout_mode = 2
+offset_top = 8.0
+offset_right = 252.0
+offset_bottom = 260.0
+scale = Vector2(1.25, 1.25)
 size_flags_horizontal = 0
-size_flags_vertical = 0
+size_flags_vertical = 2
 columns = 4
 
-[node name="leader_button" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 
-[node name="leader_button2" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
-layout_mode = 2
-focus_mode = 2
-
-[node name="leader_button3" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button2" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button4" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button3" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button5" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button4" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button6" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button5" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button7" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button6" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button8" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button7" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button9" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button8" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button10" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button9" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button11" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button10" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button12" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button11" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button13" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button12" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
-[node name="leader_button14" parent="VBoxContainer/leaders_container" instance=ExtResource("2")]
+[node name="leader_button13" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="leader_button14" parent="VBoxContainer/Control/leaders_container" instance=ExtResource("2")]
 layout_mode = 2
 focus_mode = 2
 
@@ -94,6 +118,7 @@ focus_mode = 2
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
-offset_right = 272.0
+offset_right = 350.0
+offset_bottom = 380.0
 
 [connection signal="preview_confirm" from="leader_preview" to="." method="preview_confirm"]

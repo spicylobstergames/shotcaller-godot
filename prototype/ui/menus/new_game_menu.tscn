@@ -1,63 +1,110 @@
-[gd_scene load_steps=4 format=3 uid="uid://u1q0st63a0fu"]
+[gd_scene load_steps=10 format=3 uid="uid://u1q0st63a0fu"]
 
 [ext_resource type="Script" path="res://ui/menus/new_game_menu.gd" id="1"]
 [ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_t6mua"]
 [ext_resource type="PackedScene" uid="uid://cvmtml6sny3qf" path="res://ui/menus/leader_selection/leader_select_item.tscn" id="2"]
 
-[node name="new_game_menu" type="ItemList"]
-custom_minimum_size = Vector2(400, 460)
-offset_left = 100.0
-offset_top = 40.0
-offset_right = 500.0
-offset_bottom = 500.0
-theme = ExtResource("1_t6mua")
-script = ExtResource("1")
+[sub_resource type="ButtonGroup" id="ButtonGroup_h0a0m"]
+resource_name = "map"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
+[sub_resource type="ButtonGroup" id="ButtonGroup_6kep1"]
+resource_name = "team"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rbvv"]
+bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_33vkl"]
+bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m1alq"]
+bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jud25"]
+bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
+
+[node name="new_game_menu" type="Panel"]
+custom_minimum_size = Vector2(460, 460)
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -214.0
-offset_right = 180.0
-offset_bottom = 206.0
+offset_left = -230.0
+offset_top = -230.0
+offset_right = 230.0
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_t6mua")
+script = ExtResource("1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -220.0
+offset_right = 220.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-text = "Team selection"
+theme_override_font_sizes/font_size = 26
+text = "New Game"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 20
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Select map:"
+text = "Select map"
 
 [node name="3_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+button_pressed = true
+button_group = SubResource("ButtonGroup_h0a0m")
 text = "3-lane"
+alignment = 1
 
 [node name="1_lane_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+button_group = SubResource("ButtonGroup_h0a0m")
 text = "1-lane"
+alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
 
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Select team"
+horizontal_alignment = 1
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
@@ -65,11 +112,15 @@ alignment = 1
 
 [node name="blue_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+button_pressed = true
+button_group = SubResource("ButtonGroup_6kep1")
 text = "Blue Team"
+alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(0, 230)
+custom_minimum_size = Vector2(0, 190)
 layout_mode = 2
 
 [node name="blue_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer/ScrollContainer"]
@@ -94,7 +145,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="add_leader_blue" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5rbvv")
 text = "Add leader"
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer2"]
@@ -103,7 +156,7 @@ layout_mode = 2
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
 layout_mode = 2
@@ -111,11 +164,14 @@ alignment = 1
 
 [node name="red_team_checkbox" type="CheckBox" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+button_group = SubResource("ButtonGroup_6kep1")
 text = "Red Team"
+alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
-custom_minimum_size = Vector2(0, 230)
+custom_minimum_size = Vector2(0, 190)
 layout_mode = 2
 
 [node name="red_team_container" type="VBoxContainer" parent="VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer"]
@@ -140,25 +196,31 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="add_leader_red" type="Button" parent="VBoxContainer/HBoxContainer2/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_styles/pressed = SubResource("StyleBoxFlat_33vkl")
 text = "Add leader"
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="back_button" type="Button" parent="VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/pressed = SubResource("StyleBoxFlat_m1alq")
 text = "Back"
 
 [node name="start_game_button" type="Button" parent="VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jud25")
 text = "Start game"
 
 [connection signal="button_down" from="VBoxContainer/HBoxContainer2/VBoxContainer/add_leader_blue" to="." method="choose_leader" binds= ["blue"]]

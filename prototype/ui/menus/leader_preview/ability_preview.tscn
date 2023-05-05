@@ -1,38 +1,55 @@
-[gd_scene load_steps=3 format=3 uid="uid://4v4c3jqp1iln"]
+[gd_scene load_steps=5 format=3 uid="uid://4v4c3jqp1iln"]
 
 [ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="1"]
+[ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_wr6fd"]
 [ext_resource type="Script" path="res://ui/menus/leader_preview/ability_preview.gd" id="2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_idt2m"]
 
 [node name="ability_preview" type="PanelContainer"]
 offset_right = 270.0
-offset_bottom = 120.0
+offset_bottom = 160.0
+theme = ExtResource("1_wr6fd")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_idt2m")
 script = ExtResource("2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="ability_icon" type="TextureRect" parent="HBoxContainer"]
+[node name="ability_icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 0
+size_flags_vertical = 0
 texture = ExtResource("1")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(220, 120)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 13
 
-[node name="ability_name" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="ability_name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Aura of Courage"
 
-[node name="ability_description" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="ability_description" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 1
 text = "Some ability description some ability description some ability description some ability description some ability description."
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+size_flags_vertical = 8

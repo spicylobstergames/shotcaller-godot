@@ -1,22 +1,39 @@
-[gd_scene load_steps=3 format=3 uid="uid://b750he7nyjqqe"]
+[gd_scene load_steps=5 format=3 uid="uid://b750he7nyjqqe"]
 
+[ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_4rnj0"]
 [ext_resource type="Script" path="res://ui/menus/leader_preview/leader_preview.gd" id="2"]
-[ext_resource type="PackedScene" path="res://ui/menus/leader_preview/ability_preview.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://4v4c3jqp1iln" path="res://ui/menus/leader_preview/ability_preview.tscn" id="4"]
 
-[node name="leader_preview" type="PanelContainer"]
-custom_minimum_size = Vector2(272, 310)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_013id"]
+bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
+
+[node name="leader_preview" type="Panel"]
+custom_minimum_size = Vector2(350, 380)
 offset_right = 280.0
 offset_bottom = 310.0
+theme = ExtResource("1_4rnj0")
 script = ExtResource("2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -167.0
+offset_top = -185.0
+offset_right = 167.0
+offset_bottom = 185.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="leader_name" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "Random leader"
-uppercase = true
+horizontal_alignment = 1
 
 [node name="abilities_preview_container" type="VBoxContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -29,16 +46,20 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+size_flags_vertical = 8
 
 [node name="cancel_button" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/pressed = SubResource("StyleBoxFlat_013id")
 text = "Back"
 
 [node name="confirm_button" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
 text = "OK"
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/cancel_button" to="." method="cancel_button_pressed"]

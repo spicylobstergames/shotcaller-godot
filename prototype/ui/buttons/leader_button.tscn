@@ -37,7 +37,6 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 focus_mode = 1
 theme = ExtResource("1_3w2ig")
-toggle_mode = true
 expand_icon = true
 script = ExtResource("1")
 

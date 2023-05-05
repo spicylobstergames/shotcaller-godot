@@ -21,13 +21,14 @@ func _ready():
 	name_label = get_node("name_label")
 	hint = get_node("hint")
 	hpbar = get_node("hpbar")
-
+	
 	red_material = sprite.material
+
 
 func prepare(new_leader_name, new_team = "red"):
 	# leader sprite
 	leader_name = new_leader_name
-	name_label.text = leader_name
+	name_label.text = leader_name[0].to_upper() + leader_name.substr(1,-1)
 	if leader_name == "random":
 		sprite.texture = question_mark
 	else:

@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://kg27vl16eqx3"]
+
+[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_j1u83"]
+
+[resource]
+default_font = ExtResource("1_j1u83")
+default_font_size = 16
+Button/colors/font_color = Color(0.843137, 0.396078, 0.396078, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 4

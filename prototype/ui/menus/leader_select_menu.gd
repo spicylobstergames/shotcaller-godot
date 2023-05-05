@@ -34,7 +34,7 @@ func format_button(button):
 
 
 func show_preview(button):
-	var leader = button.name_label.text
+	var leader = button.leader_name
 	leader_preview.prepare(leader)
 	leader_preview.show()
 	button.button_pressed = false
