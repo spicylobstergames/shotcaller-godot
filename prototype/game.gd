@@ -65,6 +65,11 @@ func start():
 	maps.load_map(maps.current_map)
 	ui.hide_version()
 	transitions.start()
+	transitions.transition_completed.connect(get_map_texture)
+
+
+func get_map_texture():
+	ui.minimap.update_map_texture = true
 
 
 func _input(event):
@@ -80,6 +85,7 @@ func _input(event):
 
 
 func map_loaded():
+	print('loaded')
 	if not WorldState.get_state("game_started"):
 		WorldState.set_state("game_started", true)
 		resume()
@@ -88,7 +94,7 @@ func map_loaded():
 		WorldState.set_state("is_game_active", true)
 		rng.randomize()
 		WorldState.one_sec_timer.start()
-		maps.spawn.start()
+		#maps.spawn.start()
 		
 		emit_signal("game_started")
 
@@ -118,7 +124,7 @@ func pause():
 func setup_one_sec_timer():
 	WorldState.one_sec_timer.wait_time = 1
 	WorldState.one_sec_timer.name = "one_sec_timer"
-	WorldState.one_sec_timer.connect("timeout",Callable(self,"one_sec_cycle"))
+	WorldState.one_sec_timer.timeout.connect(one_sec_cycle)
 	add_child(WorldState.one_sec_timer)
 
 
@@ -176,6 +182,10 @@ func end(winner: bool):
 	victory = winner
 	ui.scoreboard.handle_game_end(winner)
 	emit_signal("game_ended")
+
+
+func reload():
+	get_tree().reload_current_scene()
 
 
 func exit():

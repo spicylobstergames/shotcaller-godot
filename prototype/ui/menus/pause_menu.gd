@@ -6,6 +6,6 @@ extends Container
 @onready var exit_button : Button = $"%exit_button"
 
 func _ready():
-	continue_button.connect("pressed",Callable(game,"resume"))
-	exit_to_menu_button.connect("pressed",Callable(game,"reload"))
-	exit_button.connect("pressed",Callable(game,"exit"))
+	continue_button.pressed.connect(game.resume)
+	exit_to_menu_button.pressed.connect(game.reload)
+	exit_button.pressed.connect(game.exit)

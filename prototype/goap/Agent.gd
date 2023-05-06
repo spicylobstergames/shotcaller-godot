@@ -31,18 +31,18 @@ func _ready():
 			
 	_unit = get_parent()
 	
-	_unit.connect("unit_reseted",Callable(self,"reset"))
-	_unit.connect("unit_collided",Callable(self,"on_collision"))
-	_unit.connect("unit_arrived",Callable(self,"on_arrive"))
-	_unit.connect("unit_idle_ended",Callable(self,"on_idle_end"))
-	_unit.connect("unit_stun_ended",Callable(self,"on_stun_end"))
-	_unit.connect("unit_move_ended",Callable(self,"on_move_end"))
-	_unit.connect("unit_attack_ended",Callable(self,"on_attack_end"))
-	_unit.connect("unit_animation_ended",Callable(self,"on_animation_end"))
-	_unit.connect("unit_was_attacked",Callable(self,"was_attacked"))
+	_unit.unit_reseted.connect(reset)
+	_unit.unit_collided.connect(on_collision)
+	_unit.unit_arrived.connect(on_arrive)
+	_unit.unit_idle_ended.connect(on_idle_end)
+	_unit.unit_stun_ended.connect(on_stun_end)
+	_unit.unit_move_ended.connect(on_move_end)
+	_unit.unit_attack_ended.connect(on_attack_end)
+	_unit.unit_animation_ended.connect(on_animation_end)
+	_unit.unit_was_attacked.connect(was_attacked)
 	
 	
-	WorldState.one_sec_timer.connect("timeout",Callable(self,"on_every_second"))
+	WorldState.one_sec_timer.timeout.connect(on_every_second)
 
 
 func get_unit():
@@ -132,7 +132,7 @@ func _follow_plan(plan, delta):
 				_current_plan_step += 1
 				get_current_action().enter(self)
 			else:
-				 #trigger replan
+				#trigger replan
 				_current_goal = null
 				_current_plan = null
 

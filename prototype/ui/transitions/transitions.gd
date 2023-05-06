@@ -5,19 +5,20 @@ extends CanvasLayer
 
 @onready var game = get_tree().get_current_scene()
 
+signal transition_completed
 
 func start():
-	var transition = random()
+	#var transition = random()
+	var transition = circle_transition_scene.instantiate()
 	add_child(transition)
-	transition.start_transition()
-	transition.connect("transition_completed",Callable(self,"on_transition_end").bind(transition))
+	transition.transition_completed.connect(on_transition_end.bind(transition))
 
 
 func on_transition_end(transition = null):
 	# clears transition
 	if transition: transition.queue_free()
 	# prepare to screenshot the map
-	game.ui.minimap.update_map_texture = true
+	emit_signal("transition_completed")
 
 
 func random():

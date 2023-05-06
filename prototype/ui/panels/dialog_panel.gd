@@ -14,7 +14,7 @@ var can_hide := false
 
 func _ready():
 	game = get_tree().get_current_scene()
-	game.connect("game_started",Callable(self,"campaign_start"))
+	game.game_started.connect(campaign_start)
 
 
 func campaign_start():

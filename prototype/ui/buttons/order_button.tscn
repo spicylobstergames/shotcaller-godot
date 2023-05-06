@@ -1,108 +1,47 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://m6qyqc7n5ksl"]
 
-[ext_resource type="FontFile" uid="uid://c5hqgw64nmglt" path="res://assets/ui/kenvector_future.ttf" id="1"]
+[ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_2qc3q"]
 [ext_resource type="Script" path="res://ui/buttons/order_button.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="4"]
 
-
-[sub_resource type="FontFile" id=2]
-size = 11
-font_data = ExtResource( 1 )
-
-[sub_resource type="StyleBoxTexture" id=23]
-texture = ExtResource( 3 )
-region_rect = Rect2( 105, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=24]
-texture = ExtResource( 3 )
-region_rect = Rect2( 70, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=25]
-texture = ExtResource( 3 )
-region_rect = Rect2( 140, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=26]
-texture = ExtResource( 3 )
-region_rect = Rect2( 70, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="StyleBoxTexture" id=13]
-texture = ExtResource( 3 )
-region_rect = Rect2( 0, 0, 35, 35 )
-offset_left = 3.0
-offset_right = 3.0
-offset_top = 3.0
-offset_bottom = 3.0
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 46, 46 )
-margin = Rect2( 2, 2, 0, 0 )
-
-[sub_resource type="FontFile" id=27]
-size = 8
-font_data = ExtResource( 1 )
-
-[sub_resource type="FontFile" id=22]
-size = 8
-font_data = ExtResource( 1 )
+[sub_resource type="AtlasTexture" id="14"]
+atlas = ExtResource("4")
+region = Rect2(0, 0, 46, 46)
+margin = Rect2(2, 2, 0, 0)
 
 [node name="order_button" type="Button"]
+custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 60.0
-custom_minimum_size = Vector2( 60, 60 )
 focus_mode = 1
-custom_fonts/font = SubResource( 2 )
-custom_styles/hover = SubResource( 23 )
-custom_styles/pressed = SubResource( 24 )
-custom_styles/focus = SubResource( 25 )
-custom_styles/disabled = SubResource( 26 )
-custom_styles/normal = SubResource( 13 )
+theme = ExtResource("1_2qc3q")
 toggle_mode = true
-icon = SubResource( 14 )
-script = ExtResource( 2 )
+icon = SubResource("14")
+script = ExtResource("2")
 
 [node name="name" type="Label" parent="."]
+layout_mode = 0
 offset_top = 3.0
 offset_right = 60.0
 offset_bottom = 33.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 27 )
 text = "Name"
-align = 1
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="hint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -57.0
-offset_top = -12.0
-offset_right = -3.0
+offset_left = -55.0
+offset_top = -21.0
+offset_right = -5.0
 offset_bottom = -3.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 22 )
+grow_horizontal = 0
+grow_vertical = 0
 text = "1"
-align = 2
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [connection signal="pressed" from="." to="." method="button_down"]

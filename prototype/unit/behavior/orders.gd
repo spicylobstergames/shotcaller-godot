@@ -6,10 +6,10 @@ var game:Node
 # self = Behavior.orders
 
 
-const player_lanes_orders = {}
-const enemy_lanes_orders = {}
-const player_leaders_orders = {}
-const enemy_leaders_orders = {}
+var player_lanes_orders = {}
+var enemy_lanes_orders = {}
+var player_leaders_orders = {}
+var enemy_leaders_orders = {}
 
 var player_tax = "low"
 var enemy_tax = "low"
@@ -238,7 +238,7 @@ func lose_building(building):
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
 			if team == game.player_team:
-				 game.maps.spawn.player_extra_unit = "infantry"
+				game.maps.spawn.player_extra_unit = "infantry"
 			else: game.maps.spawn.enemy_extra_unit = "infantry"
 			building.attacks = false
 		

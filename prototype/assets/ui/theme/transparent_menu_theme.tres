@@ -1,0 +1,25 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://cn18lpnkwwgu1"]
+
+[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_yqwsw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fljss"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mlanh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sad1e"]
+
+[resource]
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 12
+Button/font_sizes/font_size = 32
+Button/fonts/font = ExtResource("1_yqwsw")
+Button/styles/disabled = SubResource("StyleBoxEmpty_fljss")
+Button/styles/focus = null
+Button/styles/hover = SubResource("StyleBoxEmpty_mlanh")
+Button/styles/normal = SubResource("StyleBoxEmpty_sad1e")
+Button/styles/pressed = null
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 16
+Label/font_sizes/font_size = 44
+Label/fonts/font = ExtResource("1_yqwsw")
+VBoxContainer/constants/separation = 10

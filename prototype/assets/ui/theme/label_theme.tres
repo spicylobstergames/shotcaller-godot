@@ -1,0 +1,14 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://w6f0qhitj51d"]
+
+[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_3fbea"]
+
+[resource]
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 10
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("1_3fbea")
+TextEdit/colors/font_outline_color = Color(0, 0, 0, 1)
+TextEdit/constants/line_spacing = 1
+TextEdit/constants/outline_size = 6
+TextEdit/font_sizes/font_size = 14
+TextEdit/fonts/font = ExtResource("1_3fbea")

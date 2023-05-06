@@ -22,7 +22,7 @@ var half_tile_size = tile_size / 2
 @export var fog_of_war:bool = true
 
 @export var camera_limit = Vector2(225,225)
-@export var zoom_limit:Vector2 = Vector2(0.5,1.76)
+@export var zoom_limit:Vector2 = Vector2(0.5,2)
 
 var unit_container:Node2D
 var block_container:Node2D

@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3]
 
-[ext_resource path="res://ui/buttons/menu_button.gd" type="Script" id=1]
-[ext_resource path="res://assets/ui/CompassProTitle.tres" type="FontFile" id=2]
+[ext_resource type="Script" path="res://ui/buttons/menu_button.gd" id="1"]
+
 
 [sub_resource type="StyleBoxEmpty" id=5]
 
@@ -18,7 +18,6 @@ grow_horizontal = 2
 grow_vertical = 2
 custom_colors/font_color_disabled = Color( 0.580392, 0.580392, 0.580392, 1 )
 custom_colors/font_color_focus = Color( 0.207843, 0.909804, 0.858824, 1 )
-custom_fonts/font = ExtResource( 2 )
 custom_styles/hover = SubResource( 5 )
 custom_styles/pressed = SubResource( 1 )
 custom_styles/focus = SubResource( 4 )

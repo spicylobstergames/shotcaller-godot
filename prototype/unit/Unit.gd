@@ -148,7 +148,7 @@ func _ready():
 func setup_leader_exp():
 		experience_timer.wait_time = 5
 		experience_timer.autostart = true
-		experience_timer.connect("timeout",Callable(self,"on_experience_tick"))
+		experience_timer.timeout.connect(on_experience_tick)
 		add_child(experience_timer)
 
 
@@ -347,7 +347,7 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 	var targets = []
 	for unit2 in neighbors:
 		if self != unit2 and not unit2.dead:
-			if not filters: targets.append(unit2)
+			if filters.size() == 0: targets.append(unit2)
 			else:
 				for filter in filters:
 					if unit2[filter] == filters[filter]:

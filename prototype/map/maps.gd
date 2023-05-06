@@ -1,6 +1,10 @@
 extends Node2D
 var game:Node
 
+
+# self = game.maps
+
+
 var current_map = "one_lane_map"
 
 var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
@@ -28,7 +32,7 @@ func load_map(map_name):
 	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
 	WorldState.set_state("map_mid", mid)
 	WorldState.set_state("map_camera_limit", game.map.camera_limit)
-	game.ui.minimap.map_loaded()
+	WorldState.set_state("zoom_limit", game.map.zoom_limit)
 
 
 func create_container(container_name):
@@ -40,15 +44,14 @@ func create_container(container_name):
 
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
-	game.map.trees.light_mask = 2
-	game.map.walls.light_mask = 2
+	#game.map.trees.light_mask = 2
+	#game.map.walls.light_mask = 2
 	
-	await game.map.ready
+	
 	
 	setup_buildings()
 	setup_lanes()
 	blocks.setup_quadtree()
-	Crafty_camera.map_loaded()
 	game.ui.map_loaded()
 	Behavior.path.setup_pathfind()
 	game.map_loaded()

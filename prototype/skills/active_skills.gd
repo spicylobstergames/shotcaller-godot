@@ -1,4 +1,4 @@
-extends ItemList
+extends Control
 
 @onready var game: Node = get_tree().get_current_scene()
 @onready var _skill_buttons = $placeholder.get_children()
@@ -318,7 +318,7 @@ func bokuden_special(_effects, _parameters, _visualize):
 	leader.add_child(battle_call_timer)
 	battle_call_timer.wait_time = aura_duration
 	# warning-ignore:return_value_discarded
-	battle_call_timer.connect("timeout",Callable(self,"battle_call_remove").bind(targets))
+	battle_call_timer.timeout.connect(battle_call_remove.bind(targets))
 
 	for unit in leader.get_units_in_radius(range_of_aura, {"team": leader.team}):
 		if unit.type != "building":
@@ -365,7 +365,7 @@ func osman_special(_effects, _parameters, _visualize):
 	leader.add_child(bribe_timer)
 	bribe_timer.wait_time = effect_duration * leader.level
 	# warning-ignore:return_value_discarded
-	bribe_timer.connect("timeout",Callable(self,"bribe_remove").bind(targets))
+	bribe_timer.timeout.connect(bribe_remove.bind(targets))
 	if leader.gold >= bribe_gold_cost:
 		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
 			targets[unit] = unit.team
@@ -402,7 +402,7 @@ func bribe_remove(targets):
 
 func _ready():
 	hide()
-	clear()
+	#clear()
 
 
 func reset_buttons():

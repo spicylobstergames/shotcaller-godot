@@ -1,4 +1,4 @@
-extends PanelContainer
+extends Control
 
 signal preview_confirm
 

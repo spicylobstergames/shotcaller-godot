@@ -1,16 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbxqqihthhfid"]
+[gd_scene load_steps=5 format=3 uid="uid://dbxqqihthhfid"]
 
+[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_dadjh"]
 [ext_resource type="Script" path="res://ui/minimap.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://defd23p55hffp" path="res://assets/map/light.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://c1t1in76sp63i" path="res://assets/ui/minimap.png" id="4"]
 
-[node name="minimap" type="ItemList"]
+[node name="minimap" type="Panel"]
+custom_minimum_size = Vector2(150, 150)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -150.0
 offset_right = 150.0
 grow_vertical = 0
+theme = ExtResource("1_dadjh")
 script = ExtResource("2")
 
 [node name="minimap_container" type="CanvasLayer" parent="."]
@@ -29,10 +32,9 @@ unique_name_in_owner = true
 light_mask = 2
 position = Vector2(75, -75)
 texture = ExtResource("4")
-region_enabled = true
-region_rect = Rect2(2, 2, 142, 142)
 
 [node name="fog" type="CanvasModulate" parent="minimap_container"]
+visible = false
 color = Color(0.392157, 0.392157, 0.392157, 1)
 
 [node name="light_template" type="PointLight2D" parent="minimap_container"]
@@ -64,6 +66,7 @@ offset_left = 50.0
 offset_top = -100.0
 offset_right = 100.0
 offset_bottom = -50.0
+grow_vertical = 0
 pivot_offset = Vector2(25, 25)
 border_color = Color(1, 1, 1, 0.666667)
 border_width = 2.0

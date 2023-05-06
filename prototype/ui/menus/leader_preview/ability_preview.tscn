@@ -1,64 +1,55 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://4v4c3jqp1iln"]
 
-[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture2D" id=1]
-[ext_resource path="res://ui/menus/leader_preview/ability_preview.gd" type="Script" id=2]
-[ext_resource path="res://assets/ui/kenvector_future.ttf" type="FontFile" id=3]
-[ext_resource path="res://assets/ui/EquipmentPro.ttf" type="FontFile" id=4]
+[ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="1"]
+[ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_wr6fd"]
+[ext_resource type="Script" path="res://ui/menus/leader_preview/ability_preview.gd" id="2"]
 
-[sub_resource type="StyleBoxEmpty" id=1]
-
-[sub_resource type="FontFile" id=3]
-size = 24
-outline_size = 2
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 4 )
-
-[sub_resource type="FontFile" id=2]
-size = 12
-font_data = ExtResource( 3 )
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_idt2m"]
 
 [node name="ability_preview" type="PanelContainer"]
 offset_right = 270.0
-offset_bottom = 120.0
-custom_styles/panel = SubResource( 1 )
-script = ExtResource( 2 )
+offset_bottom = 160.0
+theme = ExtResource("1_wr6fd")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_idt2m")
+script = ExtResource("2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-offset_right = 270.0
-offset_bottom = 120.0
-custom_constants/separation = 8
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 16
 
-[node name="ability_icon" type="TextureRect" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ability_icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
-offset_right = 42.0
-offset_bottom = 120.0
-custom_minimum_size = Vector2( 32, 32 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource( 1 )
-expand = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("1")
+expand_mode = 1
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-offset_left = 50.0
-offset_right = 270.0
-offset_bottom = 120.0
-custom_minimum_size = Vector2( 220, 120 )
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(220, 120)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 13
 
-[node name="ability_name" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="ability_name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
-offset_right = 220.0
-offset_bottom = 24.0
-custom_fonts/font = SubResource( 3 )
+layout_mode = 2
 text = "Aura of Courage"
 
-[node name="ability_description" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="ability_description" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
-offset_top = 28.0
-offset_right = 220.0
-offset_bottom = 110.0
-custom_fonts/font = SubResource( 2 )
+layout_mode = 2
+size_flags_vertical = 1
 text = "Some ability description some ability description some ability description some ability description some ability description."
-autowrap = true
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+size_flags_vertical = 8
