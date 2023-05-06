@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ceq7l7wrpkgjb"]
+[gd_scene load_steps=9 format=3 uid="uid://ceq7l7wrpkgjb"]
 
 [ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_3je86"]
 [ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2_v6bh3"]
@@ -9,24 +9,28 @@
 [ext_resource type="PackedScene" uid="uid://bo63dr5ay7r3l" path="res://ui/buttons/skill_button.tscn" id="8"]
 [ext_resource type="Script" path="res://skills/active_skills.gd" id="9"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xiva6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2hnuo"]
-
-[node name="stats" type="ItemList"]
-clip_contents = false
+[node name="stats" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 offset_left = -150.0
-offset_top = -96.0
+offset_top = -208.0
 offset_right = 150.0
 pivot_offset = Vector2(-763, -347)
 theme = ExtResource("1_3je86")
-max_columns = 0
 script = ExtResource("3")
 
 [node name="panel" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 300.0
-offset_bottom = 96.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -96.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 0
 
 [node name="hpbar" type="Control" parent="panel"]
 anchors_preset = 0
@@ -158,20 +162,32 @@ centered = false
 region_enabled = true
 region_rect = Rect2(682, 10, 28, 27)
 
-[node name="inventories" type="ItemList" parent="."]
-layout_mode = 0
-offset_left = 146.0
-offset_top = -90.0
-offset_right = 300.0
-offset_bottom = -2.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_xiva6")
+[node name="inventories" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -187.0
+offset_right = 150.0
+offset_bottom = -99.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("4")
 
 [node name="placeholder" type="HBoxContainer" parent="inventories"]
-layout_mode = 0
-offset_top = 40.0
-offset_right = 182.0
-offset_bottom = 88.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -88.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="item_button" parent="inventories/placeholder" instance=ExtResource("5")]
 layout_mode = 2
@@ -194,29 +210,29 @@ focus_mode = 2
 [node name="sell_button" parent="inventories/placeholder/item_button3" index="2"]
 visible = true
 
-[node name="active_skills" type="ItemList" parent="."]
-layout_mode = 0
-offset_left = 3.0
-offset_top = -77.0
-offset_right = 127.0
-offset_bottom = -2.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_2hnuo")
+[node name="active_skills" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -204.0
+offset_right = -26.0
+offset_bottom = -99.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("9")
 
-[node name="tip" type="Label" parent="active_skills"]
-visible = false
-layout_mode = 0
-offset_left = -10.0
-offset_top = 4.0
-offset_right = 143.0
-offset_bottom = 20.0
-text = "PRESS ESC TO CANCEL"
-
 [node name="placeholder" type="HBoxContainer" parent="active_skills"]
-layout_mode = 0
-offset_top = 15.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
 offset_right = 124.0
-offset_bottom = 75.0
+grow_vertical = 0
 
 [node name="skill_button" parent="active_skills/placeholder" instance=ExtResource("8")]
 layout_mode = 2
@@ -224,12 +240,24 @@ layout_mode = 2
 [node name="skill_button2" parent="active_skills/placeholder" instance=ExtResource("8")]
 layout_mode = 2
 
-[node name="status_effect_display" parent="." instance=ExtResource("7")]
-layout_mode = 0
-offset_left = 4.0
+[node name="status_effect_display" parent="active_skills" instance=ExtResource("7")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_top = -88.0
-offset_right = 76.0
+offset_right = 80.0
 offset_bottom = -64.0
+grow_vertical = 0
+
+[node name="tip" type="Label" parent="active_skills"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = -1.0
+offset_right = 128.0
+offset_bottom = 17.0
+text = "Press ESC to cancel"
 
 [connection signal="gui_input" from="panel" to="." method="stats_down"]
 

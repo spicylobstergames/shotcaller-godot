@@ -12,6 +12,7 @@ region = Rect2(0, 0, 32, 32)
 custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 48.0
+size_flags_vertical = 8
 focus_mode = 0
 theme = ExtResource("1_8vksr")
 toggle_mode = true

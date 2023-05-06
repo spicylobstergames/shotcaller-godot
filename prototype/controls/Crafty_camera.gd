@@ -63,17 +63,18 @@ func input(event):
 		if not pressed:
 			var cam_move = null;
 			var x = WorldState.get_state("map_mid").x
+			var y = WorldState.get_state("map_mid").y
 			match event.keycode:
 				# nine grid cam movement
-				KEY_KP_1: cam_move = [-x, x]
-				KEY_KP_2: cam_move = [0, x]
-				KEY_KP_3: cam_move = [x, x]
+				KEY_KP_1: cam_move = [-x, y]
+				KEY_KP_2: cam_move = [0, y]
+				KEY_KP_3: cam_move = [x, y]
 				KEY_KP_4: cam_move = [-x, 0]
 				KEY_KP_5: cam_move = [0, 0]
 				KEY_KP_6: cam_move = [x, 0]
-				KEY_KP_7: cam_move = [-x, -x]
-				KEY_KP_8: cam_move = [0, -x]
-				KEY_KP_9: cam_move = [x, -x]
+				KEY_KP_7: cam_move = [-x, -y]
+				KEY_KP_8: cam_move = [0, -y]
+				KEY_KP_9: cam_move = [x, -y]
 				# ZOOM KEYS
 				KEY_KP_SUBTRACT: full_zoom_out()
 				KEY_KP_ADD: full_zoom_in()
@@ -132,6 +133,11 @@ func map_loaded():
 	limit_top = -mid.y
 	limit_right = mid.x
 	limit_bottom = mid.y
+	offset = mid
+	zoom_limit = WorldState.get_state("zoom_limit")
+	var zoom_out = zoom_limit.x
+	zoom =  Vector2(zoom_out, zoom_out)
+	position = Vector2.ZERO
 
 
 func focus_leader(index):

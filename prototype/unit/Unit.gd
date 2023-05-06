@@ -347,7 +347,7 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 	var targets = []
 	for unit2 in neighbors:
 		if self != unit2 and not unit2.dead:
-			if not filters: targets.append(unit2)
+			if filters.size() == 0: targets.append(unit2)
 			else:
 				for filter in filters:
 					if unit2[filter] == filters[filter]:

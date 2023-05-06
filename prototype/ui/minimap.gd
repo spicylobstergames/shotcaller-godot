@@ -28,7 +28,7 @@ var sprite_scale:float = 1.0
 
 func _ready():
 	$minimap_container.hide()
-	pass
+
 
 func input(event):
 	# MOUSE CLICK
@@ -51,7 +51,7 @@ func input(event):
 		is_panning = event.is_pressed()
 	elif event is InputEventScreenDrag:
 		if is_panning: pan_position = event.position
-	
+
 
 
 func over_minimap(event):
@@ -67,21 +67,21 @@ func over_minimap(event):
 	)
 
 
-func map_loaded():
+func process():
+	if update_map_texture:
+		get_map_texture()
+	else:
+		move_symbols()
+		follow_camera()
+
+
+func get_map_texture():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
 	var r_size = default_screen * minimap_size / max(game.map.size.x, game.map.size.y)
 	cam_rect.size = Vector2(r_size, r_size)
-	update_map_texture = true
-
-
-func get_map_texture():
 	# set camera zoom and limits
-	Crafty_camera.zoom_limit = game.map.zoom_limit
-	var zoom_out = game.map.zoom_limit.x
-	Crafty_camera.offset = WorldState.get_state("map_mid") * zoom_out
-	Crafty_camera.zoom =  Vector2(zoom_out, zoom_out)
-	Crafty_camera.position = Vector2.ZERO
+	Crafty_camera.map_loaded()
 	# hides units and ui
 	map_sprite.hide()
 	game.background.hide()

@@ -48,6 +48,7 @@ theme_override_constants/v_separation = 6
 columns = 2
 
 [node name="unit_controls_button" parent="GridContainer" instance=ExtResource("1")]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 icon = SubResource("3")
@@ -72,6 +73,7 @@ grow_vertical = 1
 text = "A"
 
 [node name="shop_button" parent="GridContainer" instance=ExtResource("1")]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
 icon = SubResource("4")
@@ -96,6 +98,7 @@ grow_vertical = 1
 text = "B"
 
 [node name="orders_button" parent="GridContainer" instance=ExtResource("1")]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 icon = SubResource("5")
@@ -120,6 +123,7 @@ grow_vertical = 1
 text = "X"
 
 [node name="menu_button" parent="GridContainer" instance=ExtResource("1")]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
 toggle_mode = false

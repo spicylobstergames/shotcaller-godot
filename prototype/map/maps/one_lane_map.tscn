@@ -3975,6 +3975,9 @@ libraries = {
 "": SubResource("AnimationLibrary_fpkew")
 }
 
+[node name="light" parent="buildings/blue/blacksmith" index="5"]
+energy = 1.0
+
 [node name="closest_tree" type="Marker2D" parent="buildings/blue/blacksmith"]
 position = Vector2(-94, 67)
 
@@ -4004,6 +4007,9 @@ libraries = {
 "": SubResource("AnimationLibrary_seewg")
 }
 
+[node name="light" parent="buildings/red/castle" index="5"]
+energy = 1.0
+
 [node name="barrack" parent="buildings/red" instance=ExtResource("10")]
 material = SubResource("57")
 position = Vector2(864, 236)
@@ -4027,6 +4033,9 @@ sprite_frames = SubResource("SpriteFrames_cnevr")
 libraries = {
 "": SubResource("AnimationLibrary_iiara")
 }
+
+[node name="light" parent="buildings/red/barrack" index="5"]
+energy = 1.0
 
 [node name="tower" parent="buildings/red" instance=ExtResource("12")]
 material = SubResource("57")
@@ -4052,6 +4061,9 @@ libraries = {
 "": SubResource("AnimationLibrary_1jqox")
 }
 
+[node name="light" parent="buildings/red/tower" index="5"]
+energy = 1.0
+
 [node name="camp" parent="buildings/red" instance=ExtResource("14")]
 material = SubResource("58")
 position = Vector2(798, 689)
@@ -4071,6 +4083,9 @@ sprite_frames = SubResource("47")
 libraries = {
 "": SubResource("AnimationLibrary_x4qg7")
 }
+
+[node name="light" parent="buildings/red/camp" index="5"]
+energy = 1.0
 
 [node name="lanes" type="Node2D" parent="."]
 visible = false

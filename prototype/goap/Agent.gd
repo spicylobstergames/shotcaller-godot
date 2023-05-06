@@ -132,7 +132,7 @@ func _follow_plan(plan, delta):
 				_current_plan_step += 1
 				get_current_action().enter(self)
 			else:
-				 #trigger replan
+				#trigger replan
 				_current_goal = null
 				_current_plan = null
 

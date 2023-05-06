@@ -419,11 +419,12 @@ func setup_tactics(orders_container, tactics):
 			"hint": hint_keys_up[index]
 		}
 		index += 1
-		setup_order_button(button)
 		if tactic == "default":
 			button.button_pressed = true
 			button.disabled = true
 		buttons_container.add_child(button)
+		setup_order_button(button)
+	
 	orders_container.node.add_child(HSeparator.new())
 
 
@@ -442,10 +443,10 @@ func setup_priority(orders_container):
 			"hint": hint_keys_down[index]
 		}
 		index += 1
-		setup_order_button(button)
 		button.set_toggle_mode(false)
 		button.set_action_mode(true)
 		buttons_container.add_child(button)
+		setup_order_button(button)
 	var first = buttons_container.get_child(0)
 	first.set_pressed(true)
 	first.set_disabled(true)
@@ -453,7 +454,7 @@ func setup_priority(orders_container):
 
 
 func setup_order_button(button):
-	await get_tree().idle_frame
+	#await get_tree().idle_frame
 	button.setup_order_button()
 
 

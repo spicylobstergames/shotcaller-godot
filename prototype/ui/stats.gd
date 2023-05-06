@@ -1,4 +1,4 @@
-extends ItemList
+extends Control
 var game:Node
 
 # self = game.ui.stats
@@ -18,7 +18,7 @@ var game:Node
 @onready var portrait_sprite = panel.get_node("portrait/sprite")
 @onready var level_label : Label = get_node("panel/level_container/level_label")
 @onready var exp_bar : ProgressBar = get_node("panel/level_container/exp_bar")
-@onready var status_effect_display = $status_effect_display
+@onready var status_effect_display = $"%status_effect_display"
 @onready var active_skills = $active_skills
 
 

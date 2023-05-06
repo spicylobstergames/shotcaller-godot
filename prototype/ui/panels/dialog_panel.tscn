@@ -1,28 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://dep3q4yi1ywcn"]
+[gd_scene load_steps=4 format=3 uid="uid://dep3q4yi1ywcn"]
 
+[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_hbud3"]
 [ext_resource type="Texture2D" uid="uid://b3bjc227x04bf" path="res://assets/ui/portraits.png" id="2"]
 [ext_resource type="Script" path="res://ui/panels/dialog_panel.gd" id="3"]
 
-[node name="dialog_panel" type="ItemList"]
+[node name="dialog_panel" type="Panel"]
 offset_right = 420.0
 offset_bottom = 140.0
+theme = ExtResource("1_hbud3")
 script = ExtResource("3")
 
-[node name="panel" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 420.0
-offset_bottom = 140.0
-
-[node name="display_name" type="Label" parent="panel"]
+[node name="display_name" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 8.0
 offset_top = 114.0
 offset_right = 115.0
-offset_bottom = 131.0
-text = "name"
+offset_bottom = 132.0
+text = "Leader Name"
+horizontal_alignment = 1
 
-[node name="portrait" type="Control" parent="panel"]
+[node name="portrait" type="Control" parent="."]
 clip_contents = true
 anchors_preset = 0
 offset_left = 12.0
@@ -31,27 +29,35 @@ offset_right = 76.0
 offset_bottom = 77.0
 scale = Vector2(1.5, 1.5)
 
-[node name="sprite" type="Sprite2D" parent="panel/portrait"]
+[node name="sprite" type="Sprite2D" parent="portrait"]
 unique_name_in_owner = true
 position = Vector2(32, 32)
 texture = ExtResource("2")
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 
-[node name="msg" type="Label" parent="panel"]
+[node name="msg" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 122.0
 offset_top = 13.0
 offset_right = 410.0
 offset_bottom = 109.0
-text = "lorem ipsum lorem hey  ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem hi ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum etc"
+text = "Lorem ipsum lorem hey  ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem hi ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum etc."
+autowrap_mode = 3
 
-[node name="control_delay" type="Label" parent="panel"]
+[node name="control_delay" type="Label" parent="."]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 258.0
-offset_top = 117.0
-offset_right = 402.0
-offset_bottom = 131.0
-text = "press to continue..."
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -179.0
+offset_top = -22.0
+offset_right = -9.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Press any key to continue..."

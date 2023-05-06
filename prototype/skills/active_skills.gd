@@ -1,4 +1,4 @@
-extends ItemList
+extends Control
 
 @onready var game: Node = get_tree().get_current_scene()
 @onready var _skill_buttons = $placeholder.get_children()
@@ -402,7 +402,7 @@ func bribe_remove(targets):
 
 func _ready():
 	hide()
-	clear()
+	#clear()
 
 
 func reset_buttons():

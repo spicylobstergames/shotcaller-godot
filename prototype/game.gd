@@ -65,7 +65,11 @@ func start():
 	maps.load_map(maps.current_map)
 	ui.hide_version()
 	transitions.start()
-	transitions.transition_completed.connect(ui.minimap.map_loaded)
+	transitions.transition_completed.connect(get_map_texture)
+
+
+func get_map_texture():
+	ui.minimap.update_map_texture = true
 
 
 func _input(event):
@@ -81,6 +85,7 @@ func _input(event):
 
 
 func map_loaded():
+	print('loaded')
 	if not WorldState.get_state("game_started"):
 		WorldState.set_state("game_started", true)
 		resume()
@@ -89,7 +94,7 @@ func map_loaded():
 		WorldState.set_state("is_game_active", true)
 		rng.randomize()
 		WorldState.one_sec_timer.start()
-		maps.spawn.start()
+		#maps.spawn.start()
 		
 		emit_signal("game_started")
 

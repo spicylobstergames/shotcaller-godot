@@ -32,7 +32,8 @@ func setup_pathfind():
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
-	var used_cells = game.map.walls.get_used_cells()
+	var used_cells = game.map.walls.get_used_cells(0)
+	
 	for cell in used_cells:
 		game.maps.blocks.create_block(cell.x, cell.y)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
@@ -49,7 +50,7 @@ func setup_pathfind():
 	# setup finder
 	path_finder = Finder.JumpPointFinder.new()
 	# add movement line indicator
-	game.map.add_sibling(game.map.fog, path_line)
+	game.map.fog.add_sibling(path_line)
 
 
 func setup_unit_path(unit, path):
@@ -97,18 +98,18 @@ func smart(unit, path, cb):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		Behavior.advance.point(unit, next_point)
+		Behavior[cb].point(unit, next_point)
 
 
 func resume_lane(unit):
 	var lane = unit.agent.get_state("lane")
 	var new_path = game.maps.new_path(lane, unit.team)
-	start(Callable(unit,new_path))
+	start(unit,new_path)
 
 
 func next(unit):
 	if not unit.current_path.is_empty():
-		start(Callable(unit,unit.current_path))
+		start(unit,unit.current_path)
 	else:
 		Behavior.move.stop(unit)
 
@@ -126,7 +127,7 @@ func draw(unit):
 		var pool = PackedVector2Array()
 		# start
 		pool.push_back(unit.global_position)
-		 # end
+		# end
 		if has_path:
 			pool.append_array(unit.current_path)
 		elif unit.current_destiny and unit.current_destiny != Vector2.ZERO:

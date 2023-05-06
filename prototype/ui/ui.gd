@@ -35,9 +35,9 @@ func _ready():
 	inventories = stats.get_node("inventories")
 	active_skills = stats.get_node("active_skills")
 	# controls
-	unit_controls_button = control_panel.get_node("unit_controls_button")
-	shop_button = control_panel.get_node("shop_button")
-	orders_button = control_panel.get_node("orders_button")
+	unit_controls_button = control_panel.get_node("%unit_controls_button")
+	shop_button = control_panel.get_node("%shop_button")
+	orders_button = control_panel.get_node("%orders_button")
 	
 	leader_select_menu.leader_selected.connect(new_game_menu.add_leader)
 	
@@ -106,8 +106,8 @@ func hide_minimap():
 
 
 func map_loaded():
-	game.ui.buttons_update()
-	game.ui.orders_panel.build()
+	buttons_update()
+	orders_panel.build()
 
 
 func process():
@@ -118,11 +118,7 @@ func process():
 	
 	# minimap display update
 	if minimap:
-		if minimap.update_map_texture:
-			minimap.get_map_texture()
-		else:
-			minimap.move_symbols()
-			minimap.follow_camera()
+		minimap.process()
 
 
 func show_select():

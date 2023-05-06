@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://sd7t4e8pe6ob"]
 
 [ext_resource type="PackedScene" path="res://ui/buttons/menu_button.tscn" id="1"]
 [ext_resource type="Theme" uid="uid://cn18lpnkwwgu1" path="res://assets/ui/theme/transparent_menu_theme.tres" id="1_wfq70"]
@@ -30,6 +30,7 @@ layout_mode = 2
 [node name="options_button" parent="VBoxContainer" instance=ExtResource("1")]
 unique_name_in_owner = true
 layout_mode = 2
+disabled = true
 text = "Options"
 
 [node name="exit_to_menu_button" parent="VBoxContainer" instance=ExtResource("1")]
