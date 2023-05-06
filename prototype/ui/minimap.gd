@@ -1,4 +1,4 @@
-extends ItemList
+extends Control
 @onready var game:Node = get_tree().get_current_scene()
 
 # self = game.ui.minimap
@@ -200,8 +200,8 @@ func follow_camera():
 	if minimap_container.visible and game.map and false:
 		var view_height = get_viewport().size.y
 		# stick to the bottom (todo: replace with godot viewports)
-		minimap_container.offset.y = view_height
-		rect_layer.offset.y = view_height
+		#minimap_container.offset.y = view_height
+		#rect_layer.offset.y = view_height
 		var half = WorldState.get_state("map_mid")
 		var map_scale = float(max(game.map.size.x, game.map.size.y)) / float(minimap_size)
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale) )

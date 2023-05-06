@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://beaxx58y8ho37"]
+[gd_scene load_steps=8 format=3 uid="uid://beaxx58y8ho37"]
 
 [ext_resource type="PackedScene" uid="uid://dehxw2x1d6a82" path="res://ui/buttons/ui_button.tscn" id="1"]
+[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_thcg2"]
 [ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2_8sc0j"]
 
 [sub_resource type="AtlasTexture" id="3"]
@@ -23,24 +24,39 @@ atlas = ExtResource("2_8sc0j")
 region = Rect2(575, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
-[node name="control_panel" type="ItemList"]
+[node name="control_panel" type="Panel"]
+custom_minimum_size = Vector2(150, 150)
 offset_left = -150.0
 offset_top = -150.0
+theme = ExtResource("1_thcg2")
 
-[node name="unit_controls_button" parent="." instance=ExtResource("1")]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 11.0
-offset_right = 71.0
-offset_bottom = 71.0
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -63.0
+offset_top = -63.0
+offset_right = 63.0
+offset_bottom = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="unit_controls_button" parent="GridContainer" instance=ExtResource("1")]
+layout_mode = 2
 disabled = true
 icon = SubResource("3")
 value = "controls"
 
-[node name="name" parent="unit_controls_button" index="0"]
+[node name="name" parent="GridContainer/unit_controls_button" index="0"]
 text = "Control"
 
-[node name="hint" parent="unit_controls_button" index="1"]
+[node name="hint" parent="GridContainer/unit_controls_button" index="1"]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -55,20 +71,16 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "A"
 
-[node name="shop_button" parent="." instance=ExtResource("1")]
-layout_mode = 0
-offset_left = 79.0
-offset_top = 11.0
-offset_right = 139.0
-offset_bottom = 71.0
+[node name="shop_button" parent="GridContainer" instance=ExtResource("1")]
+layout_mode = 2
 focus_mode = 2
 icon = SubResource("4")
 value = "shop"
 
-[node name="name" parent="shop_button" index="0"]
+[node name="name" parent="GridContainer/shop_button" index="0"]
 text = "Shop"
 
-[node name="hint" parent="shop_button" index="1"]
+[node name="hint" parent="GridContainer/shop_button" index="1"]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -83,20 +95,16 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "B"
 
-[node name="orders_button" parent="." instance=ExtResource("1")]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 79.0
-offset_right = 71.0
-offset_bottom = 139.0
+[node name="orders_button" parent="GridContainer" instance=ExtResource("1")]
+layout_mode = 2
 disabled = true
 icon = SubResource("5")
 value = "orders"
 
-[node name="name" parent="orders_button" index="0"]
+[node name="name" parent="GridContainer/orders_button" index="0"]
 text = "Orders"
 
-[node name="hint" parent="orders_button" index="1"]
+[node name="hint" parent="GridContainer/orders_button" index="1"]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -111,21 +119,17 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "X"
 
-[node name="menu_button" parent="." instance=ExtResource("1")]
-layout_mode = 0
-offset_left = 79.0
-offset_top = 79.0
-offset_right = 139.0
-offset_bottom = 139.0
+[node name="menu_button" parent="GridContainer" instance=ExtResource("1")]
+layout_mode = 2
 focus_mode = 2
 toggle_mode = false
 icon = SubResource("6")
 value = "menu"
 
-[node name="name" parent="menu_button" index="0"]
+[node name="name" parent="GridContainer/menu_button" index="0"]
 text = "Menu"
 
-[node name="hint" parent="menu_button" index="1"]
+[node name="hint" parent="GridContainer/menu_button" index="1"]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -140,7 +144,7 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "Y"
 
-[editable path="unit_controls_button"]
-[editable path="shop_button"]
-[editable path="orders_button"]
-[editable path="menu_button"]
+[editable path="GridContainer/unit_controls_button"]
+[editable path="GridContainer/shop_button"]
+[editable path="GridContainer/orders_button"]
+[editable path="GridContainer/menu_button"]

@@ -133,8 +133,8 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -158.0
-offset_bottom = 158.0
+offset_top = -169.0
+offset_bottom = 147.0
 grow_vertical = 2
 
 [node name="cheat_console" type="TextEdit" parent="mid_left"]
@@ -144,11 +144,12 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 5.0
-offset_top = -180.0
+offset_top = -196.0
 offset_right = 132.0
-offset_bottom = -163.0
+offset_bottom = -174.0
 grow_vertical = 2
 theme = ExtResource("2_ple64")
+theme_override_font_sizes/font_size = 20
 placeholder_text = "Console"
 context_menu_enabled = false
 shortcut_keys_enabled = false

@@ -1,4 +1,4 @@
-extends ItemList
+extends Control
 var game:Node
 
 # self = game.ui.unit_controls_panel

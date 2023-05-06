@@ -1,4 +1,4 @@
-extends ItemList
+extends Control
 var game:Node
 
 # self = game.ui.orders_panel
@@ -81,7 +81,7 @@ const hint_keys_up = ["q","w","e","r"]
 const hint_keys_down = ["a","s","d","f"]
 
 
-@onready var container = get_node("scroll_container/container")
+@onready var container = $"%container"
 
 func _ready():
 	game = get_tree().get_current_scene()

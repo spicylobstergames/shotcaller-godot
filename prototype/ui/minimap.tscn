@@ -5,7 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://defd23p55hffp" path="res://assets/map/light.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://c1t1in76sp63i" path="res://assets/ui/minimap.png" id="4"]
 
-[node name="minimap" type="ItemList"]
+[node name="minimap" type="Panel"]
+custom_minimum_size = Vector2(150, 150)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -21,21 +22,15 @@ layer = 2
 
 [node name="Control" type="Control" parent="minimap_container"]
 layout_mode = 3
-anchor_left = 0.008
-anchor_top = 0.758
-anchor_right = 0.242
-anchor_bottom = 0.992
-offset_left = 225.8
-offset_top = -224.2
-offset_right = 225.4
-offset_bottom = -224.6
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
 
 [node name="sprite" type="Sprite2D" parent="minimap_container/Control"]
 unique_name_in_owner = true
 light_mask = 2
-position = Vector2(-156, 294)
+position = Vector2(75, -75)
 texture = ExtResource("4")
 
 [node name="fog" type="CanvasModulate" parent="minimap_container"]
@@ -71,6 +66,7 @@ offset_left = 50.0
 offset_top = -100.0
 offset_right = 100.0
 offset_bottom = -50.0
+grow_vertical = 0
 pivot_offset = Vector2(25, 25)
 border_color = Color(1, 1, 1, 0.666667)
 border_width = 2.0
