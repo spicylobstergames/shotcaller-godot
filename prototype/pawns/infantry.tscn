@@ -49,6 +49,7 @@ animations = [{
 [sub_resource type="Animation" id="24"]
 resource_name = "attack"
 length = 0.6
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -244,6 +245,7 @@ tracks/6/keys = {
 [sub_resource type="Animation" id="25"]
 resource_name = "idle"
 length = 0.6
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -334,6 +336,7 @@ tracks/6/keys = {
 [sub_resource type="Animation" id="26"]
 resource_name = "move"
 length = 0.6
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -423,6 +426,7 @@ tracks/6/keys = {
 
 [sub_resource type="Animation" id="33"]
 resource_name = "stun"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -552,9 +556,13 @@ position = Vector2(0.3, 0.3)
 scale = Vector2(1.6, 1.6)
 
 [node name="body" parent="sprites" index="1"]
-frame = 2
+modulate = Color(1, 0, 0, 0)
+position = Vector2(0, -10)
+scale = Vector2(1, 1.4)
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
+visible = false
+rotation = -0.302898
 sprite_frames = SubResource("62")
 animation = &"default"
 
@@ -563,11 +571,7 @@ libraries = {
 "": SubResource("AnimationLibrary_3e18l")
 }
 
-[node name="collisions" parent="." index="4"]
-visible = true
-
 [node name="block" parent="collisions" index="0"]
-visible = true
 shape = SubResource("32")
 
 [node name="select" parent="collisions" index="1"]
