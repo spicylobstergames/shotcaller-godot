@@ -258,7 +258,7 @@ class JumpPointFinder:
 		while (node.parent):
 			node = node.parent
 			path.append([node.x, node.y])
-		path.invert()
+		path.reverse()
 		return path
 	
 	

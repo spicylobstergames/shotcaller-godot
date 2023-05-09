@@ -104,7 +104,7 @@ func projectile_release(attacker):
 func secondary_projectile(attacker, target):
 	var target_position = target.global_position + target.collision_position
 	attacker.weapon.look_at(target_position)
-	Behavior.attack.projectile_start(Callable(attacker,target))
+	Behavior.attack.projectile_start(attacker,target)
 
 
 

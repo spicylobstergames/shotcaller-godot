@@ -269,7 +269,7 @@ func sort_by_distance(array):
 			"unit": unit2,
 			"distance": self.global_position.distance_to(unit2.global_position)
 		})
-	sorted.sort_custom(Callable(game.utils,"compare_distance"))
+	sorted.sort_custom(game.utils.compare_distance)
 	return sorted
 
 
@@ -316,7 +316,7 @@ func cut_path(path):
 			"point": point,
 			"index": index
 		})
-	distances.sort_custom(Callable(game.utils,"compare_distance"))
+	distances.sort_custom(game.utils.compare_distance)
 	var next_first_point = distances[0]
 	
 	var new_path = path.slice(next_first_point.index, path_size)

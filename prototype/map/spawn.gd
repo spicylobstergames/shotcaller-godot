@@ -197,7 +197,7 @@ func cemitery_add_leader(leader):
 	var team = leader.team
 	var lane = leader.agent.get_state("lane")
 	var path = WorldState.lanes[lane].duplicate()
-	if leader.team == "red": path.invert()
+	if leader.team == "red": path.reverse()
 	var path_start = path.pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", path_start)
 	leader.reset_unit()

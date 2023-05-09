@@ -57,7 +57,7 @@ func _update_distribution():
 				int(current_row * row_distance + open_simplex_noise.get_noise_1d(x) * random_range_y)
 			))
 		
-		vectors.sort_custom(Callable(self,"sort_y"))
+		vectors.sort_custom(sort_y)
 		
 		for index in vectors.size():
 			var v = vectors[index]

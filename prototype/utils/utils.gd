@@ -22,7 +22,7 @@ func sort_by_hp(array):
 			"unit": neighbor,
 			"hp": neighbor.current_hp
 		})
-	sorted.sort_custom(Callable(self,"compare_hp"))
+	sorted.sort_custom(compare_hp)
 	return sorted
 
 
@@ -42,7 +42,7 @@ func closer_lane(point):
 				"distance": point.distance_to(lane_point),
 				"lane": lane
 			})
-	distances.sort_custom(Callable(self,"compare_distance"))
+	distances.sort_custom(compare_distance)
 	return distances[0].lane
 
 
@@ -55,7 +55,7 @@ func closer_building(point, team):
 			"distance": point.distance_to(building.global_position),
 			"building": building
 		})
-	distances.sort_custom(Callable(self,"compare_distance"))
+	distances.sort_custom(compare_distance)
 	return distances[0].building
 
 

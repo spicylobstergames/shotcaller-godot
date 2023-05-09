@@ -39,7 +39,7 @@ func move(unit, destiny):
 		unit.current_destiny = destiny
 		var current_speed = Behavior.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
-		unit.get_node("animations").playback_speed = current_speed / unit.speed
+		unit.get_node("animations").speed_scale = current_speed / unit.speed
 		unit.set_state("move")
 
 
@@ -106,7 +106,7 @@ func stop(unit):
 		unit.final_destiny = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
-	unit.get_node("animations").playback_speed = 1
+	unit.get_node("animations").speed_scale = 1
 	if unit.collision_timer and unit.collision_timer.time_left > 0: 
 		unit.collision_timer.stop() # first stops previous timers
 

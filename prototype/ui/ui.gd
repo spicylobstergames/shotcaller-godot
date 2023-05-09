@@ -126,7 +126,7 @@ func show_select():
 	if game.can_control(game.selected_unit):
 		orders_button.disabled = false
 	orders_panel.update()
-	unit_controls_panel.update()
+	buttons_update()
 
 
 func hide_unselect():

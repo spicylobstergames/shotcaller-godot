@@ -30,7 +30,7 @@ func point(unit, target_point):
 		if unit.target:
 			unit.aim_point = target_point
 			unit.mirror_look_at(target_point)
-			unit.get_node("animations").playback_speed = Behavior.modifiers.get_value(unit, "attack_speed")
+			unit.get_node("animations").speed_scale = Behavior.modifiers.get_value(unit, "attack_speed")
 			unit.set_state("attack")
 
 

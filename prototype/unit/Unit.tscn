@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://bn44lk22rvkye" path="res://assets/pawns/infantry_neutral.png" id="17"]
 
 [sub_resource type="CanvasItemMaterial" id="45"]
-light_mode = 2
 
 [sub_resource type="CanvasItemMaterial" id="57"]
 light_mode = 2
@@ -178,10 +177,10 @@ disabled = true
 [node name="light" type="PointLight2D" parent="."]
 visible = false
 scale = Vector2(6.25, 6.25)
-energy = 0.5
+blend_mode = 2
 shadow_enabled = true
 shadow_filter = 1
-shadow_filter_smooth = 30.0
+shadow_filter_smooth = 5.0
 shadow_item_cull_mask = 2
 texture = ExtResource("16")
 

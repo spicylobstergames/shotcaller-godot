@@ -1,4 +1,4 @@
-[gd_scene load_steps=129 format=3 uid="uid://cfam87geql6"]
+[gd_scene load_steps=131 format=3 uid="uid://cfam87geql6"]
 
 [ext_resource type="Texture2D" uid="uid://dpvlocwqgaj8f" path="res://assets/map/grass.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://ksgg6u1g8cok" path="res://assets/map/brick.png" id="2"]
@@ -2776,6 +2776,12 @@ terrain_set_0/terrain_1/color = Color(0.843137, 0.396078, 0.396078, 1)
 sources/0 = SubResource("TileSetAtlasSource_ytj7v")
 sources/1 = SubResource("TileSetAtlasSource_c827j")
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_evemr"]
+polygon = PackedVector2Array(-5, 5, 0, -16, 5.5, 4.5, 5.5, 9, 0.441943, 12, -5, 9.5)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_x2w03"]
+polygon = PackedVector2Array(-5, 5, 0, -16, 5.5, 4.5, 5.5, 9, 0.441943, 12, -5, 9.5)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y2mv4"]
 resource_name = "Trees"
 texture = ExtResource("5")
@@ -2783,13 +2789,16 @@ texture_region_size = Vector2i(32, 48)
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, 8)
+0:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_evemr")
 1:0/next_alternative_id = 8
 1:0/0 = 0
 1:0/0/texture_origin = Vector2i(0, 8)
+1:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_x2w03")
 
 [sub_resource type="TileSet" id="TileSet_50aql"]
 resource_local_to_scene = true
 tile_size = Vector2i(24, 24)
+occlusion_layer_0/light_mask = 2
 sources/0 = SubResource("TileSetAtlasSource_y2mv4")
 
 [sub_resource type="AtlasTexture" id="7"]
@@ -3975,9 +3984,6 @@ libraries = {
 "": SubResource("AnimationLibrary_fpkew")
 }
 
-[node name="light" parent="buildings/blue/blacksmith" index="5"]
-energy = 1.0
-
 [node name="closest_tree" type="Marker2D" parent="buildings/blue/blacksmith"]
 position = Vector2(-94, 67)
 
@@ -4007,9 +4013,6 @@ libraries = {
 "": SubResource("AnimationLibrary_seewg")
 }
 
-[node name="light" parent="buildings/red/castle" index="5"]
-energy = 1.0
-
 [node name="barrack" parent="buildings/red" instance=ExtResource("10")]
 material = SubResource("57")
 position = Vector2(864, 236)
@@ -4033,9 +4036,6 @@ sprite_frames = SubResource("SpriteFrames_cnevr")
 libraries = {
 "": SubResource("AnimationLibrary_iiara")
 }
-
-[node name="light" parent="buildings/red/barrack" index="5"]
-energy = 1.0
 
 [node name="tower" parent="buildings/red" instance=ExtResource("12")]
 material = SubResource("57")
@@ -4061,9 +4061,6 @@ libraries = {
 "": SubResource("AnimationLibrary_1jqox")
 }
 
-[node name="light" parent="buildings/red/tower" index="5"]
-energy = 1.0
-
 [node name="camp" parent="buildings/red" instance=ExtResource("14")]
 material = SubResource("58")
 position = Vector2(798, 689)
@@ -4083,9 +4080,6 @@ sprite_frames = SubResource("47")
 libraries = {
 "": SubResource("AnimationLibrary_x4qg7")
 }
-
-[node name="light" parent="buildings/red/camp" index="5"]
-energy = 1.0
 
 [node name="lanes" type="Node2D" parent="."]
 visible = false
