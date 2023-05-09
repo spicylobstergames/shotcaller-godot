@@ -164,7 +164,7 @@ class Heap:
 		if not result.size(): return result 
 		_heapify(result, cmp)
 		for elem in array.slice(n, -1): _heappushpop(result, elem, cmp) 
-		result.sort_custom(Callable(self,cmp)).reverse()
+		result.sort_custom(cmp).reverse()
 		return result
 
 
@@ -175,7 +175,7 @@ class Heap:
 		var result
 		var los
 		if n * 10 <= array.size():
-			result = array.slice(0,n-1).sort_custom(Callable(self,cmp))
+			result = array.slice(0,n-1).sort_custom(cmp)
 			if not result.size(): return result
 			los = result[result.length - 1]
 			for elem in array.slice(n, -1):

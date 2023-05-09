@@ -33,7 +33,7 @@ func enter(agent):
 	Behavior.orders.set_leader(unit, order)
 	var lane = agent.get_state("lane")
 	var path = WorldState.lanes[lane].duplicate()
-	if unit.team == "red": path.invert()
+	if unit.team == "red": path.reverse()
 	Behavior.move.point(unit, path[0])
 
 

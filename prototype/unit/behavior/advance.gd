@@ -27,14 +27,14 @@ func point(unit, final_destiny, smart_move = false):
 			var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
 			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < game.map.half_tile_size)
 			var has_path = ( path and not path.is_empty() )
-			if not enemies:
+			if enemies.size() == 0:
 				if not at_final_destination: move(unit, unit.final_destiny, smart_move) 
-				elif has_path: Behavior.path.start(Callable(unit,path))
+				elif has_path: Behavior.path.start(unit,path)
 			else:
 				var target = Behavior.orders.select_target(unit, enemies)
 				if not target:
 					if not at_final_destination: move(unit, unit.final_destiny, smart_move)
-					elif has_path: Behavior.path.start(Callable(unit,path))
+					elif has_path: Behavior.path.start(unit,path)
 				else:
 					Behavior.attack.set_target(unit, target)
 					var target_position = target.global_position + target.collision_position

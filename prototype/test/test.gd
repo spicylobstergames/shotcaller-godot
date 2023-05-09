@@ -44,7 +44,7 @@ func spawn_unit():
 #		var start = path.pop_front()
 		var pawn = game.maps.create(s.infantry, "mid", "blue", "Vector2",  Vector2(200,600))
 #		Behavior.path.setup_unit_path(pawn, path)
-#		Behavior.path.start(Callable(pawn,path))
+#		Behavior.path.start(pawn,path)
 		pawn.hp = 10000
 		pawn.current_hp = 10000
 #		pawn.moves = false

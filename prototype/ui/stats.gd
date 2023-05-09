@@ -77,7 +77,7 @@ func set_portrait(portrait, unit):
 	var anim = unit.team
 	if unit.team == "blue": anim = "default"
 	
-	var texture_data = unit.body.frames.get_frame(anim, 0)
+	var texture_data = unit.body.sprite_frames.get_frame_texture(anim, 0)
 	portrait.texture = texture_data
 	portrait.region_rect.size = texture_data.region.size
 	

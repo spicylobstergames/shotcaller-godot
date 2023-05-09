@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dep3q4yi1ywcn" path="res://ui/panels/dialog_panel.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://cewrcon1yi08d" path="res://ui/menus/main_menu.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dgyav7j8bd85h" path="res://ui/leaders_quick_icons.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://ui/menus/pause_menu.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://sd7t4e8pe6ob" path="res://ui/menus/pause_menu.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://u1q0st63a0fu" path="res://ui/menus/new_game_menu.tscn" id="14"]
 [ext_resource type="PackedScene" path="res://ui/scoreboard/scoreboard.tscn" id="18"]
 [ext_resource type="Script" path="res://ui/cheat_console.gd" id="19"]

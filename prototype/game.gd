@@ -56,6 +56,7 @@ var rng = RandomNumberGenerator.new()
 
 func _ready():
 #	Engine.time_scale = 2
+	WorldState.set_state("is_game_active", false)
 	setup_one_sec_timer()
 	if test.debug: test.start()
 	else: ui.show_main_menu()
@@ -85,7 +86,6 @@ func _input(event):
 
 
 func map_loaded():
-	print('loaded')
 	if not WorldState.get_state("game_started"):
 		WorldState.set_state("game_started", true)
 		resume()
@@ -94,7 +94,7 @@ func map_loaded():
 		WorldState.set_state("is_game_active", true)
 		rng.randomize()
 		WorldState.one_sec_timer.start()
-		#maps.spawn.start()
+		maps.spawn.start()
 		
 		emit_signal("game_started")
 

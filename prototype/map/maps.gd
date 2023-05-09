@@ -71,7 +71,7 @@ func new_path(lane, team):
 		if team == "blue" and game.map.has_node("buildings/red/castle"):
 			path.append(game.map.get_node("buildings/red/castle").global_position)
 		if team == "red" and game.map.has_node("buildings/blue/castle"): 
-			path.invert()
+			path.reverse()
 			path.append(game.map.get_node("buildings/blue/castle").global_position)
 		return path
 

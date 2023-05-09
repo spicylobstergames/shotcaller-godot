@@ -148,7 +148,7 @@ func draw(unit):
 func change_lane(unit, point):
 	var lane = game.utils.closer_lane(point)
 	var path = lane.duplicate()
-	if unit.team == "red": path.invert()
+	if unit.team == "red": path.reverse()
 	var lane_start = path.pop_front()
 	unit.agent.set_state("lane", lane)
 	# unit.agent.set_state("order_behavior", "move")

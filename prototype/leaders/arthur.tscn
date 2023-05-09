@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://b6up7alt087ex"]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://skills/abilites/aura_of_courage.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://ccvqubnaubivh" path="res://assets/leaders/arthur_blue.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://kdv7xaxbby75" path="res://assets/leaders/arthur_red.png" id="4"]
