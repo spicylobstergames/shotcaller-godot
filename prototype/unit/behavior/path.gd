@@ -146,7 +146,7 @@ func draw(unit):
 
 
 func change_lane(unit, point):
-	var lane = game.utils.closer_lane(point)
+	var lane = Utils.closer_lane(point)
 	var path = lane.duplicate()
 	if unit.team == "red": path.reverse()
 	var lane_start = path.pop_front()
@@ -158,7 +158,7 @@ func change_lane(unit, point):
 func teleport(unit, point):
 	var agent = unit.agent
 	game.ui.controls_menu.teleport_button.disabled = true
-	var building = game.utils.closer_building(point, unit.team)
+	var building = Utils.closer_building(point, unit.team)
 	var distance = building.global_position.distance_to(point)
 	game.ui.unit_controls_panel.teleport_button.disabled = false
 	game.ui.unit_controls_panel.teleport_button.button_pressed = false

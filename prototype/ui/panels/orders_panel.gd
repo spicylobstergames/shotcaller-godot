@@ -126,10 +126,10 @@ func build_leaders():
 
 
 func setup_leader_buttons(orders_container):
-	var label = game.utils.label("set tactics")
+	var label = Utils.label("tactics")
 	orders_container.node.add_child(label)
 	setup_tactics(orders_container, order_types.leader_tactics)
-	var label2 = game.utils.label("set priority")
+	var label2 = Utils.label("priority")
 	orders_container.node.add_child(label2)
 	setup_priority(orders_container)
 	update()
@@ -152,10 +152,10 @@ func setup_lanes():
 
 
 func setup_lane_buttons(orders_container):
-	var label = game.utils.label(orders_container.lane +"lane tactics")
+	var label = Utils.label(orders_container.lane +"lane tactics")
 	orders_container.node.add_child(label)
 	setup_tactics(orders_container, order_types.lane_tactics)
-	var label2 = game.utils.label(orders_container.lane +" lane priority")
+	var label2 = Utils.label(orders_container.lane +" lane priority")
 	orders_container.node.add_child(label2)
 	setup_priority(orders_container)
 
@@ -179,10 +179,10 @@ func build_mines():
 
 
 func setup_mine_buttons(orders):
-	var label = game.utils.label("gold")
+	var label = Utils.label("gold")
 	orders.node.add_child(label)
 	setup_gold(orders)
-	var label2 = game.utils.label("taxes")
+	var label2 = Utils.label("taxes")
 	orders.node.add_child(label2)
 	setup_taxes(orders)
 
@@ -221,10 +221,10 @@ func build_blacksmiths():
 
 
 func setup_blacksmith_buttons(orders):
-	var label = game.utils.label("pawn upgrades")
+	var label = Utils.label("pawn upgrades")
 	orders.node.add_child(label)
 	setup_pawn_upgrades(orders)
-	var label2 = game.utils.label("taxes")
+	var label2 = Utils.label("taxes")
 	orders.node.add_child(label2)
 	setup_taxes(orders)
 
@@ -264,10 +264,10 @@ func build_lumbermills():
 
 
 func setup_lumbermill_buttons(orders):
-	var label = game.utils.label("hire")
+	var label = Utils.label("hire")
 	orders.node.add_child(label)
 	setup_lumberjack(orders)
-	var label2 = game.utils.label("taxes")
+	var label2 = Utils.label("taxes")
 	orders.node.add_child(label2)
 	setup_taxes(orders)
 
@@ -306,10 +306,10 @@ func build_camps():
 
 
 func setup_camp_buttons(orders):
-	var label = game.utils.label("hire")
+	var label = Utils.label("hire")
 	orders.node.add_child(label)
 	setup_hire(orders)
-	var label2 = game.utils.label("taxes")
+	var label2 = Utils.label("taxes")
 	orders.node.add_child(label2)
 	setup_taxes(orders)
 
@@ -351,10 +351,10 @@ func build_outposts():
 
 
 func setup_outpost_buttons(orders):
-	var label = game.utils.label("tower upgrades")
+	var label = Utils.label("tower upgrades")
 	orders.node.add_child(label)
 	setup_tower_upgrades(orders)
-	var label2 = game.utils.label("taxes")
+	var label2 = Utils.label("taxes")
 	orders.node.add_child(label2)
 	setup_taxes(orders)
 

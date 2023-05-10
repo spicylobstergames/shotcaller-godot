@@ -36,6 +36,7 @@ border_width_bottom = 1
 border_color = Color(0, 0, 0, 1)
 
 [resource]
+HSeparator/constants/separation = 20
 HSeparator/styles/separator = SubResource("StyleBoxTexture_osnkr")
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 8

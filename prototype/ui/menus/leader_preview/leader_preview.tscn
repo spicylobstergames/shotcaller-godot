@@ -9,24 +9,28 @@ bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
 
 [node name="leader_preview" type="Panel"]
 custom_minimum_size = Vector2(350, 380)
-offset_right = 280.0
-offset_bottom = 310.0
-theme = ExtResource("1_4rnj0")
-script = ExtResource("2")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -167.0
-offset_top = -185.0
-offset_right = 167.0
-offset_bottom = 185.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_4rnj0")
+script = ExtResource("2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -167.0
+offset_top = 8.0
+offset_right = 165.0
+offset_bottom = 370.0
+grow_horizontal = 2
 
 [node name="leader_name" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -34,6 +38,9 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Random leader"
 horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
 
 [node name="abilities_preview_container" type="VBoxContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -45,22 +52,26 @@ layout_mode = 2
 [node name="ability_preview2" parent="VBoxContainer/abilities_preview_container" instance=ExtResource("4")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+offset_left = 8.0
+offset_top = 340.0
+offset_right = 342.0
+offset_bottom = 372.0
 size_flags_vertical = 8
 
-[node name="cancel_button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="cancel_button" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/pressed = SubResource("StyleBoxFlat_013id")
 text = "Back"
 
-[node name="confirm_button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="confirm_button" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 26
 text = "OK"
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/cancel_button" to="." method="cancel_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/confirm_button" to="." method="confirm_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/cancel_button" to="." method="cancel_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/confirm_button" to="." method="confirm_button_pressed"]

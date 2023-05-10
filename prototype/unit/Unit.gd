@@ -173,7 +173,7 @@ func reset_unit():
 		self.hud.state.show()
 		self.hud.hpbar.show()
 
-	self.hud.state.text = self.display_name
+	self.hud.state.text = Utils.first_to_uppper(self.display_name)
 	self.current_hp = self.hp
 	self.current_modifiers = Behavior.modifiers.new_modifiers()
 	self.show()
@@ -269,7 +269,7 @@ func sort_by_distance(array):
 			"unit": unit2,
 			"distance": self.global_position.distance_to(unit2.global_position)
 		})
-	sorted.sort_custom(game.utils.compare_distance)
+	sorted.sort_custom(Utils.compare_distance)
 	return sorted
 
 
@@ -316,7 +316,7 @@ func cut_path(path):
 			"point": point,
 			"index": index
 		})
-	distances.sort_custom(game.utils.compare_distance)
+	distances.sort_custom(Utils.compare_distance)
 	var next_first_point = distances[0]
 	
 	var new_path = path.slice(next_first_point.index, path_size)
@@ -325,7 +325,7 @@ func cut_path(path):
 
 func point_collision(point, offset=0):
 	var unit1_pos = self.global_position + self.collision_position
-	return game.utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
+	return Utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
 
 
 func check_collision(unit2, delta):
@@ -333,7 +333,7 @@ func check_collision(unit2, delta):
 	var unit1_rad = self.collision_radius
 	var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
 	var unit2_rad = unit2.collision_radius
-	return game.utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
+	return Utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
 
 
 func get_collision_around(delta):

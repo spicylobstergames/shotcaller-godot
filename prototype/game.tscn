@@ -1,11 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://c3ge1hpb3mrip"]
+[gd_scene load_steps=12 format=3 uid="uid://bt5ysasbsjat3"]
 
 [ext_resource type="Script" path="res://collision/blocks/blocks.gd" id="1"]
 [ext_resource type="Script" path="res://game.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://vh78pi540b5i" path="res://ui/ui.tscn" id="4"]
 [ext_resource type="Script" path="res://map/maps.gd" id="6"]
 [ext_resource type="Script" path="res://controls/selection.gd" id="7"]
-[ext_resource type="Script" path="res://utils/utils.gd" id="8"]
 [ext_resource type="Script" path="res://test/test.gd" id="9"]
 [ext_resource type="Script" path="res://collision/collision.gd" id="10"]
 [ext_resource type="Script" path="res://hud/hud.gd" id="11"]
@@ -54,10 +53,6 @@ script = ExtResource("10")
 [node name="selection" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("7")
-
-[node name="utils" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("8")
 
 [node name="test" type="Node" parent="."]
 unique_name_in_owner = true

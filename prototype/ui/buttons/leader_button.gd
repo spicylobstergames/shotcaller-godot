@@ -28,7 +28,7 @@ func _ready():
 func prepare(new_leader_name, new_team = "red"):
 	# leader sprite
 	leader_name = new_leader_name
-	name_label.text = leader_name[0].to_upper() + leader_name.substr(1,-1)
+	name_label.text = Utils.first_to_uppper(leader_name)
 	if leader_name == "random":
 		sprite.texture = question_mark
 	else:

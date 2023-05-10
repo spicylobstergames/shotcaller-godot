@@ -27,6 +27,7 @@ Behavior="*res://unit/Behavior.tscn"
 WorldState="*res://goap/WorldState.gd"
 Goap="*res://goap/Goap.gd"
 Crafty_camera="*res://controls/Crafty_camera.tscn"
+Utils="*res://utils/Util.gd"
 
 [debug]
 
