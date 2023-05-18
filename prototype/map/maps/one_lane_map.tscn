@@ -3857,6 +3857,7 @@ _data = {
 }
 
 [node name="map" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("13")
 
 [node name="zoom_out_sprite" type="Sprite2D" parent="."]
@@ -3946,8 +3947,11 @@ frame = 1
 offset = Vector2(0, -12)
 
 [node name="buildings" type="Node2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="blue" type="Node2D" parent="buildings"]
+y_sort_enabled = true
 
 [node name="castle" parent="buildings/blue" instance=ExtResource("11")]
 material = SubResource("57")
@@ -3988,6 +3992,7 @@ libraries = {
 position = Vector2(-94, 67)
 
 [node name="red" type="Node2D" parent="buildings"]
+y_sort_enabled = true
 
 [node name="castle" parent="buildings/red" instance=ExtResource("11")]
 material = SubResource("57")
