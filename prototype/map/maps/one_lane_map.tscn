@@ -3859,6 +3859,8 @@ _data = {
 [node name="map" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("13")
+camera_limit = Vector2(1056, 1056)
+zoom_limit = Vector2(0.55, 2)
 
 [node name="zoom_out_sprite" type="Sprite2D" parent="."]
 z_index = -1
