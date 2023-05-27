@@ -548,21 +548,15 @@ defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]
-position = Vector2(5, 5)
 scale = Vector2(10, 10)
 
 [node name="symbol_border" parent="symbol" index="0"]
-position = Vector2(0.3, 0.3)
 scale = Vector2(1.6, 1.6)
 
 [node name="body" parent="sprites" index="1"]
-modulate = Color(1, 0, 0, 0)
-position = Vector2(0, -10)
-scale = Vector2(1, 1.4)
+frame = 2
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
-visible = false
-rotation = -0.302898
 sprite_frames = SubResource("62")
 animation = &"default"
 

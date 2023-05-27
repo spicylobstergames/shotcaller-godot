@@ -1,191 +1,217 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=3 uid="uid://bkdt0oevagnod"]
 
-[ext_resource path="res://unit/Unit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/pawns/archer_blue.png" type="Texture2D" id=2]
-[ext_resource path="res://assets/buildings/neutral_blue.png" type="Texture2D" id=3]
-[ext_resource path="res://buildings/decoration/flag.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/buildings/neutral_red.png" type="Texture2D" id=5]
-[ext_resource path="res://assets/buildings/neutral_gray.png" type="Texture2D" id=6]
+[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="3"]
+[ext_resource type="PackedScene" path="res://buildings/decoration/flag.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://cxt3ym1fu5ncp" path="res://assets/buildings/neutral_red.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://jsvqumsl1lmk" path="res://assets/buildings/neutral_gray.png" id="6"]
 
-[sub_resource type="AtlasTexture" id=42]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 15, 64, 73 )
+[sub_resource type="AtlasTexture" id="42"]
+atlas = ExtResource("3")
+region = Rect2(0, 15, 64, 73)
 
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 15, 64, 73 )
+[sub_resource type="AtlasTexture" id="43"]
+atlas = ExtResource("6")
+region = Rect2(0, 15, 64, 73)
 
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 5 )
-region = Rect2( 0, 15, 64, 73 )
+[sub_resource type="AtlasTexture" id="44"]
+atlas = ExtResource("5")
+region = Rect2(0, 15, 64, 73)
 
-[sub_resource type="SpriteFrames" id=45]
+[sub_resource type="SpriteFrames" id="45"]
 resource_name = "church"
-animations = [ {
-"frames": [ SubResource( 42 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("42")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 43 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("43")
+}],
 "loop": true,
-"name": "neutral",
+"name": &"neutral",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 44 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("44")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 2 )
-region = Rect2( 160, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="39"]
+atlas = ExtResource("2")
+region = Rect2(160, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="40"]
+atlas = ExtResource("2")
+region = Rect2(192, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id=41]
+[sub_resource type="SpriteFrames" id="41"]
 resource_name = "arrow"
-animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("39")
+}, {
+"duration": 1.0,
+"texture": SubResource("40")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
-} ]
+}]
 
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="36"]
+atlas = ExtResource("2")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="37"]
+atlas = ExtResource("2")
+region = Rect2(128, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id=46]
+[sub_resource type="SpriteFrames" id="46"]
 resource_name = "bow"
-animations = [ {
-"frames": [ SubResource( 36 ), SubResource( 37 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("36")
+}, {
+"duration": 1.0,
+"texture": SubResource("37")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
-} ]
+}]
 
-[sub_resource type="Animation" id=24]
+[sub_resource type="Animation" id="24"]
 resource_name = "attack"
 length = 0.6
-loop = true
 tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0.4, 0.6 ),
-"transitions": PackedFloat32Array( 1, 1 ),
-"values": [ {
-"args": [  ],
-"method": "on_attack_release"
+"times": PackedFloat32Array(0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"on_attack_release"
 }, {
-"args": [  ],
-"method": "on_attack_end"
-} ]
+"args": [],
+"method": &"on_attack_end"
+}]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("sprites:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PackedFloat32Array( 0, 0.6 ),
-"transitions": PackedFloat32Array( 1, 1 ),
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id=31]
+[sub_resource type="Animation" id="31"]
 resource_name = "death"
 length = 0.6
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("sprites:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.5, 0.6 ),
-"transitions": PackedFloat32Array( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1, 0.2 ), Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1), Vector2(1, 0.2), Vector2(1, 1)]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("sprites:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PackedFloat32Array( 0, 0.147264, 0.5 ),
-"transitions": PackedFloat32Array( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.147264, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 0 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 0)]
 }
 tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/keys = {
-"times": PackedFloat32Array( 0.6 ),
-"transitions": PackedFloat32Array( 1 ),
-"values": [ {
-"args": [  ],
-"method": "on_death_end"
-} ]
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_death_end"
+}]
 }
 
-[sub_resource type="Animation" id=25]
+[sub_resource type="Animation" id="25"]
 resource_name = "idle"
 length = 0.6
-loop = true
 tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0.6 ),
-"transitions": PackedFloat32Array( 1 ),
-"values": [ {
-"args": [  ],
-"method": "on_idle_end"
-} ]
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_idle_end"
+}]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("sprites:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PackedFloat32Array( 0, 0.6 ),
-"transitions": PackedFloat32Array( 1, 1 ),
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="CircleShape2D" id=28]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ixjqe"]
+_data = {
+"attack": SubResource("24"),
+"death": SubResource("31"),
+"idle": SubResource("25")
+}
+
+[sub_resource type="CircleShape2D" id="28"]
 radius = 46.0
 
-[sub_resource type="CircleShape2D" id=29]
+[sub_resource type="CircleShape2D" id="29"]
 radius = 60.0
 
-[node name="church" instance=ExtResource( 1 )]
+[node name="church" instance=ExtResource("1")]
 hp = 3600
 vision = 300
 type = "building"
@@ -205,68 +231,66 @@ offset_bottom = -94.0
 
 [node name="selection" parent="hud" index="1"]
 visible = true
-position = Vector2( 0, 7 )
-scale = Vector2( 4, 3 )
+position = Vector2(0, 7)
+scale = Vector2(4, 3)
 
 [node name="hpbar" parent="hud" index="2"]
 visible = true
-position = Vector2( 0, -95 )
+position = Vector2(0, -95)
 
 [node name="symbol" parent="." index="1"]
-position = Vector2( 12, 0 )
-scale = Vector2( 24, 24 )
+scale = Vector2(24, 24)
 
 [node name="symbol_border" parent="symbol" index="0"]
-position = Vector2( 0.18, 0.18 )
-scale = Vector2( 1.36, 1.36 )
+scale = Vector2(1.36, 1.36)
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
 [node name="body" parent="sprites" index="1"]
 use_parent_material = false
-scale = Vector2( 1.5, 1.5 )
-frames = SubResource( 45 )
-offset = Vector2( 0, -30 )
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("45")
+offset = Vector2(0, -30)
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
 visible = false
 
-[node name="flag" parent="sprites/flags" index="0" instance=ExtResource( 4 )]
-position = Vector2( 1, -80 )
+[node name="flag" parent="sprites/flags" index="0" instance=ExtResource("4")]
+position = Vector2(1, -80)
 
 [node name="weapon" type="Node2D" parent="sprites" index="3"]
-position = Vector2( 0, -43 )
-scale = Vector2( 1.0686, 1 )
+position = Vector2(0, -43)
+scale = Vector2(1.0686, 1)
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
-position = Vector2( 19.6519, 2 )
+position = Vector2(19.6519, 2)
 
 [node name="sprites" type="AnimatedSprite2D" parent="sprites/weapon/projectile" index="0"]
 visible = false
-position = Vector2( -0.216076, 0 )
-frames = SubResource( 41 )
-offset = Vector2( -11, 0 )
+position = Vector2(-0.216076, 0)
+sprite_frames = SubResource("41")
+offset = Vector2(-11, 0)
 
 [node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1"]
 visible = false
-position = Vector2( -1.11556e-07, 44 )
+position = Vector2(-1.11556e-07, 44)
 rotation = 0.151433
-scale = Vector2( 0.79656, 0.998757 )
-frames = SubResource( 46 )
-offset = Vector2( 10, 0 )
+scale = Vector2(0.79656, 0.998757)
+sprite_frames = SubResource("46")
+offset = Vector2(10, 0)
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
-anims/attack = SubResource( 24 )
-anims/death = SubResource( 31 )
-anims/idle = SubResource( 25 )
+libraries = {
+"": SubResource("AnimationLibrary_ixjqe")
+}
 
 [node name="block" parent="collisions" index="0"]
-position = Vector2( 0, -20 )
-shape = SubResource( 28 )
+position = Vector2(0, -20)
+shape = SubResource("28")
 
 [node name="select" parent="collisions" index="1"]
-position = Vector2( 0, -20 )
-shape = SubResource( 29 )
+position = Vector2(0, -20)
+shape = SubResource("29")
 
 [editable path="hud"]

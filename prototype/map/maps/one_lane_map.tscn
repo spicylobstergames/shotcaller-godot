@@ -7,11 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://kf6pu0rcrq0x" path="res://assets/map/trees.png" id="5"]
 [ext_resource type="Shader" uid="uid://2uawyneis3su" path="res://map/tool/color_replace.tres" id="8"]
 [ext_resource type="Texture2D" uid="uid://dnani3k6d3onu" path="res://assets/map/waterfall.png" id="9"]
-[ext_resource type="PackedScene" path="res://buildings/barrack.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://buildings/castle.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://bb55gchxyp5kf" path="res://buildings/barrack.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://bo260d1c1wxwa" path="res://buildings/castle.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://1i18mdlg5iyo" path="res://buildings/tower.tscn" id="12"]
 [ext_resource type="Script" path="res://map/maps/base_map.gd" id="13"]
-[ext_resource type="PackedScene" path="res://buildings/camp.tscn" id="14"]
+[ext_resource type="PackedScene" uid="uid://dnjlmnoeq6ya1" path="res://buildings/camp.tscn" id="14"]
 [ext_resource type="Texture2D" uid="uid://djy3isfv3nc2f" path="res://assets/map/mud.png" id="15"]
 [ext_resource type="Texture2D" uid="uid://csyjjdhoghdfn" path="res://assets/map/brick_square.png" id="16"]
 [ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="16_floyt"]
@@ -21,7 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="19_3dgvo"]
 [ext_resource type="Texture2D" uid="uid://dptfdx7q55b8p" path="res://assets/buildings/buildings_gray.png" id="20_5122x"]
 [ext_resource type="Texture2D" uid="uid://b0ewq88pv0taf" path="res://assets/buildings/buildings_red.png" id="21_nll47"]
-[ext_resource type="PackedScene" path="res://buildings/blacksmith.tscn" id="24"]
+[ext_resource type="PackedScene" uid="uid://bkq8nar2igern" path="res://buildings/blacksmith.tscn" id="24"]
 [ext_resource type="Texture2D" uid="uid://dbl3r53yf6ib5" path="res://assets/map/brick_old.png" id="26"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_b825v"]
@@ -3860,7 +3860,7 @@ _data = {
 y_sort_enabled = true
 script = ExtResource("13")
 camera_limit = Vector2(1056, 1056)
-zoom_limit = Vector2(0.55, 2)
+zoom_limit = Vector2(0.56, 2)
 
 [node name="zoom_out_sprite" type="Sprite2D" parent="."]
 z_index = -1

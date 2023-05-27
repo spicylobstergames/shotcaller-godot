@@ -641,7 +641,6 @@ defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]
-position = Vector2(5, 5)
 scale = Vector2(10, 10)
 
 [node name="body" parent="sprites" index="1"]

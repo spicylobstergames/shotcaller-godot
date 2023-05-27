@@ -24,14 +24,11 @@ layer = 2
 clip_contents = true
 custom_minimum_size = Vector2(140, 140)
 layout_mode = 3
-anchor_left = 0.008
-anchor_top = 0.758
-anchor_right = 0.242
-anchor_bottom = 0.992
-offset_left = 0.2
-offset_top = 0.199982
-offset_right = -0.200012
-offset_bottom = -0.200012
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+offset_right = 150.0
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -39,19 +36,19 @@ size_flags_vertical = 4
 [node name="sprite" type="Sprite2D" parent="minimap_container/Control"]
 unique_name_in_owner = true
 light_mask = 2
-position = Vector2(70, 70)
+position = Vector2(75, 75)
 texture = ExtResource("4")
 region_enabled = true
 region_rect = Rect2(0, 0, 140, 140)
 
 [node name="fog" type="CanvasModulate" parent="minimap_container"]
-visible = false
 color = Color(0.392157, 0.392157, 0.392157, 1)
 
 [node name="light_template" type="PointLight2D" parent="minimap_container"]
 unique_name_in_owner = true
 visible = false
 light_mask = 2
+blend_mode = 2
 range_layer_min = 2
 range_layer_max = 2
 range_item_cull_mask = 2
@@ -60,16 +57,32 @@ shadow_filter_smooth = 30.0
 shadow_item_cull_mask = 2
 texture = ExtResource("3")
 
-[node name="map_symbols" type="Node2D" parent="minimap_container"]
+[node name="map_symbols" type="Control" parent="minimap_container"]
 unique_name_in_owner = true
-position = Vector2(0, -150)
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+offset_right = 150.0
+grow_vertical = 0
 
 [node name="rect_layer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 2
 
-[node name="cam_rect" type="ReferenceRect" parent="rect_layer"]
+[node name="rect_container" type="Control" parent="rect_layer"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+offset_right = 150.0
+grow_vertical = 0
+
+[node name="cam_rect" type="ReferenceRect" parent="rect_layer/rect_container"]
 unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
