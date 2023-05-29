@@ -25,7 +25,7 @@ func input(event):
 					KEY_S: stand(game.selected_unit)
 	
 	# CLICK SELECTION
-	if event is InputEventMouseButton and not event.pressed: 
+	if event is InputEventMouseButton and not event.is_pressed(): 
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
 				select(point)
@@ -33,7 +33,7 @@ func input(event):
 				control_state(point)
 	
 	# TOUCH SELECTION
-	if event is InputEventScreenTouch and not event.pressed: 
+	if event is InputEventScreenTouch and not event.is_pressed(): 
 		if game.selected_unit:
 			control_state(event.position)
 		else:

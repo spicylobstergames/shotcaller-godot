@@ -75,12 +75,15 @@ func process():
 
 
 func get_map_texture():
+	# turn off snapshot
+	update_map_texture = false
+	# map nodes
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
+	# set camera zoom and limits
 	var r_size = default_screen * minimap_size / max(game.map.size.x, game.map.size.y)
 	cam_rect.size = Vector2(r_size, r_size)
 	cam_rect.pivot_offset = Vector2(r_size/2, r_size/2)
-	# set camera zoom and limits
 	# hides units and ui
 	map_sprite.hide()
 	game.background.hide()
@@ -90,18 +93,16 @@ func get_map_texture():
 	game.map.show()
 	game.maps.buildings_visibility(false)
 	Crafty_camera.map_loaded()
-	
+	# after the proper map image is draw
 	await RenderingServer.frame_post_draw
-	
-	Crafty_camera.snapshot()
 	# take snapshop
 	var snapshop = game.get_viewport().get_texture().get_image()
 	var texture = ImageTexture.create_from_image(snapshop)
 	minimap_sprite.set_texture(texture)
-	
+	# snapshot width and height
 	var w = float(texture.get_width())
 	var h = float(texture.get_height())
-	
+	# set sprite scale
 	var texture_size = min(w, h)
 	var minimap_sprite_size = minimap_size
 	sprite_scale = float(minimap_sprite_size) / float(texture_size)
@@ -114,22 +115,17 @@ func get_map_texture():
 	if texture_ratio < 1.0: v_diff = (h - texture_size) / 2
 	minimap_sprite.region_rect.position = Vector2(h_diff, v_diff)
 	minimap_sprite.region_rect.size = Vector2(minimap_size/sprite_scale, minimap_size/sprite_scale)
-	
-	await RenderingServer.frame_post_draw
-	
-	# set zoom out tile replace
+	# set map zoom out tile replace
 	#map_sprite.set_texture(texture)
 	#map_sprite.scale = Crafty_camera.zoom
-	
-	# reset cam
+	# reset camera
 	Crafty_camera.zoom_reset()
 	# reset units and turn ui back on again
 	game.ui.show_all()
 	minimap_container.show()
 	rect_layer.show()
 	game.maps.buildings_visibility(true)
-	# turn off and callback
-	update_map_texture = false
+	# game map loaded callback
 	game.maps.map_loaded()
 
 

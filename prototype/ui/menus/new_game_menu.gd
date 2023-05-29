@@ -51,14 +51,14 @@ func get_leaders(team):
 
 
 func get_selected_map():
-	if $"%1_lane_checkbox".pressed:
+	if $"%1_lane_checkbox".is_pressed():
 		return "one_lane_map"
 	else:
 		return "three_lane_map"
 
 
 func get_player_team():
-	if $"%blue_team_checkbox".pressed:
+	if $"%blue_team_checkbox".is_pressed():
 		return "blue"
 	else:
 		return "red"

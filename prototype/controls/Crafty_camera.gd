@@ -136,12 +136,9 @@ func map_loaded():
 	limit_bottom = limit.y
 	var mid = WorldState.get_state("map_mid")
 	offset = mid
-
-
-func snapshot():
 	zoom_limit = WorldState.get_state("zoom_limit")
 	var zoom_out = zoom_limit.x
-	zoom =  Vector2(zoom_out, zoom_out)
+	zoom = Vector2(zoom_out, zoom_out)
 
 
 func focus_leader(index):
