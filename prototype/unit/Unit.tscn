@@ -12,7 +12,6 @@
 [sub_resource type="CanvasItemMaterial" id="45"]
 
 [sub_resource type="CanvasItemMaterial" id="57"]
-light_mode = 2
 
 [sub_resource type="AtlasTexture" id="54"]
 atlas = ExtResource("3")
@@ -123,7 +122,6 @@ modulate = Color(0.32549, 0.584314, 0.709804, 1)
 light_mask = 3
 z_index = 2
 material = SubResource("57")
-position = Vector2(10, 10)
 scale = Vector2(20, 20)
 texture = ExtResource("2")
 region_enabled = true
@@ -134,7 +132,6 @@ modulate = Color(0, 0, 0, 1)
 light_mask = 3
 z_index = -1
 use_parent_material = true
-position = Vector2(0.2, 0.2)
 scale = Vector2(1.4, 1.4)
 texture = ExtResource("2")
 region_enabled = true

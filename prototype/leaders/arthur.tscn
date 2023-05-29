@@ -9,42 +9,42 @@
 [ext_resource type="PackedScene" path="res://weapons/excalibur.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://cdlrrondln7ga" path="res://assets/animations/side_smoke_2.png" id="8"]
 
-[sub_resource type="AtlasTexture" id="37"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ijxyg"]
 atlas = ExtResource("3")
-region = Rect2(0, 0, 24, 24)
+region = Rect2(0, 0, 24, 26)
 
-[sub_resource type="AtlasTexture" id="65"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ywn1"]
 atlas = ExtResource("3")
-region = Rect2(24, 0, 24, 24)
+region = Rect2(24, 0, 24, 26)
 
-[sub_resource type="AtlasTexture" id="66"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_55m31"]
 atlas = ExtResource("3")
-region = Rect2(48, 0, 24, 24)
+region = Rect2(48, 0, 24, 26)
 
-[sub_resource type="AtlasTexture" id="38"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_86r5x"]
 atlas = ExtResource("4")
-region = Rect2(0, 0, 24, 24)
+region = Rect2(0, 0, 24, 26)
 
-[sub_resource type="AtlasTexture" id="39"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ho30f"]
 atlas = ExtResource("4")
-region = Rect2(24, 0, 24, 24)
+region = Rect2(24, 0, 24, 26)
 
-[sub_resource type="AtlasTexture" id="40"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6erm"]
 atlas = ExtResource("4")
-region = Rect2(48, 0, 24, 24)
+region = Rect2(48, 0, 24, 26)
 
 [sub_resource type="SpriteFrames" id="36"]
 resource_name = "arthur"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("37")
+"texture": SubResource("AtlasTexture_ijxyg")
 }, {
 "duration": 1.0,
-"texture": SubResource("65")
+"texture": SubResource("AtlasTexture_8ywn1")
 }, {
 "duration": 1.0,
-"texture": SubResource("66")
+"texture": SubResource("AtlasTexture_55m31")
 }],
 "loop": true,
 "name": &"default",
@@ -52,33 +52,33 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("38")
+"texture": SubResource("AtlasTexture_86r5x")
 }, {
 "duration": 1.0,
-"texture": SubResource("39")
+"texture": SubResource("AtlasTexture_ho30f")
 }, {
 "duration": 1.0,
-"texture": SubResource("40")
+"texture": SubResource("AtlasTexture_m6erm")
 }],
 "loop": true,
 "name": &"red",
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="62"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8f824"]
 atlas = ExtResource("3")
-region = Rect2(72, 0, 24, 24)
+region = Rect2(72, 0, 24, 26)
 
-[sub_resource type="AtlasTexture" id="64"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_onlya"]
 atlas = ExtResource("4")
-region = Rect2(72, 0, 24, 24)
+region = Rect2(72, 0, 24, 26)
 
 [sub_resource type="SpriteFrames" id="63"]
 resource_name = "excalibur"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("62")
+"texture": SubResource("AtlasTexture_8f824")
 }],
 "loop": true,
 "name": &"default",
@@ -86,7 +86,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("64")
+"texture": SubResource("AtlasTexture_onlya")
 }],
 "loop": true,
 "name": &"red",
@@ -655,17 +655,17 @@ centered = false
 offset = Vector2(0, -20)
 flip_h = true
 hframes = 8
-frame = 6
 
 [node name="body" parent="sprites" index="2"]
-rotation = -0.0645953
-scale = Vector2(1, 1.04439)
+rotation = 0.0125674
+scale = Vector2(1, 0.981999)
 sprite_frames = SubResource("36")
 frame = 2
 offset = Vector2(-2, -12)
 
 [node name="weapon" parent="sprites" index="3" instance=ExtResource("7")]
-rotation = -0.7764
+position = Vector2(7, 1)
+rotation = 0.201079
 sprite_frames = SubResource("63")
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]

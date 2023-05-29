@@ -1,7 +1,7 @@
 extends Node
 var game:Node
 
-# self = game.utils
+# self = Utils
 
 func _ready():
 	game = get_tree().get_current_scene()
@@ -77,10 +77,13 @@ func offset_point_random(point, offset):
 	return p
 
 
+func first_to_uppper(string):
+	return string[0].to_upper() + string.substr(1,-1)
+
 
 func label(string):
 	var label_node = Label.new()
-	label_node.text = string
+	label_node.text = first_to_uppper(string)
 	return label_node
 
 

@@ -26,9 +26,11 @@ func load_map(map_name):
 	game.map = self[map_name].instantiate()
 	self.add_child(game.map)
 	game.map.hide()
-	create_container("unit_container")
+	var unit_container = create_container("unit_container")
+	unit_container.y_sort_enabled = true
+	var projectile_container = create_container("projectile_container")
+	projectile_container.y_sort_enabled = true
 	create_container("block_container")
-	create_container("projectile_container")
 	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
 	WorldState.set_state("map_mid", mid)
 	WorldState.set_state("map_camera_limit", game.map.camera_limit)
@@ -40,15 +42,13 @@ func create_container(container_name):
 	game.map.add_child(container)
 	game.map.set(container_name, container)
 	container.name = container_name
+	return container
 
 
 func map_loaded():
 	game.map.fog.visible = game.map.fog_of_war
 	#game.map.trees.light_mask = 2
 	#game.map.walls.light_mask = 2
-	
-	
-	
 	setup_buildings()
 	setup_lanes()
 	blocks.setup_quadtree()

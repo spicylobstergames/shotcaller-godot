@@ -66,7 +66,7 @@ func on_collision(unit, _delta):
 		var pr = p2 - p1 # relative target position
 		var ang_to_target = pr.angle() # target relative angle
 		# angle between direction and target
-		var rda = game.utils.limit_angle(unit.angle - ang_to_target) 
+		var rda = Utils.limit_angle(unit.angle - ang_to_target) 
 		# new direction: rotates pr +-90 deg (tangent direction)
 		if (rda > 0): a = Vector2(-pr.y, pr.x).angle()
 		else: a = Vector2(pr.y, -pr.x).angle()

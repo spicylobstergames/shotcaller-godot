@@ -159,9 +159,9 @@ func spawn_unit(unit, lane, team, mode, point):
 	unit.dead = false
 	unit.show()
 	if mode == "point_random":
-		point = game.utils.offset_point_random(point, 25)
+		point = Utils.offset_point_random(point, 25)
 	if mode == "random_map":
-		point = game.utils.random_point()
+		point = Utils.random_point()
 	unit.global_position = point
 	unit.set_state("idle")
 	return unit

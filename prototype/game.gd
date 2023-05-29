@@ -47,7 +47,6 @@ var control_state:String = "selection"
 @onready var ui := $"%ui"
 @onready var collision := $"%collision"
 @onready var selection := $"%selection"
-@onready var utils := $"%utils"
 @onready var test := $"%test"
 @onready var transitions := $"%transitions"
 

@@ -25,7 +25,7 @@ func input(event):
 					KEY_S: stand(game.selected_unit)
 	
 	# CLICK SELECTION
-	if event is InputEventMouseButton and not event.pressed: 
+	if event is InputEventMouseButton and not event.is_pressed(): 
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
 				select(point)
@@ -33,7 +33,7 @@ func input(event):
 				control_state(point)
 	
 	# TOUCH SELECTION
-	if event is InputEventScreenTouch and not event.pressed: 
+	if event is InputEventScreenTouch and not event.is_pressed(): 
 		if game.selected_unit:
 			control_state(event.position)
 		else:
@@ -103,7 +103,7 @@ func get_sel_unit_at_point(point):
 	for unit in game.selectable_units:
 		var select_rad =  unit.selection_radius
 		var select_pos = unit.global_position + unit.selection_position
-		if game.utils.circle_point_collision(point, select_pos, select_rad):
+		if Utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
 
 
@@ -111,7 +111,7 @@ func get_unit_at_point(point):
 	for unit in game.all_units:
 		var select_rad =  unit.selection_radius
 		var select_pos = unit.global_position + unit.selection_position
-		if game.utils.circle_point_collision(point, select_pos, select_rad):
+		if Utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
 
 
@@ -169,7 +169,7 @@ func order(unit, point):
 	Behavior.attack.set_target(unit, null)
 	unit.start_control_delay()
 	if point:
-		var building = game.utils.get_building(point)
+		var building = Utils.get_building(point)
 		if building:
 			var opponent = unit.opponent_team()
 			match building.team:

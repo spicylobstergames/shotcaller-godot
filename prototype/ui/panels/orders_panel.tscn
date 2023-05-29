@@ -21,16 +21,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -126.0
-offset_top = -94.0
+offset_top = -99.5
 offset_right = 126.0
-offset_bottom = 94.0
+offset_bottom = 100.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 2
 
 [node name="label2" type="Label" parent="container"]
 layout_mode = 2
-text = "Orders"
+text = "Tactics"
 
 [node name="container2" type="HBoxContainer" parent="container"]
 layout_mode = 2
@@ -51,12 +50,7 @@ focus_mode = 2
 layout_mode = 2
 focus_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="container"]
-layout_mode = 2
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="HSeparator" type="HSeparator" parent="container/MarginContainer"]
+[node name="HSeparator" type="HSeparator" parent="container"]
 layout_mode = 2
 
 [node name="label" type="Label" parent="container"]

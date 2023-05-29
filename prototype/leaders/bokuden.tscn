@@ -93,6 +93,7 @@ animations = [{
 [sub_resource type="Animation" id="24"]
 resource_name = "attack"
 length = 0.8
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -300,6 +301,7 @@ tracks/7/keys = {
 [sub_resource type="Animation" id="25"]
 resource_name = "idle"
 length = 0.6
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -402,6 +404,7 @@ tracks/7/keys = {
 [sub_resource type="Animation" id="26"]
 resource_name = "move"
 length = 0.6
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -503,6 +506,7 @@ tracks/7/keys = {
 
 [sub_resource type="Animation" id="33"]
 resource_name = "stun"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -662,10 +666,10 @@ region_rect = Rect2(7, 5, 30, 19)
 
 [node name="body" parent="sprites" index="1"]
 sprite_frames = SubResource("44")
-frame = 2
 offset = Vector2(-3, -16)
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
+visible = false
 sprite_frames = SubResource("50")
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]

@@ -99,7 +99,7 @@ func in_range(attacker, target):
 	var att_rad = Behavior.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
-	return game.utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
+	return Utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
 
 
 func is_valid_target(attacker, target):

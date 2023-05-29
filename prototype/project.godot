@@ -13,6 +13,7 @@ config_version=5
 config/name="Shotcall"
 run/main_scene="res://game.tscn"
 config/features=PackedStringArray("4.0")
+boot_splash/bg_color=Color(0.180392, 0.133333, 0.184314, 1)
 boot_splash/image="res://assets/waterfall/swords.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
@@ -27,6 +28,7 @@ Behavior="*res://unit/Behavior.tscn"
 WorldState="*res://goap/WorldState.gd"
 Goap="*res://goap/Goap.gd"
 Crafty_camera="*res://controls/Crafty_camera.tscn"
+Utils="*res://utils/Util.gd"
 
 [debug]
 

@@ -18,25 +18,25 @@ func _ready():
 
 
 func teleport_button_down():
-	if teleport_button.pressed: game.control_state = "teleport"
+	if teleport_button.is_pressed(): game.control_state = "teleport"
 	buttons_update(teleport_button)
 
 
 func lane_button_down():
-	if lane_button.pressed: game.control_state = "lane"
+	if lane_button.is_pressed(): game.control_state = "lane"
 	else: game.control_state = "selection"
 	buttons_update(lane_button)
 
 
 func move_button_down():
-	if move_button.pressed: game.control_state = "move"
+	if move_button.is_pressed(): game.control_state = "move"
 	else: game.control_state = "selection"
 	buttons_update(move_button)
 
 
 
 func attack_button_down():
-	if attack_button.pressed: game.control_state = "advance"
+	if attack_button.is_pressed(): game.control_state = "advance"
 	else: game.control_state = "selection"
 	buttons_update(attack_button)
 

@@ -46,6 +46,7 @@ Button/styles/pressed = null
 GridContainer/constants/h_separation = 5
 GridContainer/constants/v_separation = 4
 HBoxContainer/constants/separation = 10
+HSeparator/constants/separation = 10
 HSeparator/styles/separator = SubResource("StyleBoxTexture_u445j")
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 8

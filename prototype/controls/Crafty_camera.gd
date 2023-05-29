@@ -128,16 +128,17 @@ func input(event):
 
 
 func map_loaded():
+	position = Vector2.ZERO
+	var limit = WorldState.get_state("map_camera_limit")
+	limit_left = -limit.x
+	limit_top = -limit.y
+	limit_right = limit.x
+	limit_bottom = limit.y
 	var mid = WorldState.get_state("map_mid")
-	limit_left = -mid.x
-	limit_top = -mid.y
-	limit_right = mid.x
-	limit_bottom = mid.y
 	offset = mid
 	zoom_limit = WorldState.get_state("zoom_limit")
 	var zoom_out = zoom_limit.x
-	zoom =  Vector2(zoom_out, zoom_out)
-	position = Vector2.ZERO
+	zoom = Vector2(zoom_out, zoom_out)
 
 
 func focus_leader(index):

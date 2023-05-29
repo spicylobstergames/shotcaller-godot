@@ -15,7 +15,7 @@ func _ready():
 
 func setup_order_button():
 	var order_name = self.orders[self.orders.type]
-	name_label.text = order_name
+	name_label.text = Utils.first_to_uppper(order_name)
 	var hint = str(get_index()+1)
 	if "hint" in self.orders: hint = orders.hint
 	hint_label.text = hint

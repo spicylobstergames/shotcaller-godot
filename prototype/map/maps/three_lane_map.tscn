@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b863nnk44vbal" path="res://assets/map/water.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://4sopj8ofbtcp" path="res://assets/buildings/buildings_blue.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://kf6pu0rcrq0x" path="res://assets/map/trees.png" id="5"]
-[ext_resource type="Shader" path="res://map/tool/color_replace.tres" id="8"]
+[ext_resource type="Shader" uid="uid://2uawyneis3su" path="res://map/tool/color_replace.tres" id="8"]
 [ext_resource type="Texture2D" uid="uid://dnani3k6d3onu" path="res://assets/map/waterfall.png" id="9"]
 [ext_resource type="PackedScene" path="res://buildings/barrack.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://buildings/castle.tscn" id="11"]
@@ -4539,6 +4539,7 @@ _data = {
 }
 
 [node name="map" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("13")
 size = Vector2(2112, 2112)
 neutrals = ["mine", "blacksmith", "lumbermill", "camp", "outpost"]
@@ -4645,8 +4646,10 @@ frame = 3
 offset = Vector2(0, -12)
 
 [node name="buildings" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="blue" type="Node2D" parent="buildings"]
+y_sort_enabled = true
 
 [node name="castle" parent="buildings/blue" instance=ExtResource("11")]
 material = SubResource("57")
@@ -4807,6 +4810,7 @@ libraries = {
 }
 
 [node name="red" type="Node2D" parent="buildings"]
+y_sort_enabled = true
 
 [node name="castle" parent="buildings/red" instance=ExtResource("11")]
 material = SubResource("57")

@@ -209,7 +209,7 @@ func conquer_building(unit):
 	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
-	var building = game.utils.get_building(point)
+	var building = Utils.get_building(point)
 	if not unit.agent.get_state("is_stunned") and building:
 		var hp = float(Behavior.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
@@ -258,7 +258,7 @@ func pray_in_church(unit):
 	unit.after_arive = "stop"
 	var point = unit.global_position
 	point.y -= game.map.tile_size
-	var building = game.utils.get_building(point)
+	var building = Utils.get_building(point)
 	if (
 		building and building.team == unit.team 
 		and building.display_name == "church" 

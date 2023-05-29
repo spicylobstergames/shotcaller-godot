@@ -21,10 +21,9 @@ var map_tiles:Node
 
 var map_symbols_map = []
 
-var minimap_size:int = 150
-var border:int = 5
+var minimap_size:int = 140
 var sprite_scale:float = 1.0
-
+var minimap_border:int = 5
 
 func _ready():
 	$minimap_container.hide()
@@ -76,12 +75,15 @@ func process():
 
 
 func get_map_texture():
+	# turn off snapshot
+	update_map_texture = false
+	# map nodes
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
+	# set camera zoom and limits
 	var r_size = default_screen * minimap_size / max(game.map.size.x, game.map.size.y)
 	cam_rect.size = Vector2(r_size, r_size)
-	# set camera zoom and limits
-	Crafty_camera.map_loaded()
+	cam_rect.pivot_offset = Vector2(r_size/2, r_size/2)
 	# hides units and ui
 	map_sprite.hide()
 	game.background.hide()
@@ -90,20 +92,19 @@ func get_map_texture():
 	rect_layer.hide()
 	game.map.show()
 	game.maps.buildings_visibility(false)
-	
-	
+	Crafty_camera.map_loaded()
+	# after the proper map image is draw
 	await RenderingServer.frame_post_draw
-	
 	# take snapshop
 	var snapshop = game.get_viewport().get_texture().get_image()
 	var texture = ImageTexture.create_from_image(snapshop)
 	minimap_sprite.set_texture(texture)
-	
+	# snapshot width and height
 	var w = float(texture.get_width())
 	var h = float(texture.get_height())
-	
+	# set sprite scale
 	var texture_size = min(w, h)
-	var minimap_sprite_size = minimap_size - (2 * border)
+	var minimap_sprite_size = minimap_size
 	sprite_scale = float(minimap_sprite_size) / float(texture_size)
 	minimap_sprite.scale = Vector2(sprite_scale, sprite_scale)
 	# texture might be a rectangle so region_rect will clip it
@@ -112,22 +113,19 @@ func get_map_texture():
 	var v_diff = 0
 	if texture_ratio > 1.0: h_diff = (w - texture_size) / 2
 	if texture_ratio < 1.0: v_diff = (h - texture_size) / 2
-	minimap_sprite.region_rect.position = Vector2(h_diff+border/sprite_scale, v_diff+border/sprite_scale)
-	minimap_sprite.region_rect.size = Vector2((minimap_size-border)/sprite_scale, (minimap_size-border)/sprite_scale)
-	
-	# set zoom out tile replace
+	minimap_sprite.region_rect.position = Vector2(h_diff, v_diff)
+	minimap_sprite.region_rect.size = Vector2(minimap_size/sprite_scale, minimap_size/sprite_scale)
+	# set map zoom out tile replace
 	#map_sprite.set_texture(texture)
 	#map_sprite.scale = Crafty_camera.zoom
-	
-	# reset cam
+	# reset camera
 	Crafty_camera.zoom_reset()
 	# reset units and turn ui back on again
 	game.ui.show_all()
 	minimap_container.show()
 	rect_layer.show()
 	game.maps.buildings_visibility(true)
-	# turn off and callback
-	update_map_texture = false
+	# game map loaded callback
 	game.maps.map_loaded()
 
 
@@ -197,21 +195,17 @@ func copy_symbol(unit, symbol):
 
 
 func follow_camera():
-	if minimap_container.visible and game.map and false:
+	if minimap_container.visible and game.map:
 		var view_height = get_viewport().size.y
-		# stick to the bottom (todo: replace with godot viewports)
-		#minimap_container.offset.y = view_height
-		#rect_layer.offset.y = view_height
 		var half = WorldState.get_state("map_mid")
 		var map_scale = float(max(game.map.size.x, game.map.size.y)) / float(minimap_size)
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale) )
-		var offset = (minimap_size - cam_rect.size.y) / 2
 		if is_panning: Crafty_camera.position = pos
 		# update minimap cam rectangle position
-		cam_rect.position = Vector2(offset,offset-minimap_size) + Crafty_camera.position / map_scale
-		cam_rect.position.x = clamp(cam_rect.position.x, 0, offset*2)
-		cam_rect.position.y = clamp(cam_rect.position.y, -minimap_size, -cam_rect.size.y)
-
+		var offset = (minimap_size - cam_rect.size.y) / 2
+		cam_rect.position = Vector2(offset,offset) + Crafty_camera.position / map_scale
+		cam_rect.position.x = clamp(cam_rect.position.x, minimap_border, offset*2 + minimap_border)
+		cam_rect.position.y = clamp(cam_rect.position.y, minimap_border, offset*2 + minimap_border)
 
 
 func move_symbols():
@@ -219,5 +213,5 @@ func move_symbols():
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
+			symbol.position = Vector2(minimap_border,0) + map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
 

@@ -13,15 +13,10 @@ theme = ExtResource("1_wr6fd")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_idt2m")
 script = ExtResource("2")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/margin_bottom = 16
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="ability_icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="ability_icon" type="TextureRect" parent="HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -31,23 +26,24 @@ texture = ExtResource("1")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(220, 120)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 13
 
-[node name="ability_name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="ability_name" type="Label" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Aura of Courage"
 
-[node name="ability_description" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="ability_description" type="Label" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
-text = "Some ability description some ability description some ability description some ability description some ability description."
+text = "Some ability description some ability description some ability description some ability description."
 autowrap_mode = 3
 
 [node name="HSeparator" type="HSeparator" parent="."]

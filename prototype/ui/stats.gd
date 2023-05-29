@@ -36,7 +36,7 @@ func update():
 		set_portrait(portrait_sprite, unit)
 		add_new_hpbar(unit)
 		# stats
-		unit_name.text = "%s" % [unit.display_name]
+		unit_name.text = "%s" % [Utils.first_to_uppper(unit.display_name)]
 		hp.text = "%s / %s" % [max(unit.current_hp,0), Behavior.modifiers.get_value(unit, "hp")]
 		if unit.regen: regen.text = "+%s" % [Behavior.modifiers.get_value(unit, "regen")]
 		else: regen.text = ""
