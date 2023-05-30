@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://b4g2vjxgabfso"]
+
+[ext_resource type="Script" path="res://item/Shop_item_resource.gd" id="1_m2vxj"]
+
+[resource]
+script = ExtResource("1_m2vxj")
+name = "Shield"
+tooltip = "Wooden shield\\nHealth +50"
+attributes = {
+"hp": 100
+}
+type = "equip"
+delivery_time = 30
+sprite = 6
+price = 200

@@ -33,9 +33,9 @@ const items = {
 		"delivery_time": 30
 	},
 	"bow": {
-		"name": "Elven\nBow",
+		"name": "Elven Bow",
 		"sprite": 2,
-		"tooltip": "\nDamage +20, Attack speed +25% Range +40%",
+		"tooltip": "Precise bow made by the elfes\nDamage +20 Attack speed +25% Range +40%",
 		"attributes": {"damage": 20, "attack_speed": .25, "attack_range": .4},
 		"price": 500,
 		"type": "equip",
@@ -46,20 +46,20 @@ const items = {
 	"helm": {
 		"name": "Helm",
 		"sprite": 3,
-		"tooltip": "Adds 150 HP",
+		"tooltip": "Protects your head\nAdds 150 HP",
 		"attributes": {"hp": 150},
 		"price": 300,
 		"type": "equip",
 		"delivery_time": 20
 	},
 	"great_helm": {
-		"name": "Great\nHelm",
+		"name": "Great Helm",
 		"sprite": 4,
-		"tooltip": "Adds 150 HP Defense +5",
+		"tooltip": "Provides extra protection to your head\nAdds 150 HP Defense +5",
 		"attributes": {"hp": 200, "defense": 5},
 		"price": 500,
 		"type": "equip",
-		"delivery_time": 20
+		"delivery_time": 25
 	},
 	"boots": {
 		"name": "Boots",
@@ -80,9 +80,9 @@ const items = {
 		"delivery_time": 30
 	},
 	"holy_shield": {
-		"name": "Holy\nShield",
+		"name": "Holy Shield",
 		"sprite": 7,
-		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
+		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50\nHealth Aura +50",
 		"attributes": {"hp": 150, "vision": 50},
 		"price": 450,
 		"type": "equip",
@@ -90,7 +90,7 @@ const items = {
 		"passive": "res://items/passives/holy_shield.tscn" # nearby units +50 health
 	},
 	"scale": {
-		"name": "Dragon\nscale",
+		"name": "Dragon Scale",
 		"sprite": 8,
 		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300 Defense +4 Speed -10",
 		"attributes": {"hp": 300, "defense": 4, "speed": -10},
@@ -110,18 +110,18 @@ const items = {
 		"type": "equip",
 		"delivery_time": 15
 	},
-	"feather": {
-		"name": "Magic\nPlume",
+	"plume": {
+		"name": "Magic Plume",
 		"sprite": 10,
-		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
+		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15\nSpeed Aura +10",
 		"attributes": {"regen": 2, "speed": 5}, # Other 10 comes from passive
 		"price": 350,
 		"type": "equip",
 		"delivery_time": 15,
-		"passive": "res://items/passives/feather.tscn" # nearby units +10 speed
+		"passive": "res://items/passives/plume.tscn" # nearby units +10 speed
 	},
 	"eye": {
-		"name": "Dragon\nEye",
+		"name": "Dragon Eye",
 		"sprite": 11,
 		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100 Speed +10",
 		"attributes": {"vision": 100, "speed": 10},
@@ -132,7 +132,7 @@ const items = {
 
 	# Consumables
 	"small_hp": {
-		"name": "Small\nHealth",
+		"name": "Small Health",
 		"sprite": 12,
 		"tooltip": "Restore 100 HP",
 		"attributes": {"current_hp": 100},
@@ -141,7 +141,7 @@ const items = {
 		"delivery_time": 10
 	},
 	"medium_hp": {
-		"name": "Medium\nHealth",
+		"name": "Medium Health",
 		"sprite": 13,
 		"tooltip": "Restore 150 HP",
 		"attributes": {"current_hp": 150},
@@ -150,7 +150,7 @@ const items = {
 		"delivery_time": 15
 	},
 	"large_hp": {
-		"name": "Large\nHealth",
+		"name": "Large Health",
 		"sprite": 14,
 		"tooltip": "Restore 250 HP",
 		"attributes": {"current_hp": 250},
@@ -159,7 +159,7 @@ const items = {
 		"delivery_time": 20
 	},
 	"small_poison_bomb": {
-		"name": "Small\nPoison",
+		"name": "Small Poison",
 		"sprite": 15,
 		"tooltip": "Slows down and deals 10 damage per second for 5 seconds",
 		"attributes": {"dot": 10, "speed": -10},
@@ -169,7 +169,7 @@ const items = {
 		"duration": 5
 	},
 	"medium_poison_bomb": {
-		"name": "Medium\nPoison",
+		"name": "Medium Poison",
 		"sprite": 16,
 		"tooltip": "Slows down and deals 15 damage per second for 5 seconds",
 		"attributes": {"dot": 15, "speed": -20},
@@ -179,7 +179,7 @@ const items = {
 		"duration": 5
 	},
 	"large_poison_bomb": {
-		"name": "Large\nPoison",
+		"name": "Large Poison",
 		"sprite": 17,
 		"tooltip": "Slows down and deals 25 damage per second for 5 seconds",
 		"attributes": {"dot": 25, "speed": -30},

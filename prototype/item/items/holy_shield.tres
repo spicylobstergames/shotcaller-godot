@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://cfp0iext2t86m"]
+
+[ext_resource type="Script" path="res://item/Shop_item_resource.gd" id="1_whbp5"]
+
+[resource]
+script = ExtResource("1_whbp5")
+name = "Holy Shield"
+tooltip = "Magically reinforced, stronger than steel\\nHealth +200 Vision +50\\nHealth Aura +50"
+attributes = {
+"hp": 100,
+"vision": 50
+}
+type = "equip"
+delivery_time = 30
+sprite = 7
+price = 450
+passive = "res://items/passives/holy_shield.tscn"

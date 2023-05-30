@@ -26,8 +26,10 @@ layout_mode = 0
 offset_top = 3.0
 offset_right = 48.0
 offset_bottom = 33.0
-text = "Name"
+theme_override_constants/line_spacing = -1
+text = "Item Name"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="price" type="Label" parent="."]
 layout_mode = 1

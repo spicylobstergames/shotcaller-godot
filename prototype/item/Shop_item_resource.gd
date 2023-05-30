@@ -9,3 +9,4 @@ class_name Shop_item
 @export var delivery_time:int = 20
 @export var sprite:int = 0
 @export var price:int = 250
+@export var passive:String = ""

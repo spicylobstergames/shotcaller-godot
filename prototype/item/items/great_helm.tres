@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://dmohxmoy24jtt"]
+
+[ext_resource type="Script" path="res://item/Shop_item_resource.gd" id="1_ans22"]
+
+[resource]
+script = ExtResource("1_ans22")
+name = "Great Helm"
+tooltip = "Provides extra protection to your head\\nAdds 150 HP Defense +5"
+attributes = {
+"defense": 5,
+"hp": 200
+}
+type = "equip"
+delivery_time = 25
+sprite = 4
+price = 500
