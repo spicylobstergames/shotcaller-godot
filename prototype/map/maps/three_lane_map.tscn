@@ -7,23 +7,23 @@
 [ext_resource type="Texture2D" uid="uid://kf6pu0rcrq0x" path="res://assets/map/trees.png" id="5"]
 [ext_resource type="Shader" uid="uid://2uawyneis3su" path="res://map/tool/color_replace.tres" id="8"]
 [ext_resource type="Texture2D" uid="uid://dnani3k6d3onu" path="res://assets/map/waterfall.png" id="9"]
-[ext_resource type="PackedScene" path="res://buildings/barrack.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://buildings/castle.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://bb55gchxyp5kf" path="res://buildings/barrack.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://bo260d1c1wxwa" path="res://buildings/castle.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://1i18mdlg5iyo" path="res://buildings/tower.tscn" id="12"]
 [ext_resource type="Script" path="res://map/maps/base_map.gd" id="13"]
 [ext_resource type="Texture2D" uid="uid://c7jkf57v2odq6" path="res://assets/map/grass_dark.png" id="14"]
 [ext_resource type="Texture2D" uid="uid://djy3isfv3nc2f" path="res://assets/map/mud.png" id="15"]
 [ext_resource type="Texture2D" uid="uid://csyjjdhoghdfn" path="res://assets/map/brick_square.png" id="16"]
-[ext_resource type="PackedScene" path="res://buildings/church.tscn" id="17"]
+[ext_resource type="PackedScene" uid="uid://bkdt0oevagnod" path="res://buildings/church.tscn" id="17"]
 [ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="17_vted6"]
 [ext_resource type="Texture2D" uid="uid://jsvqumsl1lmk" path="res://assets/buildings/neutral_gray.png" id="18_rk2vl"]
 [ext_resource type="Texture2D" uid="uid://cxt3ym1fu5ncp" path="res://assets/buildings/neutral_red.png" id="19_mcoka"]
 [ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="20_4n18s"]
-[ext_resource type="PackedScene" path="res://buildings/mine.tscn" id="21"]
-[ext_resource type="PackedScene" path="res://buildings/camp.tscn" id="22"]
-[ext_resource type="PackedScene" path="res://buildings/outpost.tscn" id="23"]
-[ext_resource type="PackedScene" path="res://buildings/blacksmith.tscn" id="24"]
-[ext_resource type="PackedScene" path="res://buildings/lumbermill.tscn" id="25"]
+[ext_resource type="PackedScene" uid="uid://b71taiv4k5hr4" path="res://buildings/mine.tscn" id="21"]
+[ext_resource type="PackedScene" uid="uid://dnjlmnoeq6ya1" path="res://buildings/camp.tscn" id="22"]
+[ext_resource type="PackedScene" uid="uid://86yhxqtb5apc" path="res://buildings/outpost.tscn" id="23"]
+[ext_resource type="PackedScene" uid="uid://bkq8nar2igern" path="res://buildings/blacksmith.tscn" id="24"]
+[ext_resource type="PackedScene" uid="uid://du75dpb4yg01d" path="res://buildings/lumbermill.tscn" id="25"]
 [ext_resource type="Texture2D" uid="uid://dptfdx7q55b8p" path="res://assets/buildings/buildings_gray.png" id="25_cx7v6"]
 [ext_resource type="Texture2D" uid="uid://dbl3r53yf6ib5" path="res://assets/map/brick_old.png" id="26"]
 [ext_resource type="Texture2D" uid="uid://b0ewq88pv0taf" path="res://assets/buildings/buildings_red.png" id="26_wlsja"]
@@ -4543,8 +4543,8 @@ y_sort_enabled = true
 script = ExtResource("13")
 size = Vector2(2112, 2112)
 neutrals = ["mine", "blacksmith", "lumbermill", "camp", "outpost"]
-camera_limit = Vector2(760, 760)
-zoom_limit = Vector2(0.5, 3.32)
+camera_limit = Vector2(1056, 1056)
+zoom_limit = Vector2(0.3, 2)
 
 [node name="zoom_out_sprite" type="Sprite2D" parent="."]
 z_index = -1

@@ -120,6 +120,7 @@ func get_map_texture():
 	#map_sprite.scale = Crafty_camera.zoom
 	# reset camera
 	Crafty_camera.zoom_reset()
+	Crafty_camera.set_limits()
 	# reset units and turn ui back on again
 	game.ui.show_all()
 	minimap_container.show()

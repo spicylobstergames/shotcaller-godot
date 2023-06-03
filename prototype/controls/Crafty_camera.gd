@@ -11,8 +11,7 @@ var pan_position:Vector2 = Vector2.ZERO
 var is_zooming:bool = false
 var zoom_default:Vector2 = Vector2.ONE
 var zoom_limit:Vector2 = Vector2.ONE
-var default_zoom_sensitivity := .5
-var zoom_in_limit := .5
+var default_zoom_sensitivity := .2
 # KEYBOARD
 var arrow_keys_move:Vector2 = Vector2.ZERO
 var arrow_keys_speed := 4
@@ -129,16 +128,27 @@ func input(event):
 
 func map_loaded():
 	position = Vector2.ZERO
-	var limit = WorldState.get_state("map_camera_limit")
-	limit_left = -limit.x
-	limit_top = -limit.y
-	limit_right = limit.x
-	limit_bottom = limit.y
 	var mid = WorldState.get_state("map_mid")
 	offset = mid
 	zoom_limit = WorldState.get_state("zoom_limit")
 	var zoom_out = zoom_limit.x
 	zoom = Vector2(zoom_out, zoom_out)
+
+
+func set_limits():
+	var limit = WorldState.get_state("map_camera_limit")
+	limit_left = -limit.x
+	limit_top = -limit.y
+	limit_right = limit.x
+	limit_bottom = limit.y
+
+
+func expand_limits():
+	var limit = WorldState.get_state("map_camera_limit")
+	limit_left = -limit.x * 2
+	limit_top = -limit.y * 2
+	limit_right = limit.x * 2
+	limit_bottom = limit.y * 2
 
 
 func focus_leader(index):
@@ -156,20 +166,24 @@ func focus_unit(unit):
 
 
 func zoom_reset(): 
+	set_limits()
 	zoom = zoom_default
 	
 	
 func full_zoom_in(): 
+	set_limits()
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
 	
 	
-func full_zoom_out(): 
+func full_zoom_out():
+	expand_limits()
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
 
 
 func _zoom_camera(dir):
 	var new_zoom = zoom + Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
 	
+	var zoom_in_limit = zoom_limit.x
 	var zoom_out_limit = zoom_limit.y
 	
 	new_zoom.x = clamp(new_zoom.x, zoom_in_limit, zoom_out_limit)
@@ -177,17 +191,19 @@ func _zoom_camera(dir):
 	
 	zoom = new_zoom
 	
-#	TODO: fix map zoom and remove zoom limits from the map
-#	var size = get_viewport().size
-#	var max_size = max(size.x, size.y)
-#	var zoom_out_limit = WorldState.get_state("map_size") / max_size
+	if zoom.x > 1:
+		expand_limits()
+	else:
+		set_limits()
+	
+	# todo: adjust minimap cam rect
 
 
 func process():
 	if WorldState.get_state("game_started"): 
 		
 		# APPLY MOUSE PAN
-		if is_panning: translate(pan_position * zoom.x)
+		if is_panning: translate(pan_position / zoom.x)
 		# APPLY KEYBOARD PAN
 		else: translate(arrow_keys_move)
 		

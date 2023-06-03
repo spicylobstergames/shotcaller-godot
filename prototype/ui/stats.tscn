@@ -162,54 +162,6 @@ centered = false
 region_enabled = true
 region_rect = Rect2(682, 10, 28, 27)
 
-[node name="inventories" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -2.0
-offset_top = -187.0
-offset_right = 150.0
-offset_bottom = -99.0
-grow_horizontal = 2
-grow_vertical = 0
-script = ExtResource("4")
-
-[node name="placeholder" type="HBoxContainer" parent="inventories"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -152.0
-offset_top = -88.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="item_button" parent="inventories/placeholder" instance=ExtResource("5")]
-layout_mode = 2
-focus_mode = 2
-
-[node name="sell_button" parent="inventories/placeholder/item_button" index="2"]
-visible = true
-
-[node name="item_button2" parent="inventories/placeholder" instance=ExtResource("5")]
-layout_mode = 2
-focus_mode = 2
-
-[node name="sell_button" parent="inventories/placeholder/item_button2" index="2"]
-visible = true
-
-[node name="item_button3" parent="inventories/placeholder" instance=ExtResource("5")]
-layout_mode = 2
-focus_mode = 2
-
-[node name="sell_button" parent="inventories/placeholder/item_button3" index="2"]
-visible = true
-
 [node name="active_skills" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -217,9 +169,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -150.0
+offset_left = -147.0
 offset_top = -204.0
-offset_right = -26.0
+offset_right = -23.0
 offset_bottom = -99.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -258,6 +210,54 @@ offset_top = -1.0
 offset_right = 128.0
 offset_bottom = 17.0
 text = "Press ESC to cancel"
+
+[node name="inventories" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -187.0
+offset_right = 147.0
+offset_bottom = -99.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("4")
+
+[node name="placeholder" type="HBoxContainer" parent="inventories"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -88.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="item_button" parent="inventories/placeholder" instance=ExtResource("5")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="sell_button" parent="inventories/placeholder/item_button" index="2"]
+visible = true
+
+[node name="item_button2" parent="inventories/placeholder" instance=ExtResource("5")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="sell_button" parent="inventories/placeholder/item_button2" index="2"]
+visible = true
+
+[node name="item_button3" parent="inventories/placeholder" instance=ExtResource("5")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="sell_button" parent="inventories/placeholder/item_button3" index="2"]
+visible = true
 
 [connection signal="gui_input" from="panel" to="." method="stats_down"]
 
