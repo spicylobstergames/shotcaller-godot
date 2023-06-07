@@ -121,9 +121,9 @@ func input(event):
 		
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
-		_zoom_camera(-1)
-	if event.is_action_pressed("zoom_out"):
 		_zoom_camera(1)
+	if event.is_action_pressed("zoom_out"):
+		_zoom_camera(-1)
 
 
 func map_loaded():

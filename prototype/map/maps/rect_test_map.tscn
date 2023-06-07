@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://dosm8daqlf6qg"]
+[gd_scene load_steps=36 format=3 uid="uid://dosm8daqlf6qg"]
 
 [ext_resource type="Texture2D" uid="uid://dpvlocwqgaj8f" path="res://assets/map/grass.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://ksgg6u1g8cok" path="res://assets/map/brick.png" id="2"]
@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://djy3isfv3nc2f" path="res://assets/map/mud.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://dnani3k6d3onu" path="res://assets/map/waterfall.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://csyjjdhoghdfn" path="res://assets/map/brick_square.png" id="10"]
-[ext_resource type="PackedScene" path="res://buildings/castle.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://bo260d1c1wxwa" path="res://buildings/castle.tscn" id="11"]
 [ext_resource type="Texture2D" uid="uid://b0ewq88pv0taf" path="res://assets/buildings/buildings_red.png" id="11_0g4pl"]
 [ext_resource type="PackedScene" uid="uid://1i18mdlg5iyo" path="res://buildings/tower.tscn" id="12"]
 [ext_resource type="Script" path="res://map/maps/base_map.gd" id="13"]
@@ -2731,11 +2731,8 @@ terrain_set_0/terrain_1/color = Color(0.843137, 0.396078, 0.396078, 1)
 sources/0 = SubResource("TileSetAtlasSource_ytj7v")
 sources/1 = SubResource("TileSetAtlasSource_c827j")
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_e2fbf"]
-polygon = PackedVector2Array(-4.5, 4, 0.618719, -12, 5.5, 4, 5.5, 9, 0.5, 12, -4.5, 9)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uc0k0"]
-polygon = PackedVector2Array(-4.5, 4, 0.618719, -12, 5.5, 4, 5.5, 9, 0.5, 12, -4.5, 9)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_evemr"]
+polygon = PackedVector2Array(-5, 5, 0, -16, 5.5, 4.5, 5.5, 9, 0.441943, 12, -5, 9.5)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y2mv4"]
 resource_name = "Trees"
@@ -2744,15 +2741,16 @@ texture_region_size = Vector2i(32, 48)
 0:0/next_alternative_id = 8
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, 8)
-0:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_e2fbf")
+0:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_evemr")
 1:0/next_alternative_id = 8
 1:0/0 = 0
 1:0/0/texture_origin = Vector2i(0, 8)
-1:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_uc0k0")
+1:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_evemr")
 
 [sub_resource type="TileSet" id="15"]
 resource_local_to_scene = true
 tile_size = Vector2i(24, 24)
+occlusion_layer_0/light_mask = 2
 sources/0 = SubResource("TileSetAtlasSource_y2mv4")
 
 [sub_resource type="AtlasTexture" id="7"]
@@ -2795,14 +2793,19 @@ animations = [{
 light_mode = 2
 
 [node name="map" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("13")
 size = Vector2(1056, 528)
+camera_limit = Vector2(2112, 1056)
+zoom_limit = Vector2(0.56, 2)
 
 [node name="zoom_out_sprite" type="Sprite2D" parent="."]
+visible = false
 z_index = -1
 position = Vector2(528, 528)
 
 [node name="tiles" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="ground" type="TileMap" parent="tiles"]
 light_mask = 3
@@ -2863,20 +2866,25 @@ layer_7/tile_data = PackedInt32Array(1114202, 7, 4, 1114203, 196615, 4, 1048667,
 
 [node name="walls" type="TileMap" parent="tiles"]
 light_mask = 3
+y_sort_enabled = true
 tile_set = SubResource("11")
 cell_quadrant_size = 64
 format = 2
 layer_0/name = "Walls"
+layer_0/y_sort_enabled = true
 layer_0/tile_data = PackedInt32Array(262145, 262144, 0, 262144, 327680, 0, 327680, 458752, 1, 393216, 458752, 1, 458752, 458752, 1, 524288, 327680, 1, 524289, 458752, 0, 524290, 458752, 0, 524291, 458752, 0, 524292, 196608, 1, 458756, 393216, 0)
 
 [node name="trees" type="TileMap" parent="tiles"]
+y_sort_enabled = true
 tile_set = SubResource("15")
 cell_quadrant_size = 24
 format = 2
 layer_0/name = "Trees"
+layer_0/y_sort_enabled = true
 layer_0/tile_data = PackedInt32Array(65537, 65536, 0, 65538, 65536, 0, 65550, 65536, 0, 65551, 65536, 0, 65552, 0, 0, 65563, 0, 0, 65564, 0, 0, 65565, 0, 0, 65566, 0, 0, 65578, 0, 0, 65579, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131085, 65536, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131100, 65536, 0, 131101, 0, 0, 131115, 65536, 0, 196609, 0, 0, 196610, 0, 0, 196611, 65536, 0, 196623, 0, 0, 196651, 0, 0, 262145, 65536, 0, 262146, 65536, 0, 262147, 0, 0, 262148, 0, 0, 262182, 65536, 0, 262187, 0, 0, 327681, 65536, 0, 327682, 0, 0, 327683, 65536, 0, 327684, 0, 0, 327685, 65536, 0, 327717, 0, 0, 327718, 0, 0, 327723, 0, 0, 393217, 65536, 0, 393218, 0, 0, 393219, 65536, 0, 393220, 0, 0, 393221, 0, 0, 393222, 0, 0, 393254, 65536, 0, 393255, 65536, 0, 393259, 0, 0, 458753, 65536, 0, 458754, 0, 0, 458755, 65536, 0, 458756, 65536, 0, 458757, 0, 0, 458758, 0, 0, 458759, 65536, 0, 458790, 0, 0, 458791, 65536, 0, 458795, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 65536, 0, 524292, 65536, 0, 524293, 0, 0, 524294, 65536, 0, 524295, 0, 0, 524296, 0, 0, 524297, 0, 0, 524310, 0, 0, 524326, 0, 0, 524327, 65536, 0, 524331, 0, 0, 589825, 0, 0, 589826, 65536, 0, 589845, 65536, 0, 589846, 0, 0, 589847, 0, 0, 589862, 0, 0, 589863, 0, 0, 589867, 65536, 0, 655380, 0, 0, 655381, 0, 0, 655382, 0, 0, 655383, 0, 0, 655397, 65536, 0, 655398, 65536, 0, 655399, 65536, 0, 655403, 0, 0, 720914, 0, 0, 720915, 65536, 0, 720916, 65536, 0, 720917, 65536, 0, 720918, 0, 0, 720919, 65536, 0, 720932, 0, 0, 720933, 65536, 0, 720934, 0, 0, 720935, 0, 0, 720939, 65536, 0, 786449, 0, 0, 786450, 65536, 0, 786451, 65536, 0, 786452, 65536, 0, 786453, 0, 0, 786454, 0, 0, 786455, 65536, 0, 786456, 65536, 0, 786467, 65536, 0, 786468, 0, 0, 786469, 65536, 0, 786470, 65536, 0, 786475, 0, 0, 851984, 0, 0, 851985, 0, 0, 851986, 0, 0, 851987, 65536, 0, 851991, 0, 0, 851992, 0, 0, 852004, 0, 0, 852005, 0, 0, 852011, 65536, 0, 917519, 0, 0, 917520, 0, 0, 917521, 0, 0, 917522, 65536, 0, 917528, 0, 0, 917529, 0, 0, 917547, 0, 0, 983056, 65536, 0, 983057, 0, 0, 983065, 65536, 0, 983066, 65536, 0, 983083, 0, 0, 1048601, 0, 0, 1048602, 0, 0, 1048619, 0, 0, 1114155, 65536, 0, 1179690, 65536, 0, 1179691, 0, 0, 1245226, 65536, 0, 1245227, 0, 0, 1310740, 0, 0, 1310741, 0, 0, 1310742, 0, 0, 1310743, 65536, 0, 1310744, 0, 0, 1310745, 0, 0, 1310761, 0, 0, 1310762, 65536, 0, 1310763, 65536, 0, 1376274, 0, 0, 1376275, 0, 0, 1376276, 0, 0, 1376277, 0, 0, 1376278, 65536, 0, 1376279, 0, 0, 1376280, 65536, 0, 1376281, 0, 0, 1376282, 0, 0, 1376283, 0, 0, 1376284, 0, 0, 1376285, 65536, 0, 1376286, 65536, 0, 1376287, 65536, 0, 1376288, 0, 0, 1376289, 0, 0, 1376290, 0, 0, 1376291, 0, 0, 1376292, 0, 0, 1376293, 65536, 0, 1376294, 0, 0, 1376295, 0, 0, 1376296, 0, 0, 1376297, 65536, 0, 1376298, 0, 0, 1441807, 0, 0, 1441808, 0, 0, 1441809, 65536, 0, 1441810, 65536, 0, 1441811, 65536, 0, 1441812, 0, 0, 1441813, 0, 0, 1441814, 0, 0, 1441815, 65536, 0, 1441816, 65536, 0, 1441817, 65536, 0, 1441818, 0, 0, 1441819, 0, 0, 1441820, 65536, 0, 1441821, 0, 0, 1441822, 0, 0, 1441823, 0, 0, 1441824, 65536, 0, 1441825, 0, 0, 1441826, 0, 0, 1441827, 65536, 0, 1441828, 65536, 0, 1441829, 0, 0, 1441830, 65536, 0, 1441831, 65536, 0, 1441832, 0, 0, 1441833, 0, 0)
 
 [node name="props" type="Node2D" parent="."]
+z_index = 1
 
 [node name="waterfall" type="AnimatedSprite2D" parent="props"]
 modulate = Color(1, 1, 1, 0.470588)
@@ -2886,8 +2894,10 @@ frame_progress = 0.864082
 offset = Vector2(0, -12)
 
 [node name="buildings" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="blue" type="Node2D" parent="buildings"]
+y_sort_enabled = true
 
 [node name="castle" parent="buildings/blue" instance=ExtResource("11")]
 material = SubResource("57")
