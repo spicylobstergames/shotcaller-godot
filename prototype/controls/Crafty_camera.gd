@@ -3,6 +3,7 @@ extends Camera2D
 # Autoload
 # self = Crafty_camera
 
+signal camera_zoom_changed
 
 # PAN
 var is_panning:bool = false
@@ -26,10 +27,8 @@ var _touches_info = {
 	"last_avg_pos":Vector2.ZERO, 
 	"cur_avg_pos":Vector2.ZERO
 }
-var actions = InputMap.get_actions()
 
-func _ready():
-	zoom = zoom_default
+var actions = InputMap.get_actions()
 
 
 func get_action(event):
@@ -135,22 +134,6 @@ func map_loaded():
 	zoom = Vector2(zoom_out, zoom_out)
 
 
-func set_limits():
-	var limit = WorldState.get_state("map_camera_limit")
-	limit_left = -limit.x
-	limit_top = -limit.y
-	limit_right = limit.x
-	limit_bottom = limit.y
-
-
-func expand_limits():
-	var limit = WorldState.get_state("map_camera_limit")
-	limit_left = -limit.x * 2
-	limit_top = -limit.y * 2
-	limit_right = limit.x * 2
-	limit_bottom = limit.y * 2
-
-
 func focus_leader(index):
 	var game = get_tree().get_current_scene()
 	if game.player_leaders.size() >= index:
@@ -165,19 +148,19 @@ func focus_unit(unit):
 	global_position = unit.global_position - mid
 
 
-func zoom_reset(): 
-	set_limits()
+func zoom_reset():
 	zoom = zoom_default
+	emit_signal("camera_zoom_changed")
 	
 	
-func full_zoom_in(): 
-	set_limits()
+func full_zoom_in():
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
+	emit_signal("camera_zoom_changed")
 	
 	
 func full_zoom_out():
-	expand_limits()
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
+	emit_signal("camera_zoom_changed")
 
 
 func _zoom_camera(dir):
@@ -190,13 +173,7 @@ func _zoom_camera(dir):
 	new_zoom.y = clamp(new_zoom.y, zoom_in_limit, zoom_out_limit)
 	
 	zoom = new_zoom
-	
-	if zoom.x > 1:
-		expand_limits()
-	else:
-		set_limits()
-	
-	# todo: adjust minimap cam rect
+	emit_signal("camera_zoom_changed")
 
 
 func process():

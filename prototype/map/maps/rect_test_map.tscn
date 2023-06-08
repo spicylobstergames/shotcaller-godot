@@ -2796,7 +2796,8 @@ light_mode = 2
 y_sort_enabled = true
 script = ExtResource("13")
 size = Vector2(1056, 528)
-camera_limit = Vector2(2112, 1056)
+neutrals = []
+camera_limit = Vector2(528, 264)
 zoom_limit = Vector2(0.56, 2)
 
 [node name="zoom_out_sprite" type="Sprite2D" parent="."]

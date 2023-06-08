@@ -3,7 +3,6 @@ extends Control
 
 # self = game.ui.minimap
 
-var default_screen := 600
 
 var update_map_texture:bool = false
 var is_panning:bool = false
@@ -22,10 +21,10 @@ var map_tiles:Node
 var map_symbols_map = []
 
 var minimap_size:int = 140
-var sprite_scale:float = 1.0
 var minimap_border:int = 5
 
 func _ready():
+	Crafty_camera.camera_zoom_changed.connect(adjust_rect)
 	$minimap_container.hide()
 
 
@@ -81,9 +80,7 @@ func get_map_texture():
 	map_sprite = game.map.get_node("zoom_out_sprite")
 	map_tiles = game.map.get_node("tiles")
 	# set camera zoom and limits
-	var r_size = default_screen * minimap_size / max(game.map.size.x, game.map.size.y)
-	cam_rect.size = Vector2(r_size, r_size)
-	cam_rect.pivot_offset = Vector2(r_size/2, r_size/2)
+	adjust_rect()
 	# hides units and ui
 	map_sprite.hide()
 	game.background.hide()
@@ -105,7 +102,7 @@ func get_map_texture():
 	# set sprite scale
 	var texture_size = min(w, h)
 	var minimap_sprite_size = minimap_size
-	sprite_scale = float(minimap_sprite_size) / float(texture_size)
+	var sprite_scale := float(minimap_sprite_size) / float(texture_size)
 	minimap_sprite.scale = Vector2(sprite_scale, sprite_scale)
 	# texture might be a rectangle so region_rect will clip it
 	var texture_ratio = w / h
@@ -120,7 +117,6 @@ func get_map_texture():
 	#map_sprite.scale = Crafty_camera.zoom
 	# reset camera
 	Crafty_camera.zoom_reset()
-	Crafty_camera.set_limits()
 	# reset units and turn ui back on again
 	game.ui.show_all()
 	minimap_container.show()
@@ -128,6 +124,14 @@ func get_map_texture():
 	game.maps.buildings_visibility(true)
 	# game map loaded callback
 	game.maps.map_loaded()
+
+
+func adjust_rect():
+	var screen_size = get_viewport().size
+	var map_max = max(game.map.size.x, game.map.size.y)
+	var r_size_x = screen_size.x * minimap_size / map_max
+	var r_size_y = screen_size.y * minimap_size / map_max
+	cam_rect.size = Vector2(r_size_x, r_size_y) / Crafty_camera.zoom
 
 
 func corner_view():
@@ -203,10 +207,7 @@ func follow_camera():
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale) )
 		if is_panning: Crafty_camera.position = pos
 		# update minimap cam rectangle position
-		var offset = (minimap_size - cam_rect.size.y) / 2
-		cam_rect.position = Vector2(offset,offset) + Crafty_camera.position / map_scale
-		cam_rect.position.x = clamp(cam_rect.position.x, minimap_border, offset*2 + minimap_border)
-		cam_rect.position.y = clamp(cam_rect.position.y, minimap_border, offset*2 + minimap_border)
+		cam_rect.position = (Crafty_camera.position / map_scale) - cam_rect.size/2 + Vector2(minimap_size/2, minimap_size/2)
 
 
 func move_symbols():
@@ -214,5 +215,5 @@ func move_symbols():
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = Vector2(minimap_border,0) + map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
+			symbol.position = Vector2(minimap_border,minimap_border) + map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
 
