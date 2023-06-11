@@ -23,6 +23,7 @@ var map_symbols_map = []
 var minimap_size:int = 140
 var minimap_border:int = 5
 
+
 func _ready():
 	Crafty_camera.camera_zoom_changed.connect(adjust_rect)
 	$minimap_container.hide()
@@ -49,7 +50,6 @@ func input(event):
 		is_panning = event.is_pressed()
 	elif event is InputEventScreenDrag:
 		if is_panning: pan_position = event.position
-
 
 
 func over_minimap(event):
@@ -199,12 +199,19 @@ func copy_symbol(unit, symbol):
 	map_symbols.add_child(sym)
 
 
+func get_map_scale():
+	var map_size = WorldState.get_state("map_size")
+	var map_scale = float(max(map_size.x, map_size.y)) / float(minimap_size)
+	return map_scale
+
+
 func follow_camera():
 	if minimap_container.visible and game.map:
 		var view_height = get_viewport().size.y
 		var half = WorldState.get_state("map_mid")
-		var map_scale = float(max(game.map.size.x, game.map.size.y)) / float(minimap_size)
+		var map_scale = get_map_scale()
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale) )
+		# update camera position if panning the minimap
 		if is_panning: Crafty_camera.position = pos
 		# update minimap cam rectangle position
 		cam_rect.position = (Crafty_camera.position / map_scale) - cam_rect.size/2 + Vector2(minimap_size/2, minimap_size/2)
@@ -212,8 +219,15 @@ func follow_camera():
 
 func move_symbols():
 	if minimap_container.visible:
+		var map_size = WorldState.get_state("map_size")
+		var map_scale = get_map_scale()
+		var offset = Vector2.ZERO
+		if map_size.x > map_size.y:
+			offset.y = ((map_size.x - map_size.y) / map_scale) / 2
+		if map_size.y > map_size.x:
+			offset.x = ((map_size.y - map_size.x) / map_scale) / 2
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = Vector2(minimap_border,minimap_border) + map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
+			symbol.position = offset + Vector2(minimap_border,minimap_border) + map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
 

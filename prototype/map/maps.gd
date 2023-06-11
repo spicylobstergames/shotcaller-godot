@@ -31,6 +31,7 @@ func load_map(map_name):
 	var projectile_container = create_container("projectile_container")
 	projectile_container.y_sort_enabled = true
 	create_container("block_container")
+	WorldState.set_state("map_size", game.map.size)
 	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
 	WorldState.set_state("map_mid", mid)
 	WorldState.set_state("map_camera_limit", game.map.camera_limit)
