@@ -2,8 +2,6 @@ extends Node2D
 
 class_name base_map
 
-var game:Node
-
 
 # self = game.map
 

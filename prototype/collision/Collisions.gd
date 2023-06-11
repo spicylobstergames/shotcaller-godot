@@ -28,7 +28,7 @@ func process(delta):
 	game.maps.blocks.quad.clear()
 	
 	# loop 1
-	for unit1 in game.all_units:
+	for unit1 in WorldState.get_state("all_units"):
 		
 		# add units to quad
 		if unit1.collide and not unit1.dead:
@@ -37,7 +37,7 @@ func process(delta):
 	
 	# loop 2: checks for collisions
 	
-	for unit1 in game.all_units:
+	for unit1 in WorldState.get_state("all_units"):
 		
 		# projectiles collision
 		

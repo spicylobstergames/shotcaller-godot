@@ -1,22 +1,21 @@
 extends Node2D
-var game:Node
 
 # self = game.maps.blocks
 
 
 # COLLISION QUADTREES
 
-var quad
+var quad # : _QuadTreeClass
 var block_template:PackedScene = load("res://collision/blocks/block_template.tscn")
+var tile_size := 64
+var half_tile_size := tile_size / 2
+var current_map : Node2D
 
-
-func _ready():
-	game = get_tree().get_current_scene()
-
-
-
-func setup_quadtree():
-	var bound = Rect2(Vector2.ZERO, Vector2(game.map.size.x,game.map.size.y))
+func setup_quadtree(map):
+	current_map = map
+	tile_size = map.tile_size
+	half_tile_size = map.half_tile_size
+	var bound = Rect2(Vector2.ZERO, Vector2(map.size.x, map.size.y))
 	quad = Quadtree.create_quadtree(bound, 16, 16)
 
 
@@ -31,13 +30,11 @@ func get_units_in_radius(pos, rad):
 
 func create_block(x, y):
 	var block = block_template.instantiate()
-	var size = game.map.tile_size
-	var half = game.map.half_tile_size
 	block.selectable = false
 	block.moves = false
 	block.attacks = false
 	block.collide = true
-	block.global_position = Vector2(half + x * size, half + y * size)
-	game.map.block_container.add_child(block)
-	game.collision.setup(block)
-	game.all_units.append(block)
+	block.global_position = Vector2(half_tile_size + x * tile_size, half_tile_size + y * tile_size)
+	current_map.block_container.add_child(block)
+	Collisions.setup(block)
+	WorldState.get_state("all_units").append(block)

@@ -52,9 +52,9 @@ func map_loaded():
 	#game.map.walls.light_mask = 2
 	setup_buildings()
 	setup_lanes()
-	blocks.setup_quadtree()
-	game.ui.map_loaded()
+	blocks.setup_quadtree(game.map)
 	Behavior.path.setup_pathfind()
+	game.ui.map_loaded()
 	game.map_loaded()
 
 
@@ -106,7 +106,7 @@ func setup_buildings():
 			elif building.team == game.enemy_team:
 				game.enemy_buildings.append(building)
 			else: game.neutral_buildings.append(building)
-			game.all_units.append(building)
+			WorldState.get_state("all_units").append(building)
 			game.all_buildings.append(building)
 	
 	# shop
@@ -131,7 +131,7 @@ func create(template, lane, team, mode, point):
 	game.map.unit_container.add_child(unit)
 	game.maps.spawn.spawn_unit(unit, lane, team, mode, point)
 	unit.reset_unit()
-	game.all_units.append(unit)
+	WorldState.get_state("all_units").append(unit)
 	game.selection.setup_selection(unit)
 	game.collision.setup(unit)
 	Behavior.move.setup_timer(unit) # collision reaction timer

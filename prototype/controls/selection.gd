@@ -108,7 +108,7 @@ func get_sel_unit_at_point(point):
 
 
 func get_unit_at_point(point):
-	for unit in game.all_units:
+	for unit in WorldState.get_state("all_units"):
 		var select_rad =  unit.selection_radius
 		var select_pos = unit.global_position + unit.selection_position
 		if Utils.circle_point_collision(point, select_pos, select_rad):

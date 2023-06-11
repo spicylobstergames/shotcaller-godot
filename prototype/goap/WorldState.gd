@@ -56,7 +56,7 @@ func clear_state():
 func apply_cheat_code(code):
 	match code:
 		"SHADOW":
-			for unit1 in game.all_units:
+			for unit1 in WorldState.get_state("all_units"):
 				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
 		"WIN":
 			game.end(true)
