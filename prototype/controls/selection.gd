@@ -9,20 +9,20 @@ func _ready():
 
 func input(event):
 	var point = Crafty_camera.get_global_mouse_position()
-	
+	var selected_unit = WorldState.get_state("selected_unit")
 	# KEYBOARD
 	if event is InputEventKey:
 		if not event.is_pressed():
-			if game.selected_unit:
+			if selected_unit:
 				match event.keycode:
-					KEY_E: move(game.selected_unit, point)
-					KEY_R: advance(game.selected_unit, point)
-					KEY_Q: teleport(game.selected_unit, point)
-					KEY_W: change_lane(game.selected_unit, point)
+					KEY_E: move(selected_unit, point)
+					KEY_R: advance(selected_unit, point)
+					KEY_Q: teleport(selected_unit, point)
+					KEY_W: change_lane(selected_unit, point)
 				
 				match event.keycode:
-					KEY_A: attack(game.selected_unit, point) 
-					KEY_S: stand(game.selected_unit)
+					KEY_A: attack(selected_unit, point) 
+					KEY_S: stand(selected_unit)
 	
 	# CLICK SELECTION
 	if event is InputEventMouseButton and not event.is_pressed(): 
@@ -34,7 +34,7 @@ func input(event):
 	
 	# TOUCH SELECTION
 	if event is InputEventScreenTouch and not event.is_pressed(): 
-		if game.selected_unit:
+		if selected_unit:
 			control_state(event.position)
 		else:
 			select(event.position)
@@ -53,7 +53,7 @@ func select(point):
 
 func select_unit(unit):
 	deselect()
-	game.selected_unit = unit
+	WorldState.set_state("selected_unit", unit)
 	
 	if game.can_control(unit):
 		if unit.moves: 
@@ -84,17 +84,17 @@ func select_unit(unit):
 
 func deselect():
 	game.control_state = "selection"
-	
-	if game.selected_unit:
-		game.selected_unit.hud.hide_unselect()
+	var selected_unit = WorldState.get_state("selected_unit")
+	if selected_unit:
+		selected_unit.hud.hide_unselect()
 		
-		if (game.selected_unit.display_name == "blacksmith" 
+		if (selected_unit.display_name == "blacksmith" 
 			and game.ui.shop.visible): 
 			game.ui.shop_button.button_down()
 	
 	game.ui.leaders_icons.buttons_unfocus()
 	
-	game.selected_unit = null
+	WorldState.set_state("selected_unit", null)
 	game.selected_leader = null
 	game.ui.hide_unselect()
 
@@ -120,12 +120,13 @@ func no_delay(unit):
 
 
 func control_state(point):
+	var selected_unit = WorldState.get_state("selected_unit")
 	match game.control_state:
 		"selection": deselect()
-		"teleport": teleport(game.selected_unit, point)
-		"advance": advance(game.selected_unit, point)
-		"move": move(game.selected_unit, point)
-		"lane": change_lane(game.selected_unit, point)
+		"teleport": teleport(selected_unit, point)
+		"advance": advance(selected_unit, point)
+		"move": move(selected_unit, point)
+		"lane": change_lane(selected_unit, point)
 
 
 func advance(unit, point):

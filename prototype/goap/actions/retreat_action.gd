@@ -32,7 +32,7 @@ func enter(agent):
 			order = Behavior.orders.enemy_leaders_orders[unit.name]
 	Behavior.orders.set_leader(unit, order)
 	var lane = agent.get_state("lane")
-	var path = WorldState.lanes[lane].duplicate()
+	var path = WorldState.get_state("lanes")[lane].duplicate()
 	if unit.team == "red": path.reverse()
 	Behavior.move.point(unit, path[0])
 

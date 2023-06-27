@@ -112,6 +112,11 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
+[node name="dialog" parent="mid" instance=ExtResource("10")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [node name="score_board" parent="mid" instance=ExtResource("18")]
 unique_name_in_owner = true
 process_mode = 2
@@ -186,15 +191,6 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
-
-[node name="dialog" parent="bot_mid" instance=ExtResource("10")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = -215.0
-offset_top = -340.0
-offset_right = 205.0
-offset_bottom = -200.0
 
 [node name="bot_right" type="Control" parent="."]
 layout_mode = 3

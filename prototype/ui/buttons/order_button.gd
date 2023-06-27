@@ -43,10 +43,11 @@ func setup_order_button():
 
 
 func button_down():
+	var selected_unit = WorldState.get_state("selected_unit")
 	match self.orders.type:
 		"tactic":
 			clear_siblings(self)
-			if game.selected_unit.type == "leader":
+			if selected_unit.type == "leader":
 				Behavior.orders.set_leader_tactic(self.orders.tactic)
 			else: Behavior.orders.set_lane_tactic(self.orders.tactic)		
 			self.disabled = true
@@ -66,7 +67,7 @@ func button_down():
 				else: 
 					button.button_pressed = false
 					button.disabled = false
-			Behavior.orders.set_taxes(self.orders.taxes, game.selected_unit.team)
+			Behavior.orders.set_taxes(self.orders.taxes, selected_unit.team)
 			self.disabled = true
 		
 		"gold":
@@ -76,11 +77,11 @@ func button_down():
 		
 		"camp_hire":
 			clear_siblings(self)
-			Behavior.orders.camp_hire(self.orders.camp_hire, game.selected_unit.team)
+			Behavior.orders.camp_hire(self.orders.camp_hire, selected_unit.team)
 			self.disabled = true
 		
 		"lumberjack":
-			game.maps.spawn.lumberjack_hire(game.selected_unit, game.player_team)
+			game.maps.spawn.lumberjack_hire(selected_unit, game.player_team)
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		

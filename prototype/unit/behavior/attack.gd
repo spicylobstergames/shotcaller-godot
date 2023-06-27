@@ -130,7 +130,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			target.was_attacked(attacker, damage)
 			
 		if target.hud: target.hud.update_hpbar()
-		if target == game.selected_unit: game.ui.stats.update()
+		if target == WorldState.get_state("selected_unit"): game.ui.stats.update()
 		
 		if (target.type == "building" and 
 				target.subtype == "backwood"):

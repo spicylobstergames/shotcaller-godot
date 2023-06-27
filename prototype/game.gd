@@ -32,7 +32,6 @@ var neutral_buildings:Array = []
 var all_buildings:Array = []
 
 var map:Node2D
-var selected_unit:Node2D
 var selected_leader:Node2D
 
 var player_team:String = "blue"
@@ -160,7 +159,7 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if WorldState.get_state("game_started"):
 		collision.process(delta)
-		Behavior.path.draw(selected_unit)
+		Behavior.path.draw(WorldState.get_state("selected_unit"))
 		Goap.process(WorldState.get_state("all_units"), delta)
 
 
@@ -189,4 +188,15 @@ func reload():
 
 func exit():
 	get_tree().quit(0)
+
+
+func apply_cheat_code(code):
+	match code:
+		"SHADOW":
+			for unit1 in WorldState.get_state("all_units"):
+				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
+		"WIN":
+			end(true)
+		"LOSE":
+			end(false)
 

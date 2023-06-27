@@ -460,7 +460,7 @@ func setup_order_button(button):
 
 func update():
 	hide_all()
-	var unit = game.selected_unit
+	var unit = WorldState.get_state("selected_unit")
 	if game.can_control(unit):
 		if not unit.subtype == "backwood":
 			show_orders()

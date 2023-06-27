@@ -123,7 +123,7 @@ func process():
 
 func show_select():
 	stats.update()
-	if game.can_control(game.selected_unit):
+	if game.can_control(WorldState.get_state("selected_unit")):
 		orders_button.disabled = false
 	orders_panel.update()
 	buttons_update()

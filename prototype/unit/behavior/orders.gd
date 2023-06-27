@@ -72,23 +72,27 @@ func build_lanes():
 
 
 func set_lane_tactic(tactic):
-	var lane = game.selected_unit.agent.get_state("lane")
-	var lane_tactics
-	if game.selected_unit.team == game.player_team:
-		lane_tactics = player_lanes_orders[lane].tactics
-	else: lane_tactics = enemy_lanes_orders[lane].tactics
-	lane_tactics.tactic = tactic
-	lane_tactics.speed = tactics_extra_speed[tactic]
+	var selected_unit = WorldState.get_state("selected_unit")
+	if selected_unit:
+		var lane = selected_unit.agent.get_state("lane")
+		var lane_tactics
+		if selected_unit.team == game.player_team:
+			lane_tactics = player_lanes_orders[lane].tactics
+		else: lane_tactics = enemy_lanes_orders[lane].tactics
+		lane_tactics.tactic = tactic
+		lane_tactics.speed = tactics_extra_speed[tactic]
 
 
 func set_lane_priority(priority):
-	var lane = game.selected_unit.agent.get_state("lane")
-	var lane_priority
-	if game.selected_unit.team == game.player_team:
-		lane_priority = player_lanes_orders[lane].priority
-	else: lane_priority = enemy_lanes_orders[lane].priority
-	lane_priority.erase(priority)
-	lane_priority.push_front(priority)
+	var selected_unit = WorldState.get_state("selected_unit")
+	if selected_unit:
+		var lane = selected_unit.agent.get_state("lane")
+		var lane_priority
+		if selected_unit.team == game.player_team:
+			lane_priority = player_lanes_orders[lane].priority
+		else: lane_priority = enemy_lanes_orders[lane].priority
+		lane_priority.erase(priority)
+		lane_priority.push_front(priority)
 
 
 func set_pawn(pawn):
@@ -149,7 +153,7 @@ func set_leader(leader, orders):
 func set_leader_tactic(tactic):
 	var leader = game.selected_leader
 	var leader_tactics
-	if game.selected_unit.team == game.player_team:
+	if leader.team == game.player_team:
 		leader_tactics = player_leaders_orders[leader.name].tactics
 	else: leader_tactics = enemy_leaders_orders[leader.name].tactics
 	leader_tactics.tactic = tactic

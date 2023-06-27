@@ -33,6 +33,7 @@ func load_map(map_name):
 	create_container("block_container")
 	WorldState.set_state("map_size", game.map.size)
 	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
+	WorldState.set_state("lanes", {})
 	WorldState.set_state("map_mid", mid)
 	WorldState.set_state("map_camera_limit", game.map.camera_limit)
 	WorldState.set_state("zoom_limit", game.map.zoom_limit)
@@ -67,8 +68,8 @@ func setup_leaders(red_leaders, blue_leaders):
 
 
 func new_path(lane, team):
-	if lane in WorldState.lanes:
-		var path = WorldState.lanes[lane].duplicate()
+	if lane in WorldState.get_state("lanes"):
+		var path = WorldState.get_state("lanes")[lane].duplicate()
 		if team == "blue" and game.map.has_node("buildings/red/castle"):
 			path.append(game.map.get_node("buildings/red/castle").global_position)
 		if team == "red" and game.map.has_node("buildings/blue/castle"): 
@@ -79,7 +80,7 @@ func new_path(lane, team):
 
 func setup_lanes():
 	for lane in game.map.get_node("lanes").get_children():
-		WorldState.lanes[lane.name] = line_to_array(lane)
+		WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
 	Behavior.orders.build_lanes()
 
