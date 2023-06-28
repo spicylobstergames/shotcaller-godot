@@ -10,7 +10,9 @@ uniform vec4 color : source_color;
 void fragment()
 {
 	vec2 center = vec2(0.5, 0.5);
-	vec2 uv = UV - center;
+	vec2 ps = SCREEN_PIXEL_SIZE;
+	vec2 ratio = (ps.x > ps.y) ? vec2(ps.y / ps.x, 1) : vec2(1, ps.x / ps.y);
+	vec2 uv = (UV - center) * ratio;
 	COLOR = color;
 	COLOR.a = floor(5.0 * smoothstep(0.0, 1.0, sqrt(progress) - (uv.x * uv.x + uv.y * uv.y))) / 5.0;
 }"

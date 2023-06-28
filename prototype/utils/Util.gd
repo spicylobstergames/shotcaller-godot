@@ -36,7 +36,7 @@ func compare_distance(a: Dictionary, b: Dictionary) -> bool:
 
 func closer_lane(point):
 	var distances = []
-	for lane in WorldState.lanes:
+	for lane in WorldState.get_state("lanes"):
 		for lane_point in lane:
 			distances.append({
 				"distance": point.distance_to(lane_point),

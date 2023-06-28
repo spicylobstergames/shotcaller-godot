@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://midj7mrdtjfl"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_fgl47"]
+
+[resource]
+script = ExtResource("1_fgl47")
+name = "Magic Plume"
+tooltip = "A feather imbued with magical force\\nRegen +2 Speed +15\\nSpeed Aura +10"
+attributes = {
+"speed": 5
+}
+type = "equip"
+delivery_time = 15
+sprite = 10
+price = 350
+passive = "res://items/passives/plume.tscn"

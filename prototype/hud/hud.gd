@@ -8,8 +8,8 @@ func _ready():
 
 
 func hide_hpbars():
-	for unit in game.all_units:
-		if (unit != game.selected_unit and 
+	for unit in WorldState.get_state("all_units"):
+		if (unit != WorldState.get_state("selected_unit") and 
 				unit.hud and
 				unit.type != "leader" and
 				unit.current_hp == Behavior.modifiers.get_value(unit, "hp") ):
@@ -17,7 +17,7 @@ func hide_hpbars():
 
 
 func show_hpbars():
-	for unit in game.all_units:
+	for unit in WorldState.get_state("all_units"):
 		if unit.hud: unit.hud.hpbar.show()
 
 

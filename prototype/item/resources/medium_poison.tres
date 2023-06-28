@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://brucq8r8wmonx"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_flxnb"]
+
+[resource]
+script = ExtResource("1_flxnb")
+name = "Medium Poison"
+tooltip = "Slows down and deals 15 damage per second for 5 seconds"
+attributes = {
+"dot": 15,
+"speed": -20
+}
+type = "throwable"
+delivery_time = 30
+sprite = 16
+price = 100
+passive = ""

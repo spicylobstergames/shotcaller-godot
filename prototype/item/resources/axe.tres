@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://3p8jhonh8k28"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_kdr4k"]
+
+[resource]
+script = ExtResource("1_kdr4k")
+name = "Axe"
+tooltip = "Used to chop wood, now used for war
+Damage +25"
+attributes = {
+"damage": 25
+}
+type = "equip"
+delivery_time = 20
+sprite = 0
+price = 250

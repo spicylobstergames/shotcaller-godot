@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://nyvphyxe2c2o"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_0m7y3"]
+
+[resource]
+script = ExtResource("1_0m7y3")
+name = "Dragon Scale"
+tooltip = "No dragons were harmed in the making of this armor\\nHealth +300 Defense +4 Speed -10"
+attributes = {
+"defense": 4,
+"hp": 300,
+"speed": -10
+}
+type = "equip"
+delivery_time = 30
+sprite = 8
+price = 500
+passive = ""

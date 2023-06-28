@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://cxe1y8nslpqoi"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_2nom6"]
+
+[resource]
+script = ExtResource("1_2nom6")
+name = "Medium Health"
+tooltip = "Restore 150 HP"
+attributes = {
+"current_hp": 150
+}
+type = "consumable"
+delivery_time = 12
+sprite = 13
+price = 75
+passive = ""

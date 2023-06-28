@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://st0fxadqg7sw"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+name = "Sword"
+tooltip = "Forged of pure high-carbon steel\\nDamage +50 Attack speed +50%"
+attributes = {
+"attack_speed": 0.5,
+"damage": 50
+}
+type = "equip"
+delivery_time = 30
+sprite = 1
+price = 500

@@ -23,7 +23,7 @@ bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
 bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
 
 [node name="new_game_menu" type="Panel"]
-custom_minimum_size = Vector2(460, 460)
+custom_minimum_size = Vector2(460, 475)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

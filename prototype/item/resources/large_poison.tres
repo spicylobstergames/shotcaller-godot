@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://ba5r8cij5juxj"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_0sf57"]
+
+[resource]
+script = ExtResource("1_0sf57")
+name = "Large Poison"
+tooltip = "Slows down and deals 25 damage per second for 5 seconds"
+attributes = {
+"dot": 25,
+"speed": -30
+}
+type = "throwable"
+delivery_time = 50
+sprite = 17
+price = 175
+passive = ""

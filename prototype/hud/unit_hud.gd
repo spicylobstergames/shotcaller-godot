@@ -34,7 +34,7 @@ func update_hpbar():
 				leader_icon_hpbar.get_node("green").region_rect.size.x = h_scale * size
 			if (unit.type != "leader" 
 				and unit.current_hp >= hp 
-				and not unit == game.selected_unit):
+				and not unit == WorldState.get_state("selected_unit")):
 				hpbar.hide()
 
 

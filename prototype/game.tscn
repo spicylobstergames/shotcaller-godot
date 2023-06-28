@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://vh78pi540b5i" path="res://ui/ui.tscn" id="4"]
 [ext_resource type="Script" path="res://map/maps.gd" id="6"]
 [ext_resource type="Script" path="res://controls/selection.gd" id="7"]
+[ext_resource type="Script" path="res://collision/Collisions.gd" id="8_80fdg"]
 [ext_resource type="Script" path="res://test/test.gd" id="9"]
-[ext_resource type="Script" path="res://collision/collision.gd" id="10"]
 [ext_resource type="Script" path="res://hud/hud.gd" id="11"]
 [ext_resource type="Script" path="res://map/spawn.gd" id="12"]
 [ext_resource type="PackedScene" uid="uid://cy617y6pg38gd" path="res://ui/waterfall/waterfall_background.tscn" id="13"]
@@ -48,7 +48,7 @@ script = ExtResource("11")
 
 [node name="collision" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("10")
+script = ExtResource("8_80fdg")
 
 [node name="selection" type="Node" parent="."]
 unique_name_in_owner = true

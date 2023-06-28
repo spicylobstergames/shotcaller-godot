@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://bmussw8i873i6"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_2t26f"]
+
+[resource]
+script = ExtResource("1_2t26f")
+name = "Large Health"
+tooltip = "Restore 250 HP"
+attributes = {
+"current_hp": 250
+}
+type = "consumable"
+delivery_time = 20
+sprite = 14
+price = 125
+passive = ""

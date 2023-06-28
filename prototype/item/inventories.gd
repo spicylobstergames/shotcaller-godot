@@ -155,7 +155,7 @@ func gold_timer_timeout(unit):
 			gold_per_sec += inventory.extra_mine_gold
 		unit.gold += gold_per_sec
 		# Updates gold label
-		if unit == game.selected_unit: game.ui.stats.update()
+		if unit == WorldState.get_state("selected_unit"): game.ui.stats.update()
 
 
 func equip_items_has_slots(leader):

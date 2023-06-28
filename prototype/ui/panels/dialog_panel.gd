@@ -25,6 +25,7 @@ func campaign_start():
 
 
 func show_msg(leader, msg_text):
+	get_parent().show()
 	show()
 	can_hide = false
 	game.selection.select_unit(leader)

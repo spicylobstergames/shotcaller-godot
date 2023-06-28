@@ -27,13 +27,11 @@ var enemy_choose_leaders:Array = []
 var enemy_leaders:Array = []
 var enemy_units:Array = []
 var enemy_buildings:Array = []
-var all_units:Array = []
 var selectable_units:Array = []
 var neutral_buildings:Array = []
 var all_buildings:Array = []
 
 var map:Node2D
-var selected_unit:Node2D
 var selected_leader:Node2D
 
 var player_team:String = "blue"
@@ -56,6 +54,7 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 #	Engine.time_scale = 2
 	WorldState.set_state("is_game_active", false)
+	WorldState.set_state("all_units", [])
 	setup_one_sec_timer()
 	if test.debug: test.start()
 	else: ui.show_main_menu()
@@ -138,7 +137,7 @@ func one_sec_cycle(): # called every second
 		else:
 			ui.top_label.hide()
 			
-		for unit1 in all_units:
+		for unit1 in WorldState.get_state("all_units"):
 			var has_regen = (unit1.regen > 0)
 			var is_building = (unit1.type == "building")
 			var is_neutral = (unit1.team == "neutral")
@@ -160,8 +159,8 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if WorldState.get_state("game_started"):
 		collision.process(delta)
-		Behavior.path.draw(selected_unit)
-		Goap.process(all_units, delta)
+		Behavior.path.draw(WorldState.get_state("selected_unit"))
+		Goap.process(WorldState.get_state("all_units"), delta)
 
 
 func can_control(unit1):
@@ -189,4 +188,15 @@ func reload():
 
 func exit():
 	get_tree().quit(0)
+
+
+func apply_cheat_code(code):
+	match code:
+		"SHADOW":
+			for unit1 in WorldState.get_state("all_units"):
+				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
+		"WIN":
+			end(true)
+		"LOSE":
+			end(false)
 

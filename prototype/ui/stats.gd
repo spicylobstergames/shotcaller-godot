@@ -28,7 +28,7 @@ func _ready():
 
 
 func update():
-	var unit = game.selected_unit
+	var unit = WorldState.get_state("selected_unit")
 	clear_old_hpbar()
 	if not unit: hide()
 	else:

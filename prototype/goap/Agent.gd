@@ -12,12 +12,14 @@ extends Node
 
 @export var goals_list = []
 
+var debug_agent := false
+
 var _goals
 var _current_goal
 var _current_plan
-var _current_plan_step = 0
+var _current_plan_step := 0
 var _unit
-var _state = {}
+var _state := {}
 
 
 var attacked_timer = 2
@@ -122,7 +124,7 @@ func _follow_plan(plan, delta):
 		var is_step_complete = plan[_current_plan_step].perform(self, delta)
 		
 		# debug
-		if WorldState.game.test.debug: 
+		if debug_agent: 
 			#_unit.hud.state.text = get_current_action().get_class_name()
 			_unit.hud.state.text = _get_best_goal().get_class_name()
 		
@@ -214,13 +216,15 @@ func on_arrive():
 		_get_best_goal().on_arrive(self)
 
 
-func clear_orders():
-	for s in _state:
-		if("order_" in s):
-			_state.remove(s)
-
-
-func clear_tactics():
-	for s in _state:
-		if("tactics_" in s):
-			_state.remove(s)
+#func clear_orders():
+#	for s in _state:
+#		print(s)
+#		if("order_" in s):
+#			_state.remove(s)
+#
+#
+#func clear_tactics():
+#	for s in _state:
+#		print(s)
+#		if("tactics_" in s):
+#			_state.remove(s)

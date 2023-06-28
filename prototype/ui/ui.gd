@@ -113,7 +113,7 @@ func map_loaded():
 func process():
 	if WorldState.get_state("opt").show_fps:
 		var f = Engine.get_frames_per_second()
-		var n = game.all_units.size()
+		var n = WorldState.get_state("all_units").size()
 		fps.set_text("fps: "+str(f)+" u:"+str(n))
 	
 	# minimap display update
@@ -123,7 +123,7 @@ func process():
 
 func show_select():
 	stats.update()
-	if game.can_control(game.selected_unit):
+	if game.can_control(WorldState.get_state("selected_unit")):
 		orders_button.disabled = false
 	orders_panel.update()
 	buttons_update()

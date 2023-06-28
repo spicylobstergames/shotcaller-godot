@@ -3,6 +3,7 @@ extends Camera2D
 # Autoload
 # self = Crafty_camera
 
+signal camera_zoom_changed
 
 # PAN
 var is_panning:bool = false
@@ -11,8 +12,7 @@ var pan_position:Vector2 = Vector2.ZERO
 var is_zooming:bool = false
 var zoom_default:Vector2 = Vector2.ONE
 var zoom_limit:Vector2 = Vector2.ONE
-var default_zoom_sensitivity := .5
-var zoom_in_limit := .5
+var default_zoom_sensitivity := .2
 # KEYBOARD
 var arrow_keys_move:Vector2 = Vector2.ZERO
 var arrow_keys_speed := 4
@@ -27,10 +27,8 @@ var _touches_info = {
 	"last_avg_pos":Vector2.ZERO, 
 	"cur_avg_pos":Vector2.ZERO
 }
-var actions = InputMap.get_actions()
 
-func _ready():
-	zoom = zoom_default
+var actions = InputMap.get_actions()
 
 
 func get_action(event):
@@ -122,18 +120,13 @@ func input(event):
 		
 	# ZOOM
 	if event.is_action_pressed("zoom_in"):
-		_zoom_camera(-1)
-	if event.is_action_pressed("zoom_out"):
 		_zoom_camera(1)
+	if event.is_action_pressed("zoom_out"):
+		_zoom_camera(-1)
 
 
 func map_loaded():
 	position = Vector2.ZERO
-	var limit = WorldState.get_state("map_camera_limit")
-	limit_left = -limit.x
-	limit_top = -limit.y
-	limit_right = limit.x
-	limit_bottom = limit.y
 	var mid = WorldState.get_state("map_mid")
 	offset = mid
 	zoom_limit = WorldState.get_state("zoom_limit")
@@ -155,39 +148,39 @@ func focus_unit(unit):
 	global_position = unit.global_position - mid
 
 
-func zoom_reset(): 
+func zoom_reset():
 	zoom = zoom_default
+	emit_signal("camera_zoom_changed")
 	
 	
-func full_zoom_in(): 
+func full_zoom_in():
 	zoom = Vector2(zoom_limit.x,zoom_limit.x)
+	emit_signal("camera_zoom_changed")
 	
 	
-func full_zoom_out(): 
+func full_zoom_out():
 	zoom = Vector2(zoom_limit.y, zoom_limit.y)
+	emit_signal("camera_zoom_changed")
 
 
 func _zoom_camera(dir):
 	var new_zoom = zoom + Vector2(default_zoom_sensitivity, default_zoom_sensitivity) * dir
 	
+	var zoom_in_limit = zoom_limit.x
 	var zoom_out_limit = zoom_limit.y
 	
 	new_zoom.x = clamp(new_zoom.x, zoom_in_limit, zoom_out_limit)
 	new_zoom.y = clamp(new_zoom.y, zoom_in_limit, zoom_out_limit)
 	
 	zoom = new_zoom
-	
-#	TODO: fix map zoom and remove zoom limits from the map
-#	var size = get_viewport().size
-#	var max_size = max(size.x, size.y)
-#	var zoom_out_limit = WorldState.get_state("map_size") / max_size
+	emit_signal("camera_zoom_changed")
 
 
 func process():
 	if WorldState.get_state("game_started"): 
 		
 		# APPLY MOUSE PAN
-		if is_panning: translate(pan_position * zoom.x)
+		if is_panning: translate(pan_position / zoom.x)
 		# APPLY KEYBOARD PAN
 		else: translate(arrow_keys_move)
 		

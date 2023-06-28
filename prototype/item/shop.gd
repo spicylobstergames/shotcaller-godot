@@ -12,198 +12,37 @@ var cleared = false
 
 var blacksmiths := []
 
-const items = {
-	# Offensive
-	"axe": {
-		"name": "Axe",
-		"sprite": 0,
-		"tooltip": "Used to chop wood, now used for war\nDamage +25",
-		"attributes": {"damage": 25},
-		"price": 250,
-		"type": "equip",
-		"delivery_time": 20
-	},
-	"sword": {
-		"name": "Sword",
-		"sprite": 1,
-		"tooltip": "Forged of pure high-carbon steel\nDamage +50 Attack speed +50%",
-		"attributes": {"damage": 50, "attack_speed": .5},
-		"price": 500,
-		"type": "equip",
-		"delivery_time": 30
-	},
-	"bow": {
-		"name": "Elven\nBow",
-		"sprite": 2,
-		"tooltip": "\nDamage +20, Attack speed +25% Range +40%",
-		"attributes": {"damage": 20, "attack_speed": .25, "attack_range": .4},
-		"price": 500,
-		"type": "equip",
-		"delivery_time": 30
-	},
-
-	# Defensive
-	"helm": {
-		"name": "Helm",
-		"sprite": 3,
-		"tooltip": "Adds 150 HP",
-		"attributes": {"hp": 150},
-		"price": 300,
-		"type": "equip",
-		"delivery_time": 20
-	},
-	"great_helm": {
-		"name": "Great\nHelm",
-		"sprite": 4,
-		"tooltip": "Adds 150 HP Defense +5",
-		"attributes": {"hp": 200, "defense": 5},
-		"price": 500,
-		"type": "equip",
-		"delivery_time": 20
-	},
-	"boots": {
-		"name": "Boots",
-		"sprite": 5,
-		"tooltip": "Protect your feet from the ground\nSpeed +15",
-		"attributes": {"speed": 15},
-		"price": 300,
-		"type": "equip",
-		"delivery_time": 15
-	},
-	"shield": {
-		"name": "Shield",
-		"sprite": 6,
-		"tooltip": "Wooden shield\nHealth +50",
-		"attributes": {"hp": 100},
-		"price": 200,
-		"type": "equip",
-		"delivery_time": 30
-	},
-	"holy_shield": {
-		"name": "Holy\nShield",
-		"sprite": 7,
-		"tooltip": "Magically reinforced, stronger than steel\nHealth +200 Vision +50",
-		"attributes": {"hp": 150, "vision": 50},
-		"price": 450,
-		"type": "equip",
-		"delivery_time": 30,
-		"passive": "res://items/passives/holy_shield.tscn" # nearby units +50 health
-	},
-	"scale": {
-		"name": "Dragon\nscale",
-		"sprite": 8,
-		"tooltip": "No dragons were harmed in the making of this armor\nHealth +300 Defense +4 Speed -10",
-		"attributes": {"hp": 300, "defense": 4, "speed": -10},
-		"price": 500,
-		"type": "equip",
-		"delivery_time": 30
-	},
-
-
-	# Utility
-	"torch": {
-		"name": "Torch",
-		"sprite": 9,
-		"tooltip": "This torch will never burn out\nVision +50",
-		"attributes": {"vision": 50},
-		"price": 150,
-		"type": "equip",
-		"delivery_time": 15
-	},
-	"feather": {
-		"name": "Magic\nPlume",
-		"sprite": 10,
-		"tooltip": "A feather imbued with magical force\nRegen +2 Speed +15",
-		"attributes": {"regen": 2, "speed": 5}, # Other 10 comes from passive
-		"price": 350,
-		"type": "equip",
-		"delivery_time": 15,
-		"passive": "res://items/passives/feather.tscn" # nearby units +10 speed
-	},
-	"eye": {
-		"name": "Dragon\nEye",
-		"sprite": 11,
-		"tooltip": "The Eye has helped heroes navigate the battlefield for centuries\nVision +100 Speed +10",
-		"attributes": {"vision": 100, "speed": 10},
-		"price": 350,
-		"type": "equip",
-		"delivery_time": 30
-	},
-
-	# Consumables
-	"small_hp": {
-		"name": "Small\nHealth",
-		"sprite": 12,
-		"tooltip": "Restore 100 HP",
-		"attributes": {"current_hp": 100},
-		"price": 50,
-		"type": "consumable",
-		"delivery_time": 10
-	},
-	"medium_hp": {
-		"name": "Medium\nHealth",
-		"sprite": 13,
-		"tooltip": "Restore 150 HP",
-		"attributes": {"current_hp": 150},
-		"price": 75,
-		"type": "consumable",
-		"delivery_time": 15
-	},
-	"large_hp": {
-		"name": "Large\nHealth",
-		"sprite": 14,
-		"tooltip": "Restore 250 HP",
-		"attributes": {"current_hp": 250},
-		"price": 125,
-		"type": "consumable",
-		"delivery_time": 20
-	},
-	"small_poison_bomb": {
-		"name": "Small\nPoison",
-		"sprite": 15,
-		"tooltip": "Slows down and deals 10 damage per second for 5 seconds",
-		"attributes": {"dot": 10, "speed": -10},
-		"price": 75,
-		"type": "throwable",
-		"delivery_time": 15,
-		"duration": 5
-	},
-	"medium_poison_bomb": {
-		"name": "Medium\nPoison",
-		"sprite": 16,
-		"tooltip": "Slows down and deals 15 damage per second for 5 seconds",
-		"attributes": {"dot": 15, "speed": -20},
-		"price": 100,
-		"type": "throwable",
-		"delivery_time": 30,
-		"duration": 5
-	},
-	"large_poison_bomb": {
-		"name": "Large\nPoison",
-		"sprite": 17,
-		"tooltip": "Slows down and deals 25 damage per second for 5 seconds",
-		"attributes": {"dot": 25, "speed": -30},
-		"price": 175,
-		"type": "throwable",
-		"delivery_time": 50,
-		"duration": 5
-	}
-}
+var items := [
+	"axe",
+	"sword",
+	"bow",
+	"helm",
+	"great_helm",
+	"boots",
+	"shield",
+	"holy_shield",
+	"scale",
+	"torch",
+	"plume",
+	"eye",
+	"small_hp",
+	"medium_hp",
+	"large_hp",
+	"small_poison",
+	"medium_poison",
+	"large_poison"
+]
 
 
 func _ready():
 	game = get_tree().get_current_scene()
-
 	hide()
-
 	clear()
-
+	
 	for item in items:
-		var new_item = items[item].duplicate(true)
-		new_item.ready = false
-		new_item.delivered = false
+		var new_item = load("res://item/resources/"+item+".tres").duplicate(true)
 		add_item(new_item)
-
+	
 	disable_all()
 
 
@@ -230,7 +69,7 @@ func add_item(item):
 	var new_item_button = item_button_preload.instantiate()
 	new_item_button.shop_item = true
 	if item.type == "consumable": consumable_items.add_child(new_item_button)
-	elif item.type == "throwable":throwable_items.add_child(new_item_button)
+	elif item.type == "throwable": throwable_items.add_child(new_item_button)
 	else: equip_items.add_child(new_item_button)
 	new_item_button.setup(item)
 

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Shop_item" load_steps=2 format=3 uid="uid://bwtl5m10jnwpj"]
+
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_20kts"]
+
+[resource]
+script = ExtResource("1_20kts")
+name = "Torch"
+tooltip = "This torch will never burn out\\nVision +50"
+attributes = {
+"vision": 50
+}
+type = "equip"
+delivery_time = 15
+sprite = 9
+price = 150
+passive = "res://items/passives/holy_shield.tscn"

@@ -432,7 +432,7 @@ func heal(heal_hp):
 	self.current_hp += heal_hp
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
 	self.hud.update_hpbar()
-	if self == game.selected_unit: game.ui.stats.update()
+	if self == WorldState.get_state("selected_unit"): game.ui.stats.update()
 	emit_signal("unit_healed")
 
 

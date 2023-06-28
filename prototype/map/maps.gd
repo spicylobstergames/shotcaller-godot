@@ -31,7 +31,9 @@ func load_map(map_name):
 	var projectile_container = create_container("projectile_container")
 	projectile_container.y_sort_enabled = true
 	create_container("block_container")
+	WorldState.set_state("map_size", game.map.size)
 	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
+	WorldState.set_state("lanes", {})
 	WorldState.set_state("map_mid", mid)
 	WorldState.set_state("map_camera_limit", game.map.camera_limit)
 	WorldState.set_state("zoom_limit", game.map.zoom_limit)
@@ -51,9 +53,9 @@ func map_loaded():
 	#game.map.walls.light_mask = 2
 	setup_buildings()
 	setup_lanes()
-	blocks.setup_quadtree()
-	game.ui.map_loaded()
+	blocks.setup_quadtree(game.map)
 	Behavior.path.setup_pathfind()
+	game.ui.map_loaded()
 	game.map_loaded()
 
 
@@ -66,8 +68,8 @@ func setup_leaders(red_leaders, blue_leaders):
 
 
 func new_path(lane, team):
-	if lane in WorldState.lanes:
-		var path = WorldState.lanes[lane].duplicate()
+	if lane in WorldState.get_state("lanes"):
+		var path = WorldState.get_state("lanes")[lane].duplicate()
 		if team == "blue" and game.map.has_node("buildings/red/castle"):
 			path.append(game.map.get_node("buildings/red/castle").global_position)
 		if team == "red" and game.map.has_node("buildings/blue/castle"): 
@@ -78,7 +80,7 @@ func new_path(lane, team):
 
 func setup_lanes():
 	for lane in game.map.get_node("lanes").get_children():
-		WorldState.lanes[lane.name] = line_to_array(lane)
+		WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
 	Behavior.orders.build_lanes()
 
@@ -105,7 +107,7 @@ func setup_buildings():
 			elif building.team == game.enemy_team:
 				game.enemy_buildings.append(building)
 			else: game.neutral_buildings.append(building)
-			game.all_units.append(building)
+			WorldState.get_state("all_units").append(building)
 			game.all_buildings.append(building)
 	
 	# shop
@@ -130,7 +132,7 @@ func create(template, lane, team, mode, point):
 	game.map.unit_container.add_child(unit)
 	game.maps.spawn.spawn_unit(unit, lane, team, mode, point)
 	unit.reset_unit()
-	game.all_units.append(unit)
+	WorldState.get_state("all_units").append(unit)
 	game.selection.setup_selection(unit)
 	game.collision.setup(unit)
 	Behavior.move.setup_timer(unit) # collision reaction timer
