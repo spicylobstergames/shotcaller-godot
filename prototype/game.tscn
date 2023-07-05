@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bt5ysasbsjat3"]
+[gd_scene load_steps=13 format=3 uid="uid://bt5ysasbsjat3"]
 
 [ext_resource type="Script" path="res://collision/blocks/blocks.gd" id="1"]
 [ext_resource type="Script" path="res://game.gd" id="2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://test/test.gd" id="9"]
 [ext_resource type="Script" path="res://hud/hud.gd" id="11"]
 [ext_resource type="Script" path="res://map/spawn.gd" id="12"]
+[ext_resource type="AudioStream" uid="uid://bcyvb0f37c1lw" path="res://assets/soundtrack/Shotcaller_Menu_Theme.mp3" id="12_bsynf"]
 [ext_resource type="PackedScene" uid="uid://cy617y6pg38gd" path="res://ui/waterfall/waterfall_background.tscn" id="13"]
 [ext_resource type="Script" path="res://ui/transitions/transitions.gd" id="14_dacea"]
 
@@ -62,3 +63,7 @@ script = ExtResource("9")
 unique_name_in_owner = true
 layer = 5
 script = ExtResource("14_dacea")
+
+[node name="soundtrack" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_bsynf")
+autoplay = true
