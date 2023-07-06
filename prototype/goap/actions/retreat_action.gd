@@ -24,10 +24,10 @@ func enter(agent):
 	Behavior.attack.set_target(unit, null)
 	# update lane data in case of lane change
 	var order
-	if unit.team == WorldState.game.player_team:
+	if unit.team == WorldState.get_state("player_team"):
 		if unit.name in Behavior.orders.player_leaders_orders:
 			order = Behavior.orders.player_leaders_orders[unit.name]
-	elif unit.team == WorldState.game.enemy_team:
+	elif unit.team == WorldState.get_state("enemy_team"):
 		if unit.name in Behavior.orders.enemy_leaders_orders:
 			order = Behavior.orders.enemy_leaders_orders[unit.name]
 	Behavior.orders.set_leader(unit, order)

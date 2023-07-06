@@ -225,17 +225,14 @@ collide = true
 projectile_speed = 0.0
 
 [node name="state" parent="hud" index="0"]
-visible = true
-offset_top = -110.0
-offset_bottom = -94.0
+offset_top = -115.0
+offset_bottom = -97.0
 
 [node name="selection" parent="hud" index="1"]
-visible = true
 position = Vector2(0, 7)
 scale = Vector2(4, 3)
 
 [node name="hpbar" parent="hud" index="2"]
-visible = true
 position = Vector2(0, -95)
 
 [node name="symbol" parent="." index="1"]

@@ -198,12 +198,11 @@ func set_state(s):
 
 func setup_team(new_team):
 	self.team = new_team
-
 	# fog setup
 	if game.map.fog_of_war and self.has_node("light"):
 		var light = get_node("light")
 		light.hide()
-		if new_team == game.player_team: light.show()
+		if new_team == WorldState.get_state("player_team"): light.show()
 		var s = self.vision / 16
 		light.scale = Vector2(s,s)
 		sprites.use_parent_material = true
@@ -508,7 +507,7 @@ func on_death_end():  # death animation end
 			"leader": game.maps.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == "castle":
-					game.end(team == game.enemy_team)
+					game.end(team == WorldState.get_state("enemy_team"))
 	
 	emit_signal("unit_died")
 

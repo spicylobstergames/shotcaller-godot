@@ -25,7 +25,7 @@ func reset():
 
 func _button_down():
 	var leader = game.selected_leader
-	if leader.team != game.player_team:
+	if leader.team != WorldState.get_state("player_team"):
 		return
 	if skill.on_cooldown():
 		return
@@ -43,7 +43,7 @@ func _button_down():
 #func _physics_process(delta):
 #	if not skill == null:
 #		var selected_unit = WorldState.get_state("selected_unit")
-#		if selected_unit and selected_unit.team != game.player_team:
+#		if selected_unit and selected_unit.team != WorldState.get_state("player_team"):
 #			# We shoudln't see enemy skill's cooldowns
 #			self.disabled = true
 #		elif self.skill.on_cooldown():

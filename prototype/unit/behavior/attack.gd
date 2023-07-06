@@ -139,7 +139,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				var rate = float(target.current_hp)/float(hp)
 				
 				var tax = Behavior.orders.player_tax
-				if target.team == game.enemy_team:
+				if target.team == WorldState.get_state("enemy_team"):
 					tax = Behavior.orders.enemy_tax
 					
 				var limit = Behavior.orders.tax_conquer_limit[tax]
@@ -151,9 +151,10 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			target.current_hp = 0
 			target.die()
 			if target.type == "leader":
-				if target.team == game.player_team: game.player_deaths += 1
+				var player_team = WorldState.get_state("player_team")
+				if target.team == player_team: game.player_deaths += 1
 				else: game.enemy_deaths += 1
-				if attacker.team == game.player_team: game.player_kills += 1
+				if attacker.team == player_team: game.player_kills += 1
 				else: game.enemy_kills += 1
 
 

@@ -26,8 +26,9 @@ func build():
 		button.name = leader.name
 		index += 1
 		button.hint.text = str(index)
-		if game.player_team == "blue": button.sprite.material = null
-		button.prepare(leader.display_name, game.player_team)
+		var player_team = WorldState.get_state("player_team")
+		if player_team == "blue": button.sprite.material = null
+		button.prepare(leader.display_name, player_team)
 		button.show()
 	self.built = true
 	self.show()

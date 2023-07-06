@@ -230,8 +230,8 @@ defense = 10
 projectile_speed = 220.0
 
 [node name="state" parent="hud" index="0"]
-offset_top = -71.0
-offset_bottom = -55.0
+offset_top = -77.0
+offset_bottom = -59.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2(0, 5)

@@ -189,7 +189,7 @@ func copy_symbol(unit, symbol):
 	var sym = symbol.duplicate()
 	sym.show()
 	sym.scale *= 0.25
-	if unit.team == game.player_team:
+	if unit.team == WorldState.get_state("player_team"):
 		var light = light_template.duplicate()
 		light.show()
 		var s = float(unit.vision) * 2 / max(game.map.size.x, game.map.size.y)
