@@ -601,6 +601,13 @@ attack_speed = 0.6
 defense = 8
 projectile_speed = 0.0
 
+[node name="state" parent="hud" index="0"]
+offset_top = -55.0
+offset_bottom = -37.0
+
+[node name="hpbar" parent="hud" index="2"]
+position = Vector2(0, -35)
+
 [node name="symbol" parent="." index="1"]
 scale = Vector2(12, 12)
 

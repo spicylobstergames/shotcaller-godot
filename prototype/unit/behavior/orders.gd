@@ -76,7 +76,7 @@ func set_lane_tactic(tactic):
 	if selected_unit:
 		var lane = selected_unit.agent.get_state("lane")
 		var lane_tactics
-		if selected_unit.team == game.player_team:
+		if selected_unit.team == WorldState.get_state("player_team"):
 			lane_tactics = player_lanes_orders[lane].tactics
 		else: lane_tactics = enemy_lanes_orders[lane].tactics
 		lane_tactics.tactic = tactic
@@ -88,7 +88,7 @@ func set_lane_priority(priority):
 	if selected_unit:
 		var lane = selected_unit.agent.get_state("lane")
 		var lane_priority
-		if selected_unit.team == game.player_team:
+		if selected_unit.team == WorldState.get_state("player_team"):
 			lane_priority = player_lanes_orders[lane].priority
 		else: lane_priority = enemy_lanes_orders[lane].priority
 		lane_priority.erase(priority)
@@ -98,7 +98,7 @@ func set_lane_priority(priority):
 func set_pawn(pawn):
 	var lane = pawn.agent.get_state("lane")
 	var lane_orders
-	if pawn.team == game.player_team:
+	if pawn.team == WorldState.get_state("player_team"):
 		lane_orders = player_lanes_orders[lane]
 	else: lane_orders = enemy_lanes_orders[lane]
 	pawn.tactics = lane_orders.tactics.tactic
@@ -140,7 +140,7 @@ func set_leader(leader, orders):
 		leader.priority = orders.priority.duplicate()
 		
 		var extra_unit = game.maps.spawn.player_extra_unit
-		if leader.team == game.enemy_team:
+		if leader.team == WorldState.get_state("enemy_team"):
 			extra_unit = game.maps.spawn.enemy_extra_unit
 		var cost
 		match extra_unit:
@@ -153,7 +153,7 @@ func set_leader(leader, orders):
 func set_leader_tactic(tactic):
 	var leader = game.selected_leader
 	var leader_tactics
-	if leader.team == game.player_team:
+	if leader.team == WorldState.get_state("player_team"):
 		leader_tactics = player_leaders_orders[leader.name].tactics
 	else: leader_tactics = enemy_leaders_orders[leader.name].tactics
 	leader_tactics.tactic = tactic
@@ -163,7 +163,7 @@ func set_leader_tactic(tactic):
 func set_leader_priority(priority):
 	var leader = game.selected_leader
 	var leader_orders
-	if leader.team == game.player_team:
+	if leader.team == WorldState.get_state("player_team"):
 		leader_orders = player_leaders_orders[leader.name]
 	else: leader_orders = enemy_leaders_orders[leader.name]
 	var leader_priority = leader_orders.priority
@@ -241,7 +241,7 @@ func lose_building(building):
 	match building.display_name:
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
-			if team == game.player_team:
+			if team == WorldState.get_state("player_team"):
 				game.maps.spawn.player_extra_unit = "infantry"
 			else: game.maps.spawn.enemy_extra_unit = "infantry"
 			building.attacks = false
@@ -293,7 +293,7 @@ func pray(unit):
 func set_mine_gold(team, value):
 	var leaders = game.player_leaders
 	var inventories = game.ui.inventories.player_leaders_inv
-	if team == game.enemy_team:
+	if team == WorldState.get_state("enemy_team"):
 		leaders = game.enemy_leaders
 		inventories = game.ui.inventories.enemy_leaders_inv
 	for leader in leaders:
@@ -330,7 +330,7 @@ func gold_collect_counter(button):
 		if mine.agent.get_state("is_channeling"):
 			mine.agent.set_state("is_channeling", false)
 			var leaders = game.player_leaders
-			if mine.team == game.enemy_team: leaders = game.enemy_leaders
+			if mine.team == WorldState.get_state("enemy_team"): leaders = game.enemy_leaders
 			for leader in leaders:
 				leader.gold += floor(mine.gold / leaders.size())
 			mine.gold = 0
@@ -359,7 +359,7 @@ func gold_destroy_counter(button):
 # TAXES
 
 func set_taxes(tax, team):
-	if team == game.player_team:
+	if team == WorldState.get_state("player_team"):
 		player_tax = tax
 	else: enemy_tax = tax
 
@@ -374,7 +374,7 @@ func update_taxes():
 func remove_tax(team):
 	var leaders = game.player_leaders
 	var inventories = game.ui.inventories.player_leaders_inv
-	if team == game.enemy_team:
+	if team == WorldState.get_state("enemy_team"):
 		leaders = game.enemy_leaders
 		inventories = game.ui.inventories.enemy_leaders_inv
 	for leader in leaders:

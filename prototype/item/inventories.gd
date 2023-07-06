@@ -77,7 +77,7 @@ func build_leaders():
 func get_leader_inventory(leader):
 	if leader.type == "leader":
 		var inv = player_leaders_inv
-		if not leader.team == game.player_team:
+		if not leader.team == WorldState.get_state("player_team"):
 			inv = enemy_leaders_inv
 		if leader.name in inv: return inv[leader.name]
 
@@ -85,7 +85,7 @@ func get_leader_inventory(leader):
 func set_leader_inventory(leader, inventory):
 	if leader.type == "leader":
 		var inv = player_leaders_inv
-		if not leader.team == game.player_team:
+		if not leader.team == WorldState.get_state("player_team"):
 			inv = enemy_leaders_inv
 
 		inventory.leader = leader
@@ -95,7 +95,7 @@ func set_leader_inventory(leader, inventory):
 func get_leader_delivery(leader):
 	if leader.type == "leader":
 		var deliv = player_deliveries
-		if not leader.team == game.player_team:
+		if not leader.team == WorldState.get_state("player_team"):
 			deliv = enemy_deliveries
 		if leader.name in deliv: return deliv[leader.name]
 
@@ -108,7 +108,7 @@ func gold_timer(unit):
 func set_leader_delivery(leader, delivery):
 	if leader.type == "leader":
 		var deliv = player_deliveries
-		if not leader.team == game.player_team:
+		if not leader.team == WorldState.get_state("player_team"):
 			deliv = enemy_deliveries
 		deliv[leader.name] = delivery
 

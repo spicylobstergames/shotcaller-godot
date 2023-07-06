@@ -80,7 +80,7 @@ func leaders():
 	for team in WorldState.teams:
 		var counter = 0
 		var choose_leaders = game.player_choose_leaders
-		if team != game.player_team: choose_leaders = game.enemy_choose_leaders
+		if team != WorldState.get_state("player_team"): choose_leaders = game.enemy_choose_leaders
 		for leader in choose_leaders:
 			var leader_name = leader
 			if leader == "random":
@@ -115,7 +115,7 @@ func spawn_group_cycle():
 	
 	for team in WorldState.teams:
 		var extra_unit = player_extra_unit
-		if team != game.player_team: extra_unit = enemy_extra_unit
+		if team != WorldState.get_state("player_team"): extra_unit = enemy_extra_unit
 		for lane in game.map.get_node("lanes").get_children():
 			send_pawn("archer", lane.name, team)
 			for n in 2:
@@ -133,7 +133,7 @@ func spawn_group_cycle():
 
 func recycle(template, lane, team, point):
 	var side = "player_"
-	if team != game.player_team: side = "enemy_"
+	if team != WorldState.get_state("player_team"): side = "enemy_"
 	var index = side+template
 	if cemitery[index].size():
 		var unit = cemitery[index].pop_back()
@@ -178,16 +178,18 @@ func next_to_building(template, building, team):
 
 func cemitery_add_pawn(unit):
 	var side = "player"
-	if unit.team != game.player_team: side = "enemy"
+	if unit.team != WorldState.get_state("player_team"): side = "enemy"
 	var index = side+"_"+unit.display_name
 	cemitery[index].append(unit)
 
 
 func cemitery_add_leader(leader):
+	var player_team = WorldState.get_state("player_team")
+	var enemy_team = WorldState.get_state("enemy_team")
 	match leader.team:
-		game.player_team:
+		player_team:
 			cemitery.player_leaders.append(leader)
-		game.enemy_team:
+		enemy_team:
 			cemitery.enemy_leaders.append(leader)
 	
 	var respawn_time = order_time * leader.respawn
@@ -221,14 +223,14 @@ func lumberjack_hire(lumbermill, team):
 	
 	# charge player
 	var team_leaders = game.player_leaders
-	if team == game.enemy_team: team_leaders = game.enemy_leaders
+	if team == WorldState.get_state("enemy_team"): team_leaders = game.enemy_leaders
 	for leader in team_leaders: leader.gold -= floor(lumberjack_cost/team_leaders.size())
 
 
 # CAMP
 
 func camp_hire(unit, team):
-	if team == game.player_team:
+	if team == WorldState.get_state("player_team"):
 		player_extra_unit = unit
 	else: enemy_extra_unit = unit
 	
@@ -239,5 +241,5 @@ func camp_hire(unit, team):
 		"mounted": cost = 3
 	
 	var team_leaders = game.player_leaders
-	if team == game.enemy_team: team_leaders = game.enemy_leaders
+	if team == WorldState.get_state("enemy_team"): team_leaders = game.enemy_leaders
 	for leader in team_leaders: leader.gold -= cost

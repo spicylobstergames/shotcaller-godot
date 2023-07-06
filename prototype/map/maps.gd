@@ -102,9 +102,9 @@ func setup_buildings():
 			building.agent.set_state("lane", building.subtype)
 			game.selection.setup_selection(building)
 			game.collision.setup(building)
-			if building.team == game.player_team:
+			if building.team == WorldState.get_state("player_team"):
 				game.player_buildings.append(building)
-			elif building.team == game.enemy_team:
+			elif building.team == WorldState.get_state("enemy_team"):
 				game.enemy_buildings.append(building)
 			else: game.neutral_buildings.append(building)
 			WorldState.get_state("all_units").append(building)
@@ -138,7 +138,7 @@ func create(template, lane, team, mode, point):
 	Behavior.move.setup_timer(unit) # collision reaction timer
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
-		if team == game.player_team:
+		if team == WorldState.get_state("player_team"):
 			game.player_leaders.append(unit)
 		else:
 			game.enemy_leaders.append(unit)

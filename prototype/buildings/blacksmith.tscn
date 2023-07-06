@@ -225,8 +225,8 @@ collide = true
 projectile_speed = 0.0
 
 [node name="state" parent="hud" index="0"]
-offset_top = -77.0
-offset_bottom = -61.0
+offset_top = -81.0
+offset_bottom = -63.0
 
 [node name="selection" parent="hud" index="1"]
 position = Vector2(0, 5)

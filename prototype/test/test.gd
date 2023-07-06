@@ -50,7 +50,7 @@ func spawn_unit():
 #		pawn.moves = false
 		
 		# TEST LUMBERJACK
-		game.maps.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), game.player_team)
+		game.maps.spawn.lumberjack_hire(game.map.get_node("buildings/blue/blacksmith"), WorldState.get_state("player_team"))
 
 
 
@@ -59,7 +59,7 @@ func spawn_random_units():
 	var n = 100-26
 	for x in range(1, n+1):
 		await get_tree().create_timer(x/n).timeout
-		var t = game.player_team if randf() > 0.5 else game.enemy_team
+		var t = WorldState.get_state("player_team") if randf() > 0.5 else WorldState.get_state("enemy_team")
 		game.maps.create(s.infantry, "top", t, "random_map", Vector2.ZERO)
 
 

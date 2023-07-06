@@ -49,7 +49,7 @@ func closer_lane(point):
 func closer_building(point, team):
 	var distances = []
 	var buildings = game.player_buildings
-	if team != game.player_team: buildings = game.enemy_buildings
+	if team != WorldState.get_state("player_team"): buildings = game.enemy_buildings
 	for building in buildings:
 		distances.append({
 			"distance": point.distance_to(building.global_position),

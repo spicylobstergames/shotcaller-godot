@@ -34,8 +34,6 @@ var all_buildings:Array = []
 var map:Node2D
 var selected_leader:Node2D
 
-var player_team:String = "blue"
-var enemy_team:String = "red"
 var mode:String = "match" # campaign
 var control_state:String = "selection"
 
@@ -165,7 +163,7 @@ func _physics_process(delta: float) -> void:
 
 func can_control(unit1):
 	return (unit1 
-		and unit1.team == player_team 
+		and unit1.team == WorldState.get_state("player_team")
 		and not unit1.dead
 		and (test.debug or unit1.type == "leader")
 	) 

@@ -21,6 +21,7 @@ func quick_start():
 	game.maps.current_map = "one_lane_map"
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
+	WorldState.set_state("player_team", "blue")
 	game.mode = "match"
 	game.start()
 

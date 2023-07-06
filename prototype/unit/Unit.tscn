@@ -9,9 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://defd23p55hffp" path="res://assets/map/light.png" id="16"]
 [ext_resource type="Texture2D" uid="uid://bn44lk22rvkye" path="res://assets/pawns/infantry_neutral.png" id="17"]
 
-[sub_resource type="CanvasItemMaterial" id="45"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uxyd2"]
+light_mode = 2
 
 [sub_resource type="CanvasItemMaterial" id="57"]
+light_mode = 2
 
 [sub_resource type="AtlasTexture" id="54"]
 atlas = ExtResource("3")
@@ -102,7 +104,7 @@ radius = 30.0
 radius = 50.04
 
 [node name="unit" type="Node2D"]
-material = SubResource("45")
+material = SubResource("CanvasItemMaterial_uxyd2")
 script = ExtResource("7")
 
 [node name="hud" parent="." instance=ExtResource("1")]
