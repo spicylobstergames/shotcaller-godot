@@ -23,7 +23,6 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 WorldState="*res://goap/WorldState.gd"
-Quadtree="*res://collision/Quadtree.gd"
 Collisions="*res://collision/Collisions.gd"
 Finder="*res://map/pathfind/JumpPointFinder.gd"
 Behavior="*res://unit/Behavior.tscn"

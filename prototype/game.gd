@@ -91,7 +91,7 @@ func map_loaded():
 		rng.randomize()
 		WorldState.one_sec_timer.start()
 		maps.spawn.start()
-		
+		%soundtrack.stop()
 		emit_signal("game_started")
 
 
@@ -118,6 +118,7 @@ func pause():
 
 
 func setup_one_sec_timer():
+	WorldState.one_sec_timer = Timer.new()
 	WorldState.one_sec_timer.wait_time = 1
 	WorldState.one_sec_timer.name = "one_sec_timer"
 	WorldState.one_sec_timer.timeout.connect(one_sec_cycle)
@@ -177,12 +178,16 @@ func end(winner: bool):
 	ended = true
 	victory = winner
 	ui.scoreboard.handle_game_end(winner)
+	%soundtrack.play(0.0)
 	emit_signal("game_ended")
 
 
 func reload():
 	get_tree().reload_current_scene()
-
+	size = Vector2(600,600)
+	Crafty_camera.reset()
+	layout_mode = 3
+	anchors_preset = 15
 
 func exit():
 	get_tree().quit(0)

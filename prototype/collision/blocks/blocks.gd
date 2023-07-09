@@ -1,22 +1,26 @@
 extends Node2D
 
 # self = game.maps.blocks
-
+const Quadtree = preload("res://collision/Quadtree.gd")
 
 # COLLISION QUADTREES
-
-var quad # : _QuadTreeClass
+var quad:Quadtree
 var block_template:PackedScene = load("res://collision/blocks/block_template.tscn")
 var tile_size := 64
 var half_tile_size := tile_size / 2
 var current_map : Node2D
+
+
+func create_quadtree(bounds, splitThreshold, splitLimit, currentSplit = 0):
+	return Quadtree.new(self, bounds, splitThreshold, splitLimit, currentSplit)
+
 
 func setup_quadtree(map):
 	current_map = map
 	tile_size = map.tile_size
 	half_tile_size = map.half_tile_size
 	var bound = Rect2(Vector2.ZERO, Vector2(map.size.x, map.size.y))
-	quad = Quadtree.create_quadtree(bound, 16, 16)
+	quad = create_quadtree(bound, 16, 16)
 
 
 func get_units_in_radius(pos, rad):

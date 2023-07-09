@@ -65,5 +65,6 @@ layer = 5
 script = ExtResource("14_dacea")
 
 [node name="soundtrack" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 stream = ExtResource("12_bsynf")
 autoplay = true

@@ -31,6 +31,7 @@ func _button_down():
 		return
 	# Apply all skills effects
 	for effect in skill.effects:
+		print(effect)
 		var result = await effect.call_func(skill.effects, skill.parameters, skill.visualize)
 		# if effect wasn't successful used, then we need to abort using skill
 		if !result:

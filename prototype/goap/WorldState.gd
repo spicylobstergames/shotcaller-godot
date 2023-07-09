@@ -6,7 +6,7 @@ extends Node
 # Access the autoload list in godot settings
 
 #runs logic that is only run once per second
-var one_sec_timer = Timer.new()
+var one_sec_timer:Timer
 var time:int = 0
 
 

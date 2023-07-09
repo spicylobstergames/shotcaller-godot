@@ -118,11 +118,11 @@ func input(event):
 				_touches_info.cur_avg_pos = avg_touch
 				pan_position = Vector2(-1 * (_touches_info.cur_avg_pos - _touches_info.last_avg_pos))
 		
-	# ZOOM
-	if event.is_action_pressed("zoom_in"):
-		_zoom_camera(1)
-	if event.is_action_pressed("zoom_out"):
-		_zoom_camera(-1)
+		# ZOOM
+		if event.is_action_pressed("zoom_in"):
+			_zoom_camera(1)
+		if event.is_action_pressed("zoom_out"):
+			_zoom_camera(-1)
 
 
 func map_loaded():
@@ -201,5 +201,7 @@ func process():
 		var y = camera_limit.y
 		global_position.x = clamp(global_position.x, -x, x)
 		global_position.y = clamp(global_position.y, -y, y)
-		
 
+
+func reset():
+	get_tree().reload_current_scene()

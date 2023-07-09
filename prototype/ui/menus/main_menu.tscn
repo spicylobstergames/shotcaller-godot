@@ -47,7 +47,6 @@ text = "Campaign"
 [node name="options_button" parent="VBoxContainer" instance=ExtResource("3")]
 unique_name_in_owner = true
 layout_mode = 2
-disabled = true
 text = "Options"
 
 [node name="exit_button" parent="VBoxContainer" instance=ExtResource("3")]
@@ -58,4 +57,5 @@ text = "Exit"
 [connection signal="pressed" from="VBoxContainer/quick_start_button" to="." method="quick_start"]
 [connection signal="pressed" from="VBoxContainer/new_game_button" to="." method="show_new_game_menu"]
 [connection signal="pressed" from="VBoxContainer/campaign_button" to="." method="campaign_start"]
+[connection signal="pressed" from="VBoxContainer/options_button" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/exit_button" to="." method="on_exit"]

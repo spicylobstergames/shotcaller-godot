@@ -22,6 +22,7 @@ func quick_start():
 	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
 	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
 	WorldState.set_state("player_team", "blue")
+	WorldState.set_state("enemy_team", "red")
 	game.mode = "match"
 	game.start()
 
@@ -36,6 +37,8 @@ func campaign_start():
 	hide()
 	game.maps.current_map = "rect_test_map"
 	game.player_choose_leaders = ["joan"]
+	WorldState.set_state("player_team", "blue")
+	WorldState.set_state("enemy_team", "red")
 	game.mode = "campaign"
 	game.start()
 
@@ -43,3 +46,7 @@ func campaign_start():
 func on_exit():
 	game.exit()
 
+
+
+func _on_options_button_pressed():
+	game.reload()
