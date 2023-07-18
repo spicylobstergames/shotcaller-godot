@@ -27,7 +27,7 @@ func _ready():
 	hide()
 
 
-func update():
+func process():
 	var unit = WorldState.get_state("selected_unit")
 	clear_old_hpbar()
 	if not unit: hide()

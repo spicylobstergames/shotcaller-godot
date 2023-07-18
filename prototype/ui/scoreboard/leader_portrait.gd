@@ -12,6 +12,6 @@ func prepare(leader):
 		frame = 0
 	else:
 		texture = leader_icons
-		var sprite_index = WorldState.leaders[leader]
-		hframes = WorldState.leaders.size()
+		var sprite_index = WorldState.leaders_list[leader]
+		hframes = WorldState.leaders_list.size()
 		frame = sprite_index

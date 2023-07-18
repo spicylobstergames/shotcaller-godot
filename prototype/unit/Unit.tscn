@@ -98,7 +98,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="18"]
-radius = 30.0
+radius = 8.0
 
 [sub_resource type="CircleShape2D" id="19"]
 radius = 50.04
@@ -156,7 +156,6 @@ offset = Vector2(-2, -11)
 [node name="stuck" type="Node2D" parent="sprites"]
 
 [node name="collisions" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 0
 input_pickable = false
@@ -164,9 +163,10 @@ monitoring = false
 monitorable = false
 
 [node name="block" type="CollisionShape2D" parent="collisions"]
-visible = false
+position = Vector2(0, 2)
 shape = SubResource("18")
 disabled = true
+debug_color = Color(0.337255, 0.882353, 1, 0.419608)
 
 [node name="select" type="CollisionShape2D" parent="collisions"]
 visible = false
@@ -180,7 +180,6 @@ blend_mode = 2
 shadow_enabled = true
 shadow_filter = 1
 shadow_filter_smooth = 5.0
-shadow_item_cull_mask = 2
 texture = ExtResource("16")
 
 [node name="behavior" type="Node" parent="."]

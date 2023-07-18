@@ -199,7 +199,7 @@ func set_state(s):
 func setup_team(new_team):
 	self.team = new_team
 	# fog setup
-	if game.map.fog_of_war and self.has_node("light"):
+	if WorldState.get_state("map").fog_of_war and self.has_node("light"):
 		var light = get_node("light")
 		light.hide()
 		if new_team == WorldState.get_state("player_team"): light.show()
@@ -276,10 +276,11 @@ func closest_unit(enemies):
 	var sorted = self.sort_by_distance(enemies)
 	return sorted[0].unit
 
+func is_controllable():
+	return game.can_control(self)
 
 func start_control_delay():
 	self.curr_control_delay = self.control_delay
-	game.ui.stats.update()
 
 
 func set_delay():
@@ -335,14 +336,14 @@ func check_collision(unit2, delta):
 	return Utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
 
 
-func get_collision_around(delta):
+func get_units_in_quad(delta):
 	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
 	var unit1_rad = self.collision_radius
-	return game.maps.blocks.quad.get_units_in_radius(unit1_pos, unit1_rad)
+	return Collisions.quad.get_units_in_radius(unit1_pos, unit1_rad)
 
 
 func get_units_in_radius(radius, filters = {}, pos = self.global_position):
-	var neighbors = game.maps.blocks.get_units_in_radius(pos, radius)
+	var neighbors = Collisions.get_units_in_radius(pos, radius)
 	var targets = []
 	for unit2 in neighbors:
 		if self != unit2 and not unit2.dead:
@@ -423,6 +424,13 @@ func was_attacked(attacker, _damage):
 
 func on_attack_end(): # animation end of all attacks
 	if self.attacks:
+		if !self.target:
+			if self.current_path:
+				Behavior.path.smart(self, self.current_path)
+			if self.current_destiny:
+				Behavior.move.point(self, self.current_destiny)
+			else:
+				Behavior.move.stop(self)
 		emit_signal("unit_attack_ended")
 	emit_signal("unit_animation_ended")
 
@@ -431,7 +439,6 @@ func heal(heal_hp):
 	self.current_hp += heal_hp
 	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
 	self.hud.update_hpbar()
-	if self == WorldState.get_state("selected_unit"): game.ui.stats.update()
 	emit_signal("unit_healed")
 
 
@@ -503,11 +510,13 @@ func on_death_end():  # death animation end
 	if game.test.debug and game.test.stress: game.test.respawn(self)
 	else:
 		match self.type:
-			"pawn": game.maps.spawn.cemitery_add_pawn(self)
-			"leader": game.maps.spawn.cemitery_add_leader(self)
+			"worker": game.spawn.cemitery_add_worker(self)
+			"pawn": game.spawn.cemitery_add_pawn(self)
+			"leader": game.spawn.cemitery_add_leader(self)
 			"building":
 				if self.display_name == "castle":
 					game.end(team == WorldState.get_state("enemy_team"))
+			
 	
 	emit_signal("unit_died")
 

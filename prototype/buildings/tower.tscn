@@ -206,7 +206,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="28"]
-radius = 16.0
+radius = 18.0
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 45.0
@@ -226,6 +226,7 @@ collide = true
 attacks = true
 ranged = true
 damage = 50
+attack_range = 1.1
 attack_speed = 1.2
 defense = 10
 projectile_speed = 220.0
@@ -287,7 +288,6 @@ libraries = {
 }
 
 [node name="block" parent="collisions" index="0"]
-visible = true
 position = Vector2(0, -6)
 shape = SubResource("28")
 

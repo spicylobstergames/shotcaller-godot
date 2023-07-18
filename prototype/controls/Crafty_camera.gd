@@ -47,7 +47,7 @@ func input(event):
 		"ui_down":  arrow_keys_move.y =  arrow_keys_speed if pressed else 0
 
 		# KEYBOARD
-	if event is InputEventKey and WorldState.get_state("game_started"):
+	if event is InputEventKey:
 		
 		match event.keycode:
 			# LEADER KEYS
@@ -136,8 +136,9 @@ func map_loaded():
 
 func focus_leader(index):
 	var game = get_tree().get_current_scene()
-	if game.player_leaders.size() >= index:
-		var leader = game.player_leaders[index-1]
+	var player_leaders = WorldState.get_state("player_leaders")
+	if player_leaders.size() >= index:
+		var leader = player_leaders[index-1]
 		if leader:
 			focus_unit(leader)
 			game.selection.select_unit(leader)
@@ -204,4 +205,6 @@ func process():
 
 
 func reset():
-	get_tree().reload_current_scene()
+	position = Vector2.ZERO
+	offset = Vector2.ZERO
+	zoom = Vector2.ONE

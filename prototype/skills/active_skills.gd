@@ -234,7 +234,7 @@ func enemies_in_polygon(leader, radius, polygon):
 
 # Example how to write code for point target skill
 func robin_special(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	# Wait for player to click on map to get x and y position
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	
@@ -249,7 +249,7 @@ func robin_special(effects, parameters, visualize):
 
 
 func rollo_basic():
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var range_of_effect = 100
 	var damage = 100
 	
@@ -265,7 +265,7 @@ func rollo_basic():
 
 
 func arthur_special(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target != null:
 		var animations = leader.get_node("animations")
@@ -291,7 +291,7 @@ func arthur_special_end():
 
 
 func arthur_active(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target == null:
 		return false
@@ -307,7 +307,7 @@ func arthur_active(effects, parameters, visualize):
 
 
 func bokuden_special(_effects, _parameters, _visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var aura_duration = 5
 	var speed_modifier = 10
 	var range_of_aura = 100
@@ -340,7 +340,7 @@ func battle_call_remove(_targets):
 
 
 func bokuden_active(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target:
 		var dash_point = leader.global_position.direction_to(point_target)
@@ -355,7 +355,7 @@ func bokuden_active(effects, parameters, visualize):
 
 
 func osman_special(_effects, _parameters, _visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var bribe_gold_cost = 10
 	var effect_duration = 2
 	var range_of_effect = 100
@@ -413,7 +413,7 @@ func reset_buttons():
 func update_buttons():
 	reset_buttons()
 	show()
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	for index in active_skills[leader.display_name].size():
 		_skill_buttons[index].setup(active_skills[leader.display_name][index])
 
@@ -423,9 +423,9 @@ func new_skills(leader, skills_storage):
 
 
 func build_leaders():
-	for leader in game.player_leaders:
+	for leader in WorldState.get_state("player_leaders"):
 		new_skills(leader, player_leaders_skills)
-	for leader in game.enemy_leaders:
+	for leader in WorldState.get_state("enemy_leaders"):
 		new_skills(leader, enemy_leaders_skills)
 
 

@@ -7,14 +7,8 @@ extends Node
 
 #runs logic that is only run once per second
 var one_sec_timer:Timer
-var time:int = 0
-
-
-var _state = {
-	"opt": {
-		"show_fps": true
-	}
-}
+#controls creep spawn rate
+var spawn_timer:Timer
 
 enum teams { red, blue }
 
@@ -22,7 +16,7 @@ enum pawns_list { infantry, archer, mounted }
 
 enum neutrals_list { mailboy, lumberjack }
 
-enum leaders {
+enum leaders_list {
 	arthur, 
 	bokuden, 
 	hongi, 
@@ -38,6 +32,8 @@ enum leaders {
 	tomyris 
 }
 
+
+var _state = {}
 
 func get_state(state_name, default = null):
 	return _state.get(state_name, default)

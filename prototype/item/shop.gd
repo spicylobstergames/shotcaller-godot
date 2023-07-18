@@ -94,7 +94,7 @@ func close_to_blacksmith(leader):
 
 func update_buttons():
 	if visible:
-		var leader = game.selected_leader
+		var leader = WorldState.get_state("selected_leader")
 		var trader = null
 		
 		if leader != null:

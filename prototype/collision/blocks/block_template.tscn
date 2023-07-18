@@ -15,11 +15,8 @@ display_name = "block"
 title = "block"
 team = ""
 collide = true
-attack_range = 0
-attack_speed = 0
 
 [node name="collisions" type="Area2D" parent="."]
-visible = false
 collision_layer = 0
 collision_mask = 0
 input_pickable = false

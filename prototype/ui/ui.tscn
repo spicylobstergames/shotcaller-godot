@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://vh78pi540b5i"]
+[gd_scene load_steps=18 format=3 uid="uid://vh78pi540b5i"]
 
 [ext_resource type="Script" path="res://ui/ui.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ccyfdk71bbuky" path="res://ui/panels/unit_controls_panel.tscn" id="2"]
 [ext_resource type="Theme" uid="uid://w6f0qhitj51d" path="res://assets/ui/theme/label_theme.tres" id="2_ple64"]
 [ext_resource type="PackedScene" uid="uid://b8uav15456lm2" path="res://item/shop.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://y7wlrfeyc2xp" path="res://ui/menus/leader_select_menu.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://cy617y6pg38gd" path="res://ui/waterfall/waterfall_background.tscn" id="4_qgu41"]
 [ext_resource type="PackedScene" uid="uid://dbxqqihthhfid" path="res://ui/minimap.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dyw87tdsrrqgn" path="res://ui/panels/orders_panel.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://beaxx58y8ho37" path="res://ui/panels/control_panel.tscn" id="8"]
@@ -91,6 +92,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+
+[node name="waterfall_background" parent="mid" instance=ExtResource("4_qgu41")]
+unique_name_in_owner = true
+position = Vector2(300, 270)
+scale = Vector2(1.5, 1.5)
 
 [node name="main_menu" parent="mid" instance=ExtResource("11")]
 unique_name_in_owner = true

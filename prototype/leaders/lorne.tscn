@@ -609,7 +609,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="46"]
-radius = 14.0
+radius = 13.0
 
 [sub_resource type="CircleShape2D" id="47"]
 radius = 28.0
@@ -679,7 +679,7 @@ libraries = {
 }
 
 [node name="block" parent="collisions" index="0"]
-position = Vector2(0, -10)
+position = Vector2(0, -8)
 shape = SubResource("46")
 
 [node name="select" parent="collisions" index="1"]
@@ -687,6 +687,7 @@ position = Vector2(0, -10)
 shape = SubResource("47")
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+visible = false
 position = Vector2(3, -10)
 shape = SubResource("27")
 

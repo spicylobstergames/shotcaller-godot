@@ -47,7 +47,7 @@ func show_selected():
 	
 
 func hide_unselect():
-	if unit.type != "leader":
+	if unit.type != "leader" && !WorldState.get_state("hide_leaders_hud"): # opts
 		unit.hud.state.hide()
 		unit.hud.hpbar.hide()
 	unit.hud.selection.hide()

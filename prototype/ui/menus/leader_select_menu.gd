@@ -15,7 +15,7 @@ func _ready():
 		leaders_container.remove_child(child)
 		child.queue_free()
 	# creates leader buttons
-	for leader in WorldState.leaders:
+	for leader in WorldState.leaders_list:
 		var button = leader_button.instantiate()
 		leaders_container.add_child(button)
 		button.prepare(leader)

@@ -27,7 +27,9 @@ extends MultiMeshInstance2D
 
 var open_simplex_noise = FastNoiseLite.new()
 
-func _ready():
+
+func _update_distribution():
+	
 	var noise_seed = randi()
 	open_simplex_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	open_simplex_noise.fractal_octaves = 4
@@ -36,9 +38,7 @@ func _ready():
 	open_simplex_noise.fractal_lacunarity = 2
 	open_simplex_noise.seed = noise_seed
 	
-	_update_distribution()
-
-func _update_distribution():
+	
 	var multi_mesh = self.multimesh
 	multi_mesh.mesh = $silouet.mesh
 	
@@ -93,6 +93,5 @@ func map_range(t, min1, max1, min2, max2):
 func sort_y(a,b):
 	return a.y < b.y
 
-func _set_do_distribution(value):
-	if value:
-		_update_distribution()
+func _set_do_distribution(_value):
+	_update_distribution()

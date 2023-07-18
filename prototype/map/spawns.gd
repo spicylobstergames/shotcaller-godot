@@ -3,35 +3,12 @@ extends Node
 var game:Node
 
 
-# self = game.maps.spawn
+# self = game.spawn
 
-
-var order_time = 8
+var time = 8
 var lumberjack_cost = 1
 
-var infantry:PackedScene = load("res://pawns/infantry.tscn")
-var archer:PackedScene = load("res://pawns/archer.tscn")
-var mounted:PackedScene = load("res://pawns/mounted.tscn")
-
-var lumberjack:PackedScene = load("res://neutrals/lumberjack.tscn")
-var mailboy:PackedScene = load("res://neutrals/mailboy.tscn")
-
-var arthur:PackedScene = load("res://leaders/arthur.tscn")
-var bokuden:PackedScene = load("res://leaders/bokuden.tscn")
-var hongi:PackedScene = load("res://leaders/hongi.tscn")
-var joan:PackedScene = load("res://leaders/joan.tscn")
-var lorne:PackedScene = load("res://leaders/lorne.tscn")
-var nagato:PackedScene = load("res://leaders/nagato.tscn")
-var osman:PackedScene = load("res://leaders/osman.tscn")
-var raja:PackedScene = load("res://leaders/raja.tscn")
-var robin:PackedScene = load("res://leaders/robin.tscn")
-var rollo:PackedScene = load("res://leaders/rollo.tscn")
-var sida:PackedScene = load("res://leaders/sida.tscn")
-var takoda:PackedScene = load("res://leaders/takoda.tscn")
-var tomyris:PackedScene = load("res://leaders/tomyris.tscn")
-
-var player_extra_unit = "infantry"
-var enemy_extra_unit = "infantry"
+#var mailboy:PackedScene = load("res://neutrals/mailboy.tscn")
 
 var cemitery = {
 	"player_infantry": [],
@@ -41,29 +18,46 @@ var cemitery = {
 	"player_mounted": [],
 	"enemy_mounted": [],
 	"player_leaders": [],
-	"enemy_leaders": []
+	"enemy_leaders": [],
+	"player_worker": [],
+	"enemy_worker": []
 }
 
 var team_random_list = {"red": [], "blue": []}
 
-@onready var timer:Timer = $timer
-
 func _ready():
 	game = get_tree().get_current_scene()
-	
-	#await get_tree().idle_frame
-	
-	timer.one_shot = true
-	timer.wait_time = order_time
 
 
 func start():
 	if game.test.debug:
 		game.test.spawn_unit()
 	else: 
-		pawns()
-		await get_tree().create_timer(4).timeout
+		spawn_group_cycle()
 		leaders()
+
+
+func create(template, lane, team, mode, point):
+	var unit = template.instantiate()
+	WorldState.get_state("map").unit_container.add_child(unit)
+	spawn_unit(unit, lane, team, mode, point)
+	unit.reset_unit()
+	WorldState.get_state("all_units").append(unit)
+	game.selection.setup_selection(unit)
+	Collisions.setup(unit)
+	Behavior.move.setup_timer(unit) # collision reaction timer
+	game.ui.minimap.setup_symbol(unit)
+	if unit.type == "leader":
+		WorldState.get_state("all_leaders").append(unit)
+		if team == WorldState.get_state("player_team"):
+			WorldState.get_state("player_leaders").append(unit)
+		else:
+			WorldState.get_state("enemy_leaders").append(unit)
+	return unit
+
+
+func leader_scene(leader_name):
+	return load("res://leaders/"+leader_name+".tscn")
 
 
 func random_leader(team):
@@ -79,20 +73,20 @@ func leaders():
 	var blue_leaders = []
 	for team in WorldState.teams:
 		var counter = 0
-		var choose_leaders = game.player_choose_leaders
-		if team != WorldState.get_state("player_team"): choose_leaders = game.enemy_choose_leaders
+		var choose_leaders = WorldState.get_state("player_leaders_names")
+		if team != WorldState.get_state("player_team"): choose_leaders = WorldState.get_state("enemy_leaders_names")
 		for leader in choose_leaders:
 			var leader_name = leader
 			if leader == "random":
-				leader_name = WorldState.leaders.keys()[randi() % WorldState.leaders.size()]
+				leader_name = WorldState.leaders_list.keys()[randi() % WorldState.leaders_list.size()]
 			var lane = "mid"
-			if game.map.get_node("lanes").get_children().size() == 3:
+			if WorldState.get_state("map").get_node("lanes").get_children().size() == 3:
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
-			var path = game.maps.new_path(lane, team)
+			var path = Behavior.path.new_lane_path(lane, team)
 			var path_start = path.pop_front()
-			var leader_node = game.maps.create(self[leader_name], lane, team, "point_random", path_start)
+			var leader_node = game.spawn.create(leader_scene(leader_name), lane, team, "point_random", path_start)
 			Behavior.path.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
@@ -104,36 +98,32 @@ func leaders():
 	game.maps.setup_leaders(red_leaders, blue_leaders)
 
 
-func pawns():
-	spawn_group_cycle()
-
-
 func spawn_group_cycle():
 	Behavior.orders.lanes_cycle()
 	Behavior.orders.leaders_cycle()
 	Behavior.orders.update_taxes()
 	
 	for team in WorldState.teams:
-		var extra_unit = player_extra_unit
-		if team != WorldState.get_state("player_team"): extra_unit = enemy_extra_unit
-		for lane in game.map.get_node("lanes").get_children():
+		var extra_unit = WorldState.get_state("player_extra_unit")
+		if team != WorldState.get_state("player_team"): extra_unit = WorldState.get_state("enemy_extra_unit")
+		for lane in WorldState.get_state("map").get_node("lanes").get_children():
 			send_pawn("archer", lane.name, team)
 			for n in 2:
 				send_pawn("infantry", lane.name, team)
 			send_pawn(extra_unit, lane.name, team)
 	
-	timer.start()
-	await timer.timeout
+	WorldState.spawn_timer.start()
+	await WorldState.spawn_timer.timeout
 	Behavior.orders.leaders_cycle()
 	
-	timer.start()
-	await timer.timeout
+	WorldState.spawn_timer.start()
+	await WorldState.spawn_timer.timeout
 	spawn_group_cycle()
 
 
 func recycle(template, lane, team, point):
 	var side = "player_"
-	if team != WorldState.get_state("player_team"): side = "enemy_"
+	if team == WorldState.get_state("enemy_team"): side = "enemy_"
 	var index = side+template
 	if cemitery[index].size():
 		var unit = cemitery[index].pop_back()
@@ -142,13 +132,17 @@ func recycle(template, lane, team, point):
 		return unit
 
 
-func send_pawn(template, lane, team):
-	var path = game.maps.new_path(lane, team)
+
+func pawn_scene(pawn_name):
+	return load("res://pawns/"+pawn_name+".tscn")
+
+
+func send_pawn(template_name, lane, team):
+	var path = Behavior.path.new_lane_path(lane, team)
 	var path_start = path.pop_front()
-	var pawn = recycle(template, lane, team, path_start)
+	var pawn = recycle(template_name, lane, team, path_start)
 	if not pawn:
-		var unit_template = self[template]
-		pawn = game.maps.create(unit_template, lane, team, "point_random", path_start)
+		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
 	Behavior.path.setup_unit_path(pawn, path)
 	Behavior.orders.set_pawn(pawn)
 
@@ -170,15 +164,21 @@ func spawn_unit(unit, lane, team, mode, point):
 func next_to_building(template, building, team):
 	var spawn_point = building.global_position
 	spawn_point.y += building.collision_radius + building.collision_position.y + 1
-	var unit_template = self[template]
 	var new_team = team
 	if not team: new_team = building.team
-	return game.maps.create(unit_template, "", new_team, "point", spawn_point)
+	return game.spawn.create(template, "", new_team, "point", spawn_point)
+	
+	
+func cemitery_add_worker(unit):
+	var side = "player"
+	if unit.team == WorldState.get_state("enemy_team"): side = "enemy"
+	var index = side+"_"+unit.display_name
+	cemitery[index].append(unit)
 
 
 func cemitery_add_pawn(unit):
 	var side = "player"
-	if unit.team != WorldState.get_state("player_team"): side = "enemy"
+	if unit.team == WorldState.get_state("enemy_team"): side = "enemy"
 	var index = side+"_"+unit.display_name
 	cemitery[index].append(unit)
 
@@ -192,7 +192,7 @@ func cemitery_add_leader(leader):
 		enemy_team:
 			cemitery.enemy_leaders.append(leader)
 	
-	var respawn_time = order_time * leader.respawn
+	var respawn_time = time * leader.respawn
 	await get_tree().create_timer(respawn_time).timeout
 	
 	# respawn leader
@@ -208,10 +208,16 @@ func cemitery_add_leader(leader):
 
 # LUMBERMILL
 
+func neutral_scene(neutral_name):
+	var neutral = load("res://neutrals/"+neutral_name+".tscn")
+	WorldState.get_state("neutral_unit").append(neutral)
+	return neutral
+
+
 func lumberjack_hire(lumbermill, team):
 	var unit = lumbermill.agent.get_state("lumberjack")
 	if not unit: # create lumberjack
-		unit = next_to_building("lumberjack", lumbermill, team)
+		unit = next_to_building(neutral_scene("lumberjack"), lumbermill, team)
 		unit.agent.set_state("lumbermill", lumbermill)  
 		unit.agent.set_state("deliver_position", unit.global_position)
 		var closest_tree = lumbermill.get_node("closest_tree")
@@ -222,8 +228,8 @@ func lumberjack_hire(lumbermill, team):
 	unit.show()
 	
 	# charge player
-	var team_leaders = game.player_leaders
-	if team == WorldState.get_state("enemy_team"): team_leaders = game.enemy_leaders
+	var team_leaders = WorldState.get_state("player_leaders")
+	if team == WorldState.get_state("enemy_team"): team_leaders = WorldState.get_state("enemy_leaders")
 	for leader in team_leaders: leader.gold -= floor(lumberjack_cost/team_leaders.size())
 
 
@@ -231,8 +237,8 @@ func lumberjack_hire(lumbermill, team):
 
 func camp_hire(unit, team):
 	if team == WorldState.get_state("player_team"):
-		player_extra_unit = unit
-	else: enemy_extra_unit = unit
+		WorldState.set_state("player_extra_unit", unit)
+	else: WorldState.set_state("enemy_extra_unit", unit)
 	
 	var cost
 	match unit:
@@ -240,6 +246,6 @@ func camp_hire(unit, team):
 		"archer": cost = 2
 		"mounted": cost = 3
 	
-	var team_leaders = game.player_leaders
-	if team == WorldState.get_state("enemy_team"): team_leaders = game.enemy_leaders
+	var team_leaders = WorldState.get_state("player_leaders")
+	if team == WorldState.get_state("enemy_team"): team_leaders = WorldState.get_state("enemy_leaders")
 	for leader in team_leaders: leader.gold -= cost

@@ -19,8 +19,8 @@ func _ready():
 
 func campaign_start():
 	if game.mode == "campaign":
-		await get_tree().create_timer(5).timeout
-		var joan = game.player_leaders[0]
+		await get_tree().create_timer(2).timeout
+		var joan = WorldState.get_state("player_leaders")[0]
 		show_msg(joan, "We are under attack!")
 
 

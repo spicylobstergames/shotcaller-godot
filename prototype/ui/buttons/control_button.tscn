@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://df78qhk5nxake"]
+
+[ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_p12ny"]
+[ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2_crl6p"]
+
+[sub_resource type="AtlasTexture" id="14"]
+atlas = ExtResource("2_crl6p")
+region = Rect2(0, 0, 46, 46)
+margin = Rect2(2, 2, 0, 0)
+
+[node name="control_button" type="Button"]
+custom_minimum_size = Vector2(60, 60)
+offset_right = 60.0
+offset_bottom = 60.0
+focus_mode = 1
+theme = ExtResource("1_p12ny")
+toggle_mode = true
+icon = SubResource("14")
+
+[node name="name" type="Label" parent="."]
+layout_mode = 0
+offset_top = 3.0
+offset_right = 60.0
+offset_bottom = 33.0
+text = "Name"
+horizontal_alignment = 1
+
+[node name="hint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+offset_top = -21.0
+offset_right = -5.0
+offset_bottom = -3.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "1"
+horizontal_alignment = 2
+vertical_alignment = 2

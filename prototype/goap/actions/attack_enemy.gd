@@ -25,7 +25,7 @@ func enter(agent):
 	var target = unit.target
 	
 	if Behavior.attack.is_valid_target(unit, target):
-		Behavior.attack.point(unit, target.global_position)
+		Behavior.advance.point(unit, target.global_position)
 
 
 func on_animation_end(agent):

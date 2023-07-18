@@ -24,7 +24,7 @@ func reset():
 
 
 func _button_down():
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	if leader.team != WorldState.get_state("player_team"):
 		return
 	if skill.on_cooldown():
@@ -44,7 +44,7 @@ func _button_down():
 #func _physics_process(delta):
 #	if not skill == null:
 #		var selected_unit = WorldState.get_state("selected_unit")
-#		if selected_unit and selected_unit.team != WorldState.get_state("player_team"):
+#		if selected_unit and selected_unit.team == WorldState.get_state("enemy_team"):
 #			# We shoudln't see enemy skill's cooldowns
 #			self.disabled = true
 #		elif self.skill.on_cooldown():
@@ -54,6 +54,6 @@ func _button_down():
 #		else:
 #			self.disabled = false
 #			self._cooldown.text = ""
-#		if skill.display_name == "Bribe" and game.selected_leader.gold < bribe_gold_cost:
+#		if skill.display_name == "Bribe" and WorldState.get_state("selected_leader").gold < bribe_gold_cost:
 #			self.disabled = true
 

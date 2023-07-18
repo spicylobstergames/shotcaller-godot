@@ -1,16 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://bt5ysasbsjat3"]
+[gd_scene load_steps=10 format=3 uid="uid://bt5ysasbsjat3"]
 
-[ext_resource type="Script" path="res://collision/blocks/blocks.gd" id="1"]
 [ext_resource type="Script" path="res://game.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://vh78pi540b5i" path="res://ui/ui.tscn" id="4"]
+[ext_resource type="Script" path="res://map/spawns.gd" id="5_fcj4f"]
 [ext_resource type="Script" path="res://map/maps.gd" id="6"]
 [ext_resource type="Script" path="res://controls/selection.gd" id="7"]
-[ext_resource type="Script" path="res://collision/Collisions.gd" id="8_80fdg"]
 [ext_resource type="Script" path="res://test/test.gd" id="9"]
 [ext_resource type="Script" path="res://hud/hud.gd" id="11"]
-[ext_resource type="Script" path="res://map/spawn.gd" id="12"]
 [ext_resource type="AudioStream" uid="uid://bcyvb0f37c1lw" path="res://assets/soundtrack/Shotcaller_Menu_Theme.mp3" id="12_bsynf"]
-[ext_resource type="PackedScene" uid="uid://cy617y6pg38gd" path="res://ui/waterfall/waterfall_background.tscn" id="13"]
 [ext_resource type="Script" path="res://ui/transitions/transitions.gd" id="14_dacea"]
 
 [node name="game" type="Control"]
@@ -23,33 +20,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2")
 
-[node name="waterfall_background" parent="." instance=ExtResource("13")]
-unique_name_in_owner = true
-position = Vector2(300, 270)
-scale = Vector2(1.5, 1.5)
-
 [node name="maps" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6")
 
-[node name="spawn" type="Node" parent="maps"]
-script = ExtResource("12")
-
-[node name="timer" type="Timer" parent="maps/spawn"]
-
-[node name="blocks" type="Node2D" parent="maps"]
-script = ExtResource("1")
-
 [node name="ui" parent="." instance=ExtResource("4")]
 unique_name_in_owner = true
+
+[node name="spawn" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_fcj4f")
 
 [node name="hud" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("11")
-
-[node name="collision" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("8_80fdg")
 
 [node name="selection" type="Node" parent="."]
 unique_name_in_owner = true
@@ -61,6 +45,7 @@ script = ExtResource("9")
 
 [node name="transitions" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+process_mode = 3
 layer = 5
 script = ExtResource("14_dacea")
 

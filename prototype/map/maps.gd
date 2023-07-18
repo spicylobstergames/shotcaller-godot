@@ -1,65 +1,59 @@
 extends Node2D
-var game:Node
 
 
 # self = game.maps
 
 
-var current_map = "one_lane_map"
+var current_map := "one_lane_map"
 
-var one_lane_map:PackedScene = load("res://map/maps/one_lane_map.tscn")
-var three_lane_map:PackedScene = load("res://map/maps/three_lane_map.tscn")
-var rect_test_map:PackedScene = load("res://map/maps/rect_test_map.tscn")
-
-@onready var spawn = $spawn
-@onready var blocks = $blocks
-
-func _ready():
-	game = get_tree().get_current_scene()
+var one_lane_map:PackedScene = preload("res://map/maps/one_lane_map.tscn")
+var three_lane_map:PackedScene = preload("res://map/maps/three_lane_map.tscn")
+var rect_test_map:PackedScene = preload("res://map/maps/rect_test_map.tscn")
 
 
 func load_map(map_name):
-	if game.map:
-		game.map.hide()
-		game.map.trees.light_mask = 0
 	current_map = map_name
-	game.map = self[map_name].instantiate()
-	self.add_child(game.map)
-	game.map.hide()
+	var map = self[map_name].instantiate()
+	self.add_child(map)
+	WorldState.set_state("map", map)
+	map.hide()
 	var unit_container = create_container("unit_container")
 	unit_container.y_sort_enabled = true
 	var projectile_container = create_container("projectile_container")
 	projectile_container.y_sort_enabled = true
 	create_container("block_container")
-	WorldState.set_state("map_size", game.map.size)
-	var mid = Vector2(game.map.size.x/2, game.map.size.y/2)
+	WorldState.set_state("map_size", map.size)
+	var mid = Vector2(map.size.x/2, map.size.y/2)
 	WorldState.set_state("lanes", {})
 	WorldState.set_state("map_mid", mid)
-	WorldState.set_state("map_camera_limit", game.map.camera_limit)
-	WorldState.set_state("zoom_limit", game.map.zoom_limit)
+	WorldState.set_state("map_camera_limit", map.camera_limit)
+	WorldState.set_state("zoom_limit", map.zoom_limit)
 
 
 func create_container(container_name):
 	var container = Node2D.new()
-	game.map.add_child(container)
-	game.map.set(container_name, container)
+	WorldState.get_state("map").add_child(container)
+	WorldState.get_state("map").set(container_name, container)
 	container.name = container_name
 	return container
 
 
 func map_loaded():
-	game.map.fog.visible = game.map.fog_of_war
-	#game.map.trees.light_mask = 2
-	#game.map.walls.light_mask = 2
+	var map = WorldState.get_state("map")
+	var game = get_tree().get_current_scene()
+
+	map.fog.visible = map.fog_of_war
 	setup_buildings()
 	setup_lanes()
-	blocks.setup_quadtree(game.map)
+	Collisions.setup_quadtree(map)
 	Behavior.path.setup_pathfind()
 	game.ui.map_loaded()
 	game.map_loaded()
 
 
 func setup_leaders(red_leaders, blue_leaders):
+	var game = get_tree().get_current_scene()
+
 	game.ui.scoreboard.build(red_leaders, blue_leaders)
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
@@ -67,19 +61,10 @@ func setup_leaders(red_leaders, blue_leaders):
 	game.ui.active_skills.build_leaders()
 
 
-func new_path(lane, team):
-	if lane in WorldState.get_state("lanes"):
-		var path = WorldState.get_state("lanes")[lane].duplicate()
-		if team == "blue" and game.map.has_node("buildings/red/castle"):
-			path.append(game.map.get_node("buildings/red/castle").global_position)
-		if team == "red" and game.map.has_node("buildings/blue/castle"): 
-			path.reverse()
-			path.append(game.map.get_node("buildings/blue/castle").global_position)
-		return path
 
 
 func setup_lanes():
-	for lane in game.map.get_node("lanes").get_children():
+	for lane in WorldState.get_state("map").get_node("lanes").get_children():
 		WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
 	Behavior.orders.build_lanes()
@@ -94,62 +79,45 @@ func line_to_array(line):
 
 
 func setup_buildings():
-	for team in game.map.get_node("buildings").get_children():
+	var game = get_tree().get_current_scene()
+
+	for team in WorldState.get_state("map").get_node("buildings").get_children():
 		for building in team.get_children():
 			building.reset_unit()
 			game.ui.minimap.setup_symbol(building)
 			building.set_state("idle")
 			building.agent.set_state("lane", building.subtype)
 			game.selection.setup_selection(building)
-			game.collision.setup(building)
+			Collisions.setup(building)
 			if building.team == WorldState.get_state("player_team"):
-				game.player_buildings.append(building)
+				WorldState.get_state("player_buildings").append(building)
 			elif building.team == WorldState.get_state("enemy_team"):
-				game.enemy_buildings.append(building)
-			else: game.neutral_buildings.append(building)
+				WorldState.get_state("enemy_buildings").append(building)
+			else: WorldState.get_state("neutral_buildings").append(building)
 			WorldState.get_state("all_units").append(building)
-			game.all_buildings.append(building)
+			WorldState.get_state("all_buildings").append(building)
 	
 	# shop
 	game.ui.shop.blacksmiths = []
-	if game.map.has_node("buildings/blue/blacksmith"):
-		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/blue/blacksmith") )
-	if game.map.has_node("buildings/red/blacksmith"):
-		game.ui.shop.blacksmiths.append( game.map.get_node("buildings/red/blacksmith") )
+	if WorldState.get_state("map").has_node("buildings/blue/blacksmith"):
+		game.ui.shop.blacksmiths.append( WorldState.get_state("map").get_node("buildings/blue/blacksmith") )
+	if WorldState.get_state("map").has_node("buildings/red/blacksmith"):
+		game.ui.shop.blacksmiths.append( WorldState.get_state("map").get_node("buildings/red/blacksmith") )
 	
 	# orders
-	for neutral in game.map.neutrals:
-		if game.map.has_node("buildings/blue/" + neutral):
-			game.ui.orders_panel[neutral].append( game.map.get_node("buildings/blue/" + neutral) )
-		if game.map.has_node("buildings/red/" + neutral):
-			game.ui.orders_panel[neutral].append( game.map.get_node("buildings/red/" + neutral) )
+	for neutral in WorldState.get_state("map").neutrals:
+		if WorldState.get_state("map").has_node("buildings/blue/" + neutral):
+			game.ui.orders_panel[neutral].append( WorldState.get_state("map").get_node("buildings/blue/" + neutral) )
+		if WorldState.get_state("map").has_node("buildings/red/" + neutral):
+			game.ui.orders_panel[neutral].append( WorldState.get_state("map").get_node("buildings/red/" + neutral) )
 	
 	game.ui.orders_panel.update()
 
 
-func create(template, lane, team, mode, point):
-	var unit = template.instantiate()
-	game.map.unit_container.add_child(unit)
-	game.maps.spawn.spawn_unit(unit, lane, team, mode, point)
-	unit.reset_unit()
-	WorldState.get_state("all_units").append(unit)
-	game.selection.setup_selection(unit)
-	game.collision.setup(unit)
-	Behavior.move.setup_timer(unit) # collision reaction timer
-	game.ui.minimap.setup_symbol(unit)
-	if unit.type == "leader":
-		if team == WorldState.get_state("player_team"):
-			game.player_leaders.append(unit)
-		else:
-			game.enemy_leaders.append(unit)
-	return unit
-
-
-
 func has_neutral_buildings(team):
 	var neutral_buildings = false
-	for neutral in game.map.neutrals:
-		var neutral_building = game.map.get_node("buildings/"+team+"/"+neutral)
+	for neutral in WorldState.get_state("map").neutrals:
+		var neutral_building = WorldState.get_state("map").get_node("buildings/"+team+"/"+neutral)
 		if neutral_building.team == team:
 			neutral_buildings = true
 			break
@@ -157,6 +125,6 @@ func has_neutral_buildings(team):
 
 
 func buildings_visibility(b):
-	for team in game.map.get_node("buildings").get_children():
+	for team in WorldState.get_state("map").get_node("buildings").get_children():
 		for building in team.get_children():
 			building.visible = b

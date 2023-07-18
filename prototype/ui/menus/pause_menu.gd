@@ -7,5 +7,9 @@ extends Container
 
 func _ready():
 	continue_button.pressed.connect(game.resume)
-	exit_to_menu_button.pressed.connect(game.reload)
+	exit_to_menu_button.pressed.connect(transition)
 	exit_button.pressed.connect(game.exit)
+
+func transition():
+	game.transitions.start()
+	game.transitions.transition_completed.connect(game.reload)

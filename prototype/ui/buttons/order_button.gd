@@ -55,7 +55,7 @@ func button_down():
 		"priority":
 			if not is_first_child(self):
 				move_button_to_front(self)
-				if game.selected_leader:
+				if WorldState.get_state("selected_leader"):
 					Behavior.orders.set_leader_priority(self.orders.priority)
 				else: Behavior.orders.set_lane_priority(self.orders.priority)
 		
@@ -81,7 +81,7 @@ func button_down():
 			self.disabled = true
 		
 		"lumberjack":
-			game.maps.spawn.lumberjack_hire(selected_unit, WorldState.get_state("player_team"))
+			game.spawn.lumberjack_hire(selected_unit, WorldState.get_state("player_team"))
 			# update dismiss after lumberjack hire
 			self.disabled = true
 		

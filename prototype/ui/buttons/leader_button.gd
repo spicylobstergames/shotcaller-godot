@@ -33,7 +33,7 @@ func prepare(new_leader_name, new_team = "red"):
 		sprite.texture = question_mark
 	else:
 		sprite.texture = leader_icons
-		var sprite_index = WorldState.leaders[leader_name]
+		var sprite_index = WorldState.leaders_list[leader_name]
 		var sprites_size = sprite.region_rect.size.x
 		sprite.region_rect.position.x = sprite_index * sprites_size
 	# button color

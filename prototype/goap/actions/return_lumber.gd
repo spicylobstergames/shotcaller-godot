@@ -29,7 +29,7 @@ func on_arrive(agent):
 	agent.set_state("returning_wood", true)
 	agent.set_state("has_wood", false)
 	# heal all player buildings
-	for building in WorldState.game.all_buildings:
+	for building in WorldState.get_state("all_buildings"):
 		if unit.team == building.team:
 				building.heal(building.regen)
 

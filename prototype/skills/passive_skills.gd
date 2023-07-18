@@ -1,10 +1,7 @@
 extends Node
 
-var game:Node
-var behavior:Node
 
-
-# self = behavior.skills
+# self = Behavior.skills
 
 
 const leader = {
@@ -82,10 +79,6 @@ func get_value(unit, skill_name):
 		if skill_name in leader_skills:
 			return leader_skills[skill_name]
 	return 0
-
-func _ready():
-	game = get_tree().get_current_scene()
-
 
 
 func projectile_release(attacker):

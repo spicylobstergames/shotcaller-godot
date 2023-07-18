@@ -76,13 +76,14 @@ func _on_start_game_button_pressed():
 	
 	if player_team == "blue":
 		WorldState.set_state("enemy_team", "red")
-		game.player_choose_leaders = blue_team_leaders
-		game.enemy_choose_leaders = red_team_leaders
+		WorldState.set_state("player_leaders_names", blue_team_leaders)
+		WorldState.set_state("enemy_leaders_names", red_team_leaders)
 	else:
 		WorldState.set_state("enemy_team", "blue")
-		game.player_choose_leaders = red_team_leaders
-		game.enemy_choose_leaders = blue_team_leaders
+		WorldState.set_state("player_leaders_names", red_team_leaders)
+		WorldState.set_state("enemy_leaders_names", blue_team_leaders)
 	
+	WorldState.set_state("game_mode", "match")
 	game.start()
 
 

@@ -15,12 +15,12 @@ func input(event):
 		if not event.is_pressed():
 			if selected_unit:
 				match event.keycode:
+					
 					KEY_E: move(selected_unit, point)
 					KEY_R: advance(selected_unit, point)
 					KEY_Q: teleport(selected_unit, point)
 					KEY_W: change_lane(selected_unit, point)
-				
-				match event.keycode:
+					
 					KEY_A: attack(selected_unit, point) 
 					KEY_S: stand(selected_unit)
 	
@@ -42,7 +42,7 @@ func input(event):
 
 
 func setup_selection(unit):
-	if unit.selectable: game.selectable_units.append(unit)
+	if unit.selectable: WorldState.get_state("selectable_units").append(unit)
 
 
 func select(point):
@@ -55,7 +55,7 @@ func select_unit(unit):
 	deselect()
 	WorldState.set_state("selected_unit", unit)
 	
-	if game.can_control(unit):
+	if unit.is_controllable():
 		if unit.moves: 
 			if unit.attacks: 
 				game.control_state = "advance"
@@ -64,15 +64,15 @@ func select_unit(unit):
 		elif unit.attacks:
 				game.control_state = "attack"
 					
-	if game.can_control(unit) and unit.type == "leader":
-		game.selected_leader = unit
+	if unit.is_controllable() and unit.type == "leader":
+		WorldState.set_state("selected_leader", unit)
 		game.ui.shop.update_buttons()
 		game.ui.inventories.update_buttons()
 		game.ui.unit_controls_button.disabled = false
 		game.ui.active_skills.update_buttons()
 		game.ui.leaders_icons.buttons_focus(unit)
 	else:
-		game.selected_leader = null
+		WorldState.set_state("selected_leader", null)
 		game.ui.shop.disable_all()
 	
 	unit.hud.show_selected()
@@ -95,13 +95,13 @@ func deselect():
 	game.ui.leaders_icons.buttons_unfocus()
 	
 	WorldState.set_state("selected_unit", null)
-	game.selected_leader = null
+	WorldState.set_state("selected_leader", null)
 	game.ui.hide_unselect()
 
 
 func get_sel_unit_at_point(point):
-	for unit in game.selectable_units:
-		var select_rad =  unit.selection_radius
+	for unit in WorldState.get_state("selectable_units"):
+		var select_rad = unit.selection_radius
 		var select_pos = unit.global_position + unit.selection_position
 		if Utils.circle_point_collision(point, select_pos, select_rad):
 			return unit
@@ -127,40 +127,41 @@ func control_state(point):
 		"advance": advance(selected_unit, point)
 		"move": move(selected_unit, point)
 		"lane": change_lane(selected_unit, point)
+		"attack": attack(selected_unit, point)
 
 
 func advance(unit, point):
-	if unit and unit.attacks and unit.moves and game.can_control(unit) and no_delay(unit):
+	if unit and unit.attacks and unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.advance.smart(unit, order_point)
 
 
 func attack(unit, point):
-	if unit.attacks and game.can_control(unit) and no_delay(unit):
+	if unit.attacks and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.attack.point(unit, order_point)
 
 
 func teleport(unit, point):
-	if unit.moves and game.can_control(unit) and no_delay(unit):
+	if unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
-		Behavior.path.teleport(unit, order_point)
+		Behavior.move.teleport(unit, order_point)
 
 
 func change_lane(unit, point):
-	if unit.moves and game.can_control(unit) and no_delay(unit):
+	if unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.path.change_lane(unit, order_point)
 
 
 func move(unit, point):
-	if unit.moves and game.can_control(unit) and no_delay(unit):
+	if unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
 		Behavior.move.smart(unit, order_point)
 
 
 func stand(unit):
-	if game.can_control(unit) and no_delay(unit):
+	if unit.is_controllable() and no_delay(unit):
 		order(unit, null)
 		Behavior.move.stand(unit)
 
@@ -193,5 +194,5 @@ func order(unit, point):
 
 func front_door_point(building):
 	var point = building.global_position
-	point.y += game.map.tile_size/2
+	point.y += WorldState.get_state("map").tile_size/2
 	return point
