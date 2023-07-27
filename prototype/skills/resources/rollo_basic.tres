@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Skill_resource" load_steps=2 format=3 uid="uid://bxnjsy8blpiy0"]
+
+[ext_resource type="Script" path="res://skills/Skill_resource.gd" id="1_xqg0f"]
+
+[resource]
+script = ExtResource("1_xqg0f")
+name = "Wolf's teeth"
+tooltip = "Deals damage in an AOE around it for 100 damage whenever 3 or more units are within range"
+attributes = {}
+type = "active"
+visualize = "arc"
+cooldown = 10
+sprite = 0
+effects = ["rollo_basic"]

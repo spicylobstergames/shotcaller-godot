@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Skill_resource" load_steps=2 format=3 uid="uid://dgdibl57ueg0y"]
+
+[ext_resource type="Script" path="res://skills/Skill_resource.gd" id="1_g0dfl"]
+
+[resource]
+script = ExtResource("1_g0dfl")
+name = "Battle Call"
+tooltip = "The hero leads allies on a furious offensive, increasing their movement speed by by 10 * his level for 5 seconds"
+attributes = {}
+type = "active"
+visualize = "none"
+cooldown = 30
+sprite = 0
+effects = ["bokuden_special"]

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Skill_resource" load_steps=2 format=3 uid="uid://cg1clgoc7mcb2"]
+
+[ext_resource type="Script" path="res://skills/Skill_resource.gd" id="1_xyt2b"]
+
+[resource]
+script = ExtResource("1_xyt2b")
+name = "Bribe"
+tooltip = "Throw a bag of gold to bribe nearby pawns for 10 sec. Consumes 100 gold"
+attributes = {}
+type = "none"
+visualize = "circle"
+cooldown = 10
+sprite = 0
+effects = ["osman_special"]

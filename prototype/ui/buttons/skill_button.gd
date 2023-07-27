@@ -25,20 +25,17 @@ func reset():
 
 func _button_down():
 	var leader = WorldState.get_state("selected_leader")
-	if leader.team != WorldState.get_state("player_team"):
-		return
-	if skill.on_cooldown():
-		return
-	# Apply all skills effects
-	for effect in skill.effects:
-		print(effect)
-		var result = await effect.call_func(skill.effects, skill.parameters, skill.visualize)
-		# if effect wasn't successful used, then we need to abort using skill
-		if !result:
-			self.button_pressed = false
-			return
-	self.button_pressed = false
-	skill.current_cooldown = skill.cooldown
+	if leader.team == WorldState.get_state("player_team") and !skill.on_cooldown():
+		# apply all skills effects
+		for effect in skill.effects:
+			print(effect)
+			var result = await effect.call_func(skill.effects, skill.parameters, skill.visualize)
+			# if effect wasn't successful used, then we need to abort using skill
+			if !result:
+				self.button_pressed = false
+				return
+		self.button_pressed = false
+		skill.current_cooldown = skill.cooldown
 
 
 #func _physics_process(delta):

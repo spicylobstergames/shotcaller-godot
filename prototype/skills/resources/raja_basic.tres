@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Skill_resource" load_steps=2 format=3 uid="uid://caui3iibniy1e"]
+
+[ext_resource type="Script" path="res://skills/Skill_resource.gd" id="1_52y6u"]
+
+[resource]
+script = ExtResource("1_52y6u")
+name = "Labh, son of Ganesha"
+tooltip = "Spawn an elephant companion. Can only spawn one elephant at a time"
+attributes = {}
+type = "active"
+visualize = "none"
+cooldown = 30
+sprite = 1
+effects = ["raja_basic"]
