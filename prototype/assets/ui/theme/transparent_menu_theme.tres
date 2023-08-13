@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=6 format=3 uid="uid://cn18lpnkwwgu1"]
 
 [ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_yqwsw"]
-[ext_resource type="FontFile" uid="uid://dv5qlon30xl13" path="res://assets/ui/fonts/CompassPro.ttf" id="2_jyi6g"]
+[ext_resource type="FontFile" uid="uid://cw8vl1wiwbi0x" path="res://assets/ui/fonts/CompassPro.ttf" id="2_jyi6g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fljss"]
 

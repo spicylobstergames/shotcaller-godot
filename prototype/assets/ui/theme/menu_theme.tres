@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=9 format=3 uid="uid://bm7vsmu8jxmrw"]
 
-[ext_resource type="Texture2D" uid="uid://sjnwyxvvv2nh" path="res://assets/ui/design.png" id="1_8pvce"]
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_8pvce"]
 [ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_yqwsw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fljss"]

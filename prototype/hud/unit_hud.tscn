@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://hvm2silwdgk4" path="res://hud/hpbar.tscn" id="1"]
 [ext_resource type="Theme" uid="uid://w6f0qhitj51d" path="res://assets/ui/theme/label_theme.tres" id="2_rbn5u"]
 [ext_resource type="Script" path="res://hud/unit_hud.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://bui4thqxf4mss" path="res://assets/unit/shadow.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://v8hb0egyiu54" path="res://assets/unit/shadow.png" id="4"]
 
 [node name="hud" type="Node2D"]
 texture_filter = 1
@@ -29,4 +29,3 @@ scale = Vector2(1.6, 1.6)
 texture = ExtResource("4")
 
 [node name="hpbar" parent="." instance=ExtResource("1")]
-visible = true

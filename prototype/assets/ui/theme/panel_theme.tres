@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=7 format=3 uid="uid://ca7fj8wdwjg0b"]
 
 [ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_7v2i8"]
-[ext_resource type="Texture2D" uid="uid://sjnwyxvvv2nh" path="res://assets/ui/design.png" id="1_skma4"]
+[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_skma4"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_osnkr"]
 texture = ExtResource("1_skma4")
