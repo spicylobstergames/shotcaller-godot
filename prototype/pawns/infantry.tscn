@@ -2,9 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://weapons/sword.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://xne3vf5386s5" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
-[ext_resource type="Texture2D" uid="uid://bn44lk22rvkye" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]
-[ext_resource type="Texture2D" uid="uid://cdjbbr8y06yp7" path="res://assets/pawns/infantry_red.png" id="5_lxg3d"]
+[ext_resource type="Texture2D" uid="uid://3uxyr356j68" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
+[ext_resource type="Texture2D" uid="uid://b0na4r8pnaxh8" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]
+[ext_resource type="Texture2D" uid="uid://bdrdrkrk8hjq1" path="res://assets/pawns/infantry_red.png" id="5_lxg3d"]
 
 [sub_resource type="AtlasTexture" id="34"]
 atlas = ExtResource("3_alvud")
@@ -533,6 +533,7 @@ radius = 20.0
 radius = 16.0
 
 [node name="infantry" instance=ExtResource("1")]
+texture_filter = 1
 hp = 200
 regen = 1
 vision = 140

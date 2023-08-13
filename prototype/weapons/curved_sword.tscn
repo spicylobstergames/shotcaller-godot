@@ -1,31 +1,38 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://bq02ut2if7ooy"]
 
-[ext_resource path="res://assets/leaders/raja_red.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/leaders/raja_blue.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://cf6obc17tqxus" path="res://assets/leaders/raja_red.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cc876xmfnpp21" path="res://assets/leaders/raja_blue.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="41"]
+atlas = ExtResource("2")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=42]
-atlas = ExtResource( 1 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="42"]
+atlas = ExtResource("1")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id=43]
+[sub_resource type="SpriteFrames" id="43"]
 resource_name = "curved_sword"
-animations = [ {
-"frames": [ SubResource( 41 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("41")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 42 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("42")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 6, 1 )
-frames = SubResource( 43 )
-offset = Vector2( 6, -6 )
+texture_filter = 1
+position = Vector2(6, 1)
+sprite_frames = SubResource("43")
+offset = Vector2(6, -6)

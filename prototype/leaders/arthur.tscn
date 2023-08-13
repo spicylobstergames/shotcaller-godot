@@ -610,6 +610,7 @@ radius = 20.0
 radius = 20.0
 
 [node name="arthur" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 160

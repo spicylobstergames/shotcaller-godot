@@ -1,28 +1,28 @@
 [gd_scene load_steps=151 format=3 uid="uid://cfam87geql6"]
 
-[ext_resource type="Texture2D" uid="uid://dpvlocwqgaj8f" path="res://assets/map/grass.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://ksgg6u1g8cok" path="res://assets/map/brick.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://b863nnk44vbal" path="res://assets/map/water.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://4sopj8ofbtcp" path="res://assets/buildings/buildings_blue.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://kf6pu0rcrq0x" path="res://assets/map/trees.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://y5aydeekxllq" path="res://assets/map/grass.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://dovok5a6u0s4b" path="res://assets/map/brick.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://c2sv22mvid3xu" path="res://assets/map/water.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://qugdleboju4w" path="res://assets/buildings/buildings_blue.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://dee4oulxtvj4d" path="res://assets/map/trees.png" id="5"]
 [ext_resource type="Shader" uid="uid://2uawyneis3su" path="res://map/tool/color_replace.tres" id="8"]
-[ext_resource type="Texture2D" uid="uid://dnani3k6d3onu" path="res://assets/map/waterfall.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://j81kxxo85tqw" path="res://assets/map/waterfall.png" id="9"]
 [ext_resource type="PackedScene" uid="uid://bb55gchxyp5kf" path="res://buildings/barrack.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://bo260d1c1wxwa" path="res://buildings/castle.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://1i18mdlg5iyo" path="res://buildings/tower.tscn" id="12"]
 [ext_resource type="Script" path="res://map/maps/base_map.gd" id="13"]
 [ext_resource type="PackedScene" uid="uid://dnjlmnoeq6ya1" path="res://buildings/camp.tscn" id="14"]
-[ext_resource type="Texture2D" uid="uid://djy3isfv3nc2f" path="res://assets/map/mud.png" id="15"]
-[ext_resource type="Texture2D" uid="uid://csyjjdhoghdfn" path="res://assets/map/brick_square.png" id="16"]
-[ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="16_floyt"]
-[ext_resource type="Texture2D" uid="uid://c7jkf57v2odq6" path="res://assets/map/grass_dark.png" id="17"]
-[ext_resource type="Texture2D" uid="uid://jsvqumsl1lmk" path="res://assets/buildings/neutral_gray.png" id="17_3v8tx"]
-[ext_resource type="Texture2D" uid="uid://cxt3ym1fu5ncp" path="res://assets/buildings/neutral_red.png" id="18_0c73k"]
-[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="19_3dgvo"]
-[ext_resource type="Texture2D" uid="uid://dptfdx7q55b8p" path="res://assets/buildings/buildings_gray.png" id="20_5122x"]
-[ext_resource type="Texture2D" uid="uid://b0ewq88pv0taf" path="res://assets/buildings/buildings_red.png" id="21_nll47"]
+[ext_resource type="Texture2D" uid="uid://uhiw1q5tr60c" path="res://assets/map/mud.png" id="15"]
+[ext_resource type="Texture2D" uid="uid://bg7quvq5brqpk" path="res://assets/map/brick_square.png" id="16"]
+[ext_resource type="Texture2D" uid="uid://dob21b73cd557" path="res://assets/buildings/neutral_blue.png" id="16_floyt"]
+[ext_resource type="Texture2D" uid="uid://c1awlgon52d3c" path="res://assets/map/grass_dark.png" id="17"]
+[ext_resource type="Texture2D" uid="uid://dr0615568ayn6" path="res://assets/buildings/neutral_gray.png" id="17_3v8tx"]
+[ext_resource type="Texture2D" uid="uid://dd6eywnantps8" path="res://assets/buildings/neutral_red.png" id="18_0c73k"]
+[ext_resource type="Texture2D" uid="uid://bws6c5rwhqaeq" path="res://assets/pawns/archer_blue.png" id="19_3dgvo"]
+[ext_resource type="Texture2D" uid="uid://bap1nqp67d2bj" path="res://assets/buildings/buildings_gray.png" id="20_5122x"]
+[ext_resource type="Texture2D" uid="uid://ba7mxy2m8b1dn" path="res://assets/buildings/buildings_red.png" id="21_nll47"]
 [ext_resource type="PackedScene" uid="uid://bkq8nar2igern" path="res://buildings/blacksmith.tscn" id="24"]
-[ext_resource type="Texture2D" uid="uid://dbl3r53yf6ib5" path="res://assets/map/brick_old.png" id="26"]
+[ext_resource type="Texture2D" uid="uid://bxmxwr3sggkhd" path="res://assets/map/brick_old.png" id="26"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_b825v"]
 tile_data = PackedInt32Array(0, 4, 0, 65536, 4, 1, 131072, 4, 1, 196608, 4, 1, 262144, 4, 1, 327680, 4, 2, 1, 65540, 0, 65537, 65540, 1, 131073, 65540, 1, 196609, 65540, 1, 262145, 65540, 1, 327681, 65540, 2, 2, 65540, 0, 65538, 65540, 1, 131074, 65540, 1, 196610, 65540, 1, 262146, 65540, 1, 327682, 65540, 2, 3, 65540, 0, 65539, 65540, 1, 131075, 65540, 1, 196611, 65540, 1, 262147, 65540, 1, 327683, 393220, 1, 393219, 4, 1, 458755, 4, 2, 4, 65540, 0, 65540, 65540, 1, 131076, 65540, 1, 196612, 65540, 1, 262148, 65540, 1, 327684, 65540, 1, 393220, 65540, 1, 458756, 65540, 2, 5, 65540, 0, 65541, 65540, 1, 131077, 65540, 1, 196613, 65540, 1, 262149, 65540, 1, 327685, 327684, 1, 393221, 131076, 1, 458757, 131076, 2, 6, 65540, 0, 65542, 65540, 1, 131078, 65540, 1, 196614, 65540, 1, 262150, 65540, 1, 327686, 65540, 2, 7, 65540, 0, 65543, 65540, 1, 131079, 65540, 1, 196615, 65540, 1, 262151, 65540, 1, 327687, 65540, 2, 8, 131076, 0, 65544, 131076, 1, 131080, 131076, 1, 196616, 131076, 1, 262152, 131076, 1, 327688, 131076, 2)
@@ -3941,6 +3941,7 @@ _data = {
 
 [node name="map" type="Node2D"]
 y_sort_enabled = true
+texture_filter = 1
 script = ExtResource("13")
 camera_limit = Vector2(528, 528)
 zoom_limit = Vector2(0.56, 2)
@@ -3952,9 +3953,11 @@ position = Vector2(528, 528)
 
 [node name="tiles" type="Node2D" parent="."]
 y_sort_enabled = true
+texture_filter = 1
 
 [node name="ground" type="TileMap" parent="tiles"]
 light_mask = 3
+texture_filter = 1
 tile_set = SubResource("TileSet_77x1q")
 cell_quadrant_size = 32
 format = 2
@@ -4012,6 +4015,7 @@ layer_7/tile_data = PackedInt32Array(1310736, 7, 3, 1310737, 458759, 3, 1245201,
 
 [node name="walls" type="TileMap" parent="tiles"]
 y_sort_enabled = true
+texture_filter = 1
 tile_set = SubResource("TileSet_gpmn5")
 cell_quadrant_size = 32
 format = 2
@@ -4030,9 +4034,11 @@ layer_0/tile_data = PackedInt32Array(0, 65536, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 
 
 [node name="props" type="Node2D" parent="."]
 z_index = 1
+texture_filter = 1
 
 [node name="waterfall" type="AnimatedSprite2D" parent="props"]
 modulate = Color(1, 1, 1, 0.470588)
+texture_filter = 1
 position = Vector2(661, 736)
 sprite_frames = SubResource("6")
 frame = 1
@@ -4040,6 +4046,7 @@ offset = Vector2(0, -12)
 
 [node name="buildings" type="Node2D" parent="."]
 y_sort_enabled = true
+texture_filter = 1
 
 [node name="blue" type="Node2D" parent="buildings"]
 y_sort_enabled = true
@@ -4162,6 +4169,9 @@ material = SubResource("58")
 position = Vector2(798, 689)
 team = "neutral"
 
+[node name="sprites" parent="buildings/red/camp" index="2"]
+texture_filter = 1
+
 [node name="body" parent="buildings/red/camp/sprites" index="1"]
 sprite_frames = SubResource("SpriteFrames_ii2kb")
 animation = &"neutral"
@@ -4179,6 +4189,7 @@ libraries = {
 
 [node name="lanes" type="Node2D" parent="."]
 visible = false
+texture_filter = 1
 
 [node name="mid" type="Line2D" parent="lanes"]
 position = Vector2(0, 2)

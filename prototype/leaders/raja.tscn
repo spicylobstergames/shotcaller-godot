@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://weapons/curved_sword.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://ug67jvgpt11w" path="res://assets/leaders/raja_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cshtwljwco0f6" path="res://assets/leaders/raja_red.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cc876xmfnpp21" path="res://assets/leaders/raja_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cf6obc17tqxus" path="res://assets/leaders/raja_red.png" id="4"]
 
 [sub_resource type="AtlasTexture" id="37"]
 atlas = ExtResource("3")
@@ -576,6 +576,7 @@ radius = 20.0
 radius = 20.0
 
 [node name="raja" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 160

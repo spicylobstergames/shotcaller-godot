@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://ceq7l7wrpkgjb"]
 
 [ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_3je86"]
-[ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2_v6bh3"]
+[ext_resource type="Texture2D" uid="uid://c4qoqk1xd3mov" path="res://assets/ui/ui_icons.png" id="2_v6bh3"]
 [ext_resource type="Script" path="res://ui/stats.gd" id="3"]
 [ext_resource type="Script" path="res://item/inventories.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://cjpaafpbxs87e" path="res://ui/buttons/item_button.tscn" id="5"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://skills/active_skills.gd" id="9"]
 
 [node name="stats" type="Control"]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 0
 offset_left = -150.0
@@ -20,6 +21,7 @@ theme = ExtResource("1_3je86")
 script = ExtResource("3")
 
 [node name="panel" type="Panel" parent="."]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -45,7 +47,7 @@ offset_left = 98.0
 offset_top = 12.0
 offset_right = 170.0
 offset_bottom = 28.0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "999/999"
 
 [node name="name" type="Label" parent="panel"]
@@ -53,8 +55,8 @@ layout_mode = 0
 offset_left = 150.0
 offset_top = 10.0
 offset_right = 265.0
-offset_bottom = 32.0
-theme_override_font_sizes/font_size = 20
+offset_bottom = 25.0
+theme_override_font_sizes/font_size = 16
 text = "Name"
 horizontal_alignment = 1
 
@@ -65,7 +67,7 @@ offset_top = 12.0
 offset_right = 284.0
 offset_bottom = 28.0
 theme_override_colors/font_color = Color(0.109804, 0.819608, 0.227451, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "+1"
 horizontal_alignment = 2
 
@@ -98,7 +100,7 @@ value = 50.0
 [node name="level_label" type="Label" parent="panel/level_container"]
 layout_mode = 2
 size_flags_vertical = 1
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "Level 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -147,11 +149,11 @@ text = "Speed: 35"
 [node name="gold" type="Label" parent="panel"]
 layout_mode = 0
 offset_left = 188.0
-offset_top = 69.0
+offset_top = 71.0
 offset_right = 262.0
-offset_bottom = 94.0
+offset_bottom = 86.0
 theme_override_colors/font_color = Color(1, 0.796078, 0.243137, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 16
 text = "100"
 horizontal_alignment = 2
 

@@ -1,7 +1,7 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://b5cac4xnqfgf3"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://b5cac4xnqfgf3"]
 
-[ext_resource type="Texture2D" uid="uid://bx7snlonj1ism" path="res://assets/ui/design.png" id="1_k521r"]
-[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="2_iyn4k"]
+[ext_resource type="Texture2D" uid="uid://sjnwyxvvv2nh" path="res://assets/ui/design.png" id="1_k521r"]
+[ext_resource type="FontFile" uid="uid://dhx7bmlyv1sfh" path="res://ui/theme/fonts/EightPixelsFont.ttf" id="2_celf7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2u7wn"]
 texture = ExtResource("1_k521r")
@@ -35,12 +35,12 @@ texture_margin_right = 3.0
 texture_margin_bottom = 3.0
 region_rect = Rect2(70, 0, 35, 35)
 
+[sub_resource type="FontVariation" id="FontVariation_gilv7"]
+base_font = ExtResource("2_celf7")
+
 [resource]
-default_font = ExtResource("2_iyn4k")
-default_font_size = 14
-Button/colors/font_outline_color = Color(0, 0, 0, 1)
-Button/constants/outline_size = 8
-Button/font_sizes/font_size = 16
+default_font = SubResource("FontVariation_gilv7")
+default_font_size = 8
 Button/styles/disabled = SubResource("StyleBoxTexture_2u7wn")
 Button/styles/hover = SubResource("StyleBoxTexture_ow8p1")
 Button/styles/normal = SubResource("StyleBoxTexture_j6mul")

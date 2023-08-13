@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cjpaafpbxs87e"]
 
 [ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_cpals"]
-[ext_resource type="Texture2D" uid="uid://ptu72k6uhxog" path="res://assets/items/items.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://djr471lupnx14" path="res://assets/items/items.png" id="2"]
 [ext_resource type="Script" path="res://ui/buttons/item_button.gd" id="3"]
 [ext_resource type="Theme" uid="uid://d2qm6hv4jxkev" path="res://assets/ui/theme/sell_button_theme.tres" id="4_byu65"]
 
@@ -10,9 +10,10 @@ atlas = ExtResource("2")
 region = Rect2(0, 0, 32, 32)
 
 [node name="item_button" type="Button"]
+texture_filter = 1
 custom_minimum_size = Vector2(48, 48)
-offset_right = 48.0
-offset_bottom = 48.0
+offset_right = 62.0
+offset_bottom = 64.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 focus_mode = 1
@@ -22,11 +23,12 @@ icon_alignment = 1
 script = ExtResource("3")
 
 [node name="name" type="Label" parent="."]
-layout_mode = 0
-offset_top = 3.0
-offset_right = 48.0
-offset_bottom = 33.0
-theme_override_constants/line_spacing = -1
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 5.0
+offset_bottom = 13.0
+grow_horizontal = 2
 text = "Item Name"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -39,13 +41,12 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -44.0
-offset_top = -17.0
+offset_top = -11.0
 offset_right = -4.0
-offset_bottom = -2.0
+offset_bottom = -3.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 0.796078, 0.243137, 1)
-theme_override_font_sizes/font_size = 12
 text = "100"
 horizontal_alignment = 2
 vertical_alignment = 2

@@ -1,60 +1,73 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://ckgjqcxv7vpn6"]
 
-[ext_resource path="res://assets/leaders/sida_blue.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/leaders/sida_red.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://dhugym455dkca" path="res://assets/leaders/sida_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://iog1y46mm80h" path="res://assets/leaders/sida_red.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 1 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="43"]
+atlas = ExtResource("1")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 1 )
-region = Rect2( 128, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="44"]
+atlas = ExtResource("1")
+region = Rect2(128, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="48"]
+atlas = ExtResource("2")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="49"]
+atlas = ExtResource("2")
+region = Rect2(128, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id=39]
+[sub_resource type="SpriteFrames" id="39"]
 resource_name = "spear"
-animations = [ {
-"frames": [ SubResource( 43 ), SubResource( 44 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("43")
+}, {
+"duration": 1.0,
+"texture": SubResource("44")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 48 ), SubResource( 49 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("48")
+}, {
+"duration": 1.0,
+"texture": SubResource("49")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="Node2D"]
+texture_filter = 1
 use_parent_material = true
 
 [node name="spear" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
-position = Vector2( -8.1407, 2.05879 )
+position = Vector2(-8.1407, 2.05879)
 rotation = -0.349066
-scale = Vector2( 1, 1.1 )
-frames = SubResource( 39 )
-animation = "red"
-offset = Vector2( 0, -5 )
+scale = Vector2(1, 1.1)
+sprite_frames = SubResource("39")
+animation = &"red"
+offset = Vector2(0, -5)
 
 [node name="projectile" type="Node2D" parent="."]
-use_parent_material = true
-position = Vector2( 5, -2 )
 z_index = 1
+use_parent_material = true
+position = Vector2(5, -2)
 
 [node name="sprites" type="AnimatedSprite2D" parent="projectile"]
 visible = false
 use_parent_material = true
-position = Vector2( 0, 4.76837e-07 )
-scale = Vector2( 1, 1.1 )
-frames = SubResource( 39 )
-animation = "red"
-offset = Vector2( -13, -1 )
+position = Vector2(0, 4.76837e-07)
+scale = Vector2(1, 1.1)
+sprite_frames = SubResource("39")
+animation = &"red"
+offset = Vector2(-13, -1)

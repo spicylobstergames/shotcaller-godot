@@ -1,31 +1,38 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://2ih4uuipywck"]
 
-[ext_resource path="res://assets/leaders/bokuden_blue.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/leaders/bokuden_red.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://bi0tpr0sfqcwj" path="res://assets/leaders/bokuden_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://b26t2wu4014ef" path="res://assets/leaders/bokuden_red.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=48]
-atlas = ExtResource( 1 )
-region = Rect2( 114, 0, 38, 38 )
+[sub_resource type="AtlasTexture" id="48"]
+atlas = ExtResource("1")
+region = Rect2(114, 0, 38, 38)
 
-[sub_resource type="AtlasTexture" id=49]
-atlas = ExtResource( 2 )
-region = Rect2( 114, 0, 38, 38 )
+[sub_resource type="AtlasTexture" id="49"]
+atlas = ExtResource("2")
+region = Rect2(114, 0, 38, 38)
 
-[sub_resource type="SpriteFrames" id=50]
+[sub_resource type="SpriteFrames" id="50"]
 resource_name = "katana"
-animations = [ {
-"frames": [ SubResource( 48 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("48")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 49 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("49")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 7, 0 )
-frames = SubResource( 50 )
-offset = Vector2( 2, -7 )
+texture_filter = 1
+position = Vector2(7, 0)
+sprite_frames = SubResource("50")
+offset = Vector2(2, -7)

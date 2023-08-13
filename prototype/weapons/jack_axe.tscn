@@ -1,36 +1,43 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://jbsr1bgnukad"]
 
-[ext_resource path="res://assets/neutrals/lumberjack_blue.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/neutrals/lumberjack_red.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://mivjrt3o0sef" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cipknfd53cw1h" path="res://assets/neutrals/lumberjack_red.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 1 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="39"]
+atlas = ExtResource("1")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 2 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="40"]
+atlas = ExtResource("2")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="SpriteFrames" id=41]
+[sub_resource type="SpriteFrames" id="41"]
 resource_name = "jack_axe"
-animations = [ {
-"frames": [ SubResource( 39 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("39")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [  ],
+"frames": [],
 "loop": true,
-"name": "neutral",
+"name": &"neutral",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 40 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("40")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 7, 1 )
-frames = SubResource( 41 )
-offset = Vector2( 2, -5 )
+texture_filter = 1
+position = Vector2(7, 1)
+sprite_frames = SubResource("41")
+offset = Vector2(2, -5)
