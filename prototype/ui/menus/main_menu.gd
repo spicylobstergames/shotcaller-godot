@@ -18,7 +18,7 @@ func _input(event):
 
 func quick_start():
 	hide()
-	game.maps.current_map = "one_lane_map"
+	game.map_manager.current_map = "one_lane_map"
 	WorldState.set_state("player_team", "blue")
 	WorldState.set_state("enemy_team", "red")
 	WorldState.set_state("player_leaders_names", ["arthur", "bokuden", "nagato"])
@@ -34,7 +34,7 @@ func show_new_game_menu():
 
 func campaign_start():
 	hide()
-	game.maps.current_map = "rect_test_map"
+	game.map_manager.current_map = "rect_test_map"
 	WorldState.set_state("player_leaders_names", ["joan"])
 	WorldState.set_state("player_team", "blue")
 	WorldState.set_state("enemy_team", "red")

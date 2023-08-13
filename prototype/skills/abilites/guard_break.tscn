@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bc6xt7u2t62s3"]
+
+[ext_resource type="Script" path="res://skills/abilites/guard_break.gd" id="1_t45dd"]
+[ext_resource type="Texture2D" uid="uid://bvmcrsceiy5ux" path="res://assets/ui/abilities/aura_of_courage.png" id="2_xf3tf"]
+
+[node name="guard_break" type="Node"]
+script = ExtResource("1_t45dd")
+active_skill_icon = ExtResource("2_xf3tf")

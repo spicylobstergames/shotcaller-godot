@@ -8,7 +8,7 @@ var game:Node
 var time = 8
 var lumberjack_cost = 1
 
-#var mailboy:PackedScene = load("res://neutrals/mailboy.tscn")
+# var mailboy:PackedScene = load("res://neutrals/mailboy.tscn")
 
 var cemitery = {
 	"player_infantry": [],
@@ -95,7 +95,7 @@ func leaders():
 				blue_leaders.append(leader_node)
 			counter += 1
 	
-	game.maps.setup_leaders(red_leaders, blue_leaders)
+	game.map_manager.setup_leaders(red_leaders, blue_leaders)
 
 
 func spawn_group_cycle():
@@ -210,7 +210,7 @@ func cemitery_add_leader(leader):
 
 func neutral_scene(neutral_name):
 	var neutral = load("res://neutrals/"+neutral_name+".tscn")
-	WorldState.get_state("neutral_unit").append(neutral)
+	WorldState.get_state("neutral_units").append(neutral)
 	return neutral
 
 

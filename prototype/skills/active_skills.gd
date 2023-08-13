@@ -449,7 +449,7 @@ func input(event):
 		self._waiting_for_point = false
 
 
-func process(delta):
+func process(_delta):
 	_tip.visible = self._waiting_for_point
 	
 	if self._waiting_for_point:
@@ -458,7 +458,14 @@ func process(delta):
 			polygon.look_at(mouse_position)
 
 
-func physics_process(delta):
-	for skills in player_leaders_skills.values() + enemy_leaders_skills.values():
-		for skill in skills:
+func count_down(skills):
+	for leader_name in skills:
+		var leader = skills[leader_name]
+		for skill_name in leader:
+			var skill = leader[skill_name]
 			skill.current_cooldown = clamp(skill.current_cooldown - 1, 0, skill.current_cooldown)
+
+
+func one_sec_cycle():
+	count_down(player_leaders_skills)
+	count_down(enemy_leaders_skills)

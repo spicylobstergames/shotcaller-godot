@@ -25,6 +25,8 @@ func reset():
 
 func _button_down():
 	var leader = WorldState.get_state("selected_leader")
+	
+	print(skill.on_cooldown())
 	if leader.team == WorldState.get_state("player_team") and !skill.on_cooldown():
 		# apply all skills effects
 		for effect in skill.effects:

@@ -67,10 +67,10 @@ func new_inventory(leader):
 
 
 func build_leaders():
-	for leader in WorldState.get_state("player_leaders"):
-		add_inventory(leader)
-	for leader in WorldState.get_state("enemy_leaders"):
-		add_inventory(leader)
+	for player_leader in WorldState.get_state("player_leaders"):
+		add_inventory(player_leader)
+	for enemy_leader in WorldState.get_state("enemy_leaders"):
+		add_inventory(enemy_leader)
 	WorldState.one_sec_timer.timeout.connect(gold_update_cycle)
 
 

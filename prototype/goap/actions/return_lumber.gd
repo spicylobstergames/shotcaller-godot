@@ -17,7 +17,7 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return agent.get_state("returning_wood")
+	return !!agent.get_state("returning_wood")
 
 
 func enter(agent):

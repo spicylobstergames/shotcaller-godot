@@ -177,7 +177,7 @@ func _zoom_camera(dir):
 	emit_signal("camera_zoom_changed")
 
 
-func process():
+func process(_delta):
 	if WorldState.get_state("game_started"): 
 		
 		# APPLY MOUSE PAN

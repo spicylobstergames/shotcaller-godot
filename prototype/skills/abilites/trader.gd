@@ -10,7 +10,7 @@ const VALUE = 5
 @export var ability_name = "Trader"
 @export var description = "Osman can barter the price of items down by 5 times his level percent" # (String, MULTILINE)
 @export var status_effect_icon : Texture2D
-
+@export var skill_type = "passive"
 
 func _ready():
 	unit.status_effects["Trader"] = {

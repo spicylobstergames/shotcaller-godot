@@ -65,7 +65,7 @@ func over_minimap(event):
 	)
 
 
-func process():
+func process(_delta):
 	if update_map_texture:
 		get_map_texture()
 	else:
@@ -90,7 +90,7 @@ func get_map_texture():
 	hide()
 	rect_layer.hide()
 	WorldState.get_state("map").show()
-	game.maps.buildings_visibility(false)
+	game.map_manager.buildings_visibility(false)
 	Crafty_camera.map_loaded()
 	# after the proper map image is draw
 	await RenderingServer.frame_post_draw
@@ -123,9 +123,9 @@ func get_map_texture():
 	game.ui.show_all()
 	minimap_container.show()
 	rect_layer.show()
-	game.maps.buildings_visibility(true)
+	game.map_manager.buildings_visibility(true)
 	# game map loaded callback
-	game.maps.map_loaded()
+	game.map_manager.map_loaded()
 
 
 func adjust_rect():

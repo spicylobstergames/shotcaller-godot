@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b6up7alt087ex"]
+[gd_scene load_steps=30 format=3 uid="uid://b6up7alt087ex"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://b0264hppvh7ir" path="res://skills/abilites/aura_of_courage.tscn" id="2"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
 [ext_resource type="PackedScene" path="res://weapons/excalibur.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://cdlrrondln7ga" path="res://assets/animations/side_smoke_2.png" id="8"]
+[ext_resource type="PackedScene" uid="uid://bc6xt7u2t62s3" path="res://skills/abilites/guard_break.tscn" id="9_mvi1j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijxyg"]
 atlas = ExtResource("3")
@@ -692,6 +693,8 @@ position = Vector2(7, -5)
 icon = ExtResource("5")
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource("6")
+
+[node name="guard_break" parent="behavior/abilities" index="1" instance=ExtResource("9_mvi1j")]
 
 [node name="agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]

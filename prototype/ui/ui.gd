@@ -112,7 +112,7 @@ func map_loaded():
 	orders_panel.build()
 
 
-func process():
+func process(delta):
 	if WorldState.get_state("game_started") and WorldState.get_state("show_fps"):
 		var f = Engine.get_frames_per_second()
 		var n = WorldState.get_state("all_units").size()
@@ -120,10 +120,31 @@ func process():
 	
 	# minimap display update
 	if minimap:
-		minimap.process()
+		minimap.process(delta)
 	
 	if stats:
-		stats.process()
+		stats.process(delta)
+	
+	if active_skills:
+		active_skills.process(delta)
+	
+	# hud line
+	if Behavior.path.path_line:
+		Behavior.path.draw(WorldState.get_state("selected_unit"))
+
+
+func hide_hpbars():
+	for unit in WorldState.get_state("all_units"):
+		if (unit != WorldState.get_state("selected_unit") and 
+				unit.hud and
+				unit.type != "leader" and
+				unit.current_hp == Behavior.modifiers.get_value(unit, "hp") ):
+					unit.hud.hpbar.hide()
+
+
+func show_hpbars():
+	for unit in WorldState.get_state("all_units"):
+		if unit.hud: unit.hud.hpbar.show()
 
 
 func show_select():

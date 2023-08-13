@@ -42,7 +42,7 @@ func create_block(x, y):
 	block.collide = true
 	block.global_position = Vector2(half_tile_size + x * tile_size, half_tile_size + y * tile_size)
 	current_map.block_container.add_child(block)
-	Collisions.setup(block)
+	setup(block)
 	WorldState.get_state("all_units").append(block)
 
 
@@ -61,15 +61,15 @@ func setup(unit):
 
 
 
-func process(delta):
-	Collisions.quad.clear()
+func physics_process(delta):
+	quad.clear()
 	
 	# loop 1
 	for unit1 in WorldState.get_state("all_units"):
 		
 		# add units to quad
 		if unit1.collide and not unit1.dead:
-			Collisions.quad.add_body(unit1)
+			quad.add_body(unit1)
 	
 	
 	# loop 2: checks for collisions

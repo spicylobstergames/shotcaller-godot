@@ -14,8 +14,7 @@ var map:Node2D
 var mode:String = "match" # campaign
 var control_state:String = "selection"
 
-@onready var maps := $"%maps"
-@onready var hud := $"%hud"
+@onready var map_manager := $"%map_manager"
 @onready var ui := $"%ui"
 @onready var selection := $"%selection"
 @onready var test := $"%test"
@@ -61,15 +60,21 @@ func start():
 	WorldState.set_state("neutral_buildings", [])
 	WorldState.set_state("time", 0)
 	
-	WorldState.set_state("game_started", false)
-	WorldState.set_state("game_ended", false)
+	WorldState.set_state("game_started", true)
 	WorldState.set_state("is_game_active", false)
+	WorldState.set_state("game_ended", false)
 	
 	setup_timers()
-	maps.load_map(maps.current_map)
+	map_manager.load_current_map()
 	ui.hide_version()
-	transitions.start()
-	transitions.transition_completed.connect(get_map_texture)
+	
+	if test.debug:
+		get_map_texture()
+	else:
+		transitions.start()
+		transitions.transition_completed.connect(get_map_texture)
+		
+	emit_signal("game_started")
 
 
 func get_map_texture():
@@ -77,18 +82,14 @@ func get_map_texture():
 
 
 func map_loaded():
-	if not WorldState.get_state("game_started"):
-		WorldState.set_state("game_started", true)
+	if not WorldState.get_state("is_game_active"):
 		resume()
-		emit_signal("game_map_loaded")
-		
-		WorldState.set_state("is_game_active", true)
 		rng.randomize()
 		WorldState.one_sec_timer.start()
 		spawn.start()
 		%soundtrack.stop()
 		# game.mode %soundtrack.start()
-		emit_signal("game_started")
+		emit_signal("game_map_loaded")
 
 
 func _input(event):
@@ -99,6 +100,7 @@ func _input(event):
 		if over_minimap:
 			ui.minimap.input(event)
 		else:
+			ui.active_skills.input(event)
 			selection.input(event)
 
 		Crafty_camera.input(event)
@@ -151,7 +153,7 @@ func one_sec_cycle(): # called every second
 		ui.scoreboard.update()
 	else:
 		ui.top_label.hide()
-		
+	
 	for unit in WorldState.get_state("all_units"):
 		var has_regen = (unit.regen > 0)
 		var is_building = (unit.type == "building")
@@ -163,19 +165,21 @@ func one_sec_cycle(): # called every second
 			unit.set_regen()
 			unit.set_dot()
 	
+	ui.active_skills.one_sec_cycle()
+	
 	emit_signal("game_one_sec_cycle")
 
 
-func _process(_delta: float) -> void:
-	Crafty_camera.process()
-	ui.process()
+func _process(delta: float) -> void:
+	if WorldState.get_state("game_started"):
+		Crafty_camera.process(delta)
+		ui.process(delta)
 
 
 func _physics_process(delta: float) -> void:
-	if WorldState.get_state("game_started"):
-		Collisions.process(delta)
-		Behavior.path.draw(WorldState.get_state("selected_unit"))
-		Goap.process(WorldState.get_state("all_units"), delta)
+	if WorldState.get_state("is_game_active"):
+		Collisions.physics_process(delta)
+		Goap.physics_process(WorldState.get_state("all_units"), delta)
 
 
 func can_control(unit):

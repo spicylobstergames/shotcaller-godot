@@ -8,6 +8,7 @@ extends Node
 @export var description = "Gives Bokuden a chance to deal critical damage on each attack." # (String, MULTILINE)
 
 @export var status_effect_icon : Texture2D
+@export var skill_type = "passive"
 
 func _ready():
 	unit.status_effects["critical slash"] = {

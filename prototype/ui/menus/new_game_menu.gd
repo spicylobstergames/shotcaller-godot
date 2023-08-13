@@ -67,7 +67,7 @@ func get_player_team():
 func _on_start_game_button_pressed():
 	hide()
 	
-	game.maps.current_map = get_selected_map()
+	game.map_manager.current_map = get_selected_map()
 	var player_team = get_player_team()
 	WorldState.set_state("player_team", player_team)
 		
