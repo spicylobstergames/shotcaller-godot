@@ -1,4 +1,4 @@
-[gd_scene load_steps=190 format=3 uid="uid://l08o0g1reo47"]
+[gd_scene load_steps=210 format=3 uid="uid://l08o0g1reo47"]
 
 [ext_resource type="Texture2D" uid="uid://dpvlocwqgaj8f" path="res://assets/map/grass.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://ksgg6u1g8cok" path="res://assets/map/brick.png" id="2"]
@@ -2680,6 +2680,36 @@ pattern_9 = SubResource("TileMapPattern_45rtq")
 pattern_10 = SubResource("TileMapPattern_kr14k")
 pattern_11 = SubResource("TileMapPattern_ru1r0")
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vewkc"]
+polygon = PackedVector2Array(-19.2, -25.6, 32, -25.6, 32, 19.2, -19.2, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_8s7jo"]
+polygon = PackedVector2Array(-32, 19.2, 19.2, 19.2, 19.2, -32, -19.2, -32, -19.2, -25.6, -32, -25.6)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_u2pcw"]
+polygon = PackedVector2Array(19.2, -25.6, -32, -25.6, -32, 19.2, 19.2, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_n5ioy"]
+polygon = PackedVector2Array(-32, -25.6, 19.2, -25.6, 19.2, 32, -19.2, 32, -19.2, 19.2, -32, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_qmv6k"]
+polygon = PackedVector2Array(32, -25.6, -19.2, -25.6, -19.2, 32, 19.2, 32, 19.2, 19.2, 32, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_egjjf"]
+polygon = PackedVector2Array(32, 19.2, -19.2, 19.2, -19.2, -32, 19.2, -32, 19.2, -25.6, 32, -25.6)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6midm"]
+polygon = PackedVector2Array(19.2, -25.6, -19.2, -25.6, -19.2, 32, 19.2, 32)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_1vahj"]
+polygon = PackedVector2Array(19.2, -32, -19.2, -32, -19.2, 19.2, 19.2, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vcdc2"]
+polygon = PackedVector2Array(32, -25.6, -32, -25.6, -32, 19.2, 32, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_wid4o"]
+polygon = PackedVector2Array(19.2, -32, -19.2, -32, -19.2, 32, 19.2, 32)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ytj7v"]
 resource_name = "Wall Blue"
 texture = ExtResource("4")
@@ -2687,49 +2717,89 @@ texture_region_size = Vector2i(64, 64)
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 0
+3:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_vewkc")
 3:0/0/terrains_peering_bit/right_side = 0
 3:1/0 = 0
 3:1/0/terrain_set = 0
 3:1/0/terrain = 0
+3:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_8s7jo")
 3:1/0/terrains_peering_bit/left_side = 0
 3:1/0/terrains_peering_bit/top_side = 0
 4:1/0 = 0
 4:1/0/terrain_set = 0
 4:1/0/terrain = 0
+4:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_n5ioy")
 4:1/0/terrains_peering_bit/bottom_side = 0
 4:1/0/terrains_peering_bit/left_side = 0
 4:0/0 = 0
 4:0/0/terrain_set = 0
 4:0/0/terrain = 0
+4:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_u2pcw")
 4:0/0/terrains_peering_bit/left_side = 0
 5:0/0 = 0
 5:0/0/terrain_set = 0
 5:0/0/terrain = 0
+5:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_qmv6k")
 5:0/0/terrains_peering_bit/right_side = 0
 5:0/0/terrains_peering_bit/bottom_side = 0
 5:1/0 = 0
 5:1/0/terrain_set = 0
 5:1/0/terrain = 0
+5:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_egjjf")
 5:1/0/terrains_peering_bit/right_side = 0
 5:1/0/terrains_peering_bit/top_side = 0
 6:1/0 = 0
 6:1/0/terrain_set = 0
 6:1/0/terrain = 0
+6:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_1vahj")
 6:1/0/terrains_peering_bit/top_side = 0
 6:0/0 = 0
 6:0/0/terrain_set = 0
 6:0/0/terrain = 0
+6:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_6midm")
 6:0/0/terrains_peering_bit/bottom_side = 0
 7:1/0 = 0
 7:1/0/terrain_set = 0
 7:1/0/terrain = 0
+7:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_wid4o")
 7:1/0/terrains_peering_bit/bottom_side = 0
 7:1/0/terrains_peering_bit/top_side = 0
 7:0/0 = 0
 7:0/0/terrain_set = 0
 7:0/0/terrain = 0
+7:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_vcdc2")
 7:0/0/terrains_peering_bit/right_side = 0
 7:0/0/terrains_peering_bit/left_side = 0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_m87ru"]
+polygon = PackedVector2Array(-19.2, -25.6, 32, -25.6, 32, 19.2, -19.2, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_654hb"]
+polygon = PackedVector2Array(-32, 19.2, 19.2, 19.2, 19.2, -32, -19.2, -32, -19.2, -25.6, -32, -25.6)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_u7fbs"]
+polygon = PackedVector2Array(19.2, -25.6, -32, -25.6, -32, 19.2, 19.2, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_h55qv"]
+polygon = PackedVector2Array(-32, -25.6, 19.2, -25.6, 19.2, 32, -19.2, 32, -19.2, 19.2, -32, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_pthok"]
+polygon = PackedVector2Array(32, -25.6, -19.2, -25.6, -19.2, 32, 19.2, 32, 19.2, 19.2, 32, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_38hst"]
+polygon = PackedVector2Array(32, 19.2, -19.2, 19.2, -19.2, -32, 19.2, -32, 19.2, -25.6, 32, -25.6)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_v7fvk"]
+polygon = PackedVector2Array(19.2, -25.6, -19.2, -25.6, -19.2, 32, 19.2, 32)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_1ymtk"]
+polygon = PackedVector2Array(19.2, -32, -19.2, -32, -19.2, 19.2, 19.2, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uf4f7"]
+polygon = PackedVector2Array(32, -25.6, -32, -25.6, -32, 19.2, 32, 19.2)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_avu0f"]
+polygon = PackedVector2Array(19.2, -32, -19.2, -32, -19.2, 32, 19.2, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c827j"]
 resource_name = "Wall Red"
@@ -2738,52 +2808,63 @@ texture_region_size = Vector2i(64, 64)
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 1
+3:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_m87ru")
 3:0/0/terrains_peering_bit/right_side = 1
 3:1/0 = 0
 3:1/0/terrain_set = 0
 3:1/0/terrain = 1
+3:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_654hb")
 3:1/0/terrains_peering_bit/left_side = 1
 3:1/0/terrains_peering_bit/top_side = 1
 4:1/0 = 0
 4:1/0/terrain_set = 0
 4:1/0/terrain = 1
+4:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_h55qv")
 4:1/0/terrains_peering_bit/bottom_side = 1
 4:1/0/terrains_peering_bit/left_side = 1
 4:0/0 = 0
 4:0/0/terrain_set = 0
 4:0/0/terrain = 1
+4:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_u7fbs")
 4:0/0/terrains_peering_bit/left_side = 1
 5:1/0 = 0
 5:1/0/terrain_set = 0
 5:1/0/terrain = 1
+5:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_38hst")
 5:1/0/terrains_peering_bit/right_side = 1
 5:1/0/terrains_peering_bit/top_side = 1
 6:1/0 = 0
 6:1/0/terrain_set = 0
 6:1/0/terrain = 1
+6:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_1ymtk")
 6:1/0/terrains_peering_bit/top_side = 1
 6:0/0 = 0
 6:0/0/terrain_set = 0
 6:0/0/terrain = 1
+6:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_v7fvk")
 6:0/0/terrains_peering_bit/bottom_side = 1
 5:0/0 = 0
 5:0/0/terrain_set = 0
 5:0/0/terrain = 1
+5:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_pthok")
 5:0/0/terrains_peering_bit/right_side = 1
 5:0/0/terrains_peering_bit/bottom_side = 1
 7:0/0 = 0
 7:0/0/terrain_set = 0
 7:0/0/terrain = 1
+7:0/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_uf4f7")
 7:0/0/terrains_peering_bit/right_side = 1
 7:0/0/terrains_peering_bit/left_side = 1
 7:1/0 = 0
 7:1/0/terrain_set = 0
 7:1/0/terrain = 1
+7:1/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_avu0f")
 7:1/0/terrains_peering_bit/bottom_side = 1
 7:1/0/terrains_peering_bit/top_side = 1
 
-[sub_resource type="TileSet" id="TileSet_4giw1"]
+[sub_resource type="TileSet" id="TileSet_c84ed"]
 tile_size = Vector2i(64, 64)
+occlusion_layer_0/light_mask = 1
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Wall Blue"
 terrain_set_0/terrain_0/color = Color(0.32549, 0.584314, 0.709804, 1)
@@ -4619,7 +4700,7 @@ layer_7/tile_data = PackedInt32Array(11993352, 327687, 2, 11993351, 7, 4, 119933
 
 [node name="walls" type="TileMap" parent="tiles"]
 y_sort_enabled = true
-tile_set = SubResource("TileSet_4giw1")
+tile_set = SubResource("TileSet_c84ed")
 cell_quadrant_size = 32
 format = 2
 layer_0/name = "Walls"
@@ -5190,7 +5271,6 @@ points = PackedVector2Array(430, 1955, 676, 1936, 1055, 1894, 1376, 1932, 1694, 
 default_color = Color(1, 1, 1, 0.196078)
 
 [node name="fog" type="CanvasModulate" parent="."]
-visible = false
 color = Color(0.392157, 0.392157, 0.392157, 1)
 
 [editable path="buildings/blue/mine"]

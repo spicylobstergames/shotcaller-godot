@@ -65,7 +65,7 @@ func over_minimap(event):
 	)
 
 
-func process():
+func process(_delta):
 	if update_map_texture:
 		get_map_texture()
 	else:
@@ -77,18 +77,20 @@ func get_map_texture():
 	# turn off snapshot
 	update_map_texture = false
 	# map nodes
-	map_sprite = game.map.get_node("zoom_out_sprite")
-	map_tiles = game.map.get_node("tiles")
+	var map = WorldState.get_state("map")
+	map_sprite = map.get_node("zoom_out_sprite")
+	map_tiles = map.get_node("tiles")
 	# set camera zoom and limits
 	adjust_rect()
 	# hides units and ui
 	map_sprite.hide()
-	game.background.hide()
+	map.get_node("fog").hide()
+	game.ui.background.hide()
 	game.ui.hide_all()
 	hide()
 	rect_layer.hide()
-	game.map.show()
-	game.maps.buildings_visibility(false)
+	WorldState.get_state("map").show()
+	game.map_manager.buildings_visibility(false)
 	Crafty_camera.map_loaded()
 	# after the proper map image is draw
 	await RenderingServer.frame_post_draw
@@ -121,14 +123,14 @@ func get_map_texture():
 	game.ui.show_all()
 	minimap_container.show()
 	rect_layer.show()
-	game.maps.buildings_visibility(true)
+	game.map_manager.buildings_visibility(true)
 	# game map loaded callback
-	game.maps.map_loaded()
+	game.map_manager.map_loaded()
 
 
 func adjust_rect():
 	var screen_size = get_viewport().size
-	var map_max = max(game.map.size.x, game.map.size.y)
+	var map_max = max(WorldState.get_state("map").size.x, WorldState.get_state("map").size.y)
 	var r_size_x = screen_size.x * minimap_size / map_max
 	var r_size_y = screen_size.y * minimap_size / map_max
 	cam_rect.size = Vector2(r_size_x, r_size_y) / Crafty_camera.zoom
@@ -192,7 +194,7 @@ func copy_symbol(unit, symbol):
 	if unit.team == WorldState.get_state("player_team"):
 		var light = light_template.duplicate()
 		light.show()
-		var s = float(unit.vision) * 2 / max(game.map.size.x, game.map.size.y)
+		var s = float(unit.vision) * 2 / max(WorldState.get_state("map").size.x, WorldState.get_state("map").size.y)
 		light.scale = Vector2(s,s)
 		sym.add_child(light)
 	map_symbols_map.append(unit)
@@ -206,7 +208,7 @@ func get_map_scale():
 
 
 func follow_camera():
-	if minimap_container.visible and game.map:
+	if minimap_container.visible and WorldState.get_state("map"):
 		var view_height = get_viewport().size.y
 		var half = WorldState.get_state("map_mid")
 		var map_scale = get_map_scale()
@@ -229,5 +231,5 @@ func move_symbols():
 		var symbols = map_symbols.get_children()
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
-			symbol.position = offset + Vector2(minimap_border,minimap_border) + map_symbols_map[i].global_position / max(game.map.size.x, game.map.size.y) * minimap_size
+			symbol.position = offset + Vector2(minimap_border,minimap_border) + map_symbols_map[i].global_position / max(WorldState.get_state("map").size.x, WorldState.get_state("map").size.y) * minimap_size
 

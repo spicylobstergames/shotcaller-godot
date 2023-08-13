@@ -1,10 +1,7 @@
 extends Node
 
-var game:Node
-@onready var behavior = get_parent()
 
-
-# self = behavior.modifiers
+# self = Behavior.modifiers
 
 
 var extra_retreat_speed = 10
@@ -16,9 +13,6 @@ var retreat_regen = 10
 @export var damage_per_level : float = 2.5
 @export var defense_per_level : float = 2
 @export var attack_speed_per_level : float = 0.05
-
-func _ready():
-	game = get_tree().get_current_scene()
 
 
 func new_modifiers():

@@ -624,6 +624,7 @@ shape = SubResource("32")
 shape = SubResource("29")
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+visible = false
 shape = SubResource("27")
 
 [node name="agent" parent="." index="7"]

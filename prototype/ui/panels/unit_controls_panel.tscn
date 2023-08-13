@@ -1,28 +1,28 @@
 [gd_scene load_steps=9 format=3 uid="uid://ccyfdk71bbuky"]
 
-[ext_resource type="PackedScene" uid="uid://m6qyqc7n5ksl" path="res://ui/buttons/order_button.tscn" id="1"]
 [ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_pboac"]
+[ext_resource type="PackedScene" uid="uid://df78qhk5nxake" path="res://ui/buttons/control_button.tscn" id="3_gvnde"]
 [ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="3_ju35g"]
 [ext_resource type="Script" path="res://ui/panels/unit_controls_panel.gd" id="4"]
 
-[sub_resource type="AtlasTexture" id="34"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5g8y"]
 atlas = ExtResource("3_ju35g")
-region = Rect2(624, 0, 46, 46)
+region = Rect2(624, 0, 48, 48)
 margin = Rect2(2, 2, 0, 0)
 
-[sub_resource type="AtlasTexture" id="36"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_4t41s"]
 atlas = ExtResource("3_ju35g")
-region = Rect2(0, 0, 46, 46)
-margin = Rect2(5, 2, 0, 0)
-
-[sub_resource type="AtlasTexture" id="37"]
-atlas = ExtResource("3_ju35g")
-region = Rect2(46, 0, 46, 46)
+region = Rect2(0, 0, 48, 48)
 margin = Rect2(2, 2, 0, 0)
 
-[sub_resource type="AtlasTexture" id="38"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5wsmu"]
 atlas = ExtResource("3_ju35g")
-region = Rect2(336, 0, 46, 46)
+region = Rect2(48, 0, 48, 48)
+margin = Rect2(2, 2, 0, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cubhw"]
+atlas = ExtResource("3_ju35g")
+region = Rect2(336, 0, 48, 48)
 margin = Rect2(2, 2, 0, 0)
 
 [node name="unit_controls_menu" type="Panel"]
@@ -47,104 +47,48 @@ text = "Controls"
 [node name="buttons_container" type="HBoxContainer" parent="container"]
 layout_mode = 2
 
-[node name="teleport_button" parent="container/buttons_container" instance=ExtResource("1")]
+[node name="teleport_button" parent="container/buttons_container" instance=ExtResource("3_gvnde")]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 2
-icon = SubResource("34")
-script = null
+icon = SubResource("AtlasTexture_i5g8y")
 
 [node name="name" parent="container/buttons_container/teleport_button" index="0"]
 text = "Teleport"
 
 [node name="hint" parent="container/buttons_container/teleport_button" index="1"]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 5.0
-offset_top = 34.0
-offset_right = 55.0
-offset_bottom = 57.0
-grow_horizontal = 1
-grow_vertical = 1
 text = "Q"
 
-[node name="lane_button" parent="container/buttons_container" instance=ExtResource("1")]
+[node name="lane_button" parent="container/buttons_container" instance=ExtResource("3_gvnde")]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 2
-icon = SubResource("36")
-script = null
+icon = SubResource("AtlasTexture_4t41s")
 
 [node name="name" parent="container/buttons_container/lane_button" index="0"]
 text = "Lane"
 
 [node name="hint" parent="container/buttons_container/lane_button" index="1"]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 5.0
-offset_top = 34.0
-offset_right = 55.0
-offset_bottom = 57.0
-grow_horizontal = 1
-grow_vertical = 1
 text = "W"
 
-[node name="move_button" parent="container/buttons_container" instance=ExtResource("1")]
+[node name="move_button" parent="container/buttons_container" instance=ExtResource("3_gvnde")]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 2
-icon = SubResource("37")
-script = null
+icon = SubResource("AtlasTexture_5wsmu")
 
 [node name="name" parent="container/buttons_container/move_button" index="0"]
 text = "Move"
 
 [node name="hint" parent="container/buttons_container/move_button" index="1"]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 5.0
-offset_top = 34.0
-offset_right = 55.0
-offset_bottom = 57.0
-grow_horizontal = 1
-grow_vertical = 1
 text = "E"
 
-[node name="attack_button" parent="container/buttons_container" instance=ExtResource("1")]
+[node name="attack_button" parent="container/buttons_container" instance=ExtResource("3_gvnde")]
 unique_name_in_owner = true
 layout_mode = 2
-focus_mode = 2
-icon = SubResource("38")
-script = null
+icon = SubResource("AtlasTexture_cubhw")
 
 [node name="name" parent="container/buttons_container/attack_button" index="0"]
 text = "Attack"
 
 [node name="hint" parent="container/buttons_container/attack_button" index="1"]
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 5.0
-offset_top = 34.0
-offset_right = 55.0
-offset_bottom = 57.0
-grow_horizontal = 1
-grow_vertical = 1
 text = "R"
 
 [connection signal="pressed" from="container/buttons_container/teleport_button" to="." method="teleport_button_down"]

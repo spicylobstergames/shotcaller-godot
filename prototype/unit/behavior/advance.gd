@@ -1,13 +1,7 @@
 extends Node
 
-var game:Node
-
 
 # self = Behavior.advance
-
-
-func _ready():
-	game = get_tree().get_current_scene()
 
 
 func smart(unit, final_destiny):
@@ -25,7 +19,7 @@ func point(unit, final_destiny, smart_move = false):
 				path = Behavior.path.find(unit.global_position, unit.final_destiny)
 				if path: unit.current_path = path
 			var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < game.map.half_tile_size)
+			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < WorldState.get_state("map").half_tile_size)
 			var has_path = ( path and not path.is_empty() )
 			if enemies.size() == 0:
 				if not at_final_destination: move(unit, unit.final_destiny, smart_move) 

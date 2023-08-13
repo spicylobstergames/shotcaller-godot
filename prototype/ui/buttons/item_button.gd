@@ -49,7 +49,7 @@ func setup(new_item):
 
 
 func on_button_down():
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	if self.shop_item:
 		# BUY ITEM
 		
@@ -80,7 +80,7 @@ func show_sell_button():
 
 
 func on_sell_button_down():
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var sold_item = game.ui.inventories.remove_item(leader, index)
 	# Give the leader gold for half the cost of the item
 	leader.gold += sold_item.sell_price

@@ -359,11 +359,11 @@ _data = {
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
 
-[node name="lumberjack" instance=ExtResource("2")]
+[node name="mailboy" instance=ExtResource("2")]
 hp = 180
 regen = 1
 type = "worker"
-display_name = "lumberjack"
+display_name = "mailboy"
 title = "hired worker"
 immune = true
 selectable = true

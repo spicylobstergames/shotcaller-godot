@@ -5,7 +5,7 @@ func get_class_name(): return "PursueEnemy"
 
 
 func is_valid(agent) -> bool:
-	return agent.get_state("has_attack_target")
+	return !!agent.get_state("has_attack_target")
 
 
 func get_cost(_agent) -> int:

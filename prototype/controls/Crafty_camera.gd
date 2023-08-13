@@ -47,7 +47,7 @@ func input(event):
 		"ui_down":  arrow_keys_move.y =  arrow_keys_speed if pressed else 0
 
 		# KEYBOARD
-	if event is InputEventKey and WorldState.get_state("game_started"):
+	if event is InputEventKey:
 		
 		match event.keycode:
 			# LEADER KEYS
@@ -118,11 +118,11 @@ func input(event):
 				_touches_info.cur_avg_pos = avg_touch
 				pan_position = Vector2(-1 * (_touches_info.cur_avg_pos - _touches_info.last_avg_pos))
 		
-	# ZOOM
-	if event.is_action_pressed("zoom_in"):
-		_zoom_camera(1)
-	if event.is_action_pressed("zoom_out"):
-		_zoom_camera(-1)
+		# ZOOM
+		if event.is_action_pressed("zoom_in"):
+			_zoom_camera(1)
+		if event.is_action_pressed("zoom_out"):
+			_zoom_camera(-1)
 
 
 func map_loaded():
@@ -136,8 +136,9 @@ func map_loaded():
 
 func focus_leader(index):
 	var game = get_tree().get_current_scene()
-	if game.player_leaders.size() >= index:
-		var leader = game.player_leaders[index-1]
+	var player_leaders = WorldState.get_state("player_leaders")
+	if player_leaders.size() >= index:
+		var leader = player_leaders[index-1]
 		if leader:
 			focus_unit(leader)
 			game.selection.select_unit(leader)
@@ -176,7 +177,7 @@ func _zoom_camera(dir):
 	emit_signal("camera_zoom_changed")
 
 
-func process():
+func process(_delta):
 	if WorldState.get_state("game_started"): 
 		
 		# APPLY MOUSE PAN
@@ -201,5 +202,9 @@ func process():
 		var y = camera_limit.y
 		global_position.x = clamp(global_position.x, -x, x)
 		global_position.y = clamp(global_position.y, -y, y)
-		
 
+
+func reset():
+	position = Vector2.ZERO
+	offset = Vector2.ZERO
+	zoom = Vector2.ONE

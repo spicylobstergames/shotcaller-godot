@@ -94,11 +94,11 @@ func close_to_blacksmith(leader):
 
 func update_buttons():
 	if visible:
-		var leader = game.selected_leader
+		var leader = WorldState.get_state("selected_leader")
 		var trader = null
 		
 		if leader != null:
-			trader = leader.get_node_or_null("behavior/abilities/trader")
+			trader = leader.get_node_or_null("skills/trader")
 		
 		# checks if leader has trader ability, updates price labels
 		if trader != null:

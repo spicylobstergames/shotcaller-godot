@@ -1,5 +1,4 @@
 extends CanvasLayer
-var game:Node
 
 #class_name _ui
 
@@ -28,9 +27,9 @@ var unit_controls_button : Node
 @onready var new_game_menu := $"%new_game_menu"
 @onready var leader_select_menu := $"%leader_select_menu"
 
+@onready var background := $"%waterfall_background"
 
 func _ready():
-	game = get_tree().get_current_scene()
 	# stats
 	inventories = stats.get_node("inventories")
 	active_skills = stats.get_node("active_skills")
@@ -52,6 +51,7 @@ func show_mid():
 
 
 func show_main_menu():
+	background.show()
 	show_mid()
 	show_version()
 	main_menu.show()
@@ -97,11 +97,13 @@ func show_all():
 
 func show_minimap():
 	minimap.show()
+	minimap.minimap_container.show()
 	minimap.rect_layer.show()
 
 
 func hide_minimap():
 	minimap.hide()
+	minimap.minimap_container.hide()
 	minimap.rect_layer.hide()
 
 
@@ -110,27 +112,49 @@ func map_loaded():
 	orders_panel.build()
 
 
-func process():
-	if WorldState.get_state("opt").show_fps:
+func process(delta):
+	if WorldState.get_state("game_started") and WorldState.get_state("show_fps"):
 		var f = Engine.get_frames_per_second()
 		var n = WorldState.get_state("all_units").size()
 		fps.set_text("fps: "+str(f)+" u:"+str(n))
 	
 	# minimap display update
 	if minimap:
-		minimap.process()
+		minimap.process(delta)
+	
+	if stats:
+		stats.process(delta)
+	
+	if active_skills:
+		active_skills.process(delta)
+	
+	# hud line
+	if Behavior.path.path_line:
+		Behavior.path.draw(WorldState.get_state("selected_unit"))
+
+
+func hide_hpbars():
+	for unit in WorldState.get_state("all_units"):
+		if (unit != WorldState.get_state("selected_unit") and 
+				unit.hud and
+				unit.type != "leader" and
+				unit.current_hp == Behavior.modifiers.get_value(unit, "hp") ):
+					unit.hud.hpbar.hide()
+
+
+func show_hpbars():
+	for unit in WorldState.get_state("all_units"):
+		if unit.hud: unit.hud.hpbar.show()
 
 
 func show_select():
-	stats.update()
-	if game.can_control(WorldState.get_state("selected_unit")):
+	if WorldState.get_state("selected_unit").is_controllable():
 		orders_button.disabled = false
 	orders_panel.update()
 	buttons_update()
 
 
 func hide_unselect():
-	stats.update()
 	orders_panel.hide()
 	orders_button.disabled = true
 	unit_controls_panel.hide()

@@ -1,8 +1,13 @@
 extends Control
 
+
+# self = game.ui.active_skills
+
+
 @onready var game: Node = get_tree().get_current_scene()
 @onready var _skill_buttons = $placeholder.get_children()
-#@onready var _tip = $tip
+
+@onready var _tip = $tip
 
 var aura_sprite = preload("res://assets/ui/abilities/aura_of_courage_small.png")
 
@@ -15,89 +20,89 @@ enum visualize_type {arc, circle, rectangle, none}
 signal point(pos)
 
 var active_skills = {
-	"rollo": [
-		ActiveSkill.new(
-			"Wolf's teeth",
-			"Deals damage in an AOE around it for 100 damage whenever >=3 units are within range",
-			120,
-			visualize_type.circle,
-			{},
-			["rollo_basic"]
-		)
-	],
-	"raja": [
-		ActiveSkill.new(
-			"Labh, son of Ganesha",
-			"Spawn an elephant companion. Can only spawn one elephant at a time", 
-			60,
-			visualize_type.none,
-			{},
-			["raja_basic"]
-		)
-	],
-	"robin": [
-		ActiveSkill.new(
-			"Call of the forest",
-			"Teleport",
-			30,
-			visualize_type.circle,
-			{},
-			["robin_special"]
-		)
-	],
-	"osman": [
-		ActiveSkill.new(
-			"Bribe",
-			"Throw a bag of gold to bribe nearby pawns for 10 sec. Consumes 100 gold", 
-			120,
-			visualize_type.none,
-			{},
-			["osman_special"]
-		)
-	],
-	"takoda": [],
-	"arthur": [
-		ActiveSkill.new(
-			"Cleave",
-			"Arthur slashes throw enemies, he can swing three times, but each attack need to hit enemy leader to continue the combination.",
-			100,
-			visualize_type.arc,
-			{"angle": 90, "radius": 50, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			["arthur_special"]
-		),
-		ActiveSkill.new(
-			"Cross-Guard hit",
-			"Arthur hits the guard in front of him and stuns the enemy.",
-			100,
-			visualize_type.rectangle,
-			{"lenght": 25, "width": 10, "center_pos": Vector2(0, 8),  "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			["arthur_active"]
-		)
-	],
-	"bokuden": [
-		ActiveSkill.new(
-			"Battle Call",
-			"The hero leads allies on a furious offensive, increasing their movement speed by by 10 * his level for 5 seconds.",
-			600,
-			visualize_type.none,
-			{},
-			["bokuden_special"]
-		),
-		ActiveSkill.new(
-			"Dash",
-			"Bokuden dashes forward and slashes enemies on his way.",
-			100,
-			visualize_type.rectangle,
-			{"lenght": 50, "width": 5, "center_pos": Vector2(0, 8),  "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			["bokuden_active"]
-		),
-	],
-	"joan": [],
-	"lorne": [],
-	"sida": [],
-	"tomyris": [],
-	"nagato": [],
-	"hongi": [],
+	"rollo": {
+		"rollo_basic": {
+			"display_name": "Wolf's teeth",
+			"tooltip": "Deals damage in an AOE around it for 100 damage whenever >=3 units are within range",
+			"cooldown": 120,
+			"visualize": visualize_type.circle,
+			"attributes": {},
+			"effects": []
+		}
+	},
+	"raja": {
+		"raja_basic": {
+			"display_name": "Labh, son of Ganesha",
+			"tooltip": "Spawn an elephant companion. Can only spawn one elephant at a time", 
+			"cooldown": 60,
+			"visualize": visualize_type.none,
+			"attributes": {},
+			"effects": []
+		}
+	},
+	"robin": {
+		"robin_special": {
+			"display_name": "Call of the forest",
+			"tooltip": "Teleport",
+			"cooldown": 30,
+			"visualize": visualize_type.circle,
+			"attributes": {},
+			"effects": []
+		}
+	},
+	"osman": {
+		"osman_special": {
+			"display_name": "Bribe",
+			"tooltip": "Throw a bag of gold to bribe nearby pawns for 10 sec. Consumes 100 gold", 
+			"cooldown": 120,
+			"visualize": visualize_type.none,
+			"attributes": {},
+			"effects": []
+		}
+	},
+	"takoda": {},
+	"arthur": {
+		"arthur_active": {
+			"display_name": "Guard Break",
+			"tooltip": "Arthur hits the guard in front of him and stuns the enemy.",
+			"cooldown": 100,
+			"visualize": visualize_type.rectangle,
+			"attributes": {"length": 25, "width": 10, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
+			"effects": []
+		},
+		"arthur_special": {
+			"display_name": "Cleave",
+			"tooltip": "Arthur slashes throw enemies, he can swing three times, but each attack need to hit enemy leader to continue the combination.",
+			"cooldown": 100,
+			"visualize": visualize_type.arc,
+			"attributes": {"angle": 90, "radius": 50, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
+			"effects": []
+		}
+	},
+	"bokuden": {
+		"bokuden_special": {
+			"display_name": "Battle Call",
+			"tooltip": "The hero leads allies on a furious offensive, increasing their movement speed by by 10 * his level for 5 seconds.",
+			"cooldown": 600,
+			"visualize": visualize_type.none,
+			"attributes": {},
+			"effects": []
+		},
+		"bokuden_active": {
+			"display_name": "Dash",
+			"tooltip": "Bokuden dashes forward and slashes enemies on his way.",
+			"cooldown": 100,
+			"visualize": visualize_type.rectangle,
+			"attributes": {"length": 50, "width": 5, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
+			"effects": []
+		}
+	},
+	"joan": {},
+	"lorne": {},
+	"sida": {},
+	"tomyris": {},
+	"nagato": {},
+	"hongi": {}
 }
 
 
@@ -108,7 +113,7 @@ class ActiveSkill:
 	var current_cooldown: int
 	var visualize
 	var parameters: Dictionary # skill parameters: range, angle, color etc...
-	var effects: Array # array of skill effects, looks like [FuncRef, FuncRef, ..]
+	var effects: Array # array of skill effects
 	
 	func _init(_display_name,_description,_cooldown,_visualize,_parameters,_effects):
 		self.display_name = _display_name
@@ -124,7 +129,7 @@ class ActiveSkill:
 		return self.current_cooldown > 0
 
 
-# Async func to get player point target
+# callback func to get player point target
 func _get_point_target(leader, effects, parameters, visualize):
 	self._waiting_for_point = true
 	var visualization_node = aoe_vis_setup(leader, effects, parameters, visualize)
@@ -154,14 +159,14 @@ func aoe_vis_setup(leader, _effects, parameters, visualize):
 	return rotation_node
 
 
-#Clearing used nodes
+# clearing used nodes
 func aoe_vis_clear(visualization_node):
 #	for visualization_node in visualization:
 	visualization_node.queue_free()
 	visualization.erase(visualization_node)
 
 
-#Circle visualization polygon
+# circle visualization polygon
 func generate_circle_poly(radius: float, num_sides: int, center: Vector2, color: Color) -> PackedVector2Array:
 	var angle_delta: float = (PI * 2) / num_sides
 	var vector: Vector2 = Vector2(radius, 0)
@@ -177,13 +182,13 @@ func generate_circle_poly(radius: float, num_sides: int, center: Vector2, color:
 	return polygon
 
 
-#Arc(cone) visualization polygon
+# arc(cone) visualization polygon
 func generate_arc_poly(angle, radius, start_position, finish_position, color: Color):
 	var arc_points = 30
 	var polygon = Polygon2D.new()
 	var _points: PackedVector2Array = []
 	var direction = start_position.direction_to(finish_position) #get normilised direction
-	var central_point = direction * radius #get central Vector with radius lenght
+	var central_point = direction * radius #get central Vector with radius length
 	var angle_delta: float = deg_to_rad(angle) / arc_points #calculating 1 step rotation angle
 	var compensate_angle: float = deg_to_rad(-angle) / 2
 	var vector: Vector2 = central_point
@@ -200,13 +205,13 @@ func generate_arc_poly(angle, radius, start_position, finish_position, color: Co
 	return polygon
 
 
-#Rectangle visualization polygon
-func generate_rect_poly(lenght, width, start_position, finish_position, color: Color):
+# rectangle visualization polygon
+func generate_rect_poly(length, width, start_position, finish_position, color: Color):
 	
 	var polygon = Polygon2D.new()
 	var _points: PackedVector2Array = []
 	var direction = start_position.direction_to(finish_position)
-	var central_point = direction * lenght
+	var central_point = direction * length
 	var left_down = Vector2(direction * width).orthogonal()
 	var right_down = left_down.reflect(direction)
 	var left_top = left_down + central_point
@@ -234,7 +239,7 @@ func enemies_in_polygon(leader, radius, polygon):
 
 # Example how to write code for point target skill
 func robin_special(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	# Wait for player to click on map to get x and y position
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	
@@ -249,7 +254,7 @@ func robin_special(effects, parameters, visualize):
 
 
 func rollo_basic():
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var range_of_effect = 100
 	var damage = 100
 	
@@ -265,7 +270,7 @@ func rollo_basic():
 
 
 func arthur_special(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target != null:
 		var animations = leader.get_node("animations")
@@ -291,12 +296,12 @@ func arthur_special_end():
 
 
 func arthur_active(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target == null:
 		return false
-	var polygon = generate_rect_poly(parameters.lenght, parameters.width, leader.global_position, point_target, parameters.color)
-	var targets = enemies_in_polygon(leader, parameters.lenght, polygon)
+	var polygon = generate_rect_poly(parameters.length, parameters.width, leader.global_position, point_target, parameters.color)
+	var targets = enemies_in_polygon(leader, parameters.length, polygon)
 	var damage = 10 * leader.level
 	if targets.is_empty():
 		return true
@@ -307,7 +312,7 @@ func arthur_active(effects, parameters, visualize):
 
 
 func bokuden_special(_effects, _parameters, _visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var aura_duration = 5
 	var speed_modifier = 10
 	var range_of_aura = 100
@@ -340,11 +345,11 @@ func battle_call_remove(_targets):
 
 
 func bokuden_active(effects, parameters, visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target:
 		var dash_point = leader.global_position.direction_to(point_target)
-		dash_point = dash_point * parameters.lenght + leader.global_position
+		dash_point = dash_point * parameters.length + leader.global_position
 		var dash_tween = Tween.new()
 		leader.add_child(dash_tween)
 		dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, 0.5, Tween.TRANS_LINEAR)
@@ -355,7 +360,7 @@ func bokuden_active(effects, parameters, visualize):
 
 
 func osman_special(_effects, _parameters, _visualize):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var bribe_gold_cost = 10
 	var effect_duration = 2
 	var range_of_effect = 100
@@ -389,17 +394,6 @@ func bribe_remove(targets):
 		else: targets.erase(unit)
 
 
-#func _input(event):
-#	if self._waiting_for_point:
-#		if event is InputEventMouseButton:
-#			if event.is_pressed():
-#				if event.button_index == 1:
-#					emit_signal("point", Crafty_camera.get_global_mouse_position())
-#		elif Input.is_action_pressed("ui_cancel"):
-#			emit_signal("point", null)
-	
-
-
 func _ready():
 	hide()
 	#clear()
@@ -413,30 +407,65 @@ func reset_buttons():
 func update_buttons():
 	reset_buttons()
 	show()
-	var leader = game.selected_leader
-	for index in active_skills[leader.display_name].size():
-		_skill_buttons[index].setup(active_skills[leader.display_name][index])
+	var leader = WorldState.get_state("selected_leader")
+	if leader.name in player_leaders_skills:
+		var player_skills = player_leaders_skills[leader.name].values()
+		for index in _skill_buttons.size():
+			_skill_buttons[index].setup(player_skills[index])
 
 
 func new_skills(leader, skills_storage):
-	skills_storage[leader.display_name] = active_skills[leader.display_name].duplicate()
+	var leader_skills = active_skills[leader.display_name]
+	for skill_name in leader_skills:
+		var skill = leader_skills[skill_name]
+		
+		var display_name = skill.display_name
+		var tooltip = skill.tooltip
+		var cooldown = skill.cooldown
+		var visualize = skill.visualize
+		var attributes = skill.attributes
+		var effects = skill.effects
+		
+		if !leader.name in skills_storage: skills_storage[leader.name] = {}
+		
+		skills_storage[leader.name][display_name] = ActiveSkill.new(display_name, tooltip, cooldown, visualize, attributes, effects)
 
 
 func build_leaders():
-	for leader in game.player_leaders:
+	for leader in WorldState.get_state("player_leaders"):
 		new_skills(leader, player_leaders_skills)
-	for leader in game.enemy_leaders:
+	for leader in WorldState.get_state("enemy_leaders"):
 		new_skills(leader, enemy_leaders_skills)
 
+func input(event):
+	if (self._waiting_for_point and 
+		event is InputEventMouseButton and 
+		event.is_pressed() and 
+		event.button_index == 1):
+			
+			emit_signal("point", Crafty_camera.get_global_mouse_position())
+			
+	elif Input.is_action_pressed("ui_cancel"):
+		self._waiting_for_point = false
 
-#func _physics_process(delta):
-#	_tip.visible = self._waiting_for_point
-#
-#	if self._waiting_for_point == true:
-#		for polygon in visualization:
-#			var mouse_position =  Crafty_camera.get_global_mouse_position()
-#			polygon.look_at(mouse_position)
-#
-#	for skills in player_leaders_skills.values() + enemy_leaders_skills.values():
-#		for skill in skills:
-#			skill.current_cooldown = clamp(skill.current_cooldown - 1, 0, skill.current_cooldown)
+
+func process(_delta):
+	_tip.visible = self._waiting_for_point
+	
+	if self._waiting_for_point:
+		for polygon in visualization:
+			var mouse_position =  Crafty_camera.get_global_mouse_position()
+			polygon.look_at(mouse_position)
+
+
+func count_down(skills):
+	for leader_name in skills:
+		var leader = skills[leader_name]
+		for skill_name in leader:
+			var skill = leader[skill_name]
+			skill.current_cooldown = clamp(skill.current_cooldown - 1, 0, skill.current_cooldown)
+
+
+func one_sec_cycle():
+	count_down(player_leaders_skills)
+	count_down(enemy_leaders_skills)

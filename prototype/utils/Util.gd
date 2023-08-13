@@ -48,8 +48,8 @@ func closer_lane(point):
 
 func closer_building(point, team):
 	var distances = []
-	var buildings = game.player_buildings
-	if team != WorldState.get_state("player_team"): buildings = game.enemy_buildings
+	var buildings = WorldState.get_state("player_buildings")
+	if team != WorldState.get_state("player_team"): buildings = WorldState.get_state("enemy_buildings")
 	for building in buildings:
 		distances.append({
 			"distance": point.distance_to(building.global_position),
@@ -67,7 +67,7 @@ func limit_angle(a):
 
 func random_point():
 	var o = 50
-	return Vector2(o+randf()*(game.map.size.x-o*2), o+randf()*(game.map.size.y-o*2))
+	return Vector2(o+randf()*(WorldState.get_state("map").size.x-o*2), o+randf()*(WorldState.get_state("map").size.y-o*2))
 
 
 func offset_point_random(point, offset):
@@ -88,11 +88,11 @@ func label(string):
 
 
 func get_building(point):
-	for building in game.player_buildings:
+	for building in WorldState.get_state("player_buildings"):
 		if click_distance(building, point): return building
-	for building in game.enemy_buildings:
+	for building in WorldState.get_state("enemy_buildings"):
 		if click_distance(building, point): return building
-	for building in game.neutral_buildings:
+	for building in WorldState.get_state("neutral_buildings"):
 		if click_distance(building, point): return building
 	return null
 

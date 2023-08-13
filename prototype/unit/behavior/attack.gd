@@ -1,13 +1,6 @@
 extends Node
 
-var game:Node
-
-
 # self = Behavior.attack
-
-
-func _ready():
-	game = get_tree().get_current_scene()
 
 
 func point(unit, target_point):
@@ -20,18 +13,18 @@ func point(unit, target_point):
 			unit.weapon.look_at(target_point)
 		
 		if !unit.target:
-			var neighbors = game.maps.blocks.get_units_in_radius(target_point, 1)
+			var neighbors = Collisions.get_units_in_radius(target_point, 1)
 			if neighbors:
 				var target = closest_enemy_unit(unit, neighbors)
 				if is_valid_target(unit, target):
 					set_target(unit, target)
 		
 		
-		if unit.target:
-			unit.aim_point = target_point
-			unit.mirror_look_at(target_point)
-			unit.get_node("animations").speed_scale = Behavior.modifiers.get_value(unit, "attack_speed")
-			unit.set_state("attack")
+		#if unit.target:
+		unit.aim_point = target_point
+		unit.mirror_look_at(target_point)
+		unit.get_node("animations").speed_scale = Behavior.modifiers.get_value(unit, "attack_speed")
+		unit.set_state("attack")
 
 
 
@@ -73,7 +66,7 @@ func hit(unit1):
 	if unit1.display_name in Behavior.skills.leader:
 		var attacker_skills = Behavior.skills.leader[unit1.display_name]
 		if "cleave" in attacker_skills:
-			var neighbors = game.maps.blocks.get_units_in_radius(att_pos, att_rad)
+			var neighbors = Collisions.get_units_in_radius(att_pos, att_rad)
 			for unit2 in neighbors:
 				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})
@@ -130,7 +123,6 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			target.was_attacked(attacker, damage)
 			
 		if target.hud: target.hud.update_hpbar()
-		if target == WorldState.get_state("selected_unit"): game.ui.stats.update()
 		
 		if (target.type == "building" and 
 				target.subtype == "backwood"):
@@ -152,11 +144,18 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 			target.die()
 			if target.type == "leader":
 				var player_team = WorldState.get_state("player_team")
-				if target.team == player_team: game.player_deaths += 1
-				else: game.enemy_deaths += 1
-				if attacker.team == player_team: game.player_kills += 1
-				else: game.enemy_kills += 1
-
+				if target.team == player_team: 
+					var deaths = WorldState.get_state("player_deaths") + 1
+					WorldState.set_state("player_deaths", deaths)
+				else:
+					var deaths = WorldState.get_state("enemy_deaths") + 1
+					WorldState.set_state("enemy_deaths", deaths)
+				if attacker.team == player_team: 
+					var kills = WorldState.get_state("player_kills") + 1
+					WorldState.set_state("player_kills", kills)
+				else:
+					var kills = WorldState.get_state("enemy_kills") + 1
+					WorldState.set_state("enemy_kills", kills)
 
 # projectiles
 
@@ -175,7 +174,7 @@ func projectile_start(attacker, target):
 	if not Behavior.move.in_bounds(target_position): return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
-	game.map.projectile_container.add_child(projectile)
+	WorldState.get_state("map").projectile_container.add_child(projectile)
 	var projectile_sprite = projectile.get_node("sprites")
 	projectile.global_position = attacker.projectile.global_position
 	projectile.show()

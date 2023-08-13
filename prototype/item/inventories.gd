@@ -67,10 +67,10 @@ func new_inventory(leader):
 
 
 func build_leaders():
-	for leader in game.player_leaders:
-		add_inventory(leader)
-	for leader in game.enemy_leaders:
-		add_inventory(leader)
+	for player_leader in WorldState.get_state("player_leaders"):
+		add_inventory(player_leader)
+	for enemy_leader in WorldState.get_state("enemy_leaders"):
+		add_inventory(enemy_leader)
 	WorldState.one_sec_timer.timeout.connect(gold_update_cycle)
 
 
@@ -154,8 +154,6 @@ func gold_timer_timeout(unit):
 			gold_per_sec += inventory.extra_tax_gold
 			gold_per_sec += inventory.extra_mine_gold
 		unit.gold += gold_per_sec
-		# Updates gold label
-		if unit == WorldState.get_state("selected_unit"): game.ui.stats.update()
 
 
 func equip_items_has_slots(leader):
@@ -316,7 +314,7 @@ func update_consumables(leader):
 			item_button.disabled = (enemy_leaders_on_sight.is_empty())
 
 func update_buttons():
-	for leader in game.player_leaders + game.enemy_leaders:
+	for leader in WorldState.get_state("all_leaders"):
 		var inventory = get_leader_inventory(leader)
 		var close_to_blacksmith = game.ui.shop.close_to_blacksmith(leader)
 		if inventory:
@@ -328,7 +326,7 @@ func update_buttons():
 						var delivery = get_leader_delivery(leader)
 						give_item(delivery)
 	
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	if leader:
 		var inventory = get_leader_inventory(leader)
 		if inventory:

@@ -103,7 +103,7 @@ func clear_placeholder():
 func build():
 	setup_lanes()
 	build_blacksmiths()
-	if game.map.neutrals.size() > 1:
+	if WorldState.get_state("map").neutrals.size() > 1:
 		build_mines()
 		build_lumbermills()
 		build_camps()
@@ -113,7 +113,7 @@ func build():
 # LEADERS
 
 func build_leaders():
-	for leader in game.player_leaders + game.enemy_leaders:
+	for leader in WorldState.get_state("all_leaders"):
 		var orders_container = {
 			"node": VBoxContainer.new(),
 			"leader": leader
@@ -139,7 +139,7 @@ func setup_leader_buttons(orders_container):
 
 func setup_lanes():
 	for team in WorldState.teams:
-		for lane in game.map.get_node("lanes").get_children():
+		for lane in WorldState.get_state("map").get_node("lanes").get_children():
 			var orders_container = {
 				"node": VBoxContainer.new(),
 				"type": "lane",

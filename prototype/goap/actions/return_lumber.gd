@@ -17,7 +17,7 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return agent.get_state("returning_wood")
+	return !!agent.get_state("returning_wood")
 
 
 func enter(agent):
@@ -29,7 +29,7 @@ func on_arrive(agent):
 	agent.set_state("returning_wood", true)
 	agent.set_state("has_wood", false)
 	# heal all player buildings
-	for building in WorldState.game.all_buildings:
+	for building in WorldState.get_state("all_buildings"):
 		if unit.team == building.team:
 				building.heal(building.regen)
 

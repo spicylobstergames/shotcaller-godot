@@ -3,8 +3,6 @@ extends Node2D
 class_name base_map
 
 
-# self = game.map
-
 @onready var walls = get_node("tiles/walls")
 @onready var trees = get_node("tiles/trees")
 @onready var fog = get_node("fog")

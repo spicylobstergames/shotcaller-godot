@@ -5,7 +5,7 @@ func get_class_name(): return "AttackEnemy"
 
 
 func is_valid(agent) -> bool:
-	return agent.get_state("has_attack_target")
+	return !!agent.get_state("has_attack_target")
 	
 	
 func get_cost(_agent) -> int:
@@ -25,7 +25,7 @@ func enter(agent):
 	var target = unit.target
 	
 	if Behavior.attack.is_valid_target(unit, target):
-		Behavior.attack.point(unit, target.global_position)
+		Behavior.advance.point(unit, target.global_position)
 
 
 func on_animation_end(agent):

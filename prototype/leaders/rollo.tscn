@@ -603,6 +603,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="32"]
+radius = 9.0
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
@@ -670,6 +671,7 @@ shape = SubResource("32")
 shape = SubResource("29")
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+visible = false
 shape = SubResource("27")
 
 [node name="agent" parent="." index="7"]

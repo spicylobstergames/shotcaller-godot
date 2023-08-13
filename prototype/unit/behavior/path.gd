@@ -1,13 +1,6 @@
 extends Node
 
-var game:Node
-
-
 # self = Behavior.path
-
-
-const teleport_time = 3
-const teleport_max_distance = 100
 
 
 # PATHFIND GRID
@@ -16,47 +9,55 @@ var path_finder
 var path_line
 
 
-func _ready():
-	game = get_tree().get_current_scene()
-	path_line = Line2D.new()
-	path_line.name = "unit_path_line"
-
-
 func setup_pathfind():
 	# get tiles
 	var walls_size = Vector2(
-		floor(game.map.size.x / game.map.tile_size)+1,
-		floor(game.map.size.y / game.map.tile_size)+1
+		floor(WorldState.get_state("map").size.x / WorldState.get_state("map").tile_size)+1,
+		floor(WorldState.get_state("map").size.y / WorldState.get_state("map").tile_size)+1
 	)
 	#setup grid
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
-	var used_cells = game.map.walls.get_used_cells(0)
+	var used_cells = WorldState.get_state("map").walls.get_used_cells(0)
 	
 	for cell in used_cells:
-		game.maps.blocks.create_block(cell.x, cell.y)
+		Collisions.create_block(cell.x, cell.y)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
 	# add building units
-	for building in game.player_buildings:
-		var pos = (building.global_position / game.map.tile_size).floor()
+	for building in WorldState.get_state("player_buildings"):
+		var pos = (building.global_position / WorldState.get_state("map").tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
-	for building in game.enemy_buildings:
-		var pos = (building.global_position / game.map.tile_size).floor()
+	for building in WorldState.get_state("enemy_buildings"):
+		var pos = (building.global_position / WorldState.get_state("map").tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
-	for building in game.neutral_buildings:
-		var pos = (building.global_position / game.map.tile_size).floor()
+	for building in WorldState.get_state("neutral_buildings"):
+		var pos = (building.global_position / WorldState.get_state("map").tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
 	# setup finder
 	path_finder = Finder.JumpPointFinder.new()
 	# add movement line indicator
-	game.map.fog.add_sibling(path_line)
+	path_line = Line2D.new()
+	path_line.name = "unit_path_line"
+	WorldState.get_state("map").fog.add_sibling(path_line)
 
 
 func setup_unit_path(unit, path):
 	unit.current_path = path
 	if not unit.unit_arrived.is_connected(on_arrive):
 		unit.unit_arrived.connect(on_arrive.bind(unit))
+
+
+func new_lane_path(lane, team):
+	if lane in WorldState.get_state("lanes"):
+		var path = WorldState.get_state("lanes")[lane].duplicate()
+		var map = WorldState.get_state("map")
+		if team == "blue" and map.has_node("buildings/red/castle"):
+			path.append(map.get_node("buildings/red/castle").global_position)
+		if team == "red" and map.has_node("buildings/blue/castle"): 
+			path.reverse()
+			path.append(map.get_node("buildings/blue/castle").global_position)
+		return path
 
 
 func on_arrive(unit):
@@ -67,8 +68,8 @@ func on_arrive(unit):
 
 
 func find(g1, g2):
-	var cell_size = game.map.tile_size
-	var half = game.map.half_tile_size
+	var cell_size = WorldState.get_state("map").tile_size
+	var half = WorldState.get_state("map").half_tile_size
 	var p1 = (g1 / cell_size).floor()
 	var p2 = (g2 / cell_size).floor()
 	if in_limits(p1) and in_limits(p2):
@@ -93,7 +94,7 @@ func start(unit, new_path):
 		Behavior.advance.point(unit, next_point)
 
 
-func smart(unit, path, cb):
+func smart(unit, path, cb="advance"):
 	if path and path.size():
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
@@ -103,7 +104,7 @@ func smart(unit, path, cb):
 
 func resume_lane(unit):
 	var lane = unit.agent.get_state("lane")
-	var new_path = game.maps.new_path(lane, unit.team)
+	var new_path = Behavior.path.new_lane_path(lane, unit.team)
 	start(unit,new_path)
 
 
@@ -120,7 +121,7 @@ func draw(unit):
 	
 	if unit:
 		has_path = not unit.current_path.is_empty()
-		should_draw = game.can_control(unit) and (has_path or unit.final_destiny)
+		should_draw = unit.is_controllable() and (has_path or unit.final_destiny)
 	
 	if should_draw:
 		path_line.show()
@@ -153,34 +154,3 @@ func change_lane(unit, point):
 	unit.agent.set_state("lane", lane)
 	# unit.agent.set_state("order_behavior", "move")
 	Behavior.move.smart(unit, lane_start)
-
-
-func teleport(unit, point):
-	var agent = unit.agent
-	game.ui.controls_menu.teleport_button.disabled = true
-	var building = Utils.closer_building(point, unit.team)
-	var distance = building.global_position.distance_to(point)
-	game.ui.unit_controls_panel.teleport_button.disabled = false
-	game.ui.unit_controls_panel.teleport_button.button_pressed = false
-	Behavior.move.stop(unit)
-	agent.set_state("is_channeling", true)
-	# todo move to timer
-	await get_tree().create_timer(teleport_time).timeout
-	if agent.get_state("is_channeling"):
-		agent.set_state("has_player_command", false)
-		agent.set_state("is_channeling", false)
-		var new_position = point
-		# prevent teleport into buildings
-		var min_distance = 2 * building.collision_radius + unit.collision_radius
-		if distance <= min_distance:
-			var offset = (point - building.global_position).normalized()
-			new_position = building.global_position + (offset * min_distance)
-		# limit teleport range
-		if distance > teleport_max_distance:
-			var offset = (point - building.global_position).normalized()
-			new_position = building.global_position + (offset * teleport_max_distance)
-
-		unit.global_position = new_position
-		# emit signal teleported
-		agent.set_state("lane", building.lane)
-		resume_lane(unit)

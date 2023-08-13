@@ -19,7 +19,7 @@ func _ready():
 func build():
 	var index = 0
 	var buttons_array = self.get_children()
-	for leader in game.player_leaders:
+	for leader in WorldState.get_state("player_leaders"):
 		var button = buttons_array[index]
 		buttons_name[leader.name] = button
 		button.hpbar.show()
@@ -46,7 +46,7 @@ func buttons_unfocus():
 
 
 func button_down(index):
-	var leader = game.player_leaders[index]
+	var leader = WorldState.get_state("player_leaders")[index]
 	if leader:
 		Crafty_camera.global_position = leader.global_position - Crafty_camera.offset
 		game.selection.select_unit(leader)

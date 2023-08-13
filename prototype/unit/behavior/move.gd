@@ -1,13 +1,10 @@
 extends Node
 
-var game:Node
-
 
 # self = Behavior.move
 
-
-func _ready():
-	game = get_tree().get_current_scene()
+const teleport_time = 3
+const teleport_max_distance = 100
 
 
 func setup_timer(unit):
@@ -26,8 +23,8 @@ func point(unit, destiny):
 
 
 func in_bounds(p):
-	var l = game.map.tile_size / 2
-	return p.x > l and p.y > l and p.x < game.map.size.x - l and p.y < game.map.size.y - l
+	var l = WorldState.get_state("map").tile_size / 2
+	return p.x > l and p.y > l and p.x < WorldState.get_state("map").size.x - l and p.y < WorldState.get_state("map").size.y - l
 
 
 
@@ -80,7 +77,7 @@ func on_collision(unit, _delta):
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
 			unit.collision_timer.stop() # first stops previous timers
-		unit.collision_timer.wait_time = 0.1 + randf() * 0.2
+		unit.collision_timer.wait_time = 0.2 + randf() * 0.1
 		unit.collision_timer.start()
 		
 		await unit.collision_timer.timeout
@@ -122,3 +119,35 @@ func smart(unit, target_point):
 		var path = Behavior.path.find(unit.global_position, target_point)
 		if path: Behavior.path.start(unit, path)
 
+
+
+func teleport(unit, target_point):
+	var agent = unit.agent
+	var game = get_tree().get_current_scene()
+	var ui = game.ui
+	ui.unit_controls_panel.teleport_button.disabled = false
+	ui.unit_controls_panel.teleport_button.button_pressed = false
+	var building = Utils.closer_building(target_point, unit.team)
+	var distance = building.global_position.distance_to(target_point)
+	Behavior.move.stop(unit)
+	agent.set_state("is_channeling", true)
+	# todo move to timer
+	await get_tree().create_timer(teleport_time).timeout
+	if agent.get_state("is_channeling"):
+		agent.set_state("has_player_command", false)
+		agent.set_state("is_channeling", false)
+		var new_position = target_point
+		# prevent teleport into buildings
+		var min_distance = 2 * building.collision_radius + unit.collision_radius
+		if distance <= min_distance:
+			var offset = (target_point - building.global_position).normalized()
+			new_position = building.global_position + (offset * min_distance)
+		# limit teleport range
+		if distance > teleport_max_distance:
+			var offset = (target_point - building.global_position).normalized()
+			new_position = building.global_position + (offset * teleport_max_distance)
+
+		unit.global_position = new_position
+		# emit signal teleported
+		agent.set_state("lane", building.lane)
+		Behavior.path.resume_lane(unit)

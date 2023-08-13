@@ -11,6 +11,7 @@ const VALUE = 2
 @export var ability_name = "Multishot"
 @export var description = "This unit can shoot at all enemy characters in range" # (String, MULTILINE)
 @export var status_effect_icon : Texture2D
+@export var skill_type = "passive"
 
 func _ready():
 	unit.status_effects["multishot"] = {

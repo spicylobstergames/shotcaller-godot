@@ -67,7 +67,7 @@ func get_player_team():
 func _on_start_game_button_pressed():
 	hide()
 	
-	game.maps.current_map = get_selected_map()
+	game.map_manager.current_map = get_selected_map()
 	var player_team = get_player_team()
 	WorldState.set_state("player_team", player_team)
 		
@@ -76,13 +76,14 @@ func _on_start_game_button_pressed():
 	
 	if player_team == "blue":
 		WorldState.set_state("enemy_team", "red")
-		game.player_choose_leaders = blue_team_leaders
-		game.enemy_choose_leaders = red_team_leaders
+		WorldState.set_state("player_leaders_names", blue_team_leaders)
+		WorldState.set_state("enemy_leaders_names", red_team_leaders)
 	else:
 		WorldState.set_state("enemy_team", "blue")
-		game.player_choose_leaders = red_team_leaders
-		game.enemy_choose_leaders = blue_team_leaders
+		WorldState.set_state("player_leaders_names", red_team_leaders)
+		WorldState.set_state("enemy_leaders_names", blue_team_leaders)
 	
+	WorldState.set_state("game_mode", "match")
 	game.start()
 
 

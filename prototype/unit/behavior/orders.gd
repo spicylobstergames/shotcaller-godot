@@ -1,7 +1,5 @@
 extends Node
 
-var game:Node
-
 
 # self = Behavior.orders
 
@@ -59,14 +57,10 @@ func new_orders():
 	}
 
 
-func _ready():
-	game = get_tree().get_current_scene()
-
-
 # LANES
 
 func build_lanes():
-	for lane in game.map.get_node("lanes").get_children():
+	for lane in WorldState.get_state("map").get_node("lanes").get_children():
 		player_lanes_orders[lane.name] = new_orders()
 		enemy_lanes_orders[lane.name] = new_orders()
 
@@ -106,30 +100,29 @@ func set_pawn(pawn):
 
 
 func lanes_cycle(): # called every 8 sec
-	for buildings in [game.player_buildings, game.enemy_buildings]:
-		for building in buildings:
-			var lane = building.agent.get_state("lane")
-			if lane in player_lanes_orders:
-				var priority = player_lanes_orders[lane].priority.duplicate()
-				building.priority = priority
+	for building in WorldState.get_state("all_buildings"):
+		var lane = building.agent.get_state("lane")
+		if lane in player_lanes_orders:
+			var priority = player_lanes_orders[lane].priority.duplicate()
+			building.priority = priority
 
 
 
 # LEADERS
 
 func build_leaders():
-	for leader in game.player_leaders:
+	for leader in WorldState.get_state("player_leaders"):
 		player_leaders_orders[leader.name] = new_orders()
 		
-	for leader in game.enemy_leaders:
+	for leader in WorldState.get_state("enemy_leaders"):
 		enemy_leaders_orders[leader.name] = new_orders()
 
 
 func leaders_cycle(): # called every 4 sec
-	for leader in game.player_leaders:
+	for leader in WorldState.get_state("player_leaders"):
 		set_leader(leader, player_leaders_orders[leader.name])
 		
-	for leader in game.enemy_leaders:
+	for leader in WorldState.get_state("enemy_leaders"):
 		set_leader(leader, enemy_leaders_orders[leader.name])
 
 
@@ -139,9 +132,9 @@ func set_leader(leader, orders):
 		leader.tactics = tactics.tactic
 		leader.priority = orders.priority.duplicate()
 		
-		var extra_unit = game.maps.spawn.player_extra_unit
+		var extra_unit = WorldState.get_state("player_extra_unit")
 		if leader.team == WorldState.get_state("enemy_team"):
-			extra_unit = game.maps.spawn.enemy_extra_unit
+			extra_unit = WorldState.get_state("enemy_extra_unit")
 		var cost
 		match extra_unit:
 			"infantry": cost = 1
@@ -151,7 +144,7 @@ func set_leader(leader, orders):
 
 
 func set_leader_tactic(tactic):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var leader_tactics
 	if leader.team == WorldState.get_state("player_team"):
 		leader_tactics = player_leaders_orders[leader.name].tactics
@@ -161,7 +154,7 @@ func set_leader_tactic(tactic):
 
 
 func set_leader_priority(priority):
-	var leader = game.selected_leader
+	var leader = WorldState.get_state("selected_leader")
 	var leader_orders
 	if leader.team == WorldState.get_state("player_team"):
 		leader_orders = player_leaders_orders[leader.name]
@@ -212,7 +205,7 @@ func select_target(unit, enemies):
 func conquer_building(unit):
 	unit.after_arive = "stop"
 	var point = unit.global_position
-	point.y -= game.map.tile_size
+	point.y -= WorldState.get_state("map").tile_size
 	var building = Utils.get_building(point)
 	if not unit.agent.get_state("is_stunned") and building:
 		var hp = float(Behavior.modifiers.get_value(building, "hp"))
@@ -232,6 +225,7 @@ func conquer_building(unit):
 					"camp", "outpost": building.attacks = true
 					"mine": set_mine_gold(unit.team, 1)
 				
+				var game = get_tree().get_current_scene()
 				game.ui.show_select()
 
 
@@ -242,8 +236,8 @@ func lose_building(building):
 		# todo "blacksmith": allow stealing enemy item
 		"camp": 
 			if team == WorldState.get_state("player_team"):
-				game.maps.spawn.player_extra_unit = "infantry"
-			else: game.maps.spawn.enemy_extra_unit = "infantry"
+				WorldState.set_state("player_extra_unit", "infantry")
+			else: WorldState.set_state("enemy_extra_unit", "infantry")
 			building.attacks = false
 		
 		"outpost": building.attacks = false
@@ -251,7 +245,7 @@ func lose_building(building):
 		
 	building.setup_team("neutral")
 	
-	if not game.map.has_neutral_buildings(team): remove_tax(team)
+	if not WorldState.get_state("map").has_neutral_buildings(team): remove_tax(team)
 
 
 
@@ -261,7 +255,7 @@ func lose_building(building):
 func pray_in_church(unit):
 	unit.after_arive = "stop"
 	var point = unit.global_position
-	point.y -= game.map.tile_size
+	point.y -= WorldState.get_state("map").tile_size
 	var building = Utils.get_building(point)
 	if (
 		building and building.team == unit.team 
@@ -276,6 +270,7 @@ func pray_in_church(unit):
 			unit.agent.get_state("is_channeling", false)
 			unit.agent.set_state("has_player_command", false)
 			pray(unit)
+			var game = get_tree().get_current_scene()
 			game.ui.show_select()
 			# Chruch pray cooldown <- temporary solution
 			await get_tree().create_timer(pray_cooldown).timeout
@@ -291,10 +286,11 @@ func pray(unit):
 # MINE
 
 func set_mine_gold(team, value):
-	var leaders = game.player_leaders
+	var game = get_tree().get_current_scene()
+	var leaders = WorldState.get_state("player_leaders")
 	var inventories = game.ui.inventories.player_leaders_inv
 	if team == WorldState.get_state("enemy_team"):
-		leaders = game.enemy_leaders
+		leaders = WorldState.get_state("enemy_leaders")
 		inventories = game.ui.inventories.enemy_leaders_inv
 	for leader in leaders:
 		inventories[leader.name].extra_mine_gold = value
@@ -329,8 +325,8 @@ func gold_collect_counter(button):
 		button.disabled = false
 		if mine.agent.get_state("is_channeling"):
 			mine.agent.set_state("is_channeling", false)
-			var leaders = game.player_leaders
-			if mine.team == WorldState.get_state("enemy_team"): leaders = game.enemy_leaders
+			var leaders = WorldState.get_state("player_leaders")
+			if mine.team == WorldState.get_state("enemy_team"): leaders = WorldState.get_state("enemy_leaders")
 			for leader in leaders:
 				leader.gold += floor(mine.gold / leaders.size())
 			mine.gold = 0
@@ -350,8 +346,9 @@ func gold_destroy_counter(button):
 			mine.agent.set_state("channeling", false)
 			mine.gold = 0
 			mine.setup_team("neutral")
+			var game = get_tree().get_current_scene()
 			game.ui.show_select()
-			for leader in game.player_leaders:
+			for leader in WorldState.get_state("player_leaders"):
 				game.ui.inventories.leaders[leader.name].extra_mine_gold = 0
 
 
@@ -365,17 +362,19 @@ func set_taxes(tax, team):
 
 
 func update_taxes():
-	for leader in game.player_leaders:
+	var game = get_tree().get_current_scene()
+	for leader in WorldState.get_state("player_leaders"):
 		game.ui.inventories.player_leaders_inv[leader.name].extra_tax_gold = tax_gold[player_tax]
-	for leader in game.enemy_leaders:
+	for leader in WorldState.get_state("enemy_leaders"):
 		game.ui.inventories.enemy_leaders_inv[leader.name].extra_tax_gold = tax_gold[enemy_tax] 
 
 
 func remove_tax(team):
-	var leaders = game.player_leaders
+	var game = get_tree().get_current_scene()
+	var leaders = WorldState.get_state("player_leaders")
 	var inventories = game.ui.inventories.player_leaders_inv
 	if team == WorldState.get_state("enemy_team"):
-		leaders = game.enemy_leaders
+		leaders = WorldState.get_state("enemy_leaders")
 		inventories = game.ui.inventories.enemy_leaders_inv
 	for leader in leaders:
 		var inventory = inventories[leader.name]

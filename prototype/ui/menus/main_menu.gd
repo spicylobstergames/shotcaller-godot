@@ -18,28 +18,35 @@ func _input(event):
 
 func quick_start():
 	hide()
-	game.maps.current_map = "one_lane_map"
-	game.player_choose_leaders = ["arthur", "bokuden", "nagato"]
-	game.enemy_choose_leaders = ["lorne", "robin", "rollo"]
+	game.map_manager.current_map = "one_lane_map"
 	WorldState.set_state("player_team", "blue")
-	game.mode = "match"
+	WorldState.set_state("enemy_team", "red")
+	WorldState.set_state("player_leaders_names", ["arthur", "bokuden", "nagato"])
+	WorldState.set_state("enemy_leaders_names", ["lorne", "robin", "rollo"])
+	WorldState.set_state("game_mode", "match")
 	game.start()
 
 
 func show_new_game_menu():
 	game.ui.main_menu.hide()
 	game.ui.new_game_menu.show()
-	game.mode = "match"
-	
+
 
 func campaign_start():
 	hide()
-	game.maps.current_map = "rect_test_map"
-	game.player_choose_leaders = ["joan"]
-	game.mode = "campaign"
+	game.map_manager.current_map = "rect_test_map"
+	WorldState.set_state("player_leaders_names", ["joan"])
+	WorldState.set_state("player_team", "blue")
+	WorldState.set_state("enemy_team", "red")
+	WorldState.set_state("game_mode", "campaign")
 	game.start()
 
 
 func on_exit():
 	game.exit()
 
+
+
+func _on_options_button_pressed():
+	game.transitions.start()
+	game.transitions.transition_completed.connect(game.reload)

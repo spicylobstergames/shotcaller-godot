@@ -34,7 +34,7 @@ func get_goal(goal):
 	return _goals.get_goal(goal)
 
 
-func process(units, delta):
+func physics_process(units, delta):
 	for unit in units:
 		if unit.agent:
 			unit.agent.process(delta)
