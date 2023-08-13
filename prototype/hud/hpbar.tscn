@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://hvm2silwdgk4"]
 
-[ext_resource type="Texture2D" uid="uid://cvc7kr5hkxjvf" path="res://assets/unit/hpbar.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://d2rfyfffrchee" path="res://assets/unit/hpbar.png" id="1"]
 
 [node name="hpbar" type="Node2D"]
 texture_filter = 1

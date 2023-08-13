@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://7njuybbpg8mh"]
 
 [ext_resource type="Script" path="res://item/potions/poison.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bsknjmgt6qf6c" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
 
 [node name="Poison" type="Node"]
 script = ExtResource("1")

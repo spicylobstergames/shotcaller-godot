@@ -1,11 +1,11 @@
 [gd_scene load_steps=23 format=3 uid="uid://b71taiv4k5hr4"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://bws6c5rwhqaeq" path="res://assets/pawns/archer_blue.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://dob21b73cd557" path="res://assets/buildings/neutral_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="3"]
 [ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://buildings/decoration/flag.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://dd6eywnantps8" path="res://assets/buildings/neutral_red.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://dr0615568ayn6" path="res://assets/buildings/neutral_gray.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://cxt3ym1fu5ncp" path="res://assets/buildings/neutral_red.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://jsvqumsl1lmk" path="res://assets/buildings/neutral_gray.png" id="6"]
 
 [sub_resource type="AtlasTexture" id="42"]
 atlas = ExtResource("3")
