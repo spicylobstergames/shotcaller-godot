@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://b8l6k35lk6wro"]
 
-[ext_resource path="res://goap/Goap.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://goap/Goap.gd" id="2"]
 
 [node name="Goap" type="Node"]
-script = ExtResource( 2 )
+script = ExtResource("2")

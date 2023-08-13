@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://skills/abilites/trader.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://0dpoqgxha7cv" path="res://assets/leaders/osman_red.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://ho1017q4hybm" path="res://assets/leaders/osman_blue.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://5xgism0ov6tq" path="res://assets/leaders/osman_red.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://fcwee4rmxnj0" path="res://assets/leaders/osman_blue.png" id="4"]
 [ext_resource type="PackedScene" path="res://weapons/scimitar.tscn" id="5"]
 
 [sub_resource type="AtlasTexture" id="37"]
@@ -576,6 +576,7 @@ radius = 20.0
 radius = 20.0
 
 [node name="osman" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 160

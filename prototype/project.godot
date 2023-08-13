@@ -122,11 +122,13 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
 shading/overrides/force_vertex_shading.mobile=false
 shading/overrides/force_lambert_over_burley.mobile=false
+textures/default_filters/use_nearest_mipmap_filter=true
 environment/defaults/default_clear_color=Color(0.180392, 0.133333, 0.184314, 1)
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
 quality/driver/fallback_to_gles2=true
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1

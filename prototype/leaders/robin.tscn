@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://skills/abilites/multishot.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://fhioawflnfhy" path="res://assets/leaders/robin_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://d2pmxs7g3yta4" path="res://assets/leaders/robin_red.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://bfxwpddqe3hox" path="res://assets/leaders/robin_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://dpeg8mtvhecoi" path="res://assets/leaders/robin_red.png" id="4"]
 [ext_resource type="PackedScene" path="res://weapons/leader_bow.tscn" id="5"]
 
 [sub_resource type="AtlasTexture" id="43"]
@@ -644,6 +644,7 @@ radius = 20.0
 radius = 140.0
 
 [node name="robin" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 160

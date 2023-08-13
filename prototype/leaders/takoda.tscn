@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://weapons/takoda_axe.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://ck3q1h4046vg2" path="res://assets/leaders/takoda_blue.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://cyrhs01t4iewn" path="res://assets/leaders/takoda_red.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://bfgfewkcsci7e" path="res://assets/leaders/takoda_blue.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://cf57phqms1fgf" path="res://assets/leaders/takoda_red.png" id="6"]
 
 [sub_resource type="AtlasTexture" id="42"]
 atlas = ExtResource("5")
@@ -588,6 +588,7 @@ radius = 28.0
 radius = 120.0
 
 [node name="takoda" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 4
 vision = 180

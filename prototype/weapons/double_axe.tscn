@@ -1,37 +1,44 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://c10gjh6hwayoi"]
 
-[ext_resource path="res://assets/leaders/rollo_red.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/leaders/rollo_blue.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://drvvvsunjlfpc" path="res://assets/leaders/rollo_red.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://ceo87moyi2jho" path="res://assets/leaders/rollo_blue.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=63]
-atlas = ExtResource( 2 )
-region = Rect2( 120, 0, 40, 32 )
+[sub_resource type="AtlasTexture" id="63"]
+atlas = ExtResource("2")
+region = Rect2(120, 0, 40, 32)
 
-[sub_resource type="AtlasTexture" id=64]
-atlas = ExtResource( 1 )
-region = Rect2( 120, 0, 40, 32 )
+[sub_resource type="AtlasTexture" id="64"]
+atlas = ExtResource("1")
+region = Rect2(120, 0, 40, 32)
 
-[sub_resource type="SpriteFrames" id=62]
+[sub_resource type="SpriteFrames" id="62"]
 resource_name = "double_axe"
-animations = [ {
-"frames": [ SubResource( 63 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("63")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [  ],
+"frames": [],
 "loop": true,
-"name": "neutral",
+"name": &"neutral",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 64 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("64")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 1, -14 )
+texture_filter = 1
+position = Vector2(1, -14)
 rotation = -0.349066
-frames = SubResource( 62 )
-offset = Vector2( 5, -9 )
+sprite_frames = SubResource("62")
+offset = Vector2(5, -9)

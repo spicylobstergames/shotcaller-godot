@@ -1,31 +1,38 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://s5t5kuc31hf"]
 
-[ext_resource path="res://assets/leaders/arthur_blue.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/leaders/arthur_red.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://c8aw68imy540x" path="res://assets/leaders/arthur_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://busokhcvlcugq" path="res://assets/leaders/arthur_red.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=62]
-atlas = ExtResource( 1 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="62"]
+atlas = ExtResource("1")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id=64]
-atlas = ExtResource( 2 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="64"]
+atlas = ExtResource("2")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="SpriteFrames" id=63]
+[sub_resource type="SpriteFrames" id="63"]
 resource_name = "excalibur"
-animations = [ {
-"frames": [ SubResource( 62 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("62")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 64 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("64")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 6, 0 )
-frames = SubResource( 63 )
-offset = Vector2( 2, -4 )
+texture_filter = 1
+position = Vector2(6, 0)
+sprite_frames = SubResource("63")
+offset = Vector2(2, -4)

@@ -1,12 +1,12 @@
 [gd_scene load_steps=27 format=3 uid="uid://cgdiyvj2d41ck"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://cudi8q0xnthag" path="res://assets/pawns/mounted_red.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://v8hb0egyiu54" path="res://assets/unit/shadow.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://cj6sayd636m0i" path="res://assets/pawns/mounted_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bui4thqxf4mss" path="res://assets/unit/shadow.png" id="3"]
 [ext_resource type="PackedScene" path="res://weapons/double_axe.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://cqhbpn8ydfc86" path="res://assets/pawns/mounted_blue.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://b5olqgrijutnu" path="res://assets/leaders/rollo_blue.png" id="6_1qbbb"]
-[ext_resource type="Texture2D" uid="uid://dry04otbax4i" path="res://assets/leaders/rollo_red.png" id="7_xwk07"]
+[ext_resource type="Texture2D" uid="uid://cwbk417fulqxx" path="res://assets/pawns/mounted_blue.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://ceo87moyi2jho" path="res://assets/leaders/rollo_blue.png" id="6_1qbbb"]
+[ext_resource type="Texture2D" uid="uid://drvvvsunjlfpc" path="res://assets/leaders/rollo_red.png" id="7_xwk07"]
 
 [sub_resource type="AtlasTexture" id="55"]
 atlas = ExtResource("6")
@@ -584,6 +584,7 @@ radius = 28.0
 radius = 25.0
 
 [node name="mounted" instance=ExtResource("1")]
+texture_filter = 1
 hp = 250
 regen = 1
 vision = 160

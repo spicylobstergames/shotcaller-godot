@@ -1,8 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://7njuybbpg8mh"]
 
-[ext_resource path="res://item/potions/poison.gd" type="Script" id=1]
-[ext_resource path="res://assets/ui/abilities/aura_of_courage_small.png" type="Texture2D" id=2]
+[ext_resource type="Script" path="res://item/potions/poison.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bsknjmgt6qf6c" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
 
 [node name="Poison" type="Node"]
-script = ExtResource( 1 )
-poison_sprite = ExtResource( 2 )
+script = ExtResource("1")
+poison_sprite = ExtResource("2")

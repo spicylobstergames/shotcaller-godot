@@ -1,32 +1,39 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://dyk8ccwsuyvup"]
 
-[ext_resource path="res://assets/leaders/osman_blue.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/leaders/osman_red.png" type="Texture2D" id=2]
+[ext_resource type="Texture2D" uid="uid://fcwee4rmxnj0" path="res://assets/leaders/osman_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://5xgism0ov6tq" path="res://assets/leaders/osman_red.png" id="2"]
 
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 1 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="43"]
+atlas = ExtResource("1")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 32 )
+[sub_resource type="AtlasTexture" id="44"]
+atlas = ExtResource("2")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id=45]
+[sub_resource type="SpriteFrames" id="45"]
 resource_name = "scimitar"
-animations = [ {
-"frames": [ SubResource( 43 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("43")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 44 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("44")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 8, -2 )
+texture_filter = 1
+position = Vector2(8, -2)
 rotation = -1.02617
-frames = SubResource( 45 )
-offset = Vector2( 6, -2 )
+sprite_frames = SubResource("45")
+offset = Vector2(6, -2)

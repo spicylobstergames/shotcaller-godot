@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://ui/buttons/leader_button.gd" id="1"]
 [ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_3w2ig"]
-[ext_resource type="Texture2D" uid="uid://0hcoyxgm3h0f" path="res://assets/ui/leaders_icons.png" id="3"]
-[ext_resource type="PackedScene" path="res://hud/hpbar.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://b3b2kf2ugate" path="res://assets/ui/leaders_icons.png" id="3"]
+[ext_resource type="PackedScene" uid="uid://hvm2silwdgk4" path="res://hud/hpbar.tscn" id="4"]
 [ext_resource type="Shader" uid="uid://2uawyneis3su" path="res://map/tool/color_replace.tres" id="5"]
 
 [sub_resource type="Gradient" id="59"]
@@ -30,6 +30,7 @@ shader_parameter/origin_colors = SubResource("60")
 shader_parameter/replace_colors = SubResource("62")
 
 [node name="leader_button" type="Button"]
+texture_filter = 3
 custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 60.0
@@ -69,12 +70,11 @@ offset_right = -4.0
 offset_bottom = -3.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 8
 text = "1"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="hpbar" parent="." instance=ExtResource("4")]
-visible = true
 position = Vector2(25, 51)
 scale = Vector2(2, 2)

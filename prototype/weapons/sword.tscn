@@ -1,42 +1,52 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://diee03xgfkdfb"]
 
-[ext_resource path="res://assets/pawns/infantry_blue.png" type="Texture2D" id=1]
-[ext_resource path="res://assets/pawns/infantry_red.png" type="Texture2D" id=2]
-[ext_resource path="res://assets/pawns/infantry_neutral.png" type="Texture2D" id=3]
+[ext_resource type="Texture2D" uid="uid://3uxyr356j68" path="res://assets/pawns/infantry_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bdrdrkrk8hjq1" path="res://assets/pawns/infantry_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b0na4r8pnaxh8" path="res://assets/pawns/infantry_neutral.png" id="3"]
 
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 1 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="34"]
+atlas = ExtResource("1")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 3 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="37"]
+atlas = ExtResource("3")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id=61]
-atlas = ExtResource( 2 )
-region = Rect2( 72, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="61"]
+atlas = ExtResource("2")
+region = Rect2(72, 0, 24, 24)
 
-[sub_resource type="SpriteFrames" id=62]
+[sub_resource type="SpriteFrames" id="62"]
 resource_name = "sword"
-animations = [ {
-"frames": [ SubResource( 34 ) ],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("34")
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 37 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("37")
+}],
 "loop": true,
-"name": "neutral",
+"name": &"neutral",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 61 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("61")
+}],
 "loop": true,
-"name": "red",
+"name": &"red",
 "speed": 5.0
-} ]
+}]
 
 [node name="weapon" type="AnimatedSprite2D"]
-position = Vector2( 6, 2 )
-frames = SubResource( 62 )
-animation = "neutral"
-offset = Vector2( 2, -5 )
+texture_filter = 1
+position = Vector2(6, 2)
+sprite_frames = SubResource("62")
+animation = &"neutral"
+offset = Vector2(2, -5)

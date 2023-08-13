@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://weapons/tomyris_bow.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://dtleolv85jv0i" path="res://assets/leaders/tomyris_blue.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://bwdccgtulkick" path="res://assets/leaders/tomyris_red.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://cnabkom1mp3ta" path="res://assets/leaders/tomyris_blue.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://bv1usn7mcf4ff" path="res://assets/leaders/tomyris_red.png" id="6"]
 
 [sub_resource type="AtlasTexture" id="48"]
 atlas = ExtResource("5")
@@ -672,6 +672,7 @@ radius = 28.0
 radius = 140.0
 
 [node name="tomyris" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 180

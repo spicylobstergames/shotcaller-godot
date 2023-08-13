@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://weapons/katana.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://qtgfed1clm23" path="res://assets/leaders/bokuden_red.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://buumd0gdf4bsq" path="res://assets/leaders/bokuden_blue.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://b26t2wu4014ef" path="res://assets/leaders/bokuden_red.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bi0tpr0sfqcwj" path="res://assets/leaders/bokuden_blue.png" id="4"]
 [ext_resource type="PackedScene" path="res://skills/abilites/critical_slash.tscn" id="6"]
 
 [sub_resource type="AtlasTexture" id="41"]
@@ -624,6 +624,7 @@ radius = 20.0
 radius = 20.0
 
 [node name="bokuden" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 160

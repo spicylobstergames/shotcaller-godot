@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cjpaafpbxs87e" path="res://ui/buttons/item_button.tscn" id="2"]
 
 [node name="shop" type="Panel"]
+texture_filter = 1
 custom_minimum_size = Vector2(184, 400)
 anchors_preset = 1
 anchor_left = 1.0

@@ -2,12 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://skills/abilites/aura_of_courage.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://ccvqubnaubivh" path="res://assets/leaders/arthur_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://kdv7xaxbby75" path="res://assets/leaders/arthur_red.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://bvmcrsceiy5ux" path="res://assets/ui/abilities/aura_of_courage.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://c8aw68imy540x" path="res://assets/leaders/arthur_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://busokhcvlcugq" path="res://assets/leaders/arthur_red.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://chndgtn0a4td2" path="res://assets/ui/abilities/aura_of_courage.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://bsknjmgt6qf6c" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
 [ext_resource type="PackedScene" path="res://weapons/excalibur.tscn" id="7"]
-[ext_resource type="Texture2D" uid="uid://cdlrrondln7ga" path="res://assets/animations/side_smoke_2.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://dqbg5psa72fw5" path="res://assets/animations/side_smoke_2.png" id="8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijxyg"]
 atlas = ExtResource("3")
@@ -608,6 +608,7 @@ radius = 20.0
 radius = 20.0
 
 [node name="arthur" instance=ExtResource("1")]
+texture_filter = 1
 hp = 400
 regen = 2
 vision = 160

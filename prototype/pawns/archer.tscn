@@ -1,9 +1,9 @@
 [gd_scene load_steps=21 format=3 uid="uid://cws5cs4aq1d7h"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://b762ilyybmuci" path="res://assets/pawns/archer_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://hemqwk2cvpcu" path="res://assets/pawns/archer_red.png" id="2"]
 [ext_resource type="PackedScene" path="res://weapons/bow.tscn" id="3"]
-[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://bws6c5rwhqaeq" path="res://assets/pawns/archer_blue.png" id="4"]
 
 [sub_resource type="AtlasTexture" id="42"]
 atlas = ExtResource("4")
@@ -643,6 +643,7 @@ radius = 20.0
 radius = 140.0
 
 [node name="archer" instance=ExtResource("1")]
+texture_filter = 1
 hp = 160
 regen = 1
 vision = 150
