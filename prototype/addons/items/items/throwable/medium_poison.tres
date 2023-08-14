@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ThrowableItem" load_steps=2 format=3 uid="uid://bbw2vxjiuxlp2"]
+
+[ext_resource type="Script" path="res://addons/items/classes/throwable_item/throwable_item.gd" id="1_8x65b"]
+
+[resource]
+script = ExtResource("1_8x65b")
+duration = 10
+damage_over_time = -10
+deceleration = -10
+item_name = "Medium Poison"
+icon = "res://addons/items/images/item16.png"
+item_info = "Slows down and deals damage over time."
+quantaty = 1
+max_quantaty = 10
+is_shop_item = true
+delivery_time = 20
+price = 75
+sell_price = 20

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ThrowableItem" load_steps=2 format=3 uid="uid://vx6k2ms2tvwq"]
+
+[ext_resource type="Script" path="res://addons/items/classes/throwable_item/throwable_item.gd" id="1_dyysa"]
+
+[resource]
+script = ExtResource("1_dyysa")
+duration = 5
+damage_over_time = -5
+deceleration = -5
+item_name = "Small Poison"
+icon = "res://addons/items/images/item17.png"
+item_info = "Slows down and deals damage over time."
+quantaty = 1
+max_quantaty = 10
+is_shop_item = true
+delivery_time = 10
+price = 50
+sell_price = 10

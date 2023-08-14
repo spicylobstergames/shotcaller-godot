@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipItem" load_steps=2 format=3 uid="uid://be5n8ipshpyco"]
+
+[ext_resource type="Script" path="res://addons/items/classes/equip_item/equip_item.gd" id="1_5to7q"]
+
+[resource]
+script = ExtResource("1_5to7q")
+strength = 0
+armor = 0
+endurance = 0
+sight = 0
+agility = 15
+reach = 0
+cadence = 0
+infliction = 0
+health_regen = 2
+mana_regen = 0
+passive = ""
+item_name = "Magic Plume"
+icon = "res://addons/items/images/item12.png"
+item_info = "A feather imbued with magical force."
+quantaty = 1
+max_quantaty = 1
+is_shop_item = true
+delivery_time = 30
+price = 350
+sell_price = 100

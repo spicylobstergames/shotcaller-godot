@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ConsumableItem" load_steps=2 format=3 uid="uid://bga3wytlaasql"]
+
+[ext_resource type="Script" path="res://addons/items/classes/consumable_item/consumable_item.gd" id="1_ybqsn"]
+
+[resource]
+script = ExtResource("1_ybqsn")
+health = 100
+stamina = 0
+item_name = "Small HP"
+icon = "res://addons/items/images/item13.png"
+item_info = "Restore 100 HP."
+quantaty = 1
+max_quantaty = 10
+is_shop_item = true
+delivery_time = 10
+price = 50
+sell_price = 20

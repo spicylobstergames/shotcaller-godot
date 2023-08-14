@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ConsumableItem" load_steps=2 format=3 uid="uid://xa6s2iapj17g"]
+
+[ext_resource type="Script" path="res://addons/items/classes/consumable_item/consumable_item.gd" id="1_ryyhn"]
+
+[resource]
+script = ExtResource("1_ryyhn")
+health = 250
+stamina = 0
+item_name = "Large HP"
+icon = "res://addons/items/images/item15.png"
+item_info = "Restore 250 HP."
+quantaty = 1
+max_quantaty = 10
+is_shop_item = true
+delivery_time = 15
+price = 125
+sell_price = 50

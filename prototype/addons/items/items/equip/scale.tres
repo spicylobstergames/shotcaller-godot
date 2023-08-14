@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EquipItem" load_steps=2 format=3 uid="uid://c310krlcwch4v"]
+
+[ext_resource type="Script" path="res://addons/items/classes/equip_item/equip_item.gd" id="1_wevn3"]
+
+[resource]
+script = ExtResource("1_wevn3")
+strength = 0
+armor = 4
+endurance = 300
+sight = 0
+agility = -10
+reach = 0
+cadence = 0
+infliction = 0
+passive = ""
+item_name = "Dragon Scale"
+icon = "res://addons/items/images/item9.png"
+item_info = "No dragons were harmed in the making of this armor."
+quantaty = 1
+max_quantaty = 1
+is_shop_item = true
+delivery_time = 30
+price = 500
+sell_price = 200

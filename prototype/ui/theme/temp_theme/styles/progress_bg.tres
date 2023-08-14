@@ -1,6 +1,6 @@
 [gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://cj0be7t73kmkk"]
 
-[ext_resource type="Texture2D" uid="uid://10qdo4spomqe" path="res://addons/pixel_designer/theme/default_theme/icons/panel_outline_large.png" id="1_6w6xg"]
+[ext_resource type="Texture2D" uid="uid://10qdo4spomqe" path="res://ui/theme/temp_theme/icons/panel_outline_large.png" id="1_6w6xg"]
 
 [resource]
 content_margin_left = 4.0

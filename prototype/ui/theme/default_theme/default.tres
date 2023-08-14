@@ -1,0 +1,71 @@
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://dirthkkni7g78"]
+
+[ext_resource type="Texture2D" uid="uid://sjnwyxvvv2nh" path="res://assets/ui/design.png" id="1_f7htt"]
+[ext_resource type="FontFile" uid="uid://dhx7bmlyv1sfh" path="res://ui/theme/fonts/EightPixelsFont.ttf" id="1_x1oy8"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r3fon"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("1_f7htt")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(70, 0, 35, 35)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_47kgh"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aer73"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("1_f7htt")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(105, 0, 35, 35)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xccvy"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("1_f7htt")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 0, 35, 35)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_03np7"]
+texture = ExtResource("1_f7htt")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(70, 0, 35, 35)
+
+[sub_resource type="FontVariation" id="FontVariation_di1he"]
+base_font = ExtResource("1_x1oy8")
+
+[resource]
+resource_name = "default_theme"
+default_font = SubResource("FontVariation_di1he")
+default_font_size = 8
+Button/styles/disabled = SubResource("StyleBoxTexture_r3fon")
+Button/styles/focus = SubResource("StyleBoxFlat_47kgh")
+Button/styles/hover = SubResource("StyleBoxTexture_aer73")
+Button/styles/normal = SubResource("StyleBoxTexture_xccvy")
+Button/styles/pressed = SubResource("StyleBoxTexture_03np7")
+Label/colors/font_outline_color = Color(0, 0, 0, 0.513726)
+Label/constants/line_spacing = 2
+Label/constants/outline_size = 4

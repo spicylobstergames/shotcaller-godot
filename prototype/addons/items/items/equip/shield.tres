@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EquipItem" load_steps=2 format=3 uid="uid://jhrqjn6f3adq"]
+
+[ext_resource type="Script" path="res://addons/items/classes/equip_item/equip_item.gd" id="1_uaf28"]
+
+[resource]
+script = ExtResource("1_uaf28")
+strength = 0
+endurance = 50
+sight = 0
+agility = 0
+reach = 0
+cadence = 0
+infliction = 0
+passive = ""
+item_name = "Shield"
+icon = "res://addons/items/images/item7.png"
+item_info = "Wooden shield."
+quantaty = 1
+max_quantaty = 1
+is_shop_item = true
+delivery_time = 30
+price = 200
+sell_price = 50
