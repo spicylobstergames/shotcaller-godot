@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ThrowableItem" load_steps=2 format=3 uid="uid://3n3dv33smdsh"]
+
+[ext_resource type="Script" path="res://addons/items/classes/throwable_item/throwable_item.gd" id="1_2cv43"]
+
+[resource]
+script = ExtResource("1_2cv43")
+duration = 15
+damage_over_time = -15
+deceleration = -15
+item_name = "Large Poison"
+icon = "res://addons/items/images/item18.png"
+item_info = "Slows down and deals damage over time."
+quantaty = 1
+max_quantaty = 10
+is_shop_item = true
+delivery_time = 30
+price = 125
+sell_price = 30

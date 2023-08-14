@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EquipItem" load_steps=2 format=3 uid="uid://iqxlskgo4quc"]
+
+[ext_resource type="Script" path="res://addons/items/classes/equip_item/equip_item.gd" id="1_6luaq"]
+
+[resource]
+script = ExtResource("1_6luaq")
+strength = 0
+endurance = 0
+sight = 50
+agility = 0
+reach = 0
+cadence = 0
+infliction = 0
+passive = ""
+item_name = "Torch"
+icon = "res://addons/items/images/item10.png"
+item_info = "This torch will never burn out."
+quantaty = 1
+max_quantaty = 1
+is_shop_item = true
+delivery_time = 15
+price = 150
+sell_price = 50

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipItem" load_steps=2 format=3 uid="uid://c4btx20lwpby5"]
+
+[ext_resource type="Script" path="res://addons/items/classes/equip_item/equip_item.gd" id="1_5jacl"]
+
+[resource]
+script = ExtResource("1_5jacl")
+strength = 0
+armor = 5
+endurance = 150
+sight = 0
+agility = 0
+reach = 0
+cadence = 0
+infliction = 0
+health_regen = 0
+mana_regen = 0
+passive = ""
+item_name = "Holy Helmet"
+icon = "res://addons/items/images/item5.png"
+item_info = "Provides extra protection to your head."
+quantaty = 1
+max_quantaty = 1
+is_shop_item = true
+delivery_time = 30
+price = 500
+sell_price = 150
