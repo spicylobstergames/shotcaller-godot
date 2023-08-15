@@ -26,8 +26,7 @@ signal item_pressed(item)
         print_debug("item_name = %s, item_value = %s, has_texture = %s" % [item.item_name, item.price, item.icon != null])
         ## The item icon is just a path, so we need to load it to an image then create a texture from the image.
         if item.icon:
-            var img := Image.load_from_file(item.icon)
-            icon = ImageTexture.create_from_image(img)
+            icon = load(item.icon)
         # Update label and price text.
         name_label.text = item.item_name
         price_label.text = str(item.price)
@@ -44,10 +43,10 @@ var price_label := Label.new()
 
 
 # We need to pass an item so it automatically loads it. In editor we can add the item manually to the item property
-func _init(new_item = null):
-    if item:
+func _init(new_item: Item = null):
+    if new_item:
         item = new_item
-    
+
     custom_minimum_size = Vector2i(64, 64)
 
     # Theme setup
@@ -71,13 +70,14 @@ func _init(new_item = null):
     margin.add_child(price_label)
     price_label.size_flags_horizontal = SIZE_EXPAND | SIZE_SHRINK_END
     price_label.size_flags_vertical = SIZE_SHRINK_END
-    
+
     pressed.connect(_on_button_pressed)
 
 
 ## A remap for button's pressed signal that will return the item when the button is pressed0.
 func _on_button_pressed():
     emit_signal("item_pressed", item)
+
 
 # # FIXME: remove this later.
 # func _ready():
