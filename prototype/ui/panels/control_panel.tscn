@@ -1,23 +1,59 @@
-[gd_scene load_steps=8 format=3 uid="uid://beaxx58y8ho37"]
+[gd_scene load_steps=16 format=3 uid="uid://beaxx58y8ho37"]
 
 [ext_resource type="PackedScene" uid="uid://dehxw2x1d6a82" path="res://ui/buttons/ui_button.tscn" id="1"]
 [ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_thcg2"]
-[ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="2_8sc0j"]
+[ext_resource type="Texture2D" uid="uid://c4qoqk1xd3mov" path="res://assets/ui/ui_icons.png" id="2_8sc0j"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_3jbbe"]
+device = -1
+pressed = true
+physical_keycode = 65
+unicode = 97
+
+[sub_resource type="Shortcut" id="Shortcut_qpfio"]
+events = [SubResource("InputEventKey_3jbbe")]
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("2_8sc0j")
 region = Rect2(48, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
+[sub_resource type="InputEventKey" id="InputEventKey_poit7"]
+device = -1
+pressed = true
+physical_keycode = 66
+unicode = 98
+
+[sub_resource type="Shortcut" id="Shortcut_wce0n"]
+events = [SubResource("InputEventKey_poit7")]
+
 [sub_resource type="AtlasTexture" id="4"]
 atlas = ExtResource("2_8sc0j")
 region = Rect2(480, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
+[sub_resource type="InputEventKey" id="InputEventKey_4myp5"]
+device = -1
+pressed = true
+physical_keycode = 88
+unicode = 120
+
+[sub_resource type="Shortcut" id="Shortcut_hmrqi"]
+events = [SubResource("InputEventKey_4myp5")]
+
 [sub_resource type="AtlasTexture" id="5"]
 atlas = ExtResource("2_8sc0j")
 region = Rect2(624, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
+
+[sub_resource type="InputEventKey" id="InputEventKey_h6k0y"]
+device = -1
+pressed = true
+physical_keycode = 89
+unicode = 121
+
+[sub_resource type="Shortcut" id="Shortcut_tefh3"]
+events = [SubResource("InputEventKey_h6k0y")]
 
 [sub_resource type="AtlasTexture" id="6"]
 atlas = ExtResource("2_8sc0j")
@@ -51,6 +87,9 @@ columns = 2
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
+shortcut = SubResource("Shortcut_qpfio")
+shortcut_feedback = false
+shortcut_in_tooltip = false
 icon = SubResource("3")
 value = "controls"
 
@@ -76,6 +115,9 @@ text = "A"
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
+shortcut = SubResource("Shortcut_wce0n")
+shortcut_feedback = false
+shortcut_in_tooltip = false
 icon = SubResource("4")
 value = "shop"
 
@@ -101,6 +143,9 @@ text = "B"
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
+shortcut = SubResource("Shortcut_hmrqi")
+shortcut_feedback = false
+shortcut_in_tooltip = false
 icon = SubResource("5")
 value = "orders"
 
@@ -127,6 +172,9 @@ unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
 toggle_mode = false
+shortcut = SubResource("Shortcut_tefh3")
+shortcut_feedback = false
+shortcut_in_tooltip = false
 icon = SubResource("6")
 value = "menu"
 
