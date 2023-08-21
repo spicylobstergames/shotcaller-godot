@@ -38,6 +38,16 @@ func prepare(new_leader_name, new_team = "red"):
 		sprite.region_rect.position.x = sprite_index * sprites_size
 	# button color
 	color_remap(new_team)
+	# shortcuts
+	var keys := [KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9]
+	# avoid out of index error!
+	if get_index() >= keys.size():
+		return
+	var sc := Shortcut.new()
+	var ev := InputEventKey.new()
+	ev.keycode = keys[get_index()]
+	sc.events.append(ev)
+	shortcut = sc
 
 
 func color_remap(new_team):
