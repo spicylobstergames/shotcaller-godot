@@ -34,16 +34,18 @@ func get_units_in_radius(pos, rad):
 	return in_radius_units
 
 
-func create_block(x, y):
+func create_block(x, y, team):
 	var block = block_template.instantiate()
 	block.selectable = false
 	block.moves = false
 	block.attacks = false
 	block.collide = true
+	if team == "blue": block.get_node("light").visible = true
 	block.global_position = Vector2(half_tile_size + x * tile_size, half_tile_size + y * tile_size)
 	current_map.block_container.add_child(block)
 	setup(block)
 	WorldState.get_state("all_units").append(block)
+	return block
 
 
 func setup(unit):
