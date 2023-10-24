@@ -19,10 +19,12 @@ func setup_pathfind():
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	# add tile walls
-	var used_cells = WorldState.get_state("map").walls.get_used_cells(0)
+	var walls_tile = WorldState.get_state("map").walls
+	var used_cells = walls_tile.get_used_cells(0)
 	
 	for cell in used_cells:
-		Collisions.create_block(cell.x, cell.y)
+		var team = "blue" if (walls_tile.get_cell_source_id(0, cell) == 0) else "red"
+		Collisions.create_block(cell.x, cell.y, team)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
 	# add building units
 	for building in WorldState.get_state("player_buildings"):

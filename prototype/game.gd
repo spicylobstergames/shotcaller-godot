@@ -11,7 +11,6 @@ signal game_ended
 
 var map:Node2D
 
-var mode:String = "match" # campaign
 var control_state:String = "selection"
 
 @onready var map_manager := $"%map_manager"
@@ -124,7 +123,6 @@ func pause():
 	get_tree().paused = true
 	WorldState.one_sec_timer.paused = true
 	WorldState.spawn_timer.paused = true
-	ui.show_pause_menu()
 	WorldState.set_state("is_game_active", false)
 	emit_signal("game_paused")
 

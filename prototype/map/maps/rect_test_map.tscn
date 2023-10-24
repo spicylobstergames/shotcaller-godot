@@ -2831,7 +2831,7 @@ texture_region_size = Vector2i(32, 48)
 [sub_resource type="TileSet" id="15"]
 resource_local_to_scene = true
 tile_size = Vector2i(24, 24)
-occlusion_layer_0/light_mask = 2
+occlusion_layer_0/light_mask = 1
 sources/0 = SubResource("TileSetAtlasSource_y2mv4")
 
 [sub_resource type="AtlasTexture" id="7"]

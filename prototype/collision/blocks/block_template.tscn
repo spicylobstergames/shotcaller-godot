@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://wpjiajl6383s"]
+[gd_scene load_steps=4 format=3 uid="uid://wpjiajl6383s"]
 
 [ext_resource type="Script" path="res://unit/Unit.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://defd23p55hffp" path="res://assets/map/light.png" id="2_fiakn"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 30.0
@@ -27,3 +28,12 @@ monitorable = false
 [node name="block" type="CollisionShape2D" parent="collisions"]
 shape = SubResource("1")
 disabled = true
+
+[node name="light" type="PointLight2D" parent="."]
+visible = false
+scale = Vector2(6.25, 6.25)
+blend_mode = 2
+shadow_filter = 1
+shadow_filter_smooth = 5.0
+texture = ExtResource("2_fiakn")
+texture_scale = 0.8
