@@ -10,21 +10,23 @@ var game:Node
 @onready var control_delay := $"%control_delay"
 @onready var sprite := $"%sprite"
 
+var can_proceed := false
 var can_hide := false
 
 func _ready():
 	game = get_tree().get_current_scene()
-	game.game_started.connect(campaign_start)
+	game.game_map_loaded.connect(campaign_start)
 
 
 func campaign_start():
-	if game.mode == "campaign":
-		await get_tree().create_timer(2).timeout
+	if WorldState.get_state("game_mode") == "campaign":
+		await get_tree().create_timer(0.25).timeout
 		var joan = WorldState.get_state("player_leaders")[0]
 		show_msg(joan, "We are under attack!")
 
 
 func show_msg(leader, msg_text):
+	game.pause()
 	get_parent().show()
 	show()
 	can_hide = false
@@ -42,6 +44,7 @@ func show_msg(leader, msg_text):
 func hide_msg():
 	if can_hide:
 		hide()
+		game.resume()
 
 
 func _input(event):

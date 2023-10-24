@@ -19,6 +19,7 @@ func button_down():
 	match self.value:
 		"menu":
 			game.pause()
+			game.ui.show_pause_menu()
 		
 		"shop":
 			game.ui.shop.visible = !game.ui.shop.visible
