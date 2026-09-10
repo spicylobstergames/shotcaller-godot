@@ -1,38 +1,36 @@
 extends Node
 
 # self = Goap.Agent
-
-# This script integrates the unit (NPC) with goap.
+# This script integrates the unit (NPC) with GOAP.
 # In your implementation you could have this logic
 # inside your NPC script.
 #
 # As good practice, I suggest leaving it isolated like
 # this, so it makes re-use easy and it doesn't get tied
-# to unrelated implementation details (movement, collisions, etc)
+# to unrelated implementation details (movement, collisions, etc).
 
-@export var goals_list = []
+@export var goals_list: Array = []
 
 var debug_agent := false
 
-var _goals
+var _goals: Array
 var _current_goal
 var _current_plan
 var _current_plan_step := 0
 var _unit
-var _state := {}
+var _state: Dictionary = {}
 
-
-var attacked_timer = 2
+var attacked_timer := 2
 
 
 func _ready():
 	_goals = []
 	if goals_list.size() > 0:
 		for goal in goals_list:
-			_goals.push_back(Goap.get_goal(goal))
-			
+			_goals.append(Goap.get_goal(goal))
+
 	_unit = get_parent()
-	
+
 	_unit.unit_reseted.connect(reset)
 	_unit.unit_collided.connect(on_collision)
 	_unit.unit_arrived.connect(on_arrive)
@@ -42,8 +40,7 @@ func _ready():
 	_unit.unit_attack_ended.connect(on_attack_end)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
-	
-	
+
 	WorldState.one_sec_timer.timeout.connect(on_every_second)
 
 
@@ -52,7 +49,9 @@ func get_unit():
 
 
 func get_state(state_name, default = null):
-	return _state.get(state_name, default)
+	if _state.has(state_name):
+		return _state[state_name]
+	return default
 
 
 func set_state(state_name, value):
@@ -60,10 +59,7 @@ func set_state(state_name, value):
 
 
 func clear_state():
-	_state = {}
-
-
-func reset():
+	_state.clear()
 	clear_state()
 	_current_goal = null
 	_current_plan = null

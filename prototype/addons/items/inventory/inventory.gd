@@ -75,7 +75,7 @@ func get_item(index: int) -> Item:
 func get_items() -> Array:
     var items_arr := []
     for child in inventory_grid.get_children():
-        items_arr.push_back(child.item)
+        items_arr.append(child.item)
     return items_arr
 
 

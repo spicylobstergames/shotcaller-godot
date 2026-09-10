@@ -1,56 +1,52 @@
 extends Node
 
 # self = GoapActionPlanner
-
-
 var _actions: Array
 
 
-# set actions available for planning.
-# this can be changed in runtime for more dynamic options.
+# Set actions available for planning.
+# This can be changed at runtime for more dynamic options.
 func set_actions(actions: Array):
 	_actions = actions
 
 
-# Receives a Goal and returns a list of actions to be executed.
+# Receives a goal and returns a list of actions to be executed.
 func get_plan(agent, goal) -> Array:
-	var desired_state = goal.get_desired_state(agent)
+	var desired_state: Dictionary = goal.get_desired_state(agent)
 
 	if desired_state.is_empty():
 		return []
 	return _find_best_plan(goal, desired_state, agent)
 
 
-
-func _find_best_plan(goal, desired_state, agent):
-	# goal is set as root action
+func _find_best_plan(goal, desired_state: Dictionary, agent):
+	# Goal is set as root action.
 	var root = {
 		"action": goal,
 		"state": desired_state,
-		"children": []
+		"children": [],
 	}
 
-	# build plans will populate root with children.
+	# Build plans will populate root with children.
 	# In case it doesn't find a valid path, it will return false.
 	if _build_plans(root, agent):
 		var plans = _transform_tree_into_array(root, agent)
-		
-		if plans.is_empty(): 
+
+		if plans.is_empty():
 			push_error("goap action planner error: no valid plans")
 			return []
-		
+
 		return _get_cheapest_plan(plans)
 
 	return []
 
 
-# Compares plan's cost and returns
-# actions included in the cheapest one.
+# Compares plan cost and returns the actions included in the cheapest one.
 func _get_cheapest_plan(plans):
 	var best_plan
-	for p in plans:
-		if best_plan == null or p.cost < best_plan.cost:
-			best_plan = p
+	for plan in plans:
+		if best_plan == null or plan.cost < best_plan.cost:
+			best_plan = plan
 	return best_plan.actions
 
 
@@ -59,32 +55,31 @@ func _get_cheapest_plan(plans):
 #
 # This function uses recursion to build the graph. This is
 # necessary because any new action included in the graph may
-# add pre-conditions to the desired state that can be satisfied
-# by previously considered actions, meaning, on every step we
+# add preconditions to the desired state that can be satisfied
+# by previously considered actions, meaning that on every step we
 # need to iterate from the beginning to find all solutions.
 #
-# TODO: protected from circular dependencies
-#
+# TODO: protect from circular dependencies.
 # Returns true if the path has a solution.
 func _build_plans(step, agent):
-	var has_followup = false
+	var has_followup := false
 
-	# each node in the graph has it's own desired state.
-	var state = step.state.duplicate()
-	# checks if the current state is satisfied
-	
-	for s in step.state:
-		var a = agent.get_state(s)
-		if a is Object: a = true
-		var w = WorldState.get_state(s)
-		if w is Object: w = true
-		var b = state[s]
-		if b == a or b == w:
-			state.erase(s)
+	# Each node in the graph has its own desired state.
+	var state: Dictionary = step.state.duplicate()
 
-	# if the state is empty, it means this branch already
-	# found the solution, so it doesn't need to look for
-	# more actions
+	# Check whether the current state is satisfied.
+	for state_name in step.state:
+		var actual_state = agent.get_state(state_name)
+		if actual_state is Object:
+			actual_state = true
+		var world_state = WorldState.get_state(state_name)
+		if world_state is Object:
+			world_state = true
+		var expected_state = state[state_name]
+		if expected_state == actual_state or expected_state == world_state:
+			state.erase(state_name)
+
+	# If the state is empty, the branch already found a solution.
 	if state.is_empty():
 		return true
 
@@ -92,66 +87,60 @@ func _build_plans(step, agent):
 		if not action.is_valid(agent):
 			continue
 
-		var should_use_action = false
-		var effects = action.get_effects()
-		var desired_state = state.duplicate()
+		var should_use_action := false
+		var effects: Dictionary = action.get_effects()
+		var desired_state: Dictionary = state.duplicate()
 
-		# check if action should be used, i.e. it
-		# satisfies at least one condition from the
-		# desired state
-		for s in desired_state:
-			if desired_state[s] == effects.get(s):
-				desired_state.erase(s)
+		# Check whether the action should be used.
+		for state_name in desired_state:
+			if desired_state[state_name] == effects.get(state_name):
+				desired_state.erase(state_name)
 				should_use_action = true
 
 		if should_use_action:
-			# adds actions pre-conditions to the desired state
-			var preconditions = action.get_preconditions()
-			for p in preconditions:
-				desired_state[p] = preconditions[p]
+			# Add action preconditions to the desired state.
+			var preconditions: Dictionary = action.get_preconditions()
+			for precondition in preconditions:
+				desired_state[precondition] = preconditions[precondition]
 
-			var s = {
+			var step_node = {
 				"action": action,
 				"state": desired_state,
-				"children": []
+				"children": [],
 			}
 
-			# if desired state is empty, it means this action can be included
-			# if it's not empty, _build_plans is called again (recursively) so
-			# it can try to find actions to satisfy this current state. In case
-			# it can't find anything, this action won't be included in the graph.
-			if desired_state.is_empty() or _build_plans(s, agent):
-				step.children.push_back(s)
+			# If desired state is empty, this action can be included.
+			# If it is not empty, _build_plans is called again recursively
+			# so it can try to find actions that satisfy the current state.
+			if desired_state.is_empty() or _build_plans(step_node, agent):
+				step.children.append(step_node)
 				has_followup = true
 
 	return has_followup
 
 
-# Transforms graph with actions into list of actions and calculates
-# the cost by summing actions' cost
-#
-# Returns list of plans.
+# Transforms graph with actions into a list of actions and calculates cost.
 func _transform_tree_into_array(p, agent):
 	var plans = []
-	
-	if p.children.size() == 0 and p.action.has_method("get_cost"):
-		plans.push_back({ "actions": [p.action], "cost": p.action.get_cost(agent) })
+
+	if p.children.is_empty() and p.action.has_method("get_cost"):
+		plans.append({"actions": [p.action], "cost": p.action.get_cost(agent)})
 		return plans
-	
-	for c in p.children:
-		for child_plan in _transform_tree_into_array(c, agent):
+
+	for child in p.children:
+		for child_plan in _transform_tree_into_array(child, agent):
 			if p.action.has_method("get_cost"):
-				child_plan.actions.push_back(p.action)
+				child_plan.actions.append(p.action)
 				child_plan.cost += p.action.get_cost(agent)
-			plans.push_back(child_plan)
-	
+			plans.append(child_plan)
+
 	return plans
 
 
-# Prints plan. Used for Debugging only.
+# Prints a plan. Used for debugging only.
 func _print_plan(plan):
 	var actions = []
-	for a in plan.actions:
-		actions.push_back(a.get_class_name())
+	for action in plan.actions:
+		actions.append(action.get_class_name())
 	print("action_planner: ", {"cost": plan.cost, "actions": actions})
 
