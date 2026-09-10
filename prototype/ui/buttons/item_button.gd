@@ -6,7 +6,7 @@ var index = 0
 var saved_icon
 var shop_item = false
 var price_after_discount
-var poison = preload("res://item/potions/poison.tscn").instantiate()
+var poison = preload("res://skills/item_effects/poison.tscn").instantiate()
 
 @onready var name_label = get_node("name")
 @onready var price_label = get_node("price")
@@ -85,4 +85,3 @@ func on_sell_button_down():
 	# Give the leader gold for half the cost of the item
 	leader.gold += sold_item.sell_price
 	setup(null)
-

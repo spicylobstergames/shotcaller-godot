@@ -1,7 +1,7 @@
 [gd_scene load_steps=25 format=3 uid="uid://bls7fahoo2cgo"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://skills/abilites/trader.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://skills/abilities/trader.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://5xgism0ov6tq" path="res://assets/leaders/osman_red.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://fcwee4rmxnj0" path="res://assets/leaders/osman_blue.png" id="4"]
 [ext_resource type="PackedScene" path="res://weapons/scimitar.tscn" id="5"]

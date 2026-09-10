@@ -1,14 +1,14 @@
 [gd_scene load_steps=30 format=3 uid="uid://b6up7alt087ex"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://b0264hppvh7ir" path="res://skills/abilites/aura_of_courage.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://b0264hppvh7ir" path="res://skills/abilities/aura_of_courage.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://ccvqubnaubivh" path="res://assets/leaders/arthur_blue.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://kdv7xaxbby75" path="res://assets/leaders/arthur_red.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://bvmcrsceiy5ux" path="res://assets/ui/abilities/aura_of_courage.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
 [ext_resource type="PackedScene" path="res://weapons/excalibur.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://cdlrrondln7ga" path="res://assets/animations/side_smoke_2.png" id="8"]
-[ext_resource type="PackedScene" uid="uid://bc6xt7u2t62s3" path="res://skills/abilites/guard_break.tscn" id="9_mvi1j"]
+[ext_resource type="PackedScene" uid="uid://bc6xt7u2t62s3" path="res://skills/abilities/guard_break.tscn" id="9_mvi1j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijxyg"]
 atlas = ExtResource("3")

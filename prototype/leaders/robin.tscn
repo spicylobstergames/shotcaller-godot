@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://byq67yxlgi7d2"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://skills/abilites/multishot.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://skills/abilities/multishot.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://bfxwpddqe3hox" path="res://assets/leaders/robin_blue.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://dpeg8mtvhecoi" path="res://assets/leaders/robin_red.png" id="4"]
 [ext_resource type="PackedScene" path="res://weapons/leader_bow.tscn" id="5"]

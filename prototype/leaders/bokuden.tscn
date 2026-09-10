@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://weapons/katana.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://b26t2wu4014ef" path="res://assets/leaders/bokuden_red.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://bi0tpr0sfqcwj" path="res://assets/leaders/bokuden_blue.png" id="4"]
-[ext_resource type="PackedScene" path="res://skills/abilites/critical_slash.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://skills/abilities/critical_slash.tscn" id="6"]
 
 [sub_resource type="AtlasTexture" id="41"]
 atlas = ExtResource("4")

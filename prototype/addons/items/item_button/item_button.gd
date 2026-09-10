@@ -119,7 +119,7 @@ class SellButton:
 # var saved_icon
 
 # FIXME: don't know it's use case.
-# var poison = preload("res://item/potions/poison.tscn").instantiate()
+# var poison = preload("res://skills/item_effects/poison.tscn").instantiate()
 
 
 # func setup(new_item):
@@ -183,4 +183,3 @@ class SellButton:
 # 	# Give the leader gold for half the cost of the item
 # 	leader.gold += sold_item.sell_price
 # 	setup(null)
-

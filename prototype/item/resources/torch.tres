@@ -13,4 +13,4 @@ type = "equip"
 delivery_time = 15
 sprite = 9
 price = 150
-passive = "res://items/passives/holy_shield.tscn"
+passive = "res://skills/item_effects/holy_shield.tscn"

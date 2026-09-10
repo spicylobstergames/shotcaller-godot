@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://druqj65g6lkmi"]
 
-[ext_resource type="Script" path="res://item/passives/holy_shield.gd" id="1"]
+[ext_resource type="Script" path="res://skills/item_effects/holy_shield.gd" id="1"]
 
 [node name="holy_shield" type="Node"]
 script = ExtResource("1")

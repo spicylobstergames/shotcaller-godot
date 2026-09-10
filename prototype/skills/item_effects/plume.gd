@@ -1,18 +1,17 @@
 extends Node
 
-@onready var unit : Unit = get_parent().get_parent().get_parent()
-@onready var game = get_tree().get_current_scene()
-var affected_units = {}
+@onready var unit: Unit = get_parent().get_parent().get_parent()
+var affected_units: Dictionary = {}
 
-const RANGE = 100
-const VALUE = 10
+const RANGE := 100.0
+const VALUE := 10
 
-@export var icon : Texture2D
-@export var ability_name = "Magic Plume"
-@export var description = "The plume helps nearby units move across the battlefield" # (String, MULTILINE)
-@export var status_effect_icon : Texture2D
+@export var icon: Texture2D
+@export var ability_name := "Magic Plume"
+@export var description := "The plume helps nearby units move across the battlefield"
+@export var status_effect_icon: Texture2D
 
-func _on_update_timer_timeout():
+func _on_update_timer_timeout() -> void:
 	$update_timer.start()
 	for other_unit in affected_units.keys():
 		if (other_unit.global_position - unit.global_position).length() > RANGE:
@@ -26,6 +25,6 @@ func _on_update_timer_timeout():
 			other_unit.modifiers.add(other_unit, "speed", "feather", VALUE)
 			affected_units[other_unit] = true
 			other_unit.status_effects["feather"] = {
-				icon = status_effect_icon,
-				hint = "Plume: Increases speed by %d" % (VALUE)
+				"icon": status_effect_icon,
+				"hint": "Plume: Increases speed by %d" % VALUE
 			}
