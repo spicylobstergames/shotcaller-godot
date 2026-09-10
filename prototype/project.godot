@@ -8,16 +8,20 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Shotcall"
 run/main_scene="res://game.tscn"
-config/features=PackedStringArray("4.1")
+config/features=PackedStringArray("4.7")
 run/delta_smoothing=false
 boot_splash/bg_color=Color(0.180392, 0.133333, 0.184314, 1)
-boot_splash/image="res://assets/waterfall/swords.png"
-boot_splash/fullsize=false
+boot_splash/stretch_mode=0
 boot_splash/use_filter=false
+boot_splash/image="res://assets/waterfall/swords.png"
 config/icon="res://assets/icon.png"
 
 [autoload]
@@ -127,12 +131,12 @@ common/enable_pause_aware_picking=true
 [rendering]
 
 renderer/rendering_method="mobile"
-shading/overrides/force_vertex_shading.mobile=false
 shading/overrides/force_lambert_over_burley.mobile=false
 textures/default_filters/use_nearest_mipmap_filter=true
 environment/defaults/default_clear_color=Color(0.180392, 0.133333, 0.184314, 1)
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
+shading/overrides/force_vertex_shading.mobile=false
 quality/driver/fallback_to_gles2=true
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1

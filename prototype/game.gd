@@ -217,4 +217,3 @@ func apply_cheat_code(code):
 			end(true)
 		"LOSE":
 			end(false)
-

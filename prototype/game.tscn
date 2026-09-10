@@ -1,15 +1,15 @@
-[gd_scene load_steps=9 format=3 uid="uid://bt5ysasbsjat3"]
+[gd_scene format=3 uid="uid://bt5ysasbsjat3"]
 
-[ext_resource type="Script" path="res://game.gd" id="2"]
+[ext_resource type="Script" uid="uid://6utq4i6c1doj" path="res://game.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://vh78pi540b5i" path="res://ui/ui.tscn" id="4"]
-[ext_resource type="Script" path="res://map/spawns.gd" id="5_fcj4f"]
-[ext_resource type="Script" path="res://map/map_manager.gd" id="6"]
-[ext_resource type="Script" path="res://controls/selection.gd" id="7"]
-[ext_resource type="Script" path="res://test/test.gd" id="9"]
-[ext_resource type="AudioStream" uid="uid://bcyvb0f37c1lw" path="res://assets/soundtrack/Shotcaller_Menu_Theme.mp3" id="12_bsynf"]
-[ext_resource type="Script" path="res://ui/transitions/transitions.gd" id="14_dacea"]
+[ext_resource type="Script" uid="uid://j5say8d26vik" path="res://map/spawns.gd" id="5_fcj4f"]
+[ext_resource type="Script" uid="uid://lmow5l1vqr1n" path="res://map/map_manager.gd" id="6"]
+[ext_resource type="Script" uid="uid://i4q7elpt8pf" path="res://controls/selection.gd" id="7"]
+[ext_resource type="Script" uid="uid://rd76adk7fcbu" path="res://test/test.gd" id="9"]
+[ext_resource type="AudioStream" uid="uid://d0w7smg4sjhx4" path="res://assets/soundtrack/Shotcaller_Menu_Theme.mp3" id="12_bsynf"]
+[ext_resource type="Script" uid="uid://c3md5vbyfqwuf" path="res://ui/transitions/transitions.gd" id="14_dacea"]
 
-[node name="game" type="Control"]
+[node name="game" type="Control" unique_id=565848497]
 texture_filter = 1
 custom_minimum_size = Vector2(600, 600)
 layout_mode = 3
@@ -20,33 +20,33 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2")
 
-[node name="map_manager" type="Node2D" parent="."]
+[node name="map_manager" type="Node2D" parent="." unique_id=32497454]
 unique_name_in_owner = true
 texture_filter = 1
 script = ExtResource("6")
 
-[node name="ui" parent="." instance=ExtResource("4")]
+[node name="ui" parent="." unique_id=1423145959 instance=ExtResource("4")]
 unique_name_in_owner = true
 
-[node name="spawn" type="Node" parent="."]
+[node name="spawn" type="Node" parent="." unique_id=18834040]
 unique_name_in_owner = true
 script = ExtResource("5_fcj4f")
 
-[node name="selection" type="Node" parent="."]
+[node name="selection" type="Node" parent="." unique_id=553926945]
 unique_name_in_owner = true
 script = ExtResource("7")
 
-[node name="test" type="Node" parent="."]
+[node name="test" type="Node" parent="." unique_id=1629780321]
 unique_name_in_owner = true
 script = ExtResource("9")
 
-[node name="transitions" type="CanvasLayer" parent="."]
+[node name="transitions" type="CanvasLayer" parent="." unique_id=1212416947]
 unique_name_in_owner = true
 process_mode = 3
 layer = 5
 script = ExtResource("14_dacea")
 
-[node name="soundtrack" type="AudioStreamPlayer" parent="."]
+[node name="soundtrack" type="AudioStreamPlayer" parent="." unique_id=1021854052]
 unique_name_in_owner = true
 stream = ExtResource("12_bsynf")
 autoplay = true
