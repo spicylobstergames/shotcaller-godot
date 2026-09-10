@@ -60,6 +60,9 @@ func set_state(state_name, value):
 
 func clear_state():
 	_state.clear()
+
+
+func reset():
 	clear_state()
 	_current_goal = null
 	_current_plan = null
