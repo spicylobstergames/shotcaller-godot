@@ -227,8 +227,10 @@ func projectile_stuck(attacker, target, projectile):
 	var sprites = stuck.get_node("sprites")
 	var r = projectile.node.global_rotation
 	
-	if target: 
-		stuck.get_parent().remove_child(stuck)
+	if is_instance_valid(target) and is_instance_valid(stuck):
+		var parent = stuck.get_parent()
+		if parent:
+			parent.remove_child(stuck)
 		target.get_node("sprites/stuck").add_child(stuck)
 		stuck.global_position = target.global_position + target.collision_position
 		if target.mirror: 
@@ -258,7 +260,9 @@ func projectile_stuck(attacker, target, projectile):
 
 	await get_tree().create_timer(1.2).timeout
 	if is_instance_valid(stuck):
-		stuck.get_parent().remove_child(stuck)
+		var parent = stuck.get_parent()
+		if parent:
+			parent.remove_child(stuck)
 		stuck.queue_free()
 
 
