@@ -1,10 +1,8 @@
 extends Node
 
 # self = Goap.Goals
-
-# Lists all Goal contracts
-
-var _goals = {
+# Lists all goal contracts.
+var _goals: Dictionary = {
 	"AttackEnemiesGoal": preload("goals/attack_enemies.gd").new(),
 	"FollowPathGoal": preload("goals/follow_path.gd").new(),
 	"HelpFriendsGoal": preload("goals/help_friends.gd").new(),
@@ -16,7 +14,9 @@ var _goals = {
 
 
 func get_goal(goal_name, default = null):
-	return _goals.get(goal_name, default)
+	if _goals.has(goal_name):
+		return _goals[goal_name]
+	return default
 
 
 func set_goal(goal_name, value):

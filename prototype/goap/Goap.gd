@@ -1,21 +1,16 @@
 extends Node
 
-
-# Goap global class
-
-# This class is an Autoload accessible globally.
-# Access the autoload list in godot settings
-
-# Iitialises a GoapActionPlanner with all the available
-# actions.
+# Goap global class.
+# This class is an autoload accessible globally.
+# Access the autoload list in the Godot settings.
 #
+# Initializes a GoapActionPlanner with all the available actions.
 # In your game, you might want to have different planners
-# for different enemy/npc types, and even change the set
-# of actions in runtime.
+# for different enemy/NPC types, and even change the set
+# of actions at runtime.
 #
 # This example keeps things simple, creating only one planner
 # with pre-defined actions.
-
 
 var _action_planner = preload("ActionPlanner.gd").new()
 var _actions = preload("Actions.gd").new()

@@ -27,7 +27,7 @@ func arthur_active(effects: Dictionary, parameters: Dictionary, _visualize: bool
 		return false
 	var polygon = game.ui.active_skills.generate_rect_poly(parameters.length, parameters.width, leader.global_position, point_target, parameters.color)
 	var targets = game.ui.active_skills.enemies_in_polygon(leader, parameters.length, polygon)
-	var damage := 10 * leader.level
+	var damage: int = 10 * leader.level
 	if targets.is_empty():
 		return true
 	for target in targets:
