@@ -11,9 +11,9 @@ func is_valid(agent) -> bool:
 	
 	if not target:
 		enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-		target = Behavior.orders.select_target(unit, enemies)
+		target = Goap.orders.select_target(unit, enemies)
 	
-	Behavior.attack.set_target(unit, target)
+	Goap.attack.set_target(unit, target)
 	
 	return agent.get_state("has_attack_target")
 

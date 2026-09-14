@@ -1,6 +1,6 @@
 extends Node
 
-# self = Behavior.path
+# self = Goap.path
 
 
 # PATHFIND GRID
@@ -66,7 +66,7 @@ func on_arrive(unit):
 	if unit.current_path.size() > 0:
 		next(unit)
 	else:
-		Behavior.move.end(unit)
+		Goap.move.end(unit)
 
 
 func find(g1, g2):
@@ -93,7 +93,7 @@ func start(unit, new_path):
 	if new_path and not new_path.is_empty():
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		Behavior.advance.point(unit, next_point)
+		Goap.advance.point(unit, next_point)
 
 
 func smart(unit, path, cb="advance"):
@@ -101,12 +101,12 @@ func smart(unit, path, cb="advance"):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
-		Behavior[cb].point(unit, next_point)
+		Goap[cb].point(unit, next_point)
 
 
 func resume_lane(unit):
 	var lane = unit.agent.get_state("lane")
-	var new_path = Behavior.path.new_lane_path(lane, unit.team)
+	var new_path = Goap.path.new_lane_path(lane, unit.team)
 	start(unit,new_path)
 
 
@@ -114,7 +114,7 @@ func next(unit):
 	if not unit.current_path.is_empty():
 		start(unit,unit.current_path)
 	else:
-		Behavior.move.stop(unit)
+		Goap.move.stop(unit)
 
 
 func draw(unit):
@@ -155,4 +155,4 @@ func change_lane(unit, point):
 	var lane_start = path.pop_front()
 	unit.agent.set_state("lane", lane)
 	# unit.agent.set_state("order_behavior", "move")
-	Behavior.move.smart(unit, lane_start)
+	Goap.move.smart(unit, lane_start)

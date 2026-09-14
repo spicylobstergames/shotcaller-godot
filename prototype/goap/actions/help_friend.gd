@@ -22,6 +22,6 @@ func perform(_agent, _delta) -> bool:
 
 func enter(agent):
 	var position = agent.get_state("react_target").global_position
-	Behavior.advance.point(agent.get_unit(), position)
+	Goap.advance.point(agent.get_unit(), position)
 
 

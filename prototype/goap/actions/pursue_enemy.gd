@@ -26,9 +26,9 @@ func perform(agent, _delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	Behavior.advance.point(unit, unit.target.global_position)
+	Goap.advance.point(unit, unit.target.global_position)
 
 
 func end(agent):
 	var unit = agent.get_unit()
-	Behavior.move.stop(unit)
+	Goap.move.stop(unit)

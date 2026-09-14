@@ -37,13 +37,13 @@ func process(_delta):
 		add_new_hpbar(unit)
 		# stats
 		unit_name.text = "%s" % [Utils.first_to_uppper(unit.display_name)]
-		hp.text = "%s / %s" % [max(unit.current_hp,0), Behavior.modifiers.get_value(unit, "hp")]
-		if unit.regen: regen.text = "+%s" % [Behavior.modifiers.get_value(unit, "regen")]
+		hp.text = "%s / %s" % [max(unit.current_hp,0), Goap.modifiers.get_value(unit, "hp")]
+		if unit.regen: regen.text = "+%s" % [Goap.modifiers.get_value(unit, "regen")]
 		else: regen.text = ""
-		damage.text = "Damage: %s" % Behavior.modifiers.get_value(unit, "damage")
-		vision.text = "Vision: %s" % Behavior.modifiers.get_value(unit, "vision")
-		att_range.text = "Range: %s" % Behavior.modifiers.get_value(unit, "attack_range")
-		if unit.moves: speed.text = "Speed: %s" % Behavior.modifiers.get_value(unit, "speed")
+		damage.text = "Damage: %s" % Goap.modifiers.get_value(unit, "damage")
+		vision.text = "Vision: %s" % Goap.modifiers.get_value(unit, "vision")
+		att_range.text = "Range: %s" % Goap.modifiers.get_value(unit, "attack_range")
+		if unit.moves: speed.text = "Speed: %s" % Goap.modifiers.get_value(unit, "speed")
 		else: speed.text = ""
 		# gold
 		if ((game.can_control(unit) and unit.type == "leader")

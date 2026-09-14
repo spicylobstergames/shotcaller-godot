@@ -49,7 +49,7 @@ func map_loaded():
 	setup_buildings()
 	setup_lanes()
 	Collisions.setup_quadtree(map)
-	Behavior.path.setup_pathfind()
+	Goap.path.setup_pathfind()
 	game.ui.map_loaded()
 	game.map_loaded()
 
@@ -70,7 +70,7 @@ func setup_lanes():
 	for lane in WorldState.get_state("map").get_node("lanes").get_children():
 		WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
-	Behavior.orders.build_lanes()
+	Goap.orders.build_lanes()
 
 
 func line_to_array(line):

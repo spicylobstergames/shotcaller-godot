@@ -31,6 +31,6 @@ func arthur_active(effects: Dictionary, parameters: Dictionary, _visualize: bool
 	if targets.is_empty():
 		return true
 	for target in targets:
-		Behavior.attack.take_hit(leader, target, null, {"damage": damage})
+		Goap.attack.take_hit(leader, target, null, {"damage": damage})
 		target.start_stun()
 	return true

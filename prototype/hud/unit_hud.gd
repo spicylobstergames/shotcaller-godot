@@ -23,7 +23,7 @@ func update_hpbar():
 			if leader_icon_hpbar:
 				leader_icon_hpbar.get_node("green").region_rect.size.x = 0
 		else:
-			var hp = Behavior.modifiers.get_value(unit, "hp")
+			var hp = Goap.modifiers.get_value(unit, "hp")
 			hpbar.show()
 			var h_scale = float(unit.current_hp) / float(hp)
 			if h_scale < 0: h_scale = 0

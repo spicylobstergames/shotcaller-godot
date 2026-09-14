@@ -1,7 +1,7 @@
 extends Node
 
 
-# self = Behavior.orders
+# self = Goap.orders
 
 
 var player_lanes_orders = {}
@@ -169,7 +169,7 @@ func select_target(unit, enemies):
 	var filtered = []
 	
 	for enemy in enemies:
-		if Behavior.attack.can_hit(unit, enemy): filtered.append(enemy)
+		if Goap.attack.can_hit(unit, enemy): filtered.append(enemy)
 	
 	var n = filtered.size()
 	if n == 0: return
@@ -208,7 +208,7 @@ func conquer_building(unit):
 	point.y -= WorldState.get_state("map").tile_size
 	var building = Utils.get_building(point)
 	if not unit.agent.get_state("is_stunned") and building:
-		var hp = float(Behavior.modifiers.get_value(building, "hp"))
+		var hp = float(Goap.modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = ( (current_hp / hp) == 1 )
 		if building.team == "neutral" and building_full_hp:
@@ -280,7 +280,7 @@ func pray_in_church(unit):
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	Behavior.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
+	Goap.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
 
 
 # MINE

@@ -1,7 +1,7 @@
 extends Node
 
 
-# self = Behavior.move
+# self = Goap.move
 
 const teleport_time = 3
 const teleport_max_distance = 100
@@ -34,7 +34,7 @@ func move(unit, destiny):
 		and not unit.agent.get_state("is_stunned")
 	):
 		unit.current_destiny = destiny
-		var current_speed = Behavior.modifiers.get_value(unit, "speed")
+		var current_speed = Goap.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
 		unit.get_node("animations").speed_scale = current_speed / unit.speed
 		unit.set_state("move")
@@ -72,7 +72,7 @@ func on_collision(unit, _delta):
 			unit.global_position -= pr.normalized()
 			a = randf()*2*PI # just try a random direction
 		unit.angle = a # change directioin
-		var s = Behavior.modifiers.get_value(unit, "speed")
+		var s = Goap.modifiers.get_value(unit, "speed")
 		unit.current_step = Vector2(s * cos(a), s * sin(a))
 		# send back to original destiny after some time
 		if unit.collision_timer.time_left > 0: 
@@ -116,8 +116,8 @@ func stand(unit):
 
 func smart(unit, target_point):
 	if not unit.agent.get_state("stunned"):
-		var path = Behavior.path.find(unit.global_position, target_point)
-		if path: Behavior.path.start(unit, path)
+		var path = Goap.path.find(unit.global_position, target_point)
+		if path: Goap.path.start(unit, path)
 
 
 
@@ -129,7 +129,7 @@ func teleport(unit, target_point):
 	ui.unit_controls_panel.teleport_button.button_pressed = false
 	var building = Utils.closer_building(target_point, unit.team)
 	var distance = building.global_position.distance_to(target_point)
-	Behavior.move.stop(unit)
+	Goap.move.stop(unit)
 	agent.set_state("is_channeling", true)
 	# todo move to timer
 	await get_tree().create_timer(teleport_time).timeout
@@ -150,4 +150,4 @@ func teleport(unit, target_point):
 		unit.global_position = new_position
 		# emit signal teleported
 		agent.set_state("lane", building.lane)
-		Behavior.path.resume_lane(unit)
+		Goap.path.resume_lane(unit)

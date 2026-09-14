@@ -48,16 +48,16 @@ func button_down():
 		"tactic":
 			clear_siblings(self)
 			if selected_unit.type == "leader":
-				Behavior.orders.set_leader_tactic(self.orders.tactic)
-			else: Behavior.orders.set_lane_tactic(self.orders.tactic)		
+				Goap.orders.set_leader_tactic(self.orders.tactic)
+			else: Goap.orders.set_lane_tactic(self.orders.tactic)
 			self.disabled = true
 		
 		"priority":
 			if not is_first_child(self):
 				move_button_to_front(self)
 				if WorldState.get_state("selected_leader"):
-					Behavior.orders.set_leader_priority(self.orders.priority)
-				else: Behavior.orders.set_lane_priority(self.orders.priority)
+					Goap.orders.set_leader_priority(self.orders.priority)
+				else: Goap.orders.set_lane_priority(self.orders.priority)
 		
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
@@ -67,17 +67,17 @@ func button_down():
 				else: 
 					button.button_pressed = false
 					button.disabled = false
-			Behavior.orders.set_taxes(self.orders.taxes, selected_unit.team)
+			Goap.orders.set_taxes(self.orders.taxes, selected_unit.team)
 			self.disabled = true
 		
 		"gold":
-			Behavior.orders.gold_order(self)
+			Goap.orders.gold_order(self)
 			disable_siblings(self)
 			self.disabled = true
 		
 		"camp_hire":
 			clear_siblings(self)
-			Behavior.orders.camp_hire(self.orders.camp_hire, selected_unit.team)
+			Goap.orders.camp_hire(self.orders.camp_hire, selected_unit.team)
 			self.disabled = true
 		
 		"lumberjack":
@@ -90,11 +90,11 @@ func button_down():
 			self.disabled = true
 		
 		"pawn_upgrades":
-			Behavior.orders.pawn_upgrades(self.orders.pawn_upgrade)
+			Goap.orders.pawn_upgrades(self.orders.pawn_upgrade)
 			self.disabled = true
 		
 		"tower_upgrades":
-			Behavior.orders.tower_upgrades(self.orders.pawn_upgrade)
+			Goap.orders.tower_upgrades(self.orders.pawn_upgrade)
 			self.disabled = true
 
 

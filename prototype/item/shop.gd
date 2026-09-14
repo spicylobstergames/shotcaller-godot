@@ -114,7 +114,7 @@ func disable_equip():
 func close_to_blacksmith(leader):
 	for blacksmith in blacksmiths:
 		var distance = leader.global_position.distance_to(blacksmith.global_position)
-		if distance < Behavior.modifiers.get_value(leader, "vision"):
+		if distance < Goap.modifiers.get_value(leader, "vision"):
 			return true
 	return false
 

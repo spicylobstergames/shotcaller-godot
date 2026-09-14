@@ -92,12 +92,14 @@ func has_goal_function(func_name):
 func process(delta):
 	var goal = _get_best_goal()
 	if _current_goal == null or goal != _current_goal:
-		if (goal != null):
-			_current_goal = goal
-			if (_current_plan): _current_plan[_current_plan_step].exit(self)
+		if _current_plan and _current_plan_step < _current_plan.size():
+			_current_plan[_current_plan_step].exit(self)
+		_current_goal = goal
+		_current_plan = []
+		_current_plan_step = 0
+		if _current_goal:
 			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal)
-			_current_plan_step = 0
-			if (_current_plan.size() > 0):
+			if _current_plan.size() > 0:
 				_current_plan[0].enter(self)
 	else:
 		_follow_plan(_current_plan, delta)
@@ -139,6 +141,17 @@ func _follow_plan(plan, delta):
 
 
 func on_every_second() :
+	var is_regenerating_unit = _unit.type != "building" or _unit.team == "neutral"
+	if _unit.regen > 0 and is_regenerating_unit:
+		if not _unit.dead:
+			_unit.heal(Goap.modifiers.get_value(_unit, "regen"))
+		else:
+			_unit.regen = 0
+	if not _unit.dead:
+		var dot_effects = Goap.modifiers.get_dot(_unit)
+		if dot_effects:
+			for dot in dot_effects:
+				Goap.attack.take_hit(dot.attacker, _unit, null, {"damage": dot.damage})
 	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
 	if has_goal_function("on_every_second"):
@@ -146,6 +159,10 @@ func on_every_second() :
 
 
 func on_idle_end():
+	if _unit.wait_time > 0:
+		_unit.wait_time -= 1
+	else:
+		_unit.game.test.unit_wait_end(_unit)
 	if has_action_function("on_idle_end"):
 		get_current_action().on_idle_end(self)
 	if has_goal_function("on_idle_end"):
@@ -178,6 +195,13 @@ func on_attack_end():
 		get_current_action().on_attack_end(self)
 	if has_goal_function("on_attack_end"):
 		_get_best_goal().on_attack_end(self)
+	if _unit.attacks and not _unit.target:
+		if _unit.current_path:
+			Goap.path.smart(_unit, _unit.current_path)
+		elif _unit.current_destiny:
+			Goap.move.point(_unit, _unit.current_destiny)
+		else:
+			Goap.move.stop(_unit)
 
 
 func was_attacked(attacker, damage):
@@ -213,6 +237,9 @@ func on_arrive():
 		get_current_action().on_arrive(self)
 	if has_goal_function("on_arrive"):
 		_get_best_goal().on_arrive(self)
+	match _unit.after_arive:
+		"conquer": Goap.orders.conquer_building(_unit)
+		"pray": Goap.orders.pray_in_church(_unit)
 
 
 #func clear_orders():

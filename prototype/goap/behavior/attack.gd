@@ -1,13 +1,13 @@
 extends Node
 
-# self = Behavior.attack
+# self = Goap.attack
 
 
 func point(unit, target_point):
 	if (
 		unit.attacks 
 		and not unit.agent.get_state("is_stunned")
-		and Behavior.move.in_bounds(target_point)
+		and Goap.move.in_bounds(target_point)
 	):
 		if unit.ranged and unit.weapon:
 			unit.weapon.look_at(target_point)
@@ -23,7 +23,7 @@ func point(unit, target_point):
 		#if unit.target:
 		unit.aim_point = target_point
 		unit.mirror_look_at(target_point)
-		unit.get_node("animations").speed_scale = Behavior.modifiers.get_value(unit, "attack_speed")
+		unit.get_node("animations").speed_scale = Goap.modifiers.get_value(unit, "attack_speed")
 		unit.set_state("attack")
 
 
@@ -32,14 +32,14 @@ func set_target(unit, target):
 	if not target: 
 		unit.agent.set_state("hunting", false)
 		unit.attack_count = 0
-		Behavior.modifiers.remove(unit, "attack_speed", "agile")
+		Goap.modifiers.remove(unit, "attack_speed", "agile")
 		unit.agent.set_state("has_attack_target", false)
 	else:
 		unit.agent.set_state("has_attack_target", true)
 	if target and unit.moves: unit.agent.set_state("hunting", true)
 	if unit.target != target:
 		unit.attack_count = 0
-		Behavior.modifiers.remove(unit, "attack_speed", "agile")
+		Goap.modifiers.remove(unit, "attack_speed", "agile")
 		unit.last_target = unit.target
 	unit.target = target
 
@@ -63,8 +63,8 @@ func hit(unit1):
 		did_hit = true
 	
 	# melee cleave damage
-	if unit1.display_name in Behavior.skills.leader:
-		var attacker_skills = Behavior.skills.leader[unit1.display_name]
+	if unit1.display_name in Goap.skills.leader:
+		var attacker_skills = Goap.skills.leader[unit1.display_name]
 		if "cleave" in attacker_skills:
 			var neighbors = Collisions.get_units_in_radius(att_pos, att_rad)
 			for unit2 in neighbors:
@@ -89,7 +89,7 @@ func can_hit(attacker, target):
 
 func in_range(attacker, target):
 	var att_pos = attacker.global_position + attacker.attack_hit_position
-	var att_rad = Behavior.modifiers.get_value(attacker, "attack_range")
+	var att_rad = Goap.modifiers.get_value(attacker, "attack_range")
 	var tar_pos = target.global_position + target.collision_position
 	var tar_rad = target.collision_radius
 	return Utils.circle_collision(att_pos, att_rad, tar_pos, tar_rad)
@@ -100,7 +100,7 @@ func is_valid_target(attacker, target):
 
 
 func take_hit(attacker, target, projectile = null, modifiers = {}):
-	modifiers = Behavior.skills.hit_modifiers(attacker, target, projectile, modifiers)
+	modifiers = Goap.skills.hit_modifiers(attacker, target, projectile, modifiers)
 	
 	if projectile:
 		if not modifiers.pierce: 
@@ -112,7 +112,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 	if target and not target.dead and not target.immune:
 		var damage = 0
 		if not modifiers.dodge:
-			damage = max(1, modifiers.damage - Behavior.modifiers.get_value(target, "defense"))
+			damage = max(1, modifiers.damage - Goap.modifiers.get_value(target, "defense"))
 			target.current_hp -= damage
 			attacker.attack_count += 1
 			if attacker.type == "leader":
@@ -127,17 +127,17 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 		if (target.type == "building" and 
 				target.subtype == "backwood"):
 				
-				var hp = Behavior.modifiers.get_value(target, "hp")
+				var hp = Goap.modifiers.get_value(target, "hp")
 				var rate = float(target.current_hp)/float(hp)
 				
-				var tax = Behavior.orders.player_tax
+				var tax = Goap.orders.player_tax
 				if target.team == WorldState.get_state("enemy_team"):
-					tax = Behavior.orders.enemy_tax
+					tax = Goap.orders.enemy_tax
 					
-				var limit = Behavior.orders.tax_conquer_limit[tax]
+				var limit = Goap.orders.tax_conquer_limit[tax]
 				
 				if rate <= limit:
-					Behavior.orders.lose_building(target)
+					Goap.orders.lose_building(target)
 		
 		if target.current_hp <= 0: 
 			target.current_hp = 0
@@ -162,7 +162,7 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 
 func projectile_release(attacker):
 	projectile_start(attacker,attacker.target)
-	Behavior.skills.projectile_release(attacker)
+	Goap.skills.projectile_release(attacker)
 
 
 
@@ -171,7 +171,7 @@ func projectile_start(attacker, target):
 	if target:
 		target_position = target.global_position + target.collision_position
 		if target.dead or target.immune: return
-	if not Behavior.move.in_bounds(target_position): return
+	if not Goap.move.in_bounds(target_position): return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	WorldState.get_state("map").projectile_container.add_child(projectile)
@@ -194,12 +194,12 @@ func projectile_start(attacker, target):
 	projectile.global_rotation = a
 	# piercing target array
 	var targets = null
-	if attacker.display_name in Behavior.skills.leader:
-		var attacker_skills = Behavior.skills.leader[attacker.display_name]
+	if attacker.display_name in Goap.skills.leader:
+		var attacker_skills = Goap.skills.leader[attacker.display_name]
 		if "pierce" in attacker_skills: 
 			target = null
 	if not target: targets = []
-	var radius = Behavior.modifiers.get_value(attacker, "attack_range") + 20
+	var radius = Goap.modifiers.get_value(attacker, "attack_range") + 20
 	attacker.projectiles.append({
 		"target": target,
 		"targets": targets,

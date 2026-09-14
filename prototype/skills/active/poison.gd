@@ -11,7 +11,7 @@ func poison_throw(leader: Unit, item: Item_resource) -> void:
 		"team": leader.opponent_team()
 	})
 	var target: Unit = leader.closest_unit(enemy_leaders_on_sight)
-	if target == null or not Behavior.attack.can_hit(leader, target):
+	if target == null or not Goap.attack.can_hit(leader, target):
 		return
 
 	var poison_timer := Timer.new()
@@ -21,8 +21,8 @@ func poison_throw(leader: Unit, item: Item_resource) -> void:
 	target.add_child(poison_timer)
 	poison_timer.start()
 
-	Behavior.modifiers.add(target, "speed", "poisoned", item.attributes.speed)
-	Behavior.modifiers.add(target, "dot", "poisoned", {
+	Goap.modifiers.add(target, "speed", "poisoned", item.attributes.speed)
+	Goap.modifiers.add(target, "dot", "poisoned", {
 		"attacker": leader,
 		"damage": item.attributes.dot
 	})
@@ -36,7 +36,7 @@ func poison_throw(leader: Unit, item: Item_resource) -> void:
 
 
 func _remove_poison(target: Unit, poison_timer: Timer) -> void:
-	Behavior.modifiers.remove(target, "dot", "poisoned")
-	Behavior.modifiers.remove(target, "speed", "poisoned")
+	Goap.modifiers.remove(target, "dot", "poisoned")
+	Goap.modifiers.remove(target, "speed", "poisoned")
 	target.status_effects.erase("poisoned")
 	poison_timer.queue_free()

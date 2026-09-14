@@ -45,7 +45,7 @@ func create(template, lane, team, mode, point):
 	WorldState.get_state("all_units").append(unit)
 	game.selection.setup_selection(unit)
 	Collisions.setup(unit)
-	Behavior.move.setup_timer(unit) # collision reaction timer
+	Goap.move.setup_timer(unit) # collision reaction timer
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
 		WorldState.get_state("all_leaders").append(unit)
@@ -84,10 +84,10 @@ func leaders():
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
-			var path = Behavior.path.new_lane_path(lane, team)
+			var path = Goap.path.new_lane_path(lane, team)
 			var path_start = path.pop_front()
 			var leader_node = game.spawn.create(leader_scene(leader_name), lane, team, "point_random", path_start)
-			Behavior.path.setup_unit_path(leader_node, path)
+			Goap.path.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -99,9 +99,9 @@ func leaders():
 
 
 func spawn_group_cycle():
-	Behavior.orders.lanes_cycle()
-	Behavior.orders.leaders_cycle()
-	Behavior.orders.update_taxes()
+	Goap.orders.lanes_cycle()
+	Goap.orders.leaders_cycle()
+	Goap.orders.update_taxes()
 	
 	for team in WorldState.teams:
 		var extra_unit = WorldState.get_state("player_extra_unit")
@@ -114,7 +114,7 @@ func spawn_group_cycle():
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
-	Behavior.orders.leaders_cycle()
+	Goap.orders.leaders_cycle()
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
@@ -138,13 +138,13 @@ func pawn_scene(pawn_name):
 
 
 func send_pawn(template_name, lane, team):
-	var path = Behavior.path.new_lane_path(lane, team)
+	var path = Goap.path.new_lane_path(lane, team)
 	var path_start = path.pop_front()
 	var pawn = recycle(template_name, lane, team, path_start)
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
-	Behavior.path.setup_unit_path(pawn, path)
-	Behavior.orders.set_pawn(pawn)
+	Goap.path.setup_unit_path(pawn, path)
+	Goap.orders.set_pawn(pawn)
 
 
 func spawn_unit(unit, lane, team, mode, point):

@@ -21,12 +21,12 @@ func get_effects() -> Dictionary:
 
 
 func enter(agent):
-	Behavior.move.stop(agent.get_unit())
+	Goap.move.stop(agent.get_unit())
 
 
 func perform(agent, _delta) -> bool:
 	var unit = agent.get_unit()
-	var hp = Behavior.modifiers.get_value(unit, "hp")
+	var hp = Goap.modifiers.get_value(unit, "hp")
 	var ready_to_fight = unit.current_hp > hp * 0.8
 	return ready_to_fight
 
@@ -34,4 +34,4 @@ func perform(agent, _delta) -> bool:
 func exit(agent):
 	agent.set_state("is_retreating", false)
 	agent.set_state("ready_to_fight", true)
-	Behavior.path.resume_lane(agent.get_unit())
+	Goap.path.resume_lane(agent.get_unit())

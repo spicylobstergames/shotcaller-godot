@@ -264,7 +264,7 @@ func rollo_basic():
 			targets.append(unit)
 	if targets.size() >= 3:
 		for unit in targets:
-			Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
+			Goap.attack.take_hit(leader, unit, null, { "damage": damage })
 	
 	return true
 
@@ -284,7 +284,7 @@ func arthur_special(effects, parameters, visualize):
 		if not targets.is_empty():
 			for unit in targets:
 				var damage = 100 * leader.level
-				Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
+				Goap.attack.take_hit(leader, unit, null, { "damage": damage })
 
 
 
@@ -306,7 +306,7 @@ func arthur_active(effects, parameters, visualize):
 	if targets.is_empty():
 		return true
 	for unit in targets:
-		Behavior.attack.take_hit(leader, unit, null, { "damage": damage })
+		Goap.attack.take_hit(leader, unit, null, { "damage": damage })
 		unit.start_stun()
 	return true
 
@@ -329,7 +329,7 @@ func bokuden_special(_effects, _parameters, _visualize):
 		if unit.type != "building":
 			targets.append(unit)
 			battle_call_timer.start()
-			Behavior.modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
+			Goap.modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
 			unit.status_effects["battle_call"] = {
 				icon = aura_sprite,
 				hint = "Battle call: Increases speed by %d" % (speed_modifier * leader.level)
@@ -339,7 +339,7 @@ func bokuden_special(_effects, _parameters, _visualize):
 
 func battle_call_remove(_targets):
 	for unit in _targets:
-		Behavior.modifiers.remove(unit, "speed", "battle_call")
+		Goap.modifiers.remove(unit, "speed", "battle_call")
 		_targets.erase(unit)
 		unit.status_effects.erase("battle_call")
 
@@ -375,7 +375,7 @@ func osman_special(_effects, _parameters, _visualize):
 		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
 			targets[unit] = unit.team
 			unit.setup_team(leader.team)
-			Behavior.orders.set_pawn(unit)
+			Goap.orders.set_pawn(unit)
 			unit.status_effects["Bribed"] = {
 				icon = aura_sprite,
 				hint = "Bribed: Blinded by greed, defected to the side of the enemy"
@@ -388,7 +388,7 @@ func bribe_remove(targets):
 	for unit in targets.keys():
 		if not unit.dead:
 			unit.setup_team(targets[unit])
-			Behavior.orders.set_pawn(unit)
+			Goap.orders.set_pawn(unit)
 			targets.erase(unit)
 			unit.status_effects.erase("Bribed")
 		else: targets.erase(unit)
