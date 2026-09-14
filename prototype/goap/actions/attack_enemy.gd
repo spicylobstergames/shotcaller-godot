@@ -24,8 +24,8 @@ func enter(agent):
 	var unit = agent.get_unit()
 	var target = unit.target
 	
-	if Behavior.attack.is_valid_target(unit, target):
-		Behavior.advance.point(unit, target.global_position)
+	if Goap.attack.is_valid_target(unit, target):
+		Goap.advance.point(unit, target.global_position)
 
 
 func on_animation_end(agent):
@@ -33,15 +33,15 @@ func on_animation_end(agent):
 	var target = unit.target
 	
 	if unit.agent.get_state("has_attack_target"):
-		Behavior.advance.point(unit, target.global_position)
+		Goap.advance.point(unit, target.global_position)
 	else:
-		Behavior.move.stop(unit)  
+		Goap.move.stop(unit)
 
 
 
 func exit(agent):
 	var unit = agent.get_unit()
-	Behavior.move.stop(unit)
+	Goap.move.stop(unit)
 
 
 

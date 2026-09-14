@@ -16,6 +16,14 @@ var _action_planner = preload("ActionPlanner.gd").new()
 var _actions = preload("Actions.gd").new()
 var _goals = preload("Goals.gd").new()
 
+@onready var move = $move
+@onready var attack = $attack
+@onready var advance = $advance
+@onready var path = $path
+@onready var orders = $orders
+@onready var skills = $skills
+@onready var modifiers = $modifiers
+
 
 func _ready():
 	_action_planner.set_actions(_actions.get_all_actions())

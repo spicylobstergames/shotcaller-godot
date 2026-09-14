@@ -32,7 +32,7 @@ func enter(agent):
 	var unit = agent.get_unit()
 	unit.agent.set_state("has_player_command", true)
 	var closest_tree = agent.get_state("closest_tree")
-	Behavior.move.point(unit, closest_tree)
+	Goap.move.point(unit, closest_tree)
 
 
 func on_arrive(agent):

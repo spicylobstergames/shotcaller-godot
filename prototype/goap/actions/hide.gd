@@ -20,7 +20,7 @@ func get_effects() -> Dictionary:
 
 
 func enter(agent):
-	Behavior.move.point(agent.get_unit(), agent.get_state("deliver_position"))
+	Goap.move.point(agent.get_unit(), agent.get_state("deliver_position"))
 	agent.set_state("is_running", true)
 
 

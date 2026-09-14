@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cik1ee7a3hwqs"]
+
+[ext_resource type="Script" uid="uid://c56x2d37t5a8v" path="res://skills/passive/plume.gd" id="1"]
+
+[node name="feather" type="Node" unique_id=432347965]
+script = ExtResource("1")
+
+[node name="update_timer" type="Timer" parent="." unique_id=44548893]
+autostart = true
+
+[connection signal="timeout" from="update_timer" to="." method="_on_update_timer_timeout"]

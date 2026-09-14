@@ -15,7 +15,7 @@ func prepare(leader):
 	leader_name = leader
 	is_empty()
 	if leader != "random":
-		var leader_scene = load("res://leaders/%s.tscn" % leader)
+		var leader_scene = load("res://unit/leaders/%s.tscn" % leader)
 		var leader_instance = leader_scene.instantiate()
 		leader_name_label.text = Utils.first_to_uppper(leader)
 		for ability in leader_instance.get_node("behavior/abilities").get_children():

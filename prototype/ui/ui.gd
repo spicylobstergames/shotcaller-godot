@@ -129,8 +129,8 @@ func process(delta):
 		active_skills.process(delta)
 	
 	# hud line
-	if Behavior.path.path_line:
-		Behavior.path.draw(WorldState.get_state("selected_unit"))
+	if Goap.path.path_line:
+		Goap.path.draw(WorldState.get_state("selected_unit"))
 
 
 func hide_hpbars():
@@ -138,7 +138,7 @@ func hide_hpbars():
 		if (unit != WorldState.get_state("selected_unit") and 
 				unit.hud and
 				unit.type != "leader" and
-				unit.current_hp == Behavior.modifiers.get_value(unit, "hp") ):
+				unit.current_hp == Goap.modifiers.get_value(unit, "hp") ):
 					unit.hud.hpbar.hide()
 
 

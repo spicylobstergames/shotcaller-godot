@@ -1,0 +1,34 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://goap/Goap.gd" id="1_goap"]
+[ext_resource type="Script" path="res://goap/behavior/move.gd" id="2_move"]
+[ext_resource type="Script" path="res://goap/behavior/attack.gd" id="3_attack"]
+[ext_resource type="Script" path="res://goap/behavior/advance.gd" id="4_advance"]
+[ext_resource type="Script" path="res://goap/behavior/path.gd" id="5_path"]
+[ext_resource type="Script" path="res://goap/behavior/orders.gd" id="6_orders"]
+[ext_resource type="Script" path="res://skills/passive_skills.gd" id="7_skills"]
+[ext_resource type="Script" path="res://skills/modifiers.gd" id="8_modifiers"]
+
+[node name="Goap" type="Node"]
+script = ExtResource("1_goap")
+
+[node name="move" type="Node" parent="."]
+script = ExtResource("2_move")
+
+[node name="attack" type="Node" parent="."]
+script = ExtResource("3_attack")
+
+[node name="advance" type="Node" parent="."]
+script = ExtResource("4_advance")
+
+[node name="path" type="Node" parent="."]
+script = ExtResource("5_path")
+
+[node name="orders" type="Node" parent="."]
+script = ExtResource("6_orders")
+
+[node name="skills" type="Node" parent="."]
+script = ExtResource("7_skills")
+
+[node name="modifiers" type="Node" parent="."]
+script = ExtResource("8_modifiers")

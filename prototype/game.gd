@@ -153,15 +153,9 @@ func one_sec_cycle(): # called every second
 		ui.top_label.hide()
 	
 	for unit in WorldState.get_state("all_units"):
-		var has_regen = (unit.regen > 0)
-		var is_building = (unit.type == "building")
-		var is_neutral = (unit.team == "neutral")
 		if unit.type == "leader" and not test.debug:
 			ui.inventories.update_consumables(unit)
 		if can_control(unit): unit.set_delay()
-		if ( has_regen and (!is_building or ( is_building and is_neutral )) ):
-			unit.set_regen()
-			unit.set_dot()
 	
 	ui.active_skills.one_sec_cycle()
 	

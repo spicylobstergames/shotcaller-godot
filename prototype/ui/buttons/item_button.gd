@@ -6,7 +6,7 @@ var index = 0
 var saved_icon
 var shop_item = false
 var price_after_discount
-var poison = preload("res://skills/item_effects/poison.tscn").instantiate()
+var poison = preload("res://skills/active/poison.tscn").instantiate()
 
 @onready var name_label = get_node("name")
 @onready var price_label = get_node("price")
@@ -51,16 +51,12 @@ func setup(new_item):
 func on_button_down():
 	var leader = WorldState.get_state("selected_leader")
 	if self.shop_item:
-		# BUY ITEM
-		
-		# sell is only enabled if leader has enough gold
-		# no need to check here
-		leader.gold -= price_after_discount
-		
-		game.ui.inventories.add_delivery(leader, item)
-		game.ui.shop.disable_all()
+		game.ui.shop.purchase_item(self)
+		return
 
 	else:
+		if leader == null or item == null:
+			return
 		# use inventory item
 		if item.type == "throwable":
 			poison.poison_throw(leader, item)
@@ -81,7 +77,5 @@ func show_sell_button():
 
 func on_sell_button_down():
 	var leader = WorldState.get_state("selected_leader")
-	var sold_item = game.ui.inventories.remove_item(leader, index)
-	# Give the leader gold for half the cost of the item
-	leader.gold += sold_item.sell_price
-	setup(null)
+	if game.ui.inventories.sell_item(leader, index):
+		setup(null)

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cl0xcyvl7p3ix"]
+
+[ext_resource type="Script" uid="uid://ceo2s5oo48w0" path="res://skills/passive/multishot.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bviqas7cs3x1f" path="res://assets/ui/abilities/multishot.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://xfjr80rha6rb" path="res://assets/ui/abilities/multishot_small.png" id="3"]
+
+
+[node name="mutlishot" type="Node"]
+script = ExtResource("1")
+icon = ExtResource("2")
+status_effect_icon = ExtResource("3")

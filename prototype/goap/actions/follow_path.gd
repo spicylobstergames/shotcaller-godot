@@ -29,19 +29,19 @@ func enter(agent):
 	var new_path = unit.cut_path(path)
 	agent.set_state("completed_path", false)
 	if not new_path.is_empty():
-		Behavior.path.start(unit,new_path)
+		Goap.path.start(unit,new_path)
 
 
 func on_arrive(agent):
 	var unit = agent.get_unit()
 	if agent.get_state("has_path"):
-		Behavior.path.next(unit)
+		Goap.path.next(unit)
 	else:
 		agent.set_state("completed_path", true)
 
 
 func on_animation_end(_agent):
-	# var limit = Behavior.follow.max_lane_distance
+	# var limit = Goap.follow.max_lane_distance
 	# var distance = distance_to_lane( agent.get_unit() )
 	# agent.set_state("close_to_path", distance < limit)
 	pass

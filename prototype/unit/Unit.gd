@@ -41,7 +41,7 @@ var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
 var symbol:bool = false
-var current_modifiers = Behavior.modifiers.new_modifiers()
+var current_modifiers = Goap.modifiers.new_modifiers()
 
 # SELECTION
 @export var selectable:bool = false
@@ -175,7 +175,7 @@ func reset_unit():
 
 	self.hud.state.text = Utils.first_to_uppper(self.display_name)
 	self.current_hp = self.hp
-	self.current_modifiers = Behavior.modifiers.new_modifiers()
+	self.current_modifiers = Goap.modifiers.new_modifiers()
 	self.show()
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
@@ -288,21 +288,6 @@ func set_delay():
 		self.curr_control_delay -= 1
 
 
-func set_regen():
-	if not self.dead:
-		var regen_hp = Behavior.modifiers.get_value(self, "regen")
-		self.heal(regen_hp)
-	else: self.regen = 0
-
-
-func set_dot():
-	if not self.dead:
-		var dot_effects = Behavior.modifiers.get_dot(self)
-		if dot_effects != null:
-			for dot in dot_effects:
-				Behavior.attack.take_hit(dot.attacker, self, null, {"damage": dot.damage})
-
-
 func cut_path(path):
 	var distances = []
 	var path_size = path.size()
@@ -356,12 +341,12 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 
 
 func get_units_in_sight(filters = {}):
-	var current_vision = Behavior.modifiers.get_value(self, "vision")
+	var current_vision = Goap.modifiers.get_value(self, "vision")
 	return self.get_units_in_radius(current_vision, filters)
 
 
 func get_units_in_attack_range(filters = {}):
-	var current_range = Behavior.modifiers.get_value(self, "attack_range")
+	var current_range = Goap.modifiers.get_value(self, "attack_range")
 	var pos = self.global_position + self.attack_hit_position
 	return self.get_units_in_radius(current_range, filters, pos)
 
@@ -376,19 +361,17 @@ func wait():
 
 
 func on_idle_end(): # every idle animation end (0.6s)
-	if self.wait_time > 0: self.wait_time -= 1
-	else: game.test.unit_wait_end(self)
 	emit_signal("unit_idle_ended")
 	emit_signal("unit_animation_ended")
 
 
 func on_move(delta): # every frame if there's no collision
-	Behavior.move.step(self, delta)
+	Goap.move.step(self, delta)
 
 
 func on_collision(delta):
 	if self.moves:
-		Behavior.move.on_collision(self, delta)
+		Goap.move.on_collision(self, delta)
 	emit_signal("unit_collided")
 
 
@@ -398,22 +381,18 @@ func on_move_end(): # every move animation end (0.6s for speed = 1)
 
 
 func on_arrive(): # when collides with destiny
-	match self.after_arive:
-		"conquer": Behavior.orders.conquer_building(self)
-		"pray": Behavior.orders.pray_in_church(self)
-	
 	emit_signal("unit_arrived")
 
 
 func on_attack_release(): # every ranged projectile start
 	if self.attacks:
-		Behavior.attack.projectile_release(self)
+		Goap.attack.projectile_release(self)
 		emit_signal("unit_attack_release")
 
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
-		Behavior.attack.hit(self)
+		Goap.attack.hit(self)
 		emit_signal("unit_attack_hitted")
 
 
@@ -423,21 +402,13 @@ func was_attacked(attacker, _damage):
 
 
 func on_attack_end(): # animation end of all attacks
-	if self.attacks:
-		if !self.target:
-			if self.current_path:
-				Behavior.path.smart(self, self.current_path)
-			if self.current_destiny:
-				Behavior.move.point(self, self.current_destiny)
-			else:
-				Behavior.move.stop(self)
-		emit_signal("unit_attack_ended")
+	if self.attacks: emit_signal("unit_attack_ended")
 	emit_signal("unit_animation_ended")
 
 
 func heal(heal_hp):
 	self.current_hp += heal_hp
-	self.current_hp = int(min(self.current_hp, Behavior.modifiers.get_value(self, "hp")))
+	self.current_hp = int(min(self.current_hp, Goap.modifiers.get_value(self, "hp")))
 	self.hud.update_hpbar()
 	emit_signal("unit_healed")
 
@@ -505,7 +476,7 @@ func hide_in_map():
 func on_death_end():  # death animation end
 	self.hide_in_map()
 	
-	Behavior.attack.clear_stuck(self)
+	Goap.attack.clear_stuck(self)
 	
 	if game.test.debug and game.test.stress: game.test.respawn(self)
 	else:
