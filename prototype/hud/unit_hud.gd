@@ -51,6 +51,3 @@ func hide_unselect():
 		unit.hud.state.hide()
 		unit.hud.hpbar.hide()
 	unit.hud.selection.hide()
-
-
-

@@ -1,10 +1,11 @@
-[gd_scene load_steps=25 format=3 uid="uid://trql5m2pulpv"]
+[gd_scene format=3 uid="uid://trql5m2pulpv"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://weapons/katana.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://b26t2wu4014ef" path="res://assets/leaders/bokuden_red.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://bi0tpr0sfqcwj" path="res://assets/leaders/bokuden_blue.png" id="4"]
-[ext_resource type="PackedScene" path="res://skills/abilities/critical_slash.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://2ih4uuipywck" path="res://weapons/katana.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://qcag6qpcc1i4" path="res://assets/leaders/bokuden_red.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://c3xdv81ehn8db" path="res://assets/leaders/bokuden_blue.png" id="4"]
+[ext_resource type="PackedScene" uid="uid://i74mqynh3nas" path="res://skills/passive/critical_slash.tscn" id="6"]
+
 
 [sub_resource type="AtlasTexture" id="41"]
 atlas = ExtResource("4")
