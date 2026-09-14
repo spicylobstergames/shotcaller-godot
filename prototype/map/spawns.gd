@@ -8,7 +8,7 @@ var game:Node
 var time = 8
 var lumberjack_cost = 1
 
-# var mailboy:PackedScene = load("res://neutrals/mailboy.tscn")
+# var mailboy:PackedScene = load("res://unit/neutrals/mailboy.tscn")
 
 var cemitery = {
 	"player_infantry": [],
@@ -57,7 +57,7 @@ func create(template, lane, team, mode, point):
 
 
 func leader_scene(leader_name):
-	return load("res://leaders/"+leader_name+".tscn")
+	return load("res://unit/leaders/"+leader_name+".tscn")
 
 
 func random_leader(team):
@@ -134,7 +134,7 @@ func recycle(template, lane, team, point):
 
 
 func pawn_scene(pawn_name):
-	return load("res://pawns/"+pawn_name+".tscn")
+	return load("res://unit/pawns/"+pawn_name+".tscn")
 
 
 func send_pawn(template_name, lane, team):
@@ -209,7 +209,7 @@ func cemitery_add_leader(leader):
 # LUMBERMILL
 
 func neutral_scene(neutral_name):
-	var neutral = load("res://neutrals/"+neutral_name+".tscn")
+	var neutral = load("res://unit/neutrals/"+neutral_name+".tscn")
 	WorldState.get_state("neutral_units").append(neutral)
 	return neutral
 

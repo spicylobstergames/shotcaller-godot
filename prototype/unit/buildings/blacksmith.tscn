@@ -1,26 +1,27 @@
-[gd_scene load_steps=23 format=3 uid="uid://bkdt0oevagnod"]
+[gd_scene format=3 uid="uid://bkq8nar2igern"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="3"]
-[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://buildings/decoration/flag.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://cxt3ym1fu5ncp" path="res://assets/buildings/neutral_red.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://jsvqumsl1lmk" path="res://assets/buildings/neutral_gray.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://c4gqs4ai3fydh" path="res://assets/buildings/neutral_blue.png" id="3"]
+[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://unit/buildings/decoration/flag.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://b48muhglye3v7" path="res://assets/buildings/neutral_red.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://donxlsx4i210a" path="res://assets/buildings/neutral_gray.png" id="6"]
+
 
 [sub_resource type="AtlasTexture" id="42"]
 atlas = ExtResource("3")
-region = Rect2(0, 15, 64, 73)
-
-[sub_resource type="AtlasTexture" id="43"]
-atlas = ExtResource("6")
-region = Rect2(0, 15, 64, 73)
+region = Rect2(237, 20, 62, 68)
 
 [sub_resource type="AtlasTexture" id="44"]
-atlas = ExtResource("5")
-region = Rect2(0, 15, 64, 73)
+atlas = ExtResource("6")
+region = Rect2(237, 20, 62, 68)
 
-[sub_resource type="SpriteFrames" id="45"]
-resource_name = "church"
+[sub_resource type="AtlasTexture" id="45"]
+atlas = ExtResource("5")
+region = Rect2(237, 20, 62, 68)
+
+[sub_resource type="SpriteFrames" id="43"]
+resource_name = "blacksmith"
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -32,7 +33,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("43")
+"texture": SubResource("44")
 }],
 "loop": true,
 "name": &"neutral",
@@ -40,7 +41,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("44")
+"texture": SubResource("45")
 }],
 "loop": true,
 "name": &"red",
@@ -198,7 +199,7 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ixjqe"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uswpp"]
 _data = {
 "attack": SubResource("24"),
 "death": SubResource("31"),
@@ -206,49 +207,42 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="28"]
-radius = 46.0
+radius = 32.0
 
 [sub_resource type="CircleShape2D" id="29"]
-radius = 60.0
+radius = 50.0
 
-[node name="church" instance=ExtResource("1")]
+[node name="blacksmith" instance=ExtResource("1")]
 texture_filter = 1
-hp = 3600
+hp = 1800
+regen = 10
 vision = 300
 type = "building"
 subtype = "backwood"
-display_name = "church"
-title = "sacred temple"
+display_name = "blacksmith"
+title = "blacksmith forge"
 respawn = 0.0
-immune = true
 selectable = true
 collide = true
 projectile_speed = 0.0
 
 [node name="state" parent="hud" index="0"]
-offset_top = -115.0
-offset_bottom = -97.0
+offset_top = -81.0
+offset_bottom = -63.0
 
 [node name="selection" parent="hud" index="1"]
-position = Vector2(0, 7)
-scale = Vector2(4, 3)
+position = Vector2(0, 5)
+scale = Vector2(3, 2.5)
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2(0, -95)
-
-[node name="symbol" parent="." index="1"]
-scale = Vector2(24, 24)
-
-[node name="symbol_border" parent="symbol" index="0"]
-scale = Vector2(1.36, 1.36)
+position = Vector2(0, -61)
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
 [node name="body" parent="sprites" index="1"]
 use_parent_material = false
-scale = Vector2(1.5, 1.5)
-sprite_frames = SubResource("45")
+sprite_frames = SubResource("43")
 offset = Vector2(0, -30)
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
@@ -280,7 +274,7 @@ offset = Vector2(10, 0)
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 libraries = {
-"": SubResource("AnimationLibrary_ixjqe")
+"": SubResource("AnimationLibrary_uswpp")
 }
 
 [node name="block" parent="collisions" index="0"]

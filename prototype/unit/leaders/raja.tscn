@@ -1,79 +1,47 @@
-[gd_scene load_steps=30 format=3 uid="uid://ck4p5k4ty45uj"]
+[gd_scene format=3 uid="uid://drrjv27fe105a"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://weapons/poleaxe.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://byyqcyeqykru2" path="res://assets/leaders/lorne_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cer3uaedfomoj" path="res://assets/leaders/lorne_red.png" id="5"]
+[ext_resource type="PackedScene" uid="uid://bq02ut2if7ooy" path="res://item/weapons/curved_sword.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://bjumc0664w130" path="res://assets/leaders/raja_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://dxvf0ledk8tt7" path="res://assets/leaders/raja_red.png" id="4"]
 
-[sub_resource type="AtlasTexture" id="48"]
+
+[sub_resource type="AtlasTexture" id="37"]
 atlas = ExtResource("3")
-region = Rect2(0, 0, 48, 48)
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="49"]
+[sub_resource type="AtlasTexture" id="34"]
 atlas = ExtResource("3")
-region = Rect2(48, 0, 48, 48)
+region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="50"]
+[sub_resource type="AtlasTexture" id="35"]
 atlas = ExtResource("3")
-region = Rect2(96, 0, 48, 48)
+region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="51"]
-atlas = ExtResource("3")
-region = Rect2(144, 0, 48, 48)
+[sub_resource type="AtlasTexture" id="38"]
+atlas = ExtResource("4")
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="52"]
-atlas = ExtResource("3")
-region = Rect2(192, 0, 48, 48)
+[sub_resource type="AtlasTexture" id="39"]
+atlas = ExtResource("4")
+region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="53"]
-atlas = ExtResource("3")
-region = Rect2(240, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="54"]
-atlas = ExtResource("5")
-region = Rect2(0, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="55"]
-atlas = ExtResource("5")
-region = Rect2(48, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="56"]
-atlas = ExtResource("5")
-region = Rect2(96, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="57"]
-atlas = ExtResource("5")
-region = Rect2(144, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="58"]
-atlas = ExtResource("5")
-region = Rect2(192, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="59"]
-atlas = ExtResource("5")
-region = Rect2(240, 0, 48, 48)
+[sub_resource type="AtlasTexture" id="40"]
+atlas = ExtResource("4")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="36"]
-resource_name = "lorne"
+resource_name = "raja"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("48")
+"texture": SubResource("37")
 }, {
 "duration": 1.0,
-"texture": SubResource("49")
+"texture": SubResource("34")
 }, {
 "duration": 1.0,
-"texture": SubResource("50")
-}, {
-"duration": 1.0,
-"texture": SubResource("51")
-}, {
-"duration": 1.0,
-"texture": SubResource("52")
-}, {
-"duration": 1.0,
-"texture": SubResource("53")
+"texture": SubResource("35")
 }],
 "loop": true,
 "name": &"default",
@@ -81,42 +49,33 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("54")
+"texture": SubResource("38")
 }, {
 "duration": 1.0,
-"texture": SubResource("55")
+"texture": SubResource("39")
 }, {
 "duration": 1.0,
-"texture": SubResource("56")
-}, {
-"duration": 1.0,
-"texture": SubResource("57")
-}, {
-"duration": 1.0,
-"texture": SubResource("58")
-}, {
-"duration": 1.0,
-"texture": SubResource("59")
+"texture": SubResource("40")
 }],
 "loop": true,
 "name": &"red",
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="60"]
+[sub_resource type="AtlasTexture" id="41"]
 atlas = ExtResource("3")
-region = Rect2(288, 0, 48, 48)
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="61"]
-atlas = ExtResource("5")
-region = Rect2(288, 0, 48, 48)
+[sub_resource type="AtlasTexture" id="42"]
+atlas = ExtResource("4")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id="62"]
-resource_name = "poleaxe"
+[sub_resource type="SpriteFrames" id="43"]
+resource_name = "curved_sword"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("60")
+"texture": SubResource("41")
 }],
 "loop": true,
 "name": &"default",
@@ -124,7 +83,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("61")
+"texture": SubResource("42")
 }],
 "loop": true,
 "name": &"red",
@@ -133,7 +92,7 @@ animations = [{
 
 [sub_resource type="Animation" id="24"]
 resource_name = "attack"
-length = 0.8
+length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -142,7 +101,7 @@ tracks/0/path = NodePath("sprites/body:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.4, 0.8),
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1.05), Vector2(1, 0.9), Vector2(1, 1)]
@@ -154,7 +113,7 @@ tracks/1/path = NodePath("sprites/body:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.8),
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [0.0, -4.0, 4.0, 0.0]
@@ -174,26 +133,26 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("sprites/body:position")
+tracks/3/path = NodePath("sprites/weapon:rotation_degrees")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 9), Vector2(1, 9)]
+"values": [0.0, -100.0, 90.0, 0.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("sprites/body:modulate")
+tracks/4/path = NodePath("sprites/weapon:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.8),
+"times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+"update": 1,
+"values": [true, true]
 }
 tracks/5/type = "method"
 tracks/5/imported = false
@@ -202,7 +161,7 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.4, 0.8),
+"times": PackedFloat32Array(0.3, 0.6),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -215,26 +174,26 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("sprites/weapon:rotation_degrees")
+tracks/6/path = NodePath("sprites/body:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.0, -80.0, 120.0, 100.0, 0.0]
+"values": [Vector2(0, 9), Vector2(0, 9)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("sprites/weapon:visible")
+tracks/7/path = NodePath("sprites/body:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.8),
+"times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, true]
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="31"]
@@ -276,13 +235,25 @@ tracks/2/keys = {
 "update": 1,
 "values": [0]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath(".")
+tracks/3/path = NodePath("sprites/weapon:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0.6),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -290,41 +261,29 @@ tracks/3/keys = {
 "method": &"on_death_end"
 }]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("sprites/body:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("sprites/body:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.3, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 0, 0, 0)]
 }
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("sprites/body:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 9), Vector2(2, 9), Vector2(2, 5), Vector2(1, 2), Vector2(3, -3), Vector2(2, -10)]
-}
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("sprites/weapon:visible")
+tracks/6/path = NodePath("sprites/body:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, false]
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 9), Vector2(0, 9), Vector2(0, 5), Vector2(-1, 2), Vector2(1, -3), Vector2(0, -10)]
 }
 
 [sub_resource type="Animation" id="25"]
@@ -338,10 +297,10 @@ tracks/0/path = NodePath("sprites/body:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1.03), Vector2(1, 0.97), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(1, 1.05), Vector2(1, 0.9), Vector2(1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -367,13 +326,25 @@ tracks/2/keys = {
 "update": 1,
 "values": [0]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath(".")
+tracks/3/path = NodePath("sprites/weapon:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0.6),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -381,132 +352,120 @@ tracks/3/keys = {
 "method": &"on_idle_end"
 }]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("sprites/body:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(2, 9), Vector2(2, 9)]
-}
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("sprites/body:modulate")
+tracks/5/path = NodePath("sprites/body:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+"values": [Vector2(0, 9), Vector2(0, 9)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("sprites/weapon:visible")
+tracks/6/path = NodePath("sprites/body:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0, 0.6),
 "transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, false]
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="26"]
 resource_name = "move"
-length = 0.8
+length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("sprites/body:frame")
+tracks/0/path = NodePath("sprites/body:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 0, 1, 0]
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.05), Vector2(1, 0.9), Vector2(1, 1)]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("sprites/body:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.8),
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -4.0, 4.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("sprites/body:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("sprites/weapon:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.6),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"on_move_end"
 }]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("sprites/body:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.14772, 0.3, 0.4, 0.551537, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(2, 9), Vector2(2, 4), Vector2(2, 9), Vector2(2, 9), Vector2(2, 4), Vector2(2, 9), Vector2(2, 9)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("sprites/body:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("sprites/weapon:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, false]
-}
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("sprites/body:scale")
+tracks/5/path = NodePath("sprites/body:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1, 0.9), Vector2(1, 1), Vector2(1, 1), Vector2(1, 0.9), Vector2(1, 1)]
+"values": [Vector2(0, 9), Vector2(0, 9)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("sprites/body:rotation_degrees")
+tracks/6/path = NodePath("sprites/body:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.0, -4.0, 3.0, 0.0, -4.0, 3.0, 0.0]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="33"]
@@ -584,7 +543,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(2, 9), Vector2(2, 9)]
+"values": [Vector2(0, 9), Vector2(0, 9)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -599,7 +558,7 @@ tracks/6/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_pd8v5"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ja4ap"]
 _data = {
 "attack": SubResource("24"),
 "death": SubResource("31"),
@@ -608,34 +567,31 @@ _data = {
 "stun": SubResource("33")
 }
 
-[sub_resource type="CircleShape2D" id="46"]
-radius = 13.0
+[sub_resource type="CircleShape2D" id="32"]
+radius = 9.0
 
-[sub_resource type="CircleShape2D" id="47"]
-radius = 28.0
+[sub_resource type="CircleShape2D" id="29"]
+radius = 20.0
 
 [sub_resource type="CircleShape2D" id="27"]
-radius = 25.0
+radius = 20.0
 
-[node name="lorne" instance=ExtResource("1")]
+[node name="raja" instance=ExtResource("1")]
 texture_filter = 1
 hp = 400
 regen = 2
-vision = 180
+vision = 160
 type = "leader"
-display_name = "lorne"
-title = "dark knight"
-respawn = 0.8
+display_name = "raja"
+title = "chola warrior"
 selectable = true
 moves = true
-mounted = true
-speed = 35.0
-hunting_speed = 60.0
+speed = 40.0
+hunting_speed = 55.0
 collide = true
 attacks = true
-damage = 70
-attack_speed = 0.8
-defense = 10
+damage = 60
+defense = 5
 projectile_speed = 0.0
 
 [node name="symbol" parent="." index="1"]
@@ -649,47 +605,40 @@ visible = false
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("3")
-offset = Vector2(-5, -6)
+offset = Vector2(-1, -3)
 region_enabled = true
-region_rect = Rect2(159, 9, 26, 22)
+region_rect = Rect2(6, 4, 18, 19)
 
 [node name="icon_red" type="Sprite2D" parent="symbol" index="2"]
 visible = false
 scale = Vector2(0.4, 0.4)
-texture = ExtResource("5")
-offset = Vector2(-5, -6)
+texture = ExtResource("4")
+offset = Vector2(-1, -3)
 region_enabled = true
-region_rect = Rect2(159, 9, 26, 22)
-
-[node name="shadow" parent="sprites" index="0"]
-scale = Vector2(1.4, 1.4)
+region_rect = Rect2(6, 4, 18, 19)
 
 [node name="body" parent="sprites" index="1"]
-position = Vector2(2, 9)
 sprite_frames = SubResource("36")
-offset = Vector2(4, -22)
+offset = Vector2(2, -15)
 
 [node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
 visible = false
-rotation = 0.0
-sprite_frames = SubResource("62")
+sprite_frames = SubResource("43")
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 libraries = {
-"": SubResource("AnimationLibrary_pd8v5")
+"": SubResource("AnimationLibrary_ja4ap")
 }
 
 [node name="block" parent="collisions" index="0"]
-position = Vector2(0, -8)
-shape = SubResource("46")
+shape = SubResource("32")
 
 [node name="select" parent="collisions" index="1"]
-position = Vector2(0, -10)
-shape = SubResource("47")
+shape = SubResource("29")
 
 [node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
 visible = false
-position = Vector2(3, -10)
+position = Vector2(7, 0)
 shape = SubResource("27")
 
 [node name="agent" parent="." index="7"]

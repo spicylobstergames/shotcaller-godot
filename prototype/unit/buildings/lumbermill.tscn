@@ -1,30 +1,31 @@
-[gd_scene load_steps=24 format=3 uid="uid://86yhxqtb5apc"]
+[gd_scene format=3 uid="uid://du75dpb4yg01d"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://b7t1e05au8jtf" path="res://assets/buildings/neutral_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cxt3ym1fu5ncp" path="res://assets/buildings/neutral_red.png" id="4"]
-[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://buildings/decoration/flag.tscn" id="5"]
-[ext_resource type="Texture2D" uid="uid://jsvqumsl1lmk" path="res://assets/buildings/neutral_gray.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://c4gqs4ai3fydh" path="res://assets/buildings/neutral_blue.png" id="3"]
+[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://unit/buildings/decoration/flag.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://b48muhglye3v7" path="res://assets/buildings/neutral_red.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://donxlsx4i210a" path="res://assets/buildings/neutral_gray.png" id="6"]
+
+
+[sub_resource type="AtlasTexture" id="42"]
+atlas = ExtResource("3")
+region = Rect2(299, 20, 64, 68)
+
+[sub_resource type="AtlasTexture" id="43"]
+atlas = ExtResource("6")
+region = Rect2(299, 20, 64, 68)
 
 [sub_resource type="AtlasTexture" id="44"]
-atlas = ExtResource("3")
-region = Rect2(203, 0, 34, 88)
+atlas = ExtResource("5")
+region = Rect2(299, 20, 64, 68)
 
-[sub_resource type="AtlasTexture" id="45"]
-atlas = ExtResource("6")
-region = Rect2(203, 0, 34, 88)
-
-[sub_resource type="AtlasTexture" id="46"]
-atlas = ExtResource("4")
-region = Rect2(203, 0, 34, 88)
-
-[sub_resource type="SpriteFrames" id="47"]
-resource_name = "outpost"
+[sub_resource type="SpriteFrames" id="45"]
+resource_name = "lumbermill"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("44")
+"texture": SubResource("42")
 }],
 "loop": true,
 "name": &"default",
@@ -32,7 +33,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("45")
+"texture": SubResource("43")
 }],
 "loop": true,
 "name": &"neutral",
@@ -40,7 +41,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("46")
+"texture": SubResource("44")
 }],
 "loop": true,
 "name": &"red",
@@ -78,7 +79,7 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("2")
 region = Rect2(128, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id="42"]
+[sub_resource type="SpriteFrames" id="46"]
 resource_name = "bow"
 animations = [{
 "frames": [{
@@ -198,7 +199,7 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_u1qbj"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jdx6s"]
 _data = {
 "attack": SubResource("24"),
 "death": SubResource("31"),
@@ -206,58 +207,53 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="28"]
-radius = 16.0
+radius = 48.0
 
 [sub_resource type="CircleShape2D" id="29"]
-radius = 45.0
+radius = 64.0
 
-[sub_resource type="CircleShape2D" id="43"]
-radius = 180.0
-
-[node name="outpost" instance=ExtResource("1")]
+[node name="lumbermill" instance=ExtResource("1")]
 texture_filter = 1
-hp = 2000
+hp = 1200
 regen = 10
-vision = 280
+vision = 300
 type = "building"
 subtype = "backwood"
-display_name = "outpost"
-title = "outpost tower"
+display_name = "lumbermill"
+title = "saw mill"
+respawn = 0.0
 selectable = true
 collide = true
-ranged = true
-damage = 50
-attack_speed = 1.2
-defense = 15
-projectile_speed = 220.0
+defense = 10
+projectile_speed = 0.0
 
 [node name="state" parent="hud" index="0"]
-offset_top = -100.0
-offset_bottom = -82.0
+offset_top = -77.0
+offset_bottom = -59.0
 
 [node name="selection" parent="hud" index="1"]
-position = Vector2(0, 3)
-scale = Vector2(1.6, 2)
+position = Vector2(0, 5)
+scale = Vector2(2.8, 2)
 
 [node name="hpbar" parent="hud" index="2"]
-position = Vector2(0, -80)
+position = Vector2(0, -57)
 
 [node name="shadow" parent="sprites" index="0"]
 visible = false
 
 [node name="body" parent="sprites" index="1"]
 use_parent_material = false
-position = Vector2(0, 11)
-sprite_frames = SubResource("47")
-offset = Vector2(0, -44)
+sprite_frames = SubResource("45")
+offset = Vector2(0, -30)
 
 [node name="flags" type="Node2D" parent="sprites" index="2"]
+visible = false
 
-[node name="flag" parent="sprites/flags" index="0" instance=ExtResource("5")]
-position = Vector2(1, -71)
+[node name="flag" parent="sprites/flags" index="0" instance=ExtResource("4")]
+position = Vector2(1, -80)
 
 [node name="weapon" type="Node2D" parent="sprites" index="3"]
-position = Vector2(0, -34)
+position = Vector2(0, -43)
 scale = Vector2(1.0686, 1)
 
 [node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
@@ -271,27 +267,23 @@ offset = Vector2(-11, 0)
 
 [node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1"]
 visible = false
-position = Vector2(-1.19209e-07, 1)
-rotation = 0.141846
-scale = Vector2(0.85, 1.00033)
-sprite_frames = SubResource("42")
+position = Vector2(-1.11556e-07, 44)
+rotation = 0.151433
+scale = Vector2(0.79656, 0.998757)
+sprite_frames = SubResource("46")
 offset = Vector2(10, 0)
 
 [node name="animations" type="AnimationPlayer" parent="." index="3"]
 libraries = {
-"": SubResource("AnimationLibrary_u1qbj")
+"": SubResource("AnimationLibrary_jdx6s")
 }
 
 [node name="block" parent="collisions" index="0"]
-position = Vector2(0, -6)
+position = Vector2(0, -20)
 shape = SubResource("28")
 
 [node name="select" parent="collisions" index="1"]
 position = Vector2(0, -20)
 shape = SubResource("29")
-
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
-position = Vector2(0, -20)
-shape = SubResource("43")
 
 [editable path="hud"]

@@ -232,4 +232,3 @@ func move_symbols():
 		for i in range(symbols.size()):
 			var symbol = symbols[i]
 			symbol.position = offset + Vector2(minimap_border,minimap_border) + map_symbols_map[i].global_position / max(WorldState.get_state("map").size.x, WorldState.get_state("map").size.y) * minimap_size
-

@@ -1,11 +1,12 @@
-[gd_scene load_steps=24 format=3 uid="uid://bo260d1c1wxwa"]
+[gd_scene format=3 uid="uid://bo260d1c1wxwa"]
 
 [ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://buildings/decoration/flag.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://b0ewq88pv0taf" path="res://assets/buildings/buildings_red.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://4sopj8ofbtcp" path="res://assets/buildings/buildings_blue.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://dptfdx7q55b8p" path="res://assets/buildings/buildings_gray.png" id="6"]
+[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://unit/buildings/decoration/flag.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bd3knqfnkfqsi" path="res://assets/buildings/buildings_red.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://0te8lf0bpsce" path="res://assets/buildings/buildings_blue.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://f3410v63o4pc" path="res://assets/buildings/buildings_gray.png" id="6"]
+
 
 [sub_resource type="AtlasTexture" id="43"]
 atlas = ExtResource("5")
