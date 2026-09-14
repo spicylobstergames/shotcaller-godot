@@ -74,6 +74,33 @@ func add_item(item):
 	new_item_button.setup(item)
 
 
+func purchase_item(item_button) -> bool:
+	var leader = WorldState.get_state("selected_leader")
+	if leader == null or item_button == null or item_button.item == null:
+		return false
+	if not visible or game.ui.inventories.is_delivering(leader):
+		return false
+	if item_button.item.type == "equip" and not close_to_blacksmith(leader):
+		return false
+	if not _has_item_slot(leader, item_button.item.type):
+		return false
+
+	var price = int(item_button.price_after_discount)
+	if leader.gold < price:
+		return false
+
+	leader.gold -= price
+	game.ui.inventories.add_delivery(leader, item_button.item.duplicate(true))
+	update_buttons()
+	return true
+
+
+func _has_item_slot(leader, item_type: String) -> bool:
+	if item_type == "equip":
+		return game.ui.inventories.equip_items_has_slots(leader)
+	return game.ui.inventories.consumable_items_has_slots(leader)
+
+
 func disable_all():
 	for item_button in equip_items.get_children() + consumable_items.get_children() + throwable_items.get_children():
 		item_button.disabled = true
@@ -122,11 +149,11 @@ func update_buttons():
 		if not close_to_blacksmith(leader):
 			disable_equip()
 
-		# enable/disable buttons on which leader don't have enough gold
+		# Enable/disable buttons based on the current discounted price.
 		var inventory = game.ui.inventories.get_leader_inventory(leader)
 		if leader and inventory:
 			for item_button in equip_items.get_children() + consumable_items.get_children() + throwable_items.get_children():
-				var item_price = item_button.item.price
+				var item_price = item_button.price_after_discount
 				item_button.disabled = (leader.gold < item_price)
 
 		# disable buttons if leader don't have empty slots for item

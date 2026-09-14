@@ -51,7 +51,7 @@ window/vsync/vsync_mode=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gui/plugin.cfg", "res://addons/items/plugin.cfg")
+enabled=PackedStringArray("res://addons/gui/plugin.cfg")
 
 [filesystem]
 

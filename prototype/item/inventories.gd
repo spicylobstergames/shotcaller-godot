@@ -271,9 +271,13 @@ func give_item(delivery):
 
 func remove_item(leader, index):
 	var inventory = get_leader_inventory(leader)
+	if inventory == null or index < 0 or index >= equip_items_max + consumable_items_max:
+		return null
 
 	var leader_items = inventory.equip_items + inventory.consumable_items
 	var item = leader_items[index]
+	if item == null:
+		return null
 
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
@@ -291,6 +295,19 @@ func remove_item(leader, index):
 	leader.hud.update_hpbar()
 
 	return item
+
+
+func sell_item(leader, index) -> bool:
+	if leader == null or not game.ui.shop.close_to_blacksmith(leader):
+		return false
+
+	var sold_item = remove_item(leader, index)
+	if sold_item == null:
+		return false
+
+	leader.gold += sold_item.sell_price
+	update_buttons()
+	return true
 
 
 
