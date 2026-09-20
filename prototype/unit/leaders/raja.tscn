@@ -641,7 +641,7 @@ visible = false
 position = Vector2(7, 0)
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
 
 [editable path="hud"]

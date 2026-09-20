@@ -188,7 +188,7 @@ texture = ExtResource("16")
 
 [node name="item_passives" type="Node" parent="behavior"]
 
-[node name="agent" type="Node" parent="."]
+[node name="goap_agent" type="Node" parent="."]
 script = ExtResource("4")
 
 [editable path="hud"]

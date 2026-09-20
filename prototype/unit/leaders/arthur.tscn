@@ -698,7 +698,7 @@ status_effect_icon = ExtResource("6")
 
 [node name="guard_break" parent="behavior/abilities" index="1" instance=ExtResource("9_mvi1j")]
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
 
 [editable path="hud"]
