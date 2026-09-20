@@ -79,6 +79,9 @@ func _cell_key(layer: int, coords: Vector2i) -> String:
 
 func _get_mirrored_coords(coords: Vector2i) -> Vector2i:
 	var cell_pos = map_to_local(coords)
+	if tile_set == null:
+		return coords
+	var tile_size = Vector2(tile_set.tile_size)
 	var mirror_size = map_size
 	if mirror_size == Vector2.ZERO:
 		var map = get_parent().get_parent()
@@ -86,8 +89,8 @@ func _get_mirrored_coords(coords: Vector2i) -> Vector2i:
 		if configured_size is Vector2:
 			mirror_size = configured_size
 	return local_to_map(Vector2(
-		(mirror_size.x - cell_pos.x) - cell_size.x,
-		(mirror_size.y - cell_pos.y) - cell_size.y
+		(mirror_size.x - cell_pos.x) - tile_size.x,
+		(mirror_size.y - cell_pos.y) - tile_size.y
 	))
 
 
