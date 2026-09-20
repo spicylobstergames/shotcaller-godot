@@ -489,4 +489,3 @@ func on_death_end():  # death animation end
 			
 	
 	emit_signal("unit_died")
-
