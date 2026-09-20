@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dep3q4yi1ywcn"]
 
 [ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_hbud3"]
-[ext_resource type="Texture2D" uid="uid://b3bjc227x04bf" path="res://assets/ui/portraits.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/portraits.png" id="2"]
 [ext_resource type="Script" path="res://ui/panels/dialog_panel.gd" id="3"]
 
 [node name="dialog_panel" type="Panel"]

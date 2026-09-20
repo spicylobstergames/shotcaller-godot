@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Texture2D" uid="uid://b7k3bi7bsb7j5" path="res://assets/ui/question_mark.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://c32mdus3cj8eq" path="res://assets/ui/ui_icons.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/ui/question_mark.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_icons.png" id="3"]
 [ext_resource type="Script" path="res://ui/scoreboard/scoreboard_entry.gd" id="4"]
 [ext_resource type="Script" path="res://ui/scoreboard/leader_portrait.gd" id="5"]
 

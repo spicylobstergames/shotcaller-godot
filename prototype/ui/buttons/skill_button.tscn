@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bo63dr5ay7r3l"]
 
 [ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_8vksr"]
-[ext_resource type="Texture2D" uid="uid://ptu72k6uhxog" path="res://assets/items/items.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/items/items.png" id="2"]
 [ext_resource type="Script" path="res://ui/buttons/skill_button.gd" id="4"]
 
 [sub_resource type="AtlasTexture" id="14"]

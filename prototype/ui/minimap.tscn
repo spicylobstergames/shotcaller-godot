@@ -2,8 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_dadjh"]
 [ext_resource type="Script" path="res://ui/minimap.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://defd23p55hffp" path="res://assets/map/light.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://c1t1in76sp63i" path="res://assets/ui/minimap.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/map/light.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/ui/minimap.png" id="4"]
 
 [node name="minimap" type="Panel"]
 custom_minimum_size = Vector2(150, 150)

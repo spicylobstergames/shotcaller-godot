@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://4v4c3jqp1iln"]
 
-[ext_resource type="Texture2D" uid="uid://dco3u1ib8supg" path="res://assets/ui/abilities/aura_of_courage_small.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="1"]
 [ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_wr6fd"]
 [ext_resource type="Script" path="res://ui/menus/leader_preview/ability_preview.gd" id="2"]
 
