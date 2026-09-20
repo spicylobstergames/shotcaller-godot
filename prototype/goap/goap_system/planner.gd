@@ -43,7 +43,7 @@ func _find_best_plan(goal, desired_state: Dictionary, agent):
 
 # Compares plan cost and returns the actions included in the cheapest one.
 func _get_cheapest_plan(plans):
-	var best_plan
+	var best_plan = null
 	for plan in plans:
 		if best_plan == null or plan.cost < best_plan.cost:
 			best_plan = plan

@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8uav15456lm2"]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://item/shop.gd" id="1"]
-[ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_x4v7h"]
-[ext_resource type="PackedScene" uid="uid://cjpaafpbxs87e" path="res://ui/buttons/item_button.tscn" id="2"]
+[ext_resource type="Theme" path="res://assets/ui/theme/menu_theme.tres" id="1_x4v7h"]
+[ext_resource type="PackedScene" path="res://ui/buttons/item_button.tscn" id="2"]
 
 [node name="shop" type="Panel"]
 texture_filter = 1

@@ -1,10 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://wk2cqft3xt70"]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://ui/buttons/leader_button.gd" id="1"]
-[ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_3w2ig"]
+[ext_resource type="Theme" path="res://assets/ui/theme/button_theme.tres" id="1_3w2ig"]
 [ext_resource type="Texture2D" path="res://assets/ui/leaders_icons.png" id="3"]
-[ext_resource type="PackedScene" uid="uid://hvm2silwdgk4" path="res://hud/hpbar.tscn" id="4"]
-[ext_resource type="Shader" uid="uid://2uawyneis3su" path="res://map/tool/color_replace.tres" id="5"]
+[ext_resource type="PackedScene" path="res://hud/hpbar.tscn" id="4"]
+[ext_resource type="Shader" path="res://map/tool/color_replace.tres" id="5"]
 
 [sub_resource type="Gradient" id="59"]
 offsets = PackedFloat32Array(0, 0.25, 0.5, 0.75)

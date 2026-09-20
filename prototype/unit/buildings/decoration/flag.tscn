@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cnt4wlhi1qlu5"]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/buildings/buildings_blue.png" id="1"]
 [ext_resource type="Texture2D" path="res://assets/buildings/buildings_red.png" id="2"]

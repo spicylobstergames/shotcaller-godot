@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbxqqihthhfid"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_dadjh"]
+[ext_resource type="Theme" path="res://assets/ui/theme/panel_theme.tres" id="1_dadjh"]
 [ext_resource type="Script" path="res://ui/minimap.gd" id="2"]
 [ext_resource type="Texture2D" path="res://assets/map/light.png" id="3"]
 [ext_resource type="Texture2D" path="res://assets/ui/minimap.png" id="4"]

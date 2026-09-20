@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://dqm2hh4riquay"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://dmoqfwxe8nfta" path="res://item/weapons/poleaxe.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bdwy1m3xyx3jv" path="res://assets/leaders/lorne_blue.png" id="5_0ch74"]
-[ext_resource type="Texture2D" uid="uid://cxjd52objqbbm" path="res://assets/leaders/lorne_red.png" id="6_qtqu6"]
-[ext_resource type="Texture2D" uid="uid://bui0cyrrx62gf" path="res://assets/leaders/joan_red.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://cg5geolwfpu0i" path="res://assets/leaders/joan_blue.png" id="8"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/poleaxe.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/lorne_blue.png" id="5_0ch74"]
+[ext_resource type="Texture2D" path="res://assets/leaders/lorne_red.png" id="6_qtqu6"]
+[ext_resource type="Texture2D" path="res://assets/leaders/joan_red.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/leaders/joan_blue.png" id="8"]
 
 
 [sub_resource type="AtlasTexture" id="65"]

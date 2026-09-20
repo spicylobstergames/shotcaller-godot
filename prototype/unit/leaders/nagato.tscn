@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://bo6r1l1t6ii4"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://dovbf0dk542xf" path="res://item/weapons/shuriken.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://c81xtos5i5uyu" path="res://assets/leaders/nagato_blue.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://fgwvxijkae5n" path="res://assets/leaders/nagato_red.png" id="5"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/shuriken.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/nagato_blue.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/leaders/nagato_red.png" id="5"]
 
 
 [sub_resource type="AtlasTexture" id="42"]

@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://cuji0n6btvl0p"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://diee03xgfkdfb" path="res://item/weapons/sword.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bacygsp52ihcq" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
-[ext_resource type="Texture2D" uid="uid://jxsabt6xt203" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]
-[ext_resource type="Texture2D" uid="uid://0lffhuyuh2wi" path="res://assets/pawns/infantry_red.png" id="5_lxg3d"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/sword.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
+[ext_resource type="Texture2D" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]
+[ext_resource type="Texture2D" path="res://assets/pawns/infantry_red.png" id="5_lxg3d"]
 
 
 [sub_resource type="AtlasTexture" id="34"]

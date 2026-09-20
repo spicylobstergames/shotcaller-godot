@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cjpaafpbxs87e"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Theme" uid="uid://b5cac4xnqfgf3" path="res://assets/ui/theme/button_theme.tres" id="1_cpals"]
+[ext_resource type="Theme" path="res://assets/ui/theme/button_theme.tres" id="1_cpals"]
 [ext_resource type="Texture2D" path="res://assets/items/items.png" id="2"]
 [ext_resource type="Script" path="res://ui/buttons/item_button.gd" id="3"]
-[ext_resource type="Theme" uid="uid://d2qm6hv4jxkev" path="res://assets/ui/theme/sell_button_theme.tres" id="4_byu65"]
+[ext_resource type="Theme" path="res://assets/ui/theme/sell_button_theme.tres" id="4_byu65"]
 
 [sub_resource type="AtlasTexture" id="14"]
 atlas = ExtResource("2")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://dcw6go4s523w4"]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://controls/Crafty_camera.gd" id="1"]
 

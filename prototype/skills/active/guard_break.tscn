@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://bc6xt7u2t62s3"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://dxxftltqhc6qp" path="res://skills/active/guard_break.gd" id="1_t45dd"]
-[ext_resource type="Texture2D" uid="uid://bveairjy4wmmx" path="res://assets/ui/abilities/aura_of_courage.png" id="2_xf3tf"]
+[ext_resource type="Script" path="res://skills/active/guard_break.gd" id="1_t45dd"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage.png" id="2_xf3tf"]
 
 
 [node name="guard_break" type="Node"]

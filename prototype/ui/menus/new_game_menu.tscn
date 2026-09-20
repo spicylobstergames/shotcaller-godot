@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://u1q0st63a0fu"]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://ui/menus/new_game_menu.gd" id="1"]
-[ext_resource type="Theme" uid="uid://bm7vsmu8jxmrw" path="res://assets/ui/theme/menu_theme.tres" id="1_t6mua"]
-[ext_resource type="PackedScene" uid="uid://cvmtml6sny3qf" path="res://ui/menus/leader_selection/leader_select_item.tscn" id="2"]
+[ext_resource type="Theme" path="res://assets/ui/theme/menu_theme.tres" id="1_t6mua"]
+[ext_resource type="PackedScene" path="res://ui/menus/leader_selection/leader_select_item.tscn" id="2"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_h0a0m"]
 resource_name = "map"

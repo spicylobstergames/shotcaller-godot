@@ -107,7 +107,7 @@ var channeling_timer:Timer
 var hud:Node
 var sprites:Node
 var body:Node
-@onready var agent: Node = $goap_agent
+@onready var agent: Node = get_node_or_null("goap_agent")
 
 # Experience
 var experience_timer : Timer = Timer.new()

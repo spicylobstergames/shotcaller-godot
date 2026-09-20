@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://b0264hppvh7ir"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://880p2lh7lks0" path="res://skills/passive/aura_of_courage.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+[ext_resource type="Script" path="res://skills/passive/aura_of_courage.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
 
 
 [node name="aura_of_courage" type="Node"]

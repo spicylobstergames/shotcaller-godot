@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://2ih4uuipywck"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Texture2D" uid="uid://bi0tpr0sfqcwj" path="res://assets/leaders/bokuden_blue.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://b26t2wu4014ef" path="res://assets/leaders/bokuden_red.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/bokuden_blue.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/leaders/bokuden_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="48"]
 atlas = ExtResource("1")

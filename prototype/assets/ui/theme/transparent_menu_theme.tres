@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://cn18lpnkwwgu1"]
+[gd_resource type="Theme" load_steps=6 format=3]
 
 [ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.tres" id="1_yqwsw"]
 [ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.ttf" id="2_jyi6g"]

@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://bls7fahoo2cgo"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://xumad0foiv0p" path="res://skills/passive/trader.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bdjcugmr1d208" path="res://assets/leaders/osman_red.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://chf6xr2vi0fvn" path="res://assets/leaders/osman_blue.png" id="4"]
-[ext_resource type="PackedScene" uid="uid://dyk8ccwsuyvup" path="res://item/weapons/scimitar.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://skills/passive/trader.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/osman_red.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/leaders/osman_blue.png" id="4"]
+[ext_resource type="PackedScene" path="res://item/weapons/scimitar.tscn" id="5"]
 
 
 [sub_resource type="AtlasTexture" id="37"]

@@ -1,7 +1,7 @@
-[gd_scene format=4 uid="uid://b8nba3c4x767m"]
+[gd_scene format=4]
 
-[ext_resource type="Script" uid="uid://cml8p4t2r0xb3" path="res://ui/waterfall/grasslayers.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://dp5fy8ei22qr4" path="res://assets/waterfall/grass-silouet.png" id="2"]
+[ext_resource type="Script" path="res://ui/waterfall/grasslayers.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/grass-silouet.png" id="2"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2ilmx"]
 _surfaces = [{
