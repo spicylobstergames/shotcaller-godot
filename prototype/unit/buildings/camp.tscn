@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://dnjlmnoeq6ya1"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://c4gqs4ai3fydh" path="res://assets/buildings/neutral_blue.png" id="3"]
-[ext_resource type="PackedScene" uid="uid://cnt4wlhi1qlu5" path="res://unit/buildings/decoration/flag.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://b48muhglye3v7" path="res://assets/buildings/neutral_red.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://donxlsx4i210a" path="res://assets/buildings/neutral_gray.png" id="6"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="Texture2D" path="res://assets/pawns/archer_blue.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/buildings/neutral_blue.png" id="3"]
+[ext_resource type="PackedScene" path="res://unit/buildings/decoration/flag.tscn" id="4"]
+[ext_resource type="Texture2D" path="res://assets/buildings/neutral_red.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/buildings/neutral_gray.png" id="6"]
 
 
 [sub_resource type="AtlasTexture" id="43"]

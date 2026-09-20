@@ -1,18 +1,18 @@
-[gd_scene load_steps=35 format=3 uid="uid://cy617y6pg38gd"]
+[gd_scene format=4]
 
 [ext_resource type="Script" path="res://ui/waterfall/waterfall_background.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bnc5hp8kmej1e" path="res://assets/waterfall/circle.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://dlsxkgf0mreol" path="res://assets/waterfall/rock.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://dsqas4bri74y0" path="res://assets/waterfall/waterfall.png" id="3_f6lm7"]
-[ext_resource type="Texture2D" uid="uid://ubgemjuw14g3" path="res://assets/waterfall/background.png" id="4"]
-[ext_resource type="Texture2D" uid="uid://dt3vx4ha5yer7" path="res://assets/waterfall/stuck_sword.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://c7v56qeh4q8xj" path="res://assets/waterfall/forefall.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://bv2ppw2r4c4v8" path="res://assets/leaders/hongi_red.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://dm1mlq6suh7fn" path="res://assets/waterfall/small_particle.png" id="8"]
-[ext_resource type="Texture2D" uid="uid://d0ex5iubcm1k8" path="res://assets/waterfall/stuck_sword_mask.png" id="9"]
-[ext_resource type="Texture2D" uid="uid://cqbw3sm5bncyy" path="res://assets/pawns/archer_blue.png" id="10"]
-[ext_resource type="Texture2D" uid="uid://cddup8sefqoxs" path="res://assets/waterfall/foreground.png" id="11"]
-[ext_resource type="PackedScene" uid="uid://b8nba3c4x767m" path="res://ui/waterfall/grasslayers.tscn" id="12"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/circle.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/rock.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/waterfall.png" id="3_f6lm7"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/background.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/stuck_sword.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/forefall.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/leaders/hongi_red.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/small_particle.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/stuck_sword_mask.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/pawns/archer_blue.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/waterfall/foreground.png" id="11"]
+[ext_resource type="PackedScene" path="res://ui/waterfall/grasslayers.tscn" id="12"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -131,37 +131,38 @@ emission_shape = 3
 emission_box_extents = Vector3(100, 1, 1)
 direction = Vector3(0, -10, 0)
 spread = 120.0
-gravity = Vector3(0, 98, 0)
 initial_velocity_min = 70.0
 initial_velocity_max = 100.0
+gravity = Vector3(0, 98, 0)
 damping_min = 20.0
 damping_max = 60.0
+attractor_interaction_enabled = false
 scale_min = 0.6
 scale_max = 0.8
 scale_curve = SubResource("CurveTexture_221r5")
 color_ramp = SubResource("GradientTexture1D_vbpil")
-attractor_interaction_enabled = false
 
 [sub_resource type="ParticleProcessMaterial" id="28"]
 emission_shape = 3
 emission_box_extents = Vector3(80, 1, 1)
 direction = Vector3(0, -1, 0)
 spread = 60.0
-gravity = Vector3(0, 98, 0)
 initial_velocity_min = 100.0
 initial_velocity_max = 120.0
+gravity = Vector3(0, 98, 0)
 attractor_interaction_enabled = false
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2ilmx"]
 _surfaces = [{
 "aabb": AABB(-28, -13, 0, 56, 26, 0),
-"attribute_data": PackedByteArray(0, 0, 96, 63, 197, 78, 236, 61, 58, 168, 99, 63, 23, 122, 161, 62, 110, 219, 118, 63, 209, 11, 189, 62, 110, 219, 118, 63, 95, 232, 5, 63, 80, 7, 117, 63, 189, 208, 11, 63, 146, 36, 121, 63, 20, 59, 49, 63, 0, 0, 128, 63, 20, 59, 49, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 158, 216, 9, 63, 0, 0, 0, 0, 98, 39, 246, 62, 161, 14, 106, 60, 138, 157, 216, 62, 226, 43, 62, 61, 138, 157, 216, 62, 190, 226, 171, 61, 12, 189, 208, 62, 226, 43, 62, 61, 118, 98, 167, 62, 117, 80, 135, 61, 197, 78, 108, 62, 146, 36, 201, 61, 197, 78, 108, 62, 139, 175, 248, 61, 12, 189, 80, 62, 110, 219, 182, 61, 23, 122, 33, 62, 110, 219, 182, 61, 193, 15, 252, 60, 22, 95, 241, 61, 0, 0, 0, 0, 161, 14, 106, 62, 0, 0, 0, 0, 198, 87, 156, 62, 75, 173, 212, 61, 176, 248, 170, 62, 0, 0, 0, 0, 146, 36, 9, 63, 0, 0, 0, 0, 146, 36, 9, 63, 201, 141, 92, 61, 212, 65, 13, 63, 0, 0, 0, 0, 241, 21, 31, 63, 0, 0, 0, 0, 131, 58, 40, 63, 217, 137, 157, 61, 110, 219, 86, 63, 0, 0, 0, 0, 0, 0, 96, 63, 0, 0, 0, 0),
-"format": 266257,
+"attribute_data": PackedByteArray("AABgP8VO7D06qGM/F3qhPm7bdj/RC70+btt2P1/oBT9QB3U/vdALP5IkeT8UOzE/AACAPxQ7MT8AAIA/AACAPwAAAAAAAIA/AAAAAJ7YCT8AAAAAYif2PqEOajyKndg+4is+PYqd2D6+4qs9DL3QPuIrPj12Yqc+dVCHPcVObD6SJMk9xU5sPouv+D0MvVA+btu2PRd6IT5u27Y9wQ/8PBZf8T0AAAAAoQ5qPgAAAADGV5w+S63UPbD4qj4AAAAAkiQJPwAAAACSJAk/yY1cPdRBDT8AAAAA8RUfPwAAAACDOig/2YmdPW7bVj8AAAAAAABgPwAAAAA="),
+"format": 34360004625,
 "index_count": 87,
-"index_data": PackedByteArray(1, 0, 2, 0, 3, 0, 5, 0, 6, 0, 7, 0, 7, 0, 8, 0, 9, 0, 9, 0, 10, 0, 11, 0, 13, 0, 14, 0, 15, 0, 17, 0, 18, 0, 19, 0, 19, 0, 20, 0, 21, 0, 22, 0, 23, 0, 24, 0, 25, 0, 26, 0, 27, 0, 28, 0, 29, 0, 30, 0, 1, 0, 3, 0, 4, 0, 4, 0, 5, 0, 7, 0, 7, 0, 9, 0, 11, 0, 13, 0, 15, 0, 16, 0, 17, 0, 19, 0, 21, 0, 22, 0, 24, 0, 25, 0, 25, 0, 27, 0, 28, 0, 28, 0, 30, 0, 0, 0, 1, 0, 4, 0, 7, 0, 7, 0, 11, 0, 12, 0, 13, 0, 16, 0, 17, 0, 17, 0, 21, 0, 22, 0, 22, 0, 25, 0, 28, 0, 28, 0, 0, 0, 1, 0, 1, 0, 7, 0, 12, 0, 13, 0, 17, 0, 22, 0, 22, 0, 28, 0, 1, 0, 1, 0, 12, 0, 13, 0, 13, 0, 22, 0, 1, 0),
+"index_data": PackedByteArray("AQACAAMABQAGAAcABwAIAAkACQAKAAsADQAOAA8AEQASABMAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AAQADAAQABAAFAAcABwAJAAsADQAPABAAEQATABUAFgAYABkAGQAbABwAHAAeAAAAAQAEAAcABwALAAwADQAQABEAEQAVABYAFgAZABwAHAAAAAEAAQAHAAwADQARABYAFgAcAAEAAQAMAA0ADQAWAAEA"),
 "primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 31,
-"vertex_data": PackedByteArray(0, 0, 168, 65, 0, 0, 32, 193, 80, 14, 78, 37, 102, 102, 174, 65, 154, 153, 153, 192, 0, 0, 0, 0, 0, 0, 208, 65, 152, 153, 89, 192, 62, 0, 0, 0, 0, 0, 208, 65, 160, 153, 25, 63, 14, 0, 0, 0, 204, 204, 204, 65, 152, 153, 153, 63, 2, 0, 0, 0, 0, 0, 212, 65, 0, 0, 160, 64, 80, 2, 0, 0, 0, 0, 224, 65, 0, 0, 160, 64, 80, 113, 24, 17, 0, 0, 224, 65, 0, 0, 80, 65, 63, 0, 0, 0, 0, 0, 224, 193, 0, 0, 80, 65, 7, 0, 0, 0, 0, 0, 224, 193, 0, 0, 128, 63, 80, 2, 0, 0, 0, 0, 224, 193, 0, 0, 0, 191, 0, 0, 0, 0, 154, 153, 217, 193, 0, 0, 0, 192, 80, 2, 0, 0, 51, 51, 203, 193, 0, 0, 0, 192, 7, 0, 0, 0, 102, 102, 186, 193, 152, 153, 25, 192, 46, 0, 0, 0, 51, 51, 203, 193, 0, 0, 144, 192, 16, 51, 35, 37, 102, 102, 194, 193, 0, 0, 224, 192, 0, 0, 0, 0, 0, 0, 180, 193, 0, 0, 224, 192, 66, 0, 0, 0, 154, 153, 169, 193, 102, 102, 246, 192, 34, 0, 0, 0, 0, 0, 184, 193, 102, 102, 14, 193, 2, 0, 0, 0, 0, 0, 184, 193, 51, 51, 67, 193, 80, 2, 0, 0, 51, 51, 171, 193, 0, 0, 80, 193, 80, 113, 24, 17, 51, 51, 115, 193, 0, 0, 80, 193, 69, 0, 0, 0, 102, 102, 46, 193, 205, 204, 36, 193, 7, 0, 0, 0, 204, 204, 20, 193, 0, 0, 80, 193, 108, 0, 0, 0, 0, 0, 0, 64, 0, 0, 80, 193, 0, 0, 0, 0, 0, 0, 0, 64, 154, 153, 57, 193, 80, 2, 0, 0, 152, 153, 57, 64, 0, 0, 80, 193, 7, 0, 0, 0, 152, 153, 217, 64, 0, 0, 80, 193, 100, 0, 0, 0, 204, 204, 12, 65, 0, 0, 48, 193, 100, 0, 0, 0, 0, 0, 152, 65, 0, 0, 80, 193, 109, 0, 0, 0, 0, 0, 168, 65, 0, 0, 80, 193, 114, 0, 0, 0)
+"vertex_data": PackedByteArray("AACoQQAAIMFQDk4lZmauQZqZmcAAAAAAAADQQZiZWcA+AAAAAADQQaCZGT8OAAAAzMzMQZiZmT8CAAAAAADUQQAAoEBQAgAAAADgQQAAoEBQcRgRAADgQQAAUEE/AAAAAADgwQAAUEEHAAAAAADgwQAAgD9QAgAAAADgwQAAAL8AAAAAmpnZwQAAAMBQAgAAMzPLwQAAAMAHAAAAZma6wZiZGcAuAAAAMzPLwQAAkMAQMyMlZmbCwQAA4MAAAAAAAAC0wQAA4MBCAAAAmpmpwWZm9sAiAAAAAAC4wWZmDsECAAAAAAC4wTMzQ8FQAgAAMzOrwQAAUMFQcRgRMzNzwQAAUMFFAAAAZmYuwc3MJMEHAAAAzMwUwQAAUMFsAAAAAAAAQAAAUMEAAAAAAAAAQJqZOcFQAgAAmJk5QAAAUMEHAAAAmJnZQAAAUMFkAAAAzMwMQQAAMMFkAAAAAACYQQAAUMFtAAAAAACoQQAAUMFyAAAA")
 }]
 
 [sub_resource type="MultiMesh" id="14"]
@@ -248,8 +249,8 @@ shader_parameter/angle = 50.0
 shader_parameter/width = 0.6
 shader_parameter/scale = 6.2
 shader_parameter/speed = 2.0
-shader_parameter/random_seed = 6.0
 shader_parameter/blade = ExtResource("9")
+shader_parameter/random_seed = 6.0
 
 [sub_resource type="Shader" id="17"]
 code = "shader_type canvas_item;
@@ -338,13 +339,13 @@ lifetime_randomness = 0.3
 emission_shape = 3
 emission_box_extents = Vector3(120, 1, 1)
 direction = Vector3(0, -1, 0)
-gravity = Vector3(0, -10, 0)
 initial_velocity_min = 5.0
 initial_velocity_max = 5.0
+gravity = Vector3(0, -10, 0)
+attractor_interaction_enabled = false
 color_ramp = SubResource("21")
 turbulence_enabled = true
 turbulence_noise_speed = Vector3(0.5, 0, 0)
-attractor_interaction_enabled = false
 
 [sub_resource type="MultiMesh" id="13"]
 use_colors = true
@@ -352,18 +353,18 @@ instance_count = 256
 mesh = SubResource("ArrayMesh_2ilmx")
 buffer = PackedFloat32Array(1, 0, 0, 612, 0, 1, 0, -2, 0.117086, 0.480926, 0.352551, 1, 1, 0, 0, 84, 0, 1, 0, -2, 0.168151, 0.750869, 0.446588, 1, 1, 0, 0, 229, 0, 1, 0, -2, 0.648911, 0.864176, 0.415779, 1, 1, 0, 0, 630, 0, 1, 0, -1, 0.119216, 0.489775, 0.35632, 1, 1, 0, 0, 598, 0, 1, 0, -1, 0.123814, 0.508873, 0.364454, 1, 1, 0, 0, 319, 0, 1, 0, -1, 0.119189, 0.72369, 0.446047, 1, 1, 0, 0, 305, 0, 1, 0, -1, 0.193574, 0.757722, 0.444378, 1, 1, 0, 0, 253, 0, 1, 0, -1, 0.553165, 0.854656, 0.413109, 1, 1, 0, 0, 505, 0, 1, 0, 0, 0.135879, 0.576815, 0.392638, 1, 1, 0, 0, 490, 0, 1, 0, 0, 0.137062, 0.566403, 0.388852, 1, 1, 0, 0, 408, 0, 1, 0, 0, 0.132547, 0.606134, 0.4033, 1, 1, 0, 0, 573, 0, 1, 0, 0, 0.136213, 0.560378, 0.386391, 1, 1, 0, 0, 33, 0, 1, 0, 0, 0.125674, 0.666616, 0.425293, 1, 1, 0, 0, 341, 0, 1, 0, 0, 0.122491, 0.694627, 0.435479, 1, 1, 0, 0, 293, 0, 1, 0, 0, 0.28152, 0.78143, 0.43673, 1, 1, 0, 0, 104, 0, 1, 0, 0, 0.231123, 0.767844, 0.441113, 1, 1, 0, 0, 175, 0, 1, 0, 0, 0.634863, 0.86324, 0.415077, 1, 1, 0, 0, 5, 0, 1, 0, 0, 0.129418, 0.63367, 0.413313, 1, 1, 0, 0, 271, 0, 1, 0, 1, 0.419599, 0.818651, 0.424724, 1, 1, 0, 0, 14, 0, 1, 0, 1, 0.127442, 0.651056, 0.419635, 1, 1, 0, 0, 53, 0, 1, 0, 1, 0.122606, 0.69362, 0.435113, 1, 1, 0, 0, 219, 0, 1, 0, 1, 0.626858, 0.862706, 0.414676, 1, 1, 0, 0, 160, 0, 1, 0, 1, 0.585295, 0.859935, 0.412598, 1, 1, 0, 0, 518, 0, 1, 0, 1, 0.136528, 0.571104, 0.390562, 1, 1, 0, 0, 127, 0, 1, 0, 2, 0.410918, 0.816311, 0.425479, 1, 1, 0, 0, 381, 0, 1, 0, 2, 0.12559, 0.667356, 0.425562, 1, 1, 0, 0, 193, 0, 1, 0, 2, 0.625916, 0.862643, 0.414629, 1, 1, 0, 0, 455, 0, 1, 0, 2, 0.132458, 0.606918, 0.403585, 1, 1, 0, 0, 472, 0, 1, 0, 2, 0.13363, 0.596605, 0.399835, 1, 1, 0, 0, 534, 0, 1, 0, 3, 0.1335, 0.597746, 0.40025, 1, 1, 0, 0, 400, 0, 1, 0, 3, 0.128006, 0.646093, 0.41783, 1, 1, 0, 0, 66, 0, 1, 0, 3, 0.119298, 0.722727, 0.445697, 1, 1, 0, 0, 555, 0, 1, 0, 4, 0.135079, 0.58385, 0.395197, 1, 1, 0, 0, 147, 0, 1, 0, 4, 0.456436, 0.828581, 0.421521, 1, 1, 0, 0, 354, 0, 1, 0, 5, 0.123209, 0.68831, 0.433182, 1, 1, 0, 0, 433, 0, 1, 0, 6, 0.125839, 0.665169, 0.424767, 1, 1, 0, 0, 609, 0, 1, 0, 9, 0.116918, 0.48023, 0.352255, 1, 1, 0, 0, 95, 0, 1, 0, 9, 0.121784, 0.700847, 0.437741, 1, 1, 0, 0, 231, 0, 1, 0, 9, 0.320596, 0.791963, 0.433333, 1, 1, 0, 0, 631, 0, 1, 0, 10, 0.136736, 0.569273, 0.389896, 1, 1, 0, 0, 593, 0, 1, 0, 10, 0.119941, 0.492784, 0.357602, 1, 1, 0, 0, 319, 0, 1, 0, 10, 0.12564, 0.666913, 0.425401, 1, 1, 0, 0, 300, 0, 1, 0, 10, 0.121429, 0.703975, 0.438878, 1, 1, 0, 0, 246, 0, 1, 0, 10, 0.241298, 0.770587, 0.440228, 1, 1, 0, 0, 482, 0, 1, 0, 11, 0.134198, 0.552009, 0.382827, 1, 1, 0, 0, 411, 0, 1, 0, 11, 0.130137, 0.627344, 0.411012, 1, 1, 0, 0, 338, 0, 1, 0, 11, 0.126628, 0.658219, 0.42224, 1, 1, 0, 0, 502, 0, 1, 0, 12, 0.133214, 0.54792, 0.381086, 1, 1, 0, 0, 578, 0, 1, 0, 12, 0.129248, 0.531447, 0.374069, 1, 1, 0, 0, 34, 0, 1, 0, 12, 0.12964, 0.631721, 0.412604, 1, 1, 0, 0, 291, 0, 1, 0, 12, 0.119452, 0.721368, 0.445203, 1, 1, 0, 0, 106, 0, 1, 0, 12, 0.12165, 0.702026, 0.438169, 1, 1, 0, 0, 177, 0, 1, 0, 12, 0.330658, 0.794676, 0.432458, 1, 1, 0, 0, -2, 0, 1, 0, 12, 0.135108, 0.555788, 0.384437, 1, 1, 0, 0, 273, 0, 1, 0, 13, 0.133793, 0.741607, 0.449576, 1, 1, 0, 0, 17, 0, 1, 0, 13, 0.132724, 0.604577, 0.402734, 1, 1, 0, 0, 55, 0, 1, 0, 13, 0.12689, 0.655915, 0.421402, 1, 1, 0, 0, 211, 0, 1, 0, 13, 0.256917, 0.774797, 0.43887, 1, 1, 0, 0, 157, 0, 1, 0, 13, 0.242586, 0.770934, 0.440116, 1, 1, 0, 0, 525, 0, 1, 0, 13, 0.130884, 0.538241, 0.376963, 1, 1, 0, 0, 130, 0, 1, 0, 14, 0.19848, 0.759045, 0.443951, 1, 1, 0, 0, 381, 0, 1, 0, 14, 0.130926, 0.6204, 0.408487, 1, 1, 0, 0, 198, 0, 1, 0, 14, 0.2641, 0.776734, 0.438245, 1, 1, 0, 0, 450, 0, 1, 0, 14, 0.130093, 0.627734, 0.411154, 1, 1, 0, 0, 464, 0, 1, 0, 14, 0.132434, 0.607133, 0.403663, 1, 1, 0, 0, 537, 0, 1, 0, 15, 0.136824, 0.5685, 0.389615, 1, 1, 0, 0, 391, 0, 1, 0, 15, 0.128516, 0.641604, 0.416198, 1, 1, 0, 0, 68, 0, 1, 0, 15, 0.126088, 0.662974, 0.423969, 1, 1, 0, 0, 559, 0, 1, 0, 16, 0.132099, 0.54329, 0.379113, 1, 1, 0, 0, 145, 0, 1, 0, 16, 0.13813, 0.742777, 0.449199, 1, 1, 0, 0, 362, 0, 1, 0, 17, 0.131718, 0.613433, 0.405954, 1, 1, 0, 0, 435, 0, 1, 0, 18, 0.129867, 0.629719, 0.411876, 1, 1, 0, 0, 616, 0, 1, 0, 21, 0.126204, 0.518801, 0.368683, 1, 1, 0, 0, 92, 0, 1, 0, 21, 0.128677, 0.64019, 0.415684, 1, 1, 0, 0, 230, 0, 1, 0, 21, 0.125723, 0.666187, 0.425137, 1, 1, 0, 0, 629, 0, 1, 0, 22, 0.136527, 0.571112, 0.390564, 1, 1, 0, 0, 595, 0, 1, 0, 22, 0.122549, 0.503619, 0.362216, 1, 1, 0, 0, 327, 0, 1, 0, 22, 0.131761, 0.613052, 0.405815, 1, 1, 0, 0, 307, 0, 1, 0, 22, 0.13268, 0.60497, 0.402876, 1, 1, 0, 0, 254, 0, 1, 0, 22, 0.125564, 0.667589, 0.425647, 1, 1, 0, 0, 490, 0, 1, 0, 23, 0.121462, 0.499105, 0.360294, 1, 1, 0, 0, 413, 0, 1, 0, 23, 0.135134, 0.583368, 0.395021, 1, 1, 0, 0, 336, 0, 1, 0, 23, 0.133953, 0.593768, 0.398803, 1, 1, 0, 0, 500, 0, 1, 0, 24, 0.127839, 0.525593, 0.371576, 1, 1, 0, 0, 571, 0, 1, 0, 24, 0.136304, 0.573073, 0.391277, 1, 1, 0, 0, 39, 0, 1, 0, 24, 0.133271, 0.599768, 0.400985, 1, 1, 0, 0, 289, 0, 1, 0, 24, 0.127719, 0.648619, 0.418749, 1, 1, 0, 0, 111, 0, 1, 0, 24, 0.127991, 0.646227, 0.417879, 1, 1, 0, 0, 174, 0, 1, 0, 24, 0.121958, 0.699317, 0.437184, 1, 1, 0, 0, -4, 0, 1, 0, 24, 0.136672, 0.562285, 0.387204, 1, 1, 0, 0, 273, 0, 1, 0, 25, 0.12484, 0.673956, 0.427962, 1, 1, 0, 0, 13, 0, 1, 0, 25, 0.126458, 0.519855, 0.369132, 1, 1, 0, 0, 51, 0, 1, 0, 25, 0.132684, 0.604933, 0.402863, 1, 1, 0, 0, 216, 0, 1, 0, 25, 0.126115, 0.662735, 0.423882, 1, 1, 0, 0, 158, 0, 1, 0, 25, 0.121697, 0.701619, 0.438021, 1, 1, 0, 0, 526, 0, 1, 0, 25, 0.127048, 0.522309, 0.370177, 1, 1, 0, 0, 121, 0, 1, 0, 26, 0.126178, 0.662183, 0.423681, 1, 1, 0, 0, 379, 0, 1, 0, 26, 0.133472, 0.548993, 0.381542, 1, 1, 0, 0, 202, 0, 1, 0, 26, 0.123766, 0.683406, 0.431399, 1, 1, 0, 0, 449, 0, 1, 0, 26, 0.132637, 0.605347, 0.403014, 1, 1, 0, 0, 470, 0, 1, 0, 26, 0.126372, 0.519497, 0.36898, 1, 1, 0, 0, 534, 0, 1, 0, 27, 0.125858, 0.517363, 0.368071, 1, 1, 0, 0, 391, 0, 1, 0, 27, 0.135417, 0.580879, 0.394116, 1, 1, 0, 0, 66, 0, 1, 0, 27, 0.13059, 0.623358, 0.409563, 1, 1, 0, 0, 556, 0, 1, 0, 28, 0.126452, 0.519832, 0.369122, 1, 1, 0, 0, 141, 0, 1, 0, 28, 0.125309, 0.669833, 0.426463, 1, 1, 0, 0, 365, 0, 1, 0, 29, 0.128819, 0.529663, 0.373309, 1, 1, 0, 0, 426, 0, 1, 0, 30, 0.130434, 0.536371, 0.376167, 1, 1, 0, 0, 614, 0, 1, 0, 33, 0.133163, 0.54771, 0.380996, 1, 1, 0, 0, 88, 0, 1, 0, 33, 0.130323, 0.625708, 0.410418, 1, 1, 0, 0, 239, 0, 1, 0, 33, 0.133099, 0.601282, 0.401535, 1, 1, 0, 0, 627, 0, 1, 0, 34, 0.134277, 0.590914, 0.397765, 1, 1, 0, 0, 589, 0, 1, 0, 34, 0.128531, 0.528468, 0.3728, 1, 1, 0, 0, 322, 0, 1, 0, 34, 0.132856, 0.546435, 0.380453, 1, 1, 0, 0, 303, 0, 1, 0, 34, 0.137189, 0.565288, 0.388447, 1, 1, 0, 0, 250, 0, 1, 0, 34, 0.132919, 0.602867, 0.402112, 1, 1, 0, 0, 480, 0, 1, 0, 35, 0.124368, 0.511173, 0.365434, 1, 1, 0, 0, 419, 0, 1, 0, 35, 0.124597, 0.512126, 0.36584, 1, 1, 0, 0, 346, 0, 1, 0, 35, 0.133373, 0.548582, 0.381367, 1, 1, 0, 0, 501, 0, 1, 0, 36, 0.123658, 0.508226, 0.364179, 1, 1, 0, 0, 579, 0, 1, 0, 36, 0.131915, 0.542526, 0.378788, 1, 1, 0, 0, 41, 0, 1, 0, 36, 0.13578, 0.577687, 0.392955, 1, 1, 0, 0, 283, 0, 1, 0, 36, 0.131186, 0.61811, 0.407654, 1, 1, 0, 0, 107, 0, 1, 0, 36, 0.136257, 0.573486, 0.391428, 1, 1, 0, 0, 181, 0, 1, 0, 36, 0.13101, 0.619663, 0.408219, 1, 1, 0, 0, 3, 0, 1, 0, 36, 0.133929, 0.550889, 0.38235, 1, 1, 0, 0, 271, 0, 1, 0, 37, 0.130208, 0.626717, 0.410785, 1, 1, 0, 0, 23, 0, 1, 0, 37, 0.126583, 0.520375, 0.369353, 1, 1, 0, 0, 57, 0, 1, 0, 37, 0.136551, 0.570905, 0.390489, 1, 1, 0, 0, 215, 0, 1, 0, 37, 0.131172, 0.618238, 0.407701, 1, 1, 0, 0, 166, 0, 1, 0, 37, 0.131116, 0.618727, 0.407879, 1, 1, 0, 0, 516, 0, 1, 0, 37, 0.11751, 0.482686, 0.353301, 1, 1, 0, 0, 130, 0, 1, 0, 38, 0.134305, 0.590666, 0.397675, 1, 1, 0, 0, 379, 0, 1, 0, 38, 0.126179, 0.518698, 0.368639, 1, 1, 0, 0, 193, 0, 1, 0, 38, 0.128943, 0.637853, 0.414834, 1, 1, 0, 0, 454, 0, 1, 0, 38, 0.132287, 0.54407, 0.379446, 1, 1, 0, 0, 471, 0, 1, 0, 38, 0.122382, 0.502927, 0.361922, 1, 1, 0, 0, 534, 0, 1, 0, 39, 0.120451, 0.494905, 0.358505, 1, 1, 0, 0, 395, 0, 1, 0, 39, 0.137177, 0.564382, 0.388097, 1, 1, 0, 0, 68, 0, 1, 0, 39, 0.130754, 0.621911, 0.409037, 1, 1, 0, 0, 555, 0, 1, 0, 40, 0.126116, 0.518436, 0.368527, 1, 1, 0, 0, 141, 0, 1, 0, 40, 0.135805, 0.577466, 0.392875, 1, 1, 0, 0, 357, 0, 1, 0, 41, 0.135941, 0.559247, 0.38591, 1, 1, 0, 0, 437, 0, 1, 0, 42, 0.125859, 0.517369, 0.368073, 1, 1, 0, 0, 613, 0, 1, 0, 45, 0.134189, 0.59169, 0.398047, 1, 1, 0, 0, 86, 0, 1, 0, 45, 0.132815, 0.603776, 0.402442, 1, 1, 0, 0, 234, 0, 1, 0, 45, 0.133249, 0.59996, 0.401055, 1, 1, 0, 0, 634, 0, 1, 0, 46, 0.134558, 0.588438, 0.396865, 1, 1, 0, 0, 592, 0, 1, 0, 46, 0.131997, 0.542865, 0.378932, 1, 1, 0, 0, 329, 0, 1, 0, 46, 0.133371, 0.548574, 0.381364, 1, 1, 0, 0, 300, 0, 1, 0, 46, 0.134011, 0.593253, 0.398616, 1, 1, 0, 0, 251, 0, 1, 0, 46, 0.135097, 0.583696, 0.39514, 1, 1, 0, 0, 484, 0, 1, 0, 47, 0.133823, 0.550452, 0.382164, 1, 1, 0, 0, 418, 0, 1, 0, 47, 0.120026, 0.493137, 0.357752, 1, 1, 0, 0, 346, 0, 1, 0, 47, 0.13191, 0.542504, 0.378779, 1, 1, 0, 0, 504, 0, 1, 0, 48, 0.118933, 0.4886, 0.35582, 1, 1, 0, 0, 576, 0, 1, 0, 48, 0.1347, 0.554091, 0.383714, 1, 1, 0, 0, 33, 0, 1, 0, 48, 0.127875, 0.525742, 0.371639, 1, 1, 0, 0, 285, 0, 1, 0, 48, 0.136366, 0.572533, 0.391081, 1, 1, 0, 0, 113, 0, 1, 0, 48, 0.126943, 0.52187, 0.36999, 1, 1, 0, 0, 185, 0, 1, 0, 48, 0.136552, 0.570888, 0.390483, 1, 1, 0, 0, 4, 0, 1, 0, 48, 0.122301, 0.502587, 0.361777, 1, 1, 0, 0, 275, 0, 1, 0, 49, 0.133969, 0.593624, 0.398751, 1, 1, 0, 0, 22, 0, 1, 0, 49, 0.125144, 0.514399, 0.366808, 1, 1, 0, 0, 52, 0, 1, 0, 49, 0.129205, 0.531267, 0.373992, 1, 1, 0, 0, 210, 0, 1, 0, 49, 0.136845, 0.568312, 0.389546, 1, 1, 0, 0, 156, 0, 1, 0, 49, 0.127516, 0.524251, 0.371004, 1, 1, 0, 0, 521, 0, 1, 0, 49, 0.121698, 0.500085, 0.360711, 1, 1, 0, 0, 128, 0, 1, 0, 50, 0.120275, 0.494175, 0.358194, 1, 1, 0, 0, 373, 0, 1, 0, 50, 0.132306, 0.544147, 0.379478, 1, 1, 0, 0, 193, 0, 1, 0, 50, 0.135874, 0.576861, 0.392655, 1, 1, 0, 0, 450, 0, 1, 0, 50, 0.123662, 0.508243, 0.364186, 1, 1, 0, 0, 468, 0, 1, 0, 50, 0.127013, 0.522162, 0.370114, 1, 1, 0, 0, 537, 0, 1, 0, 51, 0.125789, 0.517078, 0.367949, 1, 1, 0, 0, 397, 0, 1, 0, 51, 0.130545, 0.536833, 0.376363, 1, 1, 0, 0, 66, 0, 1, 0, 51, 0.132498, 0.606564, 0.403456, 1, 1, 0, 0, 552, 0, 1, 0, 52, 0.115225, 0.473197, 0.349259, 1, 1, 0, 0, 141, 0, 1, 0, 52, 0.12246, 0.503247, 0.362058, 1, 1, 0, 0, 360, 0, 1, 0, 53, 0.137036, 0.566629, 0.388934, 1, 1, 0, 0, 429, 0, 1, 0, 54, 0.111674, 0.458445, 0.342976, 1, 1, 0, 0, 607, 0, 1, 0, 57, 0.136104, 0.574837, 0.391919, 1, 1, 0, 0, 88, 0, 1, 0, 57, 0.132756, 0.604296, 0.402631, 1, 1, 0, 0, 233, 0, 1, 0, 57, 0.136427, 0.561267, 0.38677, 1, 1, 0, 0, 626, 0, 1, 0, 58, 0.134984, 0.584691, 0.395502, 1, 1, 0, 0, 590, 0, 1, 0, 58, 0.136805, 0.56867, 0.389676, 1, 1, 0, 0, 326, 0, 1, 0, 58, 0.12479, 0.512927, 0.366181, 1, 1, 0, 0, 310, 0, 1, 0, 58, 0.135512, 0.580044, 0.393812, 1, 1, 0, 0, 256, 0, 1, 0, 58, 0.136405, 0.572183, 0.390954, 1, 1, 0, 0, 484, 0, 1, 0, 59, 0.130732, 0.53761, 0.376694, 1, 1, 0, 0, 416, 0, 1, 0, 59, 0.120863, 0.496614, 0.359233, 1, 1, 0, 0, 343, 0, 1, 0, 59, 0.130722, 0.537567, 0.376676, 1, 1, 0, 0, 509, 0, 1, 0, 60, 0.116422, 0.478169, 0.351377, 1, 1, 0, 0, 579, 0, 1, 0, 60, 0.135667, 0.57868, 0.393316, 1, 1, 0, 0, 35, 0, 1, 0, 60, 0.121053, 0.497404, 0.359569, 1, 1, 0, 0, 285, 0, 1, 0, 60, 0.134093, 0.592534, 0.398354, 1, 1, 0, 0, 113, 0, 1, 0, 60, 0.123724, 0.5085, 0.364295, 1, 1, 0, 0, 181, 0, 1, 0, 60, 0.126621, 0.520533, 0.369421, 1, 1, 0, 0, -2, 0, 1, 0, 60, 0.120793, 0.496324, 0.35911, 1, 1, 0, 0, 265, 0, 1, 0, 61, 0.134862, 0.585764, 0.395892, 1, 1, 0, 0, 12, 0, 1, 0, 61, 0.116981, 0.48049, 0.352365, 1, 1, 0, 0, 48, 0, 1, 0, 61, 0.115103, 0.472688, 0.349042, 1, 1, 0, 0, 218, 0, 1, 0, 61, 0.122497, 0.503403, 0.362125, 1, 1, 0, 0, 167, 0, 1, 0, 61, 0.124707, 0.512582, 0.366034, 1, 1, 0, 0, 523, 0, 1, 0, 61, 0.110775, 0.454709, 0.341385, 1, 1, 0, 0, 128, 0, 1, 0, 62, 0.115595, 0.474734, 0.349913, 1, 1, 0, 0, 372, 0, 1, 0, 62, 0.135393, 0.58109, 0.394193, 1, 1, 0, 0, 192, 0, 1, 0, 62, 0.125818, 0.5172, 0.368001, 1, 1, 0, 0, 449, 0, 1, 0, 62, 0.127233, 0.523077, 0.370504, 1, 1, 0, 0, 464, 0, 1, 0, 62, 0.136916, 0.567687, 0.389319, 1, 1, 0, 0, 535, 0, 1, 0, 63, 0.104418, 0.428303, 0.330138, 1, 1, 0, 0, 394, 0, 1, 0, 63, 0.12801, 0.526302, 0.371878, 1, 1, 0, 0, 68, 0, 1, 0, 63, 0.135241, 0.582426, 0.394679, 1, 1, 0, 0, 562, 0, 1, 0, 64, 0.118948, 0.488662, 0.355846, 1, 1, 0, 0, 143, 0, 1, 0, 64, 0.120114, 0.493506, 0.357909, 1, 1, 0, 0, 358, 0, 1, 0, 65, 0.135619, 0.557909, 0.38534, 1, 1, 0, 0, 437, 0, 1, 0, 66, 0.110236, 0.45247, 0.340431, 1, 1, 0, 0, 611, 0, 1, 0, 69, 0.132739, 0.545948, 0.380245, 1, 1, 0, 0, 89, 0, 1, 0, 69, 0.135983, 0.575901, 0.392306, 1, 1, 0, 0, 229, 0, 1, 0, 69, 0.12618, 0.518701, 0.36864, 1, 1, 0, 0, 630, 0, 1, 0, 70, 0.136717, 0.569444, 0.389958, 1, 1, 0, 0, 599, 0, 1, 0, 70, 0.133822, 0.550445, 0.382161, 1, 1, 0, 0, 326, 0, 1, 0, 70, 0.126903, 0.521703, 0.369919, 1, 1, 0, 0, 310, 0, 1, 0, 70, 0.128622, 0.528844, 0.37296, 1, 1, 0, 0, 252, 0, 1, 0, 70, 0.131978, 0.542784, 0.378898, 1, 1, 0, 0, 480, 0, 1, 0, 71, 0.136613, 0.562041, 0.3871, 1, 1, 0, 0, 412, 0, 1, 0, 71, 0.123753, 0.508621, 0.364347, 1, 1, 0, 0, 343, 0, 1, 0, 71, 0.135753, 0.577919, 0.39304, 1, 1, 0, 0, 501, 0, 1, 0, 72, 0.123589, 0.507937, 0.364056, 1, 1, 0, 0, 578, 0, 1, 0, 72, 0.135644, 0.578885, 0.393391, 1, 1, 0, 0, 34, 0, 1, 0, 72, 0.120595, 0.495504, 0.35876, 1, 1, 0, 0, 285, 0, 1, 0, 72, 0.134362, 0.55269, 0.383117, 1, 1, 0, 0, 108, 0, 1, 0, 72, 0.119247, 0.489905, 0.356375, 1, 1, 0, 0, 176, 0, 1, 0, 72, 0.124444, 0.511492, 0.36557, 1, 1, 0, 0, -4, 0, 1, 0, 72, 0.110484, 0.453503, 0.340871, 1, 1, 0, 0, 273, 0, 1, 0, 73, 0.129131, 0.530961, 0.373862, 1, 1, 0, 0, 22, 0, 1, 0, 73, 0.1144, 0.469768, 0.347798, 1, 1, 0, 0, 52, 0, 1, 0, 73, 0.122631, 0.503959, 0.362361, 1, 1, 0, 0, 213, 0, 1, 0, 73, 0.107718, 0.442011, 0.335976, 1, 1, 0, 0, 156, 0, 1, 0, 73, 0.129572, 0.532793, 0.374643, 1, 1, 0, 0, 523, 0, 1, 0, 73, 0.103366, 0.423933, 0.328276, 1, 1, 0, 0, 120, 0, 1, 0, 74, 0.110189, 0.452279, 0.340349, 1, 1, 0, 0, 372, 0, 1, 0, 74, 0.13295, 0.602592, 0.402012, 1, 1, 0, 0, 199, 0, 1, 0, 74, 0.111536, 0.457873, 0.342732, 1, 1, 0, 0, 449, 0, 1, 0, 74, 0.127075, 0.52242, 0.370225, 1, 1, 0, 0, 471, 0, 1, 0, 74, 0.135087, 0.583788, 0.395174, 1, 1, 0, 0, 538, 0, 1, 0, 75, 0.103578, 0.424815, 0.328652, 1, 1, 0, 0, 392, 0, 1, 0, 75, 0.129132, 0.530963, 0.373863, 1, 1, 0, 0, 73, 0, 1, 0, 75, 0.133409, 0.548732, 0.381431, 1, 1, 0, 0, 556, 0, 1, 0, 76, 0.11191, 0.459426, 0.343393, 1, 1, 0, 0, 147, 0, 1, 0, 76, 0.124527, 0.511835, 0.365716, 1, 1, 0, 0, 354, 0, 1, 0, 77, 0.134731, 0.586917, 0.396312, 1, 1, 0, 0, 426, 0, 1, 0, 78, 0.111425, 0.45741, 0.342535, 1, 1, 0, 0, 7, 0, 1, 0, 86, 0.131246, 0.539744, 0.377603, 1, 1, 0, 0, 531, 0, 1, 0, 86, 0.133132, 0.547581, 0.380941, 1, 1, 0, 0, 527, 0, 1, 0, 87, 0.136886, 0.563174, 0.387583, 1, 1, 0, 0, 187, 0, 1, 0, 87, 0.12493, 0.513508, 0.366429, 1)
 
-[node name="background" type="Node2D"]
+[node name="background" type="Node2D" unique_id=1700890123]
 position = Vector2(0, -30)
 script = ExtResource("1")
 
-[node name="background_sprite" type="Sprite2D" parent="."]
+[node name="background_sprite" type="Sprite2D" parent="." unique_id=2135001060]
 texture = ExtResource("4")
 
-[node name="waterfall" type="Node2D" parent="."]
+[node name="waterfall" type="Node2D" parent="." unique_id=1694801488]
 position = Vector2(170, -34)
 scale = Vector2(0.85, 1)
 
-[node name="waterfall_back_sprite" type="Sprite2D" parent="waterfall"]
+[node name="waterfall_back_sprite" type="Sprite2D" parent="waterfall" unique_id=628833305]
 modulate = Color(1, 1, 1, 0.643137)
 position = Vector2(0, -50)
 scale = Vector2(1.17647, 1.18056)
@@ -371,7 +372,7 @@ texture = ExtResource("3_f6lm7")
 region_enabled = true
 region_rect = Rect2(0, 50, 160, 225)
 
-[node name="waterfall_back_shader" type="ColorRect" parent="waterfall"]
+[node name="waterfall_back_shader" type="ColorRect" parent="waterfall" unique_id=1416551453]
 material = SubResource("ShaderMaterial_et17c")
 anchors_preset = 15
 anchor_right = 1.0
@@ -383,7 +384,7 @@ offset_bottom = 95.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="waterfall_shader" type="ColorRect" parent="waterfall"]
+[node name="waterfall_shader" type="ColorRect" parent="waterfall" unique_id=1726494411]
 material = SubResource("2")
 anchors_preset = 15
 anchor_right = 1.0
@@ -395,44 +396,44 @@ offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="large_particles" type="GPUParticles2D" parent="waterfall"]
+[node name="large_particles" type="GPUParticles2D" parent="waterfall" unique_id=891766564]
 modulate = Color(1, 1, 1, 0.792157)
 position = Vector2(0, 70)
 amount = 60
-process_material = SubResource("7")
 texture = ExtResource("2")
 lifetime = 1.8
 randomness = 1.0
 fract_delta = false
+process_material = SubResource("7")
 
-[node name="small_particles" type="GPUParticles2D" parent="waterfall"]
+[node name="small_particles" type="GPUParticles2D" parent="waterfall" unique_id=1707455339]
 position = Vector2(0, 64)
 scale = Vector2(1.17647, 1)
 amount = 10
-process_material = SubResource("28")
 lifetime = 2.0
 speed_scale = 1.6
 randomness = 1.0
 fract_delta = false
 visibility_rect = Rect2(-100, -100, 200, 100)
+process_material = SubResource("28")
 
-[node name="forefall" type="Sprite2D" parent="waterfall"]
+[node name="forefall" type="Sprite2D" parent="waterfall" unique_id=500522085]
 position = Vector2(-189.412, 48)
 scale = Vector2(1.17647, 1)
 texture = ExtResource("6")
 centered = false
 
-[node name="scene" type="Node2D" parent="."]
+[node name="scene" type="Node2D" parent="." unique_id=1696513664]
 position = Vector2(-320, -160)
 
-[node name="grass" parent="scene" instance=ExtResource("12")]
+[node name="grass" parent="scene" unique_id=533908316 instance=ExtResource("12")]
 position = Vector2(0, 230)
 multimesh = SubResource("14")
 in_a_rows = 36
 center_light = Vector2(200, 280)
 colors = [Color(0.086275, 0.352941, 0.298039, 1), Color(0.137255, 0.564706, 0.388235, 1), Color(0.117647, 0.737255, 0.45098, 1), Color(0.568627, 0.858824, 0.411765, 1), Color(0.803922, 0.87451, 0.423529, 1)]
 
-[node name="axe" type="Sprite2D" parent="scene"]
+[node name="axe" type="Sprite2D" parent="scene" unique_id=1939460716]
 position = Vector2(466, 235)
 rotation = -1.13795
 scale = Vector2(-2.4, 2.4)
@@ -441,12 +442,12 @@ centered = false
 region_enabled = true
 region_rect = Rect2(129, 8, 22, 16)
 
-[node name="rock" type="Sprite2D" parent="scene"]
+[node name="rock" type="Sprite2D" parent="scene" unique_id=617456223]
 position = Vector2(135, 226)
 texture = ExtResource("3")
 centered = false
 
-[node name="arrow" type="Sprite2D" parent="scene"]
+[node name="arrow" type="Sprite2D" parent="scene" unique_id=2082312400]
 position = Vector2(423, 220)
 rotation = 0.905826
 texture = ExtResource("10")
@@ -454,7 +455,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2(194, 14, 21, 5)
 
-[node name="arrow2" type="Sprite2D" parent="scene"]
+[node name="arrow2" type="Sprite2D" parent="scene" unique_id=369785541]
 position = Vector2(410, 224)
 rotation = 0.647517
 texture = ExtResource("10")
@@ -462,7 +463,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2(194, 14, 21, 5)
 
-[node name="arrow3" type="Sprite2D" parent="scene"]
+[node name="arrow3" type="Sprite2D" parent="scene" unique_id=1274617318]
 position = Vector2(611, 158)
 rotation = 0.129154
 texture = ExtResource("10")
@@ -470,7 +471,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2(194, 14, 21, 5)
 
-[node name="arrow4" type="Sprite2D" parent="scene"]
+[node name="arrow4" type="Sprite2D" parent="scene" unique_id=1460208376]
 position = Vector2(370, 257)
 rotation = 0.776672
 scale = Vector2(2, 2)
@@ -479,50 +480,50 @@ centered = false
 region_enabled = true
 region_rect = Rect2(194, 14, 21, 5)
 
-[node name="stuck_sword" type="Sprite2D" parent="scene"]
+[node name="stuck_sword" type="Sprite2D" parent="scene" unique_id=43923541]
 material = SubResource("31")
 position = Vector2(204.5, 206)
 texture = ExtResource("5")
 
-[node name="lights" type="Node2D" parent="."]
+[node name="lights" type="Node2D" parent="." unique_id=1860166027]
 position = Vector2(-320, -210)
 
-[node name="sunray" type="ColorRect" parent="lights"]
+[node name="sunray" type="ColorRect" parent="lights" unique_id=774437013]
 material = SubResource("18")
 anchors_preset = 10
 anchor_right = 1.0
 offset_right = 640.0
 offset_bottom = 640.0
 
-[node name="sunray2" type="ColorRect" parent="lights"]
+[node name="sunray2" type="ColorRect" parent="lights" unique_id=349512377]
 material = SubResource("30")
 anchors_preset = 10
 anchor_right = 1.0
 offset_right = 640.0
 offset_bottom = 640.0
 
-[node name="particles" type="GPUParticles2D" parent="lights"]
+[node name="particles" type="GPUParticles2D" parent="lights" unique_id=1188239210]
 position = Vector2(206.276, 320)
 amount = 12
-process_material = SubResource("19")
 texture = ExtResource("8")
 lifetime = 30.0
 preprocess = 30.0
 speed_scale = 0.6
 randomness = 1.0
 fract_delta = false
+process_material = SubResource("19")
 
-[node name="front" type="Node2D" parent="."]
+[node name="front" type="Node2D" parent="." unique_id=848986393]
 position = Vector2(-320, -160)
 
-[node name="grass2" parent="front" instance=ExtResource("12")]
+[node name="grass2" parent="front" unique_id=509203098 instance=ExtResource("12")]
 position = Vector2(0, 288)
 multimesh = SubResource("13")
 in_a_rows = 36
 center_light = Vector2(200, 280)
 colors = [Color(0.086275, 0.352941, 0.298039, 1), Color(0.137255, 0.564706, 0.388235, 1), Color(0.117647, 0.737255, 0.45098, 1), Color(0.568627, 0.858824, 0.411765, 1), Color(0.803922, 0.87451, 0.423529, 1)]
 
-[node name="arrow" type="Sprite2D" parent="front"]
+[node name="arrow" type="Sprite2D" parent="front" unique_id=237415311]
 position = Vector2(540, 278)
 rotation = 1.03498
 scale = Vector2(2.2, 2.2)
@@ -531,11 +532,11 @@ centered = false
 region_enabled = true
 region_rect = Rect2(194, 14, 21, 5)
 
-[node name="foreground" type="Sprite2D" parent="front"]
+[node name="foreground" type="Sprite2D" parent="front" unique_id=1698628845]
 texture = ExtResource("11")
 centered = false
 
-[node name="ColorRect2" type="ColorRect" parent="front"]
+[node name="ColorRect2" type="ColorRect" parent="front" unique_id=1922849781]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -544,7 +545,7 @@ offset_top = -360.0
 offset_right = 1000.0
 color = Color(0.180392, 0.133333, 0.184314, 1)
 
-[node name="ColorRect3" type="ColorRect" parent="front"]
+[node name="ColorRect3" type="ColorRect" parent="front" unique_id=1586141663]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -554,7 +555,7 @@ offset_right = 1000.0
 offset_bottom = 720.0
 color = Color(0.180392, 0.133333, 0.184314, 1)
 
-[node name="ColorRect4" type="ColorRect" parent="front"]
+[node name="ColorRect4" type="ColorRect" parent="front" unique_id=1861160557]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -562,7 +563,7 @@ offset_left = -360.0
 offset_bottom = 360.0
 color = Color(0.180392, 0.133333, 0.184314, 1)
 
-[node name="ColorRect5" type="ColorRect" parent="front"]
+[node name="ColorRect5" type="ColorRect" parent="front" unique_id=751371331]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

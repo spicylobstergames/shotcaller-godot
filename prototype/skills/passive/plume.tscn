@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://cik1ee7a3hwqs"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://c56x2d37t5a8v" path="res://skills/passive/plume.gd" id="1"]
+[ext_resource type="Script" path="res://skills/passive/plume.gd" id="1"]
 
 [node name="feather" type="Node" unique_id=432347965]
 script = ExtResource("1")

@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://ck4p5k4ty45uj"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://dmoqfwxe8nfta" path="res://item/weapons/poleaxe.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bdwy1m3xyx3jv" path="res://assets/leaders/lorne_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cxjd52objqbbm" path="res://assets/leaders/lorne_red.png" id="5"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/poleaxe.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/lorne_blue.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/leaders/lorne_red.png" id="5"]
 
 
 [sub_resource type="AtlasTexture" id="48"]
@@ -693,7 +693,7 @@ visible = false
 position = Vector2(3, -10)
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
 
 [editable path="hud"]

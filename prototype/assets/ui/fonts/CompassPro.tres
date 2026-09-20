@@ -1,6 +1,6 @@
 [gd_resource type="FontFile" load_steps=2 format=3]
 
-[ext_resource type="FontFile" uid="uid://cw8vl1wiwbi0x" path="res://assets/ui/fonts/CompassPro.ttf" id="1"]
+[ext_resource type="FontFile" path="res://assets/ui/fonts/CompassPro.ttf" id="1"]
 
 
 [resource]

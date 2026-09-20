@@ -107,7 +107,7 @@ var channeling_timer:Timer
 var hud:Node
 var sprites:Node
 var body:Node
-var agent:Node
+@onready var agent: Node = get_node_or_null("goap_agent")
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -142,7 +142,6 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
-	if has_node("agent"): agent = get_node("agent")
 
 
 func setup_leader_exp():
@@ -490,4 +489,3 @@ func on_death_end():  # death animation end
 			
 	
 	emit_signal("unit_died")
-

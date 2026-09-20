@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://7njuybbpg8mh"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://b7wk6f38y0vmv" path="res://skills/active/poison.gd" id="1_5qes2"]
-[ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2_plhgx"]
+[ext_resource type="Script" path="res://skills/active/poison.gd" id="1_5qes2"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2_plhgx"]
 
 [node name="Poison" type="Node" unique_id=1697107462]
 script = ExtResource("1_5qes2")

@@ -1,4 +1,4 @@
-extends "../Goal.gd"
+extends "res://goap/goap_system/goal_contract.gd"
 
 
 func get_class_name(): return "PursueEnemiesGoal"

@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cewrcon1yi08d"]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Theme" uid="uid://cn18lpnkwwgu1" path="res://assets/ui/theme/transparent_menu_theme.tres" id="1_11kws"]
+[ext_resource type="Theme" path="res://assets/ui/theme/transparent_menu_theme.tres" id="1_11kws"]
 [ext_resource type="PackedScene" path="res://ui/buttons/menu_button.tscn" id="3"]
 [ext_resource type="Script" path="res://ui/menus/main_menu.gd" id="5"]
 

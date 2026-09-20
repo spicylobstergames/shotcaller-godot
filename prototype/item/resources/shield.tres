@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3 uid="uid://b4g2vjxgabfso"]
+[gd_resource type="Resource" script_class="Shop_item" format=3]
 
-[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/Item_resource.gd" id="1_m2vxj"]
+[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_m2vxj"]
 
 
 [resource]

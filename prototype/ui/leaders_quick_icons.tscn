@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dgyav7j8bd85h"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" uid="uid://wk2cqft3xt70" path="res://ui/buttons/leader_button.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://ui/buttons/leader_button.tscn" id="1"]
 [ext_resource type="Script" path="res://ui/leaders_quick_icons.gd" id="2"]
 
 [node name="leaders_icons" type="VBoxContainer"]

@@ -12,9 +12,9 @@ extends Node
 # This example keeps things simple, creating only one planner
 # with pre-defined actions.
 
-var _action_planner = preload("ActionPlanner.gd").new()
-var _actions = preload("Actions.gd").new()
-var _goals = preload("Goals.gd").new()
+var _action_planner = preload("res://goap/goap_system/planner.gd").new()
+var _actions = preload("res://goap/game_logic/action_registry.gd").new()
+var _goals = preload("res://goap/game_logic/goal_registry.gd").new()
 
 @onready var move = $move
 @onready var attack = $attack

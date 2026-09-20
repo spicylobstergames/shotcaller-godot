@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://jbsr1bgnukad"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Texture2D" uid="uid://mivjrt3o0sef" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://cipknfd53cw1h" path="res://assets/neutrals/lumberjack_red.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="39"]
 atlas = ExtResource("1")

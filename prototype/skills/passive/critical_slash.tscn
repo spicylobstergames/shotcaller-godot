@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://i74mqynh3nas"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://cov5rmhhwa3ar" path="res://skills/passive/critical_slash.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://bveairjy4wmmx" path="res://assets/ui/abilities/aura_of_courage.png" id="3"]
+[ext_resource type="Script" path="res://skills/passive/critical_slash.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage.png" id="3"]
 
 
 [node name="critical_slash" type="Node"]

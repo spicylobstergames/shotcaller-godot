@@ -255,7 +255,7 @@ func give_item(delivery):
 				Goap.modifiers.add(leader, key, item.name, item.attributes[key])
 			if "passive" in item:
 				var item_scene = load(item.passive)
-				leader.get_node("behavior/item_passives").add_child(item_scene.instantiate())
+				leader.get_node("goap_agent/item_passives").add_child(item_scene.instantiate())
 
 		"consumable":
 			inventory.consumable_items[index] = item

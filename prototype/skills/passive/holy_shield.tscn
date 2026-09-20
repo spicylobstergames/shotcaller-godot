@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://druqj65g6lkmi"]
+[gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://b17yykq8656n3" path="res://skills/passive/holy_shield.gd" id="1"]
+[ext_resource type="Script" path="res://skills/passive/holy_shield.gd" id="1"]
 
 
 [node name="holy_shield" type="Node"]

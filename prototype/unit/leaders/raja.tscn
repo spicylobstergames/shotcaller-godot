@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://drrjv27fe105a"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://bq02ut2if7ooy" path="res://item/weapons/curved_sword.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bjumc0664w130" path="res://assets/leaders/raja_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://dxvf0ledk8tt7" path="res://assets/leaders/raja_red.png" id="4"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/curved_sword.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/raja_blue.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/leaders/raja_red.png" id="4"]
 
 
 [sub_resource type="AtlasTexture" id="37"]
@@ -641,7 +641,7 @@ visible = false
 position = Vector2(7, 0)
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
 
 [editable path="hud"]

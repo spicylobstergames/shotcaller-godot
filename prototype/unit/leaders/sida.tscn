@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://by38rvd582gku"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://ckgjqcxv7vpn6" path="res://item/weapons/spear.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://bisjm54krg610" path="res://assets/leaders/sida_blue.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://cmos5au7lfxwp" path="res://assets/leaders/sida_red.png" id="4"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/spear.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/sida_blue.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/leaders/sida_red.png" id="4"]
 
 
 [sub_resource type="AtlasTexture" id="40"]
@@ -636,7 +636,7 @@ shape = SubResource("29")
 visible = false
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
 
 [editable path="hud"]

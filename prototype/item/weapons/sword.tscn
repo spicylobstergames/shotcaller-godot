@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://diee03xgfkdfb"]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource type="Texture2D" uid="uid://3uxyr356j68" path="res://assets/pawns/infantry_blue.png" id="1"]
-[ext_resource type="Texture2D" uid="uid://bdrdrkrk8hjq1" path="res://assets/pawns/infantry_red.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://b0na4r8pnaxh8" path="res://assets/pawns/infantry_neutral.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/pawns/infantry_blue.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/pawns/infantry_red.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/pawns/infantry_neutral.png" id="3"]
 
 [sub_resource type="AtlasTexture" id="34"]
 atlas = ExtResource("1")

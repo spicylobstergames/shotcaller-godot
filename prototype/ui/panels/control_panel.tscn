@@ -1,8 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://beaxx58y8ho37"]
+[gd_scene load_steps=16 format=3]
 
-[ext_resource type="PackedScene" uid="uid://dehxw2x1d6a82" path="res://ui/buttons/ui_button.tscn" id="1"]
-[ext_resource type="Theme" uid="uid://ca7fj8wdwjg0b" path="res://assets/ui/theme/panel_theme.tres" id="1_thcg2"]
-[ext_resource type="Texture2D" uid="uid://c4qoqk1xd3mov" path="res://assets/ui/ui_icons.png" id="2_8sc0j"]
+[ext_resource type="PackedScene" path="res://ui/buttons/ui_button.tscn" id="1"]
+[ext_resource type="Theme" path="res://assets/ui/theme/panel_theme.tres" id="1_thcg2"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_icons.png" id="2_8sc0j"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_3jbbe"]
 device = -1

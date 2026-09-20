@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://cgdiyvj2d41ck"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://bmmc6gp4g3i08" path="res://assets/pawns/mounted_red.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://bdmnf3yu0pgjq" path="res://assets/unit/shadow.png" id="3"]
-[ext_resource type="PackedScene" uid="uid://c10gjh6hwayoi" path="res://item/weapons/double_axe.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://51f7nlqd57x1" path="res://assets/pawns/mounted_blue.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://dle2n6ie8fhqe" path="res://assets/leaders/rollo_blue.png" id="6_1qbbb"]
-[ext_resource type="Texture2D" uid="uid://b1w2idhpj4hk6" path="res://assets/leaders/rollo_red.png" id="7_xwk07"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="Texture2D" path="res://assets/pawns/mounted_red.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/unit/shadow.png" id="3"]
+[ext_resource type="PackedScene" path="res://item/weapons/double_axe.tscn" id="4"]
+[ext_resource type="Texture2D" path="res://assets/pawns/mounted_blue.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/leaders/rollo_blue.png" id="6_1qbbb"]
+[ext_resource type="Texture2D" path="res://assets/leaders/rollo_red.png" id="7_xwk07"]
 
 
 [sub_resource type="AtlasTexture" id="55"]
@@ -655,7 +655,7 @@ shape = SubResource("47")
 position = Vector2(3, -10)
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "FollowPathGoal"]
 
 [editable path="hud"]

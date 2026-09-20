@@ -1,9 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvmtml6sny3qf"]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://ui/menus/leader_selection/leader_select_item.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://wk2cqft3xt70" path="res://ui/buttons/leader_button.tscn" id="2"]
-[ext_resource type="Theme" uid="uid://w6f0qhitj51d" path="res://assets/ui/theme/label_theme.tres" id="3_dlx6l"]
-[ext_resource type="Theme" uid="uid://kg27vl16eqx3" path="res://assets/ui/theme/close_button.tres" id="4_58kcy"]
+[ext_resource type="PackedScene" path="res://ui/buttons/leader_button.tscn" id="2"]
+[ext_resource type="Theme" path="res://assets/ui/theme/label_theme.tres" id="3_dlx6l"]
+[ext_resource type="Theme" path="res://assets/ui/theme/close_button.tres" id="4_58kcy"]
 
 [node name="leader_select_item" type="PanelContainer"]
 anchors_preset = 15

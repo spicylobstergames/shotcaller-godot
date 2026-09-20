@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://dmvxjrcfdsoab"]
+[gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://ctyfg2hu7j30a" path="res://item/weapons/takoda_axe.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://byyh7tkv7k8pl" path="res://assets/leaders/takoda_blue.png" id="5"]
-[ext_resource type="Texture2D" uid="uid://qdndmjn3snt5" path="res://assets/leaders/takoda_red.png" id="6"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://item/weapons/takoda_axe.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://assets/leaders/takoda_blue.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/leaders/takoda_red.png" id="6"]
 
 
 [sub_resource type="AtlasTexture" id="42"]
@@ -660,7 +660,7 @@ shape = SubResource("29")
 visible = false
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
 
 [editable path="hud"]

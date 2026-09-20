@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://h0vyyonmjm1o"]
+[gd_scene format=3]
 
-[ext_resource type="Texture2D" uid="uid://cumc6i45eki5r" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
-[ext_resource type="PackedScene" uid="uid://dao7ctjjxffjy" path="res://unit/Unit.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://jbsr1bgnukad" path="res://item/weapons/jack_axe.tscn" id="4"]
-[ext_resource type="Texture2D" uid="uid://dwgk4mx226mwt" path="res://assets/neutrals/lumberjack_red.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
+[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://item/weapons/jack_axe.tscn" id="4"]
+[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_red.png" id="5"]
 
 
 [sub_resource type="AtlasTexture" id="35"]
@@ -668,7 +668,7 @@ shape = SubResource("29")
 position = Vector2(7, 0)
 shape = SubResource("27")
 
-[node name="agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="7"]
 goals_list = ["NeedLumberGoal", "NeedSafetyGoal"]
 
 [editable path="hud"]

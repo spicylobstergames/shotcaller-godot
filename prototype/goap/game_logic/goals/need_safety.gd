@@ -1,4 +1,4 @@
-extends "../Goal.gd"
+extends "res://goap/goap_system/goal_contract.gd"
 
 
 # blacksmith hide behavior
