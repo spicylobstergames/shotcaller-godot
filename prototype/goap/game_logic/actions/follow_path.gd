@@ -1,4 +1,4 @@
-extends "../Action.gd"
+extends "res://goap/goap_system/action_contract.gd"
 
 
 func get_class_name(): return "FollowPath"

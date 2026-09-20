@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b7os1aewnwora" path="res://hud/unit_hud.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://v8hb0egyiu54" path="res://assets/unit/shadow.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://xne3vf5386s5" path="res://assets/pawns/infantry_blue.png" id="3"]
-[ext_resource type="Script" path="res://goap/Agent.gd" id="4"]
+[ext_resource type="Script" path="res://goap/goap_system/agent.gd" id="4"]
 [ext_resource type="Script" path="res://unit/Unit.gd" id="7"]
 [ext_resource type="Texture2D" uid="uid://cdjbbr8y06yp7" path="res://assets/pawns/infantry_red.png" id="13"]
 [ext_resource type="Texture2D" uid="uid://defd23p55hffp" path="res://assets/map/light.png" id="16"]

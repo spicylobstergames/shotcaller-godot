@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://goap/Goap.gd" id="1_goap"]
-[ext_resource type="Script" path="res://goap/behavior/move.gd" id="2_move"]
-[ext_resource type="Script" path="res://goap/behavior/attack.gd" id="3_attack"]
-[ext_resource type="Script" path="res://goap/behavior/advance.gd" id="4_advance"]
-[ext_resource type="Script" path="res://goap/behavior/path.gd" id="5_path"]
-[ext_resource type="Script" path="res://goap/behavior/orders.gd" id="6_orders"]
+[ext_resource type="Script" path="res://goap/goap_system/goap.gd" id="1_goap"]
+[ext_resource type="Script" path="res://goap/goap_system/movement.gd" id="2_move"]
+[ext_resource type="Script" path="res://goap/goap_system/combat.gd" id="3_attack"]
+[ext_resource type="Script" path="res://goap/goap_system/advance.gd" id="4_advance"]
+[ext_resource type="Script" path="res://goap/goap_system/pathfinding.gd" id="5_path"]
+[ext_resource type="Script" path="res://goap/goap_system/orders.gd" id="6_orders"]
 [ext_resource type="Script" path="res://skills/passive_skills.gd" id="7_skills"]
 [ext_resource type="Script" path="res://skills/modifiers.gd" id="8_modifiers"]
 
