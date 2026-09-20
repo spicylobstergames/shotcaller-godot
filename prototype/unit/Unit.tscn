@@ -182,13 +182,11 @@ shadow_filter = 1
 shadow_filter_smooth = 5.0
 texture = ExtResource("16")
 
-[node name="behavior" type="Node" parent="."]
-
-[node name="abilities" type="Node" parent="behavior"]
-
-[node name="item_passives" type="Node" parent="behavior"]
-
 [node name="goap_agent" type="Node" parent="."]
 script = ExtResource("4")
+
+[node name="abilities" type="Node" parent="goap_agent"]
+
+[node name="item_passives" type="Node" parent="goap_agent"]
 
 [editable path="hud"]

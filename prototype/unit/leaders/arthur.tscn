@@ -691,12 +691,12 @@ shape = SubResource("27")
 [node name="light" parent="." index="5"]
 position = Vector2(7, -5)
 
-[node name="aura_of_courage" parent="behavior/abilities" index="0" instance=ExtResource("2")]
+[node name="aura_of_courage" parent="goap_agent/abilities" index="0" instance=ExtResource("2")]
 icon = ExtResource("5")
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource("6")
 
-[node name="guard_break" parent="behavior/abilities" index="1" instance=ExtResource("9_mvi1j")]
+[node name="guard_break" parent="goap_agent/abilities" index="1" instance=ExtResource("9_mvi1j")]
 
 [node name="goap_agent" parent="." index="7"]
 goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
