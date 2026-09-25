@@ -1,13 +1,13 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene format=3 uid="uid://q37eswbcgiv8"]
 
 [ext_resource type="PackedScene" path="res://hud/unit_hud.tscn" id="1"]
-[ext_resource type="Texture2D" path="res://assets/unit/shadow.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/pawns/infantry_blue.png" id="3"]
-[ext_resource type="Script" path="res://goap/goap_system/agent.gd" id="4"]
-[ext_resource type="Script" path="res://unit/Unit.gd" id="7"]
-[ext_resource type="Texture2D" path="res://assets/pawns/infantry_red.png" id="13"]
-[ext_resource type="Texture2D" path="res://assets/map/light.png" id="16"]
-[ext_resource type="Texture2D" path="res://assets/pawns/infantry_neutral.png" id="17"]
+[ext_resource type="Texture2D" uid="uid://bdmnf3yu0pgjq" path="res://assets/unit/shadow.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bacygsp52ihcq" path="res://assets/pawns/infantry_blue.png" id="3"]
+[ext_resource type="Script" uid="uid://bhg8xduiaaqnf" path="res://goap/goap_system/agent.gd" id="4"]
+[ext_resource type="Script" uid="uid://wbppf7q1rtk5" path="res://unit/Unit.gd" id="7"]
+[ext_resource type="Texture2D" uid="uid://0lffhuyuh2wi" path="res://assets/pawns/infantry_red.png" id="13"]
+[ext_resource type="Texture2D" uid="uid://whgtykrtiaca" path="res://assets/map/light.png" id="16"]
+[ext_resource type="Texture2D" uid="uid://jxsabt6xt203" path="res://assets/pawns/infantry_neutral.png" id="17"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uxyd2"]
 light_mode = 2
@@ -64,7 +64,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("56")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -78,7 +78,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("52")
 }],
-"loop": true,
+"loop": 1,
 "name": &"neutral",
 "speed": 5.0
 }, {
@@ -92,7 +92,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("49")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -103,11 +103,11 @@ radius = 8.0
 [sub_resource type="CircleShape2D" id="19"]
 radius = 50.04
 
-[node name="unit" type="Node2D"]
+[node name="unit" type="Node2D" unique_id=1109540589]
 material = SubResource("CanvasItemMaterial_uxyd2")
 script = ExtResource("7")
 
-[node name="hud" parent="." instance=ExtResource("1")]
+[node name="hud" parent="." unique_id=895146676 instance=ExtResource("1")]
 
 [node name="state" parent="hud" index="0"]
 visible = false
@@ -118,7 +118,7 @@ visible = false
 [node name="hpbar" parent="hud" index="2"]
 visible = false
 
-[node name="symbol" type="Sprite2D" parent="."]
+[node name="symbol" type="Sprite2D" parent="." unique_id=222958006]
 visible = false
 modulate = Color(0.32549, 0.584314, 0.709804, 1)
 light_mask = 3
@@ -129,7 +129,7 @@ texture = ExtResource("2")
 region_enabled = true
 region_rect = Rect2(1, 1, 1, 1)
 
-[node name="symbol_border" type="Sprite2D" parent="symbol"]
+[node name="symbol_border" type="Sprite2D" parent="symbol" unique_id=1677192396]
 modulate = Color(0, 0, 0, 1)
 light_mask = 3
 z_index = -1
@@ -139,41 +139,41 @@ texture = ExtResource("2")
 region_enabled = true
 region_rect = Rect2(1, 1, 1, 1)
 
-[node name="sprites" type="Node2D" parent="."]
+[node name="sprites" type="Node2D" parent="." unique_id=1765529208]
 
-[node name="shadow" type="Sprite2D" parent="sprites"]
+[node name="shadow" type="Sprite2D" parent="sprites" unique_id=1892846986]
 modulate = Color(0, 0, 0, 0.0627451)
 use_parent_material = true
 position = Vector2(0, 8)
 texture = ExtResource("2")
 
-[node name="body" type="AnimatedSprite2D" parent="sprites"]
+[node name="body" type="AnimatedSprite2D" parent="sprites" unique_id=1237125589]
 use_parent_material = true
 position = Vector2(0, 9)
 sprite_frames = SubResource("53")
 offset = Vector2(-2, -11)
 
-[node name="stuck" type="Node2D" parent="sprites"]
+[node name="stuck" type="Node2D" parent="sprites" unique_id=2024680191]
 
-[node name="collisions" type="Area2D" parent="."]
+[node name="collisions" type="Area2D" parent="." unique_id=225153916]
 collision_layer = 0
 collision_mask = 0
 input_pickable = false
 monitoring = false
 monitorable = false
 
-[node name="block" type="CollisionShape2D" parent="collisions"]
+[node name="block" type="CollisionShape2D" parent="collisions" unique_id=1218543807]
 position = Vector2(0, 2)
 shape = SubResource("18")
 disabled = true
 debug_color = Color(0.337255, 0.882353, 1, 0.419608)
 
-[node name="select" type="CollisionShape2D" parent="collisions"]
+[node name="select" type="CollisionShape2D" parent="collisions" unique_id=225705177]
 visible = false
 shape = SubResource("19")
 disabled = true
 
-[node name="light" type="PointLight2D" parent="."]
+[node name="light" type="PointLight2D" parent="." unique_id=264360134]
 visible = false
 scale = Vector2(6.25, 6.25)
 blend_mode = 2
@@ -182,11 +182,11 @@ shadow_filter = 1
 shadow_filter_smooth = 5.0
 texture = ExtResource("16")
 
-[node name="goap_agent" type="Node" parent="."]
+[node name="goap_agent" type="Node" parent="." unique_id=544344335]
 script = ExtResource("4")
 
-[node name="abilities" type="Node" parent="goap_agent"]
+[node name="abilities" type="Node" parent="goap_agent" unique_id=441167843]
 
-[node name="item_passives" type="Node" parent="goap_agent"]
+[node name="item_passives" type="Node" parent="goap_agent" unique_id=630487369]
 
 [editable path="hud"]

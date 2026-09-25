@@ -66,6 +66,7 @@ func on_arrive(unit):
 	if unit.current_path.size() > 0:
 		next(unit)
 	else:
+		unit.current_path = []
 		Goap.move.end(unit)
 
 

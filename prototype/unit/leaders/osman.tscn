@@ -649,6 +649,6 @@ shape = SubResource("27")
 [node name="trader" parent="goap_agent/abilities" index="0" instance=ExtResource("2")]
 
 [node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
+goals_list = ["AttackEnemies", "PursueEnemies", "Retreat", "FollowPath"]
 
 [editable path="hud"]

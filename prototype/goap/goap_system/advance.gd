@@ -66,5 +66,3 @@ func ally_attacked(target, attacker):
 
 func stop(unit):
 	Goap.move.stop(unit)
-
-

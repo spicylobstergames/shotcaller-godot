@@ -1,17 +1,10 @@
 extends Node
 
 # self = Goap.Agent
-# This script integrates the unit (NPC) with GOAP.
-# In your implementation you could have this logic
-# inside your NPC script.
-#
-# As good practice, I suggest leaving it isolated like
-# this, so it makes re-use easy and it doesn't get tied
-# to unrelated implementation details (movement, collisions, etc).
 
 @export var goals_list: Array = []
 
-var debug_agent := false
+var agent_debug := true
 
 var _goals: Array
 var _current_goal
@@ -125,7 +118,7 @@ func _follow_plan(plan, delta):
 		var is_step_complete = plan[_current_plan_step].perform(self, delta)
 		
 		# debug
-		if debug_agent: 
+		if agent_debug: 
 			#_unit.hud.state.text = get_current_action().get_class_name()
 			_unit.hud.state.text = _get_best_goal().get_class_name()
 		

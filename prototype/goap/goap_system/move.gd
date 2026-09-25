@@ -94,7 +94,7 @@ func resume(unit):
 func end(unit):
 	if unit.agent.get_state("is_retreating"):
 		unit.agent.set_state("is_retreating", false)
-	stand(unit)
+	stop(unit)
 	
 
 func stop(unit):
@@ -106,12 +106,6 @@ func stop(unit):
 	unit.get_node("animations").speed_scale = 1
 	if unit.collision_timer and unit.collision_timer.time_left > 0: 
 		unit.collision_timer.stop() # first stops previous timers
-
-
-func stand(unit):
-	unit.current_path = []
-	stop(unit)
-
 
 
 func smart(unit, target_point):

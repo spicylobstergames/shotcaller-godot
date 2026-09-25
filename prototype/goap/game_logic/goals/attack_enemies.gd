@@ -1,7 +1,7 @@
 extends "res://goap/goap_system/goal_contract.gd"
 
 
-func get_class_name(): return "AttackEnemiesGoal"
+func get_class_name(): return "AttackEnemies"
 
 
 func is_valid(agent) -> bool:
@@ -19,4 +19,3 @@ func priority(_agent) -> int:
 
 func get_desired_state(_agent) -> Dictionary:
 	return { "has_attack_target": false }
-

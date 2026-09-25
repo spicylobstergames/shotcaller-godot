@@ -4,7 +4,7 @@ extends "res://goap/goap_system/goal_contract.gd"
 # blacksmith hide behavior
 
 
-func get_class_name(): return "NeedSafetyGoal"
+func get_class_name(): return "NeedSafety"
 
 
 func priority(agent) -> int:
@@ -16,4 +16,3 @@ func priority(agent) -> int:
 
 func get_desired_state(_agent) -> Dictionary:
 	return { "is_threatened": false }
-
