@@ -168,4 +168,3 @@ func buttons_update():
 	orders_button.set_pressed(orders_panel.visible)
 	shop_button.set_pressed(shop.visible)
 	unit_controls_button.set_pressed(unit_controls_panel.visible)
-

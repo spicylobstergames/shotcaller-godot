@@ -4,7 +4,7 @@ extends "res://goap/goap_system/goal_contract.gd"
 # leaders retreat behavior
 
 
-func get_class_name(): return "RetreatGoal"
+func get_class_name(): return "Retreat"
 
 
 func get_desired_state(_agent) -> Dictionary:
@@ -41,4 +41,3 @@ func should_retreat(unit):
 			if unit.current_hp < hp / 3:
 				return true
 	return false
-

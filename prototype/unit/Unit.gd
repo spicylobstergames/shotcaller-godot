@@ -290,21 +290,23 @@ func set_delay():
 func cut_path(path):
 	var distances = []
 	var path_size = path.size()
-	var first_point = path[0]
-	for index in path_size:
-		var point = path[index]
-		var d1 = self.global_position.distance_to(point)
-		var d2 = first_point.distance_to(point)
-		distances.append({
-			"distance": d1 - (d2 / 10),
-			"point": point,
-			"index": index
-		})
-	distances.sort_custom(Utils.compare_distance)
-	var next_first_point = distances[0]
+	if path_size > 0:
+		var first_point = path[0]
+		for index in path_size:
+			var point = path[index]
+			var d1 = self.global_position.distance_to(point)
+			var d2 = first_point.distance_to(point)
+			distances.append({
+				"distance": d1 - (d2 / 10),
+				"point": point,
+				"index": index
+			})
+		distances.sort_custom(Utils.compare_distance)
+		var next_first_point = distances[0]
 	
-	var new_path = path.slice(next_first_point.index, path_size)
-	return new_path
+		var new_path = path.slice(next_first_point.index, path_size)
+		return new_path
+	return path
 
 
 func point_collision(point, offset=0):

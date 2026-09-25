@@ -1,7 +1,7 @@
 extends "res://goap/goap_system/goal_contract.gd"
 
 
-func get_class_name(): return "HelpFriendsGoal"
+func get_class_name(): return "HelpFriends"
 
 
 func is_valid(agent) -> bool:

@@ -1,11 +1,11 @@
 extends "res://goap/goap_system/goal_contract.gd"
 
 
-func get_class_name(): return "NeedLumber"
+func get_class_name(): return "WaitOut"
 
 
 func is_valid(agent) -> bool:
-	return not agent.get_state("is_running") and not agent.get_state("is_hiding")
+	return !agent.get_state("is_threatened")
 
 
 func priority(_agent) -> int:
@@ -13,4 +13,6 @@ func priority(_agent) -> int:
 
 
 func get_desired_state(_agent) -> Dictionary:
-	return { "collected_wood": true }
+	return { 
+		"ready_to_fight": true
+	}

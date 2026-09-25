@@ -1,15 +1,17 @@
 extends Node
 
 # self = Goap.Goals
+
 # Lists all goal contracts.
 var _goals: Dictionary = {
-	"AttackEnemiesGoal": preload("res://goap/game_logic/goals/attack_enemies.gd").new(),
-	"FollowPathGoal": preload("res://goap/game_logic/goals/follow_path.gd").new(),
-	"HelpFriendsGoal": preload("res://goap/game_logic/goals/help_friends.gd").new(),
-	"NeedLumberGoal": preload("res://goap/game_logic/goals/need_lumber.gd").new(),
-	"NeedSafetyGoal": preload("res://goap/game_logic/goals/need_safety.gd").new(),
-	"PursueEnemiesGoal": preload("res://goap/game_logic/goals/pursue_enemies.gd").new(),
-	"RetreatGoal": preload("res://goap/game_logic/goals/retreat_goal.gd").new(),
+	"AttackEnemies": preload("res://goap/game_logic/goals/attack_enemies.gd").new(),
+	"FollowPath": preload("res://goap/game_logic/goals/follow_path.gd").new(),
+	"HelpFriends": preload("res://goap/game_logic/goals/help_friends.gd").new(),
+	"NeedLumber": preload("res://goap/game_logic/goals/need_lumber.gd").new(),
+	"NeedSafety": preload("res://goap/game_logic/goals/need_safety.gd").new(),
+	"PursueEnemies": preload("res://goap/game_logic/goals/pursue_enemies.gd").new(),
+	"Retreat": preload("res://goap/game_logic/goals/retreat_goal.gd").new(),
+	"WaitOut": preload("res://goap/game_logic/goals/wait_out.gd").new()
 }
 
 

@@ -1,15 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c8qbxofcf1oda"]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://q37eswbcgiv8" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://skills/passive/aura_of_courage.tscn" id="2"]
-[ext_resource type="Texture2D" path="res://assets/leaders/arthur_blue.png" id="3"]
-[ext_resource type="Texture2D" path="res://assets/leaders/arthur_red.png" id="4"]
-[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage.png" id="5"]
-[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://dmoif2u2y5ap5" path="res://assets/leaders/arthur_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://d2vogwreashv6" path="res://assets/leaders/arthur_red.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://bveairjy4wmmx" path="res://assets/ui/abilities/aura_of_courage.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
 [ext_resource type="PackedScene" path="res://item/weapons/excalibur.tscn" id="7"]
-[ext_resource type="Texture2D" path="res://assets/animations/side_smoke_2.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://bxit3nsbngr8r" path="res://assets/animations/side_smoke_2.png" id="8"]
 [ext_resource type="PackedScene" path="res://skills/active/guard_break.tscn" id="9_mvi1j"]
-
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijxyg"]
 atlas = ExtResource("3")
@@ -48,7 +47,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_55m31")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -62,7 +61,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m6erm")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -82,7 +81,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8f824")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -90,7 +89,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_onlya")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -593,12 +592,12 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ywbmk"]
 _data = {
-"arthur_special_cleave": SubResource("67"),
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"arthur_special_cleave": SubResource("67"),
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
 
 [sub_resource type="CircleShape2D" id="32"]
@@ -610,7 +609,7 @@ radius = 20.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 20.0
 
-[node name="arthur" instance=ExtResource("1")]
+[node name="arthur" unique_id=112072742 instance=ExtResource("1")]
 texture_filter = 1
 hp = 400
 regen = 2
@@ -628,15 +627,15 @@ damage = 80
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 modulate = Color(1, 1, 1, 1)
 scale = Vector2(10, 10)
 
-[node name="symbol_border" parent="symbol" index="0"]
+[node name="symbol_border" parent="symbol" index="0" unique_id=1677192396]
 visible = false
 scale = Vector2(1.2, 1.2)
 
-[node name="icon_blue" type="Sprite2D" parent="symbol" index="1"]
+[node name="icon_blue" type="Sprite2D" parent="symbol" index="1" unique_id=1118539286]
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("3")
@@ -644,7 +643,7 @@ offset = Vector2(0, -2)
 region_enabled = true
 region_rect = Rect2(31, 0, 14, 14)
 
-[node name="icon_red" type="Sprite2D" parent="symbol" index="2"]
+[node name="icon_red" type="Sprite2D" parent="symbol" index="2" unique_id=413192797]
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("4")
@@ -652,7 +651,7 @@ offset = Vector2(0, -2)
 region_enabled = true
 region_rect = Rect2(31, 0, 14, 14)
 
-[node name="cleave" type="Sprite2D" parent="sprites" index="1"]
+[node name="cleave" type="Sprite2D" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=850556035]
 visible = false
 texture = ExtResource("8")
 centered = false
@@ -660,45 +659,43 @@ offset = Vector2(0, -20)
 flip_h = true
 hframes = 8
 
-[node name="body" parent="sprites" index="2"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=1237125589]
 rotation = 0.0125674
 scale = Vector2(1, 0.981999)
 sprite_frames = SubResource("36")
 frame = 2
 offset = Vector2(-2, -12)
 
-[node name="weapon" parent="sprites" index="3" instance=ExtResource("7")]
+[node name="weapon" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="3" unique_id=24111120 instance=ExtResource("7")]
 position = Vector2(7, 1)
 rotation = 0.201079
 sprite_frames = SubResource("63")
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_ywbmk")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=1674725509]
+libraries/ = SubResource("AnimationLibrary_ywbmk")
 
-[node name="block" parent="collisions" index="0"]
+[node name="block" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=1218543807]
 shape = SubResource("32")
 
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=225705177]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="2" unique_id=1650123338]
 visible = false
 position = Vector2(6, 0)
 shape = SubResource("27")
 
-[node name="light" parent="." index="5"]
+[node name="light" parent="." index="5" unique_id=264360134]
 position = Vector2(7, -5)
 
-[node name="aura_of_courage" parent="goap_agent/abilities" index="0" instance=ExtResource("2")]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
+goals_list = ["AttackEnemies", "PursueEnemies", "Retreat", "FollowPath", "WaitOut"]
+
+[node name="aura_of_courage" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="0" unique_id=1871703252 instance=ExtResource("2")]
 icon = ExtResource("5")
 description = "Arthur inspires courage in nearby allies, increasing their attack by 2 x his level"
 status_effect_icon = ExtResource("6")
 
-[node name="guard_break" parent="goap_agent/abilities" index="1" instance=ExtResource("9_mvi1j")]
-
-[node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemiesGoal", "PursueEnemiesGoal", "RetreatGoal", "FollowPathGoal"]
+[node name="guard_break" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="1" unique_id=1802881226 instance=ExtResource("9_mvi1j")]
 
 [editable path="hud"]

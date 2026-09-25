@@ -8,9 +8,7 @@ extends Node
 # In your game, you might want to have different planners
 # for different enemy/NPC types, and even change the set
 # of actions at runtime.
-#
-# This example keeps things simple, creating only one planner
-# with pre-defined actions.
+
 
 var _action_planner = preload("res://goap/goap_system/planner.gd").new()
 var _actions = preload("res://goap/game_logic/action_registry.gd").new()
