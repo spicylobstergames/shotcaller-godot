@@ -46,13 +46,6 @@ func move(unit, final_destiny, smart_move):
 	else: stop(unit)
 
 
-func on_collision(unit):
-	if unit.collide_target == unit.target:
-		var target_position = unit.target.global_position + unit.target.collision_position
-		Goap.attack.point(unit, target_position)
-
-
-
 func resume(unit):
 	point(unit, null)
 

@@ -61,6 +61,32 @@ func setup(unit):
 		unit.attack_hit_position = unit.get_node("collisions/attack").position
 		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
 
+	if unit is CollisionObject2D:
+		unit.collision_layer = 1 if unit.collide else 0
+		unit.collision_mask = 1 if unit.collide else 0
+		if unit is CharacterBody2D:
+			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	if unit.collide and unit is CollisionObject2D:
+		var physical_shape = unit.get_node_or_null("physical_collision")
+		if physical_shape == null:
+			physical_shape = CollisionShape2D.new()
+			physical_shape.name = "physical_collision"
+			unit.add_child(physical_shape)
+		var rectangle = RectangleShape2D.new()
+		var diameter = max(unit.collision_radius * 2.0, 4.0)
+		rectangle.size = Vector2(diameter, diameter)
+		physical_shape.shape = rectangle
+		physical_shape.position = unit.collision_position
+		if unit.navigation_agent:
+			unit.navigation_agent.radius = max(unit.collision_radius, 8.0)
+
+	if unit.collide and not unit.moves and not unit.has_node("NavigationObstacle2D"):
+		var obstacle = NavigationObstacle2D.new()
+		obstacle.name = "NavigationObstacle2D"
+		obstacle.avoidance_enabled = true
+		obstacle.radius = max(unit.collision_radius, 8.0)
+		unit.add_child(obstacle)
+
 
 
 func physics_process(delta):
@@ -101,38 +127,20 @@ func physics_process(delta):
 						# move projectile
 						if not projectile.stuck: Goap.attack.projectile_step(delta, projectile)
 		
-		# units next event (move, arrive or collision)
+		# Unit blocking is handled by CharacterBody2D collision response.
 		
 		unit1.next_event  = "" # default no event
 		if not unit1.dead:
-			# units > destiny collision (arrive)
 			if unit1.moves and unit1.state == "move":
-				# offset creates larger collision destiny to avoid fighting over point
 				var offset = 0
 				if not unit1.target and not unit1.agent.get_state("has_player_command"):
 					offset = WorldState.get_state("map").half_tile_size
 				if unit1.point_collision(unit1.current_destiny, offset):
 					unit1.next_event = "arrive"
-			# units1 > unit2 collision
-			
-			if (unit1.moves and unit1.state == "move" and unit1.next_event != "arrive"):
-				unit1.next_event = "move"
-				if unit1.collide:
-					for unit2 in unit1.get_units_in_quad(delta):
-						if not unit2.dead and unit2.collide and unit1 != unit2:
-							if unit1.check_collision(unit2, delta):
-								unit1.next_event = "collision"
-								unit1.collide_target = unit2
-								break
+				else:
+					unit1.next_event = "move"
 		
-		# move or collide or stop
+		# move or arrive
 		match unit1.next_event:
 			"move": unit1.on_move(delta)
-			"collision": unit1.on_collision(delta)
 			"arrive": unit1.on_arrive()
-		
-		# save last positions
-		unit1.last_position2 = unit1.last_position
-		unit1.last_position = unit1.global_position
-
-

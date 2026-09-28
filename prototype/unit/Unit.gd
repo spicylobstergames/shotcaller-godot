@@ -9,7 +9,6 @@ var game:Node
 # SIGNALS
 signal unit_reseted
 signal unit_idle_ended
-signal unit_collided
 signal unit_move_ended
 signal unit_arrived
 signal unit_started_channeling
@@ -57,16 +56,12 @@ var angle:float = 0
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var final_destiny:Vector2 = Vector2.ZERO
-var last_position:Vector2 = Vector2.ZERO
-var last_position2:Vector2 = Vector2.ZERO
 var current_path:Array = []
 
 # COLLISION
 @export var collide:bool = false
 var collision_radius = 0
 var collision_position:Vector2 = Vector2.ZERO
-var collide_target:Node2D
-var collision_timer:Timer
 
 # ATTACK
 @export var attacks:bool = false
@@ -90,7 +85,7 @@ var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
 # BEHAVIOR
-var next_event:String = "" # "on_arive" "on_move" "on_collision"
+var next_event:String = "" # "move" or "arrive"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
@@ -109,6 +104,8 @@ var sprites:Node
 var body:Node
 @onready var agent: Node = get_node_or_null("goap_agent")
 var navigation_agent: NavigationAgent2D
+var navigation_safe_velocity := Vector2.ZERO
+var has_navigation_safe_velocity := false
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -143,7 +140,8 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
-	ensure_navigation_agent()
+	if moves:
+		ensure_navigation_agent()
 
 
 func ensure_navigation_agent() -> NavigationAgent2D:
@@ -152,7 +150,8 @@ func ensure_navigation_agent() -> NavigationAgent2D:
 		navigation_agent.name = "NavigationAgent2D"
 		navigation_agent.path_desired_distance = 12.0
 		navigation_agent.target_desired_distance = 8.0
-		navigation_agent.avoidance_enabled = false
+		navigation_agent.avoidance_enabled = true
+		navigation_agent.velocity_computed.connect(_on_navigation_velocity_computed)
 		add_child(navigation_agent)
 	return navigation_agent
 
@@ -161,6 +160,8 @@ func set_navigation_target(target: Vector2) -> void:
 	if navigation_agent == null:
 		ensure_navigation_agent()
 	if navigation_agent:
+		has_navigation_safe_velocity = false
+		navigation_safe_velocity = Vector2.ZERO
 		navigation_agent.target_position = target
 
 
@@ -174,12 +175,16 @@ func advance_with_navigation(delta: float) -> bool:
 	if direction.length_squared() <= 0.01:
 		return false
 	var speed = Goap.modifiers.get_value(self, "speed")
-	var step = direction.normalized() * speed * delta
-	if step.length() > direction.length():
-		step = direction
-	global_position += step
+	var desired_velocity = direction.normalized() * speed
+	navigation_agent.velocity = desired_velocity
+	current_step = navigation_safe_velocity if has_navigation_safe_velocity else desired_velocity
 	mirror_look_at(next_point.x)
 	return true
+
+
+func _on_navigation_velocity_computed(safe_velocity: Vector2) -> void:
+	navigation_safe_velocity = safe_velocity
+	has_navigation_safe_velocity = true
 
 
 func setup_leader_exp():
@@ -352,20 +357,6 @@ func point_collision(point, offset=0):
 	return Utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
 
 
-func check_collision(unit2, delta):
-	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
-	var unit1_rad = self.collision_radius
-	var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
-	var unit2_rad = unit2.collision_radius
-	return Utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
-
-
-func get_units_in_quad(delta):
-	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
-	var unit1_rad = self.collision_radius
-	return Collisions.quad.get_units_in_radius(unit1_pos, unit1_rad)
-
-
 func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 	var neighbors = Collisions.get_units_in_radius(pos, radius)
 	var targets = []
@@ -404,14 +395,8 @@ func on_idle_end(): # every idle animation end (0.6s)
 	emit_signal("unit_animation_ended")
 
 
-func on_move(delta): # every frame if there's no collision
+func on_move(delta): # movement tick
 	Goap.move.step(self, delta)
-
-
-func on_collision(delta):
-	if self.moves:
-		Goap.move.on_collision(self, delta)
-	emit_signal("unit_collided")
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
@@ -464,8 +449,11 @@ func channel_start(time):
 
 func stun_start():
 	self.wait_time = 2
-	self.agent.get_state("is_stunned", true)
+	self.agent.set_state("is_stunned", true)
+	self.agent.set_state("stunned", true)
 	self.agent.set_state("is_channeling", false)
+	if self.agent.get_state("player_order", {}).get("type", "") == "teleport":
+		self.agent.set_state("player_order_id", self.agent.get_state("player_order_id", 0) + 1)
 	self.set_state("stun")
 	emit_signal("unit_stuned")
 
@@ -473,6 +461,7 @@ func stun_start():
 func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
+		self.agent.set_state("is_stunned", false)
 		self.agent.set_state("stunned", false)
 		emit_signal("unit_stun_ended")
 		emit_signal("unit_animation_ended")
@@ -484,7 +473,7 @@ func die():  # hp <= 0
 	self.target = null
 	
 	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("has_player_command", false)
+	self.agent.cancel_player_order()
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:

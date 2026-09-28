@@ -86,6 +86,7 @@ func setup_buildings():
 
 	for team in WorldState.get_state("map").get_node("buildings").get_children():
 		for building in team.get_children():
+			Collisions.setup(building)
 			building.reset_unit()
 			game.ui.minimap.setup_symbol(building)
 			building.set_state("idle")

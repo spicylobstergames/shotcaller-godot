@@ -23,9 +23,10 @@ func _ready():
 			_goals.append(Goap.get_goal(goal))
 
 	_unit = get_parent()
+	if _unit.type == "leader":
+		_goals.append(Goap.get_goal("ObeyPlayer"))
 
 	_unit.unit_reseted.connect(reset)
-	_unit.unit_collided.connect(on_collision)
 	_unit.unit_arrived.connect(on_arrive)
 	_unit.unit_idle_ended.connect(on_idle_end)
 	_unit.unit_stun_ended.connect(on_stun_end)
@@ -56,13 +57,19 @@ func clear_state():
 
 
 func reset():
+	_exit_current_action()
 	clear_state()
 	_current_goal = null
-	_current_plan = null
+	_current_plan = []
+	_current_plan_step = 0
 
 
 func get_current_action():
-	if (_current_plan != null and _current_plan.size() > 0):
+	if (
+		_current_plan != null
+		and _current_plan_step >= 0
+		and _current_plan_step < _current_plan.size()
+	):
 		return _current_plan[_current_plan_step]
 	else:
 		return null
@@ -78,6 +85,55 @@ func has_goal_function(func_name):
 	return goal != null and goal.has_method(func_name)
 
 
+func issue_player_order(order_type: String, target: Vector2 = Vector2.ZERO) -> bool:
+	const supported_orders = ["move", "advance", "attack", "lane", "teleport", "stand"]
+	if (
+		_unit == null
+		or _unit.type != "leader"
+		or not _unit.is_controllable()
+		or _unit.dead
+		or order_type not in supported_orders
+	):
+		return false
+
+	_exit_current_action()
+	Goap.move.stop(_unit)
+	_unit.current_path.clear()
+	_state["is_channeling"] = false
+	_state["player_order_id"] = get_state("player_order_id", 0) + 1
+	_state["player_order"] = {"type": order_type, "target": target}
+	_state["player_order_complete"] = false
+	_state["has_player_command"] = true
+	_current_goal = null
+	_current_plan = []
+	_current_plan_step = 0
+	Goap.attack.set_target(_unit, null)
+	_unit.start_control_delay()
+	return true
+
+
+func complete_player_order():
+	_state.erase("player_order")
+	_state["player_order_complete"] = true
+	_state["has_player_command"] = false
+
+
+func cancel_player_order():
+	_exit_current_action()
+	_state.erase("player_order")
+	_state["player_order_complete"] = false
+	_state["has_player_command"] = false
+	_current_goal = null
+	_current_plan = []
+	_current_plan_step = 0
+
+
+func _exit_current_action():
+	var action = get_current_action()
+	if action and action.has_method("exit"):
+		action.exit(self)
+
+
 
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
@@ -85,8 +141,7 @@ func has_goal_function(func_name):
 func process(delta):
 	var goal = _get_best_goal()
 	if _current_goal == null or goal != _current_goal:
-		if _current_plan and _current_plan_step < _current_plan.size():
-			_current_plan[_current_plan_step].exit(self)
+		_exit_current_action()
 		_current_goal = goal
 		_current_plan = []
 		_current_plan_step = 0
@@ -114,23 +169,31 @@ func _get_best_goal():
 # Every action exposes a function called perform, which will return true when
 # the job is complete, so the agent can jump to the next action in the list.
 func _follow_plan(plan, delta):
-	if plan.size() > 0:
-		var is_step_complete = plan[_current_plan_step].perform(self, delta)
+	if plan == null or plan.is_empty() or _current_plan_step >= plan.size():
+		return
+	var action = plan[_current_plan_step]
+	if action == null:
+		return
+	var is_step_complete = action.perform(self, delta)
 		
-		# debug
-		if agent_debug: 
-			#_unit.hud.state.text = get_current_action().get_class_name()
-			_unit.hud.state.text = _get_best_goal().get_class_name()
+	# debug
+	if agent_debug and _unit.hud and _unit.hud.state:
+		var goal = _get_best_goal()
+		if goal:
+			_unit.hud.state.text = goal.get_class_name()
 		
-		if is_step_complete:
-			get_current_action().exit(self) #untested
-			if _current_plan_step < plan.size() - 1:
-				_current_plan_step += 1
-				get_current_action().enter(self)
-			else:
-				#trigger replan
-				_current_goal = null
-				_current_plan = null
+	if is_step_complete:
+		if action.has_method("exit"):
+			action.exit(self)
+		if _current_plan_step < plan.size() - 1:
+			_current_plan_step += 1
+			var next_action = get_current_action()
+			if next_action and next_action.has_method("enter"):
+				next_action.enter(self)
+		else:
+			_current_goal = null
+			_current_plan = []
+			_current_plan_step = 0
 
 
 func on_every_second() :
@@ -169,13 +232,6 @@ func on_move_end():
 		_get_best_goal().on_move_end(self)
 
 
-func on_collision():
-	if has_action_function("on_collision"):
-		get_current_action().on_collision(self)
-	if has_goal_function("on_collision"):
-		_get_best_goal().on_collision(self)
-
-
 func on_stun_end():
 	if has_action_function("resume"):
 		get_current_action().resume(_unit)
@@ -188,6 +244,9 @@ func on_attack_end():
 		get_current_action().on_attack_end(self)
 	if has_goal_function("on_attack_end"):
 		_get_best_goal().on_attack_end(self)
+	var order = get_state("player_order", {})
+	if order.get("type", "") == "attack":
+		complete_player_order()
 	if _unit.attacks and not _unit.target:
 		if _unit.current_path:
 			Goap.path.smart(_unit, _unit.current_path)

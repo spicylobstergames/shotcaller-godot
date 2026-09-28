@@ -133,43 +133,41 @@ func control_state(point):
 func advance(unit, point):
 	if unit and unit.attacks and unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
-		Goap.advance.smart(unit, order_point)
+		Goap.orders.issue_player_order(unit, "advance", order_point)
 
 
 func attack(unit, point):
 	if unit.attacks and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
-		Goap.attack.point(unit, order_point)
+		Goap.orders.issue_player_order(unit, "attack", order_point)
 
 
 func teleport(unit, point):
 	if unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
-		Goap.move.teleport(unit, order_point)
+		Goap.orders.issue_player_order(unit, "teleport", order_point)
 
 
 func change_lane(unit, point):
 	if unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
-		Goap.path.change_lane(unit, order_point)
+		Goap.orders.issue_player_order(unit, "lane", order_point)
 
 
 func move(unit, point):
 	if unit.moves and unit.is_controllable() and no_delay(unit):
 		var order_point = order(unit, point)
-		Goap.move.smart(unit, order_point)
+		Goap.orders.issue_player_order(unit, "move", order_point)
 
 
 func stand(unit):
 	if unit.is_controllable() and no_delay(unit):
 		order(unit, null)
-		Goap.move.stand(unit)
+		Goap.orders.issue_player_order(unit, "stand")
 
 
 func order(unit, point):
-	unit.agent.set_state("has_player_command", true)
-	Goap.attack.set_target(unit, null)
-	unit.start_control_delay()
+	unit.after_arive = "stop"
 	if point:
 		var building = Utils.get_building(point)
 		if building:

@@ -7,6 +7,7 @@ extends Node
 var path_grid
 var path_finder
 var path_line
+var navigation_region: NavigationRegion2D
 
 
 func setup_pathfind():
@@ -36,12 +37,42 @@ func setup_pathfind():
 	for building in WorldState.get_state("neutral_buildings"):
 		var pos = (building.global_position / WorldState.get_state("map").tile_size).floor()
 		path_grid.setWalkableAt(pos.x, pos.y, false)
+	setup_native_navigation(WorldState.get_state("map"))
 	# setup finder
 	path_finder = Finder.JumpPointFinder.new()
 	# add movement line indicator
 	path_line = Line2D.new()
 	path_line.name = "unit_path_line"
 	WorldState.get_state("map").fog.add_sibling(path_line)
+
+
+func setup_native_navigation(map):
+	if is_instance_valid(navigation_region):
+		navigation_region.queue_free()
+
+	var navigation_polygon = NavigationPolygon.new()
+	var tile_size = map.tile_size
+	for y in range(path_grid.height):
+		for x in range(path_grid.width):
+			if not path_grid.isWalkableAt(x, y):
+				continue
+			var left = x * tile_size
+			var top = y * tile_size
+			var right = min(left + tile_size, map.size.x)
+			var bottom = min(top + tile_size, map.size.y)
+			if right <= left or bottom <= top:
+				continue
+			navigation_polygon.add_polygon(PackedVector2Array([
+				Vector2(left, top),
+				Vector2(right, top),
+				Vector2(right, bottom),
+				Vector2(left, bottom)
+			]))
+
+	navigation_region = NavigationRegion2D.new()
+	navigation_region.name = "generated_navigation_region"
+	navigation_region.navigation_polygon = navigation_polygon
+	map.add_child(navigation_region)
 
 
 func setup_unit_path(unit, path):
@@ -117,17 +148,23 @@ func in_limits(p):
 func navigate_to(unit, target_point: Vector2):
 	if not unit or target_point == Vector2.ZERO:
 		return
-	unit.current_destiny = target_point
-	unit.set_navigation_target(target_point)
 	var native_path = find_native_path(unit.global_position, target_point)
 	if native_path.size() > 1:
-		unit.current_path = native_path.slice(1)
+		unit.current_path.clear()
+		unit.current_destiny = target_point
+		unit.final_destiny = target_point
+		unit.set_navigation_target(target_point)
+		Goap.move.move(unit, target_point)
 		return
 	var custom_path = find_custom_path(unit.global_position, target_point)
 	if custom_path.size() > 0:
-		unit.current_path = custom_path
+		start(unit, custom_path)
 		return
 	unit.current_path = []
+	unit.current_destiny = target_point
+	unit.final_destiny = target_point
+	unit.set_navigation_target(target_point)
+	Goap.move.move(unit, target_point)
 
 
 func start(unit, new_path):

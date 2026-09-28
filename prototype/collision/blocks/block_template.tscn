@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="1"]
 radius = 30.0
 
-[node name="block" type="Node2D"]
+[node name="block" type="StaticBody2D"]
 texture_filter = 1
 script = ExtResource("1")
 hp = 0

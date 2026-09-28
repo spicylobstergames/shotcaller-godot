@@ -103,7 +103,7 @@ radius = 8.0
 [sub_resource type="CircleShape2D" id="19"]
 radius = 50.04
 
-[node name="unit" type="Node2D" unique_id=1109540589]
+[node name="unit" type="CharacterBody2D" unique_id=1109540589]
 material = SubResource("CanvasItemMaterial_uxyd2")
 script = ExtResource("7")
 
