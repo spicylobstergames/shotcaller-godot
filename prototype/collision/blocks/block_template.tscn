@@ -18,16 +18,8 @@ title = "block"
 team = ""
 collide = true
 
-[node name="collisions" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-input_pickable = false
-monitoring = false
-monitorable = false
-
-[node name="block" type="CollisionShape2D" parent="collisions"]
+[node name="block" type="CollisionShape2D" parent="."]
 shape = SubResource("1")
-disabled = true
 
 [node name="light" type="PointLight2D" parent="."]
 visible = false

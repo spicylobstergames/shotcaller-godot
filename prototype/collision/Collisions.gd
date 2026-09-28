@@ -56,6 +56,9 @@ func setup(unit):
 	if unit.has_node("collisions/block"):
 		unit.collision_position = unit.get_node("collisions/block").position
 		unit.collision_radius = unit.get_node("collisions/block").shape.radius
+	elif unit.has_node("block") and unit.get_node("block") is CollisionShape2D:
+		unit.collision_position = unit.get_node("block").position
+		unit.collision_radius = unit.get_node("block").shape.radius
 	
 	if unit.has_node("collisions/attack"):
 		unit.attack_hit_position = unit.get_node("collisions/attack").position
@@ -68,15 +71,17 @@ func setup(unit):
 			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if unit.collide and unit is CollisionObject2D:
 		var physical_shape = unit.get_node_or_null("physical_collision")
-		if physical_shape == null:
+		if physical_shape == null and unit.get_node_or_null("block") is CollisionShape2D:
+			physical_shape = unit.get_node("block")
+		elif physical_shape == null:
 			physical_shape = CollisionShape2D.new()
 			physical_shape.name = "physical_collision"
 			unit.add_child(physical_shape)
-		var rectangle = RectangleShape2D.new()
-		var diameter = max(unit.collision_radius * 2.0, 4.0)
-		rectangle.size = Vector2(diameter, diameter)
-		physical_shape.shape = rectangle
-		physical_shape.position = unit.collision_position
+			var rectangle = RectangleShape2D.new()
+			var diameter = max(unit.collision_radius * 2.0, 4.0)
+			rectangle.size = Vector2(diameter, diameter)
+			physical_shape.shape = rectangle
+			physical_shape.position = unit.collision_position
 		if unit.navigation_agent:
 			unit.navigation_agent.radius = max(unit.collision_radius, 8.0)
 
