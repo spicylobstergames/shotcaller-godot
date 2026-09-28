@@ -178,7 +178,7 @@ func advance_with_navigation(delta: float) -> bool:
 	var desired_velocity = direction.normalized() * speed
 	navigation_agent.velocity = desired_velocity
 	current_step = navigation_safe_velocity if has_navigation_safe_velocity else desired_velocity
-	mirror_look_at(next_point.x)
+	mirror_look_at(next_point)
 	return true
 
 
@@ -290,7 +290,7 @@ func opponent_team():
 		"neutral": return "all"
 
 
-func mirror_look_at(point):
+func mirror_look_at(point: Vector2):
 	if self.type != "building":
 		self.mirror_toggle(point.x - self.global_position.x < 0)
 
