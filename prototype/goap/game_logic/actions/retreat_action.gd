@@ -34,7 +34,7 @@ func enter(agent):
 	var lane = agent.get_state("lane")
 	var path = WorldState.get_state("lanes")[lane].duplicate()
 	if unit.team == "red": path.reverse()
-	Goap.move.point(unit, path[0])
+	Goap.path.navigate_to(unit, path[0])
 
 
 func on_arrive(agent):

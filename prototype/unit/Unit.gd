@@ -108,6 +108,7 @@ var hud:Node
 var sprites:Node
 var body:Node
 @onready var agent: Node = get_node_or_null("goap_agent")
+var navigation_agent: NavigationAgent2D
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -142,6 +143,43 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	ensure_navigation_agent()
+
+
+func ensure_navigation_agent() -> NavigationAgent2D:
+	if navigation_agent == null:
+		navigation_agent = NavigationAgent2D.new()
+		navigation_agent.name = "NavigationAgent2D"
+		navigation_agent.path_desired_distance = 12.0
+		navigation_agent.target_desired_distance = 8.0
+		navigation_agent.avoidance_enabled = false
+		add_child(navigation_agent)
+	return navigation_agent
+
+
+func set_navigation_target(target: Vector2) -> void:
+	if navigation_agent == null:
+		ensure_navigation_agent()
+	if navigation_agent:
+		navigation_agent.target_position = target
+
+
+func advance_with_navigation(delta: float) -> bool:
+	if navigation_agent == null or navigation_agent.target_position == Vector2.ZERO:
+		return false
+	if navigation_agent.is_target_reached():
+		return false
+	var next_point = navigation_agent.get_next_path_position()
+	var direction = next_point - global_position
+	if direction.length_squared() <= 0.01:
+		return false
+	var speed = Goap.modifiers.get_value(self, "speed")
+	var step = direction.normalized() * speed * delta
+	if step.length() > direction.length():
+		step = direction
+	global_position += step
+	mirror_look_at(next_point.x)
+	return true
 
 
 func setup_leader_exp():

@@ -50,7 +50,9 @@ func calc_step(unit, speed):
 
 
 
-func step(unit, delta):	
+func step(unit, delta):
+	if unit.advance_with_navigation(delta):
+		return
 	unit.global_position += unit.current_step * delta
 
 
@@ -110,8 +112,7 @@ func stop(unit):
 
 func smart(unit, target_point):
 	if not unit.agent.get_state("stunned"):
-		var path = Goap.path.find(unit.global_position, target_point)
-		if path: Goap.path.start(unit, path)
+		Goap.path.navigate_to(unit, target_point)
 
 
 

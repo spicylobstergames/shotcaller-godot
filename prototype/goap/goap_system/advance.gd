@@ -39,8 +39,10 @@ func point(unit, final_destiny, smart_move = false):
 
 func move(unit, final_destiny, smart_move):
 	if unit.moves and final_destiny:
-		if smart_move: Goap.move.smart(unit, final_destiny)
-		else : Goap.move.move(unit, final_destiny)
+		if smart_move:
+			Goap.path.navigate_to(unit, final_destiny)
+		else:
+			Goap.move.move(unit, final_destiny)
 	else: stop(unit)
 
 

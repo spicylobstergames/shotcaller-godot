@@ -71,6 +71,13 @@ func on_arrive(unit):
 
 
 func find(g1, g2):
+	var native_path = find_native_path(g1, g2)
+	if native_path.size() > 0:
+		return native_path
+	return find_custom_path(g1, g2)
+
+
+func find_custom_path(g1, g2):
 	var cell_size = WorldState.get_state("map").tile_size
 	var half = WorldState.get_state("map").half_tile_size
 	var p1 = (g1 / cell_size).floor()
@@ -84,16 +91,51 @@ func find(g1, g2):
 		# int array[x,y] to float dict Vector2(x,y)
 			path.append(Vector2(half + (item[0] * cell_size), half + (item[1] * cell_size)))
 		return path
+	return []
+
+
+func find_native_path(from: Vector2, to: Vector2) -> Array:
+	var map = WorldState.get_state("map")
+	if not map or not map.get_world_2d():
+		return []
+	var nav_map = map.get_world_2d().navigation_map
+	if nav_map == null:
+		return []
+	var path = NavigationServer2D.map_get_path(nav_map, from, to, true)
+	if path.size() <= 1:
+		return []
+	var converted = []
+	for point in path:
+		converted.append(point)
+	return converted
 
 
 func in_limits(p):
-	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height)) 
+	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height))
+
+
+func navigate_to(unit, target_point: Vector2):
+	if not unit or target_point == Vector2.ZERO:
+		return
+	unit.current_destiny = target_point
+	unit.set_navigation_target(target_point)
+	var native_path = find_native_path(unit.global_position, target_point)
+	if native_path.size() > 1:
+		unit.current_path = native_path.slice(1)
+		return
+	var custom_path = find_custom_path(unit.global_position, target_point)
+	if custom_path.size() > 0:
+		unit.current_path = custom_path
+		return
+	unit.current_path = []
 
 
 func start(unit, new_path):
 	if new_path and not new_path.is_empty():
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
+		unit.current_destiny = next_point
+		unit.set_navigation_target(next_point)
 		Goap.advance.point(unit, next_point)
 
 
@@ -102,6 +144,8 @@ func smart(unit, path, cb="advance"):
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
+		unit.current_destiny = next_point
+		unit.set_navigation_target(next_point)
 		Goap[cb].point(unit, next_point)
 
 
