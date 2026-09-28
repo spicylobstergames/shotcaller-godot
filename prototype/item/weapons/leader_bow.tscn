@@ -1,6 +1,6 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://du80apn5788qj"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/robin_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://6bb8ipch0gs" path="res://assets/leaders/robin_blue.png" id="1"]
 
 [sub_resource type="AtlasTexture" id="37"]
 atlas = ExtResource("1")
@@ -20,7 +20,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("38")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -43,29 +43,25 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("41")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="weapon" type="Node2D"]
-texture_filter = 1
-use_parent_material = true
-position = Vector2(0, -4)
-scale = Vector2(1.0686, 1)
+[node name="weapon" type="Node2D" unique_id=1953395702]
 
-[node name="projectile" type="Node2D" parent="."]
+[node name="projectile" type="Node2D" parent="." unique_id=1003914246]
 modulate = Color(1, 1, 1, 0)
 use_parent_material = true
 position = Vector2(22.1654, 1)
 
-[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile" unique_id=579523076]
 use_parent_material = true
 position = Vector2(19.8074, 3)
 sprite_frames = SubResource("39")
 offset = Vector2(-33, -3)
 
-[node name="bow" type="AnimatedSprite2D" parent="."]
+[node name="bow" type="AnimatedSprite2D" parent="." unique_id=1266846066]
 use_parent_material = true
 position = Vector2(0, 1)
 rotation = 0.349066

@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://d5m4pu7kk04h"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/nagato_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://c81xtos5i5uyu" path="res://assets/leaders/nagato_blue.png" id="1"]
 
 [sub_resource type="AtlasTexture" id="45"]
 atlas = ExtResource("1")
@@ -12,7 +12,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("45")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -27,18 +27,17 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("45")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="weapon" type="Node2D"]
+[node name="weapon" type="Node2D" unique_id=731806027]
 texture_filter = 1
 use_parent_material = true
-position = Vector2(0, -8)
 scale = Vector2(1.0686, 1)
 
-[node name="shuriken" type="AnimatedSprite2D" parent="."]
+[node name="shuriken" type="AnimatedSprite2D" parent="." unique_id=949595596]
 modulate = Color(1, 1, 1, 0.838745)
 use_parent_material = true
 position = Vector2(-7.48643, 2)
@@ -46,11 +45,11 @@ rotation = -1.64399
 scale = Vector2(0.994479, 0.941669)
 sprite_frames = SubResource("41")
 
-[node name="projectile" type="Node2D" parent="."]
+[node name="projectile" type="Node2D" parent="." unique_id=1751290602]
 visible = false
 z_index = 1
 use_parent_material = true
 
-[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile" unique_id=942124494]
 use_parent_material = true
 sprite_frames = SubResource("39")

@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://d0ujujatbc5u1"]
 
-[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://cumc6i45eki5r" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://dwgk4mx226mwt" path="res://assets/neutrals/lumberjack_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="39"]
 atlas = ExtResource("1")
@@ -18,12 +18,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("39")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
 "frames": [],
-"loop": true,
+"loop": 1,
 "name": &"neutral",
 "speed": 5.0
 }, {
@@ -31,13 +31,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("40")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
 
-[node name="weapon" type="AnimatedSprite2D"]
+[node name="weapon" type="AnimatedSprite2D" unique_id=209225743]
 texture_filter = 1
-position = Vector2(7, 1)
 sprite_frames = SubResource("41")
 offset = Vector2(2, -5)

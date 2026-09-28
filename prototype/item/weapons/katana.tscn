@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://cqi7aoqpk3y87"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/bokuden_blue.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/leaders/bokuden_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://c3xdv81ehn8db" path="res://assets/leaders/bokuden_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://qcag6qpcc1i4" path="res://assets/leaders/bokuden_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="48"]
 atlas = ExtResource("1")
@@ -18,7 +18,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("48")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -26,13 +26,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("49")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
 
-[node name="weapon" type="AnimatedSprite2D"]
+[node name="weapon" type="AnimatedSprite2D" unique_id=1985798319]
 texture_filter = 1
-position = Vector2(7, 0)
 sprite_frames = SubResource("50")
 offset = Vector2(2, -7)

@@ -1,8 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bvln4bj2j4esc"]
 
-[ext_resource type="Script" path="res://controls/Crafty_camera.gd" id="1"]
+[ext_resource type="Script" uid="uid://em3v87o4df2k" path="res://controls/Crafty_camera.gd" id="1"]
 
-[node name="Crafty_camera" type="Camera2D"]
+[node name="Crafty_camera" type="Camera2D" unique_id=769179991]
 unique_name_in_owner = true
-position = Vector2(300, 300)
 script = ExtResource("1")

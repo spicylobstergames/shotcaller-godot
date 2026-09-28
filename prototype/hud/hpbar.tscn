@@ -1,20 +1,17 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bvxhqbux0k5ao"]
 
-[ext_resource type="Texture2D" path="res://assets/unit/hpbar.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bkib4p8mpqk1u" path="res://assets/unit/hpbar.png" id="1"]
 
-[node name="hpbar" type="Node2D"]
-texture_filter = 1
-use_parent_material = true
-position = Vector2(0, -19)
+[node name="hpbar" type="Node2D" unique_id=213771358]
 
-[node name="bar" type="Sprite2D" parent="."]
+[node name="bar" type="Sprite2D" parent="." unique_id=516123247]
 modulate = Color(0.168627, 0.160784, 0.227451, 0.862745)
 use_parent_material = true
 texture = ExtResource("1")
 region_enabled = true
 region_rect = Rect2(2, 2, 22, 4)
 
-[node name="red" type="Sprite2D" parent="."]
+[node name="red" type="Sprite2D" parent="." unique_id=664061716]
 modulate = Color(0.682353, 0.172549, 0.172549, 1)
 use_parent_material = true
 position = Vector2(-9, 0)
@@ -24,7 +21,7 @@ offset = Vector2(0, -1)
 region_enabled = true
 region_rect = Rect2(4, 7, 18, 2)
 
-[node name="green" type="Sprite2D" parent="."]
+[node name="green" type="Sprite2D" parent="." unique_id=1085714251]
 modulate = Color(0.0392157, 0.643137, 0.117647, 1)
 use_parent_material = true
 position = Vector2(-9, 0)

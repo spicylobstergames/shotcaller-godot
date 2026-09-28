@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://qes1pdekl5uv"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/osman_blue.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/leaders/osman_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://chf6xr2vi0fvn" path="res://assets/leaders/osman_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bdjcugmr1d208" path="res://assets/leaders/osman_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="43"]
 atlas = ExtResource("1")
@@ -18,7 +18,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("43")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -26,14 +26,13 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("44")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
 
-[node name="weapon" type="AnimatedSprite2D"]
+[node name="weapon" type="AnimatedSprite2D" unique_id=24577357]
 texture_filter = 1
-position = Vector2(8, -2)
 rotation = -1.02617
 sprite_frames = SubResource("45")
 offset = Vector2(6, -2)
