@@ -52,6 +52,8 @@ func setup_native_navigation(map):
 
 	var navigation_polygon = NavigationPolygon.new()
 	var tile_size = map.tile_size
+	var vertices := PackedVector2Array()
+	var polygons: Array[PackedInt32Array] = []
 	for y in range(path_grid.height):
 		for x in range(path_grid.width):
 			if not path_grid.isWalkableAt(x, y):
@@ -62,13 +64,23 @@ func setup_native_navigation(map):
 			var bottom = min(top + tile_size, map.size.y)
 			if right <= left or bottom <= top:
 				continue
-			navigation_polygon.add_polygon(PackedVector2Array([
+			var first_vertex = vertices.size()
+			vertices.append_array(PackedVector2Array([
 				Vector2(left, top),
 				Vector2(right, top),
 				Vector2(right, bottom),
 				Vector2(left, bottom)
 			]))
+			polygons.append(PackedInt32Array([
+				first_vertex,
+				first_vertex + 1,
+				first_vertex + 2,
+				first_vertex + 3
+			]))
 
+	navigation_polygon.vertices = vertices
+	for polygon in polygons:
+		navigation_polygon.add_polygon(polygon)
 	navigation_region = NavigationRegion2D.new()
 	navigation_region.name = "generated_navigation_region"
 	navigation_region.navigation_polygon = navigation_polygon
