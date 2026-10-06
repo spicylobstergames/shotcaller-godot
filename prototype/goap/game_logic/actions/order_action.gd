@@ -69,7 +69,6 @@ func on_arrive(agent):
 
 
 func on_attack_end(agent):
-	var unit = agent.get_unit()
 	var order = agent.get_state("player_order", {})
 	if order.get("type", "") == "attack":
 		complete_player_order(agent)

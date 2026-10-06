@@ -80,7 +80,7 @@ func stop(unit):
 func smart(unit, target_point):
 	if not unit.agent.get_state("stunned"):
 		Goap.navigation.navigate_to(unit, target_point)
-
+	# todo add queue to resume movement
 
 
 func teleport(unit, target_point):
@@ -94,7 +94,7 @@ func teleport(unit, target_point):
 	Goap.move.stop(unit)
 	agent.set_state("is_channeling", true)
 	var order_id = agent.get_state("player_order_id", 0)
-	# todo move to timer
+	# todo move to world state timer
 	await get_tree().create_timer(teleport_time).timeout
 	if (
 		agent.get_state("is_channeling")

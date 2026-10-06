@@ -20,25 +20,25 @@ func start():
 
 
 func transition():
-	var transition = circle_transition_scene.instantiate()
-	add_child(transition)
-	transition.transition_completed.connect(on_transition_end.bind(transition))
+	var new_transition = circle_transition_scene.instantiate()
+	add_child(new_transition)
+	new_transition.transition_completed.connect(on_transition_end.bind(new_transition))
 
 
 func intro():
-	var intro = campaign_intro_scene.instantiate()
-	add_child(intro)
-	intro_text = intro
-	intro.intro_completed.connect(intro_end)
+	var intro_scene = campaign_intro_scene.instantiate()
+	add_child(intro_scene)
+	intro_text = intro_scene
+	intro_scene.intro_completed.connect(intro_end)
 
 func intro_end():
 	intro_ended = true
 	transition()
 	
 
-func on_transition_end(transition = null):
+func on_transition_end(end_transition = null):
 	# clears transition
-	if transition: transition.queue_free()
+	if end_transition: end_transition.queue_free()
 	
 	if game.map_manager.current_map == "campaign_map" and !intro_ended:
 		intro()

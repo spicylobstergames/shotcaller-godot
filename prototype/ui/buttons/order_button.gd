@@ -82,11 +82,11 @@ func button_down():
 		
 		"lumberjack":
 			game.spawn.lumberjack_hire(selected_unit, WorldState.get_state("player_team"))
-			# update dismiss after lumberjack hire
+			# todo update dismiss after lumberjack hire
 			self.disabled = true
 		
 		"dismiss":
-			#todo
+			# todo remove unit 
 			self.disabled = true
 		
 		"pawn_upgrades":

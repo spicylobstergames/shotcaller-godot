@@ -156,16 +156,16 @@ func ensure_navigation_agent() -> NavigationAgent2D:
 	return navigation_agent
 
 
-func set_navigation_target(target: Vector2) -> void:
+func set_navigation_target(target_vector: Vector2) -> void:
 	if navigation_agent == null:
 		ensure_navigation_agent()
 	if navigation_agent:
 		has_navigation_safe_velocity = false
 		navigation_safe_velocity = Vector2.ZERO
-		navigation_agent.target_position = target
+		navigation_agent.target_position = target_vector
 
 
-func advance_with_navigation(delta: float) -> bool:
+func advance_with_navigation(_delta: float) -> bool:
 	if navigation_agent == null or navigation_agent.target_position == Vector2.ZERO:
 		return false
 	if navigation_agent.is_target_reached():

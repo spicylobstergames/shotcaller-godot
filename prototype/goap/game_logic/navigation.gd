@@ -195,8 +195,8 @@ func find_native_path(from: Vector2, to: Vector2) -> Array:
 	if path.size() <= 1:
 		return []
 	var converted = []
-	for point in path:
-		converted.append(point)
+	for path_point in path:
+		converted.append(path_point)
 	return converted
 
 
@@ -283,8 +283,8 @@ func draw(unit):
 		path_line.hide()
 
 
-func change_lane(unit, point):
-	var lane = Utils.closer_lane(point)
+func change_lane(unit, lane_point):
+	var lane = Utils.closer_lane(lane_point)
 	var path = lane.duplicate()
 	if unit.team == "red":
 		path.reverse()
