@@ -77,8 +77,8 @@ func setup_pathfind():
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
 	var walls_tile = map.walls
-	for cell in walls_tile.get_used_cells(0):
-		var team = "blue" if walls_tile.get_cell_source_id(0, cell) == 0 else "red"
+	for cell in walls_tile.get_used_cells():
+		var team = "blue" if walls_tile.get_cell_source_id(cell) == 0 else "red"
 		Collisions.create_block(cell.x, cell.y, team)
 		path_grid.setWalkableAt(cell.x, cell.y, false)
 	for building in WorldState.get_state("player_buildings"):
@@ -235,14 +235,14 @@ func start(unit, new_path):
 		Goap.navigation.point(unit, next_point)
 
 
-func follow_path(unit, path, cb = "point"):
+func follow_path(unit, path):
 	if path and path.size():
 		var new_path = unit.cut_path(path)
 		var next_point = new_path.pop_front()
 		unit.current_path = new_path
 		unit.current_destiny = next_point
 		unit.set_navigation_target(next_point)
-		Goap.navigation[cb](unit, next_point)
+		Goap.navigation.point(unit, next_point)
 
 
 func resume_lane(unit):

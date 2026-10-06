@@ -1,16 +1,16 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c8d2oyhcseu3a"]
 
-[ext_resource type="PackedScene" path="res://hud/hpbar.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://bvxhqbux0k5ao" path="res://hud/hpbar.tscn" id="1"]
 [ext_resource type="Theme" path="res://assets/ui/theme/label_theme.tres" id="2_rbn5u"]
-[ext_resource type="Script" path="res://hud/unit_hud.gd" id="3"]
-[ext_resource type="Texture2D" path="res://assets/unit/shadow.png" id="4"]
+[ext_resource type="Script" uid="uid://bmhokpdat5jdg" path="res://hud/unit_hud.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://bdmnf3yu0pgjq" path="res://assets/unit/shadow.png" id="4"]
 
-[node name="hud" type="Node2D"]
+[node name="hud" type="Node2D" unique_id=979712477]
 texture_filter = 1
 use_parent_material = true
 script = ExtResource("3")
 
-[node name="state" type="Label" parent="."]
+[node name="state" type="Label" parent="." unique_id=279554608]
 use_parent_material = true
 offset_left = -37.0
 offset_top = -39.0
@@ -21,11 +21,12 @@ text = "Unit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="selection" type="Sprite2D" parent="."]
+[node name="selection" type="Sprite2D" parent="." unique_id=601893277]
 modulate = Color(0.117647, 1, 0.211765, 0.588235)
 use_parent_material = true
 position = Vector2(0, 8)
 scale = Vector2(1.6, 1.6)
 texture = ExtResource("4")
 
-[node name="hpbar" parent="." instance=ExtResource("1")]
+[node name="hpbar" parent="." unique_id=304701875 instance=ExtResource("1")]
+use_parent_material = true
