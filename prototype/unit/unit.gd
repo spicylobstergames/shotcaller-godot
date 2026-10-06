@@ -175,8 +175,8 @@ func advance_with_navigation(_delta: float) -> bool:
 	var direction = next_point - global_position
 	if direction.length_squared() <= 0.01:
 		return false
-	var speed = Goap.modifiers.get_value(self, "speed")
-	var desired_velocity = direction.normalized() * speed
+	var current_speed = Goap.modifiers.get_value(self, "speed")
+	var desired_velocity = direction.normalized() * current_speed
 	navigation_agent.velocity = desired_velocity
 	current_step = navigation_safe_velocity if has_navigation_safe_velocity else desired_velocity
 	mirror_look_at(next_point)

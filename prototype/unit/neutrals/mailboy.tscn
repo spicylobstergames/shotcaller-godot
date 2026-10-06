@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/neutrals/mailboy_blue.png" id="1"]
-[ext_resource type="PackedScene" path="res://unit/unit.tscn" id="2"]
-[ext_resource type="Texture2D" path="res://assets/neutrals/mailboy_red.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bajdspaegcx6s" path="res://assets/neutrals/mailboy_blue.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://q37eswbcgiv8" path="res://unit/Unit.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://dt5vpfum5tvqt" path="res://assets/neutrals/mailboy_red.png" id="3"]
 
 [sub_resource type="AtlasTexture" id="39"]
 atlas = ExtResource("1")
