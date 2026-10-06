@@ -219,6 +219,7 @@ radius = 180.0
 texture_filter = 1
 hp = 2000
 regen = 10
+goals_list = ["EnemyDefeated", "Recover"]
 vision = 280
 type = "building"
 subtype = "backwood"

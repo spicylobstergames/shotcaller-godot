@@ -67,17 +67,17 @@ func button_down():
 				else: 
 					button.button_pressed = false
 					button.disabled = false
-			Goap.orders.set_taxes(self.orders.taxes, selected_unit.team)
+			Goap.get_action("TaxesAction").set_taxes(self.orders.taxes, selected_unit.team)
 			self.disabled = true
 		
 		"gold":
-			Goap.orders.gold_order(self)
+			Goap.get_action("MineAction").gold_order(self)
 			disable_siblings(self)
 			self.disabled = true
 		
 		"camp_hire":
 			clear_siblings(self)
-			Goap.orders.camp_hire(self.orders.camp_hire, selected_unit.team)
+			game.spawn.camp_hire(self.orders.camp_hire, selected_unit.team)
 			self.disabled = true
 		
 		"lumberjack":

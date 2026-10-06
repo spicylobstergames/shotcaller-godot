@@ -84,10 +84,10 @@ func leaders():
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
-			var path = Goap.path.new_lane_path(lane, team)
+			var path = Goap.navigation.new_lane_path(lane, team)
 			var path_start = path.pop_front()
 			var leader_node = game.spawn.create(leader_scene(leader_name), lane, team, "point_random", path_start)
-			Goap.path.setup_unit_path(leader_node, path)
+			Goap.navigation.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -101,7 +101,7 @@ func leaders():
 func spawn_group_cycle():
 	Goap.orders.lanes_cycle()
 	Goap.orders.leaders_cycle()
-	Goap.orders.update_taxes()
+	Goap.get_action("TaxesAction").update_taxes()
 	
 	for team in WorldState.teams:
 		var extra_unit = WorldState.get_state("player_extra_unit")
@@ -138,12 +138,12 @@ func pawn_scene(pawn_name):
 
 
 func send_pawn(template_name, lane, team):
-	var path = Goap.path.new_lane_path(lane, team)
+	var path = Goap.navigation.new_lane_path(lane, team)
 	var path_start = path.pop_front()
 	var pawn = recycle(template_name, lane, team, path_start)
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
-	Goap.path.setup_unit_path(pawn, path)
+	Goap.navigation.setup_unit_path(pawn, path)
 	Goap.orders.set_pawn(pawn)
 
 

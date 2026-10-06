@@ -694,6 +694,6 @@ shape = SubResource("27")
 [node name="critical_slash" parent="goap_agent/abilities" index="0" instance=ExtResource("6")]
 
 [node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemies", "PursueEnemies", "Retreat", "FollowPath", "WaitOut"]
+goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
 
 [editable path="hud"]

@@ -369,6 +369,7 @@ title = "hired worker"
 immune = true
 selectable = true
 moves = true
+goals_list = ["Recover", "ArriveAtDestination"]
 speed = 35.0
 hunting_speed = 50.0
 collide = true

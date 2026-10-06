@@ -23,8 +23,6 @@ func _ready():
 			_goals.append(Goap.get_goal(goal))
 
 	_unit = get_parent()
-	if _unit.type == "leader":
-		_goals.append(Goap.get_goal("ObeyPlayer"))
 
 	_unit.unit_reseted.connect(reset)
 	_unit.unit_arrived.connect(on_arrive)
@@ -50,6 +48,10 @@ func get_state(state_name, default = null):
 
 func set_state(state_name, value):
 	_state[state_name] = value
+
+
+func erase_state(state_name):
+	_state.erase(state_name)
 
 
 func clear_state():
@@ -85,44 +87,8 @@ func has_goal_function(func_name):
 	return goal != null and goal.has_method(func_name)
 
 
-func issue_player_order(order_type: String, target: Vector2 = Vector2.ZERO) -> bool:
-	const supported_orders = ["move", "advance", "attack", "lane", "teleport", "stand"]
-	if (
-		_unit == null
-		or _unit.type != "leader"
-		or not _unit.is_controllable()
-		or _unit.dead
-		or order_type not in supported_orders
-	):
-		return false
-
+func clear_plan():
 	_exit_current_action()
-	Goap.move.stop(_unit)
-	_unit.current_path.clear()
-	_state["is_channeling"] = false
-	_state["player_order_id"] = get_state("player_order_id", 0) + 1
-	_state["player_order"] = {"type": order_type, "target": target}
-	_state["player_order_complete"] = false
-	_state["has_player_command"] = true
-	_current_goal = null
-	_current_plan = []
-	_current_plan_step = 0
-	Goap.attack.set_target(_unit, null)
-	_unit.start_control_delay()
-	return true
-
-
-func complete_player_order():
-	_state.erase("player_order")
-	_state["player_order_complete"] = true
-	_state["has_player_command"] = false
-
-
-func cancel_player_order():
-	_exit_current_action()
-	_state.erase("player_order")
-	_state["player_order_complete"] = false
-	_state["has_player_command"] = false
 	_current_goal = null
 	_current_plan = []
 	_current_plan_step = 0
@@ -204,10 +170,7 @@ func on_every_second() :
 		else:
 			_unit.regen = 0
 	if not _unit.dead:
-		var dot_effects = Goap.modifiers.get_dot(_unit)
-		if dot_effects:
-			for dot in dot_effects:
-				Goap.attack.take_hit(dot.attacker, _unit, null, {"damage": dot.damage})
+		Goap.attack.on_every_second(self)
 	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
 	if has_goal_function("on_every_second"):
@@ -244,16 +207,8 @@ func on_attack_end():
 		get_current_action().on_attack_end(self)
 	if has_goal_function("on_attack_end"):
 		_get_best_goal().on_attack_end(self)
-	var order = get_state("player_order", {})
-	if order.get("type", "") == "attack":
-		complete_player_order()
-	if _unit.attacks and not _unit.target:
-		if _unit.current_path:
-			Goap.path.smart(_unit, _unit.current_path)
-		elif _unit.current_destiny:
-			Goap.move.point(_unit, _unit.current_destiny)
-		else:
-			Goap.move.stop(_unit)
+	Goap.get_action("OrderAction").on_attack_end(self)
+	Goap.attack.on_attack_end(_unit)
 
 
 func was_attacked(attacker, damage):
@@ -289,9 +244,7 @@ func on_arrive():
 		get_current_action().on_arrive(self)
 	if has_goal_function("on_arrive"):
 		_get_best_goal().on_arrive(self)
-	match _unit.after_arive:
-		"conquer": Goap.orders.conquer_building(_unit)
-		"pray": Goap.orders.pray_in_church(_unit)
+	Goap.get_action("OrderAction").on_arrive(self)
 
 
 #func clear_orders():

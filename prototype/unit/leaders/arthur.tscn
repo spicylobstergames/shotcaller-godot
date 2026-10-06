@@ -689,7 +689,7 @@ shape = SubResource("27")
 position = Vector2(7, -5)
 
 [node name="goap_agent" parent="." index="6" unique_id=544344335]
-goals_list = ["AttackEnemies", "PursueEnemies", "Retreat", "FollowPath", "WaitOut"]
+goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
 
 [node name="aura_of_courage" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="0" unique_id=1871703252 instance=ExtResource("2")]
 icon = ExtResource("5")

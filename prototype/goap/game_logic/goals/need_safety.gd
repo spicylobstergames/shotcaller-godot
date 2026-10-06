@@ -7,10 +7,17 @@ extends "res://goap/goap_system/goal_contract.gd"
 func get_class_name(): return "NeedSafety"
 
 
+func is_valid(agent) -> bool:
+	var unit = agent.get_unit()
+	var enemies = unit.get_units_in_sight({"team": unit.opponent_team()})
+	agent.set_state("is_threatened", not enemies.is_empty())
+	return not enemies.is_empty()
+
+
 func priority(agent) -> int:
 	var unit = agent.get_unit()
 	var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-	if not enemies.is_empty(): agent.set_state("is_threatened", true)
+	agent.set_state("is_threatened", not enemies.is_empty())
 	return enemies.size() * 2
 
 

@@ -473,7 +473,7 @@ func die():  # hp <= 0
 	self.target = null
 	
 	self.agent.set_state("is_channeling", false)
-	self.agent.cancel_player_order()
+	Goap.get_action("OrderAction").cancel_player_order(self.agent)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:

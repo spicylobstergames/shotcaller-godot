@@ -1,7 +1,7 @@
 extends Node
 
 
-# self = Goap.move
+# self = Goap.movement
 
 const teleport_time = 3
 const teleport_max_distance = 100
@@ -79,7 +79,7 @@ func stop(unit):
 
 func smart(unit, target_point):
 	if not unit.agent.get_state("stunned"):
-		Goap.path.navigate_to(unit, target_point)
+		Goap.navigation.navigate_to(unit, target_point)
 
 
 
@@ -115,5 +115,5 @@ func teleport(unit, target_point):
 		unit.global_position = new_position
 		# emit signal teleported
 		agent.set_state("lane", building.lane)
-		agent.complete_player_order()
-		Goap.path.resume_lane(unit)
+		Goap.get_action("OrderAction").complete_player_order(agent)
+		Goap.navigation.resume_lane(unit)

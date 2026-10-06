@@ -694,6 +694,6 @@ visible = false
 shape = SubResource("27")
 
 [node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemies", "PursueEnemies", "HelpFriends", "FollowPath"]
+goals_list = ["EnemyDefeated", "FriendsSafe", "Recover", "ArriveAtDestination"]
 
 [editable path="hud"]

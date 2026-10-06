@@ -4,15 +4,13 @@ extends Node
 
 # Lists all goal contracts.
 var _goals: Dictionary = {
-	"AttackEnemies": preload("res://goap/game_logic/goals/attack_enemies.gd").new(),
-	"FollowPath": preload("res://goap/game_logic/goals/follow_path.gd").new(),
-	"HelpFriends": preload("res://goap/game_logic/goals/help_friends.gd").new(),
+	"ArriveAtDestination": preload("res://goap/game_logic/goals/arrive_at_destination.gd").new(),
+	"EnemyDefeated": preload("res://goap/game_logic/goals/enemy_defeated.gd").new(),
+	"FriendsSafe": preload("res://goap/game_logic/goals/friends_safe.gd").new(),
 	"NeedLumber": preload("res://goap/game_logic/goals/need_lumber.gd").new(),
 	"NeedSafety": preload("res://goap/game_logic/goals/need_safety.gd").new(),
 	"ObeyPlayer": preload("res://goap/game_logic/goals/obey_player.gd").new(),
-	"PursueEnemies": preload("res://goap/game_logic/goals/pursue_enemies.gd").new(),
-	"Retreat": preload("res://goap/game_logic/goals/retreat_goal.gd").new(),
-	"WaitOut": preload("res://goap/game_logic/goals/wait_out.gd").new()
+	"Recover": preload("res://goap/game_logic/goals/recover.gd").new()
 }
 
 

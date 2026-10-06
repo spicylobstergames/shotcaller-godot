@@ -49,7 +49,7 @@ func map_loaded():
 	setup_buildings()
 	setup_lanes()
 	Collisions.setup_quadtree(map)
-	Goap.path.setup_pathfind()
+	Goap.navigation.setup_pathfind()
 	game.ui.map_loaded()
 	game.map_loaded()
 
