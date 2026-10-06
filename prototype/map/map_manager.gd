@@ -1,5 +1,6 @@
 extends Node2D
 
+signal map_became_ready
 
 # self = game.map_manager
 
@@ -51,7 +52,7 @@ func map_loaded():
 	Collisions.setup_quadtree(map)
 	Goap.navigation.setup_pathfind()
 	game.ui.map_loaded()
-	game.map_loaded()
+	map_became_ready.emit()
 
 
 func setup_leaders(red_leaders, blue_leaders):
@@ -67,6 +68,7 @@ func setup_leaders(red_leaders, blue_leaders):
 
 
 func setup_lanes():
+	# todo fix instantiated scene call
 	for lane in WorldState.get_state("map").get_node("lanes").get_children():
 		WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
@@ -84,6 +86,7 @@ func line_to_array(line):
 func setup_buildings():
 	var game = get_tree().get_current_scene()
 
+	# todo fix instantiated scene call
 	for team in WorldState.get_state("map").get_node("buildings").get_children():
 		for building in team.get_children():
 			Collisions.setup(building)
@@ -103,16 +106,24 @@ func setup_buildings():
 	
 	# shop
 	game.ui.shop.blacksmiths = []
+	# todo fix instantiated scene call
 	if WorldState.get_state("map").has_node("buildings/blue/blacksmith"):
+		# todo fix instantiated scene call
 		game.ui.shop.blacksmiths.append( WorldState.get_state("map").get_node("buildings/blue/blacksmith") )
+	# todo fix instantiated scene call
 	if WorldState.get_state("map").has_node("buildings/red/blacksmith"):
+		# todo fix instantiated scene call
 		game.ui.shop.blacksmiths.append( WorldState.get_state("map").get_node("buildings/red/blacksmith") )
 	
 	# orders
 	for neutral in WorldState.get_state("map").neutrals:
+		# todo fix instantiated scene call
 		if WorldState.get_state("map").has_node("buildings/blue/" + neutral):
+			# todo fix instantiated scene call
 			game.ui.orders_panel[neutral].append( WorldState.get_state("map").get_node("buildings/blue/" + neutral) )
+		# todo fix instantiated scene call
 		if WorldState.get_state("map").has_node("buildings/red/" + neutral):
+			# todo fix instantiated scene call
 			game.ui.orders_panel[neutral].append( WorldState.get_state("map").get_node("buildings/red/" + neutral) )
 	
 	game.ui.orders_panel.update()
@@ -121,6 +132,7 @@ func setup_buildings():
 func has_neutral_buildings(team):
 	var neutral_buildings = false
 	for neutral in WorldState.get_state("map").neutrals:
+		# todo fix instantiated scene call
 		var neutral_building = WorldState.get_state("map").get_node("buildings/"+team+"/"+neutral)
 		if neutral_building.team == team:
 			neutral_buildings = true
@@ -129,6 +141,7 @@ func has_neutral_buildings(team):
 
 
 func buildings_visibility(b):
+	# todo fix instantiated scene call
 	for team in WorldState.get_state("map").get_node("buildings").get_children():
 		for building in team.get_children():
 			building.visible = b

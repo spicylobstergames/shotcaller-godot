@@ -1,7 +1,7 @@
 extends Camera2D
 
 # Autoload
-# self = Crafty_camera
+# self = CraftyCamera
 
 signal camera_zoom_changed
 

@@ -33,7 +33,7 @@ func _ready():
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
 
-	WorldState.one_sec_timer.timeout.connect(on_every_second)
+	WorldState.second_elapsed.connect(on_every_second)
 
 
 func get_unit():

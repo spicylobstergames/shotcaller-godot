@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://unit/unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://item/weapons/shuriken.tscn" id="2"]
 [ext_resource type="Texture2D" path="res://assets/leaders/nagato_blue.png" id="4"]
 [ext_resource type="Texture2D" path="res://assets/leaders/nagato_red.png" id="5"]

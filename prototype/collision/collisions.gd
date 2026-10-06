@@ -2,7 +2,7 @@ extends Node
 
 # self = Collisions
 
-const Quadtree = preload("res://collision/Quadtree.gd")
+const Quadtree = preload("res://collision/quadtree.gd")
 
 # COLLISION QUADTREES
 var quad:Quadtree
@@ -49,19 +49,31 @@ func create_block(x, y, team):
 
 
 func setup(unit):
+	# todo fix instantiated scene call
 	if unit.has_node("collisions/select"):
+		# todo fix instantiated scene call
 		unit.selection_position = unit.get_node("collisions/select").position
+		# todo fix instantiated scene call
 		unit.selection_radius = unit.get_node("collisions/select").shape.radius
 	
+	# todo fix instantiated scene call
 	if unit.has_node("collisions/block"):
+		# todo fix instantiated scene call
 		unit.collision_position = unit.get_node("collisions/block").position
+		# todo fix instantiated scene call
 		unit.collision_radius = unit.get_node("collisions/block").shape.radius
+	# todo fix instantiated scene call
 	elif unit.has_node("block") and unit.get_node("block") is CollisionShape2D:
+		# todo fix instantiated scene call
 		unit.collision_position = unit.get_node("block").position
+		# todo fix instantiated scene call
 		unit.collision_radius = unit.get_node("block").shape.radius
 	
+	# todo fix instantiated scene call
 	if unit.has_node("collisions/attack"):
+		# todo fix instantiated scene call
 		unit.attack_hit_position = unit.get_node("collisions/attack").position
+		# todo fix instantiated scene call
 		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
 
 	if unit is CollisionObject2D:
@@ -70,8 +82,11 @@ func setup(unit):
 		if unit is CharacterBody2D:
 			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if unit.collide and unit is CollisionObject2D:
+		# todo fix instantiated scene call
 		var physical_shape = unit.get_node_or_null("physical_collision")
+		# todo fix instantiated scene call
 		if physical_shape == null and unit.get_node_or_null("block") is CollisionShape2D:
+			# todo fix instantiated scene call
 			physical_shape = unit.get_node("block")
 		elif physical_shape == null:
 			physical_shape = CollisionShape2D.new()
@@ -85,6 +100,7 @@ func setup(unit):
 		if unit.navigation_agent:
 			unit.navigation_agent.radius = max(unit.collision_radius, 8.0)
 
+	# todo fix instantiated scene call
 	if unit.collide and not unit.moves and not unit.has_node("NavigationObstacle2D"):
 		var obstacle = NavigationObstacle2D.new()
 		obstacle.name = "NavigationObstacle2D"

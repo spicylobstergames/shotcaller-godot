@@ -23,6 +23,7 @@ func point(unit, target_point):
 		#if unit.target:
 		unit.aim_point = target_point
 		unit.mirror_look_at(target_point)
+		# todo fix instantiated scene call
 		unit.get_node("animations").speed_scale = Goap.modifiers.get_value(unit, "attack_speed")
 		unit.set_state("attack")
 
@@ -219,6 +220,7 @@ func projectile_start(attacker, target):
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	WorldState.get_state("map").projectile_container.add_child(projectile)
+	# todo fix instantiated scene call
 	var projectile_sprite = projectile.get_node("sprites")
 	projectile.global_position = attacker.projectile.global_position
 	projectile.show()
@@ -268,6 +270,7 @@ func projectile_step(delta, projectile):
 func projectile_stuck(attacker, target, projectile):
 	projectile.stuck = true
 	var stuck = projectile.node
+	# todo fix instantiated scene call
 	var sprites = stuck.get_node("sprites")
 	var r = projectile.node.global_rotation
 	
@@ -275,6 +278,7 @@ func projectile_stuck(attacker, target, projectile):
 		var parent = stuck.get_parent()
 		if parent:
 			parent.remove_child(stuck)
+		# todo fix instantiated scene call
 		target.get_node("sprites/stuck").add_child(stuck)
 		stuck.global_position = target.global_position + target.collision_position
 		if target.mirror: 
@@ -311,6 +315,7 @@ func projectile_stuck(attacker, target, projectile):
 
 
 func clear_stuck(unit):
+	# todo fix instantiated scene call
 	var node = unit.get_node("sprites/stuck")
 	for n in node.get_children():
 		node.remove_child(n)

@@ -1,6 +1,6 @@
 extends Control
 
-signal preview_confirm
+signal preview_confirm(leader_name: String)
 
 @onready var ability_preview_scene = preload("ability_preview.tscn")
 @onready var abilities_preview_container = $"%abilities_preview_container"
@@ -18,6 +18,7 @@ func prepare(leader):
 		var leader_scene = load("res://unit/leaders/%s.tscn" % leader)
 		var leader_instance = leader_scene.instantiate()
 		leader_name_label.text = Utils.first_to_uppper(leader)
+		# todo fix instantiated scene call
 		for ability in leader_instance.get_node("goap_agent/abilities").get_children():
 			var ability_preview = ability_preview_scene.instantiate()
 			ability_preview.prepare(ability.icon, ability.ability_name, ability.description)
@@ -32,7 +33,7 @@ func is_empty():
 
 
 func confirm_button_pressed():
-	emit_signal("preview_confirm", leader_name)
+	preview_confirm.emit(leader_name)
 
 
 func cancel_button_pressed():

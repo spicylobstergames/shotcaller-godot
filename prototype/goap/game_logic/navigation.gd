@@ -146,10 +146,14 @@ func new_lane_path(lane, team):
 	if lane in WorldState.get_state("lanes"):
 		var path = WorldState.get_state("lanes")[lane].duplicate()
 		var map = WorldState.get_state("map")
+		# todo fix instantiated scene call
 		if team == "blue" and map.has_node("buildings/red/castle"):
+			# todo fix instantiated scene call
 			path.append(map.get_node("buildings/red/castle").global_position)
+		# todo fix instantiated scene call
 		if team == "red" and map.has_node("buildings/blue/castle"):
 			path.reverse()
+			# todo fix instantiated scene call
 			path.append(map.get_node("buildings/blue/castle").global_position)
 		return path
 

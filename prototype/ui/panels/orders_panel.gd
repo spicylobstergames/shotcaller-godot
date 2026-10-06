@@ -139,6 +139,7 @@ func setup_leader_buttons(orders_container):
 
 func setup_lanes():
 	for team in WorldState.teams:
+		# todo fix instantiated scene call
 		for lane in WorldState.get_state("map").get_node("lanes").get_children():
 			var orders_container = {
 				"node": VBoxContainer.new(),
@@ -504,4 +505,3 @@ func hide_all():
 		leader_orders[leader].node.hide()
 	for lane in lane_orders:
 		lane_orders[lane].node.hide()
-

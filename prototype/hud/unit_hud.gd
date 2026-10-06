@@ -16,6 +16,7 @@ func update_hpbar():
 		var leader_icon_hpbar
 		if player_leader and unit.name in game.ui.leaders_icons.buttons_name:
 			var leader_icon = game.ui.leaders_icons.buttons_name[unit.name]
+			# todo fix instantiated scene call
 			leader_icon_hpbar = leader_icon.get_node("hpbar")
 		if unit.current_hp <= 0:
 			unit.current_hp = 0

@@ -17,7 +17,7 @@ signal unit_leveled_up
 signal unit_attack_release # ranged projectile
 signal unit_attack_hitted # melee hit
 signal unit_attack_ended
-signal unit_was_attacked
+signal unit_was_attacked(attacker: Unit, damage: int)
 signal unit_stuned
 signal unit_stun_ended
 signal unit_animation_ended
@@ -139,6 +139,7 @@ func _ready():
 	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
+	# todo fix instantiated scene call
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 	if moves:
 		ensure_navigation_agent()
@@ -235,12 +236,14 @@ func reset_unit():
 func set_state(s):
 	if not self.dead:
 		self.state = s
+		# todo fix instantiated scene call
 		self.get_node("animations").current_animation = s
 
 
 func setup_team(new_team):
 	self.team = new_team
 	# fog setup
+	# todo fix instantiated scene call
 	if WorldState.get_state("map").fog_of_war and self.has_node("light"):
 		var light = get_node("light")
 		light.hide()
@@ -254,9 +257,11 @@ func setup_team(new_team):
 
 	# color weapons
 	if weapon is AnimatedSprite2D: set_anim(new_team, weapon)
+	# todo fix instantiated scene call
 	if has_node("sprites/weapon/spear"):
 		var spear = get_node("sprites/weapon/spear")
 		set_anim(new_team, spear)
+		# todo fix instantiated scene call
 		var spear_proj = get_node("sprites/weapon/projectile/sprites")
 		set_anim(new_team, spear_proj)
 
@@ -269,8 +274,10 @@ func setup_team(new_team):
 			self.mirror_toggle(true)
 
 		# color flags
+		# todo fix instantiated scene call
 		var flags = self.get_node("sprites/flags").get_children()
 		for flag in flags:
+			# todo fix instantiated scene call
 			var flag_sprite = flag.get_node("sprites")
 			set_anim(new_team, flag_sprite)
 
@@ -421,8 +428,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 
 
 func was_attacked(attacker, _damage):
-	
-	emit_signal("unit_was_attacked", attacker, _damage)
+	unit_was_attacked.emit(attacker, _damage)
 
 
 func on_attack_end(): # animation end of all attacks
@@ -498,6 +504,7 @@ func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.hide()
 	self.state = "dead"
+	# todo fix instantiated scene call
 	self.get_node("animations").current_animation = "[stop]"
 
 

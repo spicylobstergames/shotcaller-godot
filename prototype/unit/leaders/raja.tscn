@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://unit/unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://item/weapons/curved_sword.tscn" id="2"]
 [ext_resource type="Texture2D" path="res://assets/leaders/raja_blue.png" id="3"]
 [ext_resource type="Texture2D" path="res://assets/leaders/raja_red.png" id="4"]

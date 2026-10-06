@@ -48,6 +48,6 @@ func buttons_unfocus():
 func button_down(index):
 	var leader = WorldState.get_state("player_leaders")[index]
 	if leader:
-		Crafty_camera.global_position = leader.global_position - Crafty_camera.offset
+		CraftyCamera.global_position = leader.global_position - CraftyCamera.offset
 		game.selection.select_unit(leader)
 		game.ui.leaders_icons.buttons_focus(leader)

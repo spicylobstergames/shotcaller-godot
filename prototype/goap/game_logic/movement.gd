@@ -32,6 +32,7 @@ func move(unit, destiny):
 		unit.current_destiny = destiny
 		var current_speed = Goap.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
+		# todo fix instantiated scene call
 		unit.get_node("animations").speed_scale = current_speed / unit.speed
 		unit.set_state("move")
 
@@ -74,6 +75,7 @@ func stop(unit):
 		unit.final_destiny = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
+	# todo fix instantiated scene call
 	unit.get_node("animations").speed_scale = 1
 
 

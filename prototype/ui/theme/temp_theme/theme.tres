@@ -48,7 +48,7 @@
 [ext_resource type="StyleBox" path="res://ui/theme/temp_theme/styles/window.tres" id="37_1sc1f"]
 [ext_resource type="StyleBox" path="res://ui/theme/temp_theme/styles/tool_button_normal.tres" id="37_rfsru"]
 [ext_resource type="StyleBox" path="res://ui/theme/temp_theme/styles/tab_panel.tres" id="42_qqcms"]
-[ext_resource type="FontFile" path="res://ui/theme/fonts/EightPixelsFont.ttf" id="49_vnxgf"]
+[ext_resource type="FontFile" path="res://ui/theme/fonts/eight_pixels_font.ttf" id="49_vnxgf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lpa4"]
 draw_center = false

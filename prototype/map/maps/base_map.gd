@@ -1,6 +1,6 @@
 extends Node2D
 
-class_name base_map
+class_name BaseMap
 
 
 @onready var walls = get_node("tiles/walls/Walls")

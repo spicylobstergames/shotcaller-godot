@@ -1,6 +1,6 @@
 extends Resource
 
-class_name Item_resource
+class_name ItemResource
 
 @export var name:String = "Item Name"
 @export var tooltip:String = "Item description\nDamage +10"

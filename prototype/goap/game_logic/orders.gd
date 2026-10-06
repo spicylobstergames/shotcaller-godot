@@ -25,6 +25,7 @@ func new_orders():
 
 
 func build_lanes():
+	# todo fix instantiated scene call
 	for lane in WorldState.get_state("map").get_node("lanes").get_children():
 		player_lanes_orders[lane.name] = new_orders()
 		enemy_lanes_orders[lane.name] = new_orders()

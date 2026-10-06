@@ -8,7 +8,7 @@ func _ready():
 
 
 func input(event):
-	var point = Crafty_camera.get_global_mouse_position()
+	var point = CraftyCamera.get_global_mouse_position()
 	var selected_unit = WorldState.get_state("selected_unit")
 	# KEYBOARD
 	if event is InputEventKey:

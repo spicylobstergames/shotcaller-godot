@@ -273,7 +273,9 @@ func arthur_special(effects, parameters, visualize):
 	var leader = WorldState.get_state("selected_leader")
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target != null:
+		# todo fix instantiated scene call
 		var animations = leader.get_node("animations")
+		# todo fix instantiated scene call
 		var skill_animation_sprite = leader.get_node("sprites/cleave")
 		var polygon = generate_arc_poly(parameters.angle, parameters.radius, leader.global_position, point_target, parameters.color)
 		var targets = enemies_in_polygon(leader, parameters.radius, polygon)
@@ -290,6 +292,7 @@ func arthur_special(effects, parameters, visualize):
 
 func arthur_special_end():
 	var leader = null
+	# todo fix instantiated scene call
 	var skill_animation_sprite = leader.get_node("sprites/cleave")
 	skill_animation_sprite.hide()
 
@@ -443,7 +446,7 @@ func input(event):
 		event.is_pressed() and 
 		event.button_index == 1):
 			
-			emit_signal("point", Crafty_camera.get_global_mouse_position())
+			emit_signal("point", CraftyCamera.get_global_mouse_position())
 			
 	elif Input.is_action_pressed("ui_cancel"):
 		self._waiting_for_point = false
@@ -454,7 +457,7 @@ func process(_delta):
 	
 	if self._waiting_for_point:
 		for polygon in visualization:
-			var mouse_position =  Crafty_camera.get_global_mouse_position()
+			var mouse_position =  CraftyCamera.get_global_mouse_position()
 			polygon.look_at(mouse_position)
 
 

@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://unit/unit.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://item/weapons/sword.tscn" id="2"]
 [ext_resource type="Texture2D" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
 [ext_resource type="Texture2D" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]

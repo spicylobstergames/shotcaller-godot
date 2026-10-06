@@ -11,7 +11,7 @@
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
-[node name="Menu_button" type="Button"]
+[node name="MenuButton" type="Button"]
 offset_right = 12.0
 offset_bottom = 20.0
 grow_horizontal = 2
@@ -26,6 +26,6 @@ custom_styles/normal = SubResource( 2 )
 text = "New game"
 script = ExtResource( 1 )
 
-[connection signal="focus_entered" from="." to="." method="_on_Menu_button_focus_entered"]
-[connection signal="focus_exited" from="." to="." method="_on_Menu_button_focus_exited"]
-[connection signal="mouse_entered" from="." to="." method="_on_Menu_button_mouse_entered"]
+[connection signal="focus_entered" from="." to="." method="_on_menu_button_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_menu_button_focus_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_menu_button_mouse_entered"]

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bdmnf3yu0pgjq" path="res://assets/unit/shadow.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://bacygsp52ihcq" path="res://assets/pawns/infantry_blue.png" id="3"]
 [ext_resource type="Script" uid="uid://bhg8xduiaaqnf" path="res://goap/goap_system/agent.gd" id="4"]
-[ext_resource type="Script" uid="uid://wbppf7q1rtk5" path="res://unit/Unit.gd" id="7"]
+[ext_resource type="Script" uid="uid://wbppf7q1rtk5" path="res://unit/unit.gd" id="7"]
 [ext_resource type="Texture2D" uid="uid://0lffhuyuh2wi" path="res://assets/pawns/infantry_red.png" id="13"]
 [ext_resource type="Texture2D" uid="uid://whgtykrtiaca" path="res://assets/map/light.png" id="16"]
 [ext_resource type="Texture2D" uid="uid://jxsabt6xt203" path="res://assets/pawns/infantry_neutral.png" id="17"]
