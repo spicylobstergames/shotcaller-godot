@@ -162,12 +162,6 @@ input_pickable = false
 monitoring = false
 monitorable = false
 
-[node name="block" type="CollisionShape2D" parent="collisions" unique_id=1218543807]
-position = Vector2(0, 2)
-shape = SubResource("18")
-disabled = true
-debug_color = Color(0.337255, 0.882353, 1, 0.419608)
-
 [node name="select" type="CollisionShape2D" parent="collisions" unique_id=225705177]
 visible = false
 shape = SubResource("19")
@@ -188,5 +182,10 @@ script = ExtResource("4")
 [node name="abilities" type="Node" parent="goap_agent" unique_id=441167843]
 
 [node name="item_passives" type="Node" parent="goap_agent" unique_id=630487369]
+
+[node name="block" type="CollisionShape2D" parent="." unique_id=1218543807]
+position = Vector2(0, 2)
+shape = SubResource("18")
+debug_color = Color(0.337255, 0.882353, 1, 0.419608)
 
 [editable path="hud"]

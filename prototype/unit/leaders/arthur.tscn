@@ -674,13 +674,13 @@ sprite_frames = SubResource("63")
 [node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=1674725509]
 libraries/ = SubResource("AnimationLibrary_ywbmk")
 
-[node name="block" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=1218543807]
+[node name="block" parent="." index="6" unique_id=1218543807]
 shape = SubResource("32")
 
-[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=225705177]
+[node name="select" parent="collisions" index="0" unique_id=225705177]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="2" unique_id=1650123338]
+[node name="attack" type="CollisionShape2D" parent="collisions" index="1" unique_id=1650123338]
 visible = false
 position = Vector2(6, 0)
 shape = SubResource("27")

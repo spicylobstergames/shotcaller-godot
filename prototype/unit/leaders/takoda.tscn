@@ -648,15 +648,15 @@ libraries = {
 "": SubResource("AnimationLibrary_xbbg2")
 }
 
-[node name="block" parent="collisions" index="0"]
+[node name="block" parent="." index="6"]
 position = Vector2(0, -8)
 shape = SubResource("32")
 
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" index="0"]
 position = Vector2(0, -10)
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" index="1"]
 visible = false
 shape = SubResource("27")
 

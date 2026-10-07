@@ -283,15 +283,15 @@ libraries = {
 "": SubResource("AnimationLibrary_tdjaq")
 }
 
-[node name="block" parent="collisions" index="0"]
+[node name="block" parent="." index="6"]
 position = Vector2(0, -20)
 shape = SubResource("28")
 
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" index="0"]
 position = Vector2(0, -20)
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" index="1"]
 position = Vector2(0, -20)
 shape = SubResource("42")
 

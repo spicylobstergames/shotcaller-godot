@@ -392,10 +392,10 @@ libraries = {
 "": SubResource("AnimationLibrary_3kr35")
 }
 
-[node name="block" parent="collisions" index="0"]
+[node name="block" parent="." index="6"]
 shape = SubResource("32")
 
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" index="0"]
 shape = SubResource("29")
 
 [editable path="hud"]

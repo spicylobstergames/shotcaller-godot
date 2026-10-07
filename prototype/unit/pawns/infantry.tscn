@@ -568,13 +568,13 @@ libraries = {
 "": SubResource("AnimationLibrary_3e18l")
 }
 
-[node name="block" parent="collisions" index="0"]
+[node name="block" parent="." index="6"]
 shape = SubResource("32")
 
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" index="0"]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" index="1"]
 visible = false
 position = Vector2(6, 0)
 shape = SubResource("27")
