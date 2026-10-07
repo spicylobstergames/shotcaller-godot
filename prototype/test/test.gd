@@ -50,8 +50,10 @@ func spawn_unit():
 #		pawn.moves = false
 		
 		# TEST LUMBERJACK
-		# todo fix instantiated scene call
-		game.spawn.lumberjack_hire(WorldState.get_state("map").get_node("buildings/blue/blacksmith"), WorldState.get_state("player_team"))
+		var map = WorldState.get_state("map")
+		var blacksmith = map.get_node_or_null("buildings/blue/blacksmith")
+		if blacksmith:
+			game.spawn.lumberjack_hire(blacksmith, WorldState.get_state("player_team"))
 
 
 

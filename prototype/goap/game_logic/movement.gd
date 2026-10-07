@@ -32,8 +32,9 @@ func move(unit, destiny):
 		unit.current_destiny = destiny
 		var current_speed = Goap.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
-		# todo fix instantiated scene call
-		unit.get_node("animations").speed_scale = current_speed / unit.speed
+		var animations = unit.get_node_or_null("animations")
+		if animations and "speed_scale" in animations:
+			animations.speed_scale = current_speed / max(unit.speed, 0.0001)
 		unit.set_state("move")
 
 
@@ -75,14 +76,18 @@ func stop(unit):
 		unit.final_destiny = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
-	# todo fix instantiated scene call
-	unit.get_node("animations").speed_scale = 1
+	var animations = unit.get_node_or_null("animations")
+	if animations and "speed_scale" in animations:
+		animations.speed_scale = 1.0
 
 
 func smart(unit, target_point):
+	if not unit or not unit.agent:
+		return
 	if not unit.agent.get_state("stunned"):
+		if target_point != Vector2.ZERO and unit.current_destiny != Vector2.ZERO:
+			unit.final_destiny = target_point
 		Goap.navigation.navigate_to(unit, target_point)
-	# todo add queue to resume movement
 
 
 func teleport(unit, target_point):
@@ -96,8 +101,14 @@ func teleport(unit, target_point):
 	Goap.move.stop(unit)
 	agent.set_state("is_channeling", true)
 	var order_id = agent.get_state("player_order_id", 0)
-	# todo move to world state timer
-	await get_tree().create_timer(teleport_time).timeout
+	var delay = Timer.new()
+	delay.one_shot = true
+	delay.wait_time = teleport_time
+	unit.add_child(delay)
+	delay.start()
+	await delay.timeout
+	if is_instance_valid(delay):
+		delay.queue_free()
 	if (
 		agent.get_state("is_channeling")
 		and agent.get_state("player_order_id", 0) == order_id

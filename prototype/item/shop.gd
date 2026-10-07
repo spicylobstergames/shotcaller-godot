@@ -125,7 +125,6 @@ func update_buttons():
 		var trader = null
 		
 		if leader != null:
-			# todo fix instantiated scene call
 			trader = leader.get_node_or_null("skills/trader")
 		
 		# checks if leader has trader ability, updates price labels

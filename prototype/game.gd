@@ -216,8 +216,9 @@ func apply_cheat_code(code):
 	match code:
 		"SHADOW":
 			for unit1 in WorldState.get_state("all_units"):
-				# todo fix instantiated scene call
-				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
+				var light = unit1.get_node_or_null("light")
+				if light:
+					light.shadow_enabled = false
 		"WIN":
 			end(true)
 		"LOSE":

@@ -78,16 +78,18 @@ func get_map_texture():
 	update_map_texture = false
 	# map nodes
 	var map = WorldState.get_state("map")
-	# todo fix instantiated scene call
-	map_sprite = map.get_node("zoom_out_sprite")
-	# todo fix instantiated scene call
-	map_tiles = map.get_node("tiles")
-	# set camera zoom and limits
+	var sprite = map.get_node_or_null("zoom_out_sprite")
+	if sprite:
+		map_sprite = sprite
+	var tiles = map.get_node_or_null("tiles")
+	if tiles:
+		map_tiles = tiles
 	adjust_rect()
-	# hides units and ui
-	map_sprite.hide()
-	# todo fix instantiated scene call
-	map.get_node("fog").hide()
+	if map_sprite:
+		map_sprite.hide()
+	var fog = map.get_node_or_null("fog")
+	if fog:
+		fog.hide()
 	game.ui.background.hide()
 	game.ui.hide_all()
 	hide()
@@ -160,19 +162,17 @@ func hide_view():
 
 
 func setup_symbol(unit):
-	# todo fix instantiated scene call
-	if unit.has_node("symbol") and not unit.symbol:
-		# todo fix instantiated scene call
-		var symbol = unit.get_node("symbol")
-		setup_unit_symbol(unit, symbol)
-		copy_symbol(unit, symbol)
+	var symbol_node = unit.get_node_or_null("symbol")
+	if symbol_node and not unit.symbol:
+		setup_unit_symbol(unit, symbol_node)
+		copy_symbol(unit, symbol_node)
 		unit.symbol = true
 
 
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)
 	if unit.type == "building":
-		symbol.material = null # show behind fog
+		symbol.material = null
 	if unit.type != "leader":
 		match unit.team:
 			"red":
@@ -183,13 +183,15 @@ func setup_unit_symbol(unit, symbol):
 
 func setup_leader_icon(unit, symbol):
 	if unit.type == "leader":
-		# todo fix instantiated scene call
-		var icon = symbol.get_node("icon_blue")
+		var icon = symbol.get_node_or_null("icon_blue")
+		if not icon:
+			return
 		if unit.team == "red": 
-			# todo fix instantiated scene call
-			icon = symbol.get_node("icon_red")
-			icon.scale.x = -1 * abs(icon.scale.x)
-		icon.show();
+			var icon_red = symbol.get_node_or_null("icon_red")
+			if icon_red:
+				icon = icon_red
+				icon.scale.x = -1 * abs(icon.scale.x)
+		icon.show()
 		icon.material = symbol.material
 		icon.light_mask = symbol.light_mask
 

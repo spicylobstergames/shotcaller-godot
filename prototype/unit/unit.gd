@@ -139,7 +139,6 @@ func _ready():
 	if has_node("sprites"): sprites = get_node("sprites")
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
-	# todo fix instantiated scene call
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
 	if moves:
 		ensure_navigation_agent()
@@ -236,50 +235,47 @@ func reset_unit():
 func set_state(s):
 	if not self.dead:
 		self.state = s
-		# todo fix instantiated scene call
-		self.get_node("animations").current_animation = s
+		var animations = get_node_or_null("animations")
+		if animations:
+			animations.current_animation = s
 
 
 func setup_team(new_team):
 	self.team = new_team
-	# fog setup
-	# todo fix instantiated scene call
-	if WorldState.get_state("map").fog_of_war and self.has_node("light"):
-		var light = get_node("light")
-		light.hide()
-		if new_team == WorldState.get_state("player_team"): light.show()
-		var s = self.vision / 16
-		light.scale = Vector2(s,s)
+	var map = WorldState.get_state("map")
+	if map and map.fog_of_war:
+		var light = get_node_or_null("light")
+		if light:
+			light.hide()
+			if new_team == WorldState.get_state("player_team"): light.show()
+			var s = self.vision / 16
+			light.scale = Vector2(s,s)
+	
+	if sprites:
 		sprites.use_parent_material = true
 
-	# color body sprite
 	set_anim(new_team, body)
 
-	# color weapons
 	if weapon is AnimatedSprite2D: set_anim(new_team, weapon)
-	# todo fix instantiated scene call
-	if has_node("sprites/weapon/spear"):
-		var spear = get_node("sprites/weapon/spear")
+	var spear = get_node_or_null("sprites/weapon/spear")
+	if spear:
 		set_anim(new_team, spear)
-		# todo fix instantiated scene call
-		var spear_proj = get_node("sprites/weapon/projectile/sprites")
-		set_anim(new_team, spear_proj)
+		var spear_proj = get_node_or_null("sprites/weapon/projectile/sprites")
+		if spear_proj:
+			set_anim(new_team, spear_proj)
 
-	# mirror red pawns, leaders and neutrals
 	var is_red = (self.team == "red")
 	if self.type != "building": self.mirror_toggle(is_red)
-
-	else: # mirror lumbermill
+	else:
 		if self.display_name == "lumbermill" and self.get_parent().name == "blue":
 			self.mirror_toggle(true)
 
-		# color flags
-		# todo fix instantiated scene call
-		var flags = self.get_node("sprites/flags").get_children()
-		for flag in flags:
-			# todo fix instantiated scene call
-			var flag_sprite = flag.get_node("sprites")
-			set_anim(new_team, flag_sprite)
+		var flags = get_node_or_null("sprites/flags")
+		if flags:
+			for flag in flags.get_children():
+				var flag_sprite = flag.get_node_or_null("sprites")
+				if flag_sprite:
+					set_anim(new_team, flag_sprite)
 
 
 func set_anim(new_team, sprite):
@@ -504,8 +500,9 @@ func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.hide()
 	self.state = "dead"
-	# todo fix instantiated scene call
-	self.get_node("animations").current_animation = "[stop]"
+	var animations = get_node_or_null("animations")
+	if animations:
+		animations.current_animation = "[stop]"
 
 
 func on_death_end():  # death animation end

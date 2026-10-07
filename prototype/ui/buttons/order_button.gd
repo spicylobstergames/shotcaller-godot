@@ -81,12 +81,44 @@ func button_down():
 			self.disabled = true
 		
 		"lumberjack":
-			game.spawn.lumberjack_hire(selected_unit, WorldState.get_state("player_team"))
-			# todo update dismiss after lumberjack hire
+			if self.orders.lumberjack == "hire":
+				game.spawn.lumberjack_hire(selected_unit, WorldState.get_state("player_team"))
+			else:
+				var dismiss_target = selected_unit
+				if dismiss_target == null and WorldState.get_state("selected_leader") != null:
+					dismiss_target = WorldState.get_state("selected_leader")
+				if dismiss_target and dismiss_target.agent and dismiss_target.agent.get_state("lumbermill") != null:
+					var lumbermill = dismiss_target.agent.get_state("lumbermill")
+					if lumbermill and lumbermill.agent:
+						lumbermill.agent.set_state("lumberjack", null)
+					if is_instance_valid(dismiss_target):
+						dismiss_target.queue_free()
+						if dismiss_target.get_parent():
+							dismiss_target.get_parent().remove_child(dismiss_target)
+						if WorldState.get_state("neutral_units") != null:
+							WorldState.get_state("neutral_units").erase(dismiss_target)
+						self.disabled = true
+						return
+				if is_instance_valid(dismiss_target):
+					dismiss_target.queue_free()
+					if dismiss_target.get_parent():
+						dismiss_target.get_parent().remove_child(dismiss_target)
+					if WorldState.get_state("neutral_units") != null:
+						WorldState.get_state("neutral_units").erase(dismiss_target)
+				self.disabled = true
+			return
 			self.disabled = true
 		
 		"dismiss":
-			# todo remove unit 
+			var dismiss_target = selected_unit
+			if dismiss_target == null:
+				dismiss_target = WorldState.get_state("selected_leader")
+			if is_instance_valid(dismiss_target):
+				dismiss_target.queue_free()
+				if dismiss_target.get_parent():
+					dismiss_target.get_parent().remove_child(dismiss_target)
+				if WorldState.get_state("neutral_units") != null:
+					WorldState.get_state("neutral_units").erase(dismiss_target)
 			self.disabled = true
 		
 		"pawn_upgrades":

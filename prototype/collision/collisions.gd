@@ -49,32 +49,29 @@ func create_block(x, y, team):
 
 
 func setup(unit):
-	# todo fix instantiated scene call
-	if unit.has_node("collisions/select"):
-		# todo fix instantiated scene call
-		unit.selection_position = unit.get_node("collisions/select").position
-		# todo fix instantiated scene call
-		unit.selection_radius = unit.get_node("collisions/select").shape.radius
+	var select = unit.get_node_or_null("collisions/select")
+	if select:
+		unit.selection_position = select.position
+		if select.shape:
+			unit.selection_radius = select.shape.radius
 	
-	# todo fix instantiated scene call
-	if unit.has_node("collisions/block"):
-		# todo fix instantiated scene call
-		unit.collision_position = unit.get_node("collisions/block").position
-		# todo fix instantiated scene call
-		unit.collision_radius = unit.get_node("collisions/block").shape.radius
-	# todo fix instantiated scene call
-	elif unit.has_node("block") and unit.get_node("block") is CollisionShape2D:
-		# todo fix instantiated scene call
-		unit.collision_position = unit.get_node("block").position
-		# todo fix instantiated scene call
-		unit.collision_radius = unit.get_node("block").shape.radius
+	var block = unit.get_node_or_null("collisions/block")
+	if block:
+		unit.collision_position = block.position
+		if block.shape:
+			unit.collision_radius = block.shape.radius
+	elif unit.get_node_or_null("block") is CollisionShape2D:
+		var block_node = unit.get_node_or_null("block")
+		if block_node:
+			unit.collision_position = block_node.position
+			if block_node.shape:
+				unit.collision_radius = block_node.shape.radius
 	
-	# todo fix instantiated scene call
-	if unit.has_node("collisions/attack"):
-		# todo fix instantiated scene call
-		unit.attack_hit_position = unit.get_node("collisions/attack").position
-		# todo fix instantiated scene call
-		unit.attack_hit_radius = unit.get_node("collisions/attack").shape.radius
+	var attack = unit.get_node_or_null("collisions/attack")
+	if attack:
+		unit.attack_hit_position = attack.position
+		if attack.shape:
+			unit.attack_hit_radius = attack.shape.radius
 
 	if unit is CollisionObject2D:
 		unit.collision_layer = 1 if unit.collide else 0
@@ -82,12 +79,10 @@ func setup(unit):
 		if unit is CharacterBody2D:
 			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if unit.collide and unit is CollisionObject2D:
-		# todo fix instantiated scene call
 		var physical_shape = unit.get_node_or_null("physical_collision")
-		# todo fix instantiated scene call
-		if physical_shape == null and unit.get_node_or_null("block") is CollisionShape2D:
-			# todo fix instantiated scene call
-			physical_shape = unit.get_node("block")
+		var block_node = unit.get_node_or_null("block")
+		if physical_shape == null and block_node is CollisionShape2D:
+			physical_shape = block_node
 		elif physical_shape == null:
 			physical_shape = CollisionShape2D.new()
 			physical_shape.name = "physical_collision"
@@ -100,7 +95,6 @@ func setup(unit):
 		if unit.navigation_agent:
 			unit.navigation_agent.radius = max(unit.collision_radius, 8.0)
 
-	# todo fix instantiated scene call
 	if unit.collide and not unit.moves and not unit.has_node("NavigationObstacle2D"):
 		var obstacle = NavigationObstacle2D.new()
 		obstacle.name = "NavigationObstacle2D"

@@ -18,11 +18,12 @@ func prepare(leader):
 		var leader_scene = load("res://unit/leaders/%s.tscn" % leader)
 		var leader_instance = leader_scene.instantiate()
 		leader_name_label.text = Utils.first_to_uppper(leader)
-		# todo fix instantiated scene call
-		for ability in leader_instance.get_node("goap_agent/abilities").get_children():
-			var ability_preview = ability_preview_scene.instantiate()
-			ability_preview.prepare(ability.icon, ability.ability_name, ability.description)
-			abilities_preview_container.add_child(ability_preview)
+		var abilities_node = leader_instance.get_node_or_null("goap_agent/abilities")
+		if abilities_node:
+			for ability in abilities_node.get_children():
+				var ability_preview = ability_preview_scene.instantiate()
+				ability_preview.prepare(ability.icon, ability.ability_name, ability.description)
+				abilities_preview_container.add_child(ability_preview)
 		leader_instance.queue_free()
 
 

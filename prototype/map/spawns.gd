@@ -80,8 +80,9 @@ func leaders():
 			if leader == "random":
 				leader_name = WorldState.leaders_list.keys()[randi() % WorldState.leaders_list.size()]
 			var lane = "mid"
-			# todo fix instantiated scene call
-			if WorldState.get_state("map").get_node("lanes").get_children().size() == 3:
+			var map = WorldState.get_state("map")
+			var lanes_node = map.get_node_or_null("lanes")
+			if lanes_node and lanes_node.get_children().size() == 3:
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
@@ -107,12 +108,14 @@ func spawn_group_cycle():
 	for team in WorldState.teams:
 		var extra_unit = WorldState.get_state("player_extra_unit")
 		if team != WorldState.get_state("player_team"): extra_unit = WorldState.get_state("enemy_extra_unit")
-		# todo fix instantiated scene call
-		for lane in WorldState.get_state("map").get_node("lanes").get_children():
-			send_pawn("archer", lane.name, team)
-			for n in 2:
-				send_pawn("infantry", lane.name, team)
-			send_pawn(extra_unit, lane.name, team)
+		var map = WorldState.get_state("map")
+		var lanes_node = map.get_node_or_null("lanes")
+		if lanes_node:
+			for lane in lanes_node.get_children():
+				send_pawn("archer", lane.name, team)
+				for n in 2:
+					send_pawn("infantry", lane.name, team)
+				send_pawn(extra_unit, lane.name, team)
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
@@ -222,14 +225,13 @@ func lumberjack_hire(lumbermill, team):
 		unit = next_to_building(neutral_scene("lumberjack"), lumbermill, team)
 		unit.agent.set_state("lumbermill", lumbermill)  
 		unit.agent.set_state("deliver_position", unit.global_position)
-		# todo fix instantiated scene call
-		var closest_tree = lumbermill.get_node("closest_tree")
-		unit.agent.set_state("closest_tree", closest_tree.global_position)
+		var closest_tree = lumbermill.get_node_or_null("closest_tree")
+		if closest_tree:
+			unit.agent.set_state("closest_tree", closest_tree.global_position)
 		lumbermill.agent.set_state("lumberjack", unit)
 	
 	unit.setup_team(team)
 	unit.show()
-	
 	# charge player
 	var team_leaders = WorldState.get_state("player_leaders")
 	if team == WorldState.get_state("enemy_team"): team_leaders = WorldState.get_state("enemy_leaders")

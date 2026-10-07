@@ -99,14 +99,15 @@ func clear_old_hpbar():
 
 
 func add_new_hpbar(unit):
-	# todo fix instantiated scene call
-	var red = unit.hud.get_node("hpbar/red").duplicate()
-	# todo fix instantiated scene call
-	var green = unit.hud.get_node("hpbar/green").duplicate()
-	red.scale *= Vector2(11,11)
-	green.scale *= Vector2(11,11)
-	hpbar.add_child(red)
-	hpbar.add_child(green)
+	var red_orig = unit.hud.get_node_or_null("hpbar/red")
+	var green_orig = unit.hud.get_node_or_null("hpbar/green")
+	if red_orig and green_orig:
+		var red = red_orig.duplicate()
+		var green = green_orig.duplicate()
+		red.scale *= Vector2(11,11)
+		green.scale *= Vector2(11,11)
+		hpbar.add_child(red)
+		hpbar.add_child(green)
 
 
 func stats_down(event):
