@@ -47,7 +47,7 @@ func button_down():
 	match self.orders.type:
 		"tactic":
 			clear_siblings(self)
-			if selected_unit.type == "leader":
+			if selected_unit and selected_unit.type == "leader":
 				Goap.orders.set_leader_tactic(self.orders.tactic)
 			else: Goap.orders.set_lane_tactic(self.orders.tactic)
 			self.disabled = true

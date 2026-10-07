@@ -289,7 +289,7 @@ func draw(unit):
 
 func change_lane(unit, lane_point):
 	var lane = Utils.closer_lane(lane_point)
-	var path = lane.duplicate()
+	var path = WorldState.get_state("lanes")[lane].duplicate()
 	if unit.team == "red":
 		path.reverse()
 	var lane_start = path.pop_front()
