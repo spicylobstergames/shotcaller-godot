@@ -53,5 +53,3 @@ func clear_siblings(button):
 		if child != button and counter > 1: 
 			child.button_pressed = false
 			child.disabled = false
-
-

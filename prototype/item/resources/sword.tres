@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://30m7bv406gww"]
 
-[ext_resource type="Script" path="res://item/item_resource.gd" id="1"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
@@ -11,7 +10,5 @@ attributes = {
 "attack_speed": 0.5,
 "damage": 50
 }
-type = "equip"
-delivery_time = 30
 sprite = 1
 price = 500

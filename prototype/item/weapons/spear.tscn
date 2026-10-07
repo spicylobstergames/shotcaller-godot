@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://cg8qvhsvp5fh2"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/sida_blue.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/leaders/sida_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bisjm54krg610" path="res://assets/leaders/sida_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cmos5au7lfxwp" path="res://assets/leaders/sida_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="43"]
 atlas = ExtResource("1")
@@ -29,7 +29,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("44")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -40,16 +40,16 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("49")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
 
-[node name="weapon" type="Node2D"]
+[node name="weapon" type="Node2D" unique_id=524356439]
 texture_filter = 1
 use_parent_material = true
 
-[node name="spear" type="AnimatedSprite2D" parent="."]
+[node name="spear" type="AnimatedSprite2D" parent="." unique_id=1355170670]
 use_parent_material = true
 position = Vector2(-8.1407, 2.05879)
 rotation = -0.349066
@@ -58,12 +58,12 @@ sprite_frames = SubResource("39")
 animation = &"red"
 offset = Vector2(0, -5)
 
-[node name="projectile" type="Node2D" parent="."]
+[node name="projectile" type="Node2D" parent="." unique_id=1044399978]
 z_index = 1
 use_parent_material = true
 position = Vector2(5, -2)
 
-[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile" unique_id=506035688]
 visible = false
 use_parent_material = true
 position = Vector2(0, 4.76837e-07)

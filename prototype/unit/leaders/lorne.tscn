@@ -1,10 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bcqikqtbn562h"]
 
-[ext_resource type="PackedScene" uid="uid://q37eswbcgiv8" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://6ioo60bd2lf3" path="res://item/weapons/poleaxe.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://bdwy1m3xyx3jv" path="res://assets/leaders/lorne_blue.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://cxjd52objqbbm" path="res://assets/leaders/lorne_red.png" id="5"]
-
 
 [sub_resource type="AtlasTexture" id="48"]
 atlas = ExtResource("3")
@@ -76,7 +75,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("53")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -99,7 +98,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("59")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -119,7 +118,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("60")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -127,7 +126,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("61")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -602,15 +601,12 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pd8v5"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
-
-[sub_resource type="CircleShape2D" id="46"]
-radius = 13.0
 
 [sub_resource type="CircleShape2D" id="47"]
 radius = 28.0
@@ -618,7 +614,10 @@ radius = 28.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 25.0
 
-[node name="lorne" instance=ExtResource("1")]
+[sub_resource type="CircleShape2D" id="46"]
+radius = 13.0
+
+[node name="lorne" unique_id=611936024 instance=ExtResource("1")]
 texture_filter = 1
 hp = 400
 regen = 2
@@ -639,14 +638,14 @@ attack_speed = 0.8
 defense = 10
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 modulate = Color(1, 1, 1, 1)
 scale = Vector2(10, 10)
 
-[node name="symbol_border" parent="symbol" index="0"]
+[node name="symbol_border" parent="symbol" index="0" unique_id=1677192396]
 visible = false
 
-[node name="icon_blue" type="Sprite2D" parent="symbol" index="1"]
+[node name="icon_blue" type="Sprite2D" parent="symbol" index="1" unique_id=1631680302]
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("3")
@@ -654,7 +653,7 @@ offset = Vector2(-5, -6)
 region_enabled = true
 region_rect = Rect2(159, 9, 26, 22)
 
-[node name="icon_red" type="Sprite2D" parent="symbol" index="2"]
+[node name="icon_red" type="Sprite2D" parent="symbol" index="2" unique_id=1858074609]
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("5")
@@ -662,38 +661,35 @@ offset = Vector2(-5, -6)
 region_enabled = true
 region_rect = Rect2(159, 9, 26, 22)
 
-[node name="shadow" parent="sprites" index="0"]
+[node name="shadow" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="0" unique_id=1892846986]
 scale = Vector2(1.4, 1.4)
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 position = Vector2(2, 9)
 sprite_frames = SubResource("36")
 offset = Vector2(4, -22)
 
-[node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
+[node name="weapon" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=1395590709 instance=ExtResource("2")]
 visible = false
-rotation = 0.0
 sprite_frames = SubResource("62")
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_pd8v5")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=920876361]
+libraries/ = SubResource("AnimationLibrary_pd8v5")
 
-[node name="block" parent="." index="6"]
-position = Vector2(0, -8)
-shape = SubResource("46")
-
-[node name="select" parent="collisions" index="0"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 position = Vector2(0, -10)
 shape = SubResource("47")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="1"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=1249525937]
 visible = false
 position = Vector2(3, -10)
 shape = SubResource("27")
 
-[node name="goap_agent" parent="." index="7"]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
 goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+position = Vector2(0, -8)
+shape = SubResource("46")
 
 [editable path="hud"]

@@ -1,30 +1,14 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://by7vfwx48jnw5"]
 
-[ext_resource type="Script" path="res://ui/buttons/menu_button.gd" id="1"]
+[ext_resource type="Script" uid="uid://b6njktjw3a1se" path="res://ui/buttons/menu_button.gd" id="1"]
 
-
-[sub_resource type="StyleBoxEmpty" id=5]
-
-[sub_resource type="StyleBoxEmpty" id=1]
-
-[sub_resource type="StyleBoxEmpty" id=4]
-
-[sub_resource type="StyleBoxEmpty" id=2]
-
-[node name="MenuButton" type="Button"]
+[node name="MenuButton" type="Button" unique_id=57975156]
 offset_right = 12.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_colors/font_color_disabled = Color( 0.580392, 0.580392, 0.580392, 1 )
-custom_colors/font_color_focus = Color( 0.207843, 0.909804, 0.858824, 1 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 1 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/disabled = SubResource( 4 )
-custom_styles/normal = SubResource( 2 )
 text = "New game"
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [connection signal="focus_entered" from="." to="." method="_on_menu_button_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_menu_button_focus_exited"]

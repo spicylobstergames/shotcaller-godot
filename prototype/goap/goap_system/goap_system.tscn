@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bdhxlt610hs8h" path="res://goap/goap_system/goap.gd" id="1_goap"]
 [ext_resource type="Script" uid="uid://c1q0skaf23exx" path="res://goap/game_logic/movement.gd" id="2_move"]
 [ext_resource type="Script" uid="uid://orqlb5jdr1an" path="res://goap/game_logic/combat.gd" id="3_attack"]
-[ext_resource type="Script" path="res://goap/game_logic/navigation.gd" id="4_navigation"]
+[ext_resource type="Script" uid="uid://b5h5j2ujj00tx" path="res://goap/game_logic/navigation.gd" id="4_navigation"]
 [ext_resource type="Script" uid="uid://i8g6r1ia8404" path="res://goap/game_logic/orders.gd" id="6_orders"]
 [ext_resource type="Script" uid="uid://c6vx31oyd2mj5" path="res://skills/passive_skills.gd" id="7_skills"]
 [ext_resource type="Script" uid="uid://ctc8moxxnbngj" path="res://skills/modifiers.gd" id="8_modifiers"]

@@ -1,7 +1,7 @@
-[gd_resource type="Theme" load_steps=6 format=3]
+[gd_resource type="Theme" format=3 uid="uid://cul7mif6oifg6"]
 
-[ext_resource type="FontFile" path="res://assets/ui/fonts/compass_pro.tres" id="1_yqwsw"]
-[ext_resource type="FontFile" path="res://assets/ui/fonts/compass_pro.ttf" id="2_jyi6g"]
+[ext_resource type="FontFile" uid="uid://1o0nefqefs0a" path="res://assets/ui/fonts/compass_pro.tres" id="1_yqwsw"]
+[ext_resource type="FontFile" uid="uid://wo8oi60fkkx0" path="res://assets/ui/fonts/compass_pro.ttf" id="2_jyi6g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fljss"]
 

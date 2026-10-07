@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://q37eswbcgiv8"]
+[gd_scene format=3 uid="uid://c8vkxhmjo7i0j"]
 
 [ext_resource type="PackedScene" uid="uid://c8d2oyhcseu3a" path="res://hud/unit_hud.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://bdmnf3yu0pgjq" path="res://assets/unit/shadow.png" id="2"]
@@ -109,13 +109,13 @@ script = ExtResource("7")
 
 [node name="hud" parent="." unique_id=895146676 instance=ExtResource("1")]
 
-[node name="state" parent="hud" index="0"]
+[node name="state" parent="hud" index="0" unique_id=279554608]
 visible = false
 
-[node name="selection" parent="hud" index="1"]
+[node name="selection" parent="hud" index="1" unique_id=601893277]
 visible = false
 
-[node name="hpbar" parent="hud" index="2"]
+[node name="hpbar" parent="hud" index="2" unique_id=304701875]
 visible = false
 
 [node name="symbol" type="Sprite2D" parent="." unique_id=222958006]
@@ -155,6 +155,11 @@ offset = Vector2(-2, -11)
 
 [node name="stuck" type="Node2D" parent="sprites" unique_id=2024680191]
 
+[node name="block" type="CollisionShape2D" parent="." unique_id=1218543807]
+position = Vector2(0, 2)
+shape = SubResource("18")
+debug_color = Color(0.337255, 0.882353, 1, 0.419608)
+
 [node name="collisions" type="Area2D" parent="." unique_id=225153916]
 collision_layer = 0
 collision_mask = 0
@@ -182,10 +187,5 @@ script = ExtResource("4")
 [node name="abilities" type="Node" parent="goap_agent" unique_id=441167843]
 
 [node name="item_passives" type="Node" parent="goap_agent" unique_id=630487369]
-
-[node name="block" type="CollisionShape2D" parent="." unique_id=1218543807]
-position = Vector2(0, 2)
-shape = SubResource("18")
-debug_color = Color(0.337255, 0.882353, 1, 0.419608)
 
 [editable path="hud"]

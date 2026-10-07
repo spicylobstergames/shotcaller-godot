@@ -1,6 +1,6 @@
-[gd_resource type="Theme" load_steps=2 format=3]
+[gd_resource type="Theme" format=3 uid="uid://dqj27c6s21127"]
 
-[ext_resource type="FontFile" path="res://assets/ui/fonts/compass_pro.tres" id="1_j1u83"]
+[ext_resource type="FontFile" uid="uid://1o0nefqefs0a" path="res://assets/ui/fonts/compass_pro.tres" id="1_j1u83"]
 
 [resource]
 default_font = ExtResource("1_j1u83")

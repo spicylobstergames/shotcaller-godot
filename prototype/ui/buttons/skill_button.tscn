@@ -1,14 +1,14 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c5h1tl2hpgt67"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/button_theme.tres" id="1_8vksr"]
-[ext_resource type="Texture2D" path="res://assets/items/items.png" id="2"]
-[ext_resource type="Script" path="res://ui/buttons/skill_button.gd" id="4"]
+[ext_resource type="Theme" uid="uid://cdwiynrgangrm" path="res://assets/ui/theme/button_theme.tres" id="1_8vksr"]
+[ext_resource type="Texture2D" uid="uid://bclvk1m25bdvc" path="res://assets/items/items.png" id="2"]
+[ext_resource type="Script" uid="uid://cp5ng1idi26gg" path="res://ui/buttons/skill_button.gd" id="4"]
 
 [sub_resource type="AtlasTexture" id="14"]
 atlas = ExtResource("2")
 region = Rect2(0, 0, 32, 32)
 
-[node name="skill_button" type="Button"]
+[node name="skill_button" type="Button" unique_id=699289457]
 custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 48.0
@@ -20,7 +20,7 @@ icon = SubResource("14")
 icon_alignment = 1
 script = ExtResource("4")
 
-[node name="name" type="Label" parent="."]
+[node name="name" type="Label" parent="." unique_id=1862754802]
 layout_mode = 0
 offset_top = 3.0
 offset_right = 60.0
@@ -28,7 +28,7 @@ offset_bottom = 33.0
 text = "Name"
 horizontal_alignment = 1
 
-[node name="cooldown" type="Label" parent="."]
+[node name="cooldown" type="Label" parent="." unique_id=482297645]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

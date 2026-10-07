@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://wpdu5utkuxpt"]
 
-[ext_resource type="Script" path="res://item/item_resource.gd" id="1_0qyb3"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1_0qyb3"]
 
 [resource]
 script = ExtResource("1_0qyb3")
@@ -15,4 +14,3 @@ type = "throwable"
 delivery_time = 15
 sprite = 15
 price = 75
-passive = ""

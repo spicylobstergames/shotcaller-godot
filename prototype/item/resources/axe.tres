@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://cyn125bu0shsa"]
 
-[ext_resource type="Script" path="res://item/item_resource.gd" id="1_kdr4k"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1_kdr4k"]
 
 [resource]
 script = ExtResource("1_kdr4k")
@@ -11,7 +10,5 @@ Damage +25"
 attributes = {
 "damage": 25
 }
-type = "equip"
 delivery_time = 20
-sprite = 0
 price = 250

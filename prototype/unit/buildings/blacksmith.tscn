@@ -1,12 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://qlmv1mv4n7mk"]
 
-[ext_resource type="PackedScene" uid="uid://q37eswbcgiv8" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://c4gqs4ai3fydh" path="res://assets/buildings/neutral_blue.png" id="3"]
 [ext_resource type="PackedScene" path="res://unit/buildings/decoration/flag.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://b48muhglye3v7" path="res://assets/buildings/neutral_red.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://donxlsx4i210a" path="res://assets/buildings/neutral_gray.png" id="6"]
-
 
 [sub_resource type="AtlasTexture" id="42"]
 atlas = ExtResource("3")
@@ -27,7 +26,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("42")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -35,7 +34,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("44")
 }],
-"loop": true,
+"loop": 1,
 "name": &"neutral",
 "speed": 5.0
 }, {
@@ -43,7 +42,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("45")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -66,7 +65,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("40")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -89,7 +88,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("37")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -201,22 +200,21 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uswpp"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25")
 }
-
-[sub_resource type="CircleShape2D" id="28"]
-radius = 32.0
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 50.0
 
-[node name="blacksmith" instance=ExtResource("1")]
+[sub_resource type="CircleShape2D" id="28"]
+radius = 32.0
+
+[node name="blacksmith" unique_id=2044204634 instance=ExtResource("1")]
 texture_filter = 1
 hp = 1800
 regen = 10
-goals_list = ["Recover"]
 vision = 300
 type = "building"
 subtype = "backwood"
@@ -227,45 +225,45 @@ selectable = true
 collide = true
 projectile_speed = 0.0
 
-[node name="state" parent="hud" index="0"]
+[node name="state" parent="hud" parent_id_path=PackedInt32Array(895146676) index="0" unique_id=279554608]
 offset_top = -81.0
 offset_bottom = -63.0
 
-[node name="selection" parent="hud" index="1"]
+[node name="selection" parent="hud" parent_id_path=PackedInt32Array(895146676) index="1" unique_id=601893277]
 position = Vector2(0, 5)
 scale = Vector2(3, 2.5)
 
-[node name="hpbar" parent="hud" index="2"]
+[node name="hpbar" parent="hud" parent_id_path=PackedInt32Array(895146676) index="2" unique_id=304701875]
 position = Vector2(0, -61)
 
-[node name="shadow" parent="sprites" index="0"]
+[node name="shadow" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="0" unique_id=1892846986]
 visible = false
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 use_parent_material = false
 sprite_frames = SubResource("43")
 offset = Vector2(0, -30)
 
-[node name="flags" type="Node2D" parent="sprites" index="2"]
+[node name="flags" type="Node2D" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=446456527]
 visible = false
 
-[node name="flag" parent="sprites/flags" index="0" instance=ExtResource("4")]
+[node name="flag" parent="sprites/flags" index="0" unique_id=10448859 instance=ExtResource("4")]
 position = Vector2(1, -80)
 
-[node name="weapon" type="Node2D" parent="sprites" index="3"]
+[node name="weapon" type="Node2D" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="3" unique_id=1404594096]
 position = Vector2(0, -43)
 scale = Vector2(1.0686, 1)
 
-[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+[node name="projectile" type="Node2D" parent="sprites/weapon" index="0" unique_id=848253097]
 position = Vector2(19.6519, 2)
 
-[node name="sprites" type="AnimatedSprite2D" parent="sprites/weapon/projectile" index="0"]
+[node name="sprites" type="AnimatedSprite2D" parent="sprites/weapon/projectile" index="0" unique_id=1993701457]
 visible = false
 position = Vector2(-0.216076, 0)
 sprite_frames = SubResource("41")
 offset = Vector2(-11, 0)
 
-[node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1"]
+[node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1" unique_id=107697080]
 visible = false
 position = Vector2(-1.11556e-07, 44)
 rotation = 0.151433
@@ -273,17 +271,15 @@ scale = Vector2(0.79656, 0.998757)
 sprite_frames = SubResource("46")
 offset = Vector2(10, 0)
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_uswpp")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=268311142]
+libraries/ = SubResource("AnimationLibrary_uswpp")
 
-[node name="block" parent="." index="6"]
-position = Vector2(0, -20)
-shape = SubResource("28")
-
-[node name="select" parent="collisions" index="0"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 position = Vector2(0, -20)
 shape = SubResource("29")
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+position = Vector2(0, -20)
+shape = SubResource("28")
 
 [editable path="hud"]

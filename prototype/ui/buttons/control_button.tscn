@@ -1,14 +1,14 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://b0e6dr82fivm4"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/button_theme.tres" id="1_p12ny"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_icons.png" id="2_crl6p"]
+[ext_resource type="Theme" uid="uid://cdwiynrgangrm" path="res://assets/ui/theme/button_theme.tres" id="1_p12ny"]
+[ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="2_crl6p"]
 
 [sub_resource type="AtlasTexture" id="14"]
 atlas = ExtResource("2_crl6p")
 region = Rect2(0, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
-[node name="control_button" type="Button"]
+[node name="control_button" type="Button" unique_id=393656002]
 custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 60.0
@@ -17,7 +17,7 @@ theme = ExtResource("1_p12ny")
 toggle_mode = true
 icon = SubResource("14")
 
-[node name="name" type="Label" parent="."]
+[node name="name" type="Label" parent="." unique_id=1172818414]
 layout_mode = 0
 offset_top = 3.0
 offset_right = 60.0
@@ -25,7 +25,7 @@ offset_bottom = 33.0
 text = "Name"
 horizontal_alignment = 1
 
-[node name="hint" type="Label" parent="."]
+[node name="hint" type="Label" parent="." unique_id=426366286]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

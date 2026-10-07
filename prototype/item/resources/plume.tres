@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://cr85pstexqw2t"]
 
-[ext_resource type="Script" path="res://item/item_resource.gd" id="1_fgl47"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1_fgl47"]
 
 [resource]
 script = ExtResource("1_fgl47")
@@ -10,7 +9,6 @@ tooltip = "A feather imbued with magical force\\nRegen +2 Speed +15\\nSpeed Aura
 attributes = {
 "speed": 5
 }
-type = "equip"
 delivery_time = 15
 sprite = 10
 price = 350

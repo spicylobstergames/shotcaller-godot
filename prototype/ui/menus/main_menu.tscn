@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://peemsr0bhld4"]
 
 [ext_resource type="Theme" path="res://assets/ui/theme/transparent_menu_theme.tres" id="1_11kws"]
-[ext_resource type="PackedScene" path="res://ui/buttons/menu_button.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://by7vfwx48jnw5" path="res://ui/buttons/menu_button.tscn" id="3"]
 [ext_resource type="Script" uid="uid://womobcx5s7ou" path="res://ui/menus/main_menu.gd" id="5"]
 
 [node name="main_menu" type="VBoxContainer" unique_id=249805117]

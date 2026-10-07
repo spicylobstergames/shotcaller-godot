@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bjdfsa4aemham"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/menu_theme.tres" id="1_4rnj0"]
-[ext_resource type="Script" path="res://ui/menus/leader_preview/leader_preview.gd" id="2"]
-[ext_resource type="PackedScene" path="res://ui/menus/leader_preview/ability_preview.tscn" id="4"]
+[ext_resource type="Theme" uid="uid://deq6ivis1mman" path="res://assets/ui/theme/menu_theme.tres" id="1_4rnj0"]
+[ext_resource type="Script" uid="uid://dxnn54o751tes" path="res://ui/menus/leader_preview/leader_preview.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://colo0qdht86u8" path="res://ui/menus/leader_preview/ability_preview.tscn" id="4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_013id"]
 bg_color = Color(0.0862745, 0.0627451, 0.105882, 1)
 
-[node name="leader_preview" type="Panel"]
+[node name="leader_preview" type="Panel" unique_id=246094367]
 custom_minimum_size = Vector2(350, 380)
 anchors_preset = 8
 anchor_left = 0.5
@@ -21,7 +21,7 @@ size_flags_vertical = 4
 theme = ExtResource("1_4rnj0")
 script = ExtResource("2")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=550058094]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -32,42 +32,42 @@ offset_right = 165.0
 offset_bottom = 370.0
 grow_horizontal = 2
 
-[node name="leader_name" type="Label" parent="VBoxContainer"]
+[node name="leader_name" type="Label" parent="VBoxContainer" unique_id=740807748]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Random leader"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=2049749502]
 layout_mode = 2
 
-[node name="abilities_preview_container" type="VBoxContainer" parent="VBoxContainer"]
+[node name="abilities_preview_container" type="VBoxContainer" parent="VBoxContainer" unique_id=1823770791]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ability_preview" parent="VBoxContainer/abilities_preview_container" instance=ExtResource("4")]
+[node name="ability_preview" parent="VBoxContainer/abilities_preview_container" unique_id=652189202 instance=ExtResource("4")]
 layout_mode = 2
 
-[node name="ability_preview2" parent="VBoxContainer/abilities_preview_container" instance=ExtResource("4")]
+[node name="ability_preview2" parent="VBoxContainer/abilities_preview_container" unique_id=1618018825 instance=ExtResource("4")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=316240997]
 custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 8.0
 offset_top = 340.0
 offset_right = 342.0
 offset_bottom = 372.0
 size_flags_vertical = 8
 
-[node name="cancel_button" type="Button" parent="HBoxContainer"]
+[node name="cancel_button" type="Button" parent="HBoxContainer" unique_id=1633514176]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/pressed = SubResource("StyleBoxFlat_013id")
 text = "Back"
 
-[node name="confirm_button" type="Button" parent="HBoxContainer"]
+[node name="confirm_button" type="Button" parent="HBoxContainer" unique_id=1760816085]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 26
