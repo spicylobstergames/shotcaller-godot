@@ -1,6 +1,6 @@
 extends Node
 
-@export var unit: Unit
+@onready var unit: Unit = get_owner() as Unit
 @export var skill_data: SkillResource
 
 func _ready() -> void:

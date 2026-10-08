@@ -1,6 +1,6 @@
 extends Node
 
-@export var unit: Unit
+@onready var unit: Unit = get_owner() as Unit
 
 var affected_units: Dictionary = {}
 

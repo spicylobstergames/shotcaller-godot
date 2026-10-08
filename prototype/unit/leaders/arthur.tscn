@@ -689,7 +689,6 @@ position = Vector2(7, -5)
 goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
 
 [node name="aura_of_courage" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="0" unique_id=1871703252 instance=ExtResource("2")]
-unit = NodePath("../../../")
 
 [node name="guard_break" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="1" unique_id=1802881226 instance=ExtResource("9_mvi1j")]
 

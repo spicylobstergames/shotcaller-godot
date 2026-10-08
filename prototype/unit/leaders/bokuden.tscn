@@ -689,7 +689,6 @@ shape = SubResource("27")
 goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
 
 [node name="critical_slash" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="0" unique_id=350471739 instance=ExtResource("6")]
-unit = NodePath("../../../")
 
 [node name="block" parent="." index="7" unique_id=1218543807]
 shape = SubResource("32")
