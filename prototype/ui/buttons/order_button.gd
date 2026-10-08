@@ -107,7 +107,6 @@ func button_down():
 						WorldState.get_state("neutral_units").erase(dismiss_target)
 				self.disabled = true
 			return
-			self.disabled = true
 		
 		"dismiss":
 			var dismiss_target = selected_unit

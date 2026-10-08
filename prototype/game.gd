@@ -68,7 +68,11 @@ func start():
 	WorldState.set_state("is_game_active", false)
 	WorldState.set_state("game_ended", false)
 	
-	setup_timers()
+	
+	WorldState.setup_timers()
+	WorldState.one_sec_timer.timeout.connect(one_sec_cycle)
+	WorldState.setup_spawn_timers(spawn.time)
+	
 	map_manager.load_current_map()
 	ui.hide_version()
 	
@@ -130,25 +134,6 @@ func pause():
 	WorldState.spawn_timer.paused = true
 	WorldState.set_state("is_game_active", false)
 	emit_signal("game_paused")
-
-
-func setup_timers():
-	WorldState.one_sec_timer = Timer.new()
-	WorldState.one_sec_timer.wait_time = 1
-	WorldState.one_sec_timer.name = "one_sec_timer"
-	WorldState.one_sec_timer.timeout.connect(one_sec_cycle)
-	WorldState.one_sec_timer.timeout.connect(_emit_second_elapsed)
-	WorldState.add_child(WorldState.one_sec_timer)
-	
-	WorldState.spawn_timer = Timer.new()
-	WorldState.spawn_timer.wait_time = spawn.time
-	WorldState.spawn_timer.name = "unit_spawn_timer"
-	WorldState.spawn_timer.one_shot = true
-	WorldState.add_child(WorldState.spawn_timer)
-
-
-func _emit_second_elapsed() -> void:
-	WorldState.second_elapsed.emit()
 
 
 func one_sec_cycle(): # called every second 
