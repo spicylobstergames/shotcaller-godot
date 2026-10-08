@@ -1,7 +1,6 @@
 extends Node
 
-@onready var unit: Unit = get_parent().get_parent().get_parent()
-
+@export var unit: Unit
 @export var skill_data: SkillResource
 
 func _ready() -> void:

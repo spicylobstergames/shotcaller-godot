@@ -1,8 +1,5 @@
 extends Node
 
-@onready var unit: Unit = get_parent().get_parent().get_parent()
-
-
 @export var skill_data: SkillResource
 
 

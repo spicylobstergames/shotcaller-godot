@@ -4,6 +4,8 @@ extends Node2D
 @onready var unit = get_parent()
 @onready var state = get_node("state")
 @onready var hpbar = get_node("hpbar")
+@onready var hpbar_red: Sprite2D = hpbar.get_node("red")
+@onready var hpbar_green: Sprite2D = hpbar.get_node("green")
 @onready var selection = get_node("selection")
 
 
@@ -19,19 +21,21 @@ func update_hpbar():
 			leader_icon_hpbar = leader_icon.get_node_or_null("hpbar")
 		if unit.current_hp <= 0:
 			unit.current_hp = 0
-			hpbar.get_node("green").region_rect.size.x = 0
+			hpbar_green.region_rect.size.x = 0
 			if leader_icon_hpbar:
-				leader_icon_hpbar.get_node("green").region_rect.size.x = 0
+				var leader_icon_green: Sprite2D = leader_icon_hpbar.get_node("green")
+				leader_icon_green.region_rect.size.x = 0
 		else:
 			var hp = Goap.modifiers.get_value(unit, "hp")
 			hpbar.show()
 			var h_scale = float(unit.current_hp) / float(hp)
 			if h_scale < 0: h_scale = 0
 			if h_scale > 1: h_scale = 1
-			var size = hpbar.get_node("red").region_rect.size.x 
-			hpbar.get_node("green").region_rect.size.x = h_scale * size
+			var size = hpbar_red.region_rect.size.x
+			hpbar_green.region_rect.size.x = h_scale * size
 			if leader_icon_hpbar:
-				leader_icon_hpbar.get_node("green").region_rect.size.x = h_scale * size
+				var leader_icon_green: Sprite2D = leader_icon_hpbar.get_node("green")
+				leader_icon_green.region_rect.size.x = h_scale * size
 			if (unit.type != "leader" 
 				and unit.current_hp >= hp 
 				and not unit == WorldState.get_state("selected_unit")):

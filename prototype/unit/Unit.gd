@@ -135,11 +135,11 @@ var status_effects = {}
 func _ready():
 	game = get_tree().get_current_scene()
 
-	if has_node("hud"): hud = get_node("hud")
-	if has_node("sprites"): sprites = get_node("sprites")
-	if has_node("sprites/body"): body = get_node("sprites/body")
-	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
-	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	hud = get_node_or_null("hud")
+	sprites = get_node_or_null("sprites")
+	body = get_node_or_null("sprites/body")
+	weapon = get_node_or_null("sprites/weapon")
+	projectile = get_node_or_null("sprites/weapon/projectile")
 	if moves:
 		ensure_navigation_agent()
 

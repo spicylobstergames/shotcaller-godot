@@ -1,6 +1,6 @@
 extends Node
 
-@onready var unit: Unit = get_parent().get_parent().get_parent()
+@export var unit: Unit
 var affected_units: Dictionary = {}
 
 @export var skill_data: SkillResource

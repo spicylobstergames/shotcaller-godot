@@ -56,12 +56,12 @@ func setup(unit):
 			unit.selection_radius = select.shape.radius
 	
 	var block = unit.get_node_or_null("collisions/block")
+	var block_node = unit.get_node_or_null("block")
 	if block:
 		unit.collision_position = block.position
 		if block.shape:
 			unit.collision_radius = block.shape.radius
-	elif unit.get_node_or_null("block") is CollisionShape2D:
-		var block_node = unit.get_node_or_null("block")
+	elif block_node is CollisionShape2D:
 		if block_node:
 			unit.collision_position = block_node.position
 			if block_node.shape:
@@ -80,7 +80,6 @@ func setup(unit):
 			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if unit.collide and unit is CollisionObject2D:
 		var physical_shape = unit.get_node_or_null("physical_collision")
-		var block_node = unit.get_node_or_null("block")
 		if physical_shape == null and block_node is CollisionShape2D:
 			physical_shape = block_node
 		elif physical_shape == null:
