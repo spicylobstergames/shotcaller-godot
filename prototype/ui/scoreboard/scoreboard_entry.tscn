@@ -1,129 +1,102 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://b5jbmk2l0ylc2"]
 
-[ext_resource type="Texture2D" path="res://assets/ui/question_mark.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_icons.png" id="3"]
-[ext_resource type="Script" path="res://ui/scoreboard/scoreboard_entry.gd" id="4"]
-[ext_resource type="Script" path="res://ui/scoreboard/leader_portrait.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://cyyklm86y3sf3" path="res://assets/ui/question_mark.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="3"]
+[ext_resource type="Script" uid="uid://de0liouf0ihh" path="res://ui/scoreboard/scoreboard_entry.gd" id="4"]
+[ext_resource type="Script" uid="uid://d15rvjyjuihfy" path="res://ui/scoreboard/leader_portrait.gd" id="5"]
 
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("3")
+region = Rect2(680, 10, 30, 30)
 
-[sub_resource type="AtlasTexture" id=1]
-atlas = ExtResource( 3 )
-region = Rect2( 680, 10, 30, 30 )
-
-[node name="scoreboard_entry" type="MarginContainer"]
+[node name="scoreboard_entry" type="MarginContainer" unique_id=1171569347]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -380.0
 offset_bottom = -538.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource( 4 )
+script = ExtResource("4")
 
-[node name="Panel" type="PanelContainer" parent="."]
-offset_right = 271.0
-offset_bottom = 62.0
+[node name="Panel" type="PanelContainer" parent="." unique_id=668987846]
+layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
-offset_left = 7.0
-offset_top = 7.0
-offset_right = 264.0
-offset_bottom = 55.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1291731618]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 0
 
-[node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer"]
-offset_right = 48.0
-offset_bottom = 48.0
-custom_minimum_size = Vector2( 48, 48 )
+[node name="CenterContainer2" type="CenterContainer" parent="Panel/HBoxContainer" unique_id=496109580]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
 
-[node name="portrait" type="Sprite2D" parent="Panel/HBoxContainer/CenterContainer2"]
+[node name="portrait" type="Sprite2D" parent="Panel/HBoxContainer/CenterContainer2" unique_id=1401576245]
 unique_name_in_owner = true
-scale = Vector2( 0.75, 0.75 )
-texture = ExtResource( 2 )
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2")
 centered = false
-script = ExtResource( 5 )
+script = ExtResource("5")
 
-[node name="separator4" type="Control" parent="Panel/HBoxContainer"]
-offset_left = 48.0
-offset_right = 58.0
-offset_bottom = 48.0
-custom_minimum_size = Vector2( 10, 0 )
+[node name="separator4" type="Control" parent="Panel/HBoxContainer" unique_id=1221039052]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
 
-[node name="level" type="Label" parent="Panel/HBoxContainer"]
+[node name="level" type="Label" parent="Panel/HBoxContainer" unique_id=392693897]
 unique_name_in_owner = true
-offset_left = 58.0
-offset_right = 70.0
-offset_bottom = 48.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 7
 text = "2"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="separator" type="Control" parent="Panel/HBoxContainer"]
-offset_left = 70.0
-offset_right = 80.0
-offset_bottom = 48.0
-custom_minimum_size = Vector2( 10, 0 )
+[node name="separator" type="Control" parent="Panel/HBoxContainer" unique_id=1427488390]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
 
-[node name="kda" type="Label" parent="Panel/HBoxContainer"]
+[node name="kda" type="Label" parent="Panel/HBoxContainer" unique_id=879843522]
 unique_name_in_owner = true
-offset_left = 80.0
-offset_right = 144.0
-offset_bottom = 48.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 7
 text = "10/0/10"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="separator2" type="Control" parent="Panel/HBoxContainer"]
-offset_left = 144.0
-offset_right = 154.0
-offset_bottom = 48.0
-custom_minimum_size = Vector2( 10, 0 )
+[node name="separator2" type="Control" parent="Panel/HBoxContainer" unique_id=546126312]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
 
-[node name="last_hits" type="Label" parent="Panel/HBoxContainer"]
+[node name="last_hits" type="Label" parent="Panel/HBoxContainer" unique_id=1939663560]
 unique_name_in_owner = true
-offset_left = 154.0
-offset_right = 178.0
-offset_bottom = 48.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 7
 text = "20"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="separator3" type="Control" parent="Panel/HBoxContainer"]
-offset_left = 178.0
-offset_right = 188.0
-offset_bottom = 48.0
-custom_minimum_size = Vector2( 10, 0 )
+[node name="separator3" type="Control" parent="Panel/HBoxContainer" unique_id=40664685]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
 
-[node name="gold_amount" type="Label" parent="Panel/HBoxContainer"]
+[node name="gold_amount" type="Label" parent="Panel/HBoxContainer" unique_id=953582214]
 unique_name_in_owner = true
-offset_left = 188.0
-offset_right = 227.0
-offset_bottom = 48.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 7
 text = "300"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer"]
-offset_left = 227.0
-offset_right = 257.0
-offset_bottom = 48.0
+[node name="CenterContainer" type="CenterContainer" parent="Panel/HBoxContainer" unique_id=2093723608]
+layout_mode = 2
 size_flags_horizontal = 5
 size_flags_vertical = 3
 
-[node name="Sprite2" type="TextureRect" parent="Panel/HBoxContainer/CenterContainer"]
-offset_top = 9.0
-offset_right = 30.0
-offset_bottom = 39.0
-pivot_offset = Vector2( 20, 20 )
+[node name="Sprite2" type="TextureRect" parent="Panel/HBoxContainer/CenterContainer" unique_id=804896568]
+layout_mode = 2
 size_flags_horizontal = 12
 size_flags_vertical = 12
-texture = SubResource( 1 )
+texture = SubResource("1")

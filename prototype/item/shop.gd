@@ -167,4 +167,3 @@ func update_buttons():
 			if !game.ui.inventories.consumable_items_has_slots(leader):
 				for item_button in throwable_items.get_children():
 					item_button.disabled = true
-

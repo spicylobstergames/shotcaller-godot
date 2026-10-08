@@ -8,10 +8,6 @@
 
 config_version=5
 
-[animation]
-
-compatibility/default_parent_skeleton_in_mesh_instance_3d=true
-
 [application]
 
 config/name="Shotcall"
@@ -27,11 +23,11 @@ config/icon="res://assets/icon.png"
 [autoload]
 
 WorldState="*res://goap/game_logic/world_state.gd"
-Collisions="*res://collision/Collisions.gd"
-Finder="*res://map/pathfind/JumpPointFinder.gd"
+Collisions="*res://collision/collisions.gd"
+Finder="*res://map/pathfind/jump_point_finder.gd"
 Goap="*res://goap/goap_system/goap_system.tscn"
-Crafty_camera="*res://controls/Crafty_camera.tscn"
-Utils="*res://utils/Util.gd"
+CraftyCamera="*res://controls/crafty_camera.tscn"
+Utils="*res://utils/util.gd"
 
 [debug]
 

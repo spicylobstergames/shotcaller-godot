@@ -2,6 +2,7 @@ extends Node
 
 # self = GoapActionPlanner
 var _actions: Array
+const MAX_PLAN_DEPTH := 64
 
 
 # Set actions available for planning.
@@ -33,7 +34,6 @@ func _find_best_plan(goal, desired_state: Dictionary, agent):
 		var plans = _transform_tree_into_array(root, agent)
 
 		if plans.is_empty():
-			push_error("goap action planner error: no valid plans")
 			return []
 
 		return _get_cheapest_plan(plans)
@@ -59,9 +59,9 @@ func _get_cheapest_plan(plans):
 # by previously considered actions, meaning that on every step we
 # need to iterate from the beginning to find all solutions.
 #
-# TODO: protect from circular dependencies.
+# Recursive planning is bounded and rejects repeated unsatisfied states.
 # Returns true if the path has a solution.
-func _build_plans(step, agent):
+func _build_plans(step, agent, visited_states: Dictionary = {}, depth: int = 0):
 	var has_followup := false
 
 	# Each node in the graph has its own desired state.
@@ -82,6 +82,14 @@ func _build_plans(step, agent):
 	# If the state is empty, the branch already found a solution.
 	if state.is_empty():
 		return true
+	if depth >= MAX_PLAN_DEPTH:
+		return false
+
+	var state_signature = _state_signature(state)
+	if visited_states.has(state_signature):
+		return false
+	var next_visited_states = visited_states.duplicate()
+	next_visited_states[state_signature] = true
 
 	for action in _actions:
 		if not action.is_valid(agent):
@@ -112,11 +120,20 @@ func _build_plans(step, agent):
 			# If desired state is empty, this action can be included.
 			# If it is not empty, _build_plans is called again recursively
 			# so it can try to find actions that satisfy the current state.
-			if desired_state.is_empty() or _build_plans(step_node, agent):
+			if desired_state.is_empty() or _build_plans(step_node, agent, next_visited_states, depth + 1):
 				step.children.append(step_node)
 				has_followup = true
 
 	return has_followup
+
+
+func _state_signature(state: Dictionary) -> String:
+	var state_names = state.keys()
+	state_names.sort()
+	var values: Array[String] = []
+	for state_name in state_names:
+		values.append("%s=%s" % [str(state_name), var_to_str(state[state_name])])
+	return ";".join(values)
 
 
 # Transforms graph with actions into a list of actions and calculates cost.

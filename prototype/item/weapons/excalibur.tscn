@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://c1selwgpiomei"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/arthur_blue.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/leaders/arthur_red.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://dmoif2u2y5ap5" path="res://assets/leaders/arthur_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://d2vogwreashv6" path="res://assets/leaders/arthur_red.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="62"]
 atlas = ExtResource("1")
@@ -18,7 +18,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("62")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -26,13 +26,10 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("64")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
 
-[node name="weapon" type="AnimatedSprite2D"]
-texture_filter = 1
-position = Vector2(6, 0)
+[node name="weapon" type="AnimatedSprite2D" unique_id=1599088682]
 sprite_frames = SubResource("63")
-offset = Vector2(2, -4)

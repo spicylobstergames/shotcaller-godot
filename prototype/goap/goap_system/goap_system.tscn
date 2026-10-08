@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://clahjrowylv2o"]
 
 [ext_resource type="Script" uid="uid://bdhxlt610hs8h" path="res://goap/goap_system/goap.gd" id="1_goap"]
-[ext_resource type="Script" uid="uid://c1q0skaf23exx" path="res://goap/goap_system/move.gd" id="2_move"]
-[ext_resource type="Script" uid="uid://orqlb5jdr1an" path="res://goap/goap_system/combat.gd" id="3_attack"]
-[ext_resource type="Script" uid="uid://ds86e1bm5tyx2" path="res://goap/goap_system/advance.gd" id="4_advance"]
-[ext_resource type="Script" uid="uid://ch3s4mg2dkvxk" path="res://goap/goap_system/pathfinding.gd" id="5_path"]
-[ext_resource type="Script" uid="uid://i8g6r1ia8404" path="res://goap/goap_system/orders.gd" id="6_orders"]
+[ext_resource type="Script" uid="uid://c1q0skaf23exx" path="res://goap/game_logic/movement.gd" id="2_move"]
+[ext_resource type="Script" uid="uid://orqlb5jdr1an" path="res://goap/game_logic/combat.gd" id="3_attack"]
+[ext_resource type="Script" uid="uid://b5h5j2ujj00tx" path="res://goap/game_logic/navigation.gd" id="4_navigation"]
+[ext_resource type="Script" uid="uid://i8g6r1ia8404" path="res://goap/game_logic/orders.gd" id="6_orders"]
 [ext_resource type="Script" uid="uid://c6vx31oyd2mj5" path="res://skills/passive_skills.gd" id="7_skills"]
 [ext_resource type="Script" uid="uid://ctc8moxxnbngj" path="res://skills/modifiers.gd" id="8_modifiers"]
 
@@ -18,11 +17,8 @@ script = ExtResource("2_move")
 [node name="attack" type="Node" parent="." unique_id=72403411]
 script = ExtResource("3_attack")
 
-[node name="advance" type="Node" parent="." unique_id=1216475530]
-script = ExtResource("4_advance")
-
-[node name="path" type="Node" parent="." unique_id=456324451]
-script = ExtResource("5_path")
+[node name="navigation" type="Node" parent="." unique_id=1216475530]
+script = ExtResource("4_navigation")
 
 [node name="orders" type="Node" parent="." unique_id=868260626]
 script = ExtResource("6_orders")

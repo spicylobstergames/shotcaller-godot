@@ -9,7 +9,6 @@ var game:Node
 # SIGNALS
 signal unit_reseted
 signal unit_idle_ended
-signal unit_collided
 signal unit_move_ended
 signal unit_arrived
 signal unit_started_channeling
@@ -18,7 +17,7 @@ signal unit_leveled_up
 signal unit_attack_release # ranged projectile
 signal unit_attack_hitted # melee hit
 signal unit_attack_ended
-signal unit_was_attacked
+signal unit_was_attacked(attacker: Unit, damage: int)
 signal unit_stuned
 signal unit_stun_ended
 signal unit_animation_ended
@@ -57,16 +56,12 @@ var angle:float = 0
 var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var final_destiny:Vector2 = Vector2.ZERO
-var last_position:Vector2 = Vector2.ZERO
-var last_position2:Vector2 = Vector2.ZERO
 var current_path:Array = []
 
 # COLLISION
 @export var collide:bool = false
 var collision_radius = 0
 var collision_position:Vector2 = Vector2.ZERO
-var collide_target:Node2D
-var collision_timer:Timer
 
 # ATTACK
 @export var attacks:bool = false
@@ -90,7 +85,7 @@ var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
 # BEHAVIOR
-var next_event:String = "" # "on_arive" "on_move" "on_collision"
+var next_event:String = "" # "move" or "arrive"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
@@ -108,6 +103,9 @@ var hud:Node
 var sprites:Node
 var body:Node
 @onready var agent: Node = get_node_or_null("goap_agent")
+var navigation_agent: NavigationAgent2D
+var navigation_safe_velocity := Vector2.ZERO
+var has_navigation_safe_velocity := false
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -142,6 +140,51 @@ func _ready():
 	if has_node("sprites/body"): body = get_node("sprites/body")
 	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
 	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	if moves:
+		ensure_navigation_agent()
+
+
+func ensure_navigation_agent() -> NavigationAgent2D:
+	if navigation_agent == null:
+		navigation_agent = NavigationAgent2D.new()
+		navigation_agent.name = "NavigationAgent2D"
+		navigation_agent.path_desired_distance = 12.0
+		navigation_agent.target_desired_distance = 8.0
+		navigation_agent.avoidance_enabled = true
+		navigation_agent.velocity_computed.connect(_on_navigation_velocity_computed)
+		add_child(navigation_agent)
+	return navigation_agent
+
+
+func set_navigation_target(target_vector: Vector2) -> void:
+	if navigation_agent == null:
+		ensure_navigation_agent()
+	if navigation_agent:
+		has_navigation_safe_velocity = false
+		navigation_safe_velocity = Vector2.ZERO
+		navigation_agent.target_position = target_vector
+
+
+func advance_with_navigation(_delta: float) -> bool:
+	if navigation_agent == null or navigation_agent.target_position == Vector2.ZERO:
+		return false
+	if navigation_agent.is_target_reached():
+		return false
+	var next_point = navigation_agent.get_next_path_position()
+	var direction = next_point - global_position
+	if direction.length_squared() <= 0.01:
+		return false
+	var current_speed = Goap.modifiers.get_value(self, "speed")
+	var desired_velocity = direction.normalized() * current_speed
+	navigation_agent.velocity = desired_velocity
+	current_step = navigation_safe_velocity if has_navigation_safe_velocity else desired_velocity
+	mirror_look_at(next_point)
+	return true
+
+
+func _on_navigation_velocity_computed(safe_velocity: Vector2) -> void:
+	navigation_safe_velocity = safe_velocity
+	has_navigation_safe_velocity = true
 
 
 func setup_leader_exp():
@@ -192,44 +235,47 @@ func reset_unit():
 func set_state(s):
 	if not self.dead:
 		self.state = s
-		self.get_node("animations").current_animation = s
+		var animations = get_node_or_null("animations")
+		if animations:
+			animations.current_animation = s
 
 
 func setup_team(new_team):
 	self.team = new_team
-	# fog setup
-	if WorldState.get_state("map").fog_of_war and self.has_node("light"):
-		var light = get_node("light")
-		light.hide()
-		if new_team == WorldState.get_state("player_team"): light.show()
-		var s = self.vision / 16
-		light.scale = Vector2(s,s)
+	var map = WorldState.get_state("map")
+	if map and map.fog_of_war:
+		var light = get_node_or_null("light")
+		if light:
+			light.hide()
+			if new_team == WorldState.get_state("player_team"): light.show()
+			var s = self.vision / 16
+			light.scale = Vector2(s,s)
+	
+	if sprites:
 		sprites.use_parent_material = true
 
-	# color body sprite
 	set_anim(new_team, body)
 
-	# color weapons
 	if weapon is AnimatedSprite2D: set_anim(new_team, weapon)
-	if has_node("sprites/weapon/spear"):
-		var spear = get_node("sprites/weapon/spear")
+	var spear = get_node_or_null("sprites/weapon/spear")
+	if spear:
 		set_anim(new_team, spear)
-		var spear_proj = get_node("sprites/weapon/projectile/sprites")
-		set_anim(new_team, spear_proj)
+		var spear_proj = get_node_or_null("sprites/weapon/projectile/sprites")
+		if spear_proj:
+			set_anim(new_team, spear_proj)
 
-	# mirror red pawns, leaders and neutrals
 	var is_red = (self.team == "red")
 	if self.type != "building": self.mirror_toggle(is_red)
-
-	else: # mirror lumbermill
+	else:
 		if self.display_name == "lumbermill" and self.get_parent().name == "blue":
 			self.mirror_toggle(true)
 
-		# color flags
-		var flags = self.get_node("sprites/flags").get_children()
-		for flag in flags:
-			var flag_sprite = flag.get_node("sprites")
-			set_anim(new_team, flag_sprite)
+		var flags = get_node_or_null("sprites/flags")
+		if flags:
+			for flag in flags.get_children():
+				var flag_sprite = flag.get_node_or_null("sprites")
+				if flag_sprite:
+					set_anim(new_team, flag_sprite)
 
 
 func set_anim(new_team, sprite):
@@ -247,7 +293,7 @@ func opponent_team():
 		"neutral": return "all"
 
 
-func mirror_look_at(point):
+func mirror_look_at(point: Vector2):
 	if self.type != "building":
 		self.mirror_toggle(point.x - self.global_position.x < 0)
 
@@ -314,20 +360,6 @@ func point_collision(point, offset=0):
 	return Utils.circle_point_collision(point, unit1_pos, self.collision_radius + offset)
 
 
-func check_collision(unit2, delta):
-	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
-	var unit1_rad = self.collision_radius
-	var unit2_pos = unit2.global_position + unit2.collision_position + (unit2.current_step * delta)
-	var unit2_rad = unit2.collision_radius
-	return Utils.circle_collision(unit1_pos, unit1_rad, unit2_pos, unit2_rad)
-
-
-func get_units_in_quad(delta):
-	var unit1_pos = self.global_position + self.collision_position + (self.current_step * delta)
-	var unit1_rad = self.collision_radius
-	return Collisions.quad.get_units_in_radius(unit1_pos, unit1_rad)
-
-
 func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 	var neighbors = Collisions.get_units_in_radius(pos, radius)
 	var targets = []
@@ -366,14 +398,8 @@ func on_idle_end(): # every idle animation end (0.6s)
 	emit_signal("unit_animation_ended")
 
 
-func on_move(delta): # every frame if there's no collision
+func on_move(delta): # movement tick
 	Goap.move.step(self, delta)
-
-
-func on_collision(delta):
-	if self.moves:
-		Goap.move.on_collision(self, delta)
-	emit_signal("unit_collided")
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
@@ -398,8 +424,7 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 
 
 func was_attacked(attacker, _damage):
-	
-	emit_signal("unit_was_attacked", attacker, _damage)
+	unit_was_attacked.emit(attacker, _damage)
 
 
 func on_attack_end(): # animation end of all attacks
@@ -426,8 +451,11 @@ func channel_start(time):
 
 func stun_start():
 	self.wait_time = 2
-	self.agent.get_state("is_stunned", true)
+	self.agent.set_state("is_stunned", true)
+	self.agent.set_state("stunned", true)
 	self.agent.set_state("is_channeling", false)
+	if self.agent.get_state("player_order", {}).get("type", "") == "teleport":
+		self.agent.set_state("player_order_id", self.agent.get_state("player_order_id", 0) + 1)
 	self.set_state("stun")
 	emit_signal("unit_stuned")
 
@@ -435,6 +463,7 @@ func stun_start():
 func on_stun_end():
 	if self.wait_time > 1: self.wait_time -= 1
 	else:
+		self.agent.set_state("is_stunned", false)
 		self.agent.set_state("stunned", false)
 		emit_signal("unit_stun_ended")
 		emit_signal("unit_animation_ended")
@@ -446,7 +475,7 @@ func die():  # hp <= 0
 	self.target = null
 	
 	self.agent.set_state("is_channeling", false)
-	self.agent.set_state("has_player_command", false)
+	Goap.get_action("OrderAction").cancel_player_order(self.agent)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
@@ -471,7 +500,9 @@ func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.hide()
 	self.state = "dead"
-	self.get_node("animations").current_animation = "[stop]"
+	var animations = get_node_or_null("animations")
+	if animations:
+		animations.current_animation = "[stop]"
 
 
 func on_death_end():  # death animation end

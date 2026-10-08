@@ -1,10 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://r4hl8ptfo6pk"]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" path="res://assets/pawns/archer_red.png" id="2"]
-[ext_resource type="PackedScene" path="res://item/weapons/bow.tscn" id="3"]
-[ext_resource type="Texture2D" path="res://assets/pawns/archer_blue.png" id="4"]
-
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://o4tjhj5un80f" path="res://assets/pawns/archer_red.png" id="2"]
+[ext_resource type="PackedScene" uid="uid://bu7an2adkeccw" path="res://item/weapons/bow.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="4"]
 
 [sub_resource type="AtlasTexture" id="42"]
 atlas = ExtResource("4")
@@ -43,7 +42,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("35")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -57,7 +56,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("45")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -628,15 +627,12 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_p1yc5"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
-
-[sub_resource type="CircleShape2D" id="32"]
-radius = 8.0
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
@@ -644,7 +640,10 @@ radius = 20.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 140.0
 
-[node name="archer" instance=ExtResource("1")]
+[sub_resource type="CircleShape2D" id="32"]
+radius = 8.0
+
+[node name="archer" unique_id=1175660606 instance=ExtResource("1")]
 texture_filter = 1
 hp = 160
 regen = 1
@@ -663,37 +662,35 @@ damage = 40
 defense = 2
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 scale = Vector2(10, 10)
 
-[node name="symbol_border" parent="symbol" index="0"]
+[node name="symbol_border" parent="symbol" index="0" unique_id=1677192396]
 scale = Vector2(1.6, 1.6)
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 sprite_frames = SubResource("22")
 offset = Vector2(0, -15)
 
-[node name="stuck" parent="sprites" index="2"]
+[node name="stuck" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=2024680191]
 visible = false
 
-[node name="weapon" parent="sprites" index="3" instance=ExtResource("3")]
+[node name="weapon" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="3" unique_id=1326186926 instance=ExtResource("3")]
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_p1yc5")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=2061260795]
+libraries/ = SubResource("AnimationLibrary_p1yc5")
 
-[node name="block" parent="collisions" index="0"]
-shape = SubResource("32")
-
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=2066993488]
 visible = false
 shape = SubResource("27")
 
-[node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemies", "PursueEnemies", "HelpFriends", "FollowPath"]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
+goals_list = ["EnemyDefeated", "FriendsSafe", "Recover", "ArriveAtDestination"]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+shape = SubResource("32")
 
 [editable path="hud"]

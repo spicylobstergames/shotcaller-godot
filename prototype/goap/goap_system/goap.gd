@@ -16,8 +16,7 @@ var _goals = preload("res://goap/game_logic/goal_registry.gd").new()
 
 @onready var move = $move
 @onready var attack = $attack
-@onready var advance = $advance
-@onready var path = $path
+@onready var navigation = $navigation
 @onready var orders = $orders
 @onready var skills = $skills
 @onready var modifiers = $modifiers
@@ -33,6 +32,10 @@ func get_action_planner():
 
 func get_goal(goal):
 	return _goals.get_goal(goal)
+
+
+func get_action(action):
+	return _actions.get_action(action)
 
 
 func physics_process(units, delta):

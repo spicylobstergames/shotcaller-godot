@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://cwuhovj0yh0s1"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/rollo_red.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/leaders/rollo_blue.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://b1w2idhpj4hk6" path="res://assets/leaders/rollo_red.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://dle2n6ie8fhqe" path="res://assets/leaders/rollo_blue.png" id="2"]
 
 [sub_resource type="AtlasTexture" id="41"]
 atlas = ExtResource("2")
@@ -18,7 +18,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("41")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -26,12 +26,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("42")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
 
-[node name="weapon" type="AnimatedSprite2D"]
+[node name="weapon" type="AnimatedSprite2D" unique_id=1716985485]
 texture_filter = 1
 sprite_frames = SubResource("43")
 offset = Vector2(6, -5)

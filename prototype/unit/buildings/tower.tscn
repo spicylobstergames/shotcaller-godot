@@ -1,12 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://5yk7yqmah2rc"]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="Texture2D" path="res://assets/pawns/archer_blue.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/buildings/buildings_blue.png" id="3"]
-[ext_resource type="Texture2D" path="res://assets/buildings/buildings_red.png" id="4"]
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://0te8lf0bpsce" path="res://assets/buildings/buildings_blue.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bd3knqfnkfqsi" path="res://assets/buildings/buildings_red.png" id="4"]
 [ext_resource type="PackedScene" path="res://unit/buildings/decoration/flag.tscn" id="5"]
-[ext_resource type="Texture2D" path="res://assets/buildings/buildings_gray.png" id="6"]
-
+[ext_resource type="Texture2D" uid="uid://f3410v63o4pc" path="res://assets/buildings/buildings_gray.png" id="6"]
 
 [sub_resource type="AtlasTexture" id="43"]
 atlas = ExtResource("3")
@@ -27,7 +26,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("43")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -35,7 +34,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("46")
 }],
-"loop": true,
+"loop": 1,
 "name": &"neutral",
 "speed": 5.0
 }, {
@@ -43,7 +42,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("45")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -66,7 +65,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("40")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -89,7 +88,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("37")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -201,13 +200,10 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_70t7t"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25")
 }
-
-[sub_resource type="CircleShape2D" id="28"]
-radius = 18.0
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 45.0
@@ -215,7 +211,10 @@ radius = 45.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 160.0
 
-[node name="tower" instance=ExtResource("1")]
+[sub_resource type="CircleShape2D" id="28"]
+radius = 18.0
+
+[node name="tower" unique_id=431796611 instance=ExtResource("1")]
 texture_filter = 1
 hp = 1600
 regen = 10
@@ -233,76 +232,74 @@ attack_speed = 1.2
 defense = 10
 projectile_speed = 220.0
 
-[node name="state" parent="hud" index="0"]
+[node name="state" parent="hud" parent_id_path=PackedInt32Array(895146676) index="0" unique_id=279554608]
 offset_top = -90.0
 offset_bottom = -72.0
 
-[node name="selection" parent="hud" index="1"]
+[node name="selection" parent="hud" parent_id_path=PackedInt32Array(895146676) index="1" unique_id=601893277]
 position = Vector2(0, 4)
 scale = Vector2(1.5, 2.5)
 
-[node name="hpbar" parent="hud" index="2"]
+[node name="hpbar" parent="hud" parent_id_path=PackedInt32Array(895146676) index="2" unique_id=304701875]
 position = Vector2(0, -70)
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 scale = Vector2(18, 18)
 
-[node name="symbol_border" parent="symbol" index="0"]
+[node name="symbol_border" parent="symbol" index="0" unique_id=1677192396]
 scale = Vector2(1.44, 1.44)
 
-[node name="shadow" parent="sprites" index="0"]
+[node name="shadow" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="0" unique_id=1892846986]
 visible = false
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 use_parent_material = false
 sprite_frames = SubResource("44")
 offset = Vector2(0, -36)
 
-[node name="flags" type="Node2D" parent="sprites" index="2"]
+[node name="flags" type="Node2D" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=1806757210]
 
-[node name="flag" parent="sprites/flags" index="0" instance=ExtResource("5")]
+[node name="flag" parent="sprites/flags" index="0" unique_id=125726762 instance=ExtResource("5")]
 position = Vector2(1, -58)
 
-[node name="weapon" type="Node2D" parent="sprites" index="3"]
+[node name="weapon" type="Node2D" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="3" unique_id=160016279]
 visible = false
 position = Vector2(0, -24)
 scale = Vector2(1.0686, 1)
 
-[node name="projectile" type="Node2D" parent="sprites/weapon" index="0"]
+[node name="projectile" type="Node2D" parent="sprites/weapon" index="0" unique_id=415895432]
 visible = false
 position = Vector2(15, 2)
 
-[node name="sprites" type="AnimatedSprite2D" parent="sprites/weapon/projectile" index="0"]
+[node name="sprites" type="AnimatedSprite2D" parent="sprites/weapon/projectile" index="0" unique_id=1612461643]
 position = Vector2(-0.216076, 0)
 sprite_frames = SubResource("41")
 offset = Vector2(-11, 0)
 
-[node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1"]
+[node name="bow" type="AnimatedSprite2D" parent="sprites/weapon" index="1" unique_id=1576009355]
 position = Vector2(-1.19209e-07, 0.999996)
 rotation = 0.141846
 scale = Vector2(0.85, 1)
 sprite_frames = SubResource("42")
 offset = Vector2(10, 0)
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_70t7t")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=733285868]
+libraries/ = SubResource("AnimationLibrary_70t7t")
 
-[node name="block" parent="collisions" index="0"]
-position = Vector2(0, -6)
-shape = SubResource("28")
-
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 position = Vector2(0, -20)
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=1927653124]
 visible = false
 position = Vector2(0, -20)
 shape = SubResource("27")
 
-[node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemies"]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
+goals_list = ["EnemyDefeated", "Recover"]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+position = Vector2(0, -6)
+shape = SubResource("28")
 
 [editable path="hud"]

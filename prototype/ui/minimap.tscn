@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://dayoyriuqshie"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/panel_theme.tres" id="1_dadjh"]
-[ext_resource type="Script" path="res://ui/minimap.gd" id="2"]
-[ext_resource type="Texture2D" path="res://assets/map/light.png" id="3"]
-[ext_resource type="Texture2D" path="res://assets/ui/minimap.png" id="4"]
+[ext_resource type="Theme" uid="uid://cw2dw3xus2e31" path="res://assets/ui/theme/panel_theme.tres" id="1_dadjh"]
+[ext_resource type="Script" uid="uid://bgp0756unfg8g" path="res://ui/minimap.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://whgtykrtiaca" path="res://assets/map/light.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bcnkww2p3eybf" path="res://assets/ui/minimap.png" id="4"]
 
-[node name="minimap" type="Panel"]
+[node name="minimap" type="Panel" unique_id=1769296355]
 custom_minimum_size = Vector2(150, 150)
 anchors_preset = 2
 anchor_top = 1.0
@@ -16,13 +16,13 @@ grow_vertical = 0
 theme = ExtResource("1_dadjh")
 script = ExtResource("2")
 
-[node name="minimap_container" type="CanvasLayer" parent="."]
+[node name="minimap_container" type="CanvasLayer" parent="." unique_id=1688619521]
 unique_name_in_owner = true
 layer = 2
 
-[node name="Control" type="Control" parent="minimap_container"]
-clip_contents = true
+[node name="Control" type="Control" parent="minimap_container" unique_id=457588489]
 custom_minimum_size = Vector2(140, 140)
+clip_contents = true
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
@@ -33,7 +33,7 @@ grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="sprite" type="Sprite2D" parent="minimap_container/Control"]
+[node name="sprite" type="Sprite2D" parent="minimap_container/Control" unique_id=506561489]
 unique_name_in_owner = true
 light_mask = 2
 position = Vector2(75, 75)
@@ -41,10 +41,10 @@ texture = ExtResource("4")
 region_enabled = true
 region_rect = Rect2(0, 0, 140, 140)
 
-[node name="fog" type="CanvasModulate" parent="minimap_container"]
+[node name="fog" type="CanvasModulate" parent="minimap_container" unique_id=381408186]
 color = Color(0.392157, 0.392157, 0.392157, 1)
 
-[node name="light_template" type="PointLight2D" parent="minimap_container"]
+[node name="light_template" type="PointLight2D" parent="minimap_container" unique_id=2087770022]
 unique_name_in_owner = true
 visible = false
 light_mask = 2
@@ -57,7 +57,7 @@ shadow_filter_smooth = 30.0
 shadow_item_cull_mask = 2
 texture = ExtResource("3")
 
-[node name="map_symbols" type="Control" parent="minimap_container"]
+[node name="map_symbols" type="Control" parent="minimap_container" unique_id=600529052]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 2
@@ -67,11 +67,11 @@ offset_top = -150.0
 offset_right = 150.0
 grow_vertical = 0
 
-[node name="rect_layer" type="CanvasLayer" parent="."]
+[node name="rect_layer" type="CanvasLayer" parent="." unique_id=133208980]
 unique_name_in_owner = true
 layer = 2
 
-[node name="rect_container" type="Control" parent="rect_layer"]
+[node name="rect_container" type="Control" parent="rect_layer" unique_id=622449471]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 2
@@ -83,7 +83,7 @@ offset_right = 145.0
 offset_bottom = -5.0
 grow_vertical = 0
 
-[node name="cam_rect" type="ReferenceRect" parent="rect_layer/rect_container"]
+[node name="cam_rect" type="ReferenceRect" parent="rect_layer/rect_container" unique_id=470723677]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2

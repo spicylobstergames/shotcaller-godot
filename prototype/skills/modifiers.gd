@@ -61,18 +61,23 @@ func get_dot(unit):
 
 
 func get_velocity(unit):
-	var default = unit.speed
-	
-	if unit.agent.get_state("hunting") and not unit.target.agent.get_state("is_retreating"):
-		default = unit.hunting_speed
+	if unit:
+		var default = unit.speed
 		
-	if unit.agent.get_state("is_retreating"):
-		var bonus = Goap.skills.get_value(unit, "bonus_retreat_speed")
-		default += extra_retreat_speed + bonus
+		if unit.agent:
+			
+			if unit.agent.get_state("hunting") and not unit.target.agent.get_state("is_retreating"):
+				default = unit.hunting_speed
+				
+			if unit.agent.get_state("is_retreating"):
+				var bonus = Goap.skills.get_value(unit, "bonus_retreat_speed")
+				default += extra_retreat_speed + bonus
+		
+		default += Goap.orders.tactics_extra_speed[unit.tactics]
 	
-	default += Goap.orders.tactics_extra_speed[unit.tactics]
+		return default
 	
-	return default
+	else: return 0
 
 
 func get_regen(unit):

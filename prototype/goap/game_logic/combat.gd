@@ -1,6 +1,6 @@
 extends Node
 
-# self = Goap.attack
+# self = Goap.combat
 
 
 func point(unit, target_point):
@@ -20,10 +20,11 @@ func point(unit, target_point):
 					set_target(unit, target)
 		
 		
-		#if unit.target:
 		unit.aim_point = target_point
 		unit.mirror_look_at(target_point)
-		unit.get_node("animations").speed_scale = Goap.modifiers.get_value(unit, "attack_speed")
+		var animations = unit.get_node_or_null("animations")
+		if animations:
+			animations.speed_scale = Goap.modifiers.get_value(unit, "attack_speed")
 		unit.set_state("attack")
 
 
@@ -52,6 +53,32 @@ func closest_enemy_unit(unit, enemies):
 	if sorted: return sorted[0].unit
 
 
+func select_target(unit, enemies):
+	var filtered = []
+	for enemy in enemies:
+		if can_hit(unit, enemy):
+			filtered.append(enemy)
+	if filtered.is_empty():
+		return null
+	if filtered.size() == 1:
+		return filtered[0]
+	var sorted = unit.sort_by_distance(filtered)
+	var closest_unit = sorted[0].unit
+	if filtered.size() == 2:
+		var further_unit = sorted[1].unit
+		var index1 = unit.priority.find(closest_unit.type)
+		var index2 = unit.priority.find(further_unit.type)
+		if index2 < index1:
+			return further_unit
+	if not unit.ranged:
+		return closest_unit
+	for priority_type in unit.priority:
+		for enemy in sorted:
+			if enemy.unit.type == priority_type:
+				return enemy.unit
+	return closest_unit
+
+
 func hit(unit1):
 	var att_pos = unit1.global_position + unit1.attack_hit_position
 	var att_rad = unit1.attack_hit_radius
@@ -71,6 +98,27 @@ func hit(unit1):
 				if can_hit(unit1, unit2) and in_range(unit1, unit2):
 					take_hit(unit1, unit2, null, {"cleave": true})
 	return did_hit
+
+
+func on_every_second(agent):
+	var unit = agent.get_unit()
+	if unit.dead:
+		return
+	var dot_effects = Goap.modifiers.get_dot(unit)
+	if dot_effects:
+		for dot in dot_effects:
+			take_hit(dot.attacker, unit, null, {"damage": dot.damage})
+
+
+func on_attack_end(unit):
+	if not unit.attacks or unit.target:
+		return
+	if not unit.current_path.is_empty():
+		Goap.navigation.follow_path(unit, unit.current_path)
+	elif unit.current_destiny != Vector2.ZERO:
+		Goap.move.point(unit, unit.current_destiny)
+	else:
+		Goap.move.stop(unit)
 
 
 func can_hit(attacker, target):
@@ -130,14 +178,11 @@ func take_hit(attacker, target, projectile = null, modifiers = {}):
 				var hp = Goap.modifiers.get_value(target, "hp")
 				var rate = float(target.current_hp)/float(hp)
 				
-				var tax = Goap.orders.player_tax
-				if target.team == WorldState.get_state("enemy_team"):
-					tax = Goap.orders.enemy_tax
-					
-				var limit = Goap.orders.tax_conquer_limit[tax]
-				
+				var tax_action = Goap.get_action("TaxesAction")
+				var tax = tax_action.get_tax_for_team(target.team)
+				var limit = tax_action.tax_conquer_limit[tax]
 				if rate <= limit:
-					Goap.orders.lose_building(target)
+					Goap.get_action("ConquerAction").lose_building(target)
 		
 		if target.current_hp <= 0: 
 			target.current_hp = 0
@@ -175,10 +220,11 @@ func projectile_start(attacker, target):
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
 	WorldState.get_state("map").projectile_container.add_child(projectile)
-	var projectile_sprite = projectile.get_node("sprites")
-	projectile.global_position = attacker.projectile.global_position
-	projectile.show()
-	projectile_sprite.show()
+	var projectile_sprite = projectile.get_node_or_null("sprites")
+	if projectile_sprite:
+		projectile.global_position = attacker.projectile.global_position
+		projectile.show()
+		projectile_sprite.show()
 	# speed
 	var a = attacker.weapon.global_rotation
 	var speed = attacker.projectile_speed
@@ -224,17 +270,19 @@ func projectile_step(delta, projectile):
 func projectile_stuck(attacker, target, projectile):
 	projectile.stuck = true
 	var stuck = projectile.node
-	var sprites = stuck.get_node("sprites")
+	var sprites = stuck.get_node_or_null("sprites")
 	var r = projectile.node.global_rotation
 	
 	if is_instance_valid(target) and is_instance_valid(stuck):
 		var parent = stuck.get_parent()
 		if parent:
 			parent.remove_child(stuck)
-		target.get_node("sprites/stuck").add_child(stuck)
-		stuck.global_position = target.global_position + target.collision_position
-		if target.mirror: 
-			r = Vector2(cos(r),-sin(r)).angle()
+		var stuck_container = target.get_node_or_null("sprites/stuck")
+		if stuck_container:
+			stuck_container.add_child(stuck)
+			stuck.global_position = target.global_position + target.collision_position
+			if target.mirror: 
+				r = Vector2(cos(r),-sin(r)).angle()
 		
 	var a = 0.2 # rad angle variation
 	var ra = (randf()*a*2) - a
@@ -267,8 +315,8 @@ func projectile_stuck(attacker, target, projectile):
 
 
 func clear_stuck(unit):
-	var node = unit.get_node("sprites/stuck")
-	for n in node.get_children():
-		node.remove_child(n)
-		n.queue_free()
-
+	var stuck_node = unit.get_node_or_null("sprites/stuck")
+	if stuck_node:
+		for n in stuck_node.get_children():
+			stuck_node.remove_child(n)
+			n.queue_free()

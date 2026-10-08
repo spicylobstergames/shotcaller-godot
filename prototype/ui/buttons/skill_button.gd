@@ -55,4 +55,3 @@ func _button_down():
 #			self._cooldown.text = ""
 #		if skill.display_name == "Bribe" and WorldState.get_state("selected_leader").gold < bribe_gold_cost:
 #			self.disabled = true
-

@@ -1,15 +1,15 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://bbsceiobgoxeh"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/panel_theme.tres" id="1_3je86"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_icons.png" id="2_v6bh3"]
-[ext_resource type="Script" path="res://ui/stats.gd" id="3"]
-[ext_resource type="Script" path="res://item/inventories.gd" id="4"]
+[ext_resource type="Theme" uid="uid://cw2dw3xus2e31" path="res://assets/ui/theme/panel_theme.tres" id="1_3je86"]
+[ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="2_v6bh3"]
+[ext_resource type="Script" uid="uid://dxgsy1u06g1qg" path="res://ui/stats.gd" id="3"]
+[ext_resource type="Script" uid="uid://du3y4rtyc5qjo" path="res://item/inventories.gd" id="4"]
 [ext_resource type="PackedScene" path="res://ui/buttons/item_button.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://ui/status_effects/status_effects_display.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://ui/buttons/skill_button.tscn" id="8"]
-[ext_resource type="Script" path="res://skills/active_skills.gd" id="9"]
+[ext_resource type="Script" uid="uid://2b8cxc3eamjs" path="res://skills/active_skills.gd" id="9"]
 
-[node name="stats" type="Control"]
+[node name="stats" type="Control" unique_id=567825073]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 0
@@ -20,7 +20,7 @@ pivot_offset = Vector2(-763, -347)
 theme = ExtResource("1_3je86")
 script = ExtResource("3")
 
-[node name="panel" type="Panel" parent="."]
+[node name="panel" type="Panel" parent="." unique_id=1351556524]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
@@ -34,14 +34,14 @@ offset_right = 150.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="hpbar" type="Control" parent="panel"]
+[node name="hpbar" type="Control" parent="panel" unique_id=1071438467]
 anchors_preset = 0
 offset_left = 100.0
 offset_top = 20.0
 offset_right = 100.0
 offset_bottom = 20.0
 
-[node name="hp" type="Label" parent="panel"]
+[node name="hp" type="Label" parent="panel" unique_id=1808070799]
 layout_mode = 0
 offset_left = 98.0
 offset_top = 12.0
@@ -50,7 +50,7 @@ offset_bottom = 28.0
 theme_override_font_sizes/font_size = 16
 text = "999/999"
 
-[node name="name" type="Label" parent="panel"]
+[node name="name" type="Label" parent="panel" unique_id=282100256]
 layout_mode = 0
 offset_left = 150.0
 offset_top = 10.0
@@ -60,7 +60,7 @@ theme_override_font_sizes/font_size = 16
 text = "Name"
 horizontal_alignment = 1
 
-[node name="regen" type="Label" parent="panel"]
+[node name="regen" type="Label" parent="panel" unique_id=1592281341]
 layout_mode = 0
 offset_left = 240.0
 offset_top = 12.0
@@ -71,7 +71,7 @@ theme_override_font_sizes/font_size = 16
 text = "+1"
 horizontal_alignment = 2
 
-[node name="portrait" type="Control" parent="panel"]
+[node name="portrait" type="Control" parent="panel" unique_id=632728898]
 clip_contents = true
 anchors_preset = 0
 offset_left = 12.0
@@ -79,25 +79,25 @@ offset_top = 12.0
 offset_right = 84.0
 offset_bottom = 84.0
 
-[node name="sprite" type="Sprite2D" parent="panel/portrait"]
+[node name="sprite" type="Sprite2D" parent="panel/portrait" unique_id=1630450956]
 position = Vector2(34, 34)
 scale = Vector2(2, 2)
 region_enabled = true
 
-[node name="level_container" type="MarginContainer" parent="panel"]
+[node name="level_container" type="MarginContainer" parent="panel" unique_id=1132268123]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 68.0
 offset_right = 86.0
 offset_bottom = 86.0
 
-[node name="exp_bar" type="ProgressBar" parent="panel/level_container"]
+[node name="exp_bar" type="ProgressBar" parent="panel/level_container" unique_id=643220055]
 custom_minimum_size = Vector2(75, 18)
 layout_mode = 2
 size_flags_vertical = 1
 value = 50.0
 
-[node name="level_label" type="Label" parent="panel/level_container"]
+[node name="level_label" type="Label" parent="panel/level_container" unique_id=1903905095]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 16
@@ -105,7 +105,7 @@ text = "Level 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="vision" type="Label" parent="panel"]
+[node name="vision" type="Label" parent="panel" unique_id=342634210]
 layout_mode = 0
 offset_left = 94.0
 offset_top = 32.0
@@ -113,7 +113,7 @@ offset_right = 160.0
 offset_bottom = 50.0
 text = "Vision: 160"
 
-[node name="control_delay" type="Label" parent="panel"]
+[node name="control_delay" type="Label" parent="panel" unique_id=557549284]
 layout_mode = 0
 offset_left = 241.0
 offset_top = 34.0
@@ -122,7 +122,7 @@ offset_bottom = 48.0
 text = "2"
 horizontal_alignment = 2
 
-[node name="damage" type="Label" parent="panel"]
+[node name="damage" type="Label" parent="panel" unique_id=866768111]
 layout_mode = 0
 offset_left = 94.0
 offset_top = 46.0
@@ -130,7 +130,7 @@ offset_right = 167.0
 offset_bottom = 64.0
 text = "Damage: 100"
 
-[node name="range" type="Label" parent="panel"]
+[node name="range" type="Label" parent="panel" unique_id=714976341]
 layout_mode = 0
 offset_left = 94.0
 offset_top = 60.0
@@ -138,7 +138,7 @@ offset_right = 153.0
 offset_bottom = 78.0
 text = "Range: 20"
 
-[node name="speed" type="Label" parent="panel"]
+[node name="speed" type="Label" parent="panel" unique_id=1817065280]
 layout_mode = 0
 offset_left = 94.0
 offset_top = 74.0
@@ -146,7 +146,7 @@ offset_right = 153.0
 offset_bottom = 92.0
 text = "Speed: 35"
 
-[node name="gold" type="Label" parent="panel"]
+[node name="gold" type="Label" parent="panel" unique_id=144541658]
 layout_mode = 0
 offset_left = 188.0
 offset_top = 71.0
@@ -157,7 +157,7 @@ theme_override_font_sizes/font_size = 16
 text = "100"
 horizontal_alignment = 2
 
-[node name="gold_sprite" type="Sprite2D" parent="panel"]
+[node name="gold_sprite" type="Sprite2D" parent="panel" unique_id=1912038831]
 position = Vector2(268, 68)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_v6bh3")
@@ -165,7 +165,7 @@ centered = false
 region_enabled = true
 region_rect = Rect2(682, 10, 28, 27)
 
-[node name="active_skills" type="Control" parent="."]
+[node name="active_skills" type="Control" parent="." unique_id=1386745246]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -180,7 +180,7 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("9")
 
-[node name="placeholder" type="HBoxContainer" parent="active_skills"]
+[node name="placeholder" type="HBoxContainer" parent="active_skills" unique_id=1205003305]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -189,13 +189,13 @@ offset_top = -60.0
 offset_right = 124.0
 grow_vertical = 0
 
-[node name="skill_button" parent="active_skills/placeholder" instance=ExtResource("8")]
+[node name="skill_button" parent="active_skills/placeholder" unique_id=897709849 instance=ExtResource("8")]
 layout_mode = 2
 
-[node name="skill_button2" parent="active_skills/placeholder" instance=ExtResource("8")]
+[node name="skill_button2" parent="active_skills/placeholder" unique_id=896313224 instance=ExtResource("8")]
 layout_mode = 2
 
-[node name="status_effect_display" parent="active_skills" instance=ExtResource("7")]
+[node name="status_effect_display" parent="active_skills" unique_id=518599256 instance=ExtResource("7")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
@@ -206,7 +206,7 @@ offset_right = 80.0
 offset_bottom = -64.0
 grow_vertical = 0
 
-[node name="tip" type="Label" parent="active_skills"]
+[node name="tip" type="Label" parent="active_skills" unique_id=503879093]
 layout_mode = 1
 offset_left = 2.0
 offset_top = -1.0
@@ -214,7 +214,7 @@ offset_right = 128.0
 offset_bottom = 17.0
 text = "Press ESC to cancel"
 
-[node name="inventories" type="Control" parent="."]
+[node name="inventories" type="Control" parent="." unique_id=673217532]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -229,7 +229,7 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("4")
 
-[node name="placeholder" type="HBoxContainer" parent="inventories"]
+[node name="placeholder" type="HBoxContainer" parent="inventories" unique_id=374293590]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -241,21 +241,21 @@ offset_top = -88.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="item_button" parent="inventories/placeholder" instance=ExtResource("5")]
+[node name="item_button" parent="inventories/placeholder" unique_id=1171659148 instance=ExtResource("5")]
 layout_mode = 2
 focus_mode = 2
 
 [node name="sell_button" parent="inventories/placeholder/item_button" index="2"]
 visible = true
 
-[node name="item_button2" parent="inventories/placeholder" instance=ExtResource("5")]
+[node name="item_button2" parent="inventories/placeholder" unique_id=792494415 instance=ExtResource("5")]
 layout_mode = 2
 focus_mode = 2
 
 [node name="sell_button" parent="inventories/placeholder/item_button2" index="2"]
 visible = true
 
-[node name="item_button3" parent="inventories/placeholder" instance=ExtResource("5")]
+[node name="item_button3" parent="inventories/placeholder" unique_id=1187036139 instance=ExtResource("5")]
 layout_mode = 2
 focus_mode = 2
 

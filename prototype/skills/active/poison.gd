@@ -5,7 +5,7 @@ const DURATION := 5.0
 @export var poison_sprite: Texture2D
 
 
-func poison_throw(leader: Unit, item: Item_resource) -> void:
+func poison_throw(leader: Unit, item: ItemResource) -> void:
 	var enemy_leaders_on_sight: Array = leader.get_units_in_sight({
 		"type": "leader",
 		"team": leader.opponent_team()

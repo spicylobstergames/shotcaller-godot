@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bvln4bj2j4esc"]
+
+[ext_resource type="Script" uid="uid://em3v87o4df2k" path="res://controls/crafty_camera.gd" id="1"]
+
+[node name="CraftyCamera" type="Camera2D" unique_id=769179991]
+unique_name_in_owner = true
+script = ExtResource("1")

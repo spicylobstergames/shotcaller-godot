@@ -10,8 +10,8 @@ extends Node
 # Access the autoload list in godot settings
 
 
-const HeapGD = preload("Heap.gd")
-const GridGD = preload("Grid.gd")
+const HeapGD = preload("heap.gd")
+const GridGD = preload("grid.gd")
 
 
 class JumpPointFinder:

@@ -13,7 +13,7 @@ func get_cost(_agent) -> int:
 
 
 func get_preconditions() -> Dictionary:
-	return { "completed_path": true }
+	return {"arrived_at_retreat": true}
 
 
 func get_effects() -> Dictionary:
@@ -36,4 +36,4 @@ func exit(agent):
 	agent.set_state("is_retreating", false)
 	agent.set_state("ready_to_fight", true)
 	if WorldState.get_state("selected_unit") == unit:
-		Goap.path.resume_lane(agent.get_unit())
+		Goap.navigation.resume_lane(agent.get_unit())

@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://controls/Crafty_camera.gd" id="1"]
-
-[node name="Crafty_camera" type="Camera2D"]
-unique_name_in_owner = true
-position = Vector2(300, 300)
-script = ExtResource("1")

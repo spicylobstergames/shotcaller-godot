@@ -71,7 +71,7 @@ func build_leaders():
 		add_inventory(player_leader)
 	for enemy_leader in WorldState.get_state("enemy_leaders"):
 		add_inventory(enemy_leader)
-	WorldState.one_sec_timer.timeout.connect(gold_update_cycle)
+	WorldState.second_elapsed.connect(gold_update_cycle)
 
 
 func get_leader_inventory(leader):
@@ -101,7 +101,7 @@ func get_leader_delivery(leader):
 
 
 func gold_timer(unit):
-	WorldState.one_sec_timer.timeout.connect(unit.gold_timer_timeout)
+	WorldState.second_elapsed.connect(unit.gold_timer_timeout)
 
 
 
@@ -255,7 +255,9 @@ func give_item(delivery):
 				Goap.modifiers.add(leader, key, item.name, item.attributes[key])
 			if "passive" in item:
 				var item_scene = load(item.passive)
-				leader.get_node("goap_agent/item_passives").add_child(item_scene.instantiate())
+				var passives_node = leader.get_node_or_null("goap_agent/item_passives")
+				if passives_node:
+					passives_node.add_child(item_scene.instantiate())
 
 		"consumable":
 			inventory.consumable_items[index] = item
@@ -366,4 +368,3 @@ func update_buttons():
 			else:
 				for item_button in inventory.equip_item_buttons + inventory.consumable_item_buttons:
 					item_button.sell_button.hide()
-

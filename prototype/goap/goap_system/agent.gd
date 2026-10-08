@@ -25,7 +25,6 @@ func _ready():
 	_unit = get_parent()
 
 	_unit.unit_reseted.connect(reset)
-	_unit.unit_collided.connect(on_collision)
 	_unit.unit_arrived.connect(on_arrive)
 	_unit.unit_idle_ended.connect(on_idle_end)
 	_unit.unit_stun_ended.connect(on_stun_end)
@@ -34,7 +33,7 @@ func _ready():
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
 
-	WorldState.one_sec_timer.timeout.connect(on_every_second)
+	WorldState.second_elapsed.connect(on_every_second)
 
 
 func get_unit():
@@ -51,18 +50,28 @@ func set_state(state_name, value):
 	_state[state_name] = value
 
 
+func erase_state(state_name):
+	_state.erase(state_name)
+
+
 func clear_state():
 	_state.clear()
 
 
 func reset():
+	_exit_current_action()
 	clear_state()
 	_current_goal = null
-	_current_plan = null
+	_current_plan = []
+	_current_plan_step = 0
 
 
 func get_current_action():
-	if (_current_plan != null and _current_plan.size() > 0):
+	if (
+		_current_plan != null
+		and _current_plan_step >= 0
+		and _current_plan_step < _current_plan.size()
+	):
 		return _current_plan[_current_plan_step]
 	else:
 		return null
@@ -78,6 +87,19 @@ func has_goal_function(func_name):
 	return goal != null and goal.has_method(func_name)
 
 
+func clear_plan():
+	_exit_current_action()
+	_current_goal = null
+	_current_plan = []
+	_current_plan_step = 0
+
+
+func _exit_current_action():
+	var action = get_current_action()
+	if action and action.has_method("exit"):
+		action.exit(self)
+
+
 
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
@@ -85,8 +107,7 @@ func has_goal_function(func_name):
 func process(delta):
 	var goal = _get_best_goal()
 	if _current_goal == null or goal != _current_goal:
-		if _current_plan and _current_plan_step < _current_plan.size():
-			_current_plan[_current_plan_step].exit(self)
+		_exit_current_action()
 		_current_goal = goal
 		_current_plan = []
 		_current_plan_step = 0
@@ -114,23 +135,31 @@ func _get_best_goal():
 # Every action exposes a function called perform, which will return true when
 # the job is complete, so the agent can jump to the next action in the list.
 func _follow_plan(plan, delta):
-	if plan.size() > 0:
-		var is_step_complete = plan[_current_plan_step].perform(self, delta)
+	if plan == null or plan.is_empty() or _current_plan_step >= plan.size():
+		return
+	var action = plan[_current_plan_step]
+	if action == null:
+		return
+	var is_step_complete = action.perform(self, delta)
 		
-		# debug
-		if agent_debug: 
-			#_unit.hud.state.text = get_current_action().get_class_name()
-			_unit.hud.state.text = _get_best_goal().get_class_name()
+	# debug
+	if agent_debug and _unit.hud and _unit.hud.state:
+		var goal = _get_best_goal()
+		if goal:
+			_unit.hud.state.text = goal.get_class_name()
 		
-		if is_step_complete:
-			get_current_action().exit(self) #untested
-			if _current_plan_step < plan.size() - 1:
-				_current_plan_step += 1
-				get_current_action().enter(self)
-			else:
-				#trigger replan
-				_current_goal = null
-				_current_plan = null
+	if is_step_complete:
+		if action.has_method("exit"):
+			action.exit(self)
+		if _current_plan_step < plan.size() - 1:
+			_current_plan_step += 1
+			var next_action = get_current_action()
+			if next_action and next_action.has_method("enter"):
+				next_action.enter(self)
+		else:
+			_current_goal = null
+			_current_plan = []
+			_current_plan_step = 0
 
 
 func on_every_second() :
@@ -141,10 +170,7 @@ func on_every_second() :
 		else:
 			_unit.regen = 0
 	if not _unit.dead:
-		var dot_effects = Goap.modifiers.get_dot(_unit)
-		if dot_effects:
-			for dot in dot_effects:
-				Goap.attack.take_hit(dot.attacker, _unit, null, {"damage": dot.damage})
+		Goap.attack.on_every_second(self)
 	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
 	if has_goal_function("on_every_second"):
@@ -169,13 +195,6 @@ func on_move_end():
 		_get_best_goal().on_move_end(self)
 
 
-func on_collision():
-	if has_action_function("on_collision"):
-		get_current_action().on_collision(self)
-	if has_goal_function("on_collision"):
-		_get_best_goal().on_collision(self)
-
-
 func on_stun_end():
 	if has_action_function("resume"):
 		get_current_action().resume(_unit)
@@ -188,13 +207,8 @@ func on_attack_end():
 		get_current_action().on_attack_end(self)
 	if has_goal_function("on_attack_end"):
 		_get_best_goal().on_attack_end(self)
-	if _unit.attacks and not _unit.target:
-		if _unit.current_path:
-			Goap.path.smart(_unit, _unit.current_path)
-		elif _unit.current_destiny:
-			Goap.move.point(_unit, _unit.current_destiny)
-		else:
-			Goap.move.stop(_unit)
+	Goap.get_action("OrderAction").on_attack_end(self)
+	Goap.attack.on_attack_end(_unit)
 
 
 func was_attacked(attacker, damage):
@@ -230,9 +244,7 @@ func on_arrive():
 		get_current_action().on_arrive(self)
 	if has_goal_function("on_arrive"):
 		_get_best_goal().on_arrive(self)
-	match _unit.after_arive:
-		"conquer": Goap.orders.conquer_building(_unit)
-		"pray": Goap.orders.pray_in_church(_unit)
+	Goap.get_action("OrderAction").on_arrive(self)
 
 
 #func clear_orders():

@@ -1,15 +1,15 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://cpa0bkg807myp"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/button_theme.tres" id="1_5t718"]
-[ext_resource type="Script" path="res://ui/buttons/ui_button.gd" id="2"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_icons.png" id="4"]
+[ext_resource type="Theme" uid="uid://cdwiynrgangrm" path="res://assets/ui/theme/button_theme.tres" id="1_5t718"]
+[ext_resource type="Script" uid="uid://bqht6bj224v83" path="res://ui/buttons/ui_button.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="4"]
 
 [sub_resource type="AtlasTexture" id="14"]
 atlas = ExtResource("4")
 region = Rect2(0, 0, 46, 46)
 margin = Rect2(5, 0, 0, 0)
 
-[node name="menu_button" type="Button"]
+[node name="menu_button" type="Button" unique_id=3041443]
 custom_minimum_size = Vector2(60, 60)
 offset_right = 60.0
 offset_bottom = 60.0
@@ -19,7 +19,7 @@ toggle_mode = true
 icon = SubResource("14")
 script = ExtResource("2")
 
-[node name="name" type="Label" parent="."]
+[node name="name" type="Label" parent="." unique_id=101677071]
 layout_mode = 0
 offset_top = 3.0
 offset_right = 60.0
@@ -27,7 +27,7 @@ offset_bottom = 30.0
 text = "Name"
 horizontal_alignment = 1
 
-[node name="hint" type="Label" parent="."]
+[node name="hint" type="Label" parent="." unique_id=1992047259]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

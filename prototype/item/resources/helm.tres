@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://c0evatrfbnclv"]
 
-[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_kdygp"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1_kdygp"]
 
 [resource]
 script = ExtResource("1_kdygp")
@@ -10,7 +9,6 @@ tooltip = "Protects your head\\nAdds 150 HP"
 attributes = {
 "hp": 150
 }
-type = "equip"
 delivery_time = 20
 sprite = 3
 price = 300

@@ -1,5 +1,6 @@
 extends Node2D
 
+signal map_became_ready
 
 # self = game.map_manager
 
@@ -8,7 +9,7 @@ var current_map := "one_lane_map"
 
 var one_lane_map:PackedScene = preload("res://map/maps/one_lane_map.tscn")
 var three_lane_map:PackedScene = preload("res://map/maps/three_lane_map.tscn")
-var rect_test_map:PackedScene = preload("res://map/maps/rect_test_map.tscn")
+var campaign_map:PackedScene = preload("res://map/maps/campaign_map.tscn")
 
 
 func load_current_map():
@@ -49,9 +50,9 @@ func map_loaded():
 	setup_buildings()
 	setup_lanes()
 	Collisions.setup_quadtree(map)
-	Goap.path.setup_pathfind()
+	Goap.navigation.setup_pathfind()
 	game.ui.map_loaded()
-	game.map_loaded()
+	map_became_ready.emit()
 
 
 func setup_leaders(red_leaders, blue_leaders):
@@ -67,14 +68,16 @@ func setup_leaders(red_leaders, blue_leaders):
 
 
 func setup_lanes():
-	for lane in WorldState.get_state("map").get_node("lanes").get_children():
-		WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
+	var map = WorldState.get_state("map")
+	var lanes_node = map.get_node_or_null("lanes")
+	if lanes_node:
+		for lane in lanes_node.get_children():
+			WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
 	Goap.orders.build_lanes()
 
 
 func line_to_array(line):
-	# from PackedVector2Array to Array
 	var array = []
 	for point in line.points:
 		array.append(point)
@@ -84,50 +87,60 @@ func line_to_array(line):
 func setup_buildings():
 	var game = get_tree().get_current_scene()
 
-	for team in WorldState.get_state("map").get_node("buildings").get_children():
-		for building in team.get_children():
-			building.reset_unit()
-			game.ui.minimap.setup_symbol(building)
-			building.set_state("idle")
-			building.agent.set_state("lane", building.subtype)
-			game.selection.setup_selection(building)
-			Collisions.setup(building)
-			if building.team == WorldState.get_state("player_team"):
-				WorldState.get_state("player_buildings").append(building)
-			elif building.team == WorldState.get_state("enemy_team"):
-				WorldState.get_state("enemy_buildings").append(building)
-			else: WorldState.get_state("neutral_buildings").append(building)
-			WorldState.get_state("all_units").append(building)
-			WorldState.get_state("all_buildings").append(building)
+	var map = WorldState.get_state("map")
+	var buildings_node = map.get_node_or_null("buildings")
+	if buildings_node:
+		for team in buildings_node.get_children():
+			for building in team.get_children():
+				Collisions.setup(building)
+				building.reset_unit()
+				game.ui.minimap.setup_symbol(building)
+				building.set_state("idle")
+				building.agent.set_state("lane", building.subtype)
+				game.selection.setup_selection(building)
+				Collisions.setup(building)
+				if building.team == WorldState.get_state("player_team"):
+					WorldState.get_state("player_buildings").append(building)
+				elif building.team == WorldState.get_state("enemy_team"):
+					WorldState.get_state("enemy_buildings").append(building)
+				else: WorldState.get_state("neutral_buildings").append(building)
+				WorldState.get_state("all_units").append(building)
+				WorldState.get_state("all_buildings").append(building)
 	
-	# shop
 	game.ui.shop.blacksmiths = []
-	if WorldState.get_state("map").has_node("buildings/blue/blacksmith"):
-		game.ui.shop.blacksmiths.append( WorldState.get_state("map").get_node("buildings/blue/blacksmith") )
-	if WorldState.get_state("map").has_node("buildings/red/blacksmith"):
-		game.ui.shop.blacksmiths.append( WorldState.get_state("map").get_node("buildings/red/blacksmith") )
+	var blue_blacksmith = map.get_node_or_null("buildings/blue/blacksmith")
+	if blue_blacksmith:
+		game.ui.shop.blacksmiths.append(blue_blacksmith)
+	var red_blacksmith = map.get_node_or_null("buildings/red/blacksmith")
+	if red_blacksmith:
+		game.ui.shop.blacksmiths.append(red_blacksmith)
 	
-	# orders
 	for neutral in WorldState.get_state("map").neutrals:
-		if WorldState.get_state("map").has_node("buildings/blue/" + neutral):
-			game.ui.orders_panel[neutral].append( WorldState.get_state("map").get_node("buildings/blue/" + neutral) )
-		if WorldState.get_state("map").has_node("buildings/red/" + neutral):
-			game.ui.orders_panel[neutral].append( WorldState.get_state("map").get_node("buildings/red/" + neutral) )
+		var blue_neutral = map.get_node_or_null("buildings/blue/" + neutral)
+		if blue_neutral:
+			game.ui.orders_panel[neutral].append(blue_neutral)
+		var red_neutral = map.get_node_or_null("buildings/red/" + neutral)
+		if red_neutral:
+			game.ui.orders_panel[neutral].append(red_neutral)
 	
 	game.ui.orders_panel.update()
 
 
 func has_neutral_buildings(team):
 	var neutral_buildings = false
-	for neutral in WorldState.get_state("map").neutrals:
-		var neutral_building = WorldState.get_state("map").get_node("buildings/"+team+"/"+neutral)
-		if neutral_building.team == team:
+	var map = WorldState.get_state("map")
+	for neutral in map.neutrals:
+		var neutral_building = map.get_node_or_null("buildings/"+team+"/"+neutral)
+		if neutral_building and neutral_building.team == team:
 			neutral_buildings = true
 			break
 	return neutral_buildings
 
 
 func buildings_visibility(b):
-	for team in WorldState.get_state("map").get_node("buildings").get_children():
-		for building in team.get_children():
-			building.visible = b
+	var map = WorldState.get_state("map")
+	var buildings_node = map.get_node_or_null("buildings")
+	if buildings_node:
+		for team in buildings_node.get_children():
+			for building in team.get_children():
+				building.visible = b

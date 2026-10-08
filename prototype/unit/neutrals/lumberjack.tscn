@@ -1,10 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://6wrlk3f2dcx6"]
 
-[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://item/weapons/jack_axe.tscn" id="4"]
-[ext_resource type="Texture2D" path="res://assets/neutrals/lumberjack_red.png" id="5"]
-
+[ext_resource type="Texture2D" uid="uid://cumc6i45eki5r" path="res://assets/neutrals/lumberjack_blue.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://d0ujujatbc5u1" path="res://item/weapons/jack_axe.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://dwgk4mx226mwt" path="res://assets/neutrals/lumberjack_red.png" id="5"]
 
 [sub_resource type="AtlasTexture" id="35"]
 atlas = ExtResource("1")
@@ -43,7 +42,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("37")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -57,7 +56,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("41")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -77,12 +76,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_weehx")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
 "frames": [],
-"loop": true,
+"loop": 1,
 "name": &"neutral",
 "speed": 5.0
 }, {
@@ -90,7 +89,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qiki6")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -610,14 +609,12 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_atfji"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
-
-[sub_resource type="CircleShape2D" id="32"]
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
@@ -625,7 +622,9 @@ radius = 20.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 20.0
 
-[node name="lumberjack" instance=ExtResource("2")]
+[sub_resource type="CircleShape2D" id="32"]
+
+[node name="lumberjack" unique_id=352755466 instance=ExtResource("2")]
 texture_filter = 1
 hp = 180
 regen = 1
@@ -642,33 +641,31 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 scale = Vector2(10, 10)
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 sprite_frames = SubResource("38")
 animation = &"red"
 
-[node name="weapon" parent="sprites" index="2" instance=ExtResource("4")]
+[node name="weapon" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=130475765 instance=ExtResource("4")]
 visible = false
 sprite_frames = SubResource("SpriteFrames_t7bpg")
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_atfji")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=350973870]
+libraries/ = SubResource("AnimationLibrary_atfji")
 
-[node name="block" parent="collisions" index="0"]
-shape = SubResource("32")
-
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=224575864]
 position = Vector2(7, 0)
 shape = SubResource("27")
 
-[node name="goap_agent" parent="." index="7"]
-goals_list = ["NeedLumber", "NeedSafety"]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
+goals_list = ["NeedLumber", "NeedSafety", "Recover", "ArriveAtDestination"]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+shape = SubResource("32")
 
 [editable path="hud"]

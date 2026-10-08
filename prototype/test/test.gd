@@ -30,7 +30,7 @@ func spawn_unit():
 		# TEST LEADER
 		var leader = game.spawn.create(game.spawn.leader_scene("arthur"), "mid", "blue", "Vector2", Vector2(400,400))
 		#leader.attacks = false
-		Goap.path.setup_unit_path(leader, [])
+		Goap.navigation.setup_unit_path(leader, [])
 		WorldState.set_state("player_leaders_names", [leader.name])
 		WorldState.set_state("player_leaders", [leader]);
 		WorldState.set_state("player_team", "blue")
@@ -40,17 +40,20 @@ func spawn_unit():
 		game.map_manager.setup_leaders([leader], [])
 		
 		# TEST LANE PAWN
-#		var path = Goap.path.new_lane_path("mid", "blue")
+#		var path = Goap.navigation.new_lane_path("mid", "blue")
 #		var start = path.pop_front()
 		var pawn = game.spawn.create(game.spawn.pawn_scene("infantry"), "mid", "blue", "Vector2",  Vector2(200,600))
-#		Goap.path.setup_unit_path(pawn, path)
-#		Goap.path.start(pawn,path)
+#		Goap.navigation.setup_unit_path(pawn, path)
+#		Goap.navigation.start(pawn,path)
 		pawn.hp = 10000
 		pawn.current_hp = 10000
 #		pawn.moves = false
 		
 		# TEST LUMBERJACK
-		game.spawn.lumberjack_hire(WorldState.get_state("map").get_node("buildings/blue/blacksmith"), WorldState.get_state("player_team"))
+		var map = WorldState.get_state("map")
+		var blacksmith = map.get_node_or_null("buildings/blue/blacksmith")
+		if blacksmith:
+			game.spawn.lumberjack_hire(blacksmith, WorldState.get_state("player_team"))
 
 
 

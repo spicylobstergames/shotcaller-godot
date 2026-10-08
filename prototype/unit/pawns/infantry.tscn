@@ -1,11 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b0tmgbrha70y7"]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://item/weapons/sword.tscn" id="2"]
-[ext_resource type="Texture2D" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
-[ext_resource type="Texture2D" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]
-[ext_resource type="Texture2D" path="res://assets/pawns/infantry_red.png" id="5_lxg3d"]
-
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://cck6x2smylk5f" path="res://item/weapons/sword.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://bacygsp52ihcq" path="res://assets/pawns/infantry_blue.png" id="3_alvud"]
+[ext_resource type="Texture2D" uid="uid://jxsabt6xt203" path="res://assets/pawns/infantry_neutral.png" id="4_b7k3e"]
+[ext_resource type="Texture2D" uid="uid://0lffhuyuh2wi" path="res://assets/pawns/infantry_red.png" id="5_lxg3d"]
 
 [sub_resource type="AtlasTexture" id="34"]
 atlas = ExtResource("3_alvud")
@@ -26,7 +25,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("34")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -34,7 +33,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("37")
 }],
-"loop": true,
+"loop": 1,
 "name": &"neutral",
 "speed": 5.0
 }, {
@@ -42,7 +41,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("61")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -517,15 +516,12 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3e18l"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
-
-[sub_resource type="CircleShape2D" id="32"]
-radius = 8.0
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
@@ -533,7 +529,10 @@ radius = 20.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 16.0
 
-[node name="infantry" instance=ExtResource("1")]
+[sub_resource type="CircleShape2D" id="32"]
+radius = 8.0
+
+[node name="infantry" unique_id=1238664643 instance=ExtResource("1")]
 texture_filter = 1
 hp = 200
 regen = 1
@@ -550,36 +549,34 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 scale = Vector2(10, 10)
 
-[node name="symbol_border" parent="symbol" index="0"]
+[node name="symbol_border" parent="symbol" index="0" unique_id=1677192396]
 scale = Vector2(1.6, 1.6)
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 frame = 2
 
-[node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
+[node name="weapon" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=207531342 instance=ExtResource("2")]
 sprite_frames = SubResource("62")
 animation = &"default"
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_3e18l")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=1929473991]
+libraries/ = SubResource("AnimationLibrary_3e18l")
 
-[node name="block" parent="collisions" index="0"]
-shape = SubResource("32")
-
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=1331284371]
 visible = false
 position = Vector2(6, 0)
 shape = SubResource("27")
 
-[node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemies", "PursueEnemies", "HelpFriends", "FollowPath"]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
+goals_list = ["EnemyDefeated", "FriendsSafe", "Recover", "ArriveAtDestination"]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+shape = SubResource("32")
 
 [editable path="hud"]

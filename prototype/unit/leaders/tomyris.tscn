@@ -1,10 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://8o8ddrad4ktc"]
 
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://item/weapons/tomyris_bow.tscn" id="2"]
-[ext_resource type="Texture2D" path="res://assets/leaders/tomyris_blue.png" id="5"]
-[ext_resource type="Texture2D" path="res://assets/leaders/tomyris_red.png" id="6"]
-
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://n6xrfs2fsclu" path="res://item/weapons/tomyris_bow.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://cwgb74sify7d2" path="res://assets/leaders/tomyris_blue.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://d0tje34oyf3ay" path="res://assets/leaders/tomyris_red.png" id="6"]
 
 [sub_resource type="AtlasTexture" id="48"]
 atlas = ExtResource("5")
@@ -65,7 +64,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("52")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -85,7 +84,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("57")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -656,15 +655,12 @@ tracks/7/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o2nw2"]
 _data = {
-"attack": SubResource("24"),
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"attack": SubResource("24"),
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
-
-[sub_resource type="CircleShape2D" id="46"]
-radius = 13.0
 
 [sub_resource type="CircleShape2D" id="47"]
 radius = 28.0
@@ -672,7 +668,10 @@ radius = 28.0
 [sub_resource type="CircleShape2D" id="27"]
 radius = 140.0
 
-[node name="tomyris" instance=ExtResource("1")]
+[sub_resource type="CircleShape2D" id="46"]
+radius = 13.0
+
+[node name="tomyris" unique_id=1990816064 instance=ExtResource("1")]
 texture_filter = 1
 hp = 400
 regen = 2
@@ -693,14 +692,14 @@ damage = 50
 defense = 5
 projectile_speed = 220.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 modulate = Color(1, 1, 1, 1)
 scale = Vector2(10, 10)
 
-[node name="symbol_border" parent="symbol" index="0"]
+[node name="symbol_border" parent="symbol" index="0" unique_id=1677192396]
 visible = false
 
-[node name="icon_blue" type="Sprite2D" parent="symbol" index="1"]
+[node name="icon_blue" type="Sprite2D" parent="symbol" index="1" unique_id=1786759668]
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("5")
@@ -708,7 +707,7 @@ offset = Vector2(0, -5)
 region_enabled = true
 region_rect = Rect2(159, 10, 18, 22)
 
-[node name="icon_red" type="Sprite2D" parent="symbol" index="2"]
+[node name="icon_red" type="Sprite2D" parent="symbol" index="2" unique_id=1347100177]
 visible = false
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("6")
@@ -716,34 +715,32 @@ offset = Vector2(0, -5)
 region_enabled = true
 region_rect = Rect2(159, 10, 18, 22)
 
-[node name="shadow" parent="sprites" index="0"]
+[node name="shadow" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="0" unique_id=1892846986]
 scale = Vector2(1.4, 1.4)
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 position = Vector2(3, 9)
 sprite_frames = SubResource("36")
 offset = Vector2(2, -24)
 
-[node name="weapon" parent="sprites" index="2" instance=ExtResource("2")]
+[node name="weapon" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="2" unique_id=841872078 instance=ExtResource("2")]
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_o2nw2")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=1128634554]
+libraries/ = SubResource("AnimationLibrary_o2nw2")
 
-[node name="block" parent="collisions" index="0"]
-position = Vector2(0, -8)
-shape = SubResource("46")
-
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 position = Vector2(0, -10)
 shape = SubResource("47")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" index="2"]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=569285996]
 visible = false
 shape = SubResource("27")
 
-[node name="goap_agent" parent="." index="7"]
-goals_list = ["AttackEnemies", "PursueEnemies", "Retreat", "FollowPath"]
+[node name="goap_agent" parent="." index="6" unique_id=544344335]
+goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+position = Vector2(0, -8)
+shape = SubResource("46")
 
 [editable path="hud"]

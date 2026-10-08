@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://dufb6n1yr2sm2"]
 
-[ext_resource type="Texture2D" path="res://assets/leaders/hongi_blue.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://ba4vjiaqw17ky" path="res://assets/leaders/hongi_blue.png" id="1"]
 
 [sub_resource type="AtlasTexture" id="37"]
 atlas = ExtResource("1")
@@ -20,17 +20,16 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("38")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="weapon" type="Node2D"]
+[node name="weapon" type="Node2D" unique_id=1186654965]
 texture_filter = 1
 use_parent_material = true
-position = Vector2(0, -25)
 
-[node name="axe" type="AnimatedSprite2D" parent="."]
+[node name="axe" type="AnimatedSprite2D" parent="." unique_id=1522198942]
 use_parent_material = true
 position = Vector2(-7.1407, 5.0588)
 rotation = -2.0944
@@ -38,12 +37,12 @@ scale = Vector2(1, 1.069)
 sprite_frames = SubResource("39")
 offset = Vector2(6, -4)
 
-[node name="projectile" type="Node2D" parent="."]
+[node name="projectile" type="Node2D" parent="." unique_id=1251458251]
 visible = false
 z_index = 1
 use_parent_material = true
 position = Vector2(2.20537e-06, 0)
 
-[node name="sprites" type="AnimatedSprite2D" parent="projectile"]
+[node name="sprites" type="AnimatedSprite2D" parent="projectile" unique_id=1016001065]
 use_parent_material = true
 sprite_frames = SubResource("39")

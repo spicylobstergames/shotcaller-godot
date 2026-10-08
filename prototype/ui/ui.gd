@@ -129,8 +129,8 @@ func process(delta):
 		active_skills.process(delta)
 	
 	# hud line
-	if Goap.path.path_line:
-		Goap.path.draw(WorldState.get_state("selected_unit"))
+	if Goap.navigation.path_line:
+		Goap.navigation.draw(WorldState.get_state("selected_unit"))
 
 
 func hide_hpbars():

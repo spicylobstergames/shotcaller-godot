@@ -1,10 +1,10 @@
 extends Node2D
 
-class_name base_map
+class_name BaseMap
 
 
-@onready var walls = get_node("tiles/walls")
-@onready var trees = get_node("tiles/trees")
+@onready var walls = get_node("tiles/walls/Walls")
+@onready var trees = get_node("tiles/trees/Trees")
 @onready var fog = get_node("fog")
 
 @export var size := Vector2(1056, 1056)

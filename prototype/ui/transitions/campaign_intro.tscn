@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://cr4g8k5jg877i"]
+
+[ext_resource type="Theme" uid="uid://deq6ivis1mman" path="res://assets/ui/theme/menu_theme.tres" id="1_mvimv"]
+[ext_resource type="Script" uid="uid://d34y5t035oemb" path="res://ui/transitions/campaign_intro.gd" id="1_ten15"]
+
+[node name="campaign_intro" type="Control" unique_id=2140989513]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 600.0
+offset_bottom = 600.0
+script = ExtResource("1_ten15")
+
+[node name="text" type="Label" parent="." unique_id=1387368803]
+custom_minimum_size = Vector2(400, 0)
+custom_maximum_size = Vector2(400, -1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -237.5
+offset_right = 200.0
+offset_bottom = 237.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_mvimv")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Once upon a time, amidst the ash-choked fields and fractured ruins of 15th-century France, a relentless war has ground a nation down to its bloody bones. Iron clashes endlessly in the mud, kings falter behind closed doors, and the shadow of total conquest looms long over a praying populace. "
+horizontal_alignment = 3
+vertical_alignment = 1
+autowrap_mode = 3

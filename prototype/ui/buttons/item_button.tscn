@@ -1,15 +1,15 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://bx3b2tchqs867"]
 
-[ext_resource type="Theme" path="res://assets/ui/theme/button_theme.tres" id="1_cpals"]
-[ext_resource type="Texture2D" path="res://assets/items/items.png" id="2"]
-[ext_resource type="Script" path="res://ui/buttons/item_button.gd" id="3"]
-[ext_resource type="Theme" path="res://assets/ui/theme/sell_button_theme.tres" id="4_byu65"]
+[ext_resource type="Theme" uid="uid://cdwiynrgangrm" path="res://assets/ui/theme/button_theme.tres" id="1_cpals"]
+[ext_resource type="Texture2D" uid="uid://bclvk1m25bdvc" path="res://assets/items/items.png" id="2"]
+[ext_resource type="Script" uid="uid://bmglo307bjaab" path="res://ui/buttons/item_button.gd" id="3"]
+[ext_resource type="Theme" uid="uid://xu434kykx1hp" path="res://assets/ui/theme/sell_button_theme.tres" id="4_byu65"]
 
 [sub_resource type="AtlasTexture" id="14"]
 atlas = ExtResource("2")
 region = Rect2(0, 0, 32, 32)
 
-[node name="item_button" type="Button"]
+[node name="item_button" type="Button" unique_id=1157610814]
 texture_filter = 1
 custom_minimum_size = Vector2(48, 48)
 offset_right = 62.0
@@ -22,7 +22,7 @@ icon = SubResource("14")
 icon_alignment = 1
 script = ExtResource("3")
 
-[node name="name" type="Label" parent="."]
+[node name="name" type="Label" parent="." unique_id=951431555]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -33,7 +33,7 @@ text = "Item Name"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="price" type="Label" parent="."]
+[node name="price" type="Label" parent="." unique_id=1834498585]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -51,7 +51,7 @@ text = "100"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="sell_button" type="Button" parent="."]
+[node name="sell_button" type="Button" parent="." unique_id=266808569]
 visible = false
 layout_mode = 1
 anchors_preset = 12

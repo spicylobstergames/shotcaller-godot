@@ -45,7 +45,7 @@ func create(template, lane, team, mode, point):
 	WorldState.get_state("all_units").append(unit)
 	game.selection.setup_selection(unit)
 	Collisions.setup(unit)
-	Goap.move.setup_timer(unit) # collision reaction timer
+	Goap.move.setup_timer(unit) # channeling timer
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
 		WorldState.get_state("all_leaders").append(unit)
@@ -80,14 +80,16 @@ func leaders():
 			if leader == "random":
 				leader_name = WorldState.leaders_list.keys()[randi() % WorldState.leaders_list.size()]
 			var lane = "mid"
-			if WorldState.get_state("map").get_node("lanes").get_children().size() == 3:
+			var map = WorldState.get_state("map")
+			var lanes_node = map.get_node_or_null("lanes")
+			if lanes_node and lanes_node.get_children().size() == 3:
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
-			var path = Goap.path.new_lane_path(lane, team)
+			var path = Goap.navigation.new_lane_path(lane, team)
 			var path_start = path.pop_front()
 			var leader_node = game.spawn.create(leader_scene(leader_name), lane, team, "point_random", path_start)
-			Goap.path.setup_unit_path(leader_node, path)
+			Goap.navigation.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -101,16 +103,19 @@ func leaders():
 func spawn_group_cycle():
 	Goap.orders.lanes_cycle()
 	Goap.orders.leaders_cycle()
-	Goap.orders.update_taxes()
+	Goap.get_action("TaxesAction").update_taxes()
 	
 	for team in WorldState.teams:
 		var extra_unit = WorldState.get_state("player_extra_unit")
 		if team != WorldState.get_state("player_team"): extra_unit = WorldState.get_state("enemy_extra_unit")
-		for lane in WorldState.get_state("map").get_node("lanes").get_children():
-			send_pawn("archer", lane.name, team)
-			for n in 2:
-				send_pawn("infantry", lane.name, team)
-			send_pawn(extra_unit, lane.name, team)
+		var map = WorldState.get_state("map")
+		var lanes_node = map.get_node_or_null("lanes")
+		if lanes_node:
+			for lane in lanes_node.get_children():
+				send_pawn("archer", lane.name, team)
+				for n in 2:
+					send_pawn("infantry", lane.name, team)
+				send_pawn(extra_unit, lane.name, team)
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
@@ -138,12 +143,12 @@ func pawn_scene(pawn_name):
 
 
 func send_pawn(template_name, lane, team):
-	var path = Goap.path.new_lane_path(lane, team)
+	var path = Goap.navigation.new_lane_path(lane, team)
 	var path_start = path.pop_front()
 	var pawn = recycle(template_name, lane, team, path_start)
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
-	Goap.path.setup_unit_path(pawn, path)
+	Goap.navigation.setup_unit_path(pawn, path)
 	Goap.orders.set_pawn(pawn)
 
 
@@ -220,13 +225,13 @@ func lumberjack_hire(lumbermill, team):
 		unit = next_to_building(neutral_scene("lumberjack"), lumbermill, team)
 		unit.agent.set_state("lumbermill", lumbermill)  
 		unit.agent.set_state("deliver_position", unit.global_position)
-		var closest_tree = lumbermill.get_node("closest_tree")
-		unit.agent.set_state("closest_tree", closest_tree.global_position)
+		var closest_tree = lumbermill.get_node_or_null("closest_tree")
+		if closest_tree:
+			unit.agent.set_state("closest_tree", closest_tree.global_position)
 		lumbermill.agent.set_state("lumberjack", unit)
 	
 	unit.setup_team(team)
 	unit.show()
-	
 	# charge player
 	var team_leaders = WorldState.get_state("player_leaders")
 	if team == WorldState.get_state("enemy_team"): team_leaders = WorldState.get_state("enemy_leaders")

@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://c8qbxofcf1oda"]
 
-[ext_resource type="PackedScene" uid="uid://q37eswbcgiv8" path="res://unit/Unit.tscn" id="1"]
-[ext_resource type="PackedScene" path="res://skills/passive/aura_of_courage.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://245ia66xx2lx" path="res://skills/passive/aura_of_courage.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://dmoif2u2y5ap5" path="res://assets/leaders/arthur_blue.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://d2vogwreashv6" path="res://assets/leaders/arthur_red.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://bveairjy4wmmx" path="res://assets/ui/abilities/aura_of_courage.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="6"]
-[ext_resource type="PackedScene" path="res://item/weapons/excalibur.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://c1selwgpiomei" path="res://item/weapons/excalibur.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://bxit3nsbngr8r" path="res://assets/animations/side_smoke_2.png" id="8"]
-[ext_resource type="PackedScene" path="res://skills/active/guard_break.tscn" id="9_mvi1j"]
+[ext_resource type="PackedScene" uid="uid://ity4wc1tgkha" path="res://skills/active/guard_break.tscn" id="9_mvi1j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijxyg"]
 atlas = ExtResource("3")
@@ -600,14 +600,14 @@ _data = {
 &"stun": SubResource("33")
 }
 
-[sub_resource type="CircleShape2D" id="32"]
-radius = 9.0
-
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
 
 [sub_resource type="CircleShape2D" id="27"]
 radius = 20.0
+
+[sub_resource type="CircleShape2D" id="32"]
+radius = 9.0
 
 [node name="arthur" unique_id=112072742 instance=ExtResource("1")]
 texture_filter = 1
@@ -674,13 +674,10 @@ sprite_frames = SubResource("63")
 [node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=1674725509]
 libraries/ = SubResource("AnimationLibrary_ywbmk")
 
-[node name="block" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=1218543807]
-shape = SubResource("32")
-
-[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=225705177]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 shape = SubResource("29")
 
-[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="2" unique_id=1650123338]
+[node name="attack" type="CollisionShape2D" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="1" unique_id=1650123338]
 visible = false
 position = Vector2(6, 0)
 shape = SubResource("27")
@@ -689,7 +686,7 @@ shape = SubResource("27")
 position = Vector2(7, -5)
 
 [node name="goap_agent" parent="." index="6" unique_id=544344335]
-goals_list = ["AttackEnemies", "PursueEnemies", "Retreat", "FollowPath", "WaitOut"]
+goals_list = ["EnemyDefeated", "Recover", "ArriveAtDestination", "ObeyPlayer"]
 
 [node name="aura_of_courage" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="0" unique_id=1871703252 instance=ExtResource("2")]
 icon = ExtResource("5")
@@ -697,5 +694,8 @@ description = "Arthur inspires courage in nearby allies, increasing their attack
 status_effect_icon = ExtResource("6")
 
 [node name="guard_break" parent="goap_agent/abilities" parent_id_path=PackedInt32Array(441167843) index="1" unique_id=1802881226 instance=ExtResource("9_mvi1j")]
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+shape = SubResource("32")
 
 [editable path="hud"]

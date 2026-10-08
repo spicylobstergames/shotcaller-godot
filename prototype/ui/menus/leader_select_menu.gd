@@ -1,6 +1,6 @@
 extends Control
 
-signal leader_selected
+signal leader_selected(leader_name: String, team: String)
 
 @onready var leader_button = preload("res://ui/buttons/leader_button.tscn")
 
@@ -49,4 +49,4 @@ func color_remap(new_team):
 func preview_confirm(leader_name):
 	hide()
 	leader_preview.hide()
-	emit_signal("leader_selected", leader_name, team)
+	leader_selected.emit(leader_name, team)

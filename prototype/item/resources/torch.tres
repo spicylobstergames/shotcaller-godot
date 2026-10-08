@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://w4iu1la81180"]
 
-[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_20kts"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1_20kts"]
 
 [resource]
 script = ExtResource("1_20kts")
@@ -10,7 +9,6 @@ tooltip = "This torch will never burn out\\nVision +50"
 attributes = {
 "vision": 50
 }
-type = "equip"
 delivery_time = 15
 sprite = 9
 price = 150

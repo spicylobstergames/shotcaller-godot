@@ -25,6 +25,11 @@ var rng = RandomNumberGenerator.new()
 
 func _ready():
 #	Engine.time_scale = 2
+	map_manager.map_became_ready.connect(map_loaded)
+	ui.dialog.pause_requested.connect(pause)
+	ui.dialog.resume_requested.connect(resume)
+	ui.dialog.selection_requested.connect(selection.select_unit)
+	game_map_loaded.connect(ui.dialog.campaign_start)
 	get_tree().paused = false
 	WorldState.set_state("is_game_active", false)
 	WorldState.set_state("game_started", false)
@@ -102,7 +107,7 @@ func _input(event):
 			ui.active_skills.input(event)
 			selection.input(event)
 
-		Crafty_camera.input(event)
+		CraftyCamera.input(event)
 
 
 
@@ -132,6 +137,7 @@ func setup_timers():
 	WorldState.one_sec_timer.wait_time = 1
 	WorldState.one_sec_timer.name = "one_sec_timer"
 	WorldState.one_sec_timer.timeout.connect(one_sec_cycle)
+	WorldState.one_sec_timer.timeout.connect(_emit_second_elapsed)
 	WorldState.add_child(WorldState.one_sec_timer)
 	
 	WorldState.spawn_timer = Timer.new()
@@ -139,6 +145,10 @@ func setup_timers():
 	WorldState.spawn_timer.name = "unit_spawn_timer"
 	WorldState.spawn_timer.one_shot = true
 	WorldState.add_child(WorldState.spawn_timer)
+
+
+func _emit_second_elapsed() -> void:
+	WorldState.second_elapsed.emit()
 
 
 func one_sec_cycle(): # called every second 
@@ -164,7 +174,7 @@ func one_sec_cycle(): # called every second
 
 func _process(delta: float) -> void:
 	if WorldState.get_state("game_started"):
-		Crafty_camera.process(delta)
+		CraftyCamera.process(delta)
 		ui.process(delta)
 
 
@@ -206,7 +216,9 @@ func apply_cheat_code(code):
 	match code:
 		"SHADOW":
 			for unit1 in WorldState.get_state("all_units"):
-				if unit1.has_node("light"): unit1.get_node("light").shadow_enabled = false
+				var light = unit1.get_node_or_null("light")
+				if light:
+					light.shadow_enabled = false
 		"WIN":
 			end(true)
 		"LOSE":

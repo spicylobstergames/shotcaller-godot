@@ -48,4 +48,3 @@ func button_down():
 				game.ui.inventories.update_buttons() # hide sell bt
 			
 			game.ui.buttons_update()
-

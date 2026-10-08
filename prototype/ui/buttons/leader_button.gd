@@ -1,6 +1,6 @@
 extends Button
 
-class_name Leader_button
+class_name LeaderButton
 
 var leader:Node
 var leader_name:String

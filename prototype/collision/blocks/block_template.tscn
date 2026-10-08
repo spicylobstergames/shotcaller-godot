@@ -1,12 +1,12 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://blahk7lfa8l5m"]
 
-[ext_resource type="Script" path="res://unit/Unit.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/map/light.png" id="2_fiakn"]
+[ext_resource type="Script" uid="uid://wbppf7q1rtk5" path="res://unit/Unit.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://whgtykrtiaca" path="res://assets/map/light.png" id="2_fiakn"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 30.0
 
-[node name="block" type="Node2D"]
+[node name="block" type="StaticBody2D" unique_id=1799291374]
 texture_filter = 1
 script = ExtResource("1")
 hp = 0
@@ -18,18 +18,10 @@ title = "block"
 team = ""
 collide = true
 
-[node name="collisions" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 0
-input_pickable = false
-monitoring = false
-monitorable = false
-
-[node name="block" type="CollisionShape2D" parent="collisions"]
+[node name="block" type="CollisionShape2D" parent="." unique_id=1111197214]
 shape = SubResource("1")
-disabled = true
 
-[node name="light" type="PointLight2D" parent="."]
+[node name="light" type="PointLight2D" parent="." unique_id=1424221441]
 visible = false
 scale = Vector2(6.25, 6.25)
 blend_mode = 2

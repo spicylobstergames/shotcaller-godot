@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene format=3 uid="uid://cl70qpxjveki5"]
 
-[ext_resource type="Texture2D" path="res://assets/neutrals/mailboy_blue.png" id="1"]
-[ext_resource type="PackedScene" path="res://unit/Unit.tscn" id="2"]
-[ext_resource type="Texture2D" path="res://assets/neutrals/mailboy_red.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bajdspaegcx6s" path="res://assets/neutrals/mailboy_blue.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://dt5vpfum5tvqt" path="res://assets/neutrals/mailboy_red.png" id="3"]
 
 [sub_resource type="AtlasTexture" id="39"]
 atlas = ExtResource("1")
@@ -19,7 +19,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("39")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -27,7 +27,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("40")
 }],
-"loop": true,
+"loop": 1,
 "name": &"red",
 "speed": 5.0
 }]
@@ -348,18 +348,18 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3kr35"]
 _data = {
-"death": SubResource("31"),
-"idle": SubResource("25"),
-"move": SubResource("26"),
-"stun": SubResource("33")
+&"death": SubResource("31"),
+&"idle": SubResource("25"),
+&"move": SubResource("26"),
+&"stun": SubResource("33")
 }
-
-[sub_resource type="CircleShape2D" id="32"]
 
 [sub_resource type="CircleShape2D" id="29"]
 radius = 20.0
 
-[node name="mailboy" instance=ExtResource("2")]
+[sub_resource type="CircleShape2D" id="32"]
+
+[node name="mailboy" unique_id=1250204469 instance=ExtResource("2")]
 texture_filter = 1
 hp = 180
 regen = 1
@@ -376,25 +376,23 @@ damage = 50
 defense = 5
 projectile_speed = 0.0
 
-[node name="symbol" parent="." index="1"]
+[node name="symbol" parent="." index="1" unique_id=222958006]
 scale = Vector2(10, 10)
 
-[node name="shadow" parent="sprites" index="0"]
+[node name="shadow" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="0" unique_id=1892846986]
 position = Vector2(-1, 8)
 scale = Vector2(0.7, 0.7)
 
-[node name="body" parent="sprites" index="1"]
+[node name="body" parent="sprites" parent_id_path=PackedInt32Array(1765529208) index="1" unique_id=1237125589]
 sprite_frames = SubResource("38")
 
-[node name="animations" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_3kr35")
-}
+[node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=553081053]
+libraries/ = SubResource("AnimationLibrary_3kr35")
 
-[node name="block" parent="collisions" index="0"]
-shape = SubResource("32")
-
-[node name="select" parent="collisions" index="1"]
+[node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 shape = SubResource("29")
+
+[node name="block" parent="." index="7" unique_id=1218543807]
+shape = SubResource("32")
 
 [editable path="hud"]

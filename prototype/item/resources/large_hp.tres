@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Shop_item" format=3]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://cfenbqlb1m7wk"]
 
-[ext_resource type="Script" path="res://item/Item_resource.gd" id="1_2t26f"]
-
+[ext_resource type="Script" uid="uid://vnf3nqq2c42y" path="res://item/item_resource.gd" id="1_2t26f"]
 
 [resource]
 script = ExtResource("1_2t26f")
@@ -14,4 +13,3 @@ type = "consumable"
 delivery_time = 20
 sprite = 14
 price = 125
-passive = ""

@@ -1,6 +1,8 @@
 extends Control
-var game:Node
 
+signal pause_requested
+signal resume_requested
+signal selection_requested(leader: Unit)
 
 # self = game.ui.dialog
 
@@ -13,40 +15,34 @@ var game:Node
 var can_proceed := false
 var can_hide := false
 
-func _ready():
-	game = get_tree().get_current_scene()
-	game.game_map_loaded.connect(campaign_start)
-
-
 func campaign_start():
 	if WorldState.get_state("game_mode") == "campaign":
-		await get_tree().create_timer(0.25).timeout
 		var joan = WorldState.get_state("player_leaders")[0]
 		show_msg(joan, "We are under attack!")
 
 
 func show_msg(leader, msg_text):
-	game.pause()
+	pause_requested.emit()
 	get_parent().show()
 	show()
 	can_hide = false
-	game.selection.select_unit(leader)
-	Crafty_camera.focus_unit(leader)
+	selection_requested.emit(leader)
+	CraftyCamera.focus_unit(leader)
 	# animate text
 	msg.text = msg_text
 	#var sprite = index of leader
 	#$panel/portrait/sprite.region_rect.position.x = sprite * 64
 	display_name.text = leader.name
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(0.5).timeout
 	can_hide = true
 
 
 func hide_msg():
 	if can_hide:
 		hide()
-		game.resume()
+		resume_requested.emit()
 
 
 func _input(event):
 	if event.is_pressed():
-		game.ui.dialog.hide_msg()
+		hide_msg()

@@ -1,32 +1,32 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene format=3 uid="uid://ch0yy1s76b4h4"]
 
-[ext_resource type="Script" path="res://ui/ui.gd" id="1"]
+[ext_resource type="Script" uid="uid://b6miwqe7krimx" path="res://ui/ui.gd" id="1"]
 [ext_resource type="PackedScene" path="res://ui/panels/unit_controls_panel.tscn" id="2"]
 [ext_resource type="Theme" path="res://assets/ui/theme/label_theme.tres" id="2_ple64"]
-[ext_resource type="PackedScene" path="res://item/shop.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cmgd1ovkvubb1" path="res://item/shop.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://ui/menus/leader_select_menu.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://ui/waterfall/waterfall_background.tscn" id="4_qgu41"]
-[ext_resource type="PackedScene" path="res://ui/minimap.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://dayoyriuqshie" path="res://ui/minimap.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://ui/panels/orders_panel.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://ui/panels/control_panel.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://ui/stats.tscn" id="9"]
-[ext_resource type="PackedScene" path="res://ui/panels/dialog_panel.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://ui/menus/main_menu.tscn" id="11"]
-[ext_resource type="PackedScene" path="res://ui/leaders_quick_icons.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://bbsceiobgoxeh" path="res://ui/stats.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://cmfl0f371ixev" path="res://ui/panels/dialog_panel.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://peemsr0bhld4" path="res://ui/menus/main_menu.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://ddw46xm86ceig" path="res://ui/leaders_quick_icons.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://ui/menus/pause_menu.tscn" id="13"]
 [ext_resource type="PackedScene" path="res://ui/menus/new_game_menu.tscn" id="14"]
 [ext_resource type="PackedScene" path="res://ui/scoreboard/scoreboard.tscn" id="18"]
-[ext_resource type="Script" path="res://ui/cheat_console.gd" id="19"]
+[ext_resource type="Script" uid="uid://b1veigxdhexy2" path="res://ui/cheat_console.gd" id="19"]
 
-[node name="ui" type="CanvasLayer"]
+[node name="ui" type="CanvasLayer" unique_id=644866763]
 script = ExtResource("1")
 
-[node name="top_left" type="Control" parent="."]
+[node name="top_left" type="Control" parent="." unique_id=964025405]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 0
 
-[node name="fps" type="Label" parent="top_left"]
+[node name="fps" type="Label" parent="top_left" unique_id=777168863]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
@@ -37,7 +37,7 @@ theme = ExtResource("2_ple64")
 text = "FPS
 "
 
-[node name="top_mid" type="Control" parent="."]
+[node name="top_mid" type="Control" parent="." unique_id=568397914]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 5
@@ -46,7 +46,7 @@ anchor_right = 0.5
 grow_horizontal = 2
 size_flags_horizontal = 4
 
-[node name="top_label" type="Label" parent="top_mid"]
+[node name="top_label" type="Label" parent="top_mid" unique_id=2121491701]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
@@ -58,7 +58,7 @@ text = "Shotcaller
 "
 horizontal_alignment = 1
 
-[node name="top_right" type="Control" parent="."]
+[node name="top_right" type="Control" parent="." unique_id=67495896]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 1
@@ -66,11 +66,11 @@ anchor_left = 1.0
 anchor_right = 1.0
 grow_horizontal = 0
 
-[node name="shop" parent="top_right" instance=ExtResource("3")]
+[node name="shop" parent="top_right" unique_id=1119293510 instance=ExtResource("3")]
 unique_name_in_owner = true
 layout_mode = 1
 
-[node name="mid_right" type="Control" parent="."]
+[node name="mid_right" type="Control" parent="." unique_id=39339623]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 6
@@ -81,7 +81,7 @@ anchor_bottom = 0.5
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="mid" type="CenterContainer" parent="."]
+[node name="mid" type="CenterContainer" parent="." unique_id=267734]
 texture_filter = 1
 custom_minimum_size = Vector2(600, 600)
 anchors_preset = 8
@@ -98,43 +98,43 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="waterfall_background" parent="mid" instance=ExtResource("4_qgu41")]
+[node name="waterfall_background" parent="mid" unique_id=572882491 instance=ExtResource("4_qgu41")]
 unique_name_in_owner = true
 position = Vector2(300, 270)
 scale = Vector2(1.5, 1.5)
 
-[node name="main_menu" parent="mid" instance=ExtResource("11")]
+[node name="main_menu" parent="mid" unique_id=366666630 instance=ExtResource("11")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="pause_menu" parent="mid" instance=ExtResource("13")]
-unique_name_in_owner = true
-process_mode = 2
-visible = false
-layout_mode = 2
-
-[node name="new_game_menu" parent="mid" instance=ExtResource("14")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="leader_select_menu" parent="mid" instance=ExtResource("4")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="dialog" parent="mid" instance=ExtResource("10")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="score_board" parent="mid" instance=ExtResource("18")]
+[node name="pause_menu" parent="mid" unique_id=18852616 instance=ExtResource("13")]
 unique_name_in_owner = true
 process_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="mid_left" type="Control" parent="."]
+[node name="new_game_menu" parent="mid" unique_id=1268086608 instance=ExtResource("14")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="leader_select_menu" parent="mid" unique_id=1123441904 instance=ExtResource("4")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="dialog" parent="mid" unique_id=2102305293 instance=ExtResource("10")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="score_board" parent="mid" unique_id=2120551037 instance=ExtResource("18")]
+unique_name_in_owner = true
+process_mode = 2
+visible = false
+layout_mode = 2
+
+[node name="mid_left" type="Control" parent="." unique_id=1168541278]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 4
@@ -144,7 +144,7 @@ grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 
-[node name="leaders_icons" parent="mid_left" instance=ExtResource("12")]
+[node name="leaders_icons" parent="mid_left" unique_id=1546294470 instance=ExtResource("12")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 4
@@ -154,7 +154,7 @@ offset_top = -169.0
 offset_bottom = 147.0
 grow_vertical = 2
 
-[node name="cheat_console" type="TextEdit" parent="mid_left"]
+[node name="cheat_console" type="TextEdit" parent="mid_left" unique_id=760277432]
 process_mode = 2
 layout_mode = 1
 anchors_preset = 4
@@ -172,7 +172,7 @@ context_menu_enabled = false
 shortcut_keys_enabled = false
 script = ExtResource("19")
 
-[node name="bot_left" type="Control" parent="."]
+[node name="bot_left" type="Control" parent="." unique_id=1204056100]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 2
@@ -180,11 +180,11 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
 
-[node name="minimap" parent="bot_left" instance=ExtResource("5")]
+[node name="minimap" parent="bot_left" unique_id=1538428525 instance=ExtResource("5")]
 unique_name_in_owner = true
 layout_mode = 1
 
-[node name="bot_mid" type="Control" parent="."]
+[node name="bot_mid" type="Control" parent="." unique_id=1621343748]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 7
@@ -195,7 +195,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="stats" parent="bot_mid" instance=ExtResource("9")]
+[node name="stats" parent="bot_mid" unique_id=1447068216 instance=ExtResource("9")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -206,7 +206,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="bot_right" type="Control" parent="."]
+[node name="bot_right" type="Control" parent="." unique_id=768071815]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 3
@@ -217,7 +217,7 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="orders_panel" parent="bot_right" instance=ExtResource("7")]
+[node name="orders_panel" parent="bot_right" unique_id=894185540 instance=ExtResource("7")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -231,7 +231,7 @@ offset_bottom = -190.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="unit_controls_panel" parent="bot_right" instance=ExtResource("2")]
+[node name="unit_controls_panel" parent="bot_right" unique_id=1349880030 instance=ExtResource("2")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -245,7 +245,7 @@ offset_bottom = -190.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="control_panel" parent="bot_right" instance=ExtResource("8")]
+[node name="control_panel" parent="bot_right" unique_id=314760067 instance=ExtResource("8")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -256,7 +256,7 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="version" type="Label" parent="bot_right"]
+[node name="version" type="Label" parent="bot_right" unique_id=925062099]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3

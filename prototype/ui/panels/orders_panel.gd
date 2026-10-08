@@ -138,17 +138,20 @@ func setup_leader_buttons(orders_container):
 # LANES
 
 func setup_lanes():
-	for team in WorldState.teams:
-		for lane in WorldState.get_state("map").get_node("lanes").get_children():
-			var orders_container = {
-				"node": VBoxContainer.new(),
-				"type": "lane",
-				"lane": lane.name,
-				"team": team
-			}
-			container.add_child(orders_container.node)
-			lane_orders[lane.name+team] = orders_container
-			setup_lane_buttons(orders_container)
+	var map = WorldState.get_state("map")
+	var lanes_node = map.get_node_or_null("lanes")
+	if lanes_node:
+		for team in WorldState.teams:
+			for lane in lanes_node.get_children():
+				var orders_container = {
+					"node": VBoxContainer.new(),
+					"type": "lane",
+					"lane": lane.name,
+					"team": team
+				}
+				container.add_child(orders_container.node)
+				lane_orders[lane.name+team] = orders_container
+				setup_lane_buttons(orders_container)
 
 
 func setup_lane_buttons(orders_container):
@@ -504,4 +507,3 @@ func hide_all():
 		leader_orders[leader].node.hide()
 	for lane in lane_orders:
 		lane_orders[lane].node.hide()
-

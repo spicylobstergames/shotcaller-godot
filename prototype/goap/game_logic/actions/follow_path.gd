@@ -5,7 +5,7 @@ func get_class_name(): return "FollowPath"
 
 
 func is_valid(agent) -> bool:
-	return agent.get_unit().moves
+	return agent.get_unit().moves and agent.get_state("has_path", false)
 
 
 func get_cost(_agent) -> int:
@@ -13,31 +13,27 @@ func get_cost(_agent) -> int:
 
 
 func get_effects() -> Dictionary:
-	return { 
-		"close_to_path": true,
-		"completed_path": true
-	}
+	return {"arrived_at_destination": true}
 
 
 func perform(agent, _delta) -> bool:
-	return agent.get_state("completed_path")
+	return agent.get_state("arrived_at_destination", false)
 
 
 func enter(agent):
 	var unit = agent.get_unit()
 	var path = unit.current_path
 	var new_path = unit.cut_path(path)
-	agent.set_state("completed_path", false)
+	agent.set_state("arrived_at_destination", false)
 	if not new_path.is_empty():
-		Goap.path.start(unit,new_path)
+		Goap.navigation.start(unit, new_path)
+	else:
+		agent.set_state("arrived_at_destination", true)
 
 
 func on_arrive(agent):
-	var unit = agent.get_unit()
-	if agent.get_state("has_path"):
-		Goap.path.next(unit)
-	else:
-		agent.set_state("completed_path", true)
+	if agent.get_unit().current_path.is_empty():
+		agent.set_state("arrived_at_destination", true)
 
 
 func on_animation_end(_agent):

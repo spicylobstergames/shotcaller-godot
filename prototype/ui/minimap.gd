@@ -25,7 +25,7 @@ var minimap_border:int = 5
 
 
 func _ready():
-	Crafty_camera.camera_zoom_changed.connect(adjust_rect)
+	CraftyCamera.camera_zoom_changed.connect(adjust_rect)
 	$minimap_container.hide()
 
 
@@ -36,7 +36,7 @@ func input(event):
 			MOUSE_BUTTON_LEFT: 
 				is_panning = true
 				pan_position = event.position
-				Crafty_camera.is_panning = false
+				CraftyCamera.is_panning = false
 	
 	# MOUSE PAN
 	if event.is_action("pan"):
@@ -78,20 +78,25 @@ func get_map_texture():
 	update_map_texture = false
 	# map nodes
 	var map = WorldState.get_state("map")
-	map_sprite = map.get_node("zoom_out_sprite")
-	map_tiles = map.get_node("tiles")
-	# set camera zoom and limits
+	var sprite = map.get_node_or_null("zoom_out_sprite")
+	if sprite:
+		map_sprite = sprite
+	var tiles = map.get_node_or_null("tiles")
+	if tiles:
+		map_tiles = tiles
 	adjust_rect()
-	# hides units and ui
-	map_sprite.hide()
-	map.get_node("fog").hide()
+	if map_sprite:
+		map_sprite.hide()
+	var fog = map.get_node_or_null("fog")
+	if fog:
+		fog.hide()
 	game.ui.background.hide()
 	game.ui.hide_all()
 	hide()
 	rect_layer.hide()
 	WorldState.get_state("map").show()
 	game.map_manager.buildings_visibility(false)
-	Crafty_camera.map_loaded()
+	CraftyCamera.map_loaded()
 	# after the proper map image is draw
 	await RenderingServer.frame_post_draw
 	# take snapshop
@@ -116,9 +121,9 @@ func get_map_texture():
 	minimap_sprite.region_rect.size = Vector2(minimap_size/sprite_scale, minimap_size/sprite_scale)
 	# set map zoom out tile replace
 	#map_sprite.set_texture(texture)
-	#map_sprite.scale = Crafty_camera.zoom
+	#map_sprite.scale = CraftyCamera.zoom
 	# reset camera
-	Crafty_camera.zoom_reset()
+	CraftyCamera.zoom_reset()
 	# reset units and turn ui back on again
 	game.ui.show_all()
 	minimap_container.show()
@@ -133,7 +138,7 @@ func adjust_rect():
 	var map_max = max(WorldState.get_state("map").size.x, WorldState.get_state("map").size.y)
 	var r_size_x = screen_size.x * minimap_size / map_max
 	var r_size_y = screen_size.y * minimap_size / map_max
-	cam_rect.size = Vector2(r_size_x, r_size_y) / Crafty_camera.zoom
+	cam_rect.size = Vector2(r_size_x, r_size_y) / CraftyCamera.zoom
 
 
 func corner_view():
@@ -157,17 +162,17 @@ func hide_view():
 
 
 func setup_symbol(unit):
-	if unit.has_node("symbol") and not unit.symbol:
-		var symbol = unit.get_node("symbol")
-		setup_unit_symbol(unit, symbol)
-		copy_symbol(unit, symbol)
+	var symbol_node = unit.get_node_or_null("symbol")
+	if symbol_node and not unit.symbol:
+		setup_unit_symbol(unit, symbol_node)
+		copy_symbol(unit, symbol_node)
 		unit.symbol = true
 
 
 func setup_unit_symbol(unit, symbol):
 	setup_leader_icon(unit, symbol)
 	if unit.type == "building":
-		symbol.material = null # show behind fog
+		symbol.material = null
 	if unit.type != "leader":
 		match unit.team:
 			"red":
@@ -178,11 +183,15 @@ func setup_unit_symbol(unit, symbol):
 
 func setup_leader_icon(unit, symbol):
 	if unit.type == "leader":
-		var icon = symbol.get_node("icon_blue")
+		var icon = symbol.get_node_or_null("icon_blue")
+		if not icon:
+			return
 		if unit.team == "red": 
-			icon = symbol.get_node("icon_red")
-			icon.scale.x = -1 * abs(icon.scale.x)
-		icon.show();
+			var icon_red = symbol.get_node_or_null("icon_red")
+			if icon_red:
+				icon = icon_red
+				icon.scale.x = -1 * abs(icon.scale.x)
+		icon.show()
 		icon.material = symbol.material
 		icon.light_mask = symbol.light_mask
 
@@ -214,9 +223,9 @@ func follow_camera():
 		var map_scale = get_map_scale()
 		var pos = Vector2( -half.x+(pan_position.x * map_scale), half.y + ((pan_position.y - view_height) * map_scale) )
 		# update camera position if panning the minimap
-		if is_panning: Crafty_camera.position = pos
+		if is_panning: CraftyCamera.position = pos
 		# update minimap cam rectangle position
-		cam_rect.position = (Crafty_camera.position / map_scale) - cam_rect.size/2 + Vector2(minimap_size/2, minimap_size/2)
+		cam_rect.position = (CraftyCamera.position / map_scale) - cam_rect.size/2 + Vector2(minimap_size/2, minimap_size/2)
 
 
 func move_symbols():

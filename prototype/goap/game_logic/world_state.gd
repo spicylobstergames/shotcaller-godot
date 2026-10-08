@@ -1,5 +1,7 @@
 extends Node
 
+signal second_elapsed
+
 # WorldState global class.
 # This class is an autoload accessible globally.
 # Access the autoload list in the Godot settings.

@@ -1,17 +1,13 @@
 extends Node
 
 
-# self = Goap.move
+# self = Goap.movement
 
 const teleport_time = 3
 const teleport_max_distance = 100
 
 
 func setup_timer(unit):
-	unit.collision_timer = Timer.new()
-	unit.collision_timer.one_shot = true
-	unit.add_child(unit.collision_timer)
-	
 	unit.channeling_timer = Timer.new()
 	unit.channeling_timer.one_shot = true
 	unit.add_child(unit.channeling_timer)
@@ -36,7 +32,9 @@ func move(unit, destiny):
 		unit.current_destiny = destiny
 		var current_speed = Goap.modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
-		unit.get_node("animations").speed_scale = current_speed / unit.speed
+		var animations = unit.get_node_or_null("animations")
+		if animations and "speed_scale" in animations:
+			animations.speed_scale = current_speed / max(unit.speed, 0.0001)
 		unit.set_state("move")
 
 
@@ -50,40 +48,15 @@ func calc_step(unit, speed):
 
 
 
-func step(unit, delta):	
-	unit.global_position += unit.current_step * delta
-
-
-func on_collision(unit, _delta):
-	var target = unit.collide_target
-	if target and target != unit.target:
-		var a # new direction
-		var p1 = unit.global_position + unit.collision_position
-		var p2 = target.global_position + target.collision_position
-		var pr = p2 - p1 # relative target position
-		var ang_to_target = pr.angle() # target relative angle
-		# angle between direction and target
-		var rda = Utils.limit_angle(unit.angle - ang_to_target) 
-		# new direction: rotates pr +-90 deg (tangent direction)
-		if (rda > 0): a = Vector2(-pr.y, pr.x).angle()
-		else: a = Vector2(pr.y, -pr.x).angle()
-		# if stuck slide away and try new direction
-		if unit.global_position == unit.last_position2:
-			unit.global_position -= pr.normalized()
-			a = randf()*2*PI # just try a random direction
-		unit.angle = a # change directioin
-		var s = Goap.modifiers.get_value(unit, "speed")
-		unit.current_step = Vector2(s * cos(a), s * sin(a))
-		# send back to original destiny after some time
-		if unit.collision_timer.time_left > 0: 
-			unit.collision_timer.stop() # first stops previous timers
-		unit.collision_timer.wait_time = 0.2 + randf() * 0.1
-		unit.collision_timer.start()
-		
-		await unit.collision_timer.timeout
-		#current_destiny does have the potential to change in the time between
-		move(unit, unit.current_destiny)		
-
+func step(unit, delta):
+	var velocity = unit.current_step
+	if unit.advance_with_navigation(delta):
+		velocity = unit.current_step
+	if unit is CharacterBody2D:
+		unit.velocity = velocity
+		unit.move_and_slide()
+	else:
+		unit.global_position += velocity * delta
 
 
 func resume(unit):
@@ -103,16 +76,18 @@ func stop(unit):
 		unit.final_destiny = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
 	unit.set_state("idle")
-	unit.get_node("animations").speed_scale = 1
-	if unit.collision_timer and unit.collision_timer.time_left > 0: 
-		unit.collision_timer.stop() # first stops previous timers
+	var animations = unit.get_node_or_null("animations")
+	if animations and "speed_scale" in animations:
+		animations.speed_scale = 1.0
 
 
 func smart(unit, target_point):
+	if not unit or not unit.agent:
+		return
 	if not unit.agent.get_state("stunned"):
-		var path = Goap.path.find(unit.global_position, target_point)
-		if path: Goap.path.start(unit, path)
-
+		if target_point != Vector2.ZERO and unit.current_destiny != Vector2.ZERO:
+			unit.final_destiny = target_point
+		Goap.navigation.navigate_to(unit, target_point)
 
 
 func teleport(unit, target_point):
@@ -125,10 +100,19 @@ func teleport(unit, target_point):
 	var distance = building.global_position.distance_to(target_point)
 	Goap.move.stop(unit)
 	agent.set_state("is_channeling", true)
-	# todo move to timer
-	await get_tree().create_timer(teleport_time).timeout
-	if agent.get_state("is_channeling"):
-		agent.set_state("has_player_command", false)
+	var order_id = agent.get_state("player_order_id", 0)
+	var delay = Timer.new()
+	delay.one_shot = true
+	delay.wait_time = teleport_time
+	unit.add_child(delay)
+	delay.start()
+	await delay.timeout
+	if is_instance_valid(delay):
+		delay.queue_free()
+	if (
+		agent.get_state("is_channeling")
+		and agent.get_state("player_order_id", 0) == order_id
+	):
 		agent.set_state("is_channeling", false)
 		var new_position = target_point
 		# prevent teleport into buildings
@@ -144,4 +128,5 @@ func teleport(unit, target_point):
 		unit.global_position = new_position
 		# emit signal teleported
 		agent.set_state("lane", building.lane)
-		Goap.path.resume_lane(unit)
+		Goap.get_action("OrderAction").complete_player_order(agent)
+		Goap.navigation.resume_lane(unit)
