@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://ity4wc1tgkha"]
 
 [ext_resource type="Script" uid="uid://dxxftltqhc6qp" path="res://skills/active/guard_break.gd" id="1_t45dd"]
-[ext_resource type="Texture2D" uid="uid://bveairjy4wmmx" path="res://assets/ui/abilities/aura_of_courage.png" id="2_xf3tf"]
+[ext_resource type="Resource" path="res://skills/resources/arthur_active.tres" id="3_skill"]
 
 [node name="guard_break" type="Node" unique_id=1660906803]
 script = ExtResource("1_t45dd")
-active_skill_icon = ExtResource("2_xf3tf")
+skill_data = ExtResource("3_skill")

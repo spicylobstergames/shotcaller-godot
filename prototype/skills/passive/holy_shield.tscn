@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://c8uooeuucjt3d"]
 
 [ext_resource type="Script" uid="uid://b17yykq8656n3" path="res://skills/passive/holy_shield.gd" id="1"]
+[ext_resource type="Resource" path="res://skills/resources/holy_shield.tres" id="2_skill"]
 
 [node name="holy_shield" type="Node" unique_id=1203299598]
 script = ExtResource("1")
+skill_data = ExtResource("2_skill")
 
 [node name="update_timer" type="Timer" parent="." unique_id=873741829]
 autostart = true

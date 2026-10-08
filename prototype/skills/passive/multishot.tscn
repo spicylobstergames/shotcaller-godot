@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://du0yb4cd6egtp"]
 
 [ext_resource type="Script" uid="uid://ceo2s5oo48w0" path="res://skills/passive/multishot.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bviqas7cs3x1f" path="res://assets/ui/abilities/multishot.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://xfjr80rha6rb" path="res://assets/ui/abilities/multishot_small.png" id="3"]
+[ext_resource type="Resource" path="res://skills/resources/multishot.tres" id="4_skill"]
 
 [node name="mutlishot" type="Node" unique_id=1197758879]
 script = ExtResource("1")
-icon = ExtResource("2")
-status_effect_icon = ExtResource("3")
+skill_data = ExtResource("4_skill")

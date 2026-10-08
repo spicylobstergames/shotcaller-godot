@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Holy Shield"
+description = "The magic aura protects your soldiers"
+skill_type = "passive"
+attributes = {
+"range": 100.0,
+"value": 50
+}
+status_effect_hint = "Holy Shield: Increases health by %d"

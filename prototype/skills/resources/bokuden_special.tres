@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Battle Call"
+description = "The hero leads allies on a furious offensive, increasing their movement speed by by 10 * his level for 5 seconds."
+skill_type = "active"
+cooldown = 600
+attributes = {
+"duration": 5.0,
+"speed_per_level": 10,
+"range": 100.0
+}
+status_effect_icon = ExtResource("2")
+status_effect_hint = "Battle call: Increases speed by %d"

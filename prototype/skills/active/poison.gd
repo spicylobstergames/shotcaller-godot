@@ -1,8 +1,6 @@
 extends Node
 
-const DURATION := 5.0
-
-@export var poison_sprite: Texture2D
+@export var skill_data: SkillResource
 
 
 func poison_throw(leader: Unit, item: ItemResource) -> void:
@@ -15,7 +13,7 @@ func poison_throw(leader: Unit, item: ItemResource) -> void:
 		return
 
 	var poison_timer := Timer.new()
-	poison_timer.wait_time = DURATION
+	poison_timer.wait_time = skill_data.attributes.duration
 	poison_timer.one_shot = true
 	poison_timer.timeout.connect(_remove_poison.bind(target, poison_timer))
 	target.add_child(poison_timer)
@@ -27,8 +25,8 @@ func poison_throw(leader: Unit, item: ItemResource) -> void:
 		"damage": item.attributes.dot
 	})
 	target.status_effects["poisoned"] = {
-		"icon": poison_sprite,
-		"hint": "Poison, losing %d hp per second.\nMovement speed slowed by %d." % [
+		"icon": skill_data.status_effect_icon,
+		"hint": skill_data.status_effect_hint % [
 			item.attributes.dot,
 			abs(item.attributes.speed)
 		]

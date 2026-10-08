@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Bribe"
+description = "Throw a bag of gold to bribe nearby pawns for 10 sec. Consumes 100 gold"
+skill_type = "active"
+cooldown = 120
+attributes = {
+"gold_cost": 10,
+"duration": 2.0,
+"range": 100.0
+}
+status_effect_icon = ExtResource("2")
+status_effect_hint = "Bribed: Blinded by greed, defected to the side of the enemy"

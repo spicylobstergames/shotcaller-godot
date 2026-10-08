@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Cleave"
+description = "Arthur slashes throw enemies, he can swing three times, but each attack need to hit enemy leader to continue the combination."
+skill_type = "active"
+cooldown = 100
+visualize = "arc"
+attributes = {
+"angle": 90,
+"radius": 50,
+"center_pos": Vector2(0, 8),
+"finish_pos": Vector2(300, 0),
+"color": Color(0, 0, 100, 0.05),
+"damage_per_level": 100
+}

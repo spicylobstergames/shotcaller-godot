@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Aura of Courage"
+description = "Arthur inspires courage in nearby allies, increasing their attack by 2 * his level"
+skill_type = "passive"
+attributes = {
+"range": 100.0,
+"value": 2
+}
+icon = ExtResource("2")
+status_effect_hint = "Courage: Increases damage by %d"

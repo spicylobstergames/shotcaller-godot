@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://uu0qye5tlc08"]
 
 [ext_resource type="Script" uid="uid://bavtq5qr46m1w" path="res://skills/passive/trader.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bveairjy4wmmx" path="res://assets/ui/abilities/aura_of_courage.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="3"]
+[ext_resource type="Resource" path="res://skills/resources/trader.tres" id="4_skill"]
 
 [node name="trader" type="Node" unique_id=1530356550]
 script = ExtResource("1")
-icon = ExtResource("2")
-status_effect_icon = ExtResource("3")
+skill_data = ExtResource("4_skill")

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://245ia66xx2lx"]
 
 [ext_resource type="Script" uid="uid://880p2lh7lks0" path="res://skills/passive/aura_of_courage.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://dh2v222x73h7v" path="res://assets/ui/abilities/aura_of_courage_small.png" id="2"]
+[ext_resource type="Resource" path="res://skills/resources/aura_of_courage.tres" id="3_skill"]
 
 [node name="aura_of_courage" type="Node" unique_id=116323935]
 script = ExtResource("1")
-icon = ExtResource("2")
+skill_data = ExtResource("3_skill")
 
 [node name="update_timer" type="Timer" parent="." unique_id=1661129255]
 autostart = true
