@@ -25,7 +25,7 @@ func perform(agent, _delta) -> bool:
 	var target = unit.target
 	if not is_instance_valid(target) or target.dead:
 		return true
-	var in_range = agent.target_in_range(target)
+	var in_range = Goap.get_action("ChooseTarget").in_range(unit, target)
 	agent.set_state("enemy_in_attack_range", in_range)
 	if not in_range and (
 		unit.current_destiny == Vector2.ZERO

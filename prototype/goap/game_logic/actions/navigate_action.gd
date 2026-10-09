@@ -62,7 +62,8 @@ func point(unit, final_destiny, smart_move = false):
 				elif has_path:
 					start(unit, path)
 			else:
-				var target = unit.agent.choose_target(enemies)
+				var choose_target = Goap.get_action("ChooseTarget")
+				var target = choose_target.select_target(unit, enemies)
 				if not target:
 					if not at_final_destination:
 						move(unit, unit.final_destiny, smart_move)
@@ -71,8 +72,8 @@ func point(unit, final_destiny, smart_move = false):
 				else:
 					unit.agent.set_state("target", target)
 					var target_position = target.global_position + target.collision_position
-					if unit.agent.target_in_range(target):
-						unit.agent.attack_at(target_position)
+					if choose_target.in_range(unit, target):
+						Goap.get_action("AttackEnemy").point(unit, target_position)
 					else:
 						move(unit, target_position, smart_move)
 

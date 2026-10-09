@@ -139,6 +139,8 @@ func _ready():
 	body = get_node_or_null("sprites/body")
 	weapon = get_node_or_null("sprites/weapon")
 	projectile = get_node_or_null("sprites/weapon/projectile")
+	if agent and hud:
+		agent.goal_changed.connect(hud.update_goal)
 	if moves:
 		ensure_navigation_agent()
 

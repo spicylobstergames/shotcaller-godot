@@ -73,9 +73,13 @@ func button_down():
 				move_button_to_front(self)
 				if WorldState.get_state("selected_leader"):
 					var leader = WorldState.get_state("selected_leader")
-					leader.agent.prioritize_target(self.orders.priority)
+					Goap.get_action("ChooseTarget").prioritize_unit(
+						leader, self.orders.priority
+					)
 				else:
-					selected_unit.agent.prioritize_target(self.orders.priority)
+					Goap.get_action("ChooseTarget").prioritize_unit(
+						selected_unit, self.orders.priority
+					)
 
 		"taxes":
 			for button in game.ui.orders.tax_buttons:

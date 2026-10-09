@@ -3,6 +3,7 @@ extends Node
 # Keep suite registration explicit so the headless run order is predictable.
 const ArriveAtDestinationTests = preload("res://tests/unit/test_arrive_at_destination.gd")
 const AttackPrioritiesTests = preload("res://tests/unit/test_attack_priorities.gd")
+const AgentSignalsTests = preload("res://tests/unit/test_agent_signals.gd")
 const AgentTargetTests = preload("res://tests/unit/test_agent_target.gd")
 const AgentTacticTests = preload("res://tests/unit/test_agent_tactic.gd")
 const CollisionTests = preload("res://tests/unit/test_collisions.gd")
@@ -21,6 +22,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	ArriveAtDestinationTests.new().run(self)
 	AttackPrioritiesTests.new().run(self)
+	AgentSignalsTests.new().run(self)
 	AgentTargetTests.new().run(self)
 	AgentTacticTests.new().run(self)
 	CollisionTests.new().run(self)

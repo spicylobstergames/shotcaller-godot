@@ -325,7 +325,7 @@ func osman_special(_effects, _parameters, _visualize):
 		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
 			targets[unit] = unit.team
 			unit.setup_team(leader.team)
-			unit.agent.initialize_target_priority()
+			Goap.get_action("ChooseTarget").set_unit_priority(unit)
 			unit.status_effects["Bribed"] = {
 				icon = skill_data.status_effect_icon,
 				hint = skill_data.status_effect_hint
@@ -338,7 +338,7 @@ func bribe_remove(targets):
 	for unit in targets.keys():
 		if not unit.dead:
 			unit.setup_team(targets[unit])
-			unit.agent.initialize_target_priority()
+			Goap.get_action("ChooseTarget").set_unit_priority(unit)
 			targets.erase(unit)
 			unit.status_effects.erase("Bribed")
 		else: targets.erase(unit)

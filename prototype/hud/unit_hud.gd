@@ -12,6 +12,11 @@ extends Node2D
 # self = unit.hud
 
 
+func update_goal(goal) -> void:
+	if state:
+		state.text = goal.get_class_name() if goal else ""
+
+
 func update_hpbar():
 	if WorldState.get_state("is_game_active"):
 		var player_leader = (unit.type == "leader" and unit.team == WorldState.get_state("player_team"))

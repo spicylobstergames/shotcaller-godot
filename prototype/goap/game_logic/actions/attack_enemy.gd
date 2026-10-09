@@ -7,7 +7,7 @@ func get_class_name():
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	return unit.attacks and agent.can_hit(unit.target)
+	return unit.attacks and Goap.get_action("ChooseTarget").can_hit(unit, unit.target)
 
 
 func get_cost(_agent) -> int:
@@ -27,7 +27,7 @@ func perform(agent, _delta) -> bool:
 	if not is_instance_valid(target) or target.dead:
 		agent.set_state("enemy_dead", true)
 		return true
-	var target_in_range = agent.target_in_range(target)
+	var target_in_range = Goap.get_action("ChooseTarget").in_range(agent.get_unit(), target)
 	agent.set_state("enemy_in_attack_range", target_in_range)
 	return not target_in_range
 
@@ -38,7 +38,7 @@ func enter(agent):
 	if not is_instance_valid(target) or target.dead:
 		agent.set_state("enemy_dead", true)
 		return
-	if agent.is_valid_target(target):
+	if Goap.get_action("ChooseTarget").is_valid_target(unit, target):
 		point(unit, target.global_position + target.collision_position)
 	else:
 		unit.final_destiny = target.global_position
@@ -49,8 +49,9 @@ func on_animation_end(agent):
 	var unit = agent.get_unit()
 	var target = unit.target
 
-	if is_instance_valid(target) and agent.can_hit(target):
-		if agent.target_in_range(target):
+	var choose_target = Goap.get_action("ChooseTarget")
+	if is_instance_valid(target) and choose_target.can_hit(unit, target):
+		if choose_target.in_range(unit, target):
 			point(unit, target.global_position + target.collision_position)
 		else:
 			unit.final_destiny = target.global_position
@@ -76,8 +77,9 @@ func point(unit, target_point: Vector2) -> void:
 		if not unit.target:
 			var neighbors = Collisions.get_units_in_radius(target_point, 1)
 			if neighbors:
-				var target = unit.agent.closest_enemy_unit(neighbors)
-				if unit.agent.is_valid_target(target):
+				var choose_target = Goap.get_action("ChooseTarget")
+				var target = choose_target.closest_enemy_unit(unit, neighbors)
+				if choose_target.is_valid_target(unit, target):
 					unit.agent.set_state("target", target)
 
 		unit.aim_point = target_point

@@ -65,6 +65,24 @@ func set_unit_priority(unit) -> void:
 	unit.agent.set_state("target_priority", priorities.duplicate())
 
 
+func prioritize_unit(unit, target_type: String) -> void:
+	if unit.type == "leader":
+		set_leader_priority(unit, target_type)
+		set_unit_priority(unit)
+		return
+
+	var lane = unit.agent.get_state("lane", "")
+	set_lane_priority(lane, unit.team, target_type)
+	for lane_unit in WorldState.get_state("all_units"):
+		if (
+			is_instance_valid(lane_unit)
+			and lane_unit.agent
+			and lane_unit.team == unit.team
+			and lane_unit.agent.get_state("lane") == lane
+		):
+			set_unit_priority(lane_unit)
+
+
 func apply_building_priorities() -> void:
 	for building in WorldState.get_state("all_buildings"):
 		set_unit_priority(building)

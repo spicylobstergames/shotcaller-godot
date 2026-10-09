@@ -9,7 +9,7 @@ func poison_throw(leader: Unit, item: ItemResource) -> void:
 		"team": leader.opponent_team()
 	})
 	var target: Unit = leader.closest_unit(enemy_leaders_on_sight)
-	if target == null or not leader.agent.can_hit(target):
+	if target == null or not Goap.get_action("ChooseTarget").can_hit(leader, target):
 		return
 
 	var poison_timer := Timer.new()

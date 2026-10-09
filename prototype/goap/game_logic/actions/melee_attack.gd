@@ -6,10 +6,11 @@ func get_class_name() -> String:
 
 
 func hit(unit) -> bool:
+	var choose_target = Goap.get_action("ChooseTarget")
 	var attack_position = unit.global_position + unit.attack_hit_position
 	var did_hit := false
 
-	if unit.agent.can_hit(unit.target) and unit.agent.target_in_range(unit.target):
+	if choose_target.can_hit(unit, unit.target) and choose_target.in_range(unit, unit.target):
 		Goap.get_goal("EnemyDefeated").take_hit(unit, unit.target)
 		did_hit = true
 
@@ -18,6 +19,6 @@ func hit(unit) -> bool:
 		if "cleave" in attacker_skills:
 			var neighbors = Collisions.get_units_in_radius(attack_position, unit.attack_hit_radius)
 			for target in neighbors:
-				if unit.agent.can_hit(target) and unit.agent.target_in_range(target):
+				if choose_target.can_hit(unit, target) and choose_target.in_range(unit, target):
 					Goap.get_goal("EnemyDefeated").take_hit(unit, target, null, {"cleave": true})
 	return did_hit

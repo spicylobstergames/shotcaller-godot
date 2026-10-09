@@ -149,12 +149,12 @@ func send_pawn(template_name, lane, team):
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
 	Goap.navigation.setup_unit_path(pawn, path)
-	pawn.agent.initialize_target_priority()
+	Goap.get_action("ChooseTarget").set_unit_priority(pawn)
 
 
 func leaders_cycle() -> void:
 	for leader in WorldState.get_state("player_leaders") + WorldState.get_state("enemy_leaders"):
-		leader.agent.initialize_target_priority()
+		Goap.get_action("ChooseTarget").set_unit_priority(leader)
 		var extra_unit = WorldState.get_state("player_extra_unit")
 		if leader.team == WorldState.get_state("enemy_team"):
 			extra_unit = WorldState.get_state("enemy_extra_unit")

@@ -59,4 +59,4 @@ func build_leaders() -> void:
 	Goap.get_action("ChooseTarget").build_leader_priorities(player_leaders, enemy_leaders)
 	var leaders = player_leaders + enemy_leaders
 	for leader in leaders:
-		leader.agent.initialize_target_priority()
+		Goap.get_action("ChooseTarget").set_unit_priority(leader)

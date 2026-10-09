@@ -9,9 +9,6 @@ class TestAgent:
 	var state := {}
 	var unit
 
-	func initialize_target_priority() -> void:
-		Goap.get_action("ChooseTarget").set_unit_priority(unit)
-
 	func set_state(state_name, value) -> void:
 		state[state_name] = value
 

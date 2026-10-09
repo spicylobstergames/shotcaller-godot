@@ -93,7 +93,7 @@ func _execute_player_order(unit, order_type: String, target: Vector2, agent = nu
 		"advance":
 			Goap.navigation.smart(unit, target)
 		"attack":
-			unit.agent.attack_at(target)
+			Goap.get_action("AttackEnemy").point(unit, target)
 		"lane":
 			Goap.navigation.change_lane(unit, target)
 		"teleport":

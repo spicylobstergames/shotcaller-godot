@@ -2,13 +2,17 @@ extends Node
 
 # self = Goap.Agent
 
+signal plan_changed(plan)
+signal goal_changed(goal)
+signal action_changed(action)
+
 @export var goals_list: Array = []
 
 var agent_debug := true
 
 var _goals: Array
 var _current_goal
-var _current_plan
+var _current_plan: Array = []
 var _current_plan_step := 0
 var _unit
 var _state: Dictionary = {}
@@ -19,8 +23,8 @@ var attacked_timer := 2
 func _ready():
 	_unit = get_parent()
 	set_state("tactic", "default")
-	set_state("target_priority", Goap.get_action("ChooseTarget").DEFAULT_PRIORITY.duplicate())
 	_goals = []
+	action_changed.connect(_on_action_changed)
 	if goals_list.size() > 0:
 		for goal in goals_list:
 			_goals.append(Goap.get_goal(goal))
@@ -84,53 +88,6 @@ func _set_target(value) -> void:
 	_state["hunting"] = target != null and _unit.moves
 
 
-func choose_target(enemies):
-	return Goap.get_action("ChooseTarget").select_target(_unit, enemies)
-
-
-func closest_enemy_unit(enemies):
-	return Goap.get_action("ChooseTarget").closest_enemy_unit(_unit, enemies)
-
-
-func can_hit(target) -> bool:
-	return Goap.get_action("ChooseTarget").can_hit(_unit, target)
-
-
-func target_in_range(target) -> bool:
-	return Goap.get_action("ChooseTarget").in_range(_unit, target)
-
-
-func is_valid_target(target) -> bool:
-	return Goap.get_action("ChooseTarget").is_valid_target(_unit, target)
-
-
-func prioritize_target(target_type: String) -> void:
-	var choosen_target = Goap.get_action("ChooseTarget")
-	if _unit.type == "leader":
-		choosen_target.set_leader_priority(_unit, target_type)
-		choosen_target.set_unit_priority(_unit)
-		return
-
-	var lane = get_state("lane", "")
-	choosen_target.set_lane_priority(lane, _unit.team, target_type)
-	for unit in WorldState.get_state("all_units"):
-		if (
-			is_instance_valid(unit)
-			and unit.agent
-			and unit.team == _unit.team
-			and unit.agent.get_state("lane") == lane
-		):
-			choosen_target.set_unit_priority(unit)
-
-
-func initialize_target_priority() -> void:
-	Goap.get_action("ChooseTarget").set_unit_priority(_unit)
-
-
-func attack_at(point: Vector2) -> void:
-	Goap.get_action("AttackEnemy").point(_unit, point)
-
-
 func erase_state(state_name):
 	_state.erase(state_name)
 
@@ -142,19 +99,15 @@ func clear_state():
 func reset():
 	var lane = get_state("lane")
 	var tactic = get_state("tactic", "default")
-	var target_priority = get_state(
-		"target_priority", Goap.get_action("ChooseTarget").DEFAULT_PRIORITY
-	)
-	_exit_current_action()
+	var target_priority = get_state("target_priority")
 	set_state("target", null)
 	clear_state()
 	if lane != null:
 		set_state("lane", lane)
 	set_state("tactic", tactic)
-	set_state("target_priority", target_priority.duplicate())
-	_current_goal = null
-	_current_plan = []
-	_current_plan_step = 0
+	if target_priority != null:
+		set_state("target_priority", target_priority.duplicate())
+	clear_plan()
 
 
 func get_current_action():
@@ -179,10 +132,8 @@ func has_goal_function(func_name):
 
 
 func clear_plan():
-	_exit_current_action()
-	_current_goal = null
-	_current_plan = []
-	_current_plan_step = 0
+	if _current_goal != null or not _current_plan.is_empty():
+		_replace_plan(null, [])
 
 
 func _exit_current_action():
@@ -191,21 +142,33 @@ func _exit_current_action():
 		action.exit(self)
 
 
+func _replace_plan(goal, plan: Array) -> void:
+	_exit_current_action()
+	var previous_goal = _current_goal
+	_current_goal = goal
+	_current_plan = plan
+	_current_plan_step = 0
+	if previous_goal != goal:
+		goal_changed.emit(goal)
+	plan_changed.emit(_current_plan)
+	action_changed.emit(get_current_action())
+
+
+func _on_action_changed(action) -> void:
+	if action and action.has_method("enter"):
+		action.enter(self)
+
 
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
 # for the new high priority goal.
 func process(delta):
 	var goal = _get_best_goal()
-	if _current_goal == null or goal != _current_goal:
-		_exit_current_action()
-		_current_goal = goal
-		_current_plan = []
-		_current_plan_step = 0
-		if _current_goal:
-			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal)
-			if _current_plan.size() > 0:
-				_current_plan[0].enter(self)
+	if goal != _current_goal:
+		var plan: Array = []
+		if goal:
+			plan = Goap.get_action_planner().get_plan(self, goal)
+		_replace_plan(goal, plan)
 	else:
 		_follow_plan(_current_plan, delta)
 
@@ -233,24 +196,14 @@ func _follow_plan(plan, delta):
 		return
 	var is_step_complete = action.perform(self, delta)
 		
-	# debug
-	if agent_debug and _unit.hud and _unit.hud.state:
-		var goal = _get_best_goal()
-		if goal:
-			_unit.hud.state.text = goal.get_class_name()
-		
 	if is_step_complete:
-		if action.has_method("exit"):
-			action.exit(self)
 		if _current_plan_step < plan.size() - 1:
+			if action.has_method("exit"):
+				action.exit(self)
 			_current_plan_step += 1
-			var next_action = get_current_action()
-			if next_action and next_action.has_method("enter"):
-				next_action.enter(self)
+			action_changed.emit(get_current_action())
 		else:
-			_current_goal = null
-			_current_plan = []
-			_current_plan_step = 0
+			_replace_plan(null, [])
 
 
 func on_every_second() :
