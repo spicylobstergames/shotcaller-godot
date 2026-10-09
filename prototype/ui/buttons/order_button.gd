@@ -38,7 +38,7 @@ func setup_order_button():
 		"high","collect": sprite = 11
 		"menu": sprite = 12
 		"order","teleport": sprite = 13
-		
+
 	icon.region.position.x = sprite * 48
 
 
@@ -47,18 +47,40 @@ func button_down():
 	match self.orders.type:
 		"tactic":
 			clear_siblings(self)
-			if selected_unit and selected_unit.type == "leader":
-				Goap.orders.set_leader_tactic(self.orders.tactic)
-			else: Goap.orders.set_lane_tactic(self.orders.tactic)
+			var tactic_unit = selected_unit
+			if tactic_unit == null:
+				tactic_unit = WorldState.get_state("selected_leader")
+			if tactic_unit and tactic_unit.agent:
+				var tactic = self.orders.tactic
+				tactic_unit.agent.set_state("tactic", tactic)
+				if tactic_unit.type != "leader":
+					var lane = tactic_unit.agent.get_state("lane")
+					for unit in WorldState.get_state("all_units"):
+						if (
+							is_instance_valid(unit)
+							and unit != tactic_unit
+							and unit.agent
+							and unit.type != "leader"
+							and unit.team == tactic_unit.team
+							and unit.agent.get_state("lane") == lane
+						):
+							unit.agent.set_state("tactic", tactic)
 			self.disabled = true
 		
+
 		"priority":
 			if not is_first_child(self):
 				move_button_to_front(self)
 				if WorldState.get_state("selected_leader"):
-					Goap.orders.set_leader_priority(self.orders.priority)
-				else: Goap.orders.set_lane_priority(self.orders.priority)
-		
+					var leader = WorldState.get_state("selected_leader")
+					Goap.get_action("ChooseTarget").prioritize_unit(
+						leader, self.orders.priority
+					)
+				else:
+					Goap.get_action("ChooseTarget").prioritize_unit(
+						selected_unit, self.orders.priority
+					)
+
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
 				if button.orders.taxes == self.orders.taxes:
@@ -69,16 +91,17 @@ func button_down():
 					button.disabled = false
 			Goap.get_action("TaxesAction").set_taxes(self.orders.taxes, selected_unit.team)
 			self.disabled = true
-		
+
 		"gold":
 			Goap.get_action("MineAction").gold_order(self)
 			disable_siblings(self)
 			self.disabled = true
-		
+
 		"camp_hire":
 			clear_siblings(self)
 			game.spawn.camp_hire(self.orders.camp_hire, selected_unit.team)
 			self.disabled = true
+
 		
 		"lumberjack":
 			if self.orders.lumberjack == "hire":
@@ -107,8 +130,7 @@ func button_down():
 						WorldState.get_state("neutral_units").erase(dismiss_target)
 				self.disabled = true
 			return
-			self.disabled = true
-		
+
 		"dismiss":
 			var dismiss_target = selected_unit
 			if dismiss_target == null:
@@ -120,13 +142,13 @@ func button_down():
 				if WorldState.get_state("neutral_units") != null:
 					WorldState.get_state("neutral_units").erase(dismiss_target)
 			self.disabled = true
-		
+
 		"pawn_upgrades":
-			Goap.orders.pawn_upgrades(self.orders.pawn_upgrade)
+			push_error("Pawn upgrade orders have no implementation.")
 			self.disabled = true
 		
 		"tower_upgrades":
-			Goap.orders.tower_upgrades(self.orders.pawn_upgrade)
+			push_error("Tower upgrade orders have no implementation.")
 			self.disabled = true
 
 

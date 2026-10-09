@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://cj7oq66v2vqae"]
 
 [ext_resource type="Script" uid="uid://c56x2d37t5a8v" path="res://skills/passive/plume.gd" id="1"]
+[ext_resource type="Resource" path="res://skills/resources/plume.tres" id="2_skill"]
 
 [node name="feather" type="Node" unique_id=432347965]
 script = ExtResource("1")
+skill_data = ExtResource("2_skill")
 
 [node name="update_timer" type="Timer" parent="." unique_id=44548893]
 autostart = true

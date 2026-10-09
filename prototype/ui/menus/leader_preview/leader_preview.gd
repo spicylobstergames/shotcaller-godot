@@ -22,7 +22,11 @@ func prepare(leader):
 		if abilities_node:
 			for ability in abilities_node.get_children():
 				var ability_preview = ability_preview_scene.instantiate()
-				ability_preview.prepare(ability.icon, ability.ability_name, ability.description)
+				ability_preview.prepare(
+					ability.skill_data.icon,
+					ability.skill_data.display_name,
+					ability.skill_data.description
+				)
 				abilities_preview_container.add_child(ability_preview)
 		leader_instance.queue_free()
 

@@ -10,7 +10,8 @@ var _goals: Dictionary = {
 	"NeedLumber": preload("res://goap/game_logic/goals/need_lumber.gd").new(),
 	"NeedSafety": preload("res://goap/game_logic/goals/need_safety.gd").new(),
 	"ObeyPlayer": preload("res://goap/game_logic/goals/obey_player.gd").new(),
-	"Recover": preload("res://goap/game_logic/goals/recover.gd").new()
+	"Recover": preload("res://goap/game_logic/goals/recover.gd").new(),
+	"WalkLane": preload("res://goap/game_logic/goals/walk_lane.gd").new()
 }
 
 

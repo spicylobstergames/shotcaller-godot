@@ -61,6 +61,9 @@ func setup_leaders(red_leaders, blue_leaders):
 	game.ui.scoreboard.build(red_leaders, blue_leaders)
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
+	game.ui.orders_panel.leaders_built.connect(
+		Goap.get_goal("WalkLane").build_leaders, CONNECT_ONE_SHOT
+	)
 	game.ui.orders_panel.build_leaders()
 	game.ui.active_skills.build_leaders()
 
@@ -73,8 +76,10 @@ func setup_lanes():
 	if lanes_node:
 		for lane in lanes_node.get_children():
 			WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
-	
-	Goap.orders.build_lanes()
+
+	Goap.get_action("ChooseTarget").build_lane_priorities(
+		lanes_node.get_children() if lanes_node else []
+	)
 
 
 func line_to_array(line):

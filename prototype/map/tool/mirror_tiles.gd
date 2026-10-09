@@ -84,10 +84,9 @@ func _get_mirrored_coords(coords: Vector2i) -> Vector2i:
 	var tile_size = Vector2(tile_set.tile_size)
 	var mirror_size = map_size
 	if mirror_size == Vector2.ZERO:
-		var map = get_parent().get_parent()
-		var configured_size = map.get("size")
-		if configured_size is Vector2:
-			mirror_size = configured_size
+		var map := get_owner() as BaseMap
+		if map != null:
+			mirror_size = map.size
 	return local_to_map(Vector2(
 		(mirror_size.x - cell_pos.x) - tile_size.x,
 		(mirror_size.y - cell_pos.y) - tile_size.y

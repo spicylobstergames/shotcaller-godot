@@ -40,4 +40,4 @@ func pray_in_church(unit):
 
 func pray(unit):
 	var random_bonus = _pray_bonuses[randi() % _pray_bonuses.size()]
-	Goap.modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])
+	Modifiers.add(unit, random_bonus[0], "pray", random_bonus[1])

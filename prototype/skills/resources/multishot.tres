@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/multishot.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/multishot_small.png" id="3"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Multishot"
+description = "This unit can shoot at all enemy characters in range"
+skill_type = "passive"
+icon = ExtResource("2")
+status_effect_icon = ExtResource("3")
+status_effect_hint = "Multishot: target all enemies in range"

@@ -25,7 +25,9 @@ config/icon="res://assets/icon.png"
 WorldState="*res://goap/game_logic/world_state.gd"
 Collisions="*res://collision/collisions.gd"
 Finder="*res://map/pathfind/jump_point_finder.gd"
-Goap="*res://goap/goap_system/goap_system.tscn"
+Skills="*res://skills/passive_skills.gd"
+Modifiers="*res://skills/modifiers.gd"
+Goap="*res://goap/goap_system/goap.gd"
 CraftyCamera="*res://controls/crafty_camera.tscn"
 Utils="*res://utils/util.gd"
 
@@ -37,7 +39,7 @@ gdscript/warnings/unused_argument=false
 
 [display]
 
-window/size/viewport_width=600
+window/size/viewport_width=800
 window/size/viewport_height=600
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"

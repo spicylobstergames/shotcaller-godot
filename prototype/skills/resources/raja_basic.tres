@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Labh, son of Ganesha"
+description = "Spawn an elephant companion. Can only spawn one elephant at a time"
+skill_type = "active"
+cooldown = 60

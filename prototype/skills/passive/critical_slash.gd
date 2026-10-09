@@ -1,16 +1,10 @@
 extends Node
 
-@onready var unit: Unit = get_parent().get_parent().get_parent()
-
-@export var icon: Texture2D
-@export var ability_name := "Critical Slash"
-@export var description := "Gives Bokuden a chance to deal critical damage on each attack."
-
-@export var status_effect_icon: Texture2D
-@export var skill_type := "passive"
+@onready var unit: Unit = get_owner() as Unit
+@export var skill_data: SkillResource
 
 func _ready() -> void:
 	unit.status_effects["critical slash"] = {
-		"icon": status_effect_icon,
-		"hint": "Critical slash: chance to deal critical damage"
+		"icon": skill_data.status_effect_icon,
+		"hint": skill_data.status_effect_hint
 	}

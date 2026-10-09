@@ -2,13 +2,17 @@ extends Node
 
 # self = Goap.Agent
 
+signal plan_changed(plan)
+signal goal_changed(goal)
+signal action_changed(action)
+
 @export var goals_list: Array = []
 
 var agent_debug := true
 
 var _goals: Array
 var _current_goal
-var _current_plan
+var _current_plan: Array = []
 var _current_plan_step := 0
 var _unit
 var _state: Dictionary = {}
@@ -17,12 +21,13 @@ var attacked_timer := 2
 
 
 func _ready():
+	_unit = get_parent()
+	set_state("tactic", "default")
 	_goals = []
+	action_changed.connect(_on_action_changed)
 	if goals_list.size() > 0:
 		for goal in goals_list:
 			_goals.append(Goap.get_goal(goal))
-
-	_unit = get_parent()
 
 	_unit.unit_reseted.connect(reset)
 	_unit.unit_arrived.connect(on_arrive)
@@ -30,10 +35,23 @@ func _ready():
 	_unit.unit_stun_ended.connect(on_stun_end)
 	_unit.unit_move_ended.connect(on_move_end)
 	_unit.unit_attack_ended.connect(on_attack_end)
+	_unit.unit_attack_release.connect(
+		Goap.get_action("RangeAttack").projectile_release.bind(_unit)
+	)
+	_unit.unit_attack_hitted.connect(Goap.get_action("MeleeAttack").hit.bind(_unit))
+	_unit.unit_death_started.connect(on_death_started)
+	_unit.unit_died.connect(Goap.get_action("RangeAttack").clear_stuck)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
-
+	_unit.unit_arrived.connect(Goap.get_action("OrderAction").on_arrive.bind(self))
+	
 	WorldState.second_elapsed.connect(on_every_second)
+
+
+func _add_goal(goal_name: String) -> void:
+	var goal = Goap.get_goal(goal_name)
+	if goal and not _goals.has(goal):
+		_goals.append(goal)
 
 
 func get_unit():
@@ -47,7 +65,27 @@ func get_state(state_name, default = null):
 
 
 func set_state(state_name, value):
+	if state_name == "target":
+		_set_target(value)
+		return
 	_state[state_name] = value
+
+
+func _set_target(value) -> void:
+	var target = value if is_instance_valid(value) else null
+	var previous_target = _state.get("target", _unit.target if _unit else null)
+	_state["target"] = target
+	if not _unit:
+		return
+
+	_unit.target = target
+	if previous_target != target:
+		_unit.last_target = previous_target
+	if previous_target != target or target == null:
+		_unit.attack_count = 0
+		Modifiers.remove(_unit, "attack_speed", "agile")
+	_state["has_attack_target"] = target != null
+	_state["hunting"] = target != null and _unit.moves
 
 
 func erase_state(state_name):
@@ -59,11 +97,17 @@ func clear_state():
 
 
 func reset():
-	_exit_current_action()
+	var lane = get_state("lane")
+	var tactic = get_state("tactic", "default")
+	var target_priority = get_state("target_priority")
+	set_state("target", null)
 	clear_state()
-	_current_goal = null
-	_current_plan = []
-	_current_plan_step = 0
+	if lane != null:
+		set_state("lane", lane)
+	set_state("tactic", tactic)
+	if target_priority != null:
+		set_state("target_priority", target_priority.duplicate())
+	clear_plan()
 
 
 func get_current_action():
@@ -88,10 +132,8 @@ func has_goal_function(func_name):
 
 
 func clear_plan():
-	_exit_current_action()
-	_current_goal = null
-	_current_plan = []
-	_current_plan_step = 0
+	if _current_goal != null or not _current_plan.is_empty():
+		_replace_plan(null, [])
 
 
 func _exit_current_action():
@@ -100,21 +142,33 @@ func _exit_current_action():
 		action.exit(self)
 
 
+func _replace_plan(goal, plan: Array) -> void:
+	_exit_current_action()
+	var previous_goal = _current_goal
+	_current_goal = goal
+	_current_plan = plan
+	_current_plan_step = 0
+	if previous_goal != goal:
+		goal_changed.emit(goal)
+	plan_changed.emit(_current_plan)
+	action_changed.emit(get_current_action())
+
+
+func _on_action_changed(action) -> void:
+	if action and action.has_method("enter"):
+		action.enter(self)
+
 
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
 # for the new high priority goal.
 func process(delta):
 	var goal = _get_best_goal()
-	if _current_goal == null or goal != _current_goal:
-		_exit_current_action()
-		_current_goal = goal
-		_current_plan = []
-		_current_plan_step = 0
-		if _current_goal:
-			_current_plan = Goap.get_action_planner().get_plan(self, _current_goal)
-			if _current_plan.size() > 0:
-				_current_plan[0].enter(self)
+	if goal != _current_goal:
+		var plan: Array = []
+		if goal:
+			plan = Goap.get_action_planner().get_plan(self, goal)
+		_replace_plan(goal, plan)
 	else:
 		_follow_plan(_current_plan, delta)
 
@@ -142,39 +196,29 @@ func _follow_plan(plan, delta):
 		return
 	var is_step_complete = action.perform(self, delta)
 		
-	# debug
-	if agent_debug and _unit.hud and _unit.hud.state:
-		var goal = _get_best_goal()
-		if goal:
-			_unit.hud.state.text = goal.get_class_name()
-		
 	if is_step_complete:
-		if action.has_method("exit"):
-			action.exit(self)
 		if _current_plan_step < plan.size() - 1:
+			if action.has_method("exit"):
+				action.exit(self)
 			_current_plan_step += 1
-			var next_action = get_current_action()
-			if next_action and next_action.has_method("enter"):
-				next_action.enter(self)
+			action_changed.emit(get_current_action())
 		else:
-			_current_goal = null
-			_current_plan = []
-			_current_plan_step = 0
+			_replace_plan(null, [])
 
 
 func on_every_second() :
 	var is_regenerating_unit = _unit.type != "building" or _unit.team == "neutral"
 	if _unit.regen > 0 and is_regenerating_unit:
 		if not _unit.dead:
-			_unit.heal(Goap.modifiers.get_value(_unit, "regen"))
+			_unit.heal(Modifiers.get_value(_unit, "regen"))
 		else:
 			_unit.regen = 0
-	if not _unit.dead:
-		Goap.attack.on_every_second(self)
 	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
 	if has_goal_function("on_every_second"):
 		_get_best_goal().on_every_second(self)
+	
+	Goap.get_goal("EnemyDefeated").apply_damage_over_time(self)
 
 
 func on_idle_end():
@@ -207,8 +251,28 @@ func on_attack_end():
 		get_current_action().on_attack_end(self)
 	if has_goal_function("on_attack_end"):
 		_get_best_goal().on_attack_end(self)
-	Goap.get_action("OrderAction").on_attack_end(self)
-	Goap.attack.on_attack_end(_unit)
+	if get_state("player_order", {}).get("type", "") == "attack":
+		set_state("player_order_attack_ended", true)
+	if not _unit.attacks or _unit.target:
+		return
+	if not _unit.current_path.is_empty():
+		Goap.navigation.follow_path(_unit, _unit.current_path)
+	elif _unit.current_destiny != Vector2.ZERO:
+		Goap.move.point(_unit, _unit.current_destiny)
+	else:
+		Goap.move.stop(_unit)
+
+
+func on_death_started():
+	cancel_player_order()
+
+
+func cancel_player_order():
+	clear_plan()
+	erase_state("player_order")
+	set_state("player_order_complete", false)
+	set_state("player_order_attack_ended", false)
+	set_state("has_player_command", false)
 
 
 func was_attacked(attacker, damage):
@@ -242,9 +306,13 @@ func on_path_arrive():
 func on_arrive():
 	if has_action_function("on_arrive"):
 		get_current_action().on_arrive(self)
-	if has_goal_function("on_arrive"):
-		_get_best_goal().on_arrive(self)
-	Goap.get_action("OrderAction").on_arrive(self)
+	var goal = _get_best_goal()
+	if goal and goal.has_method("on_arrive"):
+		goal.on_arrive(self)
+	else:
+		var arrive_goal = Goap.get_goal("ArriveAtDestination")
+		if arrive_goal:
+			arrive_goal.on_arrive(self)
 
 
 #func clear_orders():

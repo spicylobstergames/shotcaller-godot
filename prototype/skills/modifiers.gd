@@ -1,8 +1,8 @@
 extends Node
 
+# self = Modifiers
 
-# self = Goap.modifiers
-
+const TACTICS_EXTRA_SPEED = {"retreat": 0, "defend": -5, "default": 0, "attack": 5}
 
 var extra_retreat_speed = 10
 
@@ -38,7 +38,7 @@ func get_value(unit, mod_str):
 		"attack_range": default = get_att_range(unit)
 	for modifier in unit.current_modifiers[mod_str]:
 		default += modifier.value
-	
+
 	var level_bonus = unit.level - 1
 	match mod_str:
 		"hp": level_bonus *= hp_per_level
@@ -46,7 +46,7 @@ func get_value(unit, mod_str):
 		"damage": level_bonus *= damage_per_level
 		"defense": level_bonus *= defense_per_level
 		"attack_speed": level_bonus *= attack_speed_per_level
-		
+
 	return default + level_bonus
 
 
@@ -63,20 +63,21 @@ func get_dot(unit):
 func get_velocity(unit):
 	if unit:
 		var default = unit.speed
+
 		
 		if unit.agent:
-			
 			if unit.agent.get_state("hunting") and not unit.target.agent.get_state("is_retreating"):
 				default = unit.hunting_speed
-				
+
 			if unit.agent.get_state("is_retreating"):
-				var bonus = Goap.skills.get_value(unit, "bonus_retreat_speed")
+				var bonus = Skills.get_value(unit, "bonus_retreat_speed")
 				default += extra_retreat_speed + bonus
-		
-		default += Goap.orders.tactics_extra_speed[unit.tactics]
-	
+
+		var tactic = unit.agent.get_state("tactic", "default") if unit.agent else "default"
+		default += TACTICS_EXTRA_SPEED.get(tactic, 0)
+
 		return default
-	
+
 	else: return 0
 
 
@@ -89,7 +90,6 @@ func get_regen(unit):
 
 func get_att_range(unit):
 	return unit.attack_hit_radius * unit.attack_range
-
 
 
 func add(unit, mod_str, mod_name, value):

@@ -22,6 +22,9 @@ func enter(agent):
 
 
 func perform(agent, _delta) -> bool:
+	if agent.get_state("player_order_attack_ended", false):
+		complete_player_order(agent)
+		return true
 	return is_player_order_complete(agent)
 
 
@@ -41,7 +44,7 @@ func issue_player_order(unit, order_type: String, target: Vector2 = Vector2.ZERO
 	if not unit.is_controllable() or unit.dead:
 		return false
 	if unit.type != "leader":
-		Goap.attack.set_target(unit, null)
+		unit.agent.set_state("target", null)
 		unit.start_control_delay()
 		_execute_player_order(unit, order_type, target)
 		return true
@@ -53,8 +56,9 @@ func issue_player_order(unit, order_type: String, target: Vector2 = Vector2.ZERO
 	agent.set_state("player_order_id", agent.get_state("player_order_id", 0) + 1)
 	agent.set_state("player_order", {"type": order_type, "target": target})
 	agent.set_state("player_order_complete", false)
+	agent.set_state("player_order_attack_ended", false)
 	agent.set_state("has_player_command", true)
-	Goap.attack.set_target(unit, null)
+	agent.set_state("target", null)
 	unit.start_control_delay()
 	return true
 
@@ -66,12 +70,6 @@ func on_arrive(agent):
 			Goap.get_action("ConquerAction").conquer_building(unit)
 		"pray":
 			Goap.get_action("PrayerAction").pray_in_church(unit)
-
-
-func on_attack_end(agent):
-	var order = agent.get_state("player_order", {})
-	if order.get("type", "") == "attack":
-		complete_player_order(agent)
 
 
 func execute_player_order(agent):
@@ -95,7 +93,7 @@ func _execute_player_order(unit, order_type: String, target: Vector2, agent = nu
 		"advance":
 			Goap.navigation.smart(unit, target)
 		"attack":
-			Goap.attack.point(unit, target)
+			Goap.get_action("AttackEnemy").point(unit, target)
 		"lane":
 			Goap.navigation.change_lane(unit, target)
 		"teleport":
@@ -109,14 +107,12 @@ func _execute_player_order(unit, order_type: String, target: Vector2, agent = nu
 func complete_player_order(agent):
 	agent.erase_state("player_order")
 	agent.set_state("player_order_complete", true)
+	agent.set_state("player_order_attack_ended", false)
 	agent.set_state("has_player_command", false)
 
 
 func cancel_player_order(agent):
-	agent.clear_plan()
-	agent.erase_state("player_order")
-	agent.set_state("player_order_complete", false)
-	agent.set_state("has_player_command", false)
+	agent.cancel_player_order()
 
 
 func is_player_order_complete(agent) -> bool:

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Wolf's teeth"
+description = "Deals damage in an AOE around it for 100 damage whenever >=3 units are within range"
+skill_type = "active"
+cooldown = 120
+visualize = "circle"
+attributes = {
+"range": 100.0,
+"damage": 100,
+"minimum_targets": 3
+}

@@ -9,8 +9,6 @@ extends Control
 
 @onready var _tip = $tip
 
-var aura_sprite = preload("res://assets/ui/abilities/aura_of_courage_small.png")
-
 var player_leaders_skills = {}
 var enemy_leaders_skills = {}
 var _waiting_for_point = false
@@ -19,83 +17,27 @@ var visualization = []
 enum visualize_type {arc, circle, rectangle, none}
 signal point(pos)
 
-var active_skills = {
+const ACTIVE_SKILLS = {
 	"rollo": {
-		"rollo_basic": {
-			"display_name": "Wolf's teeth",
-			"tooltip": "Deals damage in an AOE around it for 100 damage whenever >=3 units are within range",
-			"cooldown": 120,
-			"visualize": visualize_type.circle,
-			"attributes": {},
-			"effects": []
-		}
+		"rollo_basic": preload("res://skills/resources/rollo_basic.tres")
 	},
 	"raja": {
-		"raja_basic": {
-			"display_name": "Labh, son of Ganesha",
-			"tooltip": "Spawn an elephant companion. Can only spawn one elephant at a time", 
-			"cooldown": 60,
-			"visualize": visualize_type.none,
-			"attributes": {},
-			"effects": []
-		}
+		"raja_basic": preload("res://skills/resources/raja_basic.tres")
 	},
 	"robin": {
-		"robin_special": {
-			"display_name": "Call of the forest",
-			"tooltip": "Teleport",
-			"cooldown": 30,
-			"visualize": visualize_type.circle,
-			"attributes": {},
-			"effects": []
-		}
+		"robin_special": preload("res://skills/resources/robin_special.tres")
 	},
 	"osman": {
-		"osman_special": {
-			"display_name": "Bribe",
-			"tooltip": "Throw a bag of gold to bribe nearby pawns for 10 sec. Consumes 100 gold", 
-			"cooldown": 120,
-			"visualize": visualize_type.none,
-			"attributes": {},
-			"effects": []
-		}
+		"osman_special": preload("res://skills/resources/osman_special.tres")
 	},
 	"takoda": {},
 	"arthur": {
-		"arthur_active": {
-			"display_name": "Guard Break",
-			"tooltip": "Arthur hits the guard in front of him and stuns the enemy.",
-			"cooldown": 100,
-			"visualize": visualize_type.rectangle,
-			"attributes": {"length": 25, "width": 10, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			"effects": []
-		},
-		"arthur_special": {
-			"display_name": "Cleave",
-			"tooltip": "Arthur slashes throw enemies, he can swing three times, but each attack need to hit enemy leader to continue the combination.",
-			"cooldown": 100,
-			"visualize": visualize_type.arc,
-			"attributes": {"angle": 90, "radius": 50, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			"effects": []
-		}
+		"arthur_active": preload("res://skills/resources/arthur_active.tres"),
+		"arthur_special": preload("res://skills/resources/arthur_special.tres")
 	},
 	"bokuden": {
-		"bokuden_special": {
-			"display_name": "Battle Call",
-			"tooltip": "The hero leads allies on a furious offensive, increasing their movement speed by by 10 * his level for 5 seconds.",
-			"cooldown": 600,
-			"visualize": visualize_type.none,
-			"attributes": {},
-			"effects": []
-		},
-		"bokuden_active": {
-			"display_name": "Dash",
-			"tooltip": "Bokuden dashes forward and slashes enemies on his way.",
-			"cooldown": 100,
-			"visualize": visualize_type.rectangle,
-			"attributes": {"length": 50, "width": 5, "center_pos": Vector2(0, 8), "finish_pos": Vector2(300, 0), "color": Color(0,0,100,0.05)},
-			"effects": []
-		}
+		"bokuden_special": preload("res://skills/resources/bokuden_special.tres"),
+		"bokuden_active": preload("res://skills/resources/bokuden_active.tres")
 	},
 	"joan": {},
 	"lorne": {},
@@ -255,22 +197,24 @@ func robin_special(effects, parameters, visualize):
 
 func rollo_basic():
 	var leader = WorldState.get_state("selected_leader")
-	var range_of_effect = 100
-	var damage = 100
+	var skill_data: SkillResource = ACTIVE_SKILLS["rollo"]["rollo_basic"]
+	var range_of_effect = skill_data.attributes.range
+	var damage = skill_data.attributes.damage
 	
 	var targets = []
 	for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team() }):
 		if unit.type != "building":
 			targets.append(unit)
-	if targets.size() >= 3:
+	if targets.size() >= skill_data.attributes.minimum_targets:
 		for unit in targets:
-			Goap.attack.take_hit(leader, unit, null, { "damage": damage })
+			Goap.get_goal("EnemyDefeated").take_hit(leader, unit, null, { "damage": damage })
 	
 	return true
 
 
 func arthur_special(effects, parameters, visualize):
 	var leader = WorldState.get_state("selected_leader")
+	var skill_data: SkillResource = ACTIVE_SKILLS["arthur"]["arthur_special"]
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target != null and leader:
 		var animations = leader.get_node_or_null("animations")
@@ -283,8 +227,8 @@ func arthur_special(effects, parameters, visualize):
 			animations.play("arthur_special_cleave")
 			if not targets.is_empty():
 				for unit in targets:
-					var damage = 100 * leader.level
-					Goap.attack.take_hit(leader, unit, null, { "damage": damage })
+					var damage = skill_data.attributes.damage_per_level * leader.level
+					Goap.get_goal("EnemyDefeated").take_hit(leader, unit, null, { "damage": damage })
 
 
 
@@ -299,25 +243,27 @@ func arthur_special_end():
 
 func arthur_active(effects, parameters, visualize):
 	var leader = WorldState.get_state("selected_leader")
+	var skill_data: SkillResource = ACTIVE_SKILLS["arthur"]["arthur_active"]
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target == null:
 		return false
 	var polygon = generate_rect_poly(parameters.length, parameters.width, leader.global_position, point_target, parameters.color)
 	var targets = enemies_in_polygon(leader, parameters.length, polygon)
-	var damage = 10 * leader.level
+	var damage = skill_data.attributes.damage_per_level * leader.level
 	if targets.is_empty():
 		return true
 	for unit in targets:
-		Goap.attack.take_hit(leader, unit, null, { "damage": damage })
+		Goap.get_goal("EnemyDefeated").take_hit(leader, unit, null, { "damage": damage })
 		unit.start_stun()
 	return true
 
 
 func bokuden_special(_effects, _parameters, _visualize):
 	var leader = WorldState.get_state("selected_leader")
-	var aura_duration = 5
-	var speed_modifier = 10
-	var range_of_aura = 100
+	var skill_data: SkillResource = ACTIVE_SKILLS["bokuden"]["bokuden_special"]
+	var aura_duration = skill_data.attributes.duration
+	var speed_modifier = skill_data.attributes.speed_per_level
+	var range_of_aura = skill_data.attributes.range
 	var targets = []
 	var battle_call_timer := Timer.new()
 
@@ -331,30 +277,31 @@ func bokuden_special(_effects, _parameters, _visualize):
 		if unit.type != "building":
 			targets.append(unit)
 			battle_call_timer.start()
-			Goap.modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
+			Modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
 			unit.status_effects["battle_call"] = {
-				icon = aura_sprite,
-				hint = "Battle call: Increases speed by %d" % (speed_modifier * leader.level)
+				icon = skill_data.status_effect_icon,
+				hint = skill_data.status_effect_hint % (speed_modifier * leader.level)
 			}
 	return true
 
 
 func battle_call_remove(_targets):
 	for unit in _targets:
-		Goap.modifiers.remove(unit, "speed", "battle_call")
+		Modifiers.remove(unit, "speed", "battle_call")
 		_targets.erase(unit)
 		unit.status_effects.erase("battle_call")
 
 
 func bokuden_active(effects, parameters, visualize):
 	var leader = WorldState.get_state("selected_leader")
+	var skill_data: SkillResource = ACTIVE_SKILLS["bokuden"]["bokuden_active"]
 	var point_target = await _get_point_target(leader, effects, parameters, visualize)
 	if point_target:
 		var dash_point = leader.global_position.direction_to(point_target)
 		dash_point = dash_point * parameters.length + leader.global_position
 		var dash_tween = Tween.new()
 		leader.add_child(dash_tween)
-		dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, 0.5, Tween.TRANS_LINEAR)
+		dash_tween.interpolate_property(leader, "global_position", leader.global_position, dash_point, skill_data.attributes.duration, Tween.TRANS_LINEAR)
 		leader.mirror_look_at(dash_point)
 		dash_tween.start()
 		await dash_tween.finished
@@ -363,9 +310,10 @@ func bokuden_active(effects, parameters, visualize):
 
 func osman_special(_effects, _parameters, _visualize):
 	var leader = WorldState.get_state("selected_leader")
-	var bribe_gold_cost = 10
-	var effect_duration = 2
-	var range_of_effect = 100
+	var skill_data: SkillResource = ACTIVE_SKILLS["osman"]["osman_special"]
+	var bribe_gold_cost = skill_data.attributes.gold_cost
+	var effect_duration = skill_data.attributes.duration
+	var range_of_effect = skill_data.attributes.range
 	var targets = {}
 	
 	var bribe_timer := Timer.new()
@@ -377,10 +325,10 @@ func osman_special(_effects, _parameters, _visualize):
 		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
 			targets[unit] = unit.team
 			unit.setup_team(leader.team)
-			Goap.orders.set_pawn(unit)
+			Goap.get_action("ChooseTarget").set_unit_priority(unit)
 			unit.status_effects["Bribed"] = {
-				icon = aura_sprite,
-				hint = "Bribed: Blinded by greed, defected to the side of the enemy"
+				icon = skill_data.status_effect_icon,
+				hint = skill_data.status_effect_hint
 			}
 		leader.gold -= bribe_gold_cost
 		bribe_timer.start()
@@ -390,7 +338,7 @@ func bribe_remove(targets):
 	for unit in targets.keys():
 		if not unit.dead:
 			unit.setup_team(targets[unit])
-			Goap.orders.set_pawn(unit)
+			Goap.get_action("ChooseTarget").set_unit_priority(unit)
 			targets.erase(unit)
 			unit.status_effects.erase("Bribed")
 		else: targets.erase(unit)
@@ -417,20 +365,20 @@ func update_buttons():
 
 
 func new_skills(leader, skills_storage):
-	var leader_skills = active_skills[leader.display_name]
+	var leader_skills = ACTIVE_SKILLS[leader.display_name]
 	for skill_name in leader_skills:
-		var skill = leader_skills[skill_name]
-		
-		var display_name = skill.display_name
-		var tooltip = skill.tooltip
-		var cooldown = skill.cooldown
-		var visualize = skill.visualize
-		var attributes = skill.attributes
-		var effects = skill.effects
+		var skill: SkillResource = leader_skills[skill_name]
 		
 		if !leader.name in skills_storage: skills_storage[leader.name] = {}
 		
-		skills_storage[leader.name][display_name] = ActiveSkill.new(display_name, tooltip, cooldown, visualize, attributes, effects)
+		skills_storage[leader.name][skill.display_name] = ActiveSkill.new(
+			skill.display_name,
+			skill.description,
+			skill.cooldown,
+			visualize_type[skill.visualize],
+			skill.attributes,
+			[]
+		)
 
 
 func build_leaders():

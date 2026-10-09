@@ -22,7 +22,7 @@ signal unit_stuned
 signal unit_stun_ended
 signal unit_animation_ended
 signal unit_death_started
-signal unit_died
+signal unit_died(unit: Unit)
 
 @export var hp:int = 100
 var current_hp:int = 100
@@ -40,7 +40,7 @@ var mirror:bool = false
 var texture:Dictionary
 var units_in_radius := []
 var symbol:bool = false
-var current_modifiers = Goap.modifiers.new_modifiers()
+var current_modifiers = Modifiers.new_modifiers()
 
 # SELECTION
 @export var selectable:bool = false
@@ -89,7 +89,6 @@ var next_event:String = "" # "move" or "arrive"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
-var tactics:String = "default" # aggresive defensive retreat
 var wait_time:int = 0
 var gold = 0
 
@@ -135,11 +134,13 @@ var status_effects = {}
 func _ready():
 	game = get_tree().get_current_scene()
 
-	if has_node("hud"): hud = get_node("hud")
-	if has_node("sprites"): sprites = get_node("sprites")
-	if has_node("sprites/body"): body = get_node("sprites/body")
-	if has_node("sprites/weapon"): weapon = get_node("sprites/weapon")
-	if has_node("sprites/weapon/projectile"): projectile = get_node("sprites/weapon/projectile")
+	hud = get_node_or_null("hud")
+	sprites = get_node_or_null("sprites")
+	body = get_node_or_null("sprites/body")
+	weapon = get_node_or_null("sprites/weapon")
+	projectile = get_node_or_null("sprites/weapon/projectile")
+	if agent and hud:
+		agent.goal_changed.connect(hud.update_goal)
 	if moves:
 		ensure_navigation_agent()
 
@@ -174,7 +175,7 @@ func advance_with_navigation(_delta: float) -> bool:
 	var direction = next_point - global_position
 	if direction.length_squared() <= 0.01:
 		return false
-	var current_speed = Goap.modifiers.get_value(self, "speed")
+	var current_speed = Modifiers.get_value(self, "speed")
 	var desired_velocity = direction.normalized() * current_speed
 	navigation_agent.velocity = desired_velocity
 	current_step = navigation_safe_velocity if has_navigation_safe_velocity else desired_velocity
@@ -217,7 +218,7 @@ func reset_unit():
 
 	self.hud.state.text = Utils.first_to_uppper(self.display_name)
 	self.current_hp = self.hp
-	self.current_modifiers = Goap.modifiers.new_modifiers()
+	self.current_modifiers = Modifiers.new_modifiers()
 	self.show()
 	self.hud.update_hpbar()
 	game.ui.minimap.setup_symbol(self)
@@ -374,12 +375,12 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 
 
 func get_units_in_sight(filters = {}):
-	var current_vision = Goap.modifiers.get_value(self, "vision")
+	var current_vision = Modifiers.get_value(self, "vision")
 	return self.get_units_in_radius(current_vision, filters)
 
 
 func get_units_in_attack_range(filters = {}):
-	var current_range = Goap.modifiers.get_value(self, "attack_range")
+	var current_range = Modifiers.get_value(self, "attack_range")
 	var pos = self.global_position + self.attack_hit_position
 	return self.get_units_in_radius(current_range, filters, pos)
 
@@ -413,13 +414,10 @@ func on_arrive(): # when collides with destiny
 
 func on_attack_release(): # every ranged projectile start
 	if self.attacks:
-		Goap.attack.projectile_release(self)
 		emit_signal("unit_attack_release")
-
 
 func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 	if self.attacks:
-		Goap.attack.hit(self)
 		emit_signal("unit_attack_hitted")
 
 
@@ -434,7 +432,7 @@ func on_attack_end(): # animation end of all attacks
 
 func heal(heal_hp):
 	self.current_hp += heal_hp
-	self.current_hp = int(min(self.current_hp, Goap.modifiers.get_value(self, "hp")))
+	self.current_hp = int(min(self.current_hp, Modifiers.get_value(self, "hp")))
 	self.hud.update_hpbar()
 	emit_signal("unit_healed")
 
@@ -472,10 +470,9 @@ func on_stun_end():
 func die():  # hp <= 0
 	self.set_state("death")
 	self.dead = true
-	self.target = null
+	self.agent.set_state("target", null)
 	
 	self.agent.set_state("is_channeling", false)
-	Goap.get_action("OrderAction").cancel_player_order(self.agent)
 
 	var neighbors = self.units_in_radius
 	for neighbor in neighbors:
@@ -508,8 +505,6 @@ func hide_in_map():
 func on_death_end():  # death animation end
 	self.hide_in_map()
 	
-	Goap.attack.clear_stuck(self)
-	
 	if game.test.debug and game.test.stress: game.test.respawn(self)
 	else:
 		match self.type:
@@ -521,4 +516,4 @@ func on_death_end():  # death animation end
 					game.end(team == WorldState.get_state("enemy_team"))
 			
 	
-	emit_signal("unit_died")
+	unit_died.emit(self)

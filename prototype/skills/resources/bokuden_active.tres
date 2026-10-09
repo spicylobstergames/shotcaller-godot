@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Dash"
+description = "Bokuden dashes forward and slashes enemies on his way."
+skill_type = "active"
+cooldown = 100
+visualize = "rectangle"
+attributes = {
+"length": 50,
+"width": 5,
+"center_pos": Vector2(0, 8),
+"finish_pos": Vector2(300, 0),
+"color": Color(0, 0, 100, 0.05),
+"duration": 0.5
+}

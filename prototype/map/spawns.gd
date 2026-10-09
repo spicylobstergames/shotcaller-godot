@@ -101,8 +101,8 @@ func leaders():
 
 
 func spawn_group_cycle():
-	Goap.orders.lanes_cycle()
-	Goap.orders.leaders_cycle()
+	Goap.get_action("ChooseTarget").apply_building_priorities()
+	leaders_cycle()
 	Goap.get_action("TaxesAction").update_taxes()
 	
 	for team in WorldState.teams:
@@ -119,7 +119,7 @@ func spawn_group_cycle():
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
-	Goap.orders.leaders_cycle()
+	leaders_cycle()
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
@@ -149,11 +149,29 @@ func send_pawn(template_name, lane, team):
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
 	Goap.navigation.setup_unit_path(pawn, path)
-	Goap.orders.set_pawn(pawn)
+	Goap.get_action("ChooseTarget").set_unit_priority(pawn)
+
+
+func leaders_cycle() -> void:
+	for leader in WorldState.get_state("player_leaders") + WorldState.get_state("enemy_leaders"):
+		Goap.get_action("ChooseTarget").set_unit_priority(leader)
+		var extra_unit = WorldState.get_state("player_extra_unit")
+		if leader.team == WorldState.get_state("enemy_team"):
+			extra_unit = WorldState.get_state("enemy_extra_unit")
+		var cost = 1
+		match extra_unit:
+			"archer":
+				cost = 2
+			"mounted":
+				cost = 3
+		leader.gold -= cost
 
 
 func spawn_unit(unit, lane, team, mode, point):
+	unit.agent._add_goal("WalkLane")
 	unit.agent.set_state("lane", lane)
+	if unit.type != "leader":
+		unit.agent.set_state("tactic", _lane_tactic(lane, team))
 	unit.setup_team(team)
 	unit.dead = false
 	unit.show()
@@ -164,6 +182,17 @@ func spawn_unit(unit, lane, team, mode, point):
 	unit.global_position = point
 	unit.set_state("idle")
 	return unit
+
+
+func _lane_tactic(lane: String, team: String) -> String:
+	for building in WorldState.get_state("all_buildings"):
+		if (
+			is_instance_valid(building)
+			and building.team == team
+			and building.agent.get_state("lane") == lane
+		):
+			return building.agent.get_state("tactic", "default")
+	return "default"
 
 
 func next_to_building(template, building, team):

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="SkillResource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://skills/skill_resource.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/abilities/aura_of_courage.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+display_name = "Guard Break"
+description = "Arthur hits the guard in front of him and stuns the enemy."
+skill_type = "active"
+cooldown = 100
+visualize = "rectangle"
+attributes = {
+"length": 25,
+"width": 10,
+"center_pos": Vector2(0, 8),
+"finish_pos": Vector2(300, 0),
+"color": Color(0, 0, 100, 0.05),
+"damage_per_level": 10
+}
+icon = ExtResource("2")
