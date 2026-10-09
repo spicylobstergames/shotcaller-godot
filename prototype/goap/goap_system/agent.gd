@@ -242,8 +242,13 @@ func on_path_arrive():
 func on_arrive():
 	if has_action_function("on_arrive"):
 		get_current_action().on_arrive(self)
-	if has_goal_function("on_arrive"):
-		_get_best_goal().on_arrive(self)
+	var goal = _get_best_goal()
+	if goal and goal.has_method("on_arrive"):
+		goal.on_arrive(self)
+	else:
+		var arrive_goal = Goap.get_goal("ArriveAtDestination")
+		if arrive_goal:
+			arrive_goal.on_arrive(self)
 	Goap.get_action("OrderAction").on_arrive(self)
 
 

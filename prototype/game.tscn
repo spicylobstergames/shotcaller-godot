@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://j5say8d26vik" path="res://map/spawns.gd" id="5_fcj4f"]
 [ext_resource type="Script" uid="uid://lmow5l1vqr1n" path="res://map/map_manager.gd" id="6"]
 [ext_resource type="Script" uid="uid://i4q7elpt8pf" path="res://controls/selection.gd" id="7"]
-[ext_resource type="Script" uid="uid://rd76adk7fcbu" path="res://test/test.gd" id="9"]
+[ext_resource type="Script" uid="uid://rd76adk7fcbu" path="res://tests/test_map/test.gd" id="9"]
 [ext_resource type="AudioStream" uid="uid://d0w7smg4sjhx4" path="res://assets/soundtrack/shotcaller_menu_theme.mp3" id="12_bsynf"]
 [ext_resource type="Script" uid="uid://c3md5vbyfqwuf" path="res://ui/transitions/transitions.gd" id="14_dacea"]
 

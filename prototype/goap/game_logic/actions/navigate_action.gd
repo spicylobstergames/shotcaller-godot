@@ -1,7 +1,4 @@
-extends Node
-
-
-# self = Goap.navigation
+extends "res://goap/goap_system/action_contract.gd"
 
 var path_grid
 var path_finder
@@ -9,11 +6,40 @@ var path_line
 var navigation_region: NavigationRegion2D
 
 
+func get_class_name() -> String:
+	return "NavigateAction"
+
+
+func is_valid(agent) -> bool:
+	return agent.get_unit().moves and agent.get_state("has_path", false)
+
+
+func get_cost(_agent) -> int:
+	return 1
+
+
+func get_effects() -> Dictionary:
+	return {"arrived_at_destination": true}
+
+
+func perform(agent, _delta) -> bool:
+	return agent.get_state("arrived_at_destination", false)
+
+
+func enter(agent):
+	var unit = agent.get_unit()
+	var new_path = unit.cut_path(unit.current_path)
+	agent.set_state("arrived_at_destination", false)
+	if not new_path.is_empty():
+		start(unit, new_path)
+	else:
+		agent.set_state("arrived_at_destination", true)
+
+
 func smart(unit, final_destiny):
-	point(unit, final_destiny, true) # uses pathfinder
+	point(unit, final_destiny, true)
 
 
- # move_and_attack
 func point(unit, final_destiny, smart_move = false):
 	Goap.attack.set_target(unit, null)
 	if final_destiny and Goap.move.in_bounds(final_destiny):
@@ -22,24 +48,33 @@ func point(unit, final_destiny, smart_move = false):
 			var path = unit.current_path
 			if smart_move:
 				path = find(unit.global_position, unit.final_destiny)
-				if path: unit.current_path = path
-			var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
-			var at_final_destination = (unit.global_position.distance_to(unit.final_destiny) < WorldState.get_state("map").half_tile_size)
-			var has_path = ( path and not path.is_empty() )
-			if enemies.size() == 0:
-				if not at_final_destination: move(unit, unit.final_destiny, smart_move) 
-				elif has_path: start(unit,path)
+				if path:
+					unit.current_path = path
+			var enemies = unit.get_units_in_sight({"team": unit.opponent_team()})
+			var at_final_destination = (
+				unit.global_position.distance_to(unit.final_destiny)
+				< WorldState.get_state("map").half_tile_size
+			)
+			var has_path = path and not path.is_empty()
+			if enemies.is_empty():
+				if not at_final_destination:
+					move(unit, unit.final_destiny, smart_move)
+				elif has_path:
+					start(unit, path)
 			else:
 				var target = Goap.attack.select_target(unit, enemies)
 				if not target:
-					if not at_final_destination: move(unit, unit.final_destiny, smart_move)
-					elif has_path: start(unit,path)
+					if not at_final_destination:
+						move(unit, unit.final_destiny, smart_move)
+					elif has_path:
+						start(unit, path)
 				else:
 					Goap.attack.set_target(unit, target)
 					var target_position = target.global_position + target.collision_position
 					if Goap.attack.in_range(unit, target):
 						Goap.attack.point(unit, target_position)
-					else: move(unit, target_position, smart_move) 
+					else:
+						move(unit, target_position, smart_move)
 
 
 func move(unit, final_destiny, smart_move):
@@ -48,7 +83,8 @@ func move(unit, final_destiny, smart_move):
 			navigate_to(unit, final_destiny)
 		else:
 			Goap.move.move(unit, final_destiny)
-	else: stop(unit)
+	else:
+		stop(unit)
 
 
 func resume(unit):
@@ -60,8 +96,9 @@ func react(target, attacker):
 
 
 func ally_attacked(target, attacker):
-	var allies = target.get_units_in_sight({ "team": target.team })
-	for ally in allies: react(ally, attacker)
+	var allies = target.get_units_in_sight({"team": target.team})
+	for ally in allies:
+		react(ally, attacker)
 
 
 func stop(unit):
@@ -71,8 +108,7 @@ func stop(unit):
 func setup_pathfind():
 	var map = WorldState.get_state("map")
 	var walls_size = Vector2(
-		floor(map.size.x / map.tile_size) + 1,
-		floor(map.size.y / map.tile_size) + 1
+		floor(map.size.x / map.tile_size) + 1, floor(map.size.y / map.tile_size) + 1
 	)
 	var grid = Finder.GridGD.new().Grid
 	path_grid = grid.new(walls_size.x, walls_size.y)
@@ -115,18 +151,21 @@ func setup_native_navigation(map):
 			if right <= left or bottom <= top:
 				continue
 			var first_vertex = vertices.size()
-			vertices.append_array(PackedVector2Array([
-				Vector2(left, top),
-				Vector2(right, top),
-				Vector2(right, bottom),
-				Vector2(left, bottom)
-			]))
-			polygons.append(PackedInt32Array([
-				first_vertex,
-				first_vertex + 1,
-				first_vertex + 2,
-				first_vertex + 3
-			]))
+			vertices.append_array(
+				PackedVector2Array(
+					[
+						Vector2(left, top),
+						Vector2(right, top),
+						Vector2(right, bottom),
+						Vector2(left, bottom)
+					]
+				)
+			)
+			polygons.append(
+				PackedInt32Array(
+					[first_vertex, first_vertex + 1, first_vertex + 2, first_vertex + 3]
+				)
+			)
 	navigation_polygon.vertices = vertices
 	for polygon in polygons:
 		navigation_polygon.add_polygon(polygon)
@@ -138,8 +177,6 @@ func setup_native_navigation(map):
 
 func setup_unit_path(unit, path):
 	unit.current_path = path
-	if not unit.unit_arrived.is_connected(on_arrive):
-		unit.unit_arrived.connect(on_arrive.bind(unit))
 
 
 func new_lane_path(lane, team):
@@ -156,33 +193,27 @@ func new_lane_path(lane, team):
 			if castle:
 				path.append(castle.global_position)
 		return path
+	return []
 
 
-func on_arrive(unit):
-	if unit.current_path.size() > 0:
-		next(unit)
-	else:
-		unit.current_path = []
-		Goap.move.end(unit)
+func find(from: Vector2, to: Vector2) -> Array:
+	if Goap.use_native_pathfinding:
+		return find_native_path(from, to)
+	return find_custom_path(from, to)
 
 
-func find(g1, g2):
-	var native_path = find_native_path(g1, g2)
-	if native_path.size() > 0:
-		return native_path
-	return find_custom_path(g1, g2)
-
-
-func find_custom_path(g1, g2):
+func find_custom_path(from: Vector2, to: Vector2) -> Array:
 	var cell_size = WorldState.get_state("map").tile_size
 	var half = WorldState.get_state("map").half_tile_size
-	var p1 = (g1 / cell_size).floor()
-	var p2 = (g2 / cell_size).floor()
-	if in_limits(p1) and in_limits(p2):
-		var solved_path = path_finder.findPath(p1.x, p1.y, p2.x, p2.y, path_grid.clone())
+	var start_cell = (from / cell_size).floor()
+	var target_cell = (to / cell_size).floor()
+	if in_limits(start_cell) and in_limits(target_cell):
+		var solved_path = path_finder.findPath(
+			start_cell.x, start_cell.y, target_cell.x, target_cell.y, path_grid.clone()
+		)
 		var path = []
-		for i in range(1, solved_path.size()):
-			var item = solved_path[i]
+		for index in range(1, solved_path.size()):
+			var item = solved_path[index]
 			path.append(Vector2(half + item[0] * cell_size, half + item[1] * cell_size))
 		return path
 	return []
@@ -199,60 +230,64 @@ func find_native_path(from: Vector2, to: Vector2) -> Array:
 	if path.size() <= 1:
 		return []
 	var converted = []
-	for path_point in path:
-		converted.append(path_point)
+	for index in range(1, path.size()):
+		converted.append(path[index])
 	return converted
 
 
-func in_limits(p):
-	return ((p.x > 0 and p.y > 0) and (p.x < path_grid.width and p.y < path_grid.height))
+func in_limits(point):
+	return point.x > 0 and point.y > 0 and point.x < path_grid.width and point.y < path_grid.height
 
 
 func navigate_to(unit, target_point: Vector2):
 	if not unit or target_point == Vector2.ZERO:
 		return
-	var native_path = find_native_path(unit.global_position, target_point)
-	if native_path.size() > 1:
+	if Goap.use_native_pathfinding and Goap.use_native_movement:
+		var native_path = find_native_path(unit.global_position, target_point)
+		if not native_path.is_empty() or _is_same_tile(unit.global_position, target_point):
+			unit.current_path.clear()
+			unit.current_destiny = target_point
+			unit.final_destiny = target_point
+			unit.set_navigation_target(target_point)
+			Goap.move.move(unit, target_point)
+			return
+	var path = find(unit.global_position, target_point)
+	if not path.is_empty():
+		unit.final_destiny = target_point
+		start(unit, path)
+		return
+	if _is_same_tile(unit.global_position, target_point):
 		unit.current_path.clear()
 		unit.current_destiny = target_point
 		unit.final_destiny = target_point
 		unit.set_navigation_target(target_point)
 		Goap.move.move(unit, target_point)
-		return
-	var custom_path = find_custom_path(unit.global_position, target_point)
-	if custom_path.size() > 0:
-		start(unit, custom_path)
-		return
-	unit.current_path = []
-	unit.current_destiny = target_point
-	unit.final_destiny = target_point
-	unit.set_navigation_target(target_point)
-	Goap.move.move(unit, target_point)
+
+
+func _is_same_tile(from: Vector2, to: Vector2) -> bool:
+	var tile_size = WorldState.get_state("map").tile_size
+	return (from / tile_size).floor() == (to / tile_size).floor()
 
 
 func start(unit, new_path):
 	if new_path and not new_path.is_empty():
-		var next_point = new_path.pop_front()
-		unit.current_path = new_path
+		var path = new_path.duplicate()
+		var next_point = path.pop_front()
+		unit.current_path = path
 		unit.current_destiny = next_point
 		unit.set_navigation_target(next_point)
-		Goap.navigation.point(unit, next_point)
+		Goap.move.point(unit, next_point)
 
 
 func follow_path(unit, path):
 	if path and path.size():
 		var new_path = unit.cut_path(path)
-		var next_point = new_path.pop_front()
-		unit.current_path = new_path
-		unit.current_destiny = next_point
-		unit.set_navigation_target(next_point)
-		Goap.navigation.point(unit, next_point)
+		start(unit, new_path)
 
 
 func resume_lane(unit):
 	var lane = unit.agent.get_state("lane")
-	var new_path = new_lane_path(lane, unit.team)
-	start(unit, new_path)
+	start(unit, new_lane_path(lane, unit.team))
 
 
 func next(unit):

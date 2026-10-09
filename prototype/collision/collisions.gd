@@ -10,6 +10,7 @@ var block_template:PackedScene = preload("res://collision/blocks/block_template.
 var tile_size := 64
 var half_tile_size := tile_size / 2
 var current_map : Node2D
+var max_collision_radius := 0.0
 
 
 
@@ -74,8 +75,9 @@ func setup(unit):
 			unit.attack_hit_radius = attack.shape.radius
 
 	if unit is CollisionObject2D:
-		unit.collision_layer = 1 if unit.collide else 0
-		unit.collision_mask = 1 if unit.collide else 0
+		var use_physics_blocking = Goap.use_native_blocking and unit.collide
+		unit.collision_layer = 1 if use_physics_blocking else 0
+		unit.collision_mask = 1 if use_physics_blocking else 0
 		if unit is CharacterBody2D:
 			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	if unit.collide and unit is CollisionObject2D:
@@ -105,21 +107,23 @@ func setup(unit):
 
 func physics_process(delta):
 	quad.clear()
+	max_collision_radius = 0.0
 	
-	# loop 1
 	for unit1 in WorldState.get_state("all_units"):
-		
-		# add units to quad
 		if unit1.collide and not unit1.dead:
 			quad.add_body(unit1)
-	
-	
-	# loop 2: checks for collisions
+			max_collision_radius = max(max_collision_radius, unit1.collision_radius)
+		if unit1 is CollisionObject2D:
+			var use_physics_blocking = Goap.use_native_blocking and unit1.collide and not unit1.dead
+			unit1.collision_layer = 1 if use_physics_blocking else 0
+			unit1.collision_mask = 1 if use_physics_blocking else 0
+		if unit1.navigation_agent:
+			unit1.navigation_agent.avoidance_enabled = Goap.use_native_blocking
+		var obstacle = unit1.get_node_or_null("NavigationObstacle2D")
+		if obstacle:
+			obstacle.avoidance_enabled = Goap.use_native_blocking
 	
 	for unit1 in WorldState.get_state("all_units"):
-		
-		# projectiles collision
-		
 		if unit1.projectiles.size():
 			for projectile in unit1.projectiles:
 				if is_instance_valid(projectile.node) and projectile.speed and projectile.stuck == false:
@@ -141,20 +145,14 @@ func physics_process(delta):
 						# move projectile
 						if not projectile.stuck: Goap.attack.projectile_step(delta, projectile)
 		
-		# Unit blocking is handled by CharacterBody2D collision response.
-		
 		unit1.next_event  = "" # default no event
 		if not unit1.dead:
 			if unit1.moves and unit1.state == "move":
-				var offset = 0
-				if not unit1.target and not unit1.agent.get_state("has_player_command"):
-					offset = WorldState.get_state("map").half_tile_size
-				if unit1.point_collision(unit1.current_destiny, offset):
+				if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
 					unit1.next_event = "arrive"
 				else:
 					unit1.next_event = "move"
-		
-		# move or arrive
+
 		match unit1.next_event:
 			"move": unit1.on_move(delta)
 			"arrive": unit1.on_arrive()

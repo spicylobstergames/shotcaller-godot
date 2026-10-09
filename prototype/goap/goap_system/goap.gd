@@ -14,15 +14,23 @@ var _action_planner = preload("res://goap/goap_system/planner.gd").new()
 var _actions = preload("res://goap/game_logic/action_registry.gd").new()
 var _goals = preload("res://goap/game_logic/goal_registry.gd").new()
 
-@onready var move = $move
+@export var use_native_movement := true
+@export var use_native_blocking := true
+@export var use_native_pathfinding := true
+
+var move
 @onready var attack = $attack
-@onready var navigation = $navigation
+var navigation
 @onready var orders = $orders
 @onready var skills = $skills
 @onready var modifiers = $modifiers
 
 
 func _ready():
+	move = get_action("MoveAction")
+	navigation = get_action("NavigateAction")
+	add_child(move)
+	add_child(navigation)
 	_action_planner.set_actions(_actions.get_all_actions())
 
 
