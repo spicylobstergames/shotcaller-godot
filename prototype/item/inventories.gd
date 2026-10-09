@@ -284,7 +284,7 @@ func remove_item(leader, index):
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
 		for key in item.attributes.keys():
-			Modifiers.remove(leader, key, item.name, item.attributes[key])
+			Modifiers.remove(leader, key, item.name)
 
 		inventory.equip_items[index] = null
 

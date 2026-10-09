@@ -40,11 +40,8 @@ func _ready():
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
 	_unit.unit_arrived.connect(Goap.get_action("OrderAction").on_arrive.bind(self))
-
+	
 	WorldState.second_elapsed.connect(on_every_second)
-	WorldState.second_elapsed.connect(
-		Goap.get_goal("EnemyDefeated").apply_damage_over_time.bind(self)
-	)
 
 
 func _add_goal(goal_name: String) -> void:
@@ -108,14 +105,14 @@ func is_valid_target(target) -> bool:
 
 
 func prioritize_target(target_type: String) -> void:
-	var choose_target = Goap.get_action("ChooseTarget")
+	var choosen_target = Goap.get_action("ChooseTarget")
 	if _unit.type == "leader":
-		choose_target.set_leader_priority(_unit, target_type)
-		choose_target.set_unit_priority(_unit)
+		choosen_target.set_leader_priority(_unit, target_type)
+		choosen_target.set_unit_priority(_unit)
 		return
 
 	var lane = get_state("lane", "")
-	choose_target.set_lane_priority(lane, _unit.team, target_type)
+	choosen_target.set_lane_priority(lane, _unit.team, target_type)
 	for unit in WorldState.get_state("all_units"):
 		if (
 			is_instance_valid(unit)
@@ -123,7 +120,7 @@ func prioritize_target(target_type: String) -> void:
 			and unit.team == _unit.team
 			and unit.agent.get_state("lane") == lane
 		):
-			choose_target.set_unit_priority(unit)
+			choosen_target.set_unit_priority(unit)
 
 
 func initialize_target_priority() -> void:
@@ -267,6 +264,8 @@ func on_every_second() :
 		get_current_action().on_every_second(self)
 	if has_goal_function("on_every_second"):
 		_get_best_goal().on_every_second(self)
+	
+	Goap.get_goal("EnemyDefeated").apply_damage_over_time(self)
 
 
 func on_idle_end():
