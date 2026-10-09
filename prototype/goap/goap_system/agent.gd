@@ -17,12 +17,13 @@ var attacked_timer := 2
 
 
 func _ready():
+	_unit = get_parent()
+	set_state("tactic", "default")
+	set_state("target_priority", Goap.get_action("ChooseTarget").DEFAULT_PRIORITY.duplicate())
 	_goals = []
 	if goals_list.size() > 0:
 		for goal in goals_list:
 			_goals.append(Goap.get_goal(goal))
-
-	_unit = get_parent()
 
 	_unit.unit_reseted.connect(reset)
 	_unit.unit_arrived.connect(on_arrive)
@@ -38,13 +39,18 @@ func _ready():
 	_unit.unit_died.connect(Goap.get_action("RangeAttack").clear_stuck)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
-	_unit.unit_attack_ended.connect(Goap.get_action("AttackEnemy").on_attack_end.bind(_unit))
 	_unit.unit_arrived.connect(Goap.get_action("OrderAction").on_arrive.bind(self))
 
 	WorldState.second_elapsed.connect(on_every_second)
 	WorldState.second_elapsed.connect(
 		Goap.get_goal("EnemyDefeated").apply_damage_over_time.bind(self)
 	)
+
+
+func _add_goal(goal_name: String) -> void:
+	var goal = Goap.get_goal(goal_name)
+	if goal and not _goals.has(goal):
+		_goals.append(goal)
 
 
 func get_unit():
@@ -58,7 +64,74 @@ func get_state(state_name, default = null):
 
 
 func set_state(state_name, value):
+	if state_name == "target":
+		_set_target(value)
+		return
 	_state[state_name] = value
+
+
+func _set_target(value) -> void:
+	var target = value if is_instance_valid(value) else null
+	var previous_target = _state.get("target", _unit.target if _unit else null)
+	_state["target"] = target
+	if not _unit:
+		return
+
+	_unit.target = target
+	if previous_target != target:
+		_unit.last_target = previous_target
+	if previous_target != target or target == null:
+		_unit.attack_count = 0
+		Modifiers.remove(_unit, "attack_speed", "agile")
+	_state["has_attack_target"] = target != null
+	_state["hunting"] = target != null and _unit.moves
+
+
+func choose_target(enemies):
+	return Goap.get_action("ChooseTarget").select_target(_unit, enemies)
+
+
+func closest_enemy_unit(enemies):
+	return Goap.get_action("ChooseTarget").closest_enemy_unit(_unit, enemies)
+
+
+func can_hit(target) -> bool:
+	return Goap.get_action("ChooseTarget").can_hit(_unit, target)
+
+
+func target_in_range(target) -> bool:
+	return Goap.get_action("ChooseTarget").in_range(_unit, target)
+
+
+func is_valid_target(target) -> bool:
+	return Goap.get_action("ChooseTarget").is_valid_target(_unit, target)
+
+
+func prioritize_target(target_type: String) -> void:
+	var choose_target = Goap.get_action("ChooseTarget")
+	if _unit.type == "leader":
+		choose_target.set_leader_priority(_unit, target_type)
+		choose_target.set_unit_priority(_unit)
+		return
+
+	var lane = get_state("lane", "")
+	choose_target.set_lane_priority(lane, _unit.team, target_type)
+	for unit in WorldState.get_state("all_units"):
+		if (
+			is_instance_valid(unit)
+			and unit.agent
+			and unit.team == _unit.team
+			and unit.agent.get_state("lane") == lane
+		):
+			choose_target.set_unit_priority(unit)
+
+
+func initialize_target_priority() -> void:
+	Goap.get_action("ChooseTarget").set_unit_priority(_unit)
+
+
+func attack_at(point: Vector2) -> void:
+	Goap.get_action("AttackEnemy").point(_unit, point)
 
 
 func erase_state(state_name):
@@ -70,8 +143,18 @@ func clear_state():
 
 
 func reset():
+	var lane = get_state("lane")
+	var tactic = get_state("tactic", "default")
+	var target_priority = get_state(
+		"target_priority", Goap.get_action("ChooseTarget").DEFAULT_PRIORITY
+	)
 	_exit_current_action()
+	set_state("target", null)
 	clear_state()
+	if lane != null:
+		set_state("lane", lane)
+	set_state("tactic", tactic)
+	set_state("target_priority", target_priority.duplicate())
 	_current_goal = null
 	_current_plan = []
 	_current_plan_step = 0
@@ -218,6 +301,14 @@ func on_attack_end():
 		_get_best_goal().on_attack_end(self)
 	if get_state("player_order", {}).get("type", "") == "attack":
 		set_state("player_order_attack_ended", true)
+	if not _unit.attacks or _unit.target:
+		return
+	if not _unit.current_path.is_empty():
+		Goap.navigation.follow_path(_unit, _unit.current_path)
+	elif _unit.current_destiny != Vector2.ZERO:
+		Goap.move.point(_unit, _unit.current_destiny)
+	else:
+		Goap.move.stop(_unit)
 
 
 func on_death_started():

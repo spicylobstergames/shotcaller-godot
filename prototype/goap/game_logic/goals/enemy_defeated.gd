@@ -8,25 +8,24 @@ func get_class_name() -> String:
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	if not unit.attacks:
-		Goap.get_action("AttackEnemy").set_target(unit, null)
+		agent.set_state("target", null)
 		agent.set_state("enemy_dead", false)
 		agent.set_state("enemy_in_attack_range", false)
 		return false
 	var target = unit.target
 	var enemies_in_range = unit.get_units_in_attack_range({"team": unit.opponent_team()})
-	var attack_action = Goap.get_action("AttackEnemy")
-	var target_in_range = attack_action.select_target(unit, enemies_in_range)
+	var target_in_range = agent.choose_target(enemies_in_range)
 	if target_in_range:
 		target = target_in_range
-	elif not unit.moves or not attack_action.can_hit(unit, target):
+	elif not unit.moves or not agent.can_hit(target):
 		target = null
 		if unit.moves:
 			var enemies_in_sight = unit.get_units_in_sight({"team": unit.opponent_team()})
-			target = attack_action.select_target(unit, enemies_in_sight)
-	attack_action.set_target(unit, target)
-	var has_target = attack_action.can_hit(unit, target)
+			target = agent.choose_target(enemies_in_sight)
+	agent.set_state("target", target)
+	var has_target = agent.can_hit(target)
 	agent.set_state("enemy_dead", false)
-	agent.set_state("enemy_in_attack_range", has_target and attack_action.in_range(unit, target))
+	agent.set_state("enemy_in_attack_range", has_target and agent.target_in_range(target))
 	return has_target
 
 

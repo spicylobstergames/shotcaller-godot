@@ -138,7 +138,7 @@ func physics_process(delta):
 						else: # pierces
 							var targets = Collisions.get_units_in_radius(projectile_position, 1) 
 							for target in targets:
-								if (Goap.get_action("AttackEnemy").can_hit(unit1, target) and
+								if (unit1.agent.can_hit(target) and
 										projectile.targets.find(target) < 0 and
 										target.point_collision(projectile_position) ):
 									Goap.get_goal("EnemyDefeated").take_hit(unit1, target, projectile)

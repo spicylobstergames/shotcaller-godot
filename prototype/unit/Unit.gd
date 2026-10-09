@@ -89,7 +89,6 @@ var next_event:String = "" # "move" or "arrive"
 var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
 var state:String = "idle" # "move", "attack", "death"
 var priority = ["leader", "pawn", "building"]
-var tactics:String = "default" # aggresive defensive retreat
 var wait_time:int = 0
 var gold = 0
 
@@ -469,7 +468,7 @@ func on_stun_end():
 func die():  # hp <= 0
 	self.set_state("death")
 	self.dead = true
-	self.target = null
+	self.agent.set_state("target", null)
 	
 	self.agent.set_state("is_channeling", false)
 

@@ -25,7 +25,7 @@ func projectile_release(attacker):
 			var sorted = attacker.sort_by_distance(enemies)
 			for enemy in sorted:
 				if (enemy.unit != attacker.target and 
-					Goap.get_action("AttackEnemy").in_range(attacker, enemy.unit)):
+					attacker.agent.target_in_range(enemy.unit)):
 					secondary_projectile(attacker, enemy.unit)
 
 

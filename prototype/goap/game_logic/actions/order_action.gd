@@ -44,7 +44,7 @@ func issue_player_order(unit, order_type: String, target: Vector2 = Vector2.ZERO
 	if not unit.is_controllable() or unit.dead:
 		return false
 	if unit.type != "leader":
-		Goap.get_action("AttackEnemy").set_target(unit, null)
+		unit.agent.set_state("target", null)
 		unit.start_control_delay()
 		_execute_player_order(unit, order_type, target)
 		return true
@@ -58,7 +58,7 @@ func issue_player_order(unit, order_type: String, target: Vector2 = Vector2.ZERO
 	agent.set_state("player_order_complete", false)
 	agent.set_state("player_order_attack_ended", false)
 	agent.set_state("has_player_command", true)
-	Goap.get_action("AttackEnemy").set_target(unit, null)
+	agent.set_state("target", null)
 	unit.start_control_delay()
 	return true
 
@@ -93,7 +93,7 @@ func _execute_player_order(unit, order_type: String, target: Vector2, agent = nu
 		"advance":
 			Goap.navigation.smart(unit, target)
 		"attack":
-			Goap.get_action("AttackEnemy").point(unit, target)
+			unit.agent.attack_at(target)
 		"lane":
 			Goap.navigation.change_lane(unit, target)
 		"teleport":

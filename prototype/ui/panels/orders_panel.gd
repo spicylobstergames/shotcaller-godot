@@ -1,6 +1,8 @@
 extends Control
 var game:Node
 
+signal leaders_built
+
 # self = game.ui.orders_panel
 
 var cleared = false
@@ -122,7 +124,7 @@ func build_leaders():
 		leader_orders[leader.name+leader.team] = orders_container
 		setup_leader_buttons(orders_container)
 	
-	Orders.build_leaders()
+	leaders_built.emit()
 
 
 func setup_leader_buttons(orders_container):
