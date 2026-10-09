@@ -136,7 +136,7 @@ func pause():
 	emit_signal("game_paused")
 
 
-func one_sec_cycle(): # called every second 
+func one_sec_cycle(): 
 	var time = WorldState.get_state("time") + 1
 	WorldState.set_state("time", time)
 	

@@ -91,16 +91,6 @@ func resume(unit):
 	point(unit, null)
 
 
-func react(target, attacker):
-	point(target, attacker.global_position)
-
-
-func ally_attacked(target, attacker):
-	var allies = target.get_units_in_sight({"team": target.team})
-	for ally in allies:
-		react(ally, attacker)
-
-
 func stop(unit):
 	Goap.move.stop(unit)
 
@@ -235,8 +225,13 @@ func find_native_path(from: Vector2, to: Vector2) -> Array:
 	return converted
 
 
-func in_limits(point):
-	return point.x > 0 and point.y > 0 and point.x < path_grid.width and point.y < path_grid.height
+func in_limits(target_point):
+	return (
+		target_point.x > 0 and 
+		target_point.y > 0 and 
+		target_point.x < path_grid.width and 
+		target_point.y < path_grid.height
+	)
 
 
 func navigate_to(unit, target_point: Vector2):

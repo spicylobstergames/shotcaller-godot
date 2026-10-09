@@ -47,14 +47,14 @@ func point(unit, destiny):
 		move(unit, destiny)
 
 
-func in_bounds(point: Vector2) -> bool:
+func in_bounds(target_point: Vector2) -> bool:
 	var map = WorldState.get_state("map")
 	var half_tile_size = map.tile_size / 2
 	return (
-		point.x > half_tile_size
-		and point.y > half_tile_size
-		and point.x < map.size.x - half_tile_size
-		and point.y < map.size.y - half_tile_size
+		target_point.x > half_tile_size and
+		target_point.y > half_tile_size and
+		target_point.x < map.size.x - half_tile_size and
+		target_point.y < map.size.y - half_tile_size
 	)
 
 
