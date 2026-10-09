@@ -26,7 +26,7 @@ func enter(agent):
 
 func perform(agent, _delta) -> bool:
 	var unit = agent.get_unit()
-	var hp = Goap.modifiers.get_value(unit, "hp")
+	var hp = Modifiers.get_value(unit, "hp")
 	var ready_to_fight = unit.current_hp > hp * 0.8
 	return ready_to_fight
 

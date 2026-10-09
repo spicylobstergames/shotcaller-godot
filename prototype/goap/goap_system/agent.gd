@@ -30,10 +30,21 @@ func _ready():
 	_unit.unit_stun_ended.connect(on_stun_end)
 	_unit.unit_move_ended.connect(on_move_end)
 	_unit.unit_attack_ended.connect(on_attack_end)
+	_unit.unit_attack_release.connect(
+		Goap.get_action("RangeAttack").projectile_release.bind(_unit)
+	)
+	_unit.unit_attack_hitted.connect(Goap.get_action("MeleeAttack").hit.bind(_unit))
+	_unit.unit_death_started.connect(on_death_started)
+	_unit.unit_died.connect(Goap.get_action("RangeAttack").clear_stuck)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
+	_unit.unit_attack_ended.connect(Goap.get_action("AttackEnemy").on_attack_end.bind(_unit))
+	_unit.unit_arrived.connect(Goap.get_action("OrderAction").on_arrive.bind(self))
 
 	WorldState.second_elapsed.connect(on_every_second)
+	WorldState.second_elapsed.connect(
+		Goap.get_goal("EnemyDefeated").apply_damage_over_time.bind(self)
+	)
 
 
 func get_unit():
@@ -166,11 +177,9 @@ func on_every_second() :
 	var is_regenerating_unit = _unit.type != "building" or _unit.team == "neutral"
 	if _unit.regen > 0 and is_regenerating_unit:
 		if not _unit.dead:
-			_unit.heal(Goap.modifiers.get_value(_unit, "regen"))
+			_unit.heal(Modifiers.get_value(_unit, "regen"))
 		else:
 			_unit.regen = 0
-	if not _unit.dead:
-		Goap.attack.on_every_second(self)
 	if has_action_function("on_every_second"):
 		get_current_action().on_every_second(self)
 	if has_goal_function("on_every_second"):
@@ -207,8 +216,20 @@ func on_attack_end():
 		get_current_action().on_attack_end(self)
 	if has_goal_function("on_attack_end"):
 		_get_best_goal().on_attack_end(self)
-	Goap.get_action("OrderAction").on_attack_end(self)
-	Goap.attack.on_attack_end(_unit)
+	if get_state("player_order", {}).get("type", "") == "attack":
+		set_state("player_order_attack_ended", true)
+
+
+func on_death_started():
+	cancel_player_order()
+
+
+func cancel_player_order():
+	clear_plan()
+	erase_state("player_order")
+	set_state("player_order_complete", false)
+	set_state("player_order_attack_ended", false)
+	set_state("has_player_command", false)
 
 
 func was_attacked(attacker, damage):
@@ -249,7 +270,6 @@ func on_arrive():
 		var arrive_goal = Goap.get_goal("ArriveAtDestination")
 		if arrive_goal:
 			arrive_goal.on_arrive(self)
-	Goap.get_action("OrderAction").on_arrive(self)
 
 
 #func clear_orders():

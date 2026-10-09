@@ -26,7 +26,7 @@ func update_hpbar():
 				var leader_icon_green: Sprite2D = leader_icon_hpbar.get_node("green")
 				leader_icon_green.region_rect.size.x = 0
 		else:
-			var hp = Goap.modifiers.get_value(unit, "hp")
+			var hp = Modifiers.get_value(unit, "hp")
 			hpbar.show()
 			var h_scale = float(unit.current_hp) / float(hp)
 			if h_scale < 0: h_scale = 0

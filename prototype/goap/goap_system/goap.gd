@@ -4,7 +4,7 @@ extends Node
 # This class is an autoload accessible globally.
 # Access the autoload list in the Godot settings.
 #
-# Initializes a GoapActionPlanner with all the available actions.
+# Initializes the planner and exposes reusable GOAP/gameplay services.
 # In your game, you might want to have different planners
 # for different enemy/NPC types, and even change the set
 # of actions at runtime.
@@ -19,18 +19,12 @@ var _goals = preload("res://goap/game_logic/goal_registry.gd").new()
 @export var use_native_pathfinding := true
 
 var move
-@onready var attack = $attack
 var navigation
-@onready var orders = $orders
-@onready var skills = $skills
-@onready var modifiers = $modifiers
 
 
 func _ready():
 	move = get_action("MoveAction")
 	navigation = get_action("NavigateAction")
-	add_child(move)
-	add_child(navigation)
 	_action_planner.set_actions(_actions.get_all_actions())
 
 

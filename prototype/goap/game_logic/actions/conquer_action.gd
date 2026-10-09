@@ -14,7 +14,7 @@ func conquer_building(unit):
 	point.y -= WorldState.get_state("map").tile_size
 	var building = Utils.get_building(point)
 	if not unit.agent.get_state("is_stunned") and building:
-		var hp = float(Goap.modifiers.get_value(building, "hp"))
+		var hp = float(Modifiers.get_value(building, "hp"))
 		var current_hp = float(building.current_hp)
 		var building_full_hp = (current_hp / hp) == 1
 		if building.team == "neutral" and building_full_hp:

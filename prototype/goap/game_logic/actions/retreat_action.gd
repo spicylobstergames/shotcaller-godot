@@ -25,16 +25,16 @@ func enter(agent):
 	unit.agent.set_state("is_retreating", true)
 	# clear previous path and targets
 	unit.current_path = []
-	Goap.attack.set_target(unit, null)
+	Goap.get_action("AttackEnemy").set_target(unit, null)
 	# update lane data in case of lane change
 	var order
 	if unit.team == WorldState.get_state("player_team"):
-		if unit.name in Goap.orders.player_leaders_orders:
-			order = Goap.orders.player_leaders_orders[unit.name]
+		if unit.name in Orders.player_leaders_orders:
+			order = Orders.player_leaders_orders[unit.name]
 	elif unit.team == WorldState.get_state("enemy_team"):
-		if unit.name in Goap.orders.enemy_leaders_orders:
-			order = Goap.orders.enemy_leaders_orders[unit.name]
-	Goap.orders.set_leader(unit, order)
+		if unit.name in Orders.enemy_leaders_orders:
+			order = Orders.enemy_leaders_orders[unit.name]
+	Orders.set_leader(unit, order)
 	var lane = agent.get_state("lane")
 	var path = WorldState.get_state("lanes")[lane].duplicate()
 	if unit.team == "red": path.reverse()

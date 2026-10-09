@@ -74,7 +74,7 @@ func setup_lanes():
 		for lane in lanes_node.get_children():
 			WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 	
-	Goap.orders.build_lanes()
+	Orders.build_lanes()
 
 
 func line_to_array(line):

@@ -26,7 +26,7 @@ func priority(_agent) -> int:
 
 
 func should_retreat(unit) -> bool:
-	var hp = Goap.modifiers.get_value(unit, "hp")
+	var hp = Modifiers.get_value(unit, "hp")
 	match unit.tactics:
 		"escape":
 			return true

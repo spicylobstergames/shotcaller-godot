@@ -39,8 +39,8 @@ func clear():
 
 func new_inventory(leader):
 	var extra_skill_gold = 0
-	if leader.display_name in Goap.skills.leader:
-		var leader_skills = Goap.skills.leader[leader.display_name]
+	if leader.display_name in Skills.leader:
+		var leader_skills = Skills.leader[leader.display_name]
 		if "extra_gold" in leader_skills:
 				extra_skill_gold = leader_skills.extra_gold
 
@@ -252,7 +252,7 @@ func give_item(delivery):
 			inventory.equip_items[index] = item
 			inventory.equip_item_buttons[index].setup(item)
 			for key in item.attributes.keys():
-				Goap.modifiers.add(leader, key, item.name, item.attributes[key])
+				Modifiers.add(leader, key, item.name, item.attributes[key])
 			if "passive" in item:
 				var item_scene = load(item.passive)
 				var passives_node = leader.get_node_or_null("goap_agent/item_passives")
@@ -284,7 +284,7 @@ func remove_item(leader, index):
 	if item.type == "equip":
 		# Remove attributes that were added when purchasing an item
 		for key in item.attributes.keys():
-			Goap.modifiers.remove(leader, key, item.name, item.attributes[key])
+			Modifiers.remove(leader, key, item.name, item.attributes[key])
 
 		inventory.equip_items[index] = null
 
@@ -323,7 +323,7 @@ func update_consumables(leader):
 	for item in inventory.consumable_items:
 		var item_button = inventory.consumable_item_buttons[counter]
 		if item != null and item.type == "consumable":
-			item_button.disabled = (leader.current_hp >= Goap.modifiers.get_value(leader, "hp"))
+			item_button.disabled = (leader.current_hp >= Modifiers.get_value(leader, "hp"))
 			counter += 1
 		elif item != null and item.type  == "throwable":
 			var enemy_leaders_on_sight = leader.get_units_in_sight({

@@ -5,6 +5,7 @@ const ArriveAtDestinationTests = preload("res://tests/unit/test_arrive_at_destin
 const CollisionTests = preload("res://tests/unit/test_collisions.gd")
 const MovementTests = preload("res://tests/unit/test_movement.gd")
 const NavigationTests = preload("res://tests/unit/test_navigation.gd")
+const OrderActionTests = preload("res://tests/unit/test_order_action.gd")
 const PlannerTests = preload("res://tests/unit/test_planner.gd")
 
 var tests_run := 0
@@ -18,6 +19,7 @@ func _ready() -> void:
 	CollisionTests.new().run(self)
 	MovementTests.new().run(self)
 	NavigationTests.new().run(self)
+	OrderActionTests.new().run(self)
 	PlannerTests.new().run(self)
 
 	if failures.is_empty():

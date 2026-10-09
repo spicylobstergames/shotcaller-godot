@@ -41,7 +41,7 @@ func smart(unit, final_destiny):
 
 
 func point(unit, final_destiny, smart_move = false):
-	Goap.attack.set_target(unit, null)
+	Goap.get_action("AttackEnemy").set_target(unit, null)
 	if final_destiny and Goap.move.in_bounds(final_destiny):
 		unit.final_destiny = final_destiny
 		if unit.attacks and not unit.agent.get_state("is_stunned"):
@@ -62,17 +62,17 @@ func point(unit, final_destiny, smart_move = false):
 				elif has_path:
 					start(unit, path)
 			else:
-				var target = Goap.attack.select_target(unit, enemies)
+				var target = Goap.get_action("AttackEnemy").select_target(unit, enemies)
 				if not target:
 					if not at_final_destination:
 						move(unit, unit.final_destiny, smart_move)
 					elif has_path:
 						start(unit, path)
 				else:
-					Goap.attack.set_target(unit, target)
+					Goap.get_action("AttackEnemy").set_target(unit, target)
 					var target_position = target.global_position + target.collision_position
-					if Goap.attack.in_range(unit, target):
-						Goap.attack.point(unit, target_position)
+					if Goap.get_action("AttackEnemy").in_range(unit, target):
+						Goap.get_action("AttackEnemy").point(unit, target_position)
 					else:
 						move(unit, target_position, smart_move)
 

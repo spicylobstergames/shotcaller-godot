@@ -207,7 +207,7 @@ func rollo_basic():
 			targets.append(unit)
 	if targets.size() >= skill_data.attributes.minimum_targets:
 		for unit in targets:
-			Goap.attack.take_hit(leader, unit, null, { "damage": damage })
+			Goap.get_goal("EnemyDefeated").take_hit(leader, unit, null, { "damage": damage })
 	
 	return true
 
@@ -228,7 +228,7 @@ func arthur_special(effects, parameters, visualize):
 			if not targets.is_empty():
 				for unit in targets:
 					var damage = skill_data.attributes.damage_per_level * leader.level
-					Goap.attack.take_hit(leader, unit, null, { "damage": damage })
+					Goap.get_goal("EnemyDefeated").take_hit(leader, unit, null, { "damage": damage })
 
 
 
@@ -253,7 +253,7 @@ func arthur_active(effects, parameters, visualize):
 	if targets.is_empty():
 		return true
 	for unit in targets:
-		Goap.attack.take_hit(leader, unit, null, { "damage": damage })
+		Goap.get_goal("EnemyDefeated").take_hit(leader, unit, null, { "damage": damage })
 		unit.start_stun()
 	return true
 
@@ -277,7 +277,7 @@ func bokuden_special(_effects, _parameters, _visualize):
 		if unit.type != "building":
 			targets.append(unit)
 			battle_call_timer.start()
-			Goap.modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
+			Modifiers.add(unit, "speed", "battle_call", speed_modifier * leader.level)
 			unit.status_effects["battle_call"] = {
 				icon = skill_data.status_effect_icon,
 				hint = skill_data.status_effect_hint % (speed_modifier * leader.level)
@@ -287,7 +287,7 @@ func bokuden_special(_effects, _parameters, _visualize):
 
 func battle_call_remove(_targets):
 	for unit in _targets:
-		Goap.modifiers.remove(unit, "speed", "battle_call")
+		Modifiers.remove(unit, "speed", "battle_call")
 		_targets.erase(unit)
 		unit.status_effects.erase("battle_call")
 
@@ -325,7 +325,7 @@ func osman_special(_effects, _parameters, _visualize):
 		for unit in leader.get_units_in_radius(range_of_effect, { "team": leader.opponent_team(), "type": "pawn" }):
 			targets[unit] = unit.team
 			unit.setup_team(leader.team)
-			Goap.orders.set_pawn(unit)
+			Orders.set_pawn(unit)
 			unit.status_effects["Bribed"] = {
 				icon = skill_data.status_effect_icon,
 				hint = skill_data.status_effect_hint
@@ -338,7 +338,7 @@ func bribe_remove(targets):
 	for unit in targets.keys():
 		if not unit.dead:
 			unit.setup_team(targets[unit])
-			Goap.orders.set_pawn(unit)
+			Orders.set_pawn(unit)
 			targets.erase(unit)
 			unit.status_effects.erase("Bribed")
 		else: targets.erase(unit)

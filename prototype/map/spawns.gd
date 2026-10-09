@@ -101,8 +101,8 @@ func leaders():
 
 
 func spawn_group_cycle():
-	Goap.orders.lanes_cycle()
-	Goap.orders.leaders_cycle()
+	Orders.lanes_cycle()
+	Orders.leaders_cycle()
 	Goap.get_action("TaxesAction").update_taxes()
 	
 	for team in WorldState.teams:
@@ -119,7 +119,7 @@ func spawn_group_cycle():
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
-	Goap.orders.leaders_cycle()
+	Orders.leaders_cycle()
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
@@ -149,7 +149,7 @@ func send_pawn(template_name, lane, team):
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
 	Goap.navigation.setup_unit_path(pawn, path)
-	Goap.orders.set_pawn(pawn)
+	Orders.set_pawn(pawn)
 
 
 func spawn_unit(unit, lane, team, mode, point):

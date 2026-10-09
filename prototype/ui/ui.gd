@@ -138,7 +138,7 @@ func hide_hpbars():
 		if (unit != WorldState.get_state("selected_unit") and 
 				unit.hud and
 				unit.type != "leader" and
-				unit.current_hp == Goap.modifiers.get_value(unit, "hp") ):
+				unit.current_hp == Modifiers.get_value(unit, "hp") ):
 					unit.hud.hpbar.hide()
 
 

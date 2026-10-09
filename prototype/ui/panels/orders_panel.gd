@@ -122,7 +122,7 @@ func build_leaders():
 		leader_orders[leader.name+leader.team] = orders_container
 		setup_leader_buttons(orders_container)
 	
-	Goap.orders.build_leaders()
+	Orders.build_leaders()
 
 
 func setup_leader_buttons(orders_container):

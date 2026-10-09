@@ -48,16 +48,16 @@ func button_down():
 		"tactic":
 			clear_siblings(self)
 			if selected_unit and selected_unit.type == "leader":
-				Goap.orders.set_leader_tactic(self.orders.tactic)
-			else: Goap.orders.set_lane_tactic(self.orders.tactic)
+				Orders.set_leader_tactic(self.orders.tactic)
+			else: Orders.set_lane_tactic(self.orders.tactic)
 			self.disabled = true
 		
 		"priority":
 			if not is_first_child(self):
 				move_button_to_front(self)
 				if WorldState.get_state("selected_leader"):
-					Goap.orders.set_leader_priority(self.orders.priority)
-				else: Goap.orders.set_lane_priority(self.orders.priority)
+					Orders.set_leader_priority(self.orders.priority)
+				else: Orders.set_lane_priority(self.orders.priority)
 		
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
@@ -121,11 +121,11 @@ func button_down():
 			self.disabled = true
 		
 		"pawn_upgrades":
-			Goap.orders.pawn_upgrades(self.orders.pawn_upgrade)
+			Orders.pawn_upgrades(self.orders.pawn_upgrade)
 			self.disabled = true
 		
 		"tower_upgrades":
-			Goap.orders.tower_upgrades(self.orders.pawn_upgrade)
+			Orders.tower_upgrades(self.orders.pawn_upgrade)
 			self.disabled = true
 
 

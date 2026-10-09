@@ -61,7 +61,7 @@ func in_bounds(target_point: Vector2) -> bool:
 func move(unit, destiny):
 	if unit.moves and not unit.agent.get_state("is_stunned"):
 		unit.current_destiny = destiny
-		var current_speed = Goap.modifiers.get_value(unit, "speed")
+		var current_speed = Modifiers.get_value(unit, "speed")
 		calc_step(unit, current_speed)
 		var animations = unit.get_node_or_null("animations")
 		if animations and "speed_scale" in animations:
@@ -170,7 +170,7 @@ func smart(unit, target_point):
 
 func teleport(unit, target_point):
 	var agent = unit.agent
-	var game = get_tree().get_current_scene()
+	var game = Goap.get_tree().get_current_scene()
 	var ui = game.ui
 	ui.unit_controls_panel.teleport_button.disabled = false
 	ui.unit_controls_panel.teleport_button.button_pressed = false
@@ -200,5 +200,5 @@ func teleport(unit, target_point):
 
 		unit.global_position = new_position
 		agent.set_state("lane", building.lane)
-		Goap.get_action("OrderAction").complete_player_order(agent)
+		agent.set_state("player_order_complete", true)
 		Goap.navigation.resume_lane(unit)

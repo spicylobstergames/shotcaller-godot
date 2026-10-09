@@ -1,7 +1,7 @@
 extends Node
 
 
-# self = Goap.modifiers
+# self = Modifiers
 
 
 var extra_retreat_speed = 10
@@ -70,10 +70,10 @@ func get_velocity(unit):
 				default = unit.hunting_speed
 				
 			if unit.agent.get_state("is_retreating"):
-				var bonus = Goap.skills.get_value(unit, "bonus_retreat_speed")
+				var bonus = Skills.get_value(unit, "bonus_retreat_speed")
 				default += extra_retreat_speed + bonus
 		
-		default += Goap.orders.tactics_extra_speed[unit.tactics]
+		default += Orders.tactics_extra_speed[unit.tactics]
 	
 		return default
 	
