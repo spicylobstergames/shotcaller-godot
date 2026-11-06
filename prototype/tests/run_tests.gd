@@ -12,6 +12,7 @@ const NavigationTests = preload("res://tests/unit/test_navigation.gd")
 const OrderActionTests = preload("res://tests/unit/test_order_action.gd")
 const OrdersPanelSignalTests = preload("res://tests/unit/test_orders_panel_signal.gd")
 const PlannerTests = preload("res://tests/unit/test_planner.gd")
+const MirrorTilesTests = preload("res://tests/unit/test_mirror_tiles.gd")
 
 var tests_run := 0
 var failures: Array[String] = []
@@ -31,6 +32,7 @@ func _ready() -> void:
 	OrderActionTests.new().run(self)
 	OrdersPanelSignalTests.new().run(self)
 	PlannerTests.new().run(self)
+	MirrorTilesTests.new().run(self)
 
 	if failures.is_empty():
 		print("All %d tests passed." % tests_run)
