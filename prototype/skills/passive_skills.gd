@@ -3,8 +3,10 @@ extends Node
 
 # self = Skills
 
+const SkillResource = preload("res://skills/skill_resource.gd")
 
-const LEADER_PASSIVES: SkillResource = preload("res://skills/resources/leader_passives.tres")
+
+var LEADER_PASSIVES := preload("res://skills/resources/leader_passives.tres")
 var leader: Dictionary = LEADER_PASSIVES.attributes
 
 

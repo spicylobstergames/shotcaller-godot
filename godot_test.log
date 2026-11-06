@@ -1,0 +1,18 @@
+ERROR: Could not create directory: '/home/john/.local/share/godot/app_userdata/Shotcall'.
+   at: make_dir_recursive (core/io/dir_access.cpp:179)
+ERROR: Error attempting to create data dir: /home/john/.local/share/godot/app_userdata/Shotcall.
+   at: ensure_user_data_dir (core/os/os.cpp:442)
+ERROR: Could not create directory: 'user://logs'.
+   at: make_dir_recursive (core/io/dir_access.cpp:179)
+ERROR: Failed to open log file for writing: user://logs/godot.log
+   at: rotate_file (core/io/logger.cpp:169)
+Godot Engine v4.7.2.stable.mono.official.ed1daf0bf - https://godotengine.org
+
+WARNING: res://collision/blocks/block_template.tscn:3 - ext_resource, invalid UID: uid://wbppf7q1rtk5 - using text path instead: res://unit/Unit.gd
+     at: load (scene/resources/resource_format_text.cpp:501)
+SCRIPT ERROR: Parse Error: Could not preload resource script "res://tests/unit/test_action_lifecycles.gd".
+          at: GDScript::reload (res://tests/run_tests.gd:15)
+SCRIPT ERROR: Parse Error: Could not resolve script "res://tests/unit/test_action_lifecycles.gd".
+          at: GDScript::reload (res://tests/run_tests.gd:15)
+ERROR: Failed to load script "res://tests/run_tests.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

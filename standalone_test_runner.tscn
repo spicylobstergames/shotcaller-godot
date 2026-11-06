@@ -1,0 +1,3 @@
+[gd_scene format=3]
+[node name="StandaloneTestRunner" type="Node"]
+script = ExtResource("1")

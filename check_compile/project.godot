@@ -1,0 +1,5 @@
+config_version=5
+[application]
+config/name="CheckCompile"
+run/main_scene="res://check.tscn"
+config/features=PackedStringArray("4.0")

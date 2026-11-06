@@ -2,6 +2,7 @@ extends Node
 
 # self = Modifiers
 
+const KNOWN_MODIFIERS := ["hp", "regen", "vision", "speed", "damage", "attack_range", "attack_speed", "defense", "dot"]
 const TACTICS_EXTRA_SPEED = {"retreat": 0, "defend": -5, "default": 0, "attack": 5}
 
 var extra_retreat_speed = 10
@@ -13,6 +14,13 @@ var retreat_regen = 10
 @export var damage_per_level : float = 2.5
 @export var defense_per_level : float = 2
 @export var attack_speed_per_level : float = 0.05
+
+
+func _is_known_modifier(mod_str: String) -> bool:
+	for known in KNOWN_MODIFIERS:
+		if known == mod_str:
+			return true
+	return false
 
 
 func new_modifiers():
@@ -30,16 +38,23 @@ func new_modifiers():
 
 
 func get_value(unit, mod_str):
-	var default = unit[mod_str]
+	if not _is_known_modifier(mod_str):
+		push_warning("Modifiers.get_value: unknown modifier name \"%s\". Known: %s" % [mod_str, KNOWN_MODIFIERS])
+
+	var unit_level = unit.get("level", 1)
+	var unit_mods = unit.get("current_modifiers", {})
+
+	var default = unit.get(mod_str, 0)
 
 	match mod_str:
 		"speed": default = get_velocity(unit)
 		"regen": default = get_regen(unit)
 		"attack_range": default = get_att_range(unit)
-	for modifier in unit.current_modifiers[mod_str]:
+
+	for modifier in unit_mods.get(mod_str, []):
 		default += modifier.value
 
-	var level_bonus = unit.level - 1
+	var level_bonus = unit_level - 1
 	match mod_str:
 		"hp": level_bonus *= hp_per_level
 		"regen": level_bonus *= regen_per_level
@@ -62,7 +77,7 @@ func get_dot(unit):
 
 func get_velocity(unit):
 	if unit:
-		var default = unit.speed
+		var default = unit.get("speed", 0.0)
 
 		
 		if unit.agent:

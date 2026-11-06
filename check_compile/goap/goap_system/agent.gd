@@ -1,0 +1,329 @@
+extends Node
+
+# self = Goap.Agent
+
+signal plan_changed(plan)
+signal goal_changed(goal)
+signal action_changed(action)
+
+@export var goals_list: Array = []
+
+var agent_debug := true
+
+var _goals: Array
+var _current_goal
+var _current_plan: Array = []
+var _current_plan_step := 0
+var _unit
+var _state: Dictionary = {}
+
+var attacked_timer := 2
+
+
+func _ready():
+	_unit = get_parent()
+	set_state("tactic", "default")
+	_goals = []
+	action_changed.connect(_on_action_changed)
+	if goals_list.size() > 0:
+		for goal in goals_list:
+			_goals.append(Goap.get_goal(goal))
+
+	_unit.unit_reseted.connect(reset)
+	_unit.unit_arrived.connect(on_arrive)
+	_unit.unit_idle_ended.connect(on_idle_end)
+	_unit.unit_stun_ended.connect(on_stun_end)
+	_unit.unit_move_ended.connect(on_move_end)
+	_unit.unit_attack_ended.connect(on_attack_end)
+	_unit.unit_attack_release.connect(
+		Goap.get_action("RangeAttack").projectile_release.bind(_unit)
+	)
+	_unit.unit_attack_hitted.connect(Goap.get_action("MeleeAttack").hit.bind(_unit))
+	_unit.unit_death_started.connect(on_death_started)
+	_unit.unit_died.connect(Goap.get_action("RangeAttack").clear_stuck)
+	_unit.unit_animation_ended.connect(on_animation_end)
+	_unit.unit_was_attacked.connect(was_attacked)
+	_unit.unit_arrived.connect(Goap.get_action("OrderAction").on_arrive.bind(self))
+	
+	WorldState.second_elapsed.connect(on_every_second)
+
+
+func _add_goal(goal_name: String) -> void:
+	var goal = Goap.get_goal(goal_name)
+	if goal and not _goals.has(goal):
+		_goals.append(goal)
+
+
+func get_unit():
+	return _unit
+
+
+func get_state(state_name, default = null):
+	if _state.has(state_name):
+		return _state[state_name]
+	return default
+
+
+func set_state(state_name, value):
+	if state_name == "target":
+		_set_target(value)
+		return
+	_state[state_name] = value
+
+
+func _set_target(value) -> void:
+	var target = value if is_instance_valid(value) else null
+	var previous_target = _state.get("target", _unit.target if _unit else null)
+	_state["target"] = target
+	if not _unit:
+		return
+
+	_unit.target = target
+	if previous_target != target:
+		_unit.last_target = previous_target
+	if previous_target != target or target == null:
+		_unit.attack_count = 0
+		Modifiers.remove(_unit, "attack_speed", "agile")
+	_state["has_attack_target"] = target != null
+	_state["hunting"] = target != null and _unit.moves
+
+
+func erase_state(state_name):
+	_state.erase(state_name)
+
+
+func clear_state():
+	_state.clear()
+
+
+func reset():
+	var lane = get_state("lane")
+	var tactic = get_state("tactic", "default")
+	var target_priority = get_state("target_priority")
+	set_state("target", null)
+	clear_state()
+	if lane != null:
+		set_state("lane", lane)
+	set_state("tactic", tactic)
+	if target_priority != null:
+		set_state("target_priority", target_priority.duplicate())
+	clear_plan()
+
+
+func get_current_action():
+	if (
+		_current_plan != null
+		and _current_plan_step >= 0
+		and _current_plan_step < _current_plan.size()
+	):
+		return _current_plan[_current_plan_step]
+	else:
+		return null
+
+
+func has_action_function(func_name):
+	var action = get_current_action()
+	return action != null and action.has_method(func_name)
+
+
+func has_goal_function(func_name):
+	var goal = _get_best_goal()
+	return goal != null and goal.has_method(func_name)
+
+
+func clear_plan():
+	if _current_goal != null or not _current_plan.is_empty():
+		_replace_plan(null, [])
+
+
+func _exit_current_action():
+	var action = get_current_action()
+	if action and action.has_method("exit"):
+		action.exit(self)
+
+
+func _replace_plan(goal, plan: Array) -> void:
+	_exit_current_action()
+	var previous_goal = _current_goal
+	_current_goal = goal
+	_current_plan = plan
+	_current_plan_step = 0
+	if previous_goal != goal:
+		goal_changed.emit(goal)
+	plan_changed.emit(_current_plan)
+	action_changed.emit(get_current_action())
+
+
+func _on_action_changed(action) -> void:
+	if action and action.has_method("enter"):
+		action.enter(self)
+
+
+# On every loop this script checks if the current goal is still
+# the highest priority. if it's not, it requests the action planner a new plan
+# for the new high priority goal.
+func process(delta):
+	var goal = _get_best_goal()
+	if goal != _current_goal:
+		var plan: Array = []
+		if goal:
+			plan = Goap.get_action_planner().get_plan(self, goal)
+		_replace_plan(goal, plan)
+	else:
+		_follow_plan(_current_plan, delta)
+
+
+# Returns the highest priority goal available.
+func _get_best_goal():
+	var highest_priority = null
+	for goal in _goals:
+		if goal.is_valid(self) and (highest_priority == null or goal.priority(self) > highest_priority.priority(self)):
+			highest_priority = goal
+	
+	return highest_priority
+
+
+# Executes plan. This function is called on every game loop.
+# "plan" is the current list of actions, and delta is the time since last loop.
+#
+# Every action exposes a function called perform, which will return true when
+# the job is complete, so the agent can jump to the next action in the list.
+func _follow_plan(plan, delta):
+	if plan == null or plan.is_empty() or _current_plan_step >= plan.size():
+		return
+	var action = plan[_current_plan_step]
+	if action == null:
+		return
+	var is_step_complete = action.perform(self, delta)
+		
+	if is_step_complete:
+		if _current_plan_step < plan.size() - 1:
+			if action.has_method("exit"):
+				action.exit(self)
+			_current_plan_step += 1
+			action_changed.emit(get_current_action())
+		else:
+			_replace_plan(null, [])
+
+
+func on_every_second() :
+	var is_regenerating_unit = _unit.type != "building" or _unit.team == "neutral"
+	if _unit.regen > 0 and is_regenerating_unit:
+		if not _unit.dead:
+			_unit.heal(Modifiers.get_value(_unit, "regen"))
+		else:
+			_unit.regen = 0
+	if has_action_function("on_every_second"):
+		get_current_action().on_every_second(self)
+	if has_goal_function("on_every_second"):
+		_get_best_goal().on_every_second(self)
+	
+	Goap.get_goal("EnemyDefeated").apply_damage_over_time(self)
+
+
+func on_idle_end():
+	if _unit.wait_time > 0:
+		_unit.wait_time -= 1
+	else:
+		_unit.game.test.unit_wait_end(_unit)
+	if has_action_function("on_idle_end"):
+		get_current_action().on_idle_end(self)
+	if has_goal_function("on_idle_end"):
+		_get_best_goal().on_idle_end(self)
+
+
+func on_move_end():
+	if has_action_function("on_move_end"):
+		get_current_action().on_move_end(self)
+	if has_goal_function("on_move_end"):
+		_get_best_goal().on_move_end(self)
+
+
+func on_stun_end():
+	if has_action_function("resume"):
+		get_current_action().resume(_unit)
+	if has_goal_function("resume"):
+		_get_best_goal().resume(_unit)
+
+
+func on_attack_end():
+	if has_action_function("on_attack_end"):
+		get_current_action().on_attack_end(self)
+	if has_goal_function("on_attack_end"):
+		_get_best_goal().on_attack_end(self)
+	if get_state("player_order", {}).get("type", "") == "attack":
+		set_state("player_order_attack_ended", true)
+	if not _unit.attacks or _unit.target:
+		return
+	if not _unit.current_path.is_empty():
+		Goap.navigation.follow_path(_unit, _unit.current_path)
+	elif _unit.current_destiny != Vector2.ZERO:
+		Goap.move.point(_unit, _unit.current_destiny)
+	else:
+		Goap.move.stop(_unit)
+
+
+func on_death_started():
+	cancel_player_order()
+
+
+func cancel_player_order():
+	clear_plan()
+	erase_state("player_order")
+	set_state("player_order_complete", false)
+	set_state("player_order_attack_ended", false)
+	set_state("has_player_command", false)
+
+
+func was_attacked(attacker, damage):
+	self.set_state("being_attacked", attacked_timer)
+	self.set_state("attacker", attacker)
+	if has_action_function("was_attacked"):
+		get_current_action().was_attacked(self, attacker, damage)
+	if has_goal_function("was_attacked"):
+		_get_best_goal().was_attacked(self, attacker, damage)
+
+
+func on_animation_end():
+	var being_attacked = self.get_state("being_attacked")
+	if being_attacked and being_attacked > 0:
+		being_attacked -= 1
+	else: self.set_state("attacker", null)
+	self.set_state("being_attacked", being_attacked)
+	if has_action_function("on_animation_end"):
+		get_current_action().on_animation_end(self)
+	if has_goal_function("on_animation_end"):
+		_get_best_goal().on_animation_end(self)
+
+
+func on_path_arrive():
+	if has_action_function("on_path_arrive"):
+		get_current_action().on_path_arrive(self)
+	if has_goal_function("on_path_arrive"):
+		_get_best_goal().on_path_arrive(self)
+
+
+func on_arrive():
+	if has_action_function("on_arrive"):
+		get_current_action().on_arrive(self)
+	var goal = _get_best_goal()
+	if goal and goal.has_method("on_arrive"):
+		goal.on_arrive(self)
+	else:
+		var arrive_goal = Goap.get_goal("ArriveAtDestination")
+		if arrive_goal:
+			arrive_goal.on_arrive(self)
+
+
+#func clear_orders():
+#	for s in _state:
+#		print(s)
+#		if("order_" in s):
+#			_state.remove(s)
+#
+#
+#func clear_tactics():
+#	for s in _state:
+#		print(s)
+#		if("tactics_" in s):
+#			_state.remove(s)
