@@ -4,21 +4,29 @@ extends Node
 # self = Skills
 
 
-const LEADER_PASSIVES: SkillResource = preload("res://skills/resources/leader_passives.tres")
-var leader: Dictionary = LEADER_PASSIVES.attributes
+var leader: Dictionary = {}
+
+
+func _ready() -> void:
+	# Load leader passives at runtime to avoid compile-time type resolution issues.
+	var passives = load("res://skills/resources/leader_passives.tres")
+	if passives and passives.has("attributes"):
+		leader = passives.attributes
 
 
 func get_value(unit, skill_name):
 	if unit.type == "leader":
-		var leader_skills = leader[unit.display_name]
+		var leader_skills = leader.get(unit.display_name, {})
 		if skill_name in leader_skills:
 			return leader_skills[skill_name]
 	return 0
 
 
 func projectile_release(attacker):
+	if not attacker: return
 	if attacker.display_name in leader:
 		var attacker_skills = leader[attacker.display_name]
+		if not attacker_skills: return
 		
 		if "multishot" in attacker_skills:
 			var enemies = attacker.get_units_in_sight({ "team": attacker.opponent_team() })
@@ -38,7 +46,7 @@ func secondary_projectile(attacker, target):
 
 func hit_modifiers(attacker, target, projectile, modifiers):
 	var damage
-	if modifiers.has("damage"): 
+	if modifiers.has("damage"):
 		damage = modifiers.damage
 	else:
 		damage = Modifiers.get_value(attacker, "damage")
@@ -46,7 +54,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		"damage": damage,
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
-		"counter": true,
+		"counter": modifiers.get("counter", true),
 		"pierce": false
 	}
 	if target and target.display_name in leader:
