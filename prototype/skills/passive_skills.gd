@@ -3,24 +3,30 @@ extends Node
 
 # self = Skills
 
-const SkillResource = preload("res://skills/skill_resource.gd")
+
+var leader: Dictionary = {}
 
 
-var LEADER_PASSIVES := preload("res://skills/resources/leader_passives.tres")
-var leader: Dictionary = LEADER_PASSIVES.attributes
+func _ready() -> void:
+	# Load leader passives at runtime to avoid compile-time type resolution issues.
+	var passives = load("res://skills/resources/leader_passives.tres")
+	if passives and passives.has("attributes"):
+		leader = passives.attributes
 
 
 func get_value(unit, skill_name):
 	if unit.type == "leader":
-		var leader_skills = leader[unit.display_name]
+		var leader_skills = leader.get(unit.display_name, {})
 		if skill_name in leader_skills:
 			return leader_skills[skill_name]
 	return 0
 
 
 func projectile_release(attacker):
+	if not attacker: return
 	if attacker.display_name in leader:
 		var attacker_skills = leader[attacker.display_name]
+		if not attacker_skills: return
 		
 		if "multishot" in attacker_skills:
 			var enemies = attacker.get_units_in_sight({ "team": attacker.opponent_team() })
@@ -48,11 +54,12 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		"damage": damage,
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
-		"counter": true,
+		"counter": modifiers.get("counter", true),
 		"pierce": false
 	}
 	if target and target.display_name in leader:
-		var target_skills = leader[target.display_name]
+		var target_skills = leader.get(target.display_name, {})
+		if not target_skills: return
 		
 		if "dodge" in target_skills:
 			modifiers.dodge = (randf() <  target_skills.dodge)
@@ -63,7 +70,8 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 				Goap.get_goal("EnemyDefeated").take_hit(target, attacker, projectile, modifiers)
 			
 	if attacker.display_name in leader:
-		var attacker_skills = leader[attacker.display_name]
+		var attacker_skills = leader.get(attacker.display_name, {})
+		if not attacker_skills: return
 		if not modifiers.counter:
 			if "stun" in attacker_skills and target.type != "building":
 				if randf() < attacker_skills.stun: 
