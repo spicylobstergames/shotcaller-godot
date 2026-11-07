@@ -270,10 +270,6 @@ func lumberjack_hire(lumbermill, team):
 # CAMP
 
 func camp_hire(unit, team):
-	if team == WorldState.get_state("player_team"):
-		WorldState.set_state("player_extra_unit", unit)
-	else: WorldState.set_state("enemy_extra_unit", unit)
-	
 	var cost
 	match unit:
 		"infantry": cost = 1
@@ -282,4 +278,15 @@ func camp_hire(unit, team):
 	
 	var team_leaders = WorldState.get_state("player_leaders")
 	if team == WorldState.get_state("enemy_team"): team_leaders = WorldState.get_state("enemy_leaders")
+	
+	# Check if team has enough gold before setting extra_unit
+	var total_gold: int = 0
+	for leader in team_leaders:
+		total_gold += leader.get("gold", 0)
+	if total_gold < cost: return  # insufficient gold, don't set extra_unit
+	
+	if team == WorldState.get_state("player_team"):
+		WorldState.set_state("player_extra_unit", unit)
+	else: WorldState.set_state("enemy_extra_unit", unit)
+	
 	for leader in team_leaders: leader.gold -= cost

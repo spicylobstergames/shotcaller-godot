@@ -34,6 +34,7 @@ class TestUnit:
 	var moves := true
 	var team := "blue"
 	var current_path: Array = [Vector2(0, 0), Vector2(1, 0), Vector2(2, 0)]
+	var agent: TestAgent
 
 
 # Stub agent that mimics just the state-storage and unit-accessors.
@@ -41,9 +42,16 @@ class TestAgent:
 	extends RefCounted
 	var _unit: TestUnit
 	var state := {}
+	var _current_goal: Variant
+	var _current_plan: Array = []
+	var _current_plan_step: int = 0
+	var plan_changed: Signal
+	var goal_changed: Signal
+	var action_changed: Signal
 
 	func _init(unit: TestUnit):
 		_unit = unit
+		unit.agent = self
 
 	func get_unit() -> TestUnit:
 		return _unit
@@ -54,7 +62,7 @@ class TestAgent:
 	func set_state(state_name: String, value) -> void:
 		state[state_name] = value
 
-	func _replace_plan(goal, plan: Array) -> void:
+	func _replace_plan(goal: Variant, plan: Array) -> void:
 		_exit_current_action()
 		var previous_goal = _current_goal
 		_current_goal = goal
@@ -154,12 +162,15 @@ class TestPlanAction:
 	var entered := false
 	var performed := false
 	var exited := false
+	var custom_perform: Callable = Callable()
 
 	func enter(_agent) -> void:
 		entered = true
 
 	func perform(_agent, _delta: float) -> bool:
 		performed = true
+		if custom_perform.is_valid():
+			return custom_perform.call(_agent, _delta)
 		return true
 
 	func exit(_agent) -> void:
@@ -177,6 +188,51 @@ class TestPlanGoal:
 
 	func get_desired_state(_agent) -> Dictionary:
 		return {"plan_completed": true}
+
+
+# Action that runs for N ticks before completing
+class MultiTickAction:
+	extends RefCounted
+	var enter_count := 0
+	var perform_count := 0
+	var exit_count := 0
+
+	func enter(_agent) -> void:
+		enter_count += 1
+
+	func perform(_agent, _delta: float) -> bool:
+		perform_count += 1
+		if perform_count < 3:
+			return false
+		return true
+
+	func exit(_agent) -> void:
+		exit_count += 1
+
+
+# Action that can be invalidated mid-execution
+class RetreatingAction:
+	extends RefCounted
+	var _is_valid := true
+	var enter_count := 0
+	var perform_count := 0
+	var exit_count := 0
+
+	func is_valid(_agent) -> bool:
+		return _is_valid
+
+	func enter(_agent) -> void:
+		enter_count += 1
+
+	func perform(_agent, _delta: float) -> bool:
+		perform_count += 1
+		return true
+
+	func exit(_agent) -> void:
+		exit_count += 1
+
+	func invalidate() -> void:
+		_is_valid = false
 
 
 func _test_plan_following(harness) -> void:
@@ -212,7 +268,7 @@ func _test_multi_step_plan(harness) -> void:
 	# Make first action take multiple ticks (returns false first tick, true second).
 	var first_ticks = 0
 	first.performed = false  # reset so we can track via first_ticks
-	first.perform = func(_agent, _delta: float) -> bool:
+	first.custom_perform = func(_agent, _delta: float) -> bool:
 		first_ticks += 1
 		if first_ticks < 2:
 			return false  # first tick: still running
@@ -302,24 +358,6 @@ func _test_exit_on_plan_switch(harness) -> void:
 # --- action returning false for N ticks then completing ---
 
 func _test_multi_tick_completion(harness) -> void:
-	class MultiTickAction:
-		extends RefCounted
-		var enter_count := 0
-		var perform_count := 0
-		var exit_count := 0
-
-		func enter(_agent) -> void:
-			enter_count += 1
-
-		func perform(_agent, _delta: float) -> bool:
-			perform_count += 1
-			if perform_count < 3:
-				return false  # Runs for 3 ticks
-			return true
-
-		func exit(_agent) -> void:
-			exit_count += 1
-
 	var action = MultiTickAction.new()
 
 	var agent = TestAgent.new(TestUnit.new())
@@ -354,29 +392,6 @@ func _test_multi_tick_completion(harness) -> void:
 # that becomes invalid (e.g., unit loses moves) still runs to completion.
 
 func _test_invalid_action_mid_execution(harness) -> void:
-	class RetreatingAction:
-		extends RefCounted
-		var _is_valid := true
-		var enter_count := 0
-		var perform_count := 0
-		var exit_count := 0
-
-		func is_valid(_agent) -> bool:
-			return _is_valid
-
-		func enter(_agent) -> void:
-			enter_count += 1
-
-		func perform(_agent, _delta: float) -> bool:
-			perform_count += 1
-			return true
-
-		func exit(_agent) -> void:
-			exit_count += 1
-
-		func invalidate(self) -> void:
-			_is_valid = false
-
 	var action = RetreatingAction.new()
 	var unit = TestUnit.new()
 	unit.moves = false  # Start invalid

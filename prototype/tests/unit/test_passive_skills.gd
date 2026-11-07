@@ -1,27 +1,23 @@
-extends Node
+extends RefCounted
 
 const PassiveSkillsScript = preload("res://skills/passive_skills.gd")
 
 
+class TestUnit:
+	extends RefCounted
+	var type := "leader"
+	var display_name := ""
+
+
 func run(harness) -> void:
-	# Create a PassiveSkills instance inside a scene tree so _ready() fires.
-	var container = Node.new()
+	# Create a PassiveSkills instance and call _ready() manually
+	# since we don't have a scene tree in headless tests.
 	var passive_skills = PassiveSkillsScript.new()
-	container.add_child(passive_skills)
-
-	# _ready() on passive_skills loads the preload once; adding to tree
-	# ensures any deferred initialization also runs.
-	await container.get_tree().process_frame
-
-	# ---- helper: build a minimal mock unit with `type` and `display_name` ----
-	func make_unit(display_name: String) -> RefCounted:
-		var u = RefCounted.new()
-		u.type = "leader"
-		u.display_name = display_name
-		return u
+	passive_skills._ready()
 
 	# Raja has "dodge": 0.2 — assert the actual expected value, not just >= 0.
-	var raja = make_unit("raja")
+	var raja = TestUnit.new()
+	raja.display_name = "raja"
 	harness.check_equal(
 		passive_skills.get_value(raja, "dodge"),
 		0.2,
@@ -29,7 +25,8 @@ func run(harness) -> void:
 	)
 
 	# Arthur has "stun": 0.25 — another known-good assertion.
-	var arthur = make_unit("arthur")
+	var arthur = TestUnit.new()
+	arthur.display_name = "arthur"
 	harness.check_equal(
 		passive_skills.get_value(arthur, "stun"),
 		0.25,
@@ -37,11 +34,10 @@ func run(harness) -> void:
 	)
 
 	# Unknown leader should return 0 for any skill.
-	var unknown = make_unit("nobody")
+	var unknown = TestUnit.new()
+	unknown.display_name = "nobody"
 	harness.check_equal(
 		passive_skills.get_value(unknown, "dodge"),
 		0,
 		"Unknown leader returns 0 for dodge."
 	)
-
-	container.free()

@@ -14,7 +14,7 @@ class TestUnit:
 
 
 class TestUnitNoModifiers:
-	"""Unit missing both `level` and `current_modifiers` — edge-case for PR fixes."""
+# Unit missing both level and current_modifiers — edge-case for PR fixes.
 	extends RefCounted
 	var speed := 8.0
 

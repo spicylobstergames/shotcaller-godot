@@ -19,10 +19,10 @@ class MockGoal extends GoalContract:
 
 	func is_valid(_agent: Variant) -> bool:
 		valid_calls += 1
-		if not valid:
-			return false
 		if not on_valid.is_null():
 			on_valid.call()
+		if not valid:
+			return false
 		return true
 
 	func priority(_agent: Variant) -> int:
@@ -47,7 +47,9 @@ func run(harness: Node) -> void:
 	# Production uses > (strict), so the *first* inserted goal wins ties.
 	var m1 := MockGoal.new(true, 5)
 	var m2 := MockGoal.new(true, 5)
-	var agent, recorder = _setup([m1, m2])
+	var setup_result = _setup([m1, m2])
+	var agent = setup_result[0]
+	var recorder = setup_result[1]
 	var best = agent._get_best_goal()
 	harness.check(best == m1, "Equal-priority: first inserted goal wins (strict > in _get_best_goal).")
 	harness.check(m1.valid_calls >= 1, "Equal-priority: first goal's is_valid() was called.")
@@ -56,7 +58,9 @@ func run(harness: Node) -> void:
 
 	# ---- 2. no valid goals ----
 	var invalid_goal := MockGoal.new(false, 10)
-	var agent2, recorder2 = _setup([invalid_goal])
+	var setup_result2 = _setup([invalid_goal])
+	var agent2 = setup_result2[0]
+	var recorder2 = setup_result2[1]
 	best = agent2._get_best_goal()
 	harness.check(best == null, "No valid goals: _get_best_goal() returns null.")
 	agent2.free()
@@ -71,7 +75,9 @@ func run(harness: Node) -> void:
 	inv.on_valid = side_effect
 
 	var valid := MockGoal.new(false, 3)  # initially invalid
-	var agent3, recorder3 = _setup([inv, valid])
+	var setup_result3 = _setup([inv, valid])
+	var agent3 = setup_result3[0]
+	var recorder3 = setup_result3[1]
 	best = agent3._get_best_goal()
 
 	harness.check(flag.second_valid, "is_valid() side effect fired during iteration.")
@@ -85,7 +91,9 @@ func run(harness: Node) -> void:
 	# ---- 4. priority changes while valid ----
 	var prio_a := MockGoal.new(true, 5)
 	var prio_b := MockGoal.new(true, 3)
-	var agent4, recorder4 = _setup([prio_a, prio_b])
+	var setup_result4 = _setup([prio_a, prio_b])
+	var agent4 = setup_result4[0]
+	var recorder4 = setup_result4[1]
 
 	best = agent4._get_best_goal()
 	harness.check(best == prio_a, "Priority change: higher-priority goal (A=5) is selected first.")
