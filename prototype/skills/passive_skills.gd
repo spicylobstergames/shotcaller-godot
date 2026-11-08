@@ -8,18 +8,11 @@ var leader: Dictionary = {}
 
 
 func _ready() -> void:
-<<<<<<< HEAD
-	# Load leader passives at runtime to avoid compile-time type resolution issues.
-	var passives = load("res://skills/resources/leader_passives.tres")
-	if passives and passives.has("attributes"):
-		leader = passives.attributes
-=======
 	var passives = load("res://skills/resources/leader_passives.tres")
 	if passives:
 		var attrs = passives.get("attributes")
 		if attrs is Dictionary:
 			leader = attrs
->>>>>>> main
 
 
 func get_value(unit, skill_name):

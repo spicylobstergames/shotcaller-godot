@@ -35,45 +35,19 @@ func new_modifiers():
 
 
 func get_value(unit, mod_str):
-<<<<<<< HEAD
-	if not unit: return 0
-=======
 	if not _is_known_modifier(mod_str):
 		push_warning("Modifiers.get_value: unknown modifier name \"%s\". Known: %s" % [mod_str, KNOWN_MODIFIERS])
 
 	var unit_level_val = unit.get("level")
 	var unit_mods_val = unit.get("current_modifiers")
 
->>>>>>> main
 	var default: float = 0.0
 
-	# Access the base value based on the modifier type.
 	match mod_str:
 		"speed": default = get_velocity(unit)
 		"regen": default = get_regen(unit)
 		"attack_range": default = get_att_range(unit)
 		_:
-<<<<<<< HEAD
-			# For other types, read from the unit directly.
-			match mod_str:
-				"hp": default = float(unit.hp)
-				"vision": default = float(unit.vision)
-				"damage": default = float(unit.damage)
-				"defense": default = float(unit.defense)
-				"attack_speed": default = float(unit.attack_speed)
-				_: default = 0.0
-
-	# Sum modifier stack.
-	if unit.current_modifiers.has(mod_str):
-		for modifier in unit.current_modifiers[mod_str]:
-			if modifier and modifier.has("value"):
-				default += float(modifier.value)
-
-	# Add level bonus.
-	var level_bonus = 0
-	if unit.level > 0:
-		level_bonus = unit.level - 1
-=======
 			var val = unit.get(mod_str)
 			if val != null:
 				default = float(val)
@@ -81,7 +55,6 @@ func get_value(unit, mod_str):
 	var level_bonus = 0
 	if unit_level_val != null:
 		level_bonus = int(unit_level_val) - 1
->>>>>>> main
 	match mod_str:
 		"hp": level_bonus *= hp_per_level
 		"regen": level_bonus *= regen_per_level
@@ -109,34 +82,6 @@ func get_dot(unit):
 
 func get_velocity(unit):
 	if not unit: return 0
-<<<<<<< HEAD
-	var default: float = 10.0  # Safe default
-
-	# Read speed - try property access, fall back to 10.
-	if "speed" in unit:
-		default = float(unit.speed)
-
-	if unit.agent:
-		var hunting: bool = false
-		var retreating: bool = false
-		if unit.agent.has_method("get_state"):
-			hunting = unit.agent.get_state("hunting", false) == true
-			retreating = unit.agent.get_state("is_retreating", false) == true
-		if hunting and unit.target and unit.target.agent:
-			if unit.target.agent.get_state("is_retreating", false) != true:
-				if "hunting_speed" in unit:
-					default = float(unit.hunting_speed)
-		if retreating:
-			var bonus = Skills.get_value(unit, "bonus_retreat_speed")
-			if bonus == null: bonus = 0
-			default += extra_retreat_speed + bonus
-
-	var tactic = "default"
-	if unit.agent and unit.agent.has_method("get_state"):
-		tactic = unit.agent.get_state("tactic", "default")
-	default += TACTICS_EXTRA_SPEED.get(tactic, 0)
-
-=======
 	var default: float = 0.0
 	var speed_val = unit.get("speed")
 	if speed_val != null:
@@ -170,18 +115,11 @@ func get_velocity(unit):
 			tactic = t
 	default += TACTICS_EXTRA_SPEED.get(tactic, 0)
 
->>>>>>> main
 	return default
 
 
 func get_regen(unit):
 	var default: float = 0.0
-<<<<<<< HEAD
-	if unit and "regen" in unit:
-		default = float(unit.regen)
-	if unit and unit.agent and unit.agent.get_state("is_retreating", false) == true:
-		default += retreat_regen
-=======
 	if unit:
 		var r = unit.get("regen")
 		if r != null:
@@ -192,7 +130,6 @@ func get_regen(unit):
 			var ret = agent.get_state("is_retreating")
 			if ret == true:
 				default += retreat_regen
->>>>>>> main
 	return default
 
 
