@@ -55,7 +55,7 @@ func _get_modifiers() -> Node:
 
 func hit_modifiers(attacker, target, projectile, modifiers):
 	var damage
-	if modifiers.has("damage"): 
+	if modifiers.has("damage"):
 		damage = modifiers.damage
 	else:
 		damage = _get_modifiers().get_value(attacker, "damage")
