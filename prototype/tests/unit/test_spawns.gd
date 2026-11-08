@@ -180,3 +180,50 @@ func _test_lane_tactic_fallback_when_no_building_exists(harness: Node) -> void:
 
 	spawns.free()
 	WorldState.set_state("all_buildings", old_all_buildings)
+
+
+# ---------------------------------------------------------------------------
+# 5. camp_hire gold deduction bug: collective check vs per-leader deduction
+# ---------------------------------------------------------------------------
+# The affordability check sums gold across ALL leaders (collective):
+#   if total_gold < cost: return
+# But the deduction charges the FULL cost to EACH leader (individual):
+#   for leader in team_leaders: leader.gold -= cost
+#
+# Example: 2 leaders with 2 gold each = 4 total. Mounted costs 3.
+#   Check: 4 >= 3 → passes
+#   Deduction: leader0.gold = 2-3 = -1, leader1.gold = 2-3 = -1
+# This is a bug — the check and deduction don't agree on payment semantics.
+# This test documents the current behavior so it can be fixed later.
+
+func _test_camp_hire_gold_deduction_semantics(harness: Node) -> void:
+	var old_player_team = WorldState.get_state("player_team")
+	var old_player_leaders = WorldState.get_state("player_leaders")
+	WorldState.set_state("player_team", "blue")
+	WorldState.set_state("enemy_team", "red")
+
+	var leader0 = MockLeader.new()
+	leader0.gold = 2
+	var leader1 = MockLeader.new()
+	leader1.gold = 2
+	WorldState.set_state("player_leaders", [leader0, leader1])
+
+	var spawns = Spawns.new()
+	harness.add_child(spawns)
+
+	# Total gold = 4, mounted cost = 3. Collective check passes.
+	spawns.camp_hire("mounted", "blue")
+
+	# Current behavior: each leader pays the full cost (3)
+	# This results in negative gold — the check/deduction mismatch bug.
+	# Once fixed, these assertions should change.
+	harness.check_equal(leader0.gold, -1,
+		"Bug documented: leader 0 gold is -1 (2 - 3) due to collective check / per-leader deduction mismatch.")
+	harness.check_equal(leader1.gold, -1,
+		"Bug documented: leader 1 gold is -1 (2 - 3) due to collective check / per-leader deduction mismatch.")
+
+	leader0.free()
+	leader1.free()
+	spawns.free()
+	WorldState.set_state("player_team", old_player_team)
+	WorldState.set_state("player_leaders", old_player_leaders)

@@ -37,7 +37,9 @@ class TestUnit:
 	var agent: TestAgent
 
 
-# Stub agent that mimics just the state-storage and unit-accessors.
+# Stub agent that mimics the production Agent's plan lifecycle methods.
+# Only the plan-following methods are duplicated here; action interface testing
+# is done separately with MockRetreatAction (no Agent dependency).
 class TestAgent:
 	extends RefCounted
 	var _unit: TestUnit
@@ -48,10 +50,12 @@ class TestAgent:
 	var plan_changed: Signal
 	var goal_changed: Signal
 	var action_changed: Signal
+	var _current_action_entered: bool = false
 
 	func _init(unit: TestUnit):
 		_unit = unit
 		unit.agent = self
+		action_changed.connect(_on_action_changed)
 
 	func get_unit() -> TestUnit:
 		return _unit
@@ -62,12 +66,18 @@ class TestAgent:
 	func set_state(state_name: String, value) -> void:
 		state[state_name] = value
 
+	func _on_action_changed(action):
+		if action and action.has_method("enter"):
+			action.enter(self)
+			_current_action_entered = true
+
 	func _replace_plan(goal: Variant, plan: Array) -> void:
 		_exit_current_action()
 		var previous_goal = _current_goal
 		_current_goal = goal
 		_current_plan = plan
 		_current_plan_step = 0
+		_current_action_entered = false
 		if previous_goal != goal:
 			goal_changed.emit(goal)
 		plan_changed.emit(_current_plan)
@@ -78,12 +88,27 @@ class TestAgent:
 		if action and action.has_method("exit"):
 			action.exit(self)
 
+	func _follow_plan(plan: Array, _delta: float):
+		if plan == null or plan.is_empty() or _current_plan_step >= plan.size():
+			return
+		var action = plan[_current_plan_step]
+		if action == null:
+			return
+		var is_step_complete = action.perform(self, _delta)
+		if is_step_complete:
+			if _current_plan_step < plan.size() - 1:
+				if action.has_method("exit"):
+					action.exit(self)
+				_current_plan_step += 1
+				action_changed.emit(get_current_action())
+			else:
+				_exit_current_action()
+				_current_goal = null
+				_current_plan = []
+				_current_plan_step = 0
+
 	func get_current_action():
-		if (
-			_current_plan != null
-			and _current_plan_step >= 0
-			and _current_plan_step < _current_plan.size()
-		):
+		if _current_plan != null and _current_plan_step >= 0 and _current_plan_step < _current_plan.size():
 			return _current_plan[_current_plan_step]
 		else:
 			return null
