@@ -1,0 +1,11 @@
+config_version=5
+
+[application]
+config/name="MinimalTest"
+run/main_scene="res://tests/test_runner.tscn"
+config/features=PackedStringArray("4.0")
+
+[debug]
+gdscript/warnings/return_value_discarded=false
+gdscript/warnings/integer_division=false
+gdscript/warnings/unused_argument=false
