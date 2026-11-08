@@ -136,9 +136,10 @@ func _ready():
 	weapon = get_node_or_null("sprites/weapon")
 	projectile = get_node_or_null("sprites/weapon/projectile")
 	animations = get_node_or_null("animations") as AnimationPlayer
+	
 	if agent and hud:
-		#agent.goal_changed.connect(hud.update_state)
-		agent.action_changed.connect(hud.update_state)
+		agent.state_changed.connect(hud.update_state)
+
 
 func setup_leader_exp():
 		experience_timer.wait_time = 5

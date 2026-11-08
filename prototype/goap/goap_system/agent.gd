@@ -5,6 +5,7 @@ extends Node
 signal plan_changed(plan)
 signal goal_changed(goal)
 signal action_changed(action)
+signal state_changed(goal, action)
 
 @export var goals_list: Array = []
 
@@ -137,8 +138,13 @@ func _replace_plan(goal, plan: Array) -> void:
 	_current_plan_step = 0
 	if previous_goal != goal:
 		goal_changed.emit(goal)
+	var action = get_current_action()
 	plan_changed.emit(_current_plan)
-	action_changed.emit(get_current_action())
+	action_changed.emit(action)
+	if (goal and action):
+		state_changed.emit(goal.get_class_name() + " " + action.get_class_name())
+
+
 
 
 func _on_action_changed(action) -> void:

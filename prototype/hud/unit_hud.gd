@@ -13,11 +13,7 @@ extends Node2D
 
 
 func update_state(text) -> void:
-	if (text):
-		if state is String:
-			state.text = text
-		else:
-			state.text = text.get_class_name()
+	state.text = text
 
 
 func update_hpbar():

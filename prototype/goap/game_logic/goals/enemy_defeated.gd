@@ -7,10 +7,8 @@ func get_class_name() -> String:
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	if (agent.get_state("ready_to_fight", true)):
-		var target = unit.target
-		if target: return true
-	return false
+	var ready_to_fight = agent.get_state("ready_to_fight", true)
+	return ready_to_fight
 
 
 func priority(_agent) -> int:
