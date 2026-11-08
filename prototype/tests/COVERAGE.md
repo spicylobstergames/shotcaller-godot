@@ -2,14 +2,14 @@
 
 ## Current state
 
-**19 test classes**, **135 individual assertions**, all passing. Running headless via `res://tests/test_runner.tscn`.
+**19 test classes**, **127 individual assertions**, all passing. Running headless via `res://tests/test_runner.tscn`.
 **96 GDScript files** in the project, 330+ public methods not directly tested.
 
 ## Test suite results
 
 ```
 godot --headless --path prototype res://tests/test_runner.tscn
-→ All 135 tests passed.
+→ All 127 tests passed.
 ```
 
 ### New test classes (7, added in this session):
