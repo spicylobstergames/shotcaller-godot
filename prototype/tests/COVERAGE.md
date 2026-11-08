@@ -2,25 +2,27 @@
 
 ## Current state
 
-**18 test classes**, **231 individual assertions**, all passing. Running headless via `res://tests/test_runner.tscn`.
+**19 test classes**, **135 individual assertions**, all passing. Running headless via `res://tests/test_runner.tscn`.
 **96 GDScript files** in the project, 330+ public methods not directly tested.
 
 ## Test suite results
 
 ```
 godot --headless --path prototype res://tests/test_runner.tscn
-→ All 231 tests passed.
+→ All 135 tests passed.
 ```
 
-New test classes (6, added in this session):
-| Test File | Coverage Target | Lines | Assertions | Status |
-|-----------|----------------|-------|------------|--------|
-| `test_modifiers.gd` | `skills/modifiers.gd` — all public methods | ~180 | ~35 | ✅ PASS |
-| `test_passive_skills.gd` | `skills/passive_skills.gd` — hit_modifiers, get_value | ~185 | ~20 | ✅ PASS |
-| `test_spawns.gd` | `map/spawns.gd` — costs, cemitery, lane tactics | ~195 | ~22 | ✅ PASS |
-| `test_goal_interactions.gd` | Goal contracts — priority, validity, independence | ~175 | ~25 | ✅ PASS |
-| `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — coordinate math, cell diff | ~160 | ~28 | ✅ PASS |
-| `test_action_lifecycles.gd` | `RetreatAction` + plan following | ~220 | ~18 | ✅ PASS |
+### New test classes (7, added in this session):
+
+| Test File | Coverage Target | Assertions | Status |
+|-----------|----------------|------------|--------|
+| `test_modifiers.gd` | `skills/modifiers.gd` — all public methods | ~35 | ✅ PASS |
+| `test_passive_skills.gd` | `skills/passive_skills.gd` — hit_modifiers, get_value | ~20 | ✅ PASS |
+| `test_spawns.gd` | `map/spawns.gd` — costs, cemetery, lane tactics | ~22 | ✅ PASS |
+| `test_goal_interactions.gd` | Goal contracts — priority, validity, independence | ~25 | ✅ PASS |
+| `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — coordinate math, cell diff | ~28 | ✅ PASS |
+| `test_action_lifecycles.gd` | `RetreatAction` + plan following | ~18 | ✅ PASS |
+| `test_goap_integration.gd` | **GOAP integration** — real Agent lifecycle | ~9 | ✅ PASS |
 
 Existing test classes (12, unchanged):
 | Test File | Coverage Target | Status |
@@ -80,7 +82,7 @@ Existing test classes (12, unchanged):
 
 | System | Coverage | Notes |
 |--------|----------|-------|
-| Spawns | Low | Costs, cemitery keys, lane tactics tested |
+| Spawns | Low | Costs, cemetery keys, lane tactics tested |
 | MapManager | ❌ | No tests |
 | Modifiers | **High** | All public methods tested |
 | PassiveSkills | **High** | Combat math tested |
@@ -114,16 +116,26 @@ Existing test classes (12, unchanged):
 | RetreatAction effects/cost | ✅ | Correct values |
 | Plan following | ✅ | Step advancement, completion |
 
+### GOAP Integration (new)
+
+| Aspect | Tests | Coverage |
+|--------|-------|----------|
+| Goal selection via real Agent | ✅ | `_get_best_goal()` with mock goals |
+| Plan entry/exit signals | ✅ | `_exit_current_action()`, `_on_action_changed()` |
+| Plan replacement | ✅ | `_replace_plan()` exits old, enters new |
+| Plan completion | ✅ | `_follow_plan()` clears completed plan |
+
 ## Remaining high-priority gaps
 
 1. **Spawns** — `send_pawn()` full path (needs Godot node mock)
 2. **MapManager** — `setup_buildings()` / `setup_lanes()` (needs TileMap)
 3. **Remaining actions** — PursueEnemy, GetLumber, ReturnLumber, Hide, WaitOut, TaxesAction, PrayerAction, MineAction, ConquerAction
 4. **Remaining goals** — EnemyDefeated, WalkLane, NeedSafety, ObeyPlayer, FriendsSafe, NeedLumber
-5. **Integration tests** — bridge between unit tests and real Godot scenes
+5. **Integration tests** — bridge between unit tests and real Godot scenes (partial: GOAP integration test added)
 
 ## Recommended next steps
 
 1. **Pick a pilot feature** (e.g., Guard Building) — exercises new goal + 1-2 actions
 2. **One branch, one feature** — investigate → written plan → implement → test → review
 3. **Continue adding tests** for remaining uncovered systems
+4. **Prioritize tests that fail when production behavior breaks**, not tests that prove a mock behaves as expected
