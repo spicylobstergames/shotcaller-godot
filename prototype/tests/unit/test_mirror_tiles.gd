@@ -1,6 +1,5 @@
 extends RefCounted
 
-<<<<<<< HEAD
 # ---------------------------------------------------------------------------
 # Helper: compute mirrored local-pixel coords using the same formula as
 # MirrorTiles._get_mirrored_coords (line 90-93 of mirror_tiles.gd).
