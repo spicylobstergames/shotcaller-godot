@@ -46,7 +46,7 @@ func perform(_agent, _delta) -> bool:
 func select_target(unit, enemies):
 	var filtered = []
 	for enemy in enemies:
-		if can_hit(unit, enemy):
+		if can_hit(unit, enemy) and (unit.moves or in_range(unit, enemy)):
 			filtered.append(enemy)
 	if filtered.is_empty():
 		return null
@@ -95,6 +95,8 @@ func set_target(agent, value) -> void:
 		unit.attack_count = 0
 		Modifiers.remove(unit, "attack_speed", "agile")
 		unit.target = target
+	if target:
+		agent.set_state("enemy_dead", false)
 		
 	agent.set_state("has_attack_target", target != null)
 	agent.set_state("hunting", target != null)

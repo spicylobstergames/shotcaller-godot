@@ -7,7 +7,7 @@ func get_class_name():
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	return unit.attacks and Goap.get_action("ChooseTarget").can_hit(unit, unit.target)
+	return unit.attacks
 
 
 func get_cost(_agent) -> int:
@@ -23,11 +23,24 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	var target = agent.get_unit().target
-	if not is_instance_valid(target) or target.dead:
-		agent.set_state("enemy_dead", true)
+	var unit = agent.get_unit()
+	var target = unit.target
+	var choose_target = Goap.get_action("ChooseTarget")
+	if not is_instance_valid(target):
+		agent.set_state("target", null)
+		agent.set_state("enemy_in_attack_range", false)
+		agent.set_state("enemy_dead", false)
 		return true
-	var target_in_range = Goap.get_action("ChooseTarget").in_range(agent.get_unit(), target)
+	if target.dead:
+		agent.set_state("enemy_dead", true)
+		agent.set_state("target", null)
+		return true
+	if not choose_target.can_hit(unit, target):
+		agent.set_state("target", null)
+		agent.set_state("enemy_in_attack_range", false)
+		agent.set_state("enemy_dead", false)
+		return true
+	var target_in_range = choose_target.in_range(unit, target)
 	agent.set_state("enemy_in_attack_range", target_in_range)
 	return not target_in_range
 
@@ -35,8 +48,19 @@ func perform(agent, _delta) -> bool:
 func enter(agent):
 	var unit = agent.get_unit()
 	var target = unit.target
-	if not is_instance_valid(target) or target.dead:
+	if not is_instance_valid(target):
+		agent.set_state("target", null)
+		agent.set_state("enemy_in_attack_range", false)
+		agent.set_state("enemy_dead", false)
+		return
+	if target.dead:
 		agent.set_state("enemy_dead", true)
+		agent.set_state("target", null)
+		return
+	if not Goap.get_action("ChooseTarget").can_hit(unit, target):
+		agent.set_state("target", null)
+		agent.set_state("enemy_in_attack_range", false)
+		agent.set_state("enemy_dead", false)
 		return
 	if Goap.get_action("ChooseTarget").is_valid_target(unit, target):
 		point(unit, target.global_position + target.collision_position)
@@ -78,7 +102,7 @@ func point(unit, target_point: Vector2) -> void:
 			var neighbors = Collisions.get_units_in_radius(target_point, 1)
 			if neighbors:
 				var choose_target = Goap.get_action("ChooseTarget")
-				var target = choose_target.closest_enemy_unit(unit, neighbors)
+				var target = choose_target.select_target(unit, neighbors)
 				if choose_target.is_valid_target(unit, target):
 					unit.agent.set_state("target", target)
 

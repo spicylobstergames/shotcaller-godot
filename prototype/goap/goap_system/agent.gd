@@ -88,6 +88,7 @@ func reset():
 	var unit = get_unit()
 	clear_state()
 	set_state("target", null)
+	set_state("is_stunned", false)
 	if lane != null:
 		set_state("lane", lane)
 	set_state("tactic", tactic)

@@ -16,8 +16,7 @@ func get_cost(_agent) -> int:
 func get_effects() -> Dictionary:
 	return {
 		"arrived_at_destination": true, 
-		"lane_route_finished": true,
-		"enemy_in_attack_range": true
+		"lane_route_finished": true
 	}
 
 
