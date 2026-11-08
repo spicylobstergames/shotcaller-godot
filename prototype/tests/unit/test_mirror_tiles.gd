@@ -292,8 +292,8 @@ func _test_cell_diff_removal() -> bool:
 				"coords": old_snap[cell_key].coords,
 				"present": false,
 			}
-	var key = "0:%d:%d" % [coords.x, coords.y]
-	return key in changed and changed[key].present == false
+	var diff_key = "0:%d:%d" % [coords.x, coords.y]
+	return diff_key in changed and changed[diff_key].present == false
 
 
 # ---------------------------------------------------------------------------

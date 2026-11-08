@@ -16,7 +16,7 @@ const ModifiersTests = preload("res://tests/unit/test_modifiers.gd")
 var PassiveSkillsTests = load("res://tests/unit/test_passive_skills.gd")
 const SpawnsTests = preload("res://tests/unit/test_spawns.gd")
 var GoalInteractionsTests = load("res://tests/unit/test_goal_interactions.gd")
-const MirrorTilesTests = preload("res://tests/unit/test_mirror_tiles.gd")
+var MirrorTilesTests = load("res://tests/unit/test_mirror_tiles.gd")
 var ActionLifecyclesTests = load("res://tests/unit/test_action_lifecycles.gd")
 
 var tests_run := 0
