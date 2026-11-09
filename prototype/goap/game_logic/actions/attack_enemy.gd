@@ -19,7 +19,10 @@ func get_preconditions() -> Dictionary:
 
 
 func get_effects() -> Dictionary:
-	return {"enemy_dead": true}
+	return {
+		"enemy_dead": true,
+		"friends_safe": true
+		}
 
 
 func perform(agent, _delta) -> bool:
@@ -72,7 +75,10 @@ func enter(agent):
 func on_animation_end(agent):
 	var unit = agent.get_unit()
 	var target = unit.target
-
+	
+	if target and target.dead:
+		agent.set_state("enemy_dead", false)
+	
 	var choose_target = agent.get_action("ChooseTarget")
 	if is_instance_valid(target) and choose_target.can_hit(unit, target):
 		if choose_target.in_range(unit, target):

@@ -8,11 +8,11 @@ func get_class_name() -> String:
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var lane = agent.get_state("lane", "")
-	var is_current_goal = agent.get_current_goal() == self
 	if (
 		unit.target
 		or not unit.moves
 		or unit.dead
+		or lane == ""
 		or lane not in WorldState.get_state("lanes")
 		or agent.get_state("has_player_command", false)
 		or agent.get_state("is_retreating", false)
@@ -21,12 +21,12 @@ func is_valid(agent) -> bool:
 		or agent.get_state("lane_route_finished", false)):
 		return false
 
-	return (
-		is_current_goal
-		or unit.current_path.is_empty()
-		or unit.current_destiny == Vector2.ZERO
-	)
+	return true
 
+func enter(agent):
+	var unit = agent.get_unit()
+	if not unit.current_path or unit.current_path.size() == 0:
+		unit.current_path = get_lane_path(agent.get_state("lane"), unit.team)
 
 
 func priority(_agent) -> int:

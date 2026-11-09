@@ -1,10 +1,5 @@
 extends "res://goap/goap_system/action_contract.gd"
 
-var player_lane_priorities := {}
-var enemy_lane_priorities := {}
-var player_leader_priorities := {}
-var enemy_leader_priorities := {}
-
 
 func get_class_name() -> String:
 	return "ChooseTarget"
@@ -12,7 +7,7 @@ func get_class_name() -> String:
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	return unit.attacks
+	return unit.attacks and !unit.target
 
 
 #func get_cost(_agent) -> int:

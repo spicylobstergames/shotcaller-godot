@@ -21,30 +21,27 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	if agent.get_current_goal() and agent.get_current_goal().get_class_name() == "WalkLane":
+	var has_lane = agent.get_state("lane", "") != ""
+	if has_lane:
 		return agent.get_state("lane_route_finished", false)
 	return agent.get_state("arrived_at_destination", false)
 
 
 func enter(agent):
 	var unit = agent.get_unit()
-	var lane = agent.get_state("lane", "")
-	var is_lane_goal = (
-		agent.get_current_goal()
-		and agent.get_current_goal().get_class_name() == "WalkLane"
-	)
+	var has_lane = agent.get_state("lane", "") != ""
 	
 	agent.set_state("arrived_at_destination", false)
-	if is_lane_goal and agent.get_state("lane_resume_path", null) is Array:
-		unit.current_path = agent.get_state("lane_resume_path")
-		agent.erase_state("lane_resume_path")
-	if is_lane_goal and unit.current_path.is_empty():
-		var path = agent.get_goal("WalkLane").get_lane_path(lane, unit.team)
-		if !path.is_empty():
-			unit.current_path = path
+	
+	if has_lane:
+		agent.set_state("lane_route_finished", false)
+		if agent.get_state("lane_resume_path", null) is Array:
+			unit.current_path = agent.get_state("lane_resume_path")
+			agent.erase_state("lane_resume_path")
+	
+	
 	
 	agent.set_state("has_path", not unit.current_path.is_empty())
-	agent.set_state("lane_route", lane)
 
 	if (agent.get_state("resume_path", false)):
 		agent.erase_state("resume_path")
@@ -53,21 +50,16 @@ func enter(agent):
 		follow_path(unit, unit.current_path)
 
 
-func exit(agent):
-	if (
-		agent.get_current_goal()
-		and agent.get_current_goal().get_class_name() == "WalkLane"
-		and not agent.get_state("lane_route_finished", false)
-	):
-		var unit = agent.get_unit()
-		var lane_path = unit.current_path.duplicate()
-		if unit.current_destiny != Vector2.ZERO:
-			lane_path.push_front(unit.current_destiny)
-		agent.set_state("lane_resume_path", lane_path)
-	elif agent.get_state("has_path", false) and not agent.get_state("lane_route_finished", false):
-		agent.set_state("resume_path", true)
-	else:
-		agent.erase_state("lane_resume_path")
+#func exit(agent):
+	#if (not agent.get_state("lane_route_finished", false)):
+		#var unit = agent.get_unit()
+		#var lane_path = unit.current_path.duplicate()
+		#agent.set_state("lane_resume_path", lane_path)
+	#elif agent.get_state("has_path", false):
+		#agent.set_state("resume_path", true)
+	#else:
+		#agent.set_state("resume_path", false)
+		#agent.erase_state("lane_resume_path")
 
 
 func point(unit, final_destiny):

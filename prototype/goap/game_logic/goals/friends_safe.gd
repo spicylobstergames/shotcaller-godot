@@ -6,10 +6,10 @@ func get_class_name() -> String:
 
 
 func is_valid(agent) -> bool:
-	if !agent.get_state("ready_to_fight", true):
-		return false
-	var attacker = ally_attacked(agent.get_unit())
-	return attacker != null
+	var unit = agent.get_unit()
+	var ready_to_fight = agent.get_state("ready_to_fight", true)
+	var friend_attacker = ally_attacked(unit)
+	return ready_to_fight and unit.attacks and friend_attacker
 
 
 func enter(agent):

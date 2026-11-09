@@ -12,12 +12,11 @@ func get_desired_state(_agent) -> Dictionary:
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var is_low_hp = should_retreat(unit)
-	if (is_low_hp):
-		agent.set_state("ready_to_fight", false)
 	return is_low_hp
 
 
 func enter(agent):
+	agent.set_state("ready_to_fight", false)
 	agent.set_state("is_retreating", true)
 	agent.set_state("arrived_at_retreat", false)
 
