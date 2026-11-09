@@ -124,3 +124,26 @@ corner mappings.
 **Why:** "tests verify intended map symmetry" — the symmetry property holds
 for every cell; hard-coding an off-by-one corner expectation would pin a
 guess instead of the formula.
+
+## D10 — Golden replay comparison robustness
+
+**Decision:** the golden comparison is field-specific and sort-stable:
+- Only POSITIONS get a tolerance (0.5 per axis) — platform float drift in
+  movement. Every other field (hp, level, kills, deaths, time) is compared
+  EXACTLY: hp 100 → 99 or time 1 → 2 is a real gameplay change, not drift.
+- Generated node names (`@StaticBody2D@83`) are normalized (counter → `#`)
+  BEFORE sorting, and units sort by the normalized identity + type + team
+  (position as tie-breaker) — never by raw node names, whose allocation
+  counters could reorder output that normalization then erases.
+- Checkpoints at frames 100/200/300 catch mid-run divergence even if it
+  converges by the final frame; the final checkpoint's frame label is
+  computed independently (the intermediate-frame array doesn't contain it —
+  indexing it would raise out-of-bounds and mask the real diagnostic).
+
+**Alternatives:** per-frame hashing (heavy, still sampled — frames are
+continuous); broad numeric tolerance (accepts real state changes like
+hp 100 → 99 — proven by sabotage: that exact change passed the original
+±1.0 comparison and fails the field-specific one).
+
+**Why:** platform/build float differences are noise; state changes are
+signal. The tolerance must be able to tell them apart, field by field.

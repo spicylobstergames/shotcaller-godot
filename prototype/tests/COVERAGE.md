@@ -40,8 +40,12 @@ converges later) and compares against the committed snapshot
 (`tests/golden/replay_300.txt`).
 
 Robustness: generated node names (`@StaticBody2D@83`) are normalized
-(counter dropped), positions compared with a 0.5 tolerance and other
-numerics 1.0 — platform float drift must not read as a gameplay regression.
+(counter dropped) BEFORE sorting (sort by normalized identity + type + team,
+never by raw names — allocation counters could reorder what normalization
+erases); positions compared with a 0.5 tolerance; every other field (hp,
+level, kills, deaths, time) compared EXACTLY — hp 100 → 99 is a real state
+change, not drift (verified by sabotage: that exact tamper fails the
+comparison).
 Caught by sabotage: halving movement speed passes all 234 assertions and the
 smoke test but fails golden at checkpoint 1.
 
