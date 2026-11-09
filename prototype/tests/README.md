@@ -38,7 +38,7 @@ fail, revert. If the test still passes, it is testing a mock — rewrite it.
 | Helper | Purpose |
 |--------|---------|
 | `fs_scan.gd` | Whole-project file scanning for the smoke tests |
-| `world_state_snapshot.gd` | Capture/restore WorldState keys — **mandatory** for any test that touches WorldState; leaked state makes the suite order-dependent |
+| `world_state_snapshot.gd` | Capture/restore WorldState keys — **mandatory** for any test registered in `run_tests.gd` that touches WorldState (they share one process; leaked state makes the suite order-dependent). Exempt: `tests/test_map/test.gd` (the dev/smoke harness owns its process). |
 | `mock_goal.gd` | Canonical GOAP mock goal: extends the real GoalContract, tracks is_valid/priority call counts |
 
 Mock policy:

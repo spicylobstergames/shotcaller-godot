@@ -77,7 +77,7 @@ func _test_insufficient_gold_prevents_hiring(harness: Node) -> void:
 	var leader = MockLeader.new()
 	leader.gold = 0
 	leader.team = "blue"
-	WorldState.set_state("player_leaders", [leader])
+	ws.set_state("player_leaders", [leader])
 
 	# Attempt to hire an infantry (cost = 1)
 	spawns.camp_hire("infantry", "blue")
@@ -213,7 +213,7 @@ func _test_camp_hire_gold_deduction_semantics(harness: Node) -> void:
 	leader0.gold = 2
 	var leader1 = MockLeader.new()
 	leader1.gold = 2
-	WorldState.set_state("player_leaders", [leader0, leader1])
+	ws.set_state("player_leaders", [leader0, leader1])
 
 	var spawns = Spawns.new()
 	harness.add_child(spawns)
@@ -247,7 +247,7 @@ func _test_camp_hire_leader_without_gold_property_does_not_crash(harness: Node) 
 	var rich = MockLeader.new()
 	rich.gold = 10
 	var no_gold = Node.new()  # plain Node: no "gold" property at all
-	WorldState.set_state("player_leaders", [no_gold, rich])
+	ws.set_state("player_leaders", [no_gold, rich])
 
 	var spawns = Spawns.new()
 	harness.add_child(spawns)

@@ -55,8 +55,8 @@ class TestAgent:
 
 func run(harness) -> void:
 	# The arrival goal reads map sizing to choose its tolerance for lane movement.
-	var old_map = WorldState.get_state("map")
-	WorldState.set_state("map", TestMap.new())
+	var ws = preload("res://tests/helpers/world_state_snapshot.gd").new()
+	ws.set_state("map", TestMap.new())
 	var goal = ArriveAtDestination.new()
 	var unit = TestUnit.new()
 	var agent = TestAgent.new(unit)
@@ -104,4 +104,4 @@ func run(harness) -> void:
 	)
 	harness.check_equal(unit.state, "idle", "Completing a path stops the unit.")
 	unit.free()
-	WorldState.set_state("map", old_map)
+	ws.restore()

@@ -13,7 +13,8 @@ class TestMap:
 
 func run(harness) -> void:
 	# Use cloned grids because the pathfinder mutates node search state during each solve.
-	var old_map = WorldState.get_state("map")
+	var ws = preload("res://tests/helpers/world_state_snapshot.gd").new()
+	ws.set_state("map", WorldState.get_state("map"))
 	var old_native_pathfinding = Goap.use_native_pathfinding
 	var grid = Pathfinder.GridGD.new().Grid.new(5, 5)
 	var finder = Pathfinder.JumpPointFinder.new()
@@ -42,7 +43,7 @@ func run(harness) -> void:
 
 	var map = TestMap.new()
 	harness.add_child(map)
-	WorldState.set_state("map", map)
+	ws.set_state("map", map)
 	# Exercise the public backend selector: custom search works, while the empty native map
 	# correctly produces no route.
 	var navigate_action = NavigateAction.new()
@@ -59,5 +60,5 @@ func run(harness) -> void:
 		"Native navigation switch dispatches to Godot's navigation map."
 	)
 	map.free()
-	WorldState.set_state("map", old_map)
+	ws.restore()
 	Goap.use_native_pathfinding = old_native_pathfinding

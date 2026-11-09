@@ -7,7 +7,6 @@ extends "res://goap/goap_system/goal_contract.gd"
 # (e.g. that is_valid is consulted before priority). Tests extend this
 # for extra behavior (plan arrays, side effects) rather than redefining it.
 
-signal validated
 
 var valid: bool = true
 var prio: int = 1

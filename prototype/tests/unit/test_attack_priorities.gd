@@ -32,8 +32,8 @@ class TestLeader:
 
 
 func run(harness) -> void:
-	var old_player_team = WorldState.get_state("player_team")
-	WorldState.set_state("player_team", "blue")
+	var ws = preload("res://tests/helpers/world_state_snapshot.gd").new()
+	ws.set_state("player_team", "blue")
 
 	var action = ChooseTarget.new()
 	var lane = TestLane.new()
@@ -56,7 +56,7 @@ func run(harness) -> void:
 		"Leader target priority is stored in agent state."
 	)
 
-	WorldState.set_state("player_team", old_player_team)
+	ws.restore()
 	leader.agent.free()
 	action.free()
 	leader.free()

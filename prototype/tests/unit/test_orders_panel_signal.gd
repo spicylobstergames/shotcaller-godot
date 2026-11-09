@@ -27,17 +27,14 @@ class TestLeader:
 
 
 func run(harness) -> void:
-	var old_all_leaders = WorldState.get_state("all_leaders")
-	var old_player_leaders = WorldState.get_state("player_leaders")
-	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
-	var old_player_team = WorldState.get_state("player_team")
+	var ws = preload("res://tests/helpers/world_state_snapshot.gd").new()
 	var choose_target = Goap.get_action("ChooseTarget")
 
 	var leader = TestLeader.new()
-	WorldState.set_state("all_leaders", [])
-	WorldState.set_state("player_leaders", [leader])
-	WorldState.set_state("enemy_leaders", [])
-	WorldState.set_state("player_team", "blue")
+	ws.set_state("all_leaders", [])
+	ws.set_state("player_leaders", [leader])
+	ws.set_state("enemy_leaders", [])
+	ws.set_state("player_team", "blue")
 
 	var panel = OrdersPanelScene.instantiate()
 	add_child(panel)
@@ -54,11 +51,12 @@ func run(harness) -> void:
 
 	panel.free()
 	leader.free()
-	WorldState.set_state("all_leaders", old_all_leaders)
-	WorldState.set_state("player_leaders", old_player_leaders)
-	WorldState.set_state("enemy_leaders", old_enemy_leaders)
-	WorldState.set_state("player_team", old_player_team)
+	ws.restore()
+	# Re-derive ChooseTarget's cached priorities from the restored leaders —
+	# the action is a registry singleton, so its state outlives this test.
+	var restored_player = WorldState.get_state("player_leaders")
+	var restored_enemy = WorldState.get_state("enemy_leaders")
 	choose_target.build_leader_priorities(
-		old_player_leaders if old_player_leaders is Array else [],
-		old_enemy_leaders if old_enemy_leaders is Array else []
+		restored_player if restored_player is Array else [],
+		restored_enemy if restored_enemy is Array else []
 	)
