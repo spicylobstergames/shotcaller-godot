@@ -8,7 +8,10 @@ const cut_time = 6
 
 
 func is_valid(_agent) -> bool:
-	return WorldState.get_state("is_game_active")
+	# Default false: an unset flag must not return null from a typed bool
+	# (get_state returns null when the key was never set — e.g. before the
+	# game starts, or in headless/test contexts).
+	return WorldState.get_state("is_game_active", false)
 
 
 func get_cost(_agent):
