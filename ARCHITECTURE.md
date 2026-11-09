@@ -87,7 +87,8 @@ while `lumberjack_hire` performs **NO affordability check at all** — it
 unconditionally deducts its share (cost is hard-coded 1) and can drive
 leaders negative. Do not assume a gold gate exists on a hire path; do not
 introduce per-leader full-cost deduction. Both behaviors are pinned in
-`tests/unit/test_spawns.gd`.
+`tests/unit/test_spawns.gd` (camp_hire: refuse + split; lumberjack_hire:
+no-gate deduction pinned as a documented quirk).
 
 ## Map
 

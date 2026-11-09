@@ -33,6 +33,33 @@ class MockAgent:
 		_states[name] = value
 
 
+# Minimal hired-unit double: lumberjack_hire only calls setup_team + show
+# when the mill already reports an existing lumberjack.
+class MockHireUnit:
+	extends RefCounted
+	var team := ""
+	var shown := false
+
+	func setup_team(t):
+		team = t
+
+	func show():
+		shown = true
+
+
+class MockLumbermill:
+	extends RefCounted
+	var agent := MockAgent.new()
+	var hired_unit
+
+	func _init():
+		hired_unit = MockHireUnit.new()
+		agent.set_state("lumberjack", hired_unit)  # pre-seeded: skips creation
+
+	func get_node_or_null(_path):
+		return null
+
+
 # TestSpawns overrides recycle so that we can verify cemitery lookup / pop
 # without needing a full game scene (spawn_unit is not mocked).
 class TestSpawns extends Spawns:
@@ -56,6 +83,7 @@ func run(harness: Node) -> void:
 	_test_lane_tactic_fallback_when_no_building_exists(harness)
 	_test_camp_hire_gold_deduction_semantics(harness)
 	_test_camp_hire_leader_without_gold_property_does_not_crash(harness)
+	_test_lumberjack_hire_has_no_affordability_gate(harness)
 
 
 # ---------------------------------------------------------------------------
@@ -265,5 +293,40 @@ func _test_camp_hire_leader_without_gold_property_does_not_crash(harness: Node) 
 
 	no_gold.free()
 	rich.free()
+	spawns.free()
+	ws.restore()
+
+
+# ---------------------------------------------------------------------------
+# 7. lumberjack_hire has NO affordability gate (documented asymmetry)
+# ---------------------------------------------------------------------------
+# camp_hire pools team gold and refuses the hire when insufficient;
+# lumberjack_hire does NOT check affordability at all — it deducts
+# floor(cost / leaders) unconditionally and can drive leaders negative.
+# ARCHITECTURE.md documents this asymmetry; this test pins it so a future
+# "add the missing gate" fix flips this test deliberately.
+
+func _test_lumberjack_hire_has_no_affordability_gate(harness: Node) -> void:
+	var ws = WorldStateSnapshot.new()
+	ws.set_state("player_team", "blue")
+	ws.set_state("player_leaders", [])
+
+	var leader = MockLeader.new()
+	leader.gold = 0
+	ws.set_state("player_leaders", [leader])
+
+	var mill = MockLumbermill.new()
+	var spawns = Spawns.new()
+	harness.add_child(spawns)
+
+	# lumberjack_cost is 1, one leader -> share 1. No gate: deduction happens
+	# even though the leader cannot afford it.
+	spawns.lumberjack_hire(mill, "blue")
+
+	harness.check_equal(leader.gold, -1,
+		"QUIRK: lumberjack_hire has no affordability gate — a 0-gold leader is driven to -1 (pinned current behavior).")
+	harness.check(mill.hired_unit.shown == true,
+		"lumberjack_hire still hires (show called) despite unaffordable cost.")
+
 	spawns.free()
 	ws.restore()

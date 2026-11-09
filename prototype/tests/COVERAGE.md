@@ -1,11 +1,11 @@
 # Test Coverage
 
-**23 test classes**, **232 assertions**, **0 script errors** — all passing.
+**23 test classes**, **234 assertions**, **0 script errors** — all passing.
 
 ```
 ./prototype/tests/run_suite.sh
-→ [1/2] TESTS_COMPLETE: passed=232 failed=0
-→ [1/2] All 232 tests passed.
+→ [1/2] TESTS_COMPLETE: passed=234 failed=0
+→ [1/2] All 234 tests passed.
 → [2/2] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → SUITE GREEN: unit tests passed, boot smoke passed, zero script errors
 ```
@@ -109,6 +109,10 @@ tested):
   table makes `hit_modifiers` return null — a latent caller crash. Pinned by
   `test_passive_skills.gd _test_empty_skill_dict_returns_null` (production
   .tres data never produces empty dicts).
+- DOCUMENTED QUIRK (not fixed): `lumberjack_hire` has no affordability gate —
+  a 0-gold leader is driven negative. Pinned by
+  `test_spawns.gd _test_lumberjack_hire_has_no_affordability_gate`; adding
+  the missing gate is a deliberate design change that must flip this test.
 
 ## Known coverage limits
 
