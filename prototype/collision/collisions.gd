@@ -10,8 +10,6 @@ var block_template:PackedScene = preload("res://collision/blocks/block_template.
 var tile_size := 64
 var half_tile_size := tile_size / 2
 var current_map : Node2D
-var max_collision_radius := 0.0
-
 
 
 func create_quadtree(bounds, splitThreshold, splitLimit, currentSplit = 0):
@@ -26,13 +24,8 @@ func setup_quadtree(map):
 	quad = create_quadtree(bound, 16, 16)
 
 
-func get_units_in_radius(pos, rad):
-	var quad_units = quad.get_units_in_radius(pos, rad)
-	var in_radius_units = []
-	for unit1 in quad_units:
-		var pos1 = unit1.global_position
-		if pos.distance_to(pos1) <= rad: in_radius_units.append(unit1)
-	return in_radius_units
+func get_units_in_radius(pos: Vector2, rad: float) -> Array:
+	return quad.get_units_in_radius(pos, rad)
 
 
 func create_block(x, y, team):
@@ -56,17 +49,11 @@ func setup(unit):
 		if select.shape:
 			unit.selection_radius = select.shape.radius
 	
-	var block = unit.get_node_or_null("collisions/block")
 	var block_node = unit.get_node_or_null("block")
-	if block:
-		unit.collision_position = block.position
-		if block.shape:
-			unit.collision_radius = block.shape.radius
-	elif block_node is CollisionShape2D:
-		if block_node:
-			unit.collision_position = block_node.position
-			if block_node.shape:
-				unit.collision_radius = block_node.shape.radius
+	if block_node:
+		unit.collision_position = block_node.position
+		if block_node.shape:
+			unit.collision_radius = block_node.shape.radius
 	
 	var attack = unit.get_node_or_null("collisions/attack")
 	if attack:
@@ -74,85 +61,22 @@ func setup(unit):
 		if attack.shape:
 			unit.attack_hit_radius = attack.shape.radius
 
-	if unit is CollisionObject2D:
-		var use_physics_blocking = Goap.use_native_blocking and unit.collide
-		unit.collision_layer = 1 if use_physics_blocking else 0
-		unit.collision_mask = 1 if use_physics_blocking else 0
-		if unit is CharacterBody2D:
-			unit.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-	if unit.collide and unit is CollisionObject2D:
-		var physical_shape = unit.get_node_or_null("physical_collision")
-		if physical_shape == null and block_node is CollisionShape2D:
-			physical_shape = block_node
-		elif physical_shape == null:
-			physical_shape = CollisionShape2D.new()
-			physical_shape.name = "physical_collision"
-			unit.add_child(physical_shape)
-			var rectangle = RectangleShape2D.new()
-			var diameter = max(unit.collision_radius * 2.0, 4.0)
-			rectangle.size = Vector2(diameter, diameter)
-			physical_shape.shape = rectangle
-			physical_shape.position = unit.collision_position
-		if unit.navigation_agent:
-			unit.navigation_agent.radius = max(unit.collision_radius, 8.0)
-
-	if unit.collide and not unit.moves and not unit.has_node("NavigationObstacle2D"):
-		var obstacle = NavigationObstacle2D.new()
-		obstacle.name = "NavigationObstacle2D"
-		obstacle.avoidance_enabled = true
-		obstacle.radius = max(unit.collision_radius, 8.0)
-		unit.add_child(obstacle)
-
-
 
 func physics_process(delta):
 	quad.clear()
-	max_collision_radius = 0.0
 	
-	for unit1 in WorldState.get_state("all_units"):
+	var all_units = WorldState.get_state("all_units")
+	for unit1 in all_units:
 		if unit1.collide and not unit1.dead:
 			quad.add_body(unit1)
-			max_collision_radius = max(max_collision_radius, unit1.collision_radius)
-		if unit1 is CollisionObject2D:
-			var use_physics_blocking = Goap.use_native_blocking and unit1.collide and not unit1.dead
-			unit1.collision_layer = 1 if use_physics_blocking else 0
-			unit1.collision_mask = 1 if use_physics_blocking else 0
-		if unit1.navigation_agent:
-			unit1.navigation_agent.avoidance_enabled = Goap.use_native_blocking
-		var obstacle = unit1.get_node_or_null("NavigationObstacle2D")
-		if obstacle:
-			obstacle.avoidance_enabled = Goap.use_native_blocking
 	
-	for unit1 in WorldState.get_state("all_units"):
+	for unit1 in all_units:
 		if unit1.projectiles.size():
-			for projectile in unit1.projectiles:
-				if is_instance_valid(projectile.node) and projectile.speed and projectile.stuck == false:
-					var projectile_position = projectile.node.global_position + (projectile.speed * delta)
-					# projectile out of range
-					if projectile_position.distance_to(unit1.global_position + unit1.collision_position) > projectile.radius:
-						Goap.get_action("RangeAttack").projectile_stuck(unit1, null, projectile)
-					else:
-						if projectile.target:
-							if projectile.target.point_collision(projectile_position):
-								Goap.get_goal("EnemyDefeated").take_hit(unit1, projectile.target, projectile)
-						else: # pierces
-							var targets = Collisions.get_units_in_radius(projectile_position, 1) 
-							for target in targets:
-								if (Goap.get_action("ChooseTarget").can_hit(unit1, target) and
-										projectile.targets.find(target) < 0 and
-										target.point_collision(projectile_position) ):
-									Goap.get_goal("EnemyDefeated").take_hit(unit1, target, projectile)
-						# move projectile
-						if not projectile.stuck: Goap.get_action("RangeAttack").projectile_step(delta, projectile)
+			Goap.get_action("RangeAttack").projectile_loop(unit1, delta)
 		
-		unit1.next_event  = "" # default no event
 		if not unit1.dead:
 			if unit1.moves and unit1.state == "move":
-				if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
-					unit1.next_event = "arrive"
+				if unit1.agent.get_goal("ArriveAtDestination").is_at_destination(unit1):
+					unit1.on_arrive()
 				else:
-					unit1.next_event = "move"
-
-		match unit1.next_event:
-			"move": unit1.on_move(delta)
-			"arrive": unit1.on_arrive()
+					unit1.on_move(delta)

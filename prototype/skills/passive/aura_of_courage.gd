@@ -14,8 +14,8 @@ func _on_update_timer_timeout() -> void:
 			affected_units.erase(other_unit)
 			other_unit.status_effects.erase("aura_of_courage")
 	
-	for other_unit in unit.units_in_radius:
-		if other_unit.team == unit.team and unit.type != "building":
+	for other_unit in unit.get_units_in_sight({"team": unit.team}):
+		if unit.type != "building":
 			Modifiers.remove(other_unit, "damage", "aura_of_courage")
 			Modifiers.add(other_unit, "damage", "aura_of_courage", skill_data.attributes.value * unit.level)
 			affected_units[other_unit] = true

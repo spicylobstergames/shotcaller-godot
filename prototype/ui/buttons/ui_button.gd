@@ -26,25 +26,25 @@ func button_down():
 			game.ui.inventories.update_buttons()
 			if game.ui.shop.visible:
 				game.ui.shop.update_buttons()
-				game.ui.unit_controls_panel.hide()
-				game.ui.orders_panel.hide()
+				game.ui.unit_control_panel.hide()
+				game.ui.tactics_panel.hide()
 			game.ui.buttons_update()
 		
 		
 		"orders":
-			game.ui.orders_panel.visible = !game.ui.orders_panel.visible
-			if game.ui.orders_panel.visible:
+			game.ui.tactics_panel.visible = !game.ui.tactics_panel.visible
+			if game.ui.tactics_panel.visible:
 				game.ui.shop.hide()
-				game.ui.unit_controls_panel.hide()
+				game.ui.unit_control_panel.hide()
 				game.ui.inventories.update_buttons() # hide sell bt
 			game.ui.buttons_update()
 		
 		
 		"controls":
-			game.ui.unit_controls_panel.visible = !game.ui.unit_controls_panel.visible
-			if game.ui.unit_controls_panel.visible:
+			game.ui.unit_control_panel.visible = !game.ui.unit_control_panel.visible
+			if game.ui.unit_control_panel.visible:
 				game.ui.shop.hide()
-				game.ui.orders_panel.hide()
+				game.ui.tactics_panel.hide()
 				game.ui.inventories.update_buttons() # hide sell bt
 			
 			game.ui.buttons_update()

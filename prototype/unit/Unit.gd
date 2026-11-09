@@ -10,6 +10,7 @@ var game:Node
 signal unit_reseted
 signal unit_idle_ended
 signal unit_move_ended
+signal unit_move_requested(delta: float)
 signal unit_arrived
 signal unit_started_channeling
 signal unit_healed
@@ -33,12 +34,12 @@ var current_hp:int = 100
 @export var display_name:String
 @export var title:String
 @export var team:String = "blue"
+@export var gold = 0
 @export var respawn:float = 1
 var dead:bool = false
 @export var immune:bool = false
 var mirror:bool = false
 var texture:Dictionary
-var units_in_radius := []
 var symbol:bool = false
 var current_modifiers = Modifiers.new_modifiers()
 
@@ -57,6 +58,7 @@ var current_step:Vector2 = Vector2.ZERO
 var current_destiny:Vector2 = Vector2.ZERO
 var final_destiny:Vector2 = Vector2.ZERO
 var current_path:Array = []
+
 
 # COLLISION
 @export var collide:bool = false
@@ -84,13 +86,9 @@ var projectiles:Array = []
 var attack_hit_position:Vector2 = Vector2.ONE
 var attack_hit_radius = 24
 
-# BEHAVIOR
-var next_event:String = "" # "move" or "arrive"
-var after_arive:String = "stop" # "attack" "conquer" "pray" "cut"
+# ANIMATION_STATE
 var state:String = "idle" # "move", "attack", "death"
-var priority = ["leader", "pawn", "building"]
 var wait_time:int = 0
-var gold = 0
 
 # ORDERS
 var control_delay = 3
@@ -101,10 +99,8 @@ var channeling_timer:Timer
 var hud:Node
 var sprites:Node
 var body:Node
+var animations: AnimationPlayer
 @onready var agent: Node = get_node_or_null("goap_agent")
-var navigation_agent: NavigationAgent2D
-var navigation_safe_velocity := Vector2.ZERO
-var has_navigation_safe_velocity := false
 
 # Experience
 var experience_timer : Timer = Timer.new()
@@ -139,53 +135,10 @@ func _ready():
 	body = get_node_or_null("sprites/body")
 	weapon = get_node_or_null("sprites/weapon")
 	projectile = get_node_or_null("sprites/weapon/projectile")
+	animations = get_node_or_null("animations") as AnimationPlayer
+	
 	if agent and hud:
-		agent.goal_changed.connect(hud.update_goal)
-	if moves:
-		ensure_navigation_agent()
-
-
-func ensure_navigation_agent() -> NavigationAgent2D:
-	if navigation_agent == null:
-		navigation_agent = NavigationAgent2D.new()
-		navigation_agent.name = "NavigationAgent2D"
-		navigation_agent.path_desired_distance = 12.0
-		navigation_agent.target_desired_distance = 8.0
-		navigation_agent.avoidance_enabled = true
-		navigation_agent.velocity_computed.connect(_on_navigation_velocity_computed)
-		add_child(navigation_agent)
-	return navigation_agent
-
-
-func set_navigation_target(target_vector: Vector2) -> void:
-	if navigation_agent == null:
-		ensure_navigation_agent()
-	if navigation_agent:
-		has_navigation_safe_velocity = false
-		navigation_safe_velocity = Vector2.ZERO
-		navigation_agent.target_position = target_vector
-
-
-func advance_with_navigation(_delta: float) -> bool:
-	if navigation_agent == null or navigation_agent.target_position == Vector2.ZERO:
-		return false
-	if navigation_agent.is_target_reached():
-		return false
-	var next_point = navigation_agent.get_next_path_position()
-	var direction = next_point - global_position
-	if direction.length_squared() <= 0.01:
-		return false
-	var current_speed = Modifiers.get_value(self, "speed")
-	var desired_velocity = direction.normalized() * current_speed
-	navigation_agent.velocity = desired_velocity
-	current_step = navigation_safe_velocity if has_navigation_safe_velocity else desired_velocity
-	mirror_look_at(next_point)
-	return true
-
-
-func _on_navigation_velocity_computed(safe_velocity: Vector2) -> void:
-	navigation_safe_velocity = safe_velocity
-	has_navigation_safe_velocity = true
+		agent.state_changed.connect(hud.update_state)
 
 
 func setup_leader_exp():
@@ -236,7 +189,6 @@ func reset_unit():
 func set_state(s):
 	if not self.dead:
 		self.state = s
-		var animations = get_node_or_null("animations")
 		if animations:
 			animations.current_animation = s
 
@@ -400,7 +352,7 @@ func on_idle_end(): # every idle animation end (0.6s)
 
 
 func on_move(delta): # movement tick
-	Goap.move.step(self, delta)
+	if self.moves: emit_signal("unit_move_requested", delta)
 
 
 func on_move_end(): # every move animation end (0.6s for speed = 1)
@@ -421,8 +373,67 @@ func on_attack_hit():  # every melee attack animation end (0.6s for ats = 1)
 		emit_signal("unit_attack_hitted")
 
 
+func take_hit(attacker, incoming_projectile = null, hit_modifiers = {}) -> void:
+	var modifiers = Skills.hit_modifiers(attacker, self, incoming_projectile, hit_modifiers)
+
+	if incoming_projectile:
+		if not modifiers.pierce:
+			attacker.agent.get_action("RangeAttack").projectile_stuck(attacker, self, incoming_projectile)
+
+		if incoming_projectile.targets != null and incoming_projectile.targets.find(self) < 0:
+			incoming_projectile.targets.append(self)
+
+	if not self.dead and not self.immune:
+		var attack_damage = 0
+		if not modifiers.dodge:
+			attack_damage = max(1, modifiers.damage - Modifiers.get_value(self, "defense"))
+			self.current_hp -= attack_damage
+			attacker.attack_count += 1
+			if attacker.type == "leader":
+				self.last_attacker = attacker
+				self.assist_candidates[attacker] = Time.get_ticks_msec()
+
+		if not modifiers.counter:
+			self.was_attacked(attacker, attack_damage)
+
+		if self.hud:
+			self.hud.update_hpbar()
+
+		if self.type == "building" and self.subtype == "backwood":
+			var mod_hp = Modifiers.get_value(self, "hp")
+			var rate = float(self.current_hp) / float(mod_hp)
+			var tax_action = Goap.get_action("Taxes")
+			var tax = tax_action.get_tax_for_team(self.team)
+			var limit = tax_action.tax_conquer_limit[tax]
+			if rate <= limit:
+				Goap.get_action("Conquer").lose_building(self)
+
+		if self.current_hp <= 0:
+			self.current_hp = 0
+			self.die()
+			if self.type == "leader":
+				var player_team = WorldState.get_state("player_team")
+				if self.team == player_team:
+					WorldState.set_state("player_deaths", WorldState.get_state("player_deaths") + 1)
+				else:
+					WorldState.set_state("enemy_deaths", WorldState.get_state("enemy_deaths") + 1)
+				if attacker.team == player_team:
+					WorldState.set_state("player_kills", WorldState.get_state("player_kills") + 1)
+				else:
+					WorldState.set_state("enemy_kills", WorldState.get_state("enemy_kills") + 1)
+
+
+
 func was_attacked(attacker, _damage):
 	unit_was_attacked.emit(attacker, _damage)
+
+
+func apply_damage_over_time() -> void:
+	if not self.dead: 
+		var dot_effects = Modifiers.get_dot(self)
+		if dot_effects:
+			for dot in dot_effects:
+				self.take_hit(dot.attacker, null, {"damage": dot.damage})
 
 
 func on_attack_end(): # animation end of all attacks
@@ -437,21 +448,38 @@ func heal(heal_hp):
 	emit_signal("unit_healed")
 
 
+func regenerate(regen_hp = null):
+	var is_regenerating_unit = type != "building" or team == "neutral"
+	if regen > 0 and is_regenerating_unit:
+		if not dead:
+			if regen_hp:
+				heal(regen_hp)
+			else:
+				heal(Modifiers.get_value(self, "regen"))
+
+
+
+func setup_channeling_timer():
+	channeling_timer = Timer.new()
+	channeling_timer.one_shot = true
+	add_child(channeling_timer)
+
+
 func channel_start(time):
 	self.agent.set_state("is_channeling" , true)
-	self.agent.set_state("has_player_command", true)
 	if self.channeling_timer.time_left > 0:
 		self.channeling_timer.stop()
 	self.channeling_timer.wait_time = time
 	self.channeling_timer.start()
 	emit_signal("unit_started_channeling")
-
+	
 
 func stun_start():
 	self.wait_time = 2
 	self.agent.set_state("is_stunned", true)
 	self.agent.set_state("stunned", true)
 	self.agent.set_state("is_channeling", false)
+	# cancels teleport
 	if self.agent.get_state("player_order", {}).get("type", "") == "teleport":
 		self.agent.set_state("player_order_id", self.agent.get_state("player_order_id", 0) + 1)
 	self.set_state("stun")
@@ -470,14 +498,10 @@ func on_stun_end():
 func die():  # hp <= 0
 	self.set_state("death")
 	self.dead = true
-	self.agent.set_state("target", null)
-	
-	self.agent.set_state("is_channeling", false)
 
-	var neighbors = self.units_in_radius
+	var neighbors = get_units_in_sight({"team": opponent_team(), "type": "leader"})
 	for neighbor in neighbors:
-		if neighbor.type == "leader" and neighbor.team != team:
-			neighbor.gain_experience(EXP_PER_KILL)
+		neighbor.gain_experience(EXP_PER_KILL)
 
 	if type == "leader":
 		if last_attacker:
@@ -497,7 +521,6 @@ func hide_in_map():
 	self.global_position = Vector2(-1000, -1000)
 	self.hide()
 	self.state = "dead"
-	var animations = get_node_or_null("animations")
 	if animations:
 		animations.current_animation = "[stop]"
 

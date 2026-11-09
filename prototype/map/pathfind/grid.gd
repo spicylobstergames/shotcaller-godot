@@ -232,8 +232,18 @@ class Grid:
 		return newGrid
 
 
+	func reset_search_state() -> void:
+		for row in nodes:
+			for node in row:
+				node.f = 0
+				node.g = 0
+				node.h = 0
+				node.opened = false
+				node.closed = false
+				node.parent = null
 
-# * A node in grid. 
+
+# * A node in grid.
 # * This class holds some basic information about a node and custom 
 # * attributes may be added, depending on the algorithms' needs.
 # * @constructor

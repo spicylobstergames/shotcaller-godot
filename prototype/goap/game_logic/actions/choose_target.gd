@@ -1,130 +1,47 @@
 extends "res://goap/goap_system/action_contract.gd"
 
-const DEFAULT_PRIORITY = ["pawn", "leader", "building"]
-
-var player_lane_priorities := {}
-var enemy_lane_priorities := {}
-var player_leader_priorities := {}
-var enemy_leader_priorities := {}
-
 
 func get_class_name() -> String:
 	return "ChooseTarget"
 
 
-func is_valid(_agent) -> bool:
-	return false
+func is_valid(agent) -> bool:
+	var unit = agent.get_unit()
+	return unit.attacks and !unit.target
 
 
-func build_lane_priorities(lanes: Array) -> void:
-	player_lane_priorities.clear()
-	enemy_lane_priorities.clear()
-	for lane in lanes:
-		player_lane_priorities[lane.name] = DEFAULT_PRIORITY.duplicate()
-		enemy_lane_priorities[lane.name] = DEFAULT_PRIORITY.duplicate()
+#func get_cost(_agent) -> int:
+#	return 1
 
 
-func build_leader_priorities(player_leaders: Array, enemy_leaders: Array) -> void:
-	player_leader_priorities.clear()
-	enemy_leader_priorities.clear()
-	for leader in player_leaders:
-		player_leader_priorities[leader.name] = DEFAULT_PRIORITY.duplicate()
-	for leader in enemy_leaders:
-		enemy_leader_priorities[leader.name] = DEFAULT_PRIORITY.duplicate()
+func get_preconditions() -> Dictionary:
+	return {"is_stunned": false}
 
 
-func set_lane_priority(lane: String, team: String, target_type: String) -> void:
-	var priorities = _lane_priorities(team)
-	if not priorities.has(lane):
-		priorities[lane] = DEFAULT_PRIORITY.duplicate()
-	_move_priority_first(priorities[lane], target_type)
+func get_effects() -> Dictionary:
+	return {"has_attack_target": true}
 
 
-func set_leader_priority(leader, target_type: String) -> void:
-	var priorities = _leader_priorities(leader.team)
-	if not priorities.has(leader.name):
-		priorities[leader.name] = DEFAULT_PRIORITY.duplicate()
-	_move_priority_first(priorities[leader.name], target_type)
+
+func enter(agent):
+	var unit = agent.get_unit()
+	var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
+	var target = select_target(unit, enemies)
+	set_target(agent, target)
 
 
-func set_unit_priority(unit) -> void:
-	if not unit.agent:
-		return
-	var priorities: Array = DEFAULT_PRIORITY
-	if unit.type == "leader":
-		var leader_priorities = _leader_priorities(unit.team)
-		if not leader_priorities.has(unit.name):
-			leader_priorities[unit.name] = DEFAULT_PRIORITY.duplicate()
-		priorities = leader_priorities[unit.name]
-	else:
-		var lane = unit.agent.get_state("lane", "")
-		var lane_priorities = _lane_priorities(unit.team)
-		if not lane_priorities.has(lane):
-			lane_priorities[lane] = DEFAULT_PRIORITY.duplicate()
-		priorities = lane_priorities[lane]
-	unit.agent.set_state("target_priority", priorities.duplicate())
+func perform(_agent, _delta) -> bool:
+	return true # is_step_complete
 
 
-func prioritize_unit(unit, target_type: String) -> void:
-	if unit.type == "leader":
-		set_leader_priority(unit, target_type)
-		set_unit_priority(unit)
-		return
-
-	var lane = unit.agent.get_state("lane", "")
-	set_lane_priority(lane, unit.team, target_type)
-	for lane_unit in WorldState.get_state("all_units"):
-		if (
-			is_instance_valid(lane_unit)
-			and lane_unit.agent
-			and lane_unit.team == unit.team
-			and lane_unit.agent.get_state("lane") == lane
-		):
-			set_unit_priority(lane_unit)
-
-
-func apply_building_priorities() -> void:
-	for building in WorldState.get_state("all_buildings"):
-		set_unit_priority(building)
-
-
-func _lane_priorities(team: String) -> Dictionary:
-	return (
-		player_lane_priorities
-		if team == WorldState.get_state("player_team")
-		else enemy_lane_priorities
-	)
-
-
-func _leader_priorities(team: String) -> Dictionary:
-	return (
-		player_leader_priorities
-		if team == WorldState.get_state("player_team")
-		else enemy_leader_priorities
-	)
-
-
-func _move_priority_first(priorities: Array, target_type: String) -> void:
-	if target_type not in priorities:
-		return
-	priorities.erase(target_type)
-	priorities.push_front(target_type)
-
-
-func closest_enemy_unit(unit, enemies):
-	var filtered = []
-	for enemy in enemies:
-		if can_hit(unit, enemy):
-			filtered.append(enemy)
-	var sorted = unit.sort_by_distance(filtered)
-	if sorted:
-		return sorted[0].unit
+#func exit(_agent) :
+#	pass
 
 
 func select_target(unit, enemies):
 	var filtered = []
 	for enemy in enemies:
-		if can_hit(unit, enemy):
+		if can_hit(unit, enemy) and (unit.moves or in_range(unit, enemy)):
 			filtered.append(enemy)
 	if filtered.is_empty():
 		return null
@@ -132,19 +49,7 @@ func select_target(unit, enemies):
 		return filtered[0]
 	var sorted = unit.sort_by_distance(filtered)
 	var closest_unit = sorted[0].unit
-	var priorities = unit.agent.get_state("target_priority", DEFAULT_PRIORITY)
-	if filtered.size() == 2:
-		var further_unit = sorted[1].unit
-		var index1 = priorities.find(closest_unit.type)
-		var index2 = priorities.find(further_unit.type)
-		if index2 < index1:
-			return further_unit
-	if not unit.ranged:
-		return closest_unit
-	for priority_type in priorities:
-		for enemy in sorted:
-			if enemy.unit.type == priority_type:
-				return enemy.unit
+	
 	return closest_unit
 
 
@@ -172,3 +77,21 @@ func in_range(attacker, target) -> bool:
 
 func is_valid_target(attacker, target) -> bool:
 	return can_hit(attacker, target) and in_range(attacker, target)
+
+
+
+func set_target(agent, value) -> void:
+	var unit = agent.get_unit()
+	var target = value if is_instance_valid(value) else null
+	var previous_target = unit.target
+	if previous_target != target:
+		unit.last_target = previous_target
+	if previous_target != target or target == null:
+		unit.attack_count = 0
+		Modifiers.remove(unit, "attack_speed", "agile")
+		unit.target = target
+	if target:
+		agent.set_state("enemy_dead", false)
+		
+	agent.set_state("has_attack_target", target != null)
+	agent.set_state("hunting", target != null)

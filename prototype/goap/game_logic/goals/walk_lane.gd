@@ -9,33 +9,24 @@ func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var lane = agent.get_state("lane", "")
 	if (
-		not unit.moves
+		unit.target
+		or not unit.moves
 		or unit.dead
+		or lane == ""
 		or lane not in WorldState.get_state("lanes")
 		or agent.get_state("has_player_command", false)
 		or agent.get_state("is_retreating", false)
+		or not agent.get_state("ready_to_fight", true)
 		or agent.get_state("is_channeling", false)
-	):
+		or agent.get_state("lane_route_finished", false)):
 		return false
 
-	if agent.get_state("lane_route", "") != lane:
-		agent.set_state("lane_route", lane)
-		agent.erase_state("lane_route_finished")
+	return true
 
-	if agent.get_state("lane_route_finished", false):
-		return false
-
-	if unit.target:
-		return false
-
-	if unit.current_path.is_empty() and unit.current_destiny == Vector2.ZERO:
-		var path = Goap.navigation.new_lane_path(lane, unit.team)
-		if path.is_empty():
-			return false
-		Goap.navigation.setup_unit_path(unit, path)
-
-	agent.set_state("has_path", not unit.current_path.is_empty())
-	return not unit.current_path.is_empty() or unit.current_destiny != Vector2.ZERO
+func enter(agent):
+	var unit = agent.get_unit()
+	if not unit.current_path or unit.current_path.size() == 0:
+		unit.current_path = get_lane_path(agent.get_state("lane"), unit.team)
 
 
 func priority(_agent) -> int:
@@ -43,20 +34,71 @@ func priority(_agent) -> int:
 
 
 func get_desired_state(_agent) -> Dictionary:
-	return {"arrived_at_destination": true}
+	return {"lane_route_finished": true}
+
+
+func get_lane_path(lane: String, team: String, include_enemy_castle := true) -> Array:
+	var lanes = WorldState.get_state("lanes", {})
+	if lane not in lanes:
+		return []
+
+	var path: Array = lanes[lane].duplicate()
+	if team == "red":
+		path.reverse()
+
+	if include_enemy_castle:
+		var castle_team = "red" if team == "blue" else "blue" if team == "red" else ""
+		if castle_team:
+			var castle = WorldState.get_state("map").get_node_or_null(
+				"buildings/" + castle_team + "/castle"
+			)
+			if castle:
+				path.append(castle.global_position)
+
+	return path
+
+
+func closest_lane(point: Vector2) -> String:
+	var closest_lane_name := ""
+	var closest_distance := INF
+	for lane in WorldState.get_state("lanes", {}):
+		for lane_point in WorldState.get_state("lanes")[lane]:
+			var distance = point.distance_to(lane_point)
+			if distance < closest_distance:
+				closest_distance = distance
+				closest_lane_name = lane
+	return closest_lane_name
+
+
+func change_lane(unit, lane_point: Vector2) -> void:
+	var lane = closest_lane(lane_point)
+	if lane.is_empty():
+		return
+
+	var path = get_lane_path(lane, unit.team, false)
+	if path.is_empty():
+		return
+
+	unit.agent.set_state("lane", lane)
+	unit.agent.set_state("lane_route_finished", false)
+	unit.agent.erase_state("lane_resume_path")
+	unit.agent.set_state("resume_path", false)
+	unit.current_path.clear()
+	var lane_start = path.pop_front()
+	unit.agent.get_action("Navigate").move(unit, lane_start)
+	unit.current_path.append_array(path)
+
+
+func resume_lane(unit) -> void:
+	var lane = unit.agent.get_state("lane", "")
+	var path = get_lane_path(lane, unit.team)
+	unit.agent.get_action("Navigate").cut_path(unit, path)
 
 
 func on_arrive(agent) -> void:
+	# todo save lane_final_destination state and check distance
 	var route_finished = agent.get_unit().current_path.is_empty()
-	Goap.get_goal("ArriveAtDestination").on_arrive(agent)
+	agent.get_goal("ArriveAtDestination").on_arrive(agent)
 	if route_finished:
 		agent.set_state("lane_route_finished", true)
-
-
-func build_leaders() -> void:
-	var player_leaders = WorldState.get_state("player_leaders")
-	var enemy_leaders = WorldState.get_state("enemy_leaders")
-	Goap.get_action("ChooseTarget").build_leader_priorities(player_leaders, enemy_leaders)
-	var leaders = player_leaders + enemy_leaders
-	for leader in leaders:
-		Goap.get_action("ChooseTarget").set_unit_priority(leader)
+		agent.erase_state("lane_resume_path")

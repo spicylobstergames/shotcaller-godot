@@ -50,7 +50,7 @@ func map_loaded():
 	setup_buildings()
 	setup_lanes()
 	Collisions.setup_quadtree(map)
-	Goap.navigation.setup_pathfind()
+	Navigation.setup_pathfind()
 	game.ui.map_loaded()
 	map_became_ready.emit()
 
@@ -61,10 +61,7 @@ func setup_leaders(red_leaders, blue_leaders):
 	game.ui.scoreboard.build(red_leaders, blue_leaders)
 	game.ui.leaders_icons.build()
 	game.ui.inventories.build_leaders()
-	game.ui.orders_panel.leaders_built.connect(
-		Goap.get_goal("WalkLane").build_leaders, CONNECT_ONE_SHOT
-	)
-	game.ui.orders_panel.build_leaders()
+	game.ui.tactics_panel.build_leaders()
 	game.ui.active_skills.build_leaders()
 
 
@@ -77,9 +74,6 @@ func setup_lanes():
 		for lane in lanes_node.get_children():
 			WorldState.get_state("lanes")[lane.name] = line_to_array(lane)
 
-	Goap.get_action("ChooseTarget").build_lane_priorities(
-		lanes_node.get_children() if lanes_node else []
-	)
 
 
 func line_to_array(line):
@@ -123,12 +117,12 @@ func setup_buildings():
 	for neutral in WorldState.get_state("map").neutrals:
 		var blue_neutral = map.get_node_or_null("buildings/blue/" + neutral)
 		if blue_neutral:
-			game.ui.orders_panel[neutral].append(blue_neutral)
+			game.ui.tactics_panel[neutral].append(blue_neutral)
 		var red_neutral = map.get_node_or_null("buildings/red/" + neutral)
 		if red_neutral:
-			game.ui.orders_panel[neutral].append(red_neutral)
+			game.ui.tactics_panel[neutral].append(red_neutral)
 	
-	game.ui.orders_panel.update()
+	game.ui.tactics_panel.update()
 
 
 func has_neutral_buildings(team):

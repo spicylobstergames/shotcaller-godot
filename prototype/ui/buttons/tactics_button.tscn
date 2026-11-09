@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b4d7l4npgif2p"]
 
 [ext_resource type="Theme" uid="uid://cdwiynrgangrm" path="res://assets/ui/theme/button_theme.tres" id="1_2qc3q"]
-[ext_resource type="Script" uid="uid://gcaflepqnd5t" path="res://ui/buttons/order_button.gd" id="2"]
+[ext_resource type="Script" uid="uid://gcaflepqnd5t" path="res://ui/buttons/tactics_button.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="4"]
 
 [sub_resource type="AtlasTexture" id="14"]

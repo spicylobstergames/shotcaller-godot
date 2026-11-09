@@ -25,7 +25,7 @@ func projectile_release(attacker):
 			var sorted = attacker.sort_by_distance(enemies)
 			for enemy in sorted:
 				if (enemy.unit != attacker.target and 
-					Goap.get_action("ChooseTarget").in_range(attacker, enemy.unit)):
+					attacker.agent.get_action("ChooseTarget").in_range(attacker, enemy.unit)):
 					secondary_projectile(attacker, enemy.unit)
 
 
@@ -58,7 +58,7 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		if not modifiers.counter:
 			if "counter" in target_skills and not attacker.ranged:
 				modifiers.damage = target_skills.counter
-				Goap.get_goal("EnemyDefeated").take_hit(target, attacker, projectile, modifiers)
+				attacker.take_hit(target, projectile, modifiers)
 			
 	if attacker.display_name in leader:
 		var attacker_skills = leader[attacker.display_name]

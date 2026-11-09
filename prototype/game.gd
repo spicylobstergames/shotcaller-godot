@@ -122,7 +122,7 @@ func resume():
 	ui.show_all()
 	ui.hide_menus()
 	ui.show_minimap()
-	ui.control_panel.show()
+	ui.player_control_panel.show()
 	ui.scoreboard.hide()
 	WorldState.set_state("is_game_active", true)
 	emit_signal("game_resumed")

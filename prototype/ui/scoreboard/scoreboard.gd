@@ -43,7 +43,7 @@ func _unhandled_input(event):
 func handle_game_end(winner):
 	is_ready = false
 	show()
-	$update_timer.stop()
+	WorldState.stop_timers()
 	$"%result_label".text = "Victory" if winner else "DEFEAT"
 	$"%result_label".show()
 	$"%restart_button".show()

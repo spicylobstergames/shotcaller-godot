@@ -1,6 +1,5 @@
 extends "res://goap/goap_system/goal_contract.gd"
 
-const ORDER_PRIORITY := 1000000
 
 
 func get_class_name():
@@ -20,7 +19,7 @@ func is_valid(agent) -> bool:
 
 
 func priority(_agent) -> int:
-	return ORDER_PRIORITY
+	return 100
 
 
 func get_desired_state(_agent) -> Dictionary:

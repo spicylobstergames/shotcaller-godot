@@ -11,7 +11,7 @@ extends Node
 # also be used during execution to abort the plan in case the world state
 # does not allow this action anymore.
 func is_valid(_agent) -> bool:
-	return true
+	return false
 
 
 # Action Cost. This is a function so it handles situational costs, when the world
@@ -41,10 +41,10 @@ func enter(_agent):
 # "agent" is the controller of the NPC
 # "delta" is the time in seconds since last loop.
 #
-# Returns true when the task is complete.
+# Returns true when the task is complete. 
 # Example: return agent.get_state("has_wood")
 func perform(_agent, _delta) -> bool:
-	return false
+	return false # is_step_complete
 
 
 # Runs once when the action ends

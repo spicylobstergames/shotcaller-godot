@@ -6,20 +6,26 @@ func get_class_name() -> String:
 
 
 func is_valid(agent) -> bool:
+	var current_goal = agent.get_current_goal()
+	if current_goal and current_goal.get_class_name() == "WalkLane":
+		return false
+	var unit = agent.get_unit()
+	var has_path = not unit.current_path.is_empty()
+	var is_moving_to_destination = (
+		unit.moves and unit.current_destiny != Vector2.ZERO
+	)
+	return has_path or is_moving_to_destination
+
+
+func enter(agent):
 	var unit = agent.get_unit()
 	var has_path = not unit.current_path.is_empty()
 	agent.set_state("has_path", has_path)
-	var is_moving_to_destination = (
-		unit.moves and unit.state == "move" and unit.current_destiny != Vector2.ZERO
-	)
-	if has_path or is_moving_to_destination:
-		agent.set_state("arrived_at_destination", false)
-		return true
-	return false
+	agent.set_state("arrived_at_destination", false)
 
 
 func priority(_agent) -> int:
-	return 1
+	return 3
 
 
 func get_desired_state(_agent) -> Dictionary:
@@ -27,10 +33,8 @@ func get_desired_state(_agent) -> Dictionary:
 
 
 func is_at_destination(unit) -> bool:
-	if not unit or not unit.agent:
-		return false
 	var offset = 0
-	if not unit.target and not unit.agent.get_state("has_player_command"):
+	if not unit.target:
 		offset = WorldState.get_state("map").half_tile_size
 	return unit.point_collision(unit.current_destiny, offset)
 
@@ -38,9 +42,10 @@ func is_at_destination(unit) -> bool:
 func on_arrive(agent):
 	var unit = agent.get_unit()
 	if not unit.current_path.is_empty():
-		Goap.navigation.next(unit)
+		agent.get_action("Navigate").next(unit)
 	else:
 		unit.current_path.clear()
 		agent.set_state("has_path", false)
 		agent.set_state("arrived_at_destination", true)
-		Goap.move.end(unit)
+		agent.get_action("Move").stop(unit)
+	

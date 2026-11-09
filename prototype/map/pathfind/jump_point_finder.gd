@@ -22,7 +22,10 @@ class JumpPointFinder:
 	var grid
 	var OnlyWhenNoObstacles = 4
 	var heuristic = "euclidean"
-	
+
+	func _init():
+		openList = Heap.new("jpfCmp")
+
 	func euclidean(dx, dy):
 		return sqrt(dx * dx + dy * dy)
 	
@@ -33,7 +36,8 @@ class JumpPointFinder:
 # */
 		
 	func findPath(startX, startY, endX, endY, _grid):
-		openList = Heap.new("jpfCmp")
+		_grid.reset_search_state()
+		openList.clear()
 		startNode = _grid.getNodeAt(startX, startY)
 		endNode = _grid.getNodeAt(endX, endY)
 		grid = _grid

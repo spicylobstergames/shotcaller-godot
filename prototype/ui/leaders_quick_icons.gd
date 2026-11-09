@@ -7,7 +7,7 @@ var built = false
 var buttons_name = {}
 
 
-var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
+var button_template:PackedScene = load("res://ui/buttons/tactics_button.tscn")
 
 func _ready():
 	game = get_tree().get_current_scene()

@@ -3,7 +3,7 @@ var game:Node
 
 signal leaders_built
 
-# self = game.ui.orders_panel
+# self = game.ui.tactics_panel
 
 var cleared = false
 
@@ -24,12 +24,11 @@ var camp:Array = []
 var outpost:Array = []
 
 
-var button_template:PackedScene = load("res://ui/buttons/order_button.tscn")
+var button_template:PackedScene = load("res://ui/buttons/tactics_button.tscn")
 
 const order_types = {
 	"leader_tactics": ["retreat","defend","default","attack"],
 	"lane_tactics": ["defend","default","attack"],
-	"priority": ["pawn", "leader", "building"],
 	"camp_hire": ["infantry","ranged","mounted"],
 	"taxes": ["low","medium","high"],
 	"gold": ["collect", "destroy"],
@@ -131,9 +130,6 @@ func setup_leader_buttons(orders_container):
 	var label = Utils.label("tactics")
 	orders_container.node.add_child(label)
 	setup_tactics(orders_container, order_types.leader_tactics)
-	var label2 = Utils.label("priority")
-	orders_container.node.add_child(label2)
-	setup_priority(orders_container)
 	update()
 
 
@@ -160,9 +156,6 @@ func setup_lane_buttons(orders_container):
 	var label = Utils.label(orders_container.lane +"lane tactics")
 	orders_container.node.add_child(label)
 	setup_tactics(orders_container, order_types.lane_tactics)
-	var label2 = Utils.label(orders_container.lane +" lane priority")
-	orders_container.node.add_child(label2)
-	setup_priority(orders_container)
 
 
 # MINES
@@ -207,8 +200,7 @@ func setup_gold(orders):
 			"hint": hint_keys_up[index]
 		}
 		index += 1
-		setup_order_button(button)
-	orders.node.add_child(HSeparator.new())
+		setup_tactics_button(button)
 
 
 # BLACKSMITH
@@ -249,8 +241,7 @@ func setup_pawn_upgrades(orders):
 			"hint": hint_keys_up[index]
 		}
 		index += 1
-		setup_order_button(button)
-	orders.node.add_child(HSeparator.new())
+		setup_tactics_button(button)
 
 
 
@@ -292,8 +283,7 @@ func setup_lumberjack(orders):
 			"hint": hint_keys_up[index]
 		}
 		index += 1
-		setup_order_button(button)
-	orders.node.add_child(HSeparator.new())
+		setup_tactics_button(button)
 
 
 # CAMPS
@@ -334,11 +324,10 @@ func setup_hire(orders):
 			"hint": hint_keys_up[index]
 		}
 		index += 1
-		setup_order_button(button)
+		setup_tactics_button(button)
 		if hire == "melee":
 			button.button_pressed = true
 			button.disabled = true
-	orders.node.add_child(HSeparator.new())
 
 
 # OUTPOSTS
@@ -379,8 +368,7 @@ func setup_tower_upgrades(orders):
 			"hint": hint_keys_up[index]
 		}
 		index += 1
-		setup_order_button(button)
-	orders.node.add_child(HSeparator.new())
+		setup_tactics_button(button)
 
 
 # TAXES
@@ -401,11 +389,10 @@ func setup_taxes(orders):
 			"hint": hint_keys_down[index]
 		}
 		index += 1
-		setup_order_button(button)
+		setup_tactics_button(button)
 		if tax == "low":
 			button.button_pressed = true
 			button.disabled = true
-	orders.node.add_child(HSeparator.new())
 
 
 # TACTICS
@@ -428,39 +415,12 @@ func setup_tactics(orders_container, tactics):
 			button.button_pressed = true
 			button.disabled = true
 		buttons_container.add_child(button)
-		setup_order_button(button)
-	
-	orders_container.node.add_child(HSeparator.new())
+		setup_tactics_button(button)
 
 
-# PRIORITY
-
-func setup_priority(orders_container):
-	var buttons_container = HBoxContainer.new()
-	orders_container.node.add_child(buttons_container)
-	var index = 0
-	for priority in order_types.priority:
-		var button = button_template.instantiate()
-		button.orders =  {
-			"order": orders_container,
-			"type": "priority",
-			"priority": priority,
-			"hint": hint_keys_down[index]
-		}
-		index += 1
-		button.set_toggle_mode(false)
-		button.set_action_mode(true)
-		buttons_container.add_child(button)
-		setup_order_button(button)
-	var first = buttons_container.get_child(0)
-	first.set_pressed(true)
-	first.set_disabled(true)
-
-
-
-func setup_order_button(button):
+func setup_tactics_button(button):
 	#await get_tree().idle_frame
-	button.setup_order_button()
+	button.setup_tactics_button()
 
 
 func update():

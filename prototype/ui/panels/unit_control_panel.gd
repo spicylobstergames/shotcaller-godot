@@ -1,7 +1,7 @@
 extends Control
 var game:Node
 
-# self = game.ui.unit_controls_panel
+# self = game.ui.unit_control_panel
 
 @onready var teleport_button = get_node("%teleport_button")
 @onready var lane_button = get_node("%lane_button")

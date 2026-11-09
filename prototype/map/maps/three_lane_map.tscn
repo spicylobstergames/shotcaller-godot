@@ -5,25 +5,25 @@
 [ext_resource type="Texture2D" uid="uid://v02ojd1vroik" path="res://assets/map/water.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://0te8lf0bpsce" path="res://assets/buildings/buildings_blue.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://b20emsujm6uuy" path="res://assets/map/trees.png" id="5"]
-[ext_resource type="Shader" path="res://map/tool/color_replace.tres" id="8"]
+[ext_resource type="Shader" uid="uid://dddo4ov106fb3" path="res://map/tool/color_replace.tres" id="8"]
 [ext_resource type="Texture2D" uid="uid://dcw7jcqvul7w1" path="res://assets/map/waterfall.png" id="9"]
-[ext_resource type="PackedScene" path="res://unit/buildings/barrack.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://unit/buildings/castle.tscn" id="11"]
-[ext_resource type="PackedScene" path="res://unit/buildings/tower.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://bpx6ma6q6tysr" path="res://unit/buildings/barrack.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://0quxwtt8gviu" path="res://unit/buildings/castle.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://5yk7yqmah2rc" path="res://unit/buildings/tower.tscn" id="12"]
 [ext_resource type="Script" uid="uid://cxmm5nsrum4xw" path="res://map/maps/base_map.gd" id="13"]
 [ext_resource type="Texture2D" uid="uid://5x0ekg16bvvx" path="res://assets/map/grass_dark.png" id="14"]
 [ext_resource type="Texture2D" uid="uid://bwpxq078saylk" path="res://assets/map/mud.png" id="15"]
 [ext_resource type="Texture2D" uid="uid://bb2dixwuidm6n" path="res://assets/map/brick_square.png" id="16"]
-[ext_resource type="PackedScene" path="res://unit/buildings/church.tscn" id="17"]
+[ext_resource type="PackedScene" uid="uid://401wlhyr2mi8" path="res://unit/buildings/church.tscn" id="17"]
 [ext_resource type="Texture2D" uid="uid://c4gqs4ai3fydh" path="res://assets/buildings/neutral_blue.png" id="17_vted6"]
 [ext_resource type="Texture2D" uid="uid://donxlsx4i210a" path="res://assets/buildings/neutral_gray.png" id="18_rk2vl"]
 [ext_resource type="Texture2D" uid="uid://b48muhglye3v7" path="res://assets/buildings/neutral_red.png" id="19_mcoka"]
 [ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="20_4n18s"]
-[ext_resource type="PackedScene" path="res://unit/buildings/mine.tscn" id="21"]
-[ext_resource type="PackedScene" path="res://unit/buildings/camp.tscn" id="22"]
-[ext_resource type="PackedScene" path="res://unit/buildings/outpost.tscn" id="23"]
-[ext_resource type="PackedScene" path="res://unit/buildings/blacksmith.tscn" id="24"]
-[ext_resource type="PackedScene" path="res://unit/buildings/lumbermill.tscn" id="25"]
+[ext_resource type="PackedScene" uid="uid://7f811ncy05t7" path="res://unit/buildings/mine.tscn" id="21"]
+[ext_resource type="PackedScene" uid="uid://djtn8wnfjnnq5" path="res://unit/buildings/camp.tscn" id="22"]
+[ext_resource type="PackedScene" uid="uid://bdgd5q7krn3yh" path="res://unit/buildings/outpost.tscn" id="23"]
+[ext_resource type="PackedScene" uid="uid://qlmv1mv4n7mk" path="res://unit/buildings/blacksmith.tscn" id="24"]
+[ext_resource type="PackedScene" uid="uid://c0rxyrwq8okrx" path="res://unit/buildings/lumbermill.tscn" id="25"]
 [ext_resource type="Texture2D" uid="uid://f3410v63o4pc" path="res://assets/buildings/buildings_gray.png" id="25_cx7v6"]
 [ext_resource type="Texture2D" uid="uid://ve2xg3pr0dxe" path="res://assets/map/brick_old.png" id="26"]
 [ext_resource type="Texture2D" uid="uid://bd3knqfnkfqsi" path="res://assets/buildings/buildings_red.png" id="26_wlsja"]
@@ -4809,13 +4809,13 @@ team = "neutral"
 sprite_frames = SubResource("45")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/blue/mine/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/blue/mine/sprites/weapon/projectile" parent_id_path=PackedInt32Array(900643751, 167709531) index="0" unique_id=1659476195]
 sprite_frames = SubResource("41")
 
-[node name="bow" parent="buildings/blue/mine/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/blue/mine/sprites/weapon" parent_id_path=PackedInt32Array(900643751, 1735597477) index="1" unique_id=1027435587]
 sprite_frames = SubResource("46")
 
-[node name="animations" parent="buildings/blue/mine" index="3"]
+[node name="animations" parent="buildings/blue/mine" index="3" unique_id=1531498016]
 libraries/ = SubResource("AnimationLibrary_sgysb")
 
 [node name="camp" parent="buildings/blue" unique_id=1004392626 instance=ExtResource("22")]
@@ -4827,13 +4827,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_ii2kb")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/blue/camp/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/blue/camp/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1004392626, 672618518) index="0" unique_id=1087302108]
 sprite_frames = SubResource("SpriteFrames_6l8xp")
 
-[node name="bow" parent="buildings/blue/camp/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/blue/camp/sprites/weapon" parent_id_path=PackedInt32Array(1004392626, 688997505) index="1" unique_id=1297574800]
 sprite_frames = SubResource("47")
 
-[node name="animations" parent="buildings/blue/camp" index="3"]
+[node name="animations" parent="buildings/blue/camp" index="3" unique_id=152441742]
 libraries/ = SubResource("AnimationLibrary_84r35")
 
 [node name="outpost" parent="buildings/blue" unique_id=539613274 instance=ExtResource("23")]
@@ -4845,13 +4845,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_gwruq")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/blue/outpost/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/blue/outpost/sprites/weapon/projectile" parent_id_path=PackedInt32Array(539613274, 592976530) index="0" unique_id=1225477396]
 sprite_frames = SubResource("SpriteFrames_af33r")
 
-[node name="bow" parent="buildings/blue/outpost/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/blue/outpost/sprites/weapon" parent_id_path=PackedInt32Array(539613274, 1466559459) index="1" unique_id=805673736]
 sprite_frames = SubResource("SpriteFrames_3r4b0")
 
-[node name="animations" parent="buildings/blue/outpost" index="3"]
+[node name="animations" parent="buildings/blue/outpost" index="3" unique_id=2137885538]
 libraries/ = SubResource("AnimationLibrary_5njkr")
 
 [node name="blacksmith" parent="buildings/blue" unique_id=769314119 instance=ExtResource("24")]
@@ -4863,13 +4863,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_rp1g2")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/blue/blacksmith/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/blue/blacksmith/sprites/weapon/projectile" parent_id_path=PackedInt32Array(769314119, 848253097) index="0" unique_id=1993701457]
 sprite_frames = SubResource("SpriteFrames_ya0sv")
 
-[node name="bow" parent="buildings/blue/blacksmith/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/blue/blacksmith/sprites/weapon" parent_id_path=PackedInt32Array(769314119, 1404594096) index="1" unique_id=107697080]
 sprite_frames = SubResource("SpriteFrames_jvovi")
 
-[node name="animations" parent="buildings/blue/blacksmith" index="3"]
+[node name="animations" parent="buildings/blue/blacksmith" index="3" unique_id=268311142]
 libraries/ = SubResource("AnimationLibrary_5gn5x")
 
 [node name="closest_tree" type="Marker2D" parent="buildings/blue/blacksmith" unique_id=2068782620]
@@ -4885,13 +4885,13 @@ scale = Vector2(-1, 1)
 sprite_frames = SubResource("SpriteFrames_7qxvh")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/blue/lumbermill/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/blue/lumbermill/sprites/weapon/projectile" parent_id_path=PackedInt32Array(473673123, 135208597) index="0" unique_id=1172786469]
 sprite_frames = SubResource("SpriteFrames_eq5p1")
 
-[node name="bow" parent="buildings/blue/lumbermill/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/blue/lumbermill/sprites/weapon" parent_id_path=PackedInt32Array(473673123, 844715012) index="1" unique_id=1759451510]
 sprite_frames = SubResource("SpriteFrames_g6wi4")
 
-[node name="animations" parent="buildings/blue/lumbermill" index="3"]
+[node name="animations" parent="buildings/blue/lumbermill" index="3" unique_id=586268972]
 libraries/ = SubResource("AnimationLibrary_bjn7x")
 
 [node name="red" type="Node2D" parent="buildings" unique_id=995955202]
@@ -4907,16 +4907,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_d7q0q")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/castle/sprites" parent_id_path=PackedInt32Array(1766463379, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/castle/sprites" parent_id_path=PackedInt32Array(1766463379, 1765529208) index="2" unique_id=1861730753]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/castle/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/castle/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1766463379, 2052214074) index="0" unique_id=1212131441]
 sprite_frames = SubResource("SpriteFrames_cyxh3")
 
-[node name="bow" parent="buildings/red/castle/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/castle/sprites/weapon" parent_id_path=PackedInt32Array(1766463379, 1827474741) index="1" unique_id=949064381]
 sprite_frames = SubResource("SpriteFrames_llupa")
 
-[node name="animations" parent="buildings/red/castle" index="3"]
+[node name="animations" parent="buildings/red/castle" index="3" unique_id=838225327]
 libraries/ = SubResource("AnimationLibrary_ipgbx")
 
 [node name="barrack_top" parent="buildings/red" unique_id=2112968422 instance=ExtResource("10")]
@@ -4929,16 +4929,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_5n5n4")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/barrack_top/sprites" parent_id_path=PackedInt32Array(2112968422, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/barrack_top/sprites" parent_id_path=PackedInt32Array(2112968422, 1765529208) index="2" unique_id=159254233]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/barrack_top/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/barrack_top/sprites/weapon/projectile" parent_id_path=PackedInt32Array(2112968422, 1701962805) index="0" unique_id=1918773793]
 sprite_frames = SubResource("SpriteFrames_srmc4")
 
-[node name="bow" parent="buildings/red/barrack_top/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/barrack_top/sprites/weapon" parent_id_path=PackedInt32Array(2112968422, 2097641760) index="1" unique_id=1623857297]
 sprite_frames = SubResource("SpriteFrames_cnevr")
 
-[node name="animations" parent="buildings/red/barrack_top" index="3"]
+[node name="animations" parent="buildings/red/barrack_top" index="3" unique_id=139267909]
 libraries/ = SubResource("AnimationLibrary_vu4ni")
 
 [node name="barrack_mid" parent="buildings/red" unique_id=1660086419 instance=ExtResource("10")]
@@ -4951,16 +4951,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_5n5n4")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/barrack_mid/sprites" parent_id_path=PackedInt32Array(1660086419, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/barrack_mid/sprites" parent_id_path=PackedInt32Array(1660086419, 1765529208) index="2" unique_id=159254233]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/barrack_mid/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/barrack_mid/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1660086419, 1701962805) index="0" unique_id=1918773793]
 sprite_frames = SubResource("SpriteFrames_srmc4")
 
-[node name="bow" parent="buildings/red/barrack_mid/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/barrack_mid/sprites/weapon" parent_id_path=PackedInt32Array(1660086419, 2097641760) index="1" unique_id=1623857297]
 sprite_frames = SubResource("SpriteFrames_cnevr")
 
-[node name="animations" parent="buildings/red/barrack_mid" index="3"]
+[node name="animations" parent="buildings/red/barrack_mid" index="3" unique_id=139267909]
 libraries/ = SubResource("AnimationLibrary_ccnle")
 
 [node name="barrack_bot" parent="buildings/red" unique_id=981578330 instance=ExtResource("10")]
@@ -4973,16 +4973,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_5n5n4")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/barrack_bot/sprites" parent_id_path=PackedInt32Array(981578330, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/barrack_bot/sprites" parent_id_path=PackedInt32Array(981578330, 1765529208) index="2" unique_id=159254233]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/barrack_bot/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/barrack_bot/sprites/weapon/projectile" parent_id_path=PackedInt32Array(981578330, 1701962805) index="0" unique_id=1918773793]
 sprite_frames = SubResource("SpriteFrames_srmc4")
 
-[node name="bow" parent="buildings/red/barrack_bot/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/barrack_bot/sprites/weapon" parent_id_path=PackedInt32Array(981578330, 2097641760) index="1" unique_id=1623857297]
 sprite_frames = SubResource("SpriteFrames_cnevr")
 
-[node name="animations" parent="buildings/red/barrack_bot" index="3"]
+[node name="animations" parent="buildings/red/barrack_bot" index="3" unique_id=139267909]
 libraries/ = SubResource("AnimationLibrary_lbqkd")
 
 [node name="tower_bot_1" parent="buildings/red" unique_id=1829812777 instance=ExtResource("12")]
@@ -4995,16 +4995,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_r7hrp")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/tower_bot_1/sprites" parent_id_path=PackedInt32Array(1829812777, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/tower_bot_1/sprites" parent_id_path=PackedInt32Array(1829812777, 1765529208) index="2" unique_id=1806757210]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/tower_bot_1/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/tower_bot_1/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1829812777, 415895432) index="0" unique_id=1612461643]
 sprite_frames = SubResource("SpriteFrames_e0vr5")
 
-[node name="bow" parent="buildings/red/tower_bot_1/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/tower_bot_1/sprites/weapon" parent_id_path=PackedInt32Array(1829812777, 160016279) index="1" unique_id=1576009355]
 sprite_frames = SubResource("SpriteFrames_aq85f")
 
-[node name="animations" parent="buildings/red/tower_bot_1" index="3"]
+[node name="animations" parent="buildings/red/tower_bot_1" index="3" unique_id=733285868]
 libraries/ = SubResource("AnimationLibrary_lpyyi")
 
 [node name="tower_bot_2" parent="buildings/red" unique_id=485432807 instance=ExtResource("12")]
@@ -5017,16 +5017,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_r7hrp")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/tower_bot_2/sprites" parent_id_path=PackedInt32Array(485432807, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/tower_bot_2/sprites" parent_id_path=PackedInt32Array(485432807, 1765529208) index="2" unique_id=1806757210]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/tower_bot_2/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/tower_bot_2/sprites/weapon/projectile" parent_id_path=PackedInt32Array(485432807, 415895432) index="0" unique_id=1612461643]
 sprite_frames = SubResource("SpriteFrames_e0vr5")
 
-[node name="bow" parent="buildings/red/tower_bot_2/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/tower_bot_2/sprites/weapon" parent_id_path=PackedInt32Array(485432807, 160016279) index="1" unique_id=1576009355]
 sprite_frames = SubResource("SpriteFrames_aq85f")
 
-[node name="animations" parent="buildings/red/tower_bot_2" index="3"]
+[node name="animations" parent="buildings/red/tower_bot_2" index="3" unique_id=733285868]
 libraries/ = SubResource("AnimationLibrary_xbm7s")
 
 [node name="tower_mid_1" parent="buildings/red" unique_id=1791115633 instance=ExtResource("12")]
@@ -5039,16 +5039,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_r7hrp")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/tower_mid_1/sprites" parent_id_path=PackedInt32Array(1791115633, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/tower_mid_1/sprites" parent_id_path=PackedInt32Array(1791115633, 1765529208) index="2" unique_id=1806757210]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/tower_mid_1/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/tower_mid_1/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1791115633, 415895432) index="0" unique_id=1612461643]
 sprite_frames = SubResource("SpriteFrames_e0vr5")
 
-[node name="bow" parent="buildings/red/tower_mid_1/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/tower_mid_1/sprites/weapon" parent_id_path=PackedInt32Array(1791115633, 160016279) index="1" unique_id=1576009355]
 sprite_frames = SubResource("SpriteFrames_aq85f")
 
-[node name="animations" parent="buildings/red/tower_mid_1" index="3"]
+[node name="animations" parent="buildings/red/tower_mid_1" index="3" unique_id=733285868]
 libraries/ = SubResource("AnimationLibrary_im6ws")
 
 [node name="tower_mid_2" parent="buildings/red" unique_id=238888223 instance=ExtResource("12")]
@@ -5061,16 +5061,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_r7hrp")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/tower_mid_2/sprites" parent_id_path=PackedInt32Array(238888223, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/tower_mid_2/sprites" parent_id_path=PackedInt32Array(238888223, 1765529208) index="2" unique_id=1806757210]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/tower_mid_2/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/tower_mid_2/sprites/weapon/projectile" parent_id_path=PackedInt32Array(238888223, 415895432) index="0" unique_id=1612461643]
 sprite_frames = SubResource("SpriteFrames_e0vr5")
 
-[node name="bow" parent="buildings/red/tower_mid_2/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/tower_mid_2/sprites/weapon" parent_id_path=PackedInt32Array(238888223, 160016279) index="1" unique_id=1576009355]
 sprite_frames = SubResource("SpriteFrames_aq85f")
 
-[node name="animations" parent="buildings/red/tower_mid_2" index="3"]
+[node name="animations" parent="buildings/red/tower_mid_2" index="3" unique_id=733285868]
 libraries/ = SubResource("AnimationLibrary_kg25h")
 
 [node name="tower_top_1" parent="buildings/red" unique_id=1228745394 instance=ExtResource("12")]
@@ -5083,16 +5083,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_r7hrp")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/tower_top_1/sprites" parent_id_path=PackedInt32Array(1228745394, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/tower_top_1/sprites" parent_id_path=PackedInt32Array(1228745394, 1765529208) index="2" unique_id=1806757210]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/tower_top_1/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/tower_top_1/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1228745394, 415895432) index="0" unique_id=1612461643]
 sprite_frames = SubResource("SpriteFrames_e0vr5")
 
-[node name="bow" parent="buildings/red/tower_top_1/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/tower_top_1/sprites/weapon" parent_id_path=PackedInt32Array(1228745394, 160016279) index="1" unique_id=1576009355]
 sprite_frames = SubResource("SpriteFrames_aq85f")
 
-[node name="animations" parent="buildings/red/tower_top_1" index="3"]
+[node name="animations" parent="buildings/red/tower_top_1" index="3" unique_id=733285868]
 libraries/ = SubResource("AnimationLibrary_in206")
 
 [node name="tower_top_2" parent="buildings/red" unique_id=1696692166 instance=ExtResource("12")]
@@ -5105,16 +5105,16 @@ team = "red"
 sprite_frames = SubResource("SpriteFrames_r7hrp")
 animation = &"red"
 
-[node name="flags" parent="buildings/red/tower_top_2/sprites" parent_id_path=PackedInt32Array(1696692166, 1765529208) index="2"]
+[node name="flags" parent="buildings/red/tower_top_2/sprites" parent_id_path=PackedInt32Array(1696692166, 1765529208) index="2" unique_id=1806757210]
 material = SubResource("63")
 
-[node name="sprites" parent="buildings/red/tower_top_2/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/tower_top_2/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1696692166, 415895432) index="0" unique_id=1612461643]
 sprite_frames = SubResource("SpriteFrames_e0vr5")
 
-[node name="bow" parent="buildings/red/tower_top_2/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/tower_top_2/sprites/weapon" parent_id_path=PackedInt32Array(1696692166, 160016279) index="1" unique_id=1576009355]
 sprite_frames = SubResource("SpriteFrames_aq85f")
 
-[node name="animations" parent="buildings/red/tower_top_2" index="3"]
+[node name="animations" parent="buildings/red/tower_top_2" index="3" unique_id=733285868]
 libraries/ = SubResource("AnimationLibrary_pvfj4")
 
 [node name="church" parent="buildings/red" unique_id=2116889158 instance=ExtResource("17")]
@@ -5131,13 +5131,13 @@ team = "neutral"
 sprite_frames = SubResource("45")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/red/mine/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/mine/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1778711132, 167709531) index="0" unique_id=1659476195]
 sprite_frames = SubResource("41")
 
-[node name="bow" parent="buildings/red/mine/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/mine/sprites/weapon" parent_id_path=PackedInt32Array(1778711132, 1735597477) index="1" unique_id=1027435587]
 sprite_frames = SubResource("46")
 
-[node name="animations" parent="buildings/red/mine" index="3"]
+[node name="animations" parent="buildings/red/mine" index="3" unique_id=1531498016]
 libraries/ = SubResource("AnimationLibrary_amonf")
 
 [node name="camp" parent="buildings/red" unique_id=1902654702 instance=ExtResource("22")]
@@ -5149,13 +5149,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_ii2kb")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/red/camp/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/camp/sprites/weapon/projectile" parent_id_path=PackedInt32Array(1902654702, 672618518) index="0" unique_id=1087302108]
 sprite_frames = SubResource("SpriteFrames_6l8xp")
 
-[node name="bow" parent="buildings/red/camp/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/camp/sprites/weapon" parent_id_path=PackedInt32Array(1902654702, 688997505) index="1" unique_id=1297574800]
 sprite_frames = SubResource("47")
 
-[node name="animations" parent="buildings/red/camp" index="3"]
+[node name="animations" parent="buildings/red/camp" index="3" unique_id=152441742]
 libraries/ = SubResource("AnimationLibrary_cgl2f")
 
 [node name="outpost" parent="buildings/red" unique_id=653873965 instance=ExtResource("23")]
@@ -5167,13 +5167,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_gwruq")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/red/outpost/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/outpost/sprites/weapon/projectile" parent_id_path=PackedInt32Array(653873965, 592976530) index="0" unique_id=1225477396]
 sprite_frames = SubResource("SpriteFrames_af33r")
 
-[node name="bow" parent="buildings/red/outpost/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/outpost/sprites/weapon" parent_id_path=PackedInt32Array(653873965, 1466559459) index="1" unique_id=805673736]
 sprite_frames = SubResource("SpriteFrames_3r4b0")
 
-[node name="animations" parent="buildings/red/outpost" index="3"]
+[node name="animations" parent="buildings/red/outpost" index="3" unique_id=2137885538]
 libraries/ = SubResource("AnimationLibrary_ww4xk")
 
 [node name="blacksmith" parent="buildings/red" unique_id=155659832 instance=ExtResource("24")]
@@ -5185,13 +5185,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_rp1g2")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/red/blacksmith/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/blacksmith/sprites/weapon/projectile" parent_id_path=PackedInt32Array(155659832, 848253097) index="0" unique_id=1993701457]
 sprite_frames = SubResource("SpriteFrames_ya0sv")
 
-[node name="bow" parent="buildings/red/blacksmith/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/blacksmith/sprites/weapon" parent_id_path=PackedInt32Array(155659832, 1404594096) index="1" unique_id=107697080]
 sprite_frames = SubResource("SpriteFrames_jvovi")
 
-[node name="animations" parent="buildings/red/blacksmith" index="3"]
+[node name="animations" parent="buildings/red/blacksmith" index="3" unique_id=268311142]
 libraries/ = SubResource("AnimationLibrary_hpk6j")
 
 [node name="closest_tree" type="Marker2D" parent="buildings/red/blacksmith" unique_id=663069541]
@@ -5206,13 +5206,13 @@ team = "neutral"
 sprite_frames = SubResource("SpriteFrames_7qxvh")
 animation = &"neutral"
 
-[node name="sprites" parent="buildings/red/lumbermill/sprites/weapon/projectile" index="0"]
+[node name="sprites" parent="buildings/red/lumbermill/sprites/weapon/projectile" parent_id_path=PackedInt32Array(187050085, 135208597) index="0" unique_id=1172786469]
 sprite_frames = SubResource("SpriteFrames_eq5p1")
 
-[node name="bow" parent="buildings/red/lumbermill/sprites/weapon" index="1"]
+[node name="bow" parent="buildings/red/lumbermill/sprites/weapon" parent_id_path=PackedInt32Array(187050085, 844715012) index="1" unique_id=1759451510]
 sprite_frames = SubResource("SpriteFrames_g6wi4")
 
-[node name="animations" parent="buildings/red/lumbermill" index="3"]
+[node name="animations" parent="buildings/red/lumbermill" index="3" unique_id=586268972]
 libraries/ = SubResource("AnimationLibrary_wum5l")
 
 [node name="lanes" type="Node2D" parent="." unique_id=1341588498]

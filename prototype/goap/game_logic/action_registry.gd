@@ -3,6 +3,7 @@ extends Node
 # Lists all actions.
 var _actions: Array = [
 	preload("res://goap/game_logic/actions/attack_enemy.gd").new(),
+	preload("res://goap/game_logic/actions/choose_tactics.gd").new(),
 	preload("res://goap/game_logic/actions/choose_target.gd").new(),
 	preload("res://goap/game_logic/actions/conquer_action.gd").new(),
 	preload("res://goap/game_logic/actions/get_lumber.gd").new(),
@@ -19,7 +20,6 @@ var _actions: Array = [
 	preload("res://goap/game_logic/actions/retreat_action.gd").new(),
 	preload("res://goap/game_logic/actions/return_lumber.gd").new(),
 	preload("res://goap/game_logic/actions/taxes_action.gd").new(),
-	preload("res://goap/game_logic/actions/wait_out.gd").new(),
 	preload("res://goap/game_logic/actions/wait_for_regeneration.gd").new(),
 ]
 

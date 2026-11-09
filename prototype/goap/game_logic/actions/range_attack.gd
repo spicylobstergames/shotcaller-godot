@@ -16,7 +16,7 @@ func projectile_start(attacker, target) -> void:
 		target_position = target.global_position + target.collision_position
 		if target.dead or target.immune:
 			return
-	if not Goap.move.in_bounds(target_position):
+	if not attacker.agent.get_action("Move").in_bounds(target_position):
 		return
 	attacker.weapon.look_at(target_position)
 	var projectile = attacker.projectile.duplicate()
@@ -56,6 +56,28 @@ func projectile_start(attacker, target) -> void:
 			"stuck": false
 		}
 	)
+
+func projectile_loop(unit1, delta):
+	for projectile in unit1.projectiles:
+		if is_instance_valid(projectile.node) and projectile.speed and projectile.stuck == false:
+			var projectile_position = projectile.node.global_position + (projectile.speed * delta)
+			# projectile out of range
+			if projectile_position.distance_to(unit1.global_position + unit1.collision_position) > projectile.radius:
+				unit1.agent.get_action("RangeAttack").projectile_stuck(unit1, null, projectile)
+			else:
+				if projectile.target:
+					if projectile.target.point_collision(projectile_position):
+						unit1.take_hit(projectile.target, projectile);
+				else: # pierces
+					var targets = Collisions.get_units_in_radius(projectile_position, 1) 
+					for target in targets:
+						if (unit1.agent.get_action("ChooseTarget").can_hit(unit1, target) and
+								projectile.targets.find(target) < 0 and
+								target.point_collision(projectile_position) ):
+							unit1.take_hit(target, projectile)
+				# move projectile
+				if not projectile.stuck: unit1.agent.get_action("RangeAttack").projectile_step(delta, projectile)
+
 
 
 func projectile_step(delta, projectile) -> void:

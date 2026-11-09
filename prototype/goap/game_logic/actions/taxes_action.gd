@@ -18,7 +18,7 @@ const tax_conquer_limit = {
 
 
 func get_class_name() -> String:
-	return "TaxesAction"
+	return "Taxes"
 
 
 func set_taxes(tax, team):
