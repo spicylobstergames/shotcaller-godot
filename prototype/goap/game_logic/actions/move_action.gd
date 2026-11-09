@@ -157,4 +157,4 @@ func teleport(unit, target_point):
 
 		unit.global_position = new_position
 		agent.set_state("lane", building.lane)
-		Goap.get_action("Navigate").resume_lane(unit)
+		Goap.get_goal("WalkLane").resume_lane(unit)

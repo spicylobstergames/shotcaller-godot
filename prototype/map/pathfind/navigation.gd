@@ -36,23 +36,6 @@ func setup_pathfind():
 	map.fog.add_sibling(path_line)
 
 
-func new_lane_path(lane, team):
-	if lane in WorldState.get_state("lanes"):
-		var path = WorldState.get_state("lanes")[lane].duplicate()
-		var map = WorldState.get_state("map")
-		if team == "blue":
-			var castle = map.get_node_or_null("buildings/red/castle")
-			if castle:
-				path.append(castle.global_position)
-		if team == "red":
-			path.reverse()
-			var castle = map.get_node_or_null("buildings/blue/castle")
-			if castle:
-				path.append(castle.global_position)
-		return path
-	return []
-
-
 func draw(unit):
 	var should_draw = false
 	var has_path = false

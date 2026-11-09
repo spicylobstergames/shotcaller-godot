@@ -40,7 +40,7 @@ func spawn_unit():
 		game.map_manager.setup_leaders([leader], [])
 		
 		# TEST LANE PAWN
-#		var path = Navigation.new_lane_path("mid", "blue")
+#		var path = Goap.get_goal("WalkLane").get_lane_path("mid", "blue")
 #		var start = path.pop_front()
 		var pawn = game.spawn.create(game.spawn.pawn_scene("infantry"), "mid", "blue", "Vector2",  Vector2(200,600))
 #		pawn.current_path = path

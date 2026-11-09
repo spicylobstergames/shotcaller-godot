@@ -34,20 +34,6 @@ func compare_distance(a: Dictionary, b: Dictionary) -> bool:
 	return a.distance < b.distance
 
 
-func closer_lane(point):
-	var distances = []
-	
-	for lane in WorldState.get_state("lanes"):
-		for lane_point in WorldState.get_state("lanes")[lane]:
-			distances.append({
-				"distance": point.distance_to(lane_point),
-				"lane": lane
-			})
-	
-	distances.sort_custom(compare_distance)
-	return distances[0].lane
-
-
 func closer_building(point, team):
 	var distances = []
 	var buildings = WorldState.get_state("player_buildings")

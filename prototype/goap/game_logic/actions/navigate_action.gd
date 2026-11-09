@@ -29,7 +29,7 @@ func enter(agent):
 	var lane = agent.get_state("lane", "")
 	
 	if !unit.current_path:
-		var path = Navigation.new_lane_path(lane, unit.team)
+		var path = Goap.get_goal("WalkLane").get_lane_path(lane, unit.team)
 		if !path.is_empty():
 			unit.current_path = path
 	
@@ -168,24 +168,8 @@ func resume_path(unit):
 	cut_path(unit, unit.current_path)
 
 
-func resume_lane(unit):
-	var lane = unit.agent.get_state("lane")
-	cut_path(unit, Collisions.new_lane_path(lane, unit.team))
-
-
 func next(unit):
 	if not unit.current_path.is_empty():
 		follow_path(unit, unit.current_path)
 	else:
 		Goap.get_action("Move").stop(unit)
-
-
-func change_lane(unit, lane_point):
-	var lane = Utils.closer_lane(lane_point)
-	unit.agent.set_state("lane", lane)
-	var path = WorldState.get_state("lanes")[lane].duplicate()
-	if unit.team == "red":
-		path.reverse()
-	var lane_start = path.pop_front()
-	move(unit, lane_start)
-	unit.current_path.append(path)

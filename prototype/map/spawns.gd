@@ -89,7 +89,7 @@ func leaders():
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
-			var path_start = Navigation.new_lane_path(lane, team).pop_front()
+			var path_start = Goap.get_goal("WalkLane").get_lane_path(lane, team).pop_front()
 			var leader_node = game.spawn.create(leader_scene(leader_name), lane, team, "point_random", path_start)
 			leader_node.setup_leader_exp()
 			if team == "red":
@@ -142,7 +142,7 @@ func pawn_scene(pawn_name):
 
 
 func create_pawn(template_name, lane, team):
-	var path_start = Navigation.new_lane_path(lane, team).pop_front()
+	var path_start = Goap.get_goal("WalkLane").get_lane_path(lane, team).pop_front()
 	var pawn = recycle(template_name, lane, team, path_start)
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
@@ -227,7 +227,7 @@ func cemitery_add_leader(leader):
 	leader.reset_unit()
 	var team = leader.team
 	var lane = leader.agent.get_state("lane")
-	var path_start = Navigation.new_lane_path(lane, team).pop_front()
+	var path_start = Goap.get_goal("WalkLane").get_lane_path(lane, team).pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", path_start)
 
 

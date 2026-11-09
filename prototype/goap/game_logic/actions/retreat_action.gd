@@ -21,9 +21,9 @@ func enter(agent):
 	var unit = agent.get_unit()
 	agent.set_state("is_retreating", true)
 	var lane = agent.get_state("lane")
-	var path = WorldState.get_state("lanes")[lane].duplicate()
-	if unit.team == "red":
-		path.reverse()
+	var path = Goap.get_goal("WalkLane").get_lane_path(lane, unit.team, false)
+	if path.is_empty():
+		return
 	var recover_point = path[0]
 	var half = WorldState.get_state("map").half_tile_size
 	recover_point.x += (randf() * 2 * half) - half
