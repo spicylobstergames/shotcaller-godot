@@ -30,8 +30,10 @@ class MockGoal extends GoalContract:
 
 class MockAction extends RefCounted:
 	var entered := false
+	var enter_count := 0
 	var perform_count := 0
 	var exited := false
+	var exit_count := 0
 	var _ticks_to_complete := 1
 
 	func _init(ticks: int = 1) -> void:
@@ -39,6 +41,7 @@ class MockAction extends RefCounted:
 
 	func enter(_agent: Variant) -> void:
 		entered = true
+		enter_count += 1
 
 	func perform(_agent: Variant, _delta: float) -> bool:
 		perform_count += 1
@@ -46,6 +49,7 @@ class MockAction extends RefCounted:
 
 	func exit(_agent: Variant) -> void:
 		exited = true
+		exit_count += 1
 
 
 func run(harness: Node) -> void:

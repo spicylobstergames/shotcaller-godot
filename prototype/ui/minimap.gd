@@ -97,6 +97,12 @@ func get_map_texture():
 	WorldState.get_state("map").show()
 	game.map_manager.buildings_visibility(false)
 	CraftyCamera.map_loaded()
+	# Headless mode (CI, dedicated servers, smoke tests): no frames are ever
+	# drawn, so awaiting frame_post_draw below would hang forever. Skip the
+	# viewport snapshot and go straight to map-loaded.
+	if DisplayServer.get_name() == "headless":
+		game.map_manager.map_loaded()
+		return
 	# after the proper map image is draw
 	await RenderingServer.frame_post_draw
 	# take snapshop

@@ -1,141 +1,88 @@
-# Test Coverage Analysis
+# Test Coverage
 
-## Current state
-
-**18 test classes**, **12633 individual assertions**, all passing. Running headless via `res://tests/test_runner.tscn`.
-**96 GDScript files** in the project, 330+ public methods not directly tested.
-
-## Test suite results
+**20 test classes**, **171 assertions**, **0 script errors** — all passing.
 
 ```
-godot --headless --path prototype res://tests/test_runner.tscn
-→ All 12633 tests passed.
+./prototype/tests/run_suite.sh
+→ [1/2] All 171 tests passed.
+→ [2/2] SMOKE_RESULT: ticks=300 units=127 leaders=1 moved=3
+→ SUITE GREEN: unit tests passed, boot smoke passed, zero script errors
 ```
 
-### New test classes (7, added in this session):
+## The suite has two layers
 
-| Test File | Coverage Target | Assertions | Status |
-|-----------|----------------|------------|--------|
-| `test_modifiers.gd` | `skills/modifiers.gd` — all public methods | ~35 | ✅ PASS |
-| `test_passive_skills.gd` | `skills/passive_skills.gd` — hit_modifiers, get_value | ~20 | ✅ PASS |
-| `test_spawns.gd` | `map/spawns.gd` — costs, cemetery, lane tactics | ~22 | ✅ PASS |
-| `test_goal_interactions.gd` | Goal contracts — priority, validity, independence | ~25 | ✅ PASS |
-| `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — coordinate math, cell diff | ~28 | ✅ PASS |
-| `test_action_lifecycles.gd` | `RetreatAction` + plan following | ~18 | ✅ PASS |
-| `test_goap_integration.gd` | **GOAP integration** — real Agent lifecycle | ~9 | ✅ PASS |
+### 1. Unit + integration suite (`res://tests/test_runner.tscn`, ~1s)
 
-Existing test classes (12, unchanged):
-| Test File | Coverage Target | Status |
-|-----------|----------------|--------|
-| `test_arrive_at_destination.gd` | Arrival goal lifecycle | ✅ PASS |
-| `test_attack_priorities.gd` | ChooseTarget priorities | ✅ PASS |
-| `test_agent_signals.gd` | Agent signal wiring | ✅ PASS |
-| `test_agent_target.gd` | Target selection | ✅ PASS |
-| `test_agent_tactic.gd` | Tactic speed bonuses | ✅ PASS |
-| `test_collisions.gd` | Quadtree + geometry helpers | ✅ PASS |
-| `test_movement.gd` | Physics movement step | ✅ PASS |
-| `test_navigation.gd` | Pathfinding + navigation | ✅ PASS |
-| `test_order_action.gd` | Order completion flow | ✅ PASS |
-| `test_orders_panel_signal.gd` | Orders panel signals | ✅ PASS |
-| `test_planner.gd` | GOAP planner | ✅ PASS |
+Fast, deterministic checks against production classes. Mocks are only ever
+used for Godot nodes/autoloads — never for game logic.
 
-## Coverage matrix
+### 2. Boot smoke test (`tests/smoke/smoke_runner.gd`, ~5s)
 
-### GOAP Actions (19 registered)
+Boots the **real game** (`game.tscn`) headless via the existing debug harness,
+runs 300 simulation ticks, and asserts the game actually plays:
+units spawn, at least one unit moves, nothing is freed mid-run.
+Run it directly with:
 
-| Action | Has Tests | Coverage |
-|--------|-----------|----------|
-| AttackEnemy | ✅ | Medium |
-| ChooseTarget | ✅ | Medium |
-| ConquerAction | ❌ | — |
-| GetLumber | ❌ | — |
-| HelpFriend | ❌ | — |
-| Hide | ❌ | — |
-| MeleeAttack | ❌ | — |
-| MineAction | ❌ | — |
-| MoveAction | ✅ | Low |
-| NavigateAction | ✅ | Low |
-| OrderAction | ✅ | Medium |
-| PrayerAction | ❌ | — |
-| PursueEnemy | ❌ | — |
-| RangeAttack | ❌ | — |
-| RetreatAction | ✅ | Low | enter/perform/exit/cost/effects |
-| ReturnLumber | ❌ | — |
-| TaxesAction | ❌ | — |
-| WaitForRegeneration | ❌ | — |
-| WaitOut | ❌ | — |
+```
+godot --headless --path prototype res://game.tscn -- --smoke --smoke-ticks=300
+```
 
-### GOAP Goals (8 registered)
+### The script-error budget
 
-| Goal | Has Tests | Coverage |
-|------|-----------|----------|
-| ArriveAtDestination | ✅ | Medium |
-| EnemyDefeated | ❌ | — |
-| FriendsSafe | ❌ | — |
-| NeedLumber | ❌ | — |
-| NeedSafety | ❌ | — |
-| ObeyPlayer | ❌ | — |
-| Recover | ✅ | Low |
-| WalkLane | ❌ | — |
+`run_suite.sh` fails on **any** `SCRIPT ERROR` line in either run's output —
+even when all assertions pass. Script errors can silently swallow assertions
+(a failing expression aborts the statement containing it), so a
+"passing" suite with script errors is lying. The budget makes that impossible
+to miss.
 
-### Systems
+## Test classes
 
-| System | Coverage | Notes |
-|--------|----------|-------|
-| Spawns | Low | Costs, cemetery keys, lane tactics tested |
-| MapManager | ❌ | No tests |
-| Modifiers | **High** | All public methods tested |
-| PassiveSkills | **High** | Combat math tested |
-| Quadtree | Medium | 1 test in collisions |
-| Pathfinder | ✅ | Covered in navigation |
+| Test File | Coverage Target | Kind |
+|-----------|----------------|------|
+| `test_script_parse.gd` | Every `.gd` file compiles | Smoke |
+| `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
+| `test_goap_integration.gd` | Real `Agent`: goal selection, signal wiring, plan lifecycle | Integration |
+| `test_action_lifecycles.gd` | Plan execution via TestAgent (real `_replace_plan`/`_follow_plan` paths) | Unit |
+| `test_goal_interactions.gd` | Goal contracts via real `Agent._get_best_goal()` | Unit |
+| `test_modifiers.gd` | `skills/modifiers.gd` public methods | Unit |
+| `test_passive_skills.gd` | `skills/passive_skills.gd` hit_modifiers, get_value | Unit |
+| `test_spawns.gd` | `map/spawns.gd` camp_hire, cemetery, lane tactics | Unit |
+| `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — real `_get_mirrored_coords`/`_get_changed_cells` | Unit |
+| `test_planner.gd` | GOAP planner | Unit |
+| `test_arrive_at_destination.gd` | Arrival goal lifecycle | Unit |
+| `test_attack_priorities.gd` | ChooseTarget priorities | Unit |
+| `test_agent_signals.gd` | Agent signal wiring | Unit |
+| `test_agent_target.gd` | Target selection | Unit |
+| `test_agent_tactic.gd` | Tactic speed bonuses | Unit |
+| `test_collisions.gd` | Quadtree + geometry helpers | Unit |
+| `test_movement.gd` | Physics movement step | Unit |
+| `test_navigation.gd` | Pathfinding + navigation | Unit |
+| `test_order_action.gd` | Order completion flow | Unit |
+| `test_orders_panel_signal.gd` | Orders panel signals | Unit |
 
-### Map Editor
+## Rules for new tests (see also tests/README.md)
 
-| Method | Tests | Coverage |
-|--------|-------|----------|
-| `_get_mirrored_coords()` | ✅ | Multiple map sizes, involution, reversibility |
-| `_get_changed_cells()` | ✅ | Add/remove/same/empty |
-| `_get_cell_snapshot()` | ❌ | Requires TileMap |
-| `_sync_mirrored_cells()` | ❌ | Requires TileMap |
+1. Tests must **fail when production behavior breaks** — never assert what a
+   mock does. Before merging a new test, break the production line it guards
+   once and watch the test fail.
+2. Every bug fix ships with a regression test.
+3. The suite must stay green **with zero script errors**. Script errors fail
+   CI even when assertions pass.
 
-### Goal Interactions
+## Known bugs (documented by tests, not yet fixed)
 
-| Aspect | Tests | Coverage |
-|--------|-------|----------|
-| Priority ordering | ✅ | Higher priority wins |
-| Validity filtering | ✅ | Invalid goals excluded |
-| State independence | ✅ | Checking one goal doesn't corrupt another |
-| Desired state consistency | ✅ | Each goal returns correct state |
-| Conditional validity | ✅ | Dependency-based gating |
-
-### Action Lifecycle
-
-| Aspect | Tests | Coverage |
-|--------|-------|----------|
-| RetreatAction enter/perform/exit | ✅ | Full lifecycle |
-| RetreatAction effects/cost | ✅ | Correct values |
-| Plan following | ✅ | Step advancement, completion |
-
-### GOAP Integration (new)
-
-| Aspect | Tests | Coverage |
-|--------|-------|----------|
-| Goal selection via real Agent | ✅ | `_get_best_goal()` with mock goals |
-| Plan entry/exit signals | ✅ | `_exit_current_action()`, `_on_action_changed()` |
-| Plan replacement | ✅ | `_replace_plan()` exits old, enters new |
-| Plan completion | ✅ | `_follow_plan()` clears completed plan |
+- `spawns.gd camp_hire()`: the affordability check sums gold across all team
+  leaders (collective), but the deduction charges the full cost to *each*
+  leader (individual) — two leaders with 2 gold each pass a 3-gold check and
+  both end at −1. See `test_spawns.gd _test_camp_hire_gold_deduction_semantics`.
 
 ## Remaining high-priority gaps
 
-1. **Spawns** — `send_pawn()` full path (needs Godot node mock)
-2. **MapManager** — `setup_buildings()` / `setup_lanes()` (needs TileMap)
-3. **Remaining actions** — PursueEnemy, GetLumber, ReturnLumber, Hide, WaitOut, TaxesAction, PrayerAction, MineAction, ConquerAction
-4. **Remaining goals** — EnemyDefeated, WalkLane, NeedSafety, ObeyPlayer, FriendsSafe, NeedLumber
-5. **Integration tests** — bridge between unit tests and real Godot scenes (partial: GOAP integration test added)
-
-## Recommended next steps
-
-1. **Pick a pilot feature** (e.g., Guard Building) — exercises new goal + 1-2 actions
-2. **One branch, one feature** — investigate → written plan → implement → test → review
-3. **Continue adding tests** for remaining uncovered systems
-4. **Prioritize tests that fail when production behavior breaks**, not tests that prove a mock behaves as expected
+1. Golden-replay test: seed the RNG, run N ticks, hash game state, compare
+   against a stored snapshot (catches silent behavior changes).
+2. GOAP `Agent.process()` orchestration test (goal selection → planner →
+   action execution, via the real planner).
+3. Combat resolution coverage (dodge/crit/counter paths in `hit_modifiers`).
+4. Economy coverage beyond camp_hire (lumber, taxes).
+5. Per-action simulation checks: each of the 19 registered actions can be
+   planned and executed inside the boot smoke scenario.

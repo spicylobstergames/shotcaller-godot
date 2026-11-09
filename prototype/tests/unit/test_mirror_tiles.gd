@@ -49,27 +49,43 @@ func _setup_mirror_map(tile_size_val: int, map_w: int, map_h: int) -> Node:
 
 
 func _test_involution_production(harness) -> void:
-	# 100x100 tiles, 32px — every cell mirrored twice returns original
+	# 100x100 tiles, 32px — corners, edges, center, and 100 seeded-random
+	# cells mirrored twice must return the original (deterministic sample,
+	# not an exhaustive 10k-assertion sweep).
 	var mt = _setup_mirror_map(32, 100, 100)
-	for x in range(100):
-		for y in range(100):
-			var a = Vector2i(x, y)
-			var b = mt._get_mirrored_coords(a)
-			var c = mt._get_mirrored_coords(b)
-			harness.check(c == a, "Involution: mirror(mirror(%d,%d)) == (%d,%d)" % [x, y, x, y])
-			if c != a:
-				break  # fail fast on first mismatch
+	var rng = RandomNumberGenerator.new()
+	rng.seed = 20240101
+	var cells: Array[Vector2i] = [
+		Vector2i(0, 0), Vector2i(99, 0), Vector2i(0, 99), Vector2i(99, 99),
+		Vector2i(0, 50), Vector2i(99, 50), Vector2i(50, 0), Vector2i(50, 99),
+		Vector2i(50, 50),
+	]
+	for i in range(100):
+		cells.append(Vector2i(rng.randi_range(0, 99), rng.randi_range(0, 99)))
+	var failures := 0
+	for a in cells:
+		var b = mt._get_mirrored_coords(a)
+		var c = mt._get_mirrored_coords(b)
+		if c != a:
+			failures += 1
+	harness.check_equal(failures, 0,
+		"Involution: mirror(mirror(cell)) == cell for %d sampled cells (incl. corners/edges/center)." % cells.size())
 
 
 func _test_reversibility_production(harness) -> void:
-	# 50x50 tiles, 32px — if mirror(A) == B then mirror(B) == A
+	# 50x50 tiles, 32px — a full sweep of a small map: if mirror(A) == B then
+	# mirror(B) == A. Small enough (2500) to exhaust while keeping the suite fast.
 	var mt = _setup_mirror_map(32, 50, 50)
+	var failures := 0
 	for x in range(50):
 		for y in range(50):
 			var a = Vector2i(x, y)
 			var b = mt._get_mirrored_coords(a)
 			var c = mt._get_mirrored_coords(b)
-			harness.check(c == a, "Reversibility: mirror(mirror(%d,%d)) == (%d,%d)" % [x, y, x, y])
+			if c != a:
+				failures += 1
+	harness.check_equal(failures, 0,
+		"Reversibility: mirror(mirror(cell)) == cell for all 2500 cells of a 50x50 map.")
 
 
 func _test_even_map_sizes_production(harness) -> void:

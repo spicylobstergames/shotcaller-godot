@@ -19,6 +19,8 @@ var GoalInteractionsTests = load("res://tests/unit/test_goal_interactions.gd")
 var MirrorTilesTests = load("res://tests/unit/test_mirror_tiles.gd")
 var ActionLifecyclesTests = load("res://tests/unit/test_action_lifecycles.gd")
 const GoapIntegrationTests = preload("res://tests/unit/test_goap_integration.gd")
+const ScriptParseTests = preload("res://tests/unit/test_script_parse.gd")
+const SceneInstantiateTests = preload("res://tests/unit/test_scene_instantiate.gd")
 
 var tests_run := 0
 var failures: Array[String] = []
@@ -45,6 +47,8 @@ func _ready() -> void:
 	MirrorTilesTests.new().run(self)
 	ActionLifecyclesTests.new().run(self)
 	GoapIntegrationTests.new().run(self)
+	ScriptParseTests.new().run(self)
+	SceneInstantiateTests.new().run(self)
 
 	if failures.is_empty():
 		print("All %d tests passed." % tests_run)

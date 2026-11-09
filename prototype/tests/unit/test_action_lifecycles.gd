@@ -47,9 +47,9 @@ class TestAgent:
 	var _current_goal: Variant
 	var _current_plan: Array = []
 	var _current_plan_step: int = 0
-	var plan_changed: Signal
-	var goal_changed: Signal
-	var action_changed: Signal
+	signal plan_changed(plan)
+	signal goal_changed(goal)
+	signal action_changed(action)
 	var _current_action_entered: bool = false
 
 	func _init(unit: TestUnit):
@@ -158,11 +158,7 @@ func run(harness) -> void:
 	retreat.exit(agent)
 	harness.check(true, "RetreatAction exit completes without error.")
 
-	retreat.free()
-	unit.free()
-	idle_unit.free()
-	idle_agent.free()
-	idle_agent2.free()
+	# Test doubles are RefCounted — they clean up when the references drop.
 
 	# --- plan-following lifecycle ---
 	_test_plan_following(harness)
@@ -187,6 +183,7 @@ class TestPlanAction:
 	var entered := false
 	var performed := false
 	var exited := false
+	var exit_count := 0
 	var custom_perform: Callable = Callable()
 
 	func enter(_agent) -> void:
@@ -200,6 +197,7 @@ class TestPlanAction:
 
 	func exit(_agent) -> void:
 		exited = true
+		exit_count += 1
 
 
 class TestPlanGoal:
@@ -289,59 +287,38 @@ func _test_plan_following(harness) -> void:
 
 
 func _test_multi_step_plan(harness) -> void:
-	var first = TestPlanAction.new()
-	# Make first action take multiple ticks (returns false first tick, true second).
-	var first_ticks = 0
-	first.performed = false  # reset so we can track via first_ticks
-	first.custom_perform = func(_agent, _delta: float) -> bool:
-		first_ticks += 1
-		if first_ticks < 2:
-			return false  # first tick: still running
-		return true  # second tick: completes
-
-	var second = TestPlanAction.new()
+	var first = MultiTickAction.new()   # completes on its 3rd perform tick
+	var second = TestPlanAction.new()   # completes on its 1st perform tick
 
 	var agent = TestAgent.new(TestUnit.new())
 
-	agent._current_goal = TestPlanGoal.new()
-	agent._current_plan = [first, second]
-	agent._current_plan_step = 0
+	# Enter the plan through the production path: _replace_plan emits
+	# action_changed, which enters the first action via _on_action_changed.
+	agent._replace_plan(TestPlanGoal.new(), [first, second])
 
-	# Enter the first action (simulates _on_action_changed signal).
-	first.enter(agent)
+	# Tick until the plan completes. Bounded: a regression that prevents
+	# completion must fail the test, not hang the suite.
+	var tick_guard := 0
+	while not agent._current_plan.is_empty() and tick_guard < 100:
+		agent._follow_plan(agent._current_plan, 0.0)
+		tick_guard += 1
 
-	# Tick loop: call _follow_plan repeatedly until the plan completes.
-	while not agent._current_plan.is_empty():
-		_follow_tick(agent, first, second, harness)
-
-	# Verify first action exited after completing.
-	harness.check(first.exited, "The first action exits after completing.")
-	# Verify second action entered when plan advanced.
-	harness.check(second.entered, "The second action enters when the plan advances to it.")
-	# Verify plan step advanced.
-	harness.check_equal(
-		agent._current_plan_step, 1,
-		"Plan step index advances after the first action completes."
-	)
-	# Verify plan is cleared after final action completes.
-	harness.check(second.exited, "The final action exits on plan completion.")
-	harness.check(
-		agent._current_plan.is_empty(),
-		"The plan is cleared after the final action completes."
-	)
-
-
-func _follow_tick(agent, first, second, harness) -> void:
-	# Simulates one agent.tick(): call _follow_plan which internally calls perform().
-	var step_before = agent._current_plan_step
-	agent._follow_plan(agent._current_plan, 0.0)
-
-	# If step changed, the action_changed signal should have been emitted,
-	# which triggers _on_action_changed -> new action.enter().
-	if agent._current_plan_step != step_before and agent._current_plan_step < agent._current_plan.size():
-		var new_action = agent._current_plan[agent._current_plan_step]
-		if new_action and new_action.has_method("enter") and not new_action.entered:
-			new_action.enter(agent)
+	harness.check(tick_guard < 100,
+		"Multi-step plan completes within the tick guard (no infinite loop).")
+	harness.check_equal(first.perform_count, 3,
+		"First action performs until complete (3 ticks).")
+	harness.check_equal(first.exit_count, 1,
+		"First action exits exactly once when it completes.")
+	harness.check_equal(first.enter_count, 1,
+		"First action entered exactly once.")
+	harness.check(second.entered,
+		"Second action enters when the plan advances (via action_changed signal).")
+	harness.check(second.exited,
+		"Final action exits on plan completion.")
+	harness.check(agent._current_plan.is_empty(),
+		"The plan is cleared after the final action completes.")
+	harness.check(agent._current_goal == null,
+		"Current goal is cleared after plan completion.")
 
 
 func _test_exit_on_plan_switch(harness) -> void:
@@ -371,11 +348,9 @@ func _test_exit_on_plan_switch(harness) -> void:
 		"Switching plans enters the first action of the new plan."
 	)
 
-	# Verify exit was called exactly once: call exit again manually.
-	var initial_exits = old_action.exited
-	old_action.exit(agent)
+	# Verify exit was called exactly once by the plan switch (not duplicated).
 	harness.check_equal(
-		old_action.exited, initial_exits + 1,
+		old_action.exit_count, 1,
 		"Old action exit was called exactly once by the plan switch (not duplicated)."
 	)
 
@@ -396,13 +371,15 @@ func _test_multi_tick_completion(harness) -> void:
 
 	# Tick loop: the agent should keep calling _follow_plan, which calls
 	# action.perform() repeatedly until it returns true.
-	while not agent._current_plan.is_empty():
+	# Bounded: an action that never completes must fail the test, not hang it.
+	# (The stale manual re-enter block was removed — TestAgent enters new
+	# actions itself via the action_changed signal.)
+	var tick_guard := 0
+	while not agent._current_plan.is_empty() and tick_guard < 100:
 		agent._follow_plan(agent._current_plan, 0.0)
-		# After step advances (or plan cleared), enter the new action if any.
-		if not agent._current_plan.is_empty() and agent._current_plan_step < agent._current_plan.size():
-			var curr = agent._current_plan[agent._current_plan_step]
-			if curr and curr.has_method("enter") and curr.enter_count == 0:
-				curr.enter(agent)
+		tick_guard += 1
+	harness.check(tick_guard < 100,
+		"Multi-tick plan completes within the tick guard (no infinite loop).")
 
 	harness.check_equal(action.perform_count, 3,
 		"Agent calls perform() multiple times on the same action until it returns true.")

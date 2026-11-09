@@ -13,13 +13,22 @@ var s
 
 func _ready():
 	game = get_tree().get_current_scene()
+	# Smoke mode must be enabled before game._ready() reads `debug` (children
+	# ready before parents, so setting it here synchronously is safe).
+	if "--smoke" in OS.get_cmdline_user_args():
+		debug = 1
+		unit = 1  # spawn the debug scenario (leader + pawn) — export flags default to 0
 	await get_tree().process_frame # wait for idle frame
 	s = game.spawn
+	if "--smoke" in OS.get_cmdline_user_args():
+		add_child(load("res://tests/smoke/smoke_runner.gd").new())
 
 
 func start():
 	if debug:
-		WorldState.set_state("game_mode", "campaign")
+		# "match" mode skips the campaign intro dialog, which pauses the tree
+		# until clicked — that would freeze headless smoke runs.
+		WorldState.set_state("game_mode", "match")
 		game.map_manager.current_map = "three_lane_map"
 		game.start()
 

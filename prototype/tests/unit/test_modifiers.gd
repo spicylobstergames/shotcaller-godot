@@ -7,6 +7,7 @@ class TestUnit:
 	extends RefCounted
 	var speed := 10.0
 	var regen := 5.0
+	var agent = null  # optional; set for tactic/retreat-speed tests
 	var hp := 100
 	var current_hp := 100
 	var level := 1
@@ -91,6 +92,4 @@ func run(harness) -> void:
 	)
 
 	unit.agent.states["tactic"] = "default"
-	unit.agent.free()
-	unit.free()
-	bare_unit.free()
+	# Test doubles are RefCounted — they clean up when the references drop.

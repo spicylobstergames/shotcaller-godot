@@ -7,6 +7,12 @@ const Spawns = preload("res://map/spawns.gd")
 # Mock objects used by every test
 # ---------------------------------------------------------------------------
 
+class MockDeadPawn:
+	extends Node2D
+	var display_name := "infantry"
+	var team := "red"
+
+
 class MockLeader:
 	extends Node
 	var gold := 0
@@ -125,9 +131,7 @@ func _test_dead_unit_recycling_from_cemetery(harness: Node) -> void:
 	harness.add_child(spawns)
 
 	# Add a dead unit to the cemitery
-	var dead_unit = Node2D.new()
-	dead_unit.display_name = "infantry"
-	dead_unit.team = "red"
+	var dead_unit = MockDeadPawn.new()
 	spawns.cemitery_add_pawn(dead_unit)
 
 	# The unit should be in the correct cemitery slot

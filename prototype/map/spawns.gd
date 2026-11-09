@@ -282,7 +282,9 @@ func camp_hire(unit, team):
 	# Check if team has enough gold before setting extra_unit
 	var total_gold: int = 0
 	for leader in team_leaders:
-		total_gold += leader.get("gold", 0)
+		var g = leader.get("gold")  # Node.get() takes 1 arg in Godot 4 — a default here errors
+		if g != null:
+			total_gold += int(g)
 	if total_gold < cost: return  # insufficient gold, don't set extra_unit
 	
 	if team == WorldState.get_state("player_team"):
