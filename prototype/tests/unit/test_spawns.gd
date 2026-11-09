@@ -53,6 +53,8 @@ func run(harness: Node) -> void:
 	_test_unknown_unit_type_produces_no_spawn(harness)
 	_test_dead_unit_recycling_from_cemetery(harness)
 	_test_lane_tactic_fallback_when_no_building_exists(harness)
+	_test_camp_hire_gold_deduction_semantics(harness)
+	_test_camp_hire_leader_without_gold_property_does_not_crash(harness)
 
 
 # ---------------------------------------------------------------------------
@@ -62,10 +64,14 @@ func run(harness: Node) -> void:
 func _test_insufficient_gold_prevents_hiring(harness: Node) -> void:
 	var old_player_team = WorldState.get_state("player_team")
 	var old_player_leaders = WorldState.get_state("player_leaders")
+	var old_enemy_team = WorldState.get_state("enemy_team")
+	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
+	var old_extra_unit = WorldState.get_state("player_extra_unit")
 	WorldState.set_state("player_team", "blue")
 	WorldState.set_state("player_leaders", [])
 	WorldState.set_state("enemy_team", "red")
 	WorldState.set_state("enemy_leaders", [])
+	WorldState.set_state("player_extra_unit", null)
 
 	var spawns = Spawns.new()
 	harness.add_child(spawns)
@@ -95,6 +101,9 @@ func _test_insufficient_gold_prevents_hiring(harness: Node) -> void:
 	spawns.free()
 	WorldState.set_state("player_team", old_player_team)
 	WorldState.set_state("player_leaders", old_player_leaders)
+	WorldState.set_state("enemy_team", old_enemy_team)
+	WorldState.set_state("enemy_leaders", old_enemy_leaders)
+	WorldState.set_state("player_extra_unit", old_extra_unit)
 
 
 # ---------------------------------------------------------------------------
@@ -201,10 +210,17 @@ func _test_lane_tactic_fallback_when_no_building_exists(harness: Node) -> void:
 # This test documents the current behavior so it can be fixed later.
 
 func _test_camp_hire_gold_deduction_semantics(harness: Node) -> void:
+	# Regression test for the collective-check / individual-deduction mismatch.
+	# Fixed semantics (matching lumberjack_hire): affordability is pooled team
+	# gold, and the cost is SPLIT evenly across leaders.
 	var old_player_team = WorldState.get_state("player_team")
 	var old_player_leaders = WorldState.get_state("player_leaders")
+	var old_enemy_team = WorldState.get_state("enemy_team")
+	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
+	var old_extra_unit = WorldState.get_state("player_extra_unit")
 	WorldState.set_state("player_team", "blue")
 	WorldState.set_state("enemy_team", "red")
+	WorldState.set_state("player_extra_unit", null)
 
 	var leader0 = MockLeader.new()
 	leader0.gold = 2
@@ -215,19 +231,64 @@ func _test_camp_hire_gold_deduction_semantics(harness: Node) -> void:
 	var spawns = Spawns.new()
 	harness.add_child(spawns)
 
-	# Total gold = 4, mounted cost = 3. Collective check passes.
+	# Total gold = 4, mounted cost = 3. Collective check passes (4 >= 3).
+	# Split payment: each leader pays floor(3 / 2) = 1 — nobody goes negative.
 	spawns.camp_hire("mounted", "blue")
 
-	# Current behavior: each leader pays the full cost (3)
-	# This results in negative gold — the check/deduction mismatch bug.
-	# Once fixed, these assertions should change.
-	harness.check_equal(leader0.gold, -1,
-		"Bug documented: leader 0 gold is -1 (2 - 3) due to collective check / per-leader deduction mismatch.")
-	harness.check_equal(leader1.gold, -1,
-		"Bug documented: leader 1 gold is -1 (2 - 3) due to collective check / per-leader deduction mismatch.")
+	harness.check_equal(leader0.gold, 1,
+		"Camp hire splits cost: leader 0 pays floor(3/2)=1, ends at 1 gold (never negative).")
+	harness.check_equal(leader1.gold, 1,
+		"Camp hire splits cost: leader 1 pays floor(3/2)=1, ends at 1 gold (never negative).")
+	harness.check_equal(WorldState.get_state("player_extra_unit"), "mounted",
+		"Successful hire sets player_extra_unit.")
 
 	leader0.free()
 	leader1.free()
 	spawns.free()
 	WorldState.set_state("player_team", old_player_team)
 	WorldState.set_state("player_leaders", old_player_leaders)
+	WorldState.set_state("enemy_team", old_enemy_team)
+	WorldState.set_state("enemy_leaders", old_enemy_leaders)
+	WorldState.set_state("player_extra_unit", old_extra_unit)
+
+
+func _test_camp_hire_leader_without_gold_property_does_not_crash(harness: Node) -> void:
+	# Regression: camp_hire used leader.get("gold", 0) (2-arg — invalid on
+	# Node) and leader.gold -= cost (crashes if the property is absent).
+	# A leader node WITHOUT a gold property must be skipped, not crash.
+	var old_player_team = WorldState.get_state("player_team")
+	var old_player_leaders = WorldState.get_state("player_leaders")
+	var old_enemy_team = WorldState.get_state("enemy_team")
+	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
+	var old_extra_unit = WorldState.get_state("player_extra_unit")
+	WorldState.set_state("player_team", "blue")
+	WorldState.set_state("enemy_team", "red")
+	WorldState.set_state("player_extra_unit", null)
+
+	var rich = MockLeader.new()
+	rich.gold = 10
+	var no_gold = Node.new()  # plain Node: no "gold" property at all
+	WorldState.set_state("player_leaders", [no_gold, rich])
+
+	var spawns = Spawns.new()
+	harness.add_child(spawns)
+
+	# Pooled gold = 10 (only the leader with gold counts), infantry costs 1.
+	# Must not crash on either the check or the deduction loop.
+	spawns.camp_hire("infantry", "blue")
+
+	# share = floor(1 / 2) = 0 — same floor-remainder behavior as
+	# lumberjack_hire; the pooled check still gates the hire itself.
+	harness.check_equal(rich.gold, 10,
+		"Gold-less nodes are skipped in deduction; share floor(1/2)=0 so gold unchanged.")
+	harness.check_equal(WorldState.get_state("player_extra_unit"), "infantry",
+		"Hire succeeds when pooled gold covers the cost, ignoring gold-less nodes.")
+
+	no_gold.free()
+	rich.free()
+	spawns.free()
+	WorldState.set_state("player_team", old_player_team)
+	WorldState.set_state("player_leaders", old_player_leaders)
+	WorldState.set_state("enemy_team", old_enemy_team)
+	WorldState.set_state("enemy_leaders", old_enemy_leaders)
+	WorldState.set_state("player_extra_unit", old_extra_unit)

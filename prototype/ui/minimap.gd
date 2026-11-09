@@ -98,8 +98,11 @@ func get_map_texture():
 	game.map_manager.buildings_visibility(false)
 	CraftyCamera.map_loaded()
 	# Headless mode (CI, dedicated servers, smoke tests): no frames are ever
-	# drawn, so awaiting frame_post_draw below would hang forever. Skip the
-	# viewport snapshot and go straight to map-loaded.
+	# drawn, so awaiting frame_post_draw below never completes and the
+	# map-ready chain stalls before spawning. Skip the viewport snapshot and
+	# go straight to map-loaded. NOTE: the tail of this function (camera zoom
+	# reset, UI re-show, building visibility) is therefore not exercised in
+	# headless runs — it is UI-only and requires a drawn frame by definition.
 	if DisplayServer.get_name() == "headless":
 		game.map_manager.map_loaded()
 		return

@@ -48,12 +48,13 @@ func spawn_unit():
 		WorldState.set_state("enemy_team", "red")
 		game.map_manager.setup_leaders([leader], [])
 		
-		# TEST LANE PAWN
-#		var path = Goap.navigation.new_lane_path("mid", "blue")
-#		var start = path.pop_front()
+		# TEST LANE PAWN — follows a real lane path so the smoke test can
+		# verify the navigation movement path actually advances units.
+		var path = Goap.navigation.new_lane_path("mid", "blue")
+		var start = path.pop_front()
 		var pawn = game.spawn.create(game.spawn.pawn_scene("infantry"), "mid", "blue", "Vector2",  Vector2(200,600))
-#		Goap.navigation.setup_unit_path(pawn, path)
-#		Goap.navigation.start(pawn,path)
+		Goap.navigation.setup_unit_path(pawn, path)
+		Goap.navigation.start(pawn, path)
 		pawn.hp = 10000
 		pawn.current_hp = 10000
 #		pawn.moves = false

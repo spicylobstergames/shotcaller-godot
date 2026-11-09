@@ -21,3 +21,11 @@ jobs:
 
       - name: Run full suite (unit tests + boot smoke + script-error budget)
         run: ./prototype/tests/run_suite.sh "$(which godot)"
+
+      - name: Upload diagnostic logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: .test-logs/
+          if-no-files-found: ignore

@@ -50,6 +50,10 @@ func _ready() -> void:
 	ScriptParseTests.new().run(self)
 	SceneInstantiateTests.new().run(self)
 
+	# Machine-checkable completion token: run_suite.sh verifies this line
+	# against the pinned EXPECTED_UNIT_TESTS count in a separate file, so a
+	# runner that crashes, hangs, or is bypassed cannot fake a green result.
+	print("TESTS_COMPLETE: passed=%d failed=%d" % [tests_run, failures.size()])
 	if failures.is_empty():
 		print("All %d tests passed." % tests_run)
 		get_tree().quit(0)

@@ -1,11 +1,12 @@
 # Test Coverage
 
-**20 test classes**, **171 assertions**, **0 script errors** — all passing.
+**20 test classes**, **175 assertions**, **0 script errors** — all passing.
 
 ```
 ./prototype/tests/run_suite.sh
-→ [1/2] All 171 tests passed.
-→ [2/2] SMOKE_RESULT: ticks=300 units=127 leaders=1 moved=3
+→ [1/2] TESTS_COMPLETE: passed=175 failed=0
+→ [1/2] All 175 tests passed.
+→ [2/2] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → SUITE GREEN: unit tests passed, boot smoke passed, zero script errors
 ```
 
@@ -34,6 +35,25 @@ even when all assertions pass. Script errors can silently swallow assertions
 (a failing expression aborts the statement containing it), so a
 "passing" suite with script errors is lying. The budget makes that impossible
 to miss.
+
+### Tamper-evidence
+
+The runner cannot silently pass:
+- `run_tests.gd` must emit `TESTS_COMPLETE: passed=N failed=0`, and `N` must
+  equal `EXPECTED_UNIT_TESTS` **pinned in run_suite.sh** (a different file).
+  A crashed, hung, or bypassed runner cannot fake green without editing both.
+- Both Godot invocations run under a per-step timeout — a hung runner fails
+  instead of hanging CI.
+- The boot smoke asserts behavior (units exist, pathed units move), so a
+  broken simulation fails even with zero assertion errors.
+
+Verified by sabotage (each experiment run, then reverted):
+| Sabotage | Caught by |
+|----------|-----------|
+| Fake success token, zero tests executed | Token/count pin in run_suite.sh |
+| Parse error appended to a production .gd | Script-error budget + parse smoke |
+| `MoveAction.calc_step` disabled (live movement path) | Smoke: "No unit moved" |
+| Runtime script error injected in `Unit.gd._ready` | Script-error budget |
 
 ## Test classes
 
@@ -69,16 +89,26 @@ to miss.
 3. The suite must stay green **with zero script errors**. Script errors fail
    CI even when assertions pass.
 
-## Known bugs (documented by tests, not yet fixed)
+## Known bugs
 
-- `spawns.gd camp_hire()`: the affordability check sums gold across all team
-  leaders (collective), but the deduction charges the full cost to *each*
-  leader (individual) — two leaders with 2 gold each pass a 3-gold check and
-  both end at −1. See `test_spawns.gd _test_camp_hire_gold_deduction_semantics`.
+None currently outstanding. (The camp_hire collective-check / per-leader
+deduction mismatch was fixed this phase: affordability is pooled team gold and
+the cost is split evenly across leaders, matching the lumberjack_hire
+convention. Regression-tested in `test_spawns.gd`.)
+
+## Known coverage limits
+
+- `Unit.advance_with_navigation` is dormant in the default config
+  (`Goap.use_native_pathfinding = false`); the smoke test exercises the live
+  movement path (MoveAction) instead. If native pathfinding is enabled, add
+  smoke coverage for it.
+- The headless smoke boots a slightly divergent UI path: minimap skips its
+  viewport snapshot (no frames are drawn headless). UI-only tail code is
+  therefore not exercised headless.
 
 ## Remaining high-priority gaps
 
-1. Golden-replay test: seed the RNG, run N ticks, hash game state, compare
+1. Golden-replay test: seed the RNG, run N frames, hash game state, compare
    against a stored snapshot (catches silent behavior changes).
 2. GOAP `Agent.process()` orchestration test (goal selection → planner →
    action execution, via the real planner).
@@ -86,3 +116,5 @@ to miss.
 4. Economy coverage beyond camp_hire (lumber, taxes).
 5. Per-action simulation checks: each of the 19 registered actions can be
    planned and executed inside the boot smoke scenario.
+6. Shared helper extraction (Phase 1): mock units, WorldState
+   snapshot/restore, seeded RNG are still duplicated across test files.

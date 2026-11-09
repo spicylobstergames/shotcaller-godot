@@ -38,4 +38,4 @@ prototype/Shotcall.apk.idsig
 # AI test infrastructure
 .godot-home/
 .test-logs/
-.clean-verify/
+.clean-verify*/
