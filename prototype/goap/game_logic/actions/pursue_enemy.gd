@@ -36,7 +36,7 @@ func perform(agent, _delta) -> bool:
 		agent.set_state("target", null)
 		agent.set_state("enemy_in_attack_range", false)
 		return true
-	var in_range = Goap.get_action("ChooseTarget").in_range(unit, target)
+	var in_range = agent.get_action("ChooseTarget").in_range(unit, target)
 	agent.set_state("enemy_in_attack_range", in_range)
 	agent.set_state("has_attack_target", true)
 	if not unit.moves and not in_range:
@@ -47,7 +47,7 @@ func perform(agent, _delta) -> bool:
 		or unit.current_destiny.distance_to(target.global_position) > 8
 	):
 		unit.final_destiny = target.global_position
-		Goap.get_action("Navigate").move(unit, target.global_position)
+		agent.get_action("Navigate").move(unit, target.global_position)
 	return in_range
 
 
@@ -65,9 +65,9 @@ func enter(agent):
 	if not unit.moves:
 		return
 	unit.final_destiny = unit.target.global_position
-	Goap.get_action("Navigate").move(unit, unit.target.global_position)
+	agent.get_action("Navigate").move(unit, unit.target.global_position)
 
 
 func exit(agent):
 	var unit = agent.get_unit()
-	Goap.get_action("Move").stop(unit)
+	agent.get_action("Move").stop(unit)

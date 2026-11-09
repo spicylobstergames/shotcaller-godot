@@ -6,7 +6,7 @@ func get_class_name() -> String:
 
 
 func hit(unit) -> bool:
-	var choose_target = Goap.get_action("ChooseTarget")
+	var choose_target = unit.agent.get_action("ChooseTarget")
 	var attack_position = unit.global_position + unit.attack_hit_position
 	var did_hit := false
 	

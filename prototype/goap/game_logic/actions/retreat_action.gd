@@ -21,7 +21,7 @@ func enter(agent):
 	var unit = agent.get_unit()
 	agent.set_state("is_retreating", true)
 	var lane = agent.get_state("lane")
-	var path = Goap.get_goal("WalkLane").get_lane_path(lane, unit.team, false)
+	var path = agent.get_goal("WalkLane").get_lane_path(lane, unit.team, false)
 	if path.is_empty():
 		return
 	var recover_point = path[0]
@@ -29,7 +29,7 @@ func enter(agent):
 	recover_point.x += (randf() * 2 * half) - half
 	recover_point.y += (randf() * 2 * half) - half
 	unit.final_destiny = recover_point
-	Goap.get_action("Navigate").follow_path(unit, path)
+	agent.get_action("Navigate").follow_path(unit, path)
 	
 
 func on_arrive(agent):

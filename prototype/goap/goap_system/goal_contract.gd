@@ -24,3 +24,11 @@ func priority(_agent) -> int:
 # goap you can deal with it as "is_hungry".
 func get_desired_state(_agent) -> Dictionary:
 	return {}
+
+
+func enter(_agent):
+	pass
+
+
+func exit(_agent):
+	pass

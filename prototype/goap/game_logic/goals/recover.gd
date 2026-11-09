@@ -39,4 +39,4 @@ func should_retreat(unit) -> bool:
 
 
 func on_arrive(agent):
-	Goap.get_goal("ArriveAtDestination").on_arrive(agent)
+	agent.get_goal("ArriveAtDestination").on_arrive(agent)

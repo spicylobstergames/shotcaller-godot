@@ -11,7 +11,7 @@ func is_valid(agent) -> bool:
 	if not ready_to_fight or not unit.attacks:
 		return false
 
-	var choose_target = Goap.get_action("ChooseTarget")
+	var choose_target = agent.get_action("ChooseTarget")
 	var target = unit.target
 	var has_target = (
 		choose_target.can_hit(unit, target)

@@ -21,15 +21,25 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
+	if agent.get_current_goal() and agent.get_current_goal().get_class_name() == "WalkLane":
+		return agent.get_state("lane_route_finished", false)
 	return agent.get_state("arrived_at_destination", false)
 
 
 func enter(agent):
 	var unit = agent.get_unit()
 	var lane = agent.get_state("lane", "")
+	var is_lane_goal = (
+		agent.get_current_goal()
+		and agent.get_current_goal().get_class_name() == "WalkLane"
+	)
 	
-	if !unit.current_path:
-		var path = Goap.get_goal("WalkLane").get_lane_path(lane, unit.team)
+	agent.set_state("arrived_at_destination", false)
+	if is_lane_goal and agent.get_state("lane_resume_path", null) is Array:
+		unit.current_path = agent.get_state("lane_resume_path")
+		agent.erase_state("lane_resume_path")
+	if is_lane_goal and unit.current_path.is_empty():
+		var path = agent.get_goal("WalkLane").get_lane_path(lane, unit.team)
 		if !path.is_empty():
 			unit.current_path = path
 	
@@ -44,13 +54,25 @@ func enter(agent):
 
 
 func exit(agent):
-	if (agent.get_state("has_path", false)):
+	if (
+		agent.get_current_goal()
+		and agent.get_current_goal().get_class_name() == "WalkLane"
+		and not agent.get_state("lane_route_finished", false)
+	):
+		var unit = agent.get_unit()
+		var lane_path = unit.current_path.duplicate()
+		if unit.current_destiny != Vector2.ZERO:
+			lane_path.push_front(unit.current_destiny)
+		agent.set_state("lane_resume_path", lane_path)
+	elif agent.get_state("has_path", false) and not agent.get_state("lane_route_finished", false):
 		agent.set_state("resume_path", true)
+	else:
+		agent.erase_state("lane_resume_path")
 
 
 func point(unit, final_destiny):
 	unit.agent.set_state("target", null)
-	if final_destiny and Goap.get_action("Move").in_bounds(final_destiny):
+	if final_destiny and unit.agent.get_action("Move").in_bounds(final_destiny):
 		unit.final_destiny = final_destiny
 		if unit.attacks and not unit.agent.get_state("is_stunned"):
 			var path = unit.current_path
@@ -70,7 +92,7 @@ func point(unit, final_destiny):
 				elif has_path:
 					follow_path(unit, path)
 			else:
-				var choose_target = Goap.get_action("ChooseTarget")
+				var choose_target = unit.agent.get_action("ChooseTarget")
 				var target = choose_target.select_target(unit, enemies)
 				if not target:
 					if not at_final_destination:
@@ -81,13 +103,13 @@ func point(unit, final_destiny):
 					unit.agent.set_state("target", target)
 					var target_position = target.global_position + target.collision_position
 					if choose_target.in_range(unit, target):
-						Goap.get_action("AttackEnemy").point(unit, target_position)
+						unit.agent.get_action("AttackEnemy").point(unit, target_position)
 					else:
 						move(unit, target_position)
 
 
 func stop(unit):
-	Goap.get_action("Move").stop(unit)
+	unit.agent.get_action("Move").stop(unit)
 
 
 #func setup_unit_path(unit, path):
@@ -141,7 +163,7 @@ func move(unit, target_point: Vector2):
 		unit.current_path.clear()
 		unit.current_destiny = target_point
 		unit.final_destiny = target_point
-		Goap.get_action("Move").point(unit, target_point)
+		unit.agent.get_action("Move").point(unit, target_point)
 
 
 func _is_same_tile(from: Vector2, to: Vector2) -> bool:
@@ -155,7 +177,7 @@ func follow_path(unit, new_path):
 		var next_point = path.pop_front()
 		unit.current_path = path
 		unit.current_destiny = next_point
-		Goap.get_action("Move").point(unit, next_point)
+		unit.agent.get_action("Move").point(unit, next_point)
 
 
 func cut_path(unit, path):
@@ -172,4 +194,4 @@ func next(unit):
 	if not unit.current_path.is_empty():
 		follow_path(unit, unit.current_path)
 	else:
-		Goap.get_action("Move").stop(unit)
+		unit.agent.get_action("Move").stop(unit)

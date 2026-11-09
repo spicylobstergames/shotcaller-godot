@@ -76,7 +76,7 @@ func physics_process(delta):
 		
 		if not unit1.dead:
 			if unit1.moves and unit1.state == "move":
-				if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
+				if unit1.agent.get_goal("ArriveAtDestination").is_at_destination(unit1):
 					unit1.on_arrive()
 				else:
 					unit1.on_move(delta)

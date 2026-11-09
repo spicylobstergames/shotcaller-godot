@@ -8,6 +8,7 @@ func get_class_name() -> String:
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var lane = agent.get_state("lane", "")
+	var is_current_goal = agent.get_current_goal() == self
 	if (
 		unit.target
 		or not unit.moves
@@ -20,7 +21,11 @@ func is_valid(agent) -> bool:
 		or agent.get_state("lane_route_finished", false)):
 		return false
 
-	return unit.current_path.is_empty() or unit.current_destiny == Vector2.ZERO
+	return (
+		is_current_goal
+		or unit.current_path.is_empty()
+		or unit.current_destiny == Vector2.ZERO
+	)
 
 
 
@@ -75,20 +80,25 @@ func change_lane(unit, lane_point: Vector2) -> void:
 		return
 
 	unit.agent.set_state("lane", lane)
+	unit.agent.set_state("lane_route_finished", false)
+	unit.agent.erase_state("lane_resume_path")
+	unit.agent.set_state("resume_path", false)
+	unit.current_path.clear()
 	var lane_start = path.pop_front()
-	Goap.get_action("Navigate").move(unit, lane_start)
+	unit.agent.get_action("Navigate").move(unit, lane_start)
 	unit.current_path.append_array(path)
 
 
 func resume_lane(unit) -> void:
 	var lane = unit.agent.get_state("lane", "")
 	var path = get_lane_path(lane, unit.team)
-	Goap.get_action("Navigate").cut_path(unit, path)
+	unit.agent.get_action("Navigate").cut_path(unit, path)
 
 
 func on_arrive(agent) -> void:
 	# todo save lane_final_destination state and check distance
 	var route_finished = agent.get_unit().current_path.is_empty()
-	Goap.get_goal("ArriveAtDestination").on_arrive(agent)
+	agent.get_goal("ArriveAtDestination").on_arrive(agent)
 	if route_finished:
 		agent.set_state("lane_route_finished", true)
+		agent.erase_state("lane_resume_path")

@@ -6,6 +6,9 @@ func get_class_name() -> String:
 
 
 func is_valid(agent) -> bool:
+	var current_goal = agent.get_current_goal()
+	if current_goal and current_goal.get_class_name() == "WalkLane":
+		return false
 	var unit = agent.get_unit()
 	var has_path = not unit.current_path.is_empty()
 	var is_moving_to_destination = (
@@ -39,10 +42,10 @@ func is_at_destination(unit) -> bool:
 func on_arrive(agent):
 	var unit = agent.get_unit()
 	if not unit.current_path.is_empty():
-		Goap.get_action("Navigate").next(unit)
+		agent.get_action("Navigate").next(unit)
 	else:
 		unit.current_path.clear()
 		agent.set_state("has_path", false)
 		agent.set_state("arrived_at_destination", true)
-		Goap.get_action("Move").stop(unit)
+		agent.get_action("Move").stop(unit)
 	

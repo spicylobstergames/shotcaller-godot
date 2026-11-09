@@ -27,7 +27,7 @@ func get_effects() -> Dictionary:
 
 
 func enter(agent):
-	Goap.get_action("Move").stop(agent.get_unit())
+	agent.get_action("Move").stop(agent.get_unit())
 
 
 func perform(agent, _delta) -> bool:

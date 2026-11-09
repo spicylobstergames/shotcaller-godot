@@ -133,7 +133,7 @@ func teleport(unit, target_point):
 	ui.unit_control_panel.teleport_button.button_pressed = false
 	var building = Utils.closer_building(target_point, unit.team)
 	var distance = building.global_position.distance_to(target_point)
-	Goap.get_action("Move").stop(unit)
+	agent.get_action("Move").stop(unit)
 	agent.set_state("is_channeling", true)
 	var order_id = agent.get_state("player_order_id", 0)
 	var delay = Timer.new()
@@ -157,4 +157,8 @@ func teleport(unit, target_point):
 
 		unit.global_position = new_position
 		agent.set_state("lane", building.lane)
-		Goap.get_goal("WalkLane").resume_lane(unit)
+		agent.set_state("lane_route_finished", false)
+		agent.erase_state("lane_resume_path")
+		agent.set_state("resume_path", false)
+		unit.current_path.clear()
+		agent.get_goal("WalkLane").resume_lane(unit)

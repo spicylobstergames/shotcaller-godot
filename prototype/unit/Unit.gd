@@ -378,7 +378,7 @@ func take_hit(attacker, incoming_projectile = null, hit_modifiers = {}) -> void:
 
 	if incoming_projectile:
 		if not modifiers.pierce:
-			Goap.get_action("RangeAttack").projectile_stuck(attacker, self, incoming_projectile)
+			attacker.agent.get_action("RangeAttack").projectile_stuck(attacker, self, incoming_projectile)
 
 		if incoming_projectile.targets != null and incoming_projectile.targets.find(self) < 0:
 			incoming_projectile.targets.append(self)

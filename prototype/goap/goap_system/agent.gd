@@ -37,10 +37,10 @@ func _ready():
 	_unit.unit_stun_ended.connect(on_stun_end)
 	_unit.unit_move_requested.connect(on_move_requested)
 	_unit.unit_attack_ended.connect(on_attack_end)
-	_unit.unit_attack_release.connect(Goap.get_action("RangeAttack").projectile_release.bind(_unit))
-	_unit.unit_attack_hitted.connect(Goap.get_action("MeleeAttack").hit.bind(_unit))
+	_unit.unit_attack_release.connect(on_attack_release)
+	_unit.unit_attack_hitted.connect(on_attack_hit)
 	_unit.unit_death_started.connect(on_death_started)
-	_unit.unit_died.connect(Goap.get_action("RangeAttack").clear_stuck)
+	_unit.unit_died.connect(on_died)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
 	
@@ -55,6 +55,17 @@ func add_goal(goal_name: String) -> void:
 		goals_list.append(goal_name)
 
 
+func get_action(action_name: String):
+	return Goap.get_action(action_name)
+
+
+func get_goal(goal_name: String):
+	for goal in _goals:
+		if goal and goal.has_method("get_class_name") and goal.get_class_name() == goal_name:
+			return goal
+	return Goap.get_goal(goal_name)
+
+
 func get_unit():
 	return _unit
 
@@ -67,7 +78,7 @@ func get_state(state_name, default = null):
 
 func set_state(state_name, value):
 	if state_name == "target":
-		Goap.get_action("ChooseTarget").set_target(self, value)
+		get_action("ChooseTarget").set_target(self, value)
 		return
 	_state[state_name] = value
 
@@ -134,11 +145,15 @@ func _exit_current_action():
 func _replace_plan(goal, plan: Array) -> void:
 	_exit_current_action()
 	var previous_goal = _current_goal
+	if previous_goal != goal and previous_goal:
+		previous_goal.exit(self)
 	_current_goal = goal
 	_current_plan = plan
 	_current_plan_step = 0
 	if previous_goal != goal:
 		goal_changed.emit(goal)
+		if goal:
+			goal.enter(self)
 	var action = get_current_action()
 	plan_changed.emit(_current_plan)
 	action_changed.emit(action)
@@ -223,7 +238,19 @@ func on_idle_end():
 
 
 func on_move_requested(delta: float) -> void:
-	Goap.get_action("Move").on_move_requested(self, delta)
+	get_action("Move").on_move_requested(self, delta)
+
+
+func on_attack_release() -> void:
+	get_action("RangeAttack").projectile_release(_unit)
+
+
+func on_attack_hit() -> void:
+	get_action("MeleeAttack").hit(_unit)
+
+
+func on_died(unit) -> void:
+	get_action("RangeAttack").clear_stuck(unit)
 
 
 func on_stun_end():
