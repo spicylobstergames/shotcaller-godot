@@ -1,33 +1,10 @@
 extends RefCounted
 
-const GoalContract = preload("res://goap/goap_system/goal_contract.gd")
 var _Agent = load("res://goap/goap_system/agent.gd")
 
-
-# Mock goal that extends GoalContract so production code paths (is_valid,
-# priority) are exercised rather than a hand-rolled implementation.
-class MockGoal extends GoalContract:
-	var valid: bool = true
-	var prio: int = 1
-	var valid_calls: int = 0
-	var priority_calls: int = 0
-	var on_valid: Callable = Callable()
-
-	func _init(v: bool = true, p: int = 1) -> void:
-		valid = v
-		prio = p
-
-	func is_valid(_agent: Variant) -> bool:
-		valid_calls += 1
-		if not on_valid.is_null():
-			on_valid.call()
-		if not valid:
-			return false
-		return true
-
-	func priority(_agent: Variant) -> int:
-		priority_calls += 1
-		return prio
+# Shared mock goal (tests/helpers/mock_goal.gd): extends the real
+# GoalContract, tracks is_valid/priority call counts.
+const MockGoal = preload("res://tests/helpers/mock_goal.gd")
 
 
 # Helper to set up an agent with injected goals and a goal tracker.

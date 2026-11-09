@@ -1,26 +1,15 @@
 extends RefCounted
 
-const GoalContract = preload("res://goap/goap_system/goal_contract.gd")
 var _Agent = load("res://goap/goap_system/agent.gd")
 
-
-# --- Mock Goal ---
-
-class MockGoal extends GoalContract:
-	var valid: bool = true
-	var prio: int = 1
+# Shared mock goal (tests/helpers/mock_goal.gd), extended with a plan so
+# the planner-replacement path has something to install.
+class MockGoal extends "res://tests/helpers/mock_goal.gd":
 	var plan: Array = []
 
 	func _init(v: bool, p: int, actions: Array = []) -> void:
-		valid = v
-		prio = p
+		super(v, p)
 		plan = actions
-
-	func is_valid(_agent: Variant) -> bool:
-		return valid
-
-	func priority(_agent: Variant) -> int:
-		return prio
 
 	func get_plan(_agent: Variant) -> Array:
 		return plan

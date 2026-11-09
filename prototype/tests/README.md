@@ -33,6 +33,27 @@ fail, revert. If the test still passes, it is testing a mock — rewrite it.
   plan-following logic, or mirror math). That was tried; it hides bugs.
 - Never keep a second copy of the project to test against.
 
+## Shared helpers (`tests/helpers/`)
+
+| Helper | Purpose |
+|--------|---------|
+| `fs_scan.gd` | Whole-project file scanning for the smoke tests |
+| `world_state_snapshot.gd` | Capture/restore WorldState keys — **mandatory** for any test that touches WorldState; leaked state makes the suite order-dependent |
+| `mock_goal.gd` | Canonical GOAP mock goal: extends the real GoalContract, tracks is_valid/priority call counts |
+
+Mock policy:
+- Shared helpers exist for doubles that mirror autoload/contract shapes
+  (goals, WorldState). Use them; extend them for extra behavior rather than
+  redefining a local copy.
+- Per-test minimal doubles (a TestUnit with three properties) are fine when
+  they are genuinely test-specific — do not force them into a shared
+  "god mock".
+- GDScript gotcha: `extends` accepts only a literal path string, a
+  class_name, or a native type — never `preload(...)` or a const. Use
+  `extends "res://tests/helpers/mock_goal.gd"`. And a file with no
+  class_name (like goal_contract.gd) cannot be extended by bare name —
+  extend by path.
+
 ## Test file shape
 
 - One file per production concern, in `prototype/tests/unit/`.

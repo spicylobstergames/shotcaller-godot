@@ -1,6 +1,7 @@
 extends Node
 
 const Spawns = preload("res://map/spawns.gd")
+const WorldStateSnapshot = preload("res://tests/helpers/world_state_snapshot.gd")
 
 
 # ---------------------------------------------------------------------------
@@ -62,16 +63,12 @@ func run(harness: Node) -> void:
 # ---------------------------------------------------------------------------
 
 func _test_insufficient_gold_prevents_hiring(harness: Node) -> void:
-	var old_player_team = WorldState.get_state("player_team")
-	var old_player_leaders = WorldState.get_state("player_leaders")
-	var old_enemy_team = WorldState.get_state("enemy_team")
-	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
-	var old_extra_unit = WorldState.get_state("player_extra_unit")
-	WorldState.set_state("player_team", "blue")
-	WorldState.set_state("player_leaders", [])
-	WorldState.set_state("enemy_team", "red")
-	WorldState.set_state("enemy_leaders", [])
-	WorldState.set_state("player_extra_unit", null)
+	var ws = WorldStateSnapshot.new()
+	ws.set_state("player_team", "blue")
+	ws.set_state("player_leaders", [])
+	ws.set_state("enemy_team", "red")
+	ws.set_state("enemy_leaders", [])
+	ws.set_state("player_extra_unit", null)
 
 	var spawns = Spawns.new()
 	harness.add_child(spawns)
@@ -99,11 +96,7 @@ func _test_insufficient_gold_prevents_hiring(harness: Node) -> void:
 
 	leader.free()
 	spawns.free()
-	WorldState.set_state("player_team", old_player_team)
-	WorldState.set_state("player_leaders", old_player_leaders)
-	WorldState.set_state("enemy_team", old_enemy_team)
-	WorldState.set_state("enemy_leaders", old_enemy_leaders)
-	WorldState.set_state("player_extra_unit", old_extra_unit)
+	ws.restore()
 
 
 # ---------------------------------------------------------------------------
@@ -131,10 +124,9 @@ func _test_unknown_unit_type_produces_no_spawn(harness: Node) -> void:
 # ---------------------------------------------------------------------------
 
 func _test_dead_unit_recycling_from_cemetery(harness: Node) -> void:
-	var old_player_team = WorldState.get_state("player_team")
-	var old_enemy_team = WorldState.get_state("enemy_team")
-	WorldState.set_state("player_team", "blue")
-	WorldState.set_state("enemy_team", "red")
+	var ws = WorldStateSnapshot.new()
+	ws.set_state("player_team", "blue")
+	ws.set_state("enemy_team", "red")
 
 	var spawns = TestSpawns.new()
 	harness.add_child(spawns)
@@ -170,8 +162,7 @@ func _test_dead_unit_recycling_from_cemetery(harness: Node) -> void:
 
 	dead_unit.free()
 	spawns.free()
-	WorldState.set_state("player_team", old_player_team)
-	WorldState.set_state("enemy_team", old_enemy_team)
+	ws.restore()
 
 
 # ---------------------------------------------------------------------------
@@ -179,8 +170,8 @@ func _test_dead_unit_recycling_from_cemetery(harness: Node) -> void:
 # ---------------------------------------------------------------------------
 
 func _test_lane_tactic_fallback_when_no_building_exists(harness: Node) -> void:
-	var old_all_buildings = WorldState.get_state("all_buildings")
-	WorldState.set_state("all_buildings", [])
+	var ws = WorldStateSnapshot.new()
+	ws.set_state("all_buildings", [])
 
 	var spawns = Spawns.new()
 	harness.add_child(spawns)
@@ -192,7 +183,7 @@ func _test_lane_tactic_fallback_when_no_building_exists(harness: Node) -> void:
 	)
 
 	spawns.free()
-	WorldState.set_state("all_buildings", old_all_buildings)
+	ws.restore()
 
 
 # ---------------------------------------------------------------------------
@@ -213,14 +204,10 @@ func _test_camp_hire_gold_deduction_semantics(harness: Node) -> void:
 	# Regression test for the collective-check / individual-deduction mismatch.
 	# Fixed semantics (matching lumberjack_hire): affordability is pooled team
 	# gold, and the cost is SPLIT evenly across leaders.
-	var old_player_team = WorldState.get_state("player_team")
-	var old_player_leaders = WorldState.get_state("player_leaders")
-	var old_enemy_team = WorldState.get_state("enemy_team")
-	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
-	var old_extra_unit = WorldState.get_state("player_extra_unit")
-	WorldState.set_state("player_team", "blue")
-	WorldState.set_state("enemy_team", "red")
-	WorldState.set_state("player_extra_unit", null)
+	var ws = WorldStateSnapshot.new()
+	ws.set_state("player_team", "blue")
+	ws.set_state("enemy_team", "red")
+	ws.set_state("player_extra_unit", null)
 
 	var leader0 = MockLeader.new()
 	leader0.gold = 2
@@ -245,25 +232,17 @@ func _test_camp_hire_gold_deduction_semantics(harness: Node) -> void:
 	leader0.free()
 	leader1.free()
 	spawns.free()
-	WorldState.set_state("player_team", old_player_team)
-	WorldState.set_state("player_leaders", old_player_leaders)
-	WorldState.set_state("enemy_team", old_enemy_team)
-	WorldState.set_state("enemy_leaders", old_enemy_leaders)
-	WorldState.set_state("player_extra_unit", old_extra_unit)
+	ws.restore()
 
 
 func _test_camp_hire_leader_without_gold_property_does_not_crash(harness: Node) -> void:
 	# Regression: camp_hire used leader.get("gold", 0) (2-arg — invalid on
 	# Node) and leader.gold -= cost (crashes if the property is absent).
 	# A leader node WITHOUT a gold property must be skipped, not crash.
-	var old_player_team = WorldState.get_state("player_team")
-	var old_player_leaders = WorldState.get_state("player_leaders")
-	var old_enemy_team = WorldState.get_state("enemy_team")
-	var old_enemy_leaders = WorldState.get_state("enemy_leaders")
-	var old_extra_unit = WorldState.get_state("player_extra_unit")
-	WorldState.set_state("player_team", "blue")
-	WorldState.set_state("enemy_team", "red")
-	WorldState.set_state("player_extra_unit", null)
+	var ws = WorldStateSnapshot.new()
+	ws.set_state("player_team", "blue")
+	ws.set_state("enemy_team", "red")
+	ws.set_state("player_extra_unit", null)
 
 	var rich = MockLeader.new()
 	rich.gold = 10
@@ -287,8 +266,4 @@ func _test_camp_hire_leader_without_gold_property_does_not_crash(harness: Node) 
 	no_gold.free()
 	rich.free()
 	spawns.free()
-	WorldState.set_state("player_team", old_player_team)
-	WorldState.set_state("player_leaders", old_player_leaders)
-	WorldState.set_state("enemy_team", old_enemy_team)
-	WorldState.set_state("enemy_leaders", old_enemy_leaders)
-	WorldState.set_state("player_extra_unit", old_extra_unit)
+	ws.restore()
