@@ -6,7 +6,8 @@
 # Checks:
 #   1. Unit/integration test suite (headless)
 #   2. Boot smoke test: boots the REAL game and simulates gameplay
-#   3. Script-error budget: ANY "SCRIPT ERROR" in either run fails the suite
+#   3. Golden replay: deterministic end-state checkpoints of the real game
+#   4. Script-error budget: ANY "SCRIPT ERROR" in any run fails the suite
 #
 # Exit codes: 0 = all green, 1 = failures (see output).
 set -u
@@ -20,7 +21,8 @@ STEP_TIMEOUT="${STEP_TIMEOUT:-180}"
 # tests — the suite will fail with the actual count until you do.
 EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-234}"
 
-GODOT="${1:-/home/john/Downloads/godot472/Godot_v4.7.2-stable_mono_linux_x86_64/Godot_v4.7.2-stable_mono_linux.x86_64}"
+# Godot binary: argument > GODOT env var > "godot" on PATH.
+GODOT="${1:-${GODOT:-godot}}"
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SMOKE_TICKS="${SMOKE_TICKS:-300}"
 
@@ -35,6 +37,11 @@ failures=0
 
 echo "=== [0/3] Build Godot resource/class cache (needed on fresh checkouts) ==="
 timeout "$STEP_TIMEOUT" "$GODOT" --headless --import --path "$PROJECT_DIR" > "$LOG_DIR/import.log" 2>&1
+import_rc=$?
+if [ "$import_rc" -ne 0 ]; then
+	echo "FAIL: --import exited $import_rc — see $LOG_DIR/import.log"
+	failures=$((failures + 1))
+fi
 if [ ! -f "$PROJECT_DIR/.godot/global_script_class_cache.cfg" ]; then
 	echo "FAIL: --import did not produce the global script class cache — see $LOG_DIR/import.log"
 	failures=$((failures + 1))

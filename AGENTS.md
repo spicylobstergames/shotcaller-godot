@@ -26,17 +26,17 @@ Conventions for AI agents (and humans) working in this repository. Read
 ## Verifying
 
 ```
-./prototype/tests/run_suite.sh                    # everything (~30s)
-# Takes an optional godot-binary argument; without one it defaults to a
-# hard-coded local path (see GODOT= in the script). CI passes "$(which godot)".
+./prototype/tests/run_suite.sh /path/to/godot     # everything (~45s)
+# Godot binary resolution: argument > GODOT env var > "godot" on PATH.
+# CI passes "$(which godot)".
 godot --headless --path prototype res://tests/test_runner.tscn    # unit only
 godot --headless --path prototype res://game.tscn -- --smoke      # boot smoke
 ```
 
-- A **golden replay** (`tests/golden/`) hashes 300 frames of the real game.
-  If it fails, either fix the regression or — if the behavior change is
-  intended — re-record with `--golden-update` and say why in the commit
-  (DECISIONS.md D6).
+- A **golden replay** (`tests/golden/`) checkpoints the real game's state at
+  frames 100/200/300 of a deterministic run. If it fails, either fix the
+  regression or — if the behavior change is intended — re-record with
+  `--golden-update` and say why in the commit (DECISIONS.md D6).
 - **Zero `SCRIPT ERROR` lines is part of green.** Script errors can silently
   swallow assertions (a failing expression aborts the statement containing
   it) — a "passing" suite with script errors is lying.
@@ -49,6 +49,11 @@ godot --headless --path prototype res://game.tscn -- --smoke      # boot smoke
 
 ## Workflow
 
+- **ARCHITECTURE.md and the directory READMEs are a map, not truth.** They
+  were verified against the code when written, but code moves. Before acting
+  on a load-bearing claim ("X reads Y by path", "this function has no gate"),
+  grep the current source. If a doc claim is wrong, fix the doc in the same
+  commit.
 - One feature or fix per branch; small commits; run the suite per commit.
 - If you find a bug you won't fix now: write the pinning test, record it in
   `prototype/tests/COVERAGE.md` under "Known bugs", and move on. Don't leave
