@@ -27,6 +27,8 @@ Conventions for AI agents (and humans) working in this repository. Read
 
 ```
 ./prototype/tests/run_suite.sh                    # everything (~30s)
+# Takes an optional godot-binary argument; without one it defaults to a
+# hard-coded local path (see GODOT= in the script). CI passes "$(which godot)".
 godot --headless --path prototype res://tests/test_runner.tscn    # unit only
 godot --headless --path prototype res://game.tscn -- --smoke      # boot smoke
 ```

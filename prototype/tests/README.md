@@ -66,6 +66,13 @@ Mock policy:
   class_name (like goal_contract.gd) cannot be extended by bare name —
   extend by path.
 
+## Testing Agent signals
+
+`Agent.goal_changed` fires only when the goal actually changes
+(`_replace_plan`); `plan_changed` and `action_changed` always fire. A spy
+test expecting `goal_changed` on every plan replacement is a false negative
+by design.
+
 ## Test file shape
 
 - One file per production concern, in `prototype/tests/unit/`.

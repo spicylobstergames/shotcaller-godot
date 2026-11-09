@@ -33,20 +33,22 @@ the end marks the landmines.
 | `Skills` | `skills/passive_skills.gd` | Passive skill lookup (`Skills.leader` table from `skills/resources/leader_passives.tres`), `hit_modifiers` combat resolution |
 | `Modifiers` | `skills/modifiers.gd` | Per-unit modifier stacks (hp/speed/damage/...), level scaling |
 | `Goap` | `goap/goap_system/goap.gd` | Action planner, action/goal registries, navigation |
-| `CraftyCamera` | `controls/crafty_camera.tscn` | Camera control |
+| `CraftyCamera` | `controls/crafty_camera.tscn` (scene) | Camera control |
 | `Utils` | `utils/util.gd` | Misc helpers |
 
 ## GOAP flow (the AI core)
 
 ```
 Agent (goap/goap_system/agent.gd, child of every unit)
-  process(delta) every frame:
+  process(delta) every physics tick (via Goap.physics_process, and only
+  while WorldState "is_game_active" is true):
     _get_best_goal()            — highest-priority valid goal (goal registry)
     goal changed?
       → Goap.get_action_planner().get_plan(agent, goal)   — planner.gd
         matches desired state against real actions' get_effects(),
         chains get_preconditions(), returns cheapest valid plan
-      → _replace_plan(goal, plan) — emits goal_changed/plan_changed/action_changed
+      → _replace_plan(goal, plan) — emits plan_changed/action_changed always,
+        goal_changed only when the goal actually changed
     _follow_plan(plan, delta)   — calls action.perform(); true → next step;
                                   last step → plan cleared
 ```
@@ -78,18 +80,23 @@ Leaders carry gold/exp and the per-leader passive skill dicts from
 
 ## Economy conventions
 
-Team purchases are **collective**: affordability checks pool gold across the
-team's leaders, and costs are split evenly (`floor(cost / leaders)` — see
-`spawns.gd camp_hire` / `lumberjack_hire`). Do not introduce per-leader
-full-cost deduction; a regression test pins the split behavior.
+Hire costs are **split evenly** across the team's leaders
+(`floor(cost / leaders)`), but the two hire paths differ in a critical way:
+`camp_hire` **pools team gold and refuses the hire when insufficient**,
+while `lumberjack_hire` performs **NO affordability check at all** — it
+unconditionally deducts its share (cost is hard-coded 1) and can drive
+leaders negative. Do not assume a gold gate exists on a hire path; do not
+introduce per-leader full-cost deduction. Both behaviors are pinned in
+`tests/unit/test_spawns.gd`.
 
 ## Map
 
 `map/maps/` holds the tile-map scenes (`three_lane_map` is the battle map).
 `map_manager.gd` instantiates the map, creates containers
-(`unit_container`, `projectile_container`, `block_container`), sets up
-buildings and lanes, and owns `spawns.gd` (spawn timers, cemetery recycling,
-camp hiring). `map/tool/mirror_tiles.gd` is a @tool TileMap for the map
+(`unit_container`, `projectile_container`, `block_container`), and sets up
+buildings and lanes. `spawns.gd` (spawn timers, cemetery recycling, camp
+hiring) is a SIBLING node driven by `game.gd` via `%spawn` — map_manager
+does not own it. `map/tool/mirror_tiles.gd` is a @tool TileMap for the map
 editor — its mirror math (`_get_mirrored_coords`) and diff
 (`_get_changed_cells`) are regression-tested.
 
