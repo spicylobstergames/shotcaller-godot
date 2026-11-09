@@ -43,8 +43,9 @@ func _test_world_state_snapshot_auto_captures(harness) -> void:
 
 func _test_world_state_snapshot_restores_null(harness) -> void:
 	var ws = WorldStateSnapshot.new()
-	# A key that did not exist before must be REMOVED-able: restoring the
-	# captured null puts a null back (get_state default), not a stale value.
+	# A key that did not exist before restores as null: restore() sets the
+	# captured null back, and get_state's null default makes that observably
+	# identical to the key never having existed.
 	ws.set_state("player_extra_unit", "infantry")
 	ws.restore()
 	harness.check(WorldState.get_state("player_extra_unit") == null,
