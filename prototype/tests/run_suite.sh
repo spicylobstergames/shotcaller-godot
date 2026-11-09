@@ -24,6 +24,13 @@ mkdir -p "$LOG_DIR"
 
 failures=0
 
+echo "=== [0/2] Build Godot resource/class cache (needed on fresh checkouts) ==="
+"$GODOT" --headless --import --path "$PROJECT_DIR" > "$LOG_DIR/import.log" 2>&1
+if [ ! -f "$PROJECT_DIR/.godot/global_script_class_cache.cfg" ]; then
+	echo "FAIL: --import did not produce the global script class cache — see $LOG_DIR/import.log"
+	failures=$((failures + 1))
+fi
+
 echo "=== [1/2] Unit + integration suite ==="
 "$GODOT" --headless --path "$PROJECT_DIR" res://tests/test_runner.tscn \
 	> "$LOG_DIR/suite.log" 2>&1
