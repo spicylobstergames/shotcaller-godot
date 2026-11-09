@@ -1,0 +1,126 @@
+# Decision Log
+
+Design decisions made during development, with rationale. When you hit a
+fork in the road, check here first — if the decision is recorded, follow it;
+if not, make one, add it here, and say why.
+
+Format: decision / alternatives considered / why.
+
+---
+
+## D1 — Hire payment is collective (pooled check, even split)
+
+**Decision:** `camp_hire` pools gold across the team's leaders for the
+affordability check and splits the cost evenly (`floor(cost / leaders)`) —
+same convention as the pre-existing `lumberjack_hire`. The floor split can
+leave a remainder unpaid (cost 3 across 2 leaders deducts 2); accepted.
+
+**Alternatives:** per-leader full-cost deduction (the original buggy code —
+2 leaders with 2 gold each passed a 3-gold check and both went negative);
+individual affordability (each leader must afford the full cost — breaks
+pooling semantics).
+
+**Why:** consistency with `lumberjack_hire`'s existing convention; the bug
+was the check/deduction mismatch, not the pooling idea. Regression-tested in
+`test_spawns.gd` (`_test_camp_hire_gold_deduction_semantics`).
+
+## D2 — `lumberjack_hire` has no affordability gate (pinned quirk)
+
+**Decision:** NOT fixed. `lumberjack_hire` deducts unconditionally and can
+drive a 0-gold leader negative. Pinned by
+`_test_lumberjack_hire_has_no_affordability_gate`; documented in
+ARCHITECTURE.md and COVERAGE.md.
+
+**Alternatives:** add the same pooled gate as camp_hire.
+
+**Why not:** that's a gameplay design change (who pays for lumberjacks?),
+not a bug fix — it belongs to the project owner. Adding a gate must flip the
+pinning test deliberately.
+
+## D3 — Script-error budget counts `SCRIPT ERROR` lines only
+
+**Decision:** the suite fails on any `SCRIPT ERROR` in Godot output; other
+`ERROR`/`WARNING` lines (e.g. the intentional "Failed loading resource:
+nonexistent_unit.tscn" from negative tests) do not fail it.
+
+**Alternatives:** fail on all ERROR output.
+
+**Why:** script errors can silently swallow assertions (a failing expression
+aborts the statement containing it), which makes a "passing" suite lie.
+Other engine errors are often intentional probes in negative tests; failing
+on them would force suppressing real diagnostics.
+
+## D4 — `advance_with_navigation` is left uncovered by tests
+
+**Decision:** the boot smoke exercises the live movement path
+(`MoveAction.calc_step`/`step`). The navigation refinement
+(`Unit.advance_with_navigation`) is dormant by default
+(`Goap.use_native_pathfinding = false`) and is not smoke-covered; if that
+config flips on, add coverage then.
+
+**Alternatives:** enable native pathfinding in the smoke scenario.
+
+**Why:** testing a disabled path adds cost without protecting current
+behavior; the config flag is the real decision point.
+
+## D5 — Determinism strategy
+
+**Decision:** two layers. (a) Unit tests avoid RNG entirely where possible —
+`hit_modifiers` tests inject skill values 1.0/0.0 through the real
+`Skills.leader` seam instead of seeding `randf()` (same branch, deterministic
+outcome). (b) The golden replay seeds the global RNG (`seed(20240101)`),
+passes `--fixed-fps 60` for constant frame deltas, and skips
+`game.rng.randomize()` under `--golden`.
+
+**Alternatives:** seeding-only everywhere (keeps the randf threshold
+nondeterministic at boundaries); frame-recording gameplay.
+
+**Why:** injection tests the same production branch without brittleness;
+the golden replay needs full-stream determinism and gets it from the
+fixed-fps + seed combination.
+
+## D6 — Golden replay update protocol
+
+**Decision:** when the golden comparison fails, the change is either a
+regression (fix the code) or an intended behavior change — in which case
+re-record with `--golden-update` and state the reason in the commit message.
+The golden file (`tests/golden/replay_<frames>.txt`) is committed.
+
+**Why:** the whole value of the replay is that silent divergence is loud.
+Silently re-recording would destroy it.
+
+## D7 — `EXPECTED_UNIT_TESTS` exact-count pin
+
+**Decision:** `run_suite.sh` pins the exact expected assertion count; the
+runner must emit a matching `TESTS_COMPLETE` token. Bump the pin when adding
+tests.
+
+**Alternatives:** minimum-threshold check (defeats count-drift detection);
+no check (a bypassed runner can fake green).
+
+**Why:** two-file agreement catches accidental drift and bypassed/crashed
+runners. Honest limit: it cannot stop deliberate forgery (the pin is
+readable) — self-reporting has that ceiling.
+
+## D8 — WorldStateSnapshot erases absent keys on restore
+
+**Decision:** keys that did not exist before a test are ERASED on restore,
+not set to null. Setting null poisons `get_state(key, default)` for typed
+readers (returns null instead of the default). Self-tested in
+`test_helpers.gd`.
+
+**Why:** the poisoning variant broke two production actions
+(`get_lumber`/`wait_out` `is_valid() -> bool`) during planner-test
+development.
+
+## D9 — Mirror test expectations follow production semantics
+
+**Decision:** mirror corner expectations use the production formula's actual
+outputs (e.g. (0,0) → (98,78) on a 100×80 grid, not the intuitive (99,79)) —
+`map_to_local` returns cell centers, so the mirror axis is center-aligned.
+The invariant tests assert involution/reversibility properties, not assumed
+corner mappings.
+
+**Why:** "tests verify intended map symmetry" — the symmetry property holds
+for every cell; hard-coding an off-by-one corner expectation would pin a
+guess instead of the formula.

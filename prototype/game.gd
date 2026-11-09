@@ -92,7 +92,11 @@ func get_map_texture():
 func map_loaded():
 	if not WorldState.get_state("is_game_active"):
 		resume()
-		rng.randomize()
+		# Golden-replay runs need a deterministic stream: skip the seed
+		# randomization when --golden is passed (tests/smoke/smoke_runner.gd
+		# seeds the global RNG itself).
+		if not "--golden" in OS.get_cmdline_user_args():
+			rng.randomize()
 		WorldState.one_sec_timer.start()
 		spawn.start()
 		%soundtrack.stop()

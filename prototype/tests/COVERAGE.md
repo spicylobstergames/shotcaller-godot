@@ -4,10 +4,11 @@
 
 ```
 ./prototype/tests/run_suite.sh
-→ [1/2] TESTS_COMPLETE: passed=234 failed=0
-→ [1/2] All 234 tests passed.
-→ [2/2] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
-→ SUITE GREEN: unit tests passed, boot smoke passed, zero script errors
+→ [1/3] TESTS_COMPLETE: passed=234 failed=0
+→ [1/3] All 234 tests passed.
+→ [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
+→ [3/3] GOLDEN_OK: 132 state lines identical
+→ SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
 ```
 
 ## The suite has two layers
@@ -27,6 +28,23 @@ Run it directly with:
 ```
 godot --headless --path prototype res://game.tscn -- --smoke --smoke-ticks=300
 ```
+
+### Golden replay (tests/golden/)
+
+The third suite layer: a deterministic replay of the real game. Seeded RNG
+(`seed(20240101)`) + `--fixed-fps 60` + skipping `game.rng.randomize()`
+(`--golden`) make 300 simulation frames bit-reproducible; the runner
+serializes every unit's state (name/type/team/hp/level/dead/position) plus
+score keys and compares against the committed snapshot
+(`tests/golden/replay_300.txt`). This catches **silent behavior changes**
+that pass every assertion — verified by sabotage: halving movement speed
+passes all 234 assertions and the smoke test, but the golden replay fails on
+the first diverging state line.
+
+If a golden failure is an INTENDED behavior change: re-record with
+`--golden-update` and state why in the commit (see DECISIONS.md D6).
+Determinism strategy: DECISIONS.md D5. Platform note: the snapshot is
+recorded on Linux x86_64; other platforms may need their own re-record.
 
 ### The script-error budget
 
@@ -68,6 +86,7 @@ Verified by sabotage (each experiment run, then reverted):
 | `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
 | `test_goap_integration.gd` | Real `Agent`: goal selection, signal wiring, plan lifecycle | Integration |
 | `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
+| `tests/golden/replay_300.txt` | Deterministic 300-frame game replay (silent drift) | Golden |
 | `test_helpers.gd` | Shared helpers are load-bearing (snapshot/mock-goal self-tests) | Unit |
 | `test_action_lifecycles.gd` | Plan execution via TestAgent (real `_replace_plan`/`_follow_plan` paths) | Unit |
 | `test_goal_interactions.gd` | Goal contracts via real `Agent._get_best_goal()` | Unit |
@@ -138,9 +157,7 @@ turn the suite RED with the exact intended assertion.
 
 ## Remaining high-priority gaps
 
-1. Golden-replay test: seed the RNG, run N frames, hash game state, compare
-   against a stored snapshot (catches silent behavior changes).
-2. GOAP `Agent.process()` orchestration test (goal selection → planner →
+1. GOAP `Agent.process()` orchestration test (goal selection → planner →
    action execution, via the real planner).
 3. Combat resolution coverage (dodge/crit/counter paths in `hit_modifiers`).
 4. Economy coverage beyond camp_hire (lumber, taxes).

@@ -33,14 +33,14 @@ mkdir -p "$LOG_DIR"
 
 failures=0
 
-echo "=== [0/2] Build Godot resource/class cache (needed on fresh checkouts) ==="
+echo "=== [0/3] Build Godot resource/class cache (needed on fresh checkouts) ==="
 timeout "$STEP_TIMEOUT" "$GODOT" --headless --import --path "$PROJECT_DIR" > "$LOG_DIR/import.log" 2>&1
 if [ ! -f "$PROJECT_DIR/.godot/global_script_class_cache.cfg" ]; then
 	echo "FAIL: --import did not produce the global script class cache — see $LOG_DIR/import.log"
 	failures=$((failures + 1))
 fi
 
-echo "=== [1/2] Unit + integration suite ==="
+echo "=== [1/3] Unit + integration suite ==="
 timeout "$STEP_TIMEOUT" "$GODOT" --headless --path "$PROJECT_DIR" res://tests/test_runner.tscn \
 	> "$LOG_DIR/suite.log" 2>&1
 suite_rc=$?
@@ -75,7 +75,7 @@ if [ "$errors" -gt 0 ]; then
 	failures=$((failures + 1))
 fi
 
-echo "=== [2/2] Boot smoke test ($SMOKE_TICKS ticks of the real game) ==="
+echo "=== [2/3] Boot smoke test ($SMOKE_TICKS ticks of the real game) ==="
 timeout "$STEP_TIMEOUT" "$GODOT" --headless --path "$PROJECT_DIR" res://game.tscn -- \
 	--smoke --smoke-ticks="$SMOKE_TICKS" \
 	> "$LOG_DIR/smoke.log" 2>&1
@@ -93,8 +93,25 @@ if [ "$errors" -gt 0 ]; then
 	failures=$((failures + 1))
 fi
 
+echo "=== [3/3] Golden replay (deterministic state hash, 300 frames) ==="
+timeout "$STEP_TIMEOUT" "$GODOT" --headless --fixed-fps 60 --path "$PROJECT_DIR" res://game.tscn -- \
+	--smoke --golden --smoke-ticks="$SMOKE_TICKS" \
+	> "$LOG_DIR/golden.log" 2>&1
+golden_rc=$?
+grep -E "GOLDEN" "$LOG_DIR/golden.log" | tail -1
+errors=$(grep -c "SCRIPT ERROR" "$LOG_DIR/golden.log" || true)
+if [ "$golden_rc" -ne 0 ] || ! grep -q "GOLDEN_OK" "$LOG_DIR/golden.log"; then
+	echo "FAIL: golden replay exited $golden_rc — behavior diverged from the recorded snapshot"
+	grep -E "GOLDEN_FAIL|SCRIPT ERROR" "$LOG_DIR/golden.log" | sort -u | head -10
+	failures=$((failures + 1))
+fi
+if [ "$errors" -gt 0 ]; then
+	echo "FAIL: golden replay produced $errors SCRIPT ERROR(s)"
+	failures=$((failures + 1))
+fi
+
 if [ "$failures" -eq 0 ]; then
-	echo "=== SUITE GREEN: unit tests passed, boot smoke passed, zero script errors ==="
+	echo "=== SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors ==="
 	exit 0
 else
 	echo "=== SUITE RED: $failures check group(s) failed ==="

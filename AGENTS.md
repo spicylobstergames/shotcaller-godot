@@ -33,6 +33,10 @@ godot --headless --path prototype res://tests/test_runner.tscn    # unit only
 godot --headless --path prototype res://game.tscn -- --smoke      # boot smoke
 ```
 
+- A **golden replay** (`tests/golden/`) hashes 300 frames of the real game.
+  If it fails, either fix the regression or — if the behavior change is
+  intended — re-record with `--golden-update` and say why in the commit
+  (DECISIONS.md D6).
 - **Zero `SCRIPT ERROR` lines is part of green.** Script errors can silently
   swallow assertions (a failing expression aborts the statement containing
   it) — a "passing" suite with script errors is lying.
