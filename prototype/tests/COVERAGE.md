@@ -1,11 +1,11 @@
 # Test Coverage
 
-**20 test classes**, **175 assertions**, **0 script errors** — all passing.
+**23 test classes**, **232 assertions**, **0 script errors** — all passing.
 
 ```
 ./prototype/tests/run_suite.sh
-→ [1/2] TESTS_COMPLETE: passed=175 failed=0
-→ [1/2] All 175 tests passed.
+→ [1/2] TESTS_COMPLETE: passed=232 failed=0
+→ [1/2] All 232 tests passed.
 → [2/2] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → SUITE GREEN: unit tests passed, boot smoke passed, zero script errors
 ```
@@ -67,10 +67,12 @@ Verified by sabotage (each experiment run, then reverted):
 | `test_script_parse.gd` | Every `.gd` file compiles | Smoke |
 | `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
 | `test_goap_integration.gd` | Real `Agent`: goal selection, signal wiring, plan lifecycle | Integration |
+| `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
+| `test_helpers.gd` | Shared helpers are load-bearing (snapshot/mock-goal self-tests) | Unit |
 | `test_action_lifecycles.gd` | Plan execution via TestAgent (real `_replace_plan`/`_follow_plan` paths) | Unit |
 | `test_goal_interactions.gd` | Goal contracts via real `Agent._get_best_goal()` | Unit |
 | `test_modifiers.gd` | `skills/modifiers.gd` public methods | Unit |
-| `test_passive_skills.gd` | `skills/passive_skills.gd` hit_modifiers, get_value | Unit |
+| `test_passive_skills.gd` | `hit_modifiers` combat resolution (dodge/stun/crit/cleave/pierce/bleed/agile/counter, deterministic via skill injection) + get_value | Unit |
 | `test_spawns.gd` | `map/spawns.gd` camp_hire, cemetery, lane tactics | Unit |
 | `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — real `_get_mirrored_coords`/`_get_changed_cells` | Unit |
 | `test_planner.gd` | GOAP planner | Unit |
@@ -96,10 +98,17 @@ Verified by sabotage (each experiment run, then reverted):
 
 ## Known bugs
 
-None currently outstanding. (The camp_hire collective-check / per-leader
-deduction mismatch was fixed this phase: affordability is pooled team gold and
-the cost is split evenly across leaders, matching the lumberjack_hire
-convention. Regression-tested in `test_spawns.gd`.)
+None currently outstanding. Fixed during test development (each regression-
+tested):
+- `spawns.gd camp_hire`: collective-check / per-leader-deduction mismatch →
+  now pooled check + even split (lumberjack_hire convention).
+- `spawns.gd camp_hire`: 2-arg `Node.get("gold", 0)` crash on Godot 4.
+- `get_lumber.gd` / `wait_out.gd`: `is_valid() -> bool` returned null when
+  `is_game_active` was never set — typed-bool violation; defaults to false.
+- DOCUMENTED QUIRK (not fixed): an empty skill dict in the `Skills.leader`
+  table makes `hit_modifiers` return null — a latent caller crash. Pinned by
+  `test_passive_skills.gd _test_empty_skill_dict_returns_null` (production
+  .tres data never produces empty dicts).
 
 ## Known coverage limits
 
@@ -116,6 +125,12 @@ convention. Regression-tested in `test_spawns.gd`.)
   2 leaders deducts 2 total). Accepted deliberately — identical to the
   pre-existing `lumberjack_hire` convention; the pooled check still gates
   every hire.
+
+## Sabotage-verified (Phase 2)
+
+Disabling dodge flagging, zeroing counter damage, breaking the bleed cap,
+breaking WaitOut's effects key, and breaking MoveAction's effects key each
+turn the suite RED with the exact intended assertion.
 
 ## Remaining high-priority gaps
 

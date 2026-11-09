@@ -87,6 +87,7 @@ func run(harness) -> void:
 	_test_agile_adds_attack_speed_modifier(harness)
 	_test_counter_swaps_damage_and_records_hit(harness)
 	_test_counter_skips_ranged_attackers(harness)
+	_test_empty_skill_dict_returns_null(harness)
 	_test_no_leader_skills_passthrough(harness)
 
 
@@ -100,10 +101,8 @@ func _make_skills(harness) -> Node:
 	return skills
 
 
-func _teardown(harness, skills, original_leader, goal_spy) -> void:
+func _teardown(harness, skills, original_leader) -> void:
 	skills.leader = original_leader
-	if goal_spy != null:
-		Goap._goals.set_goal("EnemyDefeated", goal_spy["original"])
 	skills.queue_free()
 
 
@@ -135,7 +134,7 @@ func _test_damage_passthrough(harness) -> void:
 	var result = skills.hit_modifiers(attacker, target, null, {"damage": 7})
 	harness.check_equal(result.damage, 7,
 		"hit_modifiers uses provided damage when present.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_damage_fallback_to_modifiers(harness) -> void:
@@ -148,7 +147,7 @@ func _test_damage_fallback_to_modifiers(harness) -> void:
 	var result = skills.hit_modifiers(attacker, target, null, {})
 	harness.check_equal(result.damage, 5,
 		"hit_modifiers falls back to the attacker's damage modifier (CombatUnit.damage = 5).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_flag_initialization(harness) -> void:
@@ -164,7 +163,7 @@ func _test_flag_initialization(harness) -> void:
 	harness.check(result.counter == true, "Counter defaults to true when input omits it.")
 	var result2 = skills.hit_modifiers(attacker, target, null, {"damage": 5, "counter": false})
 	harness.check(result2.counter == false, "Counter=false is preserved from input modifiers.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_dodge_always(harness) -> void:
@@ -174,7 +173,7 @@ func _test_dodge_always(harness) -> void:
 	var result = skills.hit_modifiers(pair[0], pair[1], null, {"damage": 5})
 	harness.check(result.dodge == true,
 		"Dodge skill 1.0 always dodges (deterministic: no RNG dependency).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_dodge_never(harness) -> void:
@@ -184,7 +183,7 @@ func _test_dodge_never(harness) -> void:
 	var result = skills.hit_modifiers(pair[0], pair[1], null, {"damage": 5})
 	harness.check(result.dodge == false,
 		"Dodge skill 0.0 never dodges (deterministic: no RNG dependency).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_stun_applies(harness) -> void:
@@ -195,7 +194,7 @@ func _test_stun_applies(harness) -> void:
 	skills.hit_modifiers(pair[0], target, null, {"damage": 5, "counter": false})
 	harness.check(target.stunned == true,
 		"Stun skill 1.0 always stuns non-building targets.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_stun_skips_buildings(harness) -> void:
@@ -207,7 +206,7 @@ func _test_stun_skips_buildings(harness) -> void:
 	skills.hit_modifiers(pair[0], target, null, {"damage": 5, "counter": false})
 	harness.check(target.stunned == false,
 		"Buildings are never stunned, even with stun skill 1.0.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_critical_doubles(harness) -> void:
@@ -221,7 +220,7 @@ func _test_critical_doubles(harness) -> void:
 	var result2 = skills.hit_modifiers(pair2[0], pair2[1], null, {"damage": 5, "counter": false})
 	harness.check_equal(result2.damage, 5,
 		"Critical skill 0.0 never doubles damage.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_cleave_multiplies(harness) -> void:
@@ -236,7 +235,7 @@ func _test_cleave_multiplies(harness) -> void:
 	var result2 = skills.hit_modifiers(pair[0], pair[1], null, {"damage": 5, "counter": false})
 	harness.check_equal(result2.damage, 5,
 		"Cleave skill does not apply without the input cleave flag.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_pierce(harness) -> void:
@@ -248,7 +247,7 @@ func _test_pierce(harness) -> void:
 	var pair2 = _combat_setup(skills, {"pierce": 0.0}, {})
 	var result2 = skills.hit_modifiers(pair2[0], pair2[1], null, {"damage": 5, "counter": false})
 	harness.check(result2.pierce == false, "Pierce skill 0.0 never pierces.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_bleed_scales_with_attack_count(harness) -> void:
@@ -265,7 +264,7 @@ func _test_bleed_scales_with_attack_count(harness) -> void:
 	var result2 = skills.hit_modifiers(attacker, pair[1], null, {"damage": 5, "counter": false})
 	harness.check_equal(result2.damage, 25,
 		"Bleed caps at 10 stacks (2 x 10 = 20 on top of 5).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_agile_adds_attack_speed_modifier(harness) -> void:
@@ -284,7 +283,7 @@ func _test_agile_adds_attack_speed_modifier(harness) -> void:
 			"Agile modifier is named 'agile' in the real Modifiers stack.")
 		harness.check_equal(agile_mods[0]["value"], 0.4,
 			"Agile value scales with attack_count (0.1 x 4).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_counter_swaps_damage_and_records_hit(harness) -> void:
@@ -314,7 +313,7 @@ func _test_counter_swaps_damage_and_records_hit(harness) -> void:
 			"Counter take_hit passes the TARGET as the new attacker (retaliation direction).")
 		harness.check(spy.take_hit_calls[0]["target"] == attacker,
 			"Counter take_hit passes the ATTACKER as the victim (retaliation direction).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_counter_skips_ranged_attackers(harness) -> void:
@@ -337,7 +336,7 @@ func _test_counter_skips_ranged_attackers(harness) -> void:
 		"Ranged attackers take no counter damage.")
 	harness.check_equal(spy.take_hit_calls.size(), 0,
 		"Counter branch never fires for ranged attackers.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_empty_skill_dict_returns_null(harness) -> void:
@@ -356,7 +355,7 @@ func _test_empty_skill_dict_returns_null(harness) -> void:
 	var result = skills.hit_modifiers(attacker, target, null, {"damage": 5})
 	harness.check(result == null,
 		"QUIRK: empty attacker skill dict makes hit_modifiers return null (latent caller crash, pinned current behavior).")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)
 
 
 func _test_no_leader_skills_passthrough(harness) -> void:
@@ -372,4 +371,4 @@ func _test_no_leader_skills_passthrough(harness) -> void:
 		"Unknown leaders: damage passes through untouched.")
 	harness.check(result.counter == false,
 		"Unknown leaders: input counter flag preserved.")
-	_teardown(harness, skills, original, null)
+	_teardown(harness, skills, original)

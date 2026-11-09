@@ -12,6 +12,10 @@ extends RefCounted
 # null value, defeating typed defaults in production code
 # (e.g. `is_valid() -> bool: return WorldState.get_state("is_game_active", false)`).
 #
+# NOTE: restore() reaches into WorldState._state to erase absent keys —
+# WorldState exposes no erase API (only set/get), and clear_state() would
+# wipe unrelated keys. If WorldState gains erase_state(), switch to it.
+#
 # Usage:
 #   var ws = WorldStateSnapshot.new()
 #   ws.capture(["player_team", "player_leaders", "player_extra_unit"])
