@@ -2,6 +2,18 @@
 
 How to write tests for this project. Read this before adding test files.
 
+## Layout
+
+- `run_tests.gd` — explicit registry of every unit/integration test class.
+  Registering a file here AND calling `.run(self)` are both required.
+- `run_suite.sh` — CI entry point: unit suite + boot smoke + script-error
+  budget in one command.
+- `smoke/smoke_runner.gd` — boots the REAL game headless and asserts it
+  plays (units spawn, pathed units move). Enabled via `-- --smoke` on
+  game.tscn; the debug harness (`test_map/test.gd`) spawns the scenario.
+- `helpers/` — shared doubles (see below).
+- `unit/` — the test classes.
+
 ## Running the suite
 
 ```
