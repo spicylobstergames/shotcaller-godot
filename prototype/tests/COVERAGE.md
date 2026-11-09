@@ -38,14 +38,19 @@ to miss.
 
 ### Tamper-evidence
 
-The runner cannot silently pass:
+The runner cannot *accidentally* produce a green result:
 - `run_tests.gd` must emit `TESTS_COMPLETE: passed=N failed=0`, and `N` must
   equal `EXPECTED_UNIT_TESTS` **pinned in run_suite.sh** (a different file).
-  A crashed, hung, or bypassed runner cannot fake green without editing both.
+  A crashed, hung, or accidentally-bypassed runner fails loudly, as does
+  accidental test-count drift.
 - Both Godot invocations run under a per-step timeout — a hung runner fails
   instead of hanging CI.
 - The boot smoke asserts behavior (units exist, pathed units move), so a
   broken simulation fails even with zero assertion errors.
+
+Honest limit: a *deliberate* forger can edit the reporter itself to print a
+fake token — self-reporting cannot exclude that, only make it conscious
+(the pin is in a second file, so drift/bypass is caught, not forgery).
 
 Verified by sabotage (each experiment run, then reverted):
 | Sabotage | Caught by |
@@ -105,6 +110,12 @@ convention. Regression-tested in `test_spawns.gd`.)
 - The headless smoke boots a slightly divergent UI path: minimap skips its
   viewport snapshot (no frames are drawn headless). UI-only tail code is
   therefore not exercised headless.
+- `addons/` (including `addons/gui`) is excluded from both whole-project
+  smoke tests: third-party code, not ours to gate.
+- `spawns.gd` floor-split payment can leave a remainder unpaid (cost 3 across
+  2 leaders deducts 2 total). Accepted deliberately — identical to the
+  pre-existing `lumberjack_hire` convention; the pooled check still gates
+  every hire.
 
 ## Remaining high-priority gaps
 
