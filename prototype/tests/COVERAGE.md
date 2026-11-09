@@ -7,7 +7,7 @@
 → [1/3] TESTS_COMPLETE: passed=234 failed=0
 → [1/3] All 234 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
-→ [3/3] GOLDEN_OK: 132 state lines identical
+→ [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
 ```
 
