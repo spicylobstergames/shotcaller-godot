@@ -18,7 +18,7 @@ STEP_TIMEOUT="${STEP_TIMEOUT:-180}"
 # file than the reporter: a runner that crashes, hangs, or is bypassed cannot
 # fake a green result without editing both files. Bump this when you add
 # tests — the suite will fail with the actual count until you do.
-EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-185}"
+EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-215}"
 
 GODOT="${1:-/home/john/Downloads/godot472/Godot_v4.7.2-stable_mono_linux_x86_64/Godot_v4.7.2-stable_mono_linux.x86_64}"
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
