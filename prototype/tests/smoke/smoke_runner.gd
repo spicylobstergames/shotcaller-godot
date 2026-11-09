@@ -139,7 +139,17 @@ func _serialize_state() -> String:
 	var lines: Array[String] = []
 	var all_units: Array = WorldState.get_state("all_units")
 	var sorted_units := all_units.duplicate()
-	sorted_units.sort_custom(func(a, b): return String(a.name) < String(b.name))
+	# Sort by the NORMALIZED identity (generated-name counters stripped) plus
+	# stable fields and position — sorting by raw node names would make the
+	# output order depend on allocation counters that normalization removes.
+	sorted_units.sort_custom(func(a, b):
+		var ka := _unit_sort_key(a)
+		var kb := _unit_sort_key(b)
+		if ka != kb:
+			return ka < kb
+		if absf(a.global_position.x - b.global_position.x) > 0.001:
+			return a.global_position.x < b.global_position.x
+		return a.global_position.y < b.global_position.y)
 	for unit in sorted_units:
 		if not is_instance_valid(unit):
 			lines.append("FREED")
@@ -156,6 +166,12 @@ func _serialize_state() -> String:
 # Generated node names ("@StaticBody2D@83") embed allocation counters that
 # can shift across engine versions/platforms: keep the class, drop the
 # counter. See DECISIONS.md D10.
+func _unit_sort_key(unit) -> String:
+	return "%s|%s|%s" % [
+		_normalize_node_name(String(unit.name)), unit.type, unit.team,
+	]
+
+
 func _normalize_node_name(n: String) -> String:
 	if n.begins_with("@"):
 		var parts := n.split("@")
@@ -178,6 +194,10 @@ func _states_match(expected: String, actual: String, out_diff: Array) -> bool:
 	return true
 
 func _lines_match(exp: String, got: String) -> bool:
+	# Only POSITIONS get tolerance (platform float drift in movement).
+	# Every other field is an exact state fact: hp 100 -> 99 or time 1 -> 2
+	# is a real gameplay change, not drift, and must fail the comparison.
+	# See DECISIONS.md D10.
 	var exp_f := exp.split("|")
 	var got_f := got.split("|")
 	if exp_f.size() != got_f.size():
@@ -190,17 +210,16 @@ func _lines_match(exp: String, got: String) -> bool:
 		if e.begins_with("pos=(") and g.begins_with("pos=("):
 			if not _pos_close(e, g):
 				return false
-		elif "=" in e and "=" in g:
-			var ev = e.substr(e.find("=") + 1)
-			var gv = g.substr(g.find("=") + 1)
-			if ev.is_valid_float() and gv.is_valid_float():
-				if absf(ev.to_float() - gv.to_float()) > 1.0:
-					return false
-			else:
-				return false
 		else:
 			return false
 	return true
+
+func _frame_label(c: int) -> int:
+	# The final checkpoint has no entry in checkpoint_frames — its frame
+	# label is frames_target itself. Indexing checkpoint_frames[c] for the
+	# last checkpoint is out of bounds and would mask the real diagnostic.
+	return checkpoint_frames[c] if c < checkpoint_frames.size() else frames_target
+
 
 func _pos_close(e: String, g: String) -> bool:
 	var e_coords = e.trim_prefix("pos=(").trim_suffix(")").split(",")
@@ -246,7 +265,7 @@ func _golden_report() -> void:
 				for c in range(checkpoints.size()):
 					var diff: Array = []
 					if not _states_match(exp_sections[c], checkpoints[c], diff):
-						failures.append("Golden mismatch at checkpoint %d (frame %d):\n%s" % [c + 1, checkpoint_frames[c], "\n".join(diff)])
+						failures.append("Golden mismatch at checkpoint %d (frame %d):\n%s" % [c + 1, _frame_label(c), "\n".join(diff)])
 						failures.append("If this divergence is an INTENDED behavior change, re-record with --golden-update and say why in the commit.")
 						break
 
@@ -262,10 +281,7 @@ func _golden_report() -> void:
 func _format_checkpoints() -> String:
 	var out := ""
 	for c in range(checkpoints.size()):
-		# The final checkpoint has no entry in checkpoint_frames — its frame
-		# label is frames_target itself.
-		var frame_label: int = checkpoint_frames[c] if c < checkpoint_frames.size() else frames_target
-		out += "=== checkpoint %d (frame %d) ===\n%s" % [c + 1, frame_label, checkpoints[c]]
+		out += "=== checkpoint %d (frame %d) ===\n%s" % [c + 1, _frame_label(c), checkpoints[c]]
 		if c < checkpoints.size() - 1:
 			out += "\n"
 	return out
