@@ -10,26 +10,29 @@ func get_class_name() -> String:
 
 
 func is_valid(_agent) -> bool:
-	#var unit = _agent.get_unit()
-	return false #unit.moves
+	var unit = _agent.get_unit()
+	return unit.moves and unit.current_destiny
 
 
-#func get_cost(_agent) -> int:
-#	return 1
+func get_cost(_agent) -> int:
+	return 1
 
 
-#func get_preconditions() -> Dictionary:
-#	return {"is_stunned": false}
+func get_preconditions() -> Dictionary:
+	return {"is_stunned": false}
 
 
-#func get_effects() -> Dictionary:
-#	return {"arrived_at_destination": true}
+func get_effects() -> Dictionary:
+	return {
+		"arrived_at_destination": true,
+		"lane_route_finished": true
+	}
 
 
-#func perform(agent, _delta) -> bool:
-	#var unit = agent.get_unit() 
-	#step(unit, _delta)
-	#return true
+func perform(agent, _delta) -> bool:
+	if not agent.get_state("is_stunned") and agent.get_state("move_step"):
+		step(agent.get_unit(), agent.get_state("move_step"))
+	return true
 
 
 #func enter(agent):
@@ -74,10 +77,6 @@ func calc_step(unit, speed):
 	if animations:
 		animations.speed_scale = speed / max(unit.speed, 0.0001)
 
-
-func on_move_requested(agent, delta: float) -> void:
-	if not agent.get_state("is_stunned"):
-		step(agent.get_unit(), delta)
 
 
 func step(unit, delta): 
@@ -133,7 +132,7 @@ func teleport(unit, target_point):
 	ui.unit_control_panel.teleport_button.button_pressed = false
 	var building = Utils.closer_building(target_point, unit.team)
 	var distance = building.global_position.distance_to(target_point)
-	agent.get_action("Move").stop(unit)
+	Goap.get_action("Move").stop(unit)
 	agent.set_state("is_channeling", true)
 	var order_id = agent.get_state("player_order_id", 0)
 	var delay = Timer.new()

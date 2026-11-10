@@ -32,7 +32,7 @@ func resume(unit):
 func exit(agent):
 	var unit = agent.get_unit()
 	if unit and not unit.dead:
-		unit.agent.get_action("Move").stop(unit)
+		Goap.get_action("Move").stop(unit)
 
 
 func issue_player_order(unit, order_type: String, point: Vector2 = Vector2.ZERO) -> bool:
@@ -48,7 +48,7 @@ func issue_player_order(unit, order_type: String, point: Vector2 = Vector2.ZERO)
 		return true
 	var agent = unit.agent
 	agent.clear_plan()
-	agent.get_action("Move").stop(unit)
+	Goap.get_action("Move").stop(unit)
 	unit.current_path.clear()
 	agent.set_state("is_channeling", false)
 	agent.set_state("player_order_id", agent.get_state("player_order_id", 0) + 1)
@@ -108,20 +108,20 @@ func execute_player_order(agent):
 func _execute_player_order(unit, order_type: String, target: Vector2, agent = null):
 	match order_type:
 		"move":
-			if unit.agent.get_action("Move").in_bounds(target):
-				unit.agent.get_action("Navigate").move(unit, target)
+			if Goap.get_action("Move").in_bounds(target):
+				Goap.get_action("Navigate").move(unit, target)
 			elif agent:
 				complete_player_order(agent)
 		"advance":
-			unit.agent.get_action("Navigate").point(unit, target)
+			Goap.get_action("Navigate").point(unit, target)
 		"attack":
-			unit.agent.get_action("AttackEnemy").point(unit, target)
+			Goap.get_action("AttackEnemy").point(unit, target)
 		"lane":
-			unit.agent.get_goal("WalkLane").change_lane(unit, target)
+			Goap.get_goal("WalkLane").change_lane(unit, target)
 		"teleport":
-			unit.agent.get_action("Move").teleport(unit, target)
+			Goap.get_action("Move").teleport(unit, target)
 		"stand":
-			unit.agent.get_action("Move").stop(unit)
+			Goap.get_action("Move").stop(unit)
 			if agent:
 				complete_player_order(agent)
 

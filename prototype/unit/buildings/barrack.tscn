@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c8vkxhmjo7i0j" path="res://unit/Unit.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://b58rlgkswujet" path="res://assets/pawns/archer_blue.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://0te8lf0bpsce" path="res://assets/buildings/buildings_blue.png" id="3"]
-[ext_resource type="PackedScene" path="res://unit/buildings/decoration/flag.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://xp0pr1nwlj1b" path="res://unit/buildings/decoration/flag.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://bd3knqfnkfqsi" path="res://assets/buildings/buildings_red.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://f3410v63o4pc" path="res://assets/buildings/buildings_gray.png" id="6"]
 
@@ -205,14 +205,14 @@ _data = {
 &"idle": SubResource("25")
 }
 
+[sub_resource type="CircleShape2D" id="28"]
+radius = 32.0
+
 [sub_resource type="CircleShape2D" id="29"]
 radius = 45.0
 
 [sub_resource type="CircleShape2D" id="32"]
 radius = 200.0
-
-[sub_resource type="CircleShape2D" id="28"]
-radius = 32.0
 
 [node name="barrack" unique_id=1181864591 instance=ExtResource("1")]
 texture_filter = 1
@@ -279,6 +279,10 @@ offset = Vector2(10, 0)
 [node name="animations" type="AnimationPlayer" parent="." index="3" unique_id=139267909]
 libraries/ = SubResource("AnimationLibrary_wcaip")
 
+[node name="block" parent="." index="4" unique_id=1218543807]
+position = Vector2(0, -20)
+shape = SubResource("28")
+
 [node name="select" parent="collisions" parent_id_path=PackedInt32Array(225153916) index="0" unique_id=225705177]
 position = Vector2(0, -20)
 shape = SubResource("29")
@@ -288,11 +292,7 @@ visible = false
 position = Vector2(0, -20)
 shape = SubResource("32")
 
-[node name="goap_agent" parent="." index="6" unique_id=544344335]
-goals_list = ["EnemyDefeated", "Recover"]
-
-[node name="block" parent="." index="7" unique_id=1218543807]
-position = Vector2(0, -20)
-shape = SubResource("28")
+[node name="goap_agent" parent="." index="7" unique_id=544344335]
+goals_list = ["EnemyDefeated"]
 
 [editable path="hud"]

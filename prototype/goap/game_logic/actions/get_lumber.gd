@@ -31,7 +31,7 @@ func perform(agent, _delta) -> bool:
 func enter(agent):
 	var unit = agent.get_unit()
 	var closest_tree = agent.get_state("closest_tree")
-	agent.get_action("Move").point(unit, closest_tree)
+	Goap.get_action("Move").point(unit, closest_tree)
 
 
 func on_arrive(agent):

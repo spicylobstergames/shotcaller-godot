@@ -85,14 +85,14 @@ func change_lane(unit, lane_point: Vector2) -> void:
 	unit.agent.set_state("resume_path", false)
 	unit.current_path.clear()
 	var lane_start = path.pop_front()
-	unit.agent.get_action("Navigate").move(unit, lane_start)
+	Goap.get_action("Navigate").move(unit, lane_start)
 	unit.current_path.append_array(path)
 
 
 func resume_lane(unit) -> void:
 	var lane = unit.agent.get_state("lane", "")
 	var path = get_lane_path(lane, unit.team)
-	unit.agent.get_action("Navigate").cut_path(unit, path)
+	Goap.get_action("Navigate").cut_path(unit, path)
 
 
 func on_arrive(agent) -> void:
