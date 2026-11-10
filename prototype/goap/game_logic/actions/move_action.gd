@@ -4,22 +4,23 @@ const teleport_time = 3
 const teleport_max_distance = 100
 
 
-
 func get_class_name() -> String:
 	return "Move"
 
 
-func is_valid(_agent) -> bool:
-	var unit = _agent.get_unit()
-	return unit.moves and unit.current_destiny
+func is_valid(agent) -> bool:
+	var unit = agent.get_unit()
+	return unit.moves
 
 
-func get_cost(_agent) -> int:
-	return 1
+#func get_cost(_agent) -> int:
+#	return 1
 
 
 func get_preconditions() -> Dictionary:
-	return {"is_stunned": false}
+	return {
+		"is_stunned": false
+	}
 
 
 func get_effects() -> Dictionary:

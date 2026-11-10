@@ -6,9 +6,6 @@ func get_class_name() -> String:
 
 
 func is_valid(agent) -> bool:
-	var current_goal = agent.get_current_goal()
-	if current_goal and current_goal.get_class_name() == "WalkLane":
-		return false
 	var unit = agent.get_unit()
 	var has_path = not unit.current_path.is_empty()
 	var is_moving_to_destination = (

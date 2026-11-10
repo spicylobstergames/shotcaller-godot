@@ -7,12 +7,15 @@ func get_class_name() -> String:
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	print(unit.name, ' ', agent.get_state("has_path"))
-	return agent.get_unit().moves and not agent.get_state("has_path", false)
+	return unit.moves and unit.current_destiny == Vector2.ZERO
 
 
-func get_cost(_agent) -> int:
-	return 2
+func get_preconditions() -> Dictionary:
+	return {"is_stunned": false}
+
+
+#func get_cost(_agent) -> int:
+#	return 1
 
 
 func get_effects() -> Dictionary:
@@ -31,25 +34,21 @@ func perform(agent, _delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	var has_lane = agent.get_state("lane", "") != ""
+	#var has_lane = agent.get_state("lane", "") != ""
 	
 	agent.set_state("arrived_at_destination", false)
 	
-	if has_lane:
-		agent.set_state("lane_route_finished", false)
-		if agent.get_state("lane_resume_path", null) is Array:
-			unit.current_path = agent.get_state("lane_resume_path")
-			agent.erase_state("lane_resume_path")
+	#if has_lane:
+		#agent.set_state("lane_route_finished", false)
+		#if agent.get_state("lane_resume_path", null) is Array:
+			#unit.current_path = agent.get_state("lane_resume_path")
+			#agent.erase_state("lane_resume_path")
 	
-	agent.set_state("has_path", not unit.current_path.is_empty())
-	
-	print(unit.name, ' ', agent.get_state("has_path"))
-	
-	if (agent.get_state("resume_path", false)):
-		agent.erase_state("resume_path")
-		cut_path(unit, unit.current_path)
-	else:
-		follow_path(unit, unit.current_path)
+	#if (agent.get_state("resume_path", false)):
+		#agent.erase_state("resume_path")
+		#cut_path(unit, unit.current_path)
+	#else:
+	follow_path(unit, unit.current_path)
 
 
 #func exit(agent):
@@ -170,8 +169,9 @@ func follow_path(unit, new_path):
 		var path = new_path.duplicate()
 		var next_point = path.pop_front()
 		unit.current_path = path
+		unit.agent.set_state("has_path", true)
 		unit.current_destiny = next_point
-		Goap.get_action("Move").point(unit, next_point)
+		unit.agent.set_state("has_destiny", true)
 
 
 func cut_path(unit, path):

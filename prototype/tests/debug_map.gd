@@ -1,11 +1,11 @@
 extends Node
 
 
-var game:Node
-
 # self = game.test
 
-@export var debug = 1
+var game:Node
+
+@export var debug = 0
 
 
 @export var unit = 0
@@ -13,9 +13,9 @@ var game:Node
 @export var leaders = 0
 
 
-@onready var walls = get_node("tiles/walls/Walls")
-@onready var trees = get_node("tiles/trees/Trees")
-@onready var fog = get_node("fog")
+#@onready var walls = get_node("tiles/walls/Walls")
+#@onready var trees = get_node("tiles/trees/Trees")
+#@onready var fog = get_node("fog")
 
 @export var size := Vector2(512, 512)
 var mid := Vector2(size.x/2, size.y/2)

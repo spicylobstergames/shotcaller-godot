@@ -2922,7 +2922,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="debug_map" type="Node2D" unique_id=351038812]
+[node name="debug_map" type="Node2D" unique_id=42379947]
 script = ExtResource("1_8aw0r")
 metadata/_custom_type_script = "uid://cxmm5nsrum4xw"
 
