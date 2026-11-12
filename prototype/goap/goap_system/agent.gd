@@ -32,10 +32,8 @@ func _ready():
 	action_changed.connect(_on_action_changed)
 
 	_unit.unit_reseted.connect(reset)
-	_unit.unit_arrived.connect(on_arrive)
 	_unit.unit_idle_ended.connect(on_idle_end)
 	_unit.unit_stun_ended.connect(on_stun_end)
-	_unit.unit_move_requested.connect(on_move_requested)
 	_unit.unit_attack_ended.connect(on_attack_end)
 	_unit.unit_attack_release.connect(on_attack_release)
 	_unit.unit_attack_hitted.connect(on_attack_hit)
@@ -53,10 +51,6 @@ func add_goal(goal_name: String) -> void:
 	if goal and not _goals.has(goal):
 		_goals.append(goal)
 		goals_list.append(goal_name)
-
-
-func get_action(action_name: String):
-	return Goap.get_action(action_name)
 
 
 func get_goal(goal_name: String):
@@ -78,7 +72,7 @@ func get_state(state_name, default = null):
 
 func set_state(state_name, value):
 	if state_name == "target":
-		get_action("ChooseTarget").set_target(self, value)
+		Goap.get_action("ChooseTarget").set_target(self, value)
 		return
 	_state[state_name] = value
 
@@ -171,7 +165,7 @@ func _on_action_changed(action) -> void:
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
 # for the new high priority goal.
-func process(delta):
+func goap_process(delta):
 	var goal = _get_best_goal()
 	if goal != _current_goal:
 		var plan: Array = []
@@ -237,20 +231,17 @@ func on_idle_end():
 		get_current_goal().on_idle_end(self)
 
 
-func on_move_requested(delta: float) -> void:
-	get_action("Move").on_move_requested(self, delta)
-
 
 func on_attack_release() -> void:
-	get_action("RangeAttack").projectile_release(_unit)
+	Goap.get_action("RangeAttack").projectile_release(_unit)
 
 
 func on_attack_hit() -> void:
-	get_action("MeleeAttack").hit(_unit)
+	Goap.get_action("MeleeAttack").hit(_unit)
 
 
 func on_died(unit) -> void:
-	get_action("RangeAttack").clear_stuck(unit)
+	Goap.get_action("RangeAttack").clear_stuck(unit)
 
 
 func on_stun_end():

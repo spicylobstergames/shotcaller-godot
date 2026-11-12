@@ -432,7 +432,7 @@ func update():
 			match unit.type:
 				"pawn", "building": 
 					var lane_order = unit.agent.get_state("lane")+unit.team
-					lane_orders[lane_order].node.show()
+					if (lane_order in lane_orders): lane_orders[lane_order].node.show()
 				"leader": 
 					var leader_order = unit.name+unit.team
 					if leader_order in leader_orders:

@@ -10,7 +10,6 @@ var game:Node
 signal unit_reseted
 signal unit_idle_ended
 signal unit_move_ended
-signal unit_move_requested(delta: float)
 signal unit_arrived
 signal unit_started_channeling
 signal unit_healed
@@ -351,10 +350,6 @@ func on_idle_end(): # every idle animation end (0.6s)
 	emit_signal("unit_animation_ended")
 
 
-func on_move(delta): # movement tick
-	if self.moves: emit_signal("unit_move_requested", delta)
-
-
 func on_move_end(): # every move animation end (0.6s for speed = 1)
 	if self.moves: emit_signal("unit_move_ended")
 	emit_signal("unit_animation_ended")
@@ -378,7 +373,7 @@ func take_hit(attacker, incoming_projectile = null, hit_modifiers = {}) -> void:
 
 	if incoming_projectile:
 		if not modifiers.pierce:
-			attacker.agent.get_action("RangeAttack").projectile_stuck(attacker, self, incoming_projectile)
+			Goap.get_action("RangeAttack").projectile_stuck(attacker, self, incoming_projectile)
 
 		if incoming_projectile.targets != null and incoming_projectile.targets.find(self) < 0:
 			incoming_projectile.targets.append(self)

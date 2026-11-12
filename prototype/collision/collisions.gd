@@ -73,10 +73,9 @@ func physics_process(delta):
 	for unit1 in all_units:
 		if unit1.projectiles.size():
 			Goap.get_action("RangeAttack").projectile_loop(unit1, delta)
-		
 		if not unit1.dead:
 			if unit1.moves and unit1.state == "move":
-				if unit1.agent.get_goal("ArriveAtDestination").is_at_destination(unit1):
-					unit1.on_arrive()
+				if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
+					Goap.get_goal("ArriveAtDestination").on_arrive(unit1)
 				else:
-					unit1.on_move(delta)
+					Goap.get_action("Move").step(unit1, delta)

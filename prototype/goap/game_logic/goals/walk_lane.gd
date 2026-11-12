@@ -25,7 +25,7 @@ func is_valid(agent) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	if not unit.current_path or unit.current_path.size() == 0:
+	if not unit.current_path or unit.current_path.is_empty():
 		unit.current_path = get_lane_path(agent.get_state("lane"), unit.team)
 
 
@@ -85,20 +85,19 @@ func change_lane(unit, lane_point: Vector2) -> void:
 	unit.agent.set_state("resume_path", false)
 	unit.current_path.clear()
 	var lane_start = path.pop_front()
-	unit.agent.get_action("Navigate").move(unit, lane_start)
+	Goap.get_action("Navigate").move(unit, lane_start)
 	unit.current_path.append_array(path)
 
 
 func resume_lane(unit) -> void:
 	var lane = unit.agent.get_state("lane", "")
 	var path = get_lane_path(lane, unit.team)
-	unit.agent.get_action("Navigate").cut_path(unit, path)
+	Goap.get_action("Navigate").cut_path(unit, path)
 
 
 func on_arrive(agent) -> void:
-	# todo save lane_final_destination state and check distance
 	var route_finished = agent.get_unit().current_path.is_empty()
-	agent.get_goal("ArriveAtDestination").on_arrive(agent)
 	if route_finished:
 		agent.set_state("lane_route_finished", true)
 		agent.erase_state("lane_resume_path")
+	

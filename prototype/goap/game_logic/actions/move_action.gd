@@ -4,38 +4,42 @@ const teleport_time = 3
 const teleport_max_distance = 100
 
 
-
 func get_class_name() -> String:
 	return "Move"
 
 
-func is_valid(_agent) -> bool:
-	#var unit = _agent.get_unit()
-	return false #unit.moves
+func is_valid(agent) -> bool:
+	var unit = agent.get_unit()
+	return unit.moves
 
 
 #func get_cost(_agent) -> int:
 #	return 1
 
 
-#func get_preconditions() -> Dictionary:
-#	return {"is_stunned": false}
+func get_preconditions() -> Dictionary:
+	return {
+		"has_destiny": true,
+		"is_stunned": false
+	}
 
 
-#func get_effects() -> Dictionary:
-#	return {"arrived_at_destination": true}
+func get_effects() -> Dictionary:
+	return {
+		"arrived_at_destination": true,
+		"lane_route_finished": true
+	}
 
 
-#func perform(agent, _delta) -> bool:
-	#var unit = agent.get_unit() 
-	#step(unit, _delta)
-	#return true
+func perform(agent, _delta) -> bool:
+	if agent.get_state("arrived_at_destination"):
+		return false
+	return true
 
 
-#func enter(agent):
-#	var unit = agent.get_unit()
-#	move(unit, unit.current_destiny)
-
+func enter(agent):
+	var unit = agent.get_unit()
+	move(unit, unit.current_destiny)
 
 
 func point(unit, destiny):
@@ -74,10 +78,6 @@ func calc_step(unit, speed):
 	if animations:
 		animations.speed_scale = speed / max(unit.speed, 0.0001)
 
-
-func on_move_requested(agent, delta: float) -> void:
-	if not agent.get_state("is_stunned"):
-		step(agent.get_unit(), delta)
 
 
 func step(unit, delta): 
@@ -133,7 +133,7 @@ func teleport(unit, target_point):
 	ui.unit_control_panel.teleport_button.button_pressed = false
 	var building = Utils.closer_building(target_point, unit.team)
 	var distance = building.global_position.distance_to(target_point)
-	agent.get_action("Move").stop(unit)
+	Goap.get_action("Move").stop(unit)
 	agent.set_state("is_channeling", true)
 	var order_id = agent.get_state("player_order_id", 0)
 	var delay = Timer.new()
