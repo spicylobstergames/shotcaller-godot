@@ -32,7 +32,6 @@ func _ready():
 	action_changed.connect(_on_action_changed)
 
 	_unit.unit_reseted.connect(reset)
-	_unit.unit_arrived.connect(on_arrive)
 	_unit.unit_idle_ended.connect(on_idle_end)
 	_unit.unit_stun_ended.connect(on_stun_end)
 	_unit.unit_attack_ended.connect(on_attack_end)
@@ -166,7 +165,7 @@ func _on_action_changed(action) -> void:
 # On every loop this script checks if the current goal is still
 # the highest priority. if it's not, it requests the action planner a new plan
 # for the new high priority goal.
-func process(delta):
+func goap_process(delta):
 	var goal = _get_best_goal()
 	if goal != _current_goal:
 		var plan: Array = []

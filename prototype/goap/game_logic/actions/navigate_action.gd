@@ -7,11 +7,13 @@ func get_class_name() -> String:
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	return unit.moves and unit.current_destiny == Vector2.ZERO
+	return unit.moves
 
 
 func get_preconditions() -> Dictionary:
-	return {"is_stunned": false}
+	return {
+		"is_stunned": false
+	}
 
 
 #func get_cost(_agent) -> int:
@@ -20,17 +22,13 @@ func get_preconditions() -> Dictionary:
 
 func get_effects() -> Dictionary:
 	return {
-		"arrived_at_destination": true,
-		"lane_route_finished": true
+		"has_destiny": true
 	}
 
 
 func perform(agent, _delta) -> bool:
-	var has_lane = agent.get_state("lane", "") != ""
-	if has_lane:
-		return agent.get_state("lane_route_finished", false)
-	return agent.get_state("arrived_at_destination", false)
-
+	var has_destiny = agent.get_state("has_destiny", false)
+	return has_destiny
 
 func enter(agent):
 	var unit = agent.get_unit()
@@ -49,6 +47,7 @@ func enter(agent):
 		#cut_path(unit, unit.current_path)
 	#else:
 	follow_path(unit, unit.current_path)
+	
 
 
 #func exit(agent):

@@ -19,6 +19,7 @@ func is_valid(agent) -> bool:
 
 func get_preconditions() -> Dictionary:
 	return {
+		"has_destiny": true,
 		"is_stunned": false
 	}
 
@@ -31,15 +32,14 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	if not agent.get_state("is_stunned") and agent.get_state("move_step"):
-		step(agent.get_unit(), agent.get_state("move_step"))
+	if agent.get_state("arrived_at_destination"):
+		return false
 	return true
 
 
-#func enter(agent):
-#	var unit = agent.get_unit()
-#	move(unit, unit.current_destiny)
-
+func enter(agent):
+	var unit = agent.get_unit()
+	move(unit, unit.current_destiny)
 
 
 func point(unit, destiny):

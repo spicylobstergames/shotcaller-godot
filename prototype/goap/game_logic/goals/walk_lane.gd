@@ -25,7 +25,7 @@ func is_valid(agent) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	if not unit.current_path or unit.current_path.size() == 0:
+	if not unit.current_path or unit.current_path.is_empty():
 		unit.current_path = get_lane_path(agent.get_state("lane"), unit.team)
 
 
@@ -96,9 +96,8 @@ func resume_lane(unit) -> void:
 
 
 func on_arrive(agent) -> void:
-	# todo save lane_final_destination state and check distance
 	var route_finished = agent.get_unit().current_path.is_empty()
-	agent.get_goal("ArriveAtDestination").on_arrive(agent)
 	if route_finished:
 		agent.set_state("lane_route_finished", true)
 		agent.erase_state("lane_resume_path")
+	
