@@ -10,7 +10,7 @@ var leader: Dictionary = LEADER_PASSIVES.attributes
 
 func get_value(unit, skill_name):
 	if unit.type == "leader":
-		var leader_skills = leader[unit.display_name]
+		var leader_skills = leader.get(unit.display_name, {})
 		if skill_name in leader_skills:
 			return leader_skills[skill_name]
 	return 0
@@ -46,11 +46,17 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 		"damage": damage,
 		"cleave": "cleave" in modifiers,
 		"dodge": false,
-		"counter": true,
+		# Preserve the caller's counter flag: the attacker-skill branch below is
+		# gated on `not modifiers.counter`, so resetting it to true here would
+		# silently disable stun/critical/cleave/pierce/bleed for a caller that
+		# passed counter=false (e.g. the counter branch itself, which must not
+		# re-trigger attacker skills on the retaliating hit).
+		"counter": modifiers.get("counter", true),
 		"pierce": false
 	}
 	if target and target.display_name in leader:
-		var target_skills = leader[target.display_name]
+		var target_skills = leader.get(target.display_name, {})
+		if not target_skills: return
 		
 		if "dodge" in target_skills:
 			modifiers.dodge = (randf() <  target_skills.dodge)
@@ -61,7 +67,8 @@ func hit_modifiers(attacker, target, projectile, modifiers):
 				attacker.take_hit(target, projectile, modifiers)
 			
 	if attacker.display_name in leader:
-		var attacker_skills = leader[attacker.display_name]
+		var attacker_skills = leader.get(attacker.display_name, {})
+		if not attacker_skills: return
 		if not modifiers.counter:
 			if "stun" in attacker_skills and target.type != "building":
 				if randf() < attacker_skills.stun: 
