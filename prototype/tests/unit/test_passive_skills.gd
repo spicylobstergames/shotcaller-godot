@@ -20,6 +20,7 @@ class CombatUnit:
 	var ranged := false
 	var attack_count := 0
 	var damage := 5  # fallback damage via Modifiers.get_value
+	var take_hit_calls: Array = []  # records counter-branch retaliation calls
 	var level := 1
 	var current_modifiers := {
 		"hp": [], "regen": [], "vision": [], "speed": [], "damage": [],
@@ -30,20 +31,18 @@ class CombatUnit:
 	func stun_start() -> void:
 		stunned = true
 
-
-# Records EnemyDefeated.take_hit calls so the counter branch can be asserted
-# without running the real damage pipeline.
-class GoalSpy extends "res://tests/helpers/mock_goal.gd":
-	var take_hit_calls: Array = []
-
-	func take_hit(attacker, target, projectile = null, hit_modifiers = {}) -> void:
-		take_hit_calls.append({"attacker": attacker, "target": target, "modifiers": hit_modifiers})
+	# Records Unit.take_hit calls so the counter branch can be asserted
+	# without running the real damage pipeline (upstream's counter branch
+	# calls attacker.take_hit(target, projectile, modifiers) on the victim).
+	func take_hit(attacker, _projectile = null, _hit_modifiers = {}) -> void:
+		take_hit_calls.append({"victim": self, "new_attacker": attacker})
 
 
 func run(harness) -> void:
 	# --- get_value (leader skill lookup) ---
 	var passive_skills = PassiveSkillsScript.new()
-	passive_skills._ready()
+	# Upstream's Skills builds its leader table at declaration
+	# (var leader = LEADER_PASSIVES.attributes) — no _ready() to call.
 
 	# Raja has "dodge": 0.2 — assert the actual expected value, not just >= 0.
 	var raja = TestUnit.new()
@@ -293,26 +292,21 @@ func _test_counter_swaps_damage_and_records_hit(harness) -> void:
 	var attacker = pair[0]
 	var target = pair[1]
 
-	# Swap the real EnemyDefeated goal for a spy: the counter branch calls
-	# take_hit, and the real goal would recurse into the full damage pipeline.
-	var original_goal = Goap.get_goal("EnemyDefeated")
-	var spy = GoalSpy.new()
-	Goap._goals.set_goal("EnemyDefeated", spy)
-
+	# The counter branch calls attacker.take_hit(target, ...) on the victim
+	# (Unit.take_hit) — the CombatUnit double records the call, so the real
+	# damage pipeline is never entered.
 	var result = skills.hit_modifiers(attacker, target, null, {"damage": 5, "counter": false})
-
-	Goap._goals.set_goal("EnemyDefeated", original_goal)
 
 	harness.check_equal(result.damage, 10,
 		"Counter sets damage to the target's counter value (10).")
-	harness.check_equal(spy.take_hit_calls.size(), 1,
-		"Counter branch calls EnemyDefeated.take_hit exactly once.")
-	if spy.take_hit_calls.size() == 1:
-		# take_hit is called with (target, attacker) — the hit lands on the attacker.
-		harness.check(spy.take_hit_calls[0]["attacker"] == target,
+	harness.check_equal(attacker.take_hit_calls.size(), 1,
+		"Counter branch calls Unit.take_hit exactly once.")
+	if attacker.take_hit_calls.size() == 1:
+		# take_hit is invoked ON the attacker (victim) with target as the new attacker.
+		harness.check(attacker.take_hit_calls[0]["victim"] == attacker,
+			"Counter take_hit lands on the ATTACKER (retaliation victim).")
+		harness.check(attacker.take_hit_calls[0]["new_attacker"] == target,
 			"Counter take_hit passes the TARGET as the new attacker (retaliation direction).")
-		harness.check(spy.take_hit_calls[0]["target"] == attacker,
-			"Counter take_hit passes the ATTACKER as the victim (retaliation direction).")
 	_teardown(harness, skills, original)
 
 
@@ -324,17 +318,11 @@ func _test_counter_skips_ranged_attackers(harness) -> void:
 	var target = pair[1]
 	attacker.ranged = true
 
-	var original_goal = Goap.get_goal("EnemyDefeated")
-	var spy = GoalSpy.new()
-	Goap._goals.set_goal("EnemyDefeated", spy)
-
 	var result = skills.hit_modifiers(attacker, target, null, {"damage": 5, "counter": false})
-
-	Goap._goals.set_goal("EnemyDefeated", original_goal)
 
 	harness.check_equal(result.damage, 5,
 		"Ranged attackers take no counter damage.")
-	harness.check_equal(spy.take_hit_calls.size(), 0,
+	harness.check_equal(attacker.take_hit_calls.size(), 0,
 		"Counter branch never fires for ranged attackers.")
 	_teardown(harness, skills, original)
 

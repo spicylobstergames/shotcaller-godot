@@ -5,41 +5,41 @@ const teleport_max_distance = 100
 
 
 func get_class_name() -> String:
-	return "MoveAction"
+	return "Move"
 
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	return (
-		unit.moves
-		and unit.state == "move"
-		and unit.current_destiny != Vector2.ZERO
-		and not agent.get_state("has_path", false)
-	)
+	return unit.moves
+
+
+#func get_cost(_agent) -> int:
+#	return 1
 
 
 func get_preconditions() -> Dictionary:
-	return {"has_path": false}
+	return {
+		"has_destiny": true,
+		"is_stunned": false
+	}
 
 
 func get_effects() -> Dictionary:
-	return {"arrived_at_destination": true}
+	return {
+		"arrived_at_destination": true,
+		"lane_route_finished": true
+	}
 
 
 func perform(agent, _delta) -> bool:
-	return agent.get_state("arrived_at_destination", false)
+	if agent.get_state("arrived_at_destination"):
+		return false
+	return true
 
 
 func enter(agent):
 	var unit = agent.get_unit()
-	agent.set_state("arrived_at_destination", false)
 	move(unit, unit.current_destiny)
-
-
-func setup_timer(unit):
-	unit.channeling_timer = Timer.new()
-	unit.channeling_timer.one_shot = true
-	unit.add_child(unit.channeling_timer)
 
 
 func point(unit, destiny):
@@ -61,80 +61,53 @@ func in_bounds(target_point: Vector2) -> bool:
 func move(unit, destiny):
 	if unit.moves and not unit.agent.get_state("is_stunned"):
 		unit.current_destiny = destiny
-		var current_speed = Modifiers.get_value(unit, "speed")
+		var current_speed = max(Modifiers.get_value(unit, "speed"), 0.0)
 		calc_step(unit, current_speed)
-		var animations = unit.get_node_or_null("animations")
-		if animations and "speed_scale" in animations:
-			animations.speed_scale = current_speed / max(unit.speed, 0.0001)
 		unit.set_state("move")
 
 
 func calc_step(unit, speed):
-	if speed > 0:
-		var distance = unit.current_destiny - unit.global_position
+	var distance = unit.current_destiny - unit.global_position
+	if speed > 0 and distance.length_squared() > 0:
 		unit.angle = distance.angle()
-		unit.current_step = Vector2(speed * cos(unit.angle), speed * sin(unit.angle))
+		unit.current_step = distance.normalized() * speed
 		unit.mirror_look_at(unit.current_destiny)
-
-
-func step(unit, delta):
-	var velocity = unit.current_step
-	if (
-		Goap.use_native_movement
-		and Goap.use_native_pathfinding
-		and unit.advance_with_navigation(delta)
-	):
-		velocity = unit.current_step
-
-	var motion = velocity * delta
-	if not Goap.use_native_blocking:
-		motion = _resolve_legacy_blocking(unit, motion)
-
-	if unit is CharacterBody2D:
-		if Goap.use_native_movement:
-			unit.velocity = motion / delta if delta > 0 else Vector2.ZERO
-			unit.move_and_slide()
-		elif Goap.use_native_blocking:
-			unit.move_and_collide(motion)
-		else:
-			unit.global_position += motion
 	else:
-		unit.global_position += motion
+		unit.current_step = Vector2.ZERO
+	var animations: AnimationPlayer = unit.animations
+	if animations:
+		animations.speed_scale = speed / max(unit.speed, 0.0001)
 
 
-func _resolve_legacy_blocking(unit, motion: Vector2) -> Vector2:
-	if motion == Vector2.ZERO or _can_move_to(unit, motion):
-		return motion
 
-	var resolved_motion := Vector2.ZERO
-	var horizontal_motion := Vector2(motion.x, 0)
-	var vertical_motion := Vector2(0, motion.y)
-	if (
-		horizontal_motion != Vector2.ZERO
-		and _can_move_to(unit, resolved_motion + horizontal_motion)
-	):
-		resolved_motion += horizontal_motion
-	if vertical_motion != Vector2.ZERO and _can_move_to(unit, resolved_motion + vertical_motion):
-		resolved_motion += vertical_motion
-	return resolved_motion
+func step(unit, delta): 
+	if delta <= 0: return
+	calc_step(unit, max(Modifiers.get_value(unit, "speed"), 0.0))
+	var motion = unit.current_step * delta
+	var speed2 = motion.length_squared()
+	var distance_to_destination = unit.current_destiny - unit.global_position
+	# if too fast check if won't move after destiny
+	if speed2 > distance_to_destination.length_squared():
+		motion = distance_to_destination
+	motion = _resolve_blocking(unit, motion)
+	unit.global_position += motion
 
 
-func _can_move_to(unit, motion: Vector2) -> bool:
+func _resolve_blocking(unit, motion: Vector2) -> Vector2:
+	var resolved_motion = motion
 	var destination = unit.global_position + unit.collision_position + motion
-	var search_radius = (
-		motion.length()
-		+ unit.collision_radius
-		+ Collisions.max_collision_radius
-		+ Collisions.tile_size
-	)
-	for other in Collisions.get_units_in_radius(destination, search_radius):
-		if other == unit or other.dead or not other.collide:
-			continue
-		var other_position = other.global_position + other.collision_position
-		var minimum_distance = unit.collision_radius + other.collision_radius
-		if destination.distance_squared_to(other_position) < minimum_distance * minimum_distance:
-			return false
-	return true
+	var units_at_destination = Collisions.get_units_in_radius(destination, unit.collision_radius)
+	
+	for other in units_at_destination:
+		var other_unit_collides = (other != unit) and other.collide and !other.dead
+		if other_unit_collides:
+			var other_position = other.global_position + other.collision_position
+			var minimum_distance = unit.collision_radius + other.collision_radius
+			if destination.distance_to(other_position) < minimum_distance:
+				var diff = destination - other_position
+				resolved_motion += diff * 0.05 # small reppelling force 
+
+	return resolved_motion
 
 
 func resume(unit):
@@ -142,41 +115,25 @@ func resume(unit):
 		move(unit, unit.current_destiny)
 
 
-func end(unit):
-	if unit.agent.get_state("is_retreating"):
-		unit.agent.set_state("is_retreating", false)
-	stop(unit)
-
-
 func stop(unit):
 	unit.current_step = Vector2.ZERO
-	if unit.current_destiny == unit.final_destiny:
-		unit.final_destiny = Vector2.ZERO
 	unit.current_destiny = Vector2.ZERO
+	unit.final_destiny = Vector2.ZERO
 	unit.set_state("idle")
-	var animations = unit.get_node_or_null("animations")
-	if animations and "speed_scale" in animations:
+	var animations: AnimationPlayer = unit.animations
+	if animations:
 		animations.speed_scale = 1.0
-
-
-func smart(unit, target_point):
-	if not unit or not unit.agent:
-		return
-	if not unit.agent.get_state("stunned"):
-		if target_point != Vector2.ZERO and unit.current_destiny != Vector2.ZERO:
-			unit.final_destiny = target_point
-		Goap.navigation.navigate_to(unit, target_point)
 
 
 func teleport(unit, target_point):
 	var agent = unit.agent
 	var game = Goap.get_tree().get_current_scene()
 	var ui = game.ui
-	ui.unit_controls_panel.teleport_button.disabled = false
-	ui.unit_controls_panel.teleport_button.button_pressed = false
+	ui.unit_control_panel.teleport_button.disabled = false
+	ui.unit_control_panel.teleport_button.button_pressed = false
 	var building = Utils.closer_building(target_point, unit.team)
 	var distance = building.global_position.distance_to(target_point)
-	Goap.move.stop(unit)
+	Goap.get_action("Move").stop(unit)
 	agent.set_state("is_channeling", true)
 	var order_id = agent.get_state("player_order_id", 0)
 	var delay = Timer.new()
@@ -200,5 +157,8 @@ func teleport(unit, target_point):
 
 		unit.global_position = new_position
 		agent.set_state("lane", building.lane)
-		agent.set_state("player_order_complete", true)
-		Goap.navigation.resume_lane(unit)
+		agent.set_state("lane_route_finished", false)
+		agent.erase_state("lane_resume_path")
+		agent.set_state("resume_path", false)
+		unit.current_path.clear()
+		agent.get_goal("WalkLane").resume_lane(unit)

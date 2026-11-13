@@ -6,7 +6,7 @@ const collect_time = 16
 
 
 func get_class_name() -> String:
-	return "MineAction"
+	return "Mine"
 
 
 func set_mine_gold(team, value):

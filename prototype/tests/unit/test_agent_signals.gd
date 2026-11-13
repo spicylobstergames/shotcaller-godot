@@ -6,6 +6,19 @@ const Agent = preload("res://goap/goap_system/agent.gd")
 class TestGoal:
 	extends RefCounted
 
+	# The current agent calls goal.enter()/exit() unguarded on plan
+	# replacement (the old agent used has_method guards) — the double
+	# must expose the contract methods. get_class_name() is read for
+	# the state_changed emission.
+	func enter(_agent) -> void:
+		pass
+
+	func exit(_agent) -> void:
+		pass
+
+	func get_class_name() -> String:
+		return "TestGoal"
+
 
 class TestAction:
 	extends RefCounted
@@ -13,6 +26,9 @@ class TestAction:
 	var completes := false
 	var enter_count := 0
 	var exit_count := 0
+
+	func get_class_name() -> String:
+		return "TestAction"
 
 	func enter(_agent) -> void:
 		enter_count += 1

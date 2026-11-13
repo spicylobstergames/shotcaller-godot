@@ -11,18 +11,18 @@ func get_desired_state(_agent) -> Dictionary:
 
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
-	if agent.get_state("is_retreating", false):
-		return true
-	if should_retreat(unit):
-		agent.set_state("is_retreating", true)
-		agent.set_state("arrived_at_retreat", false)
-		agent.set_state("ready_to_fight", false)
-		return true
-	return false
+	var is_low_hp = should_retreat(unit)
+	return is_low_hp
+
+
+func enter(agent):
+	agent.set_state("ready_to_fight", false)
+	agent.set_state("is_retreating", true)
+	agent.set_state("arrived_at_retreat", false)
 
 
 func priority(_agent) -> int:
-	return 5
+	return 10
 
 
 func should_retreat(unit) -> bool:
@@ -35,3 +35,7 @@ func should_retreat(unit) -> bool:
 		"default":
 			return unit.current_hp < hp / 3
 	return false
+
+
+func on_arrive(agent):
+	agent.get_goal("ArriveAtDestination").on_arrive(agent)

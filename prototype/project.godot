@@ -30,6 +30,7 @@ Modifiers="*res://skills/modifiers.gd"
 Goap="*res://goap/goap_system/goap.gd"
 CraftyCamera="*res://controls/crafty_camera.tscn"
 Utils="*res://utils/util.gd"
+Navigation="*uid://1hjr24yjiee2"
 
 [debug]
 

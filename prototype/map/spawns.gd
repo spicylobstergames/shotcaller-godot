@@ -45,7 +45,7 @@ func create(template, lane, team, mode, point):
 	WorldState.get_state("all_units").append(unit)
 	game.selection.setup_selection(unit)
 	Collisions.setup(unit)
-	Goap.move.setup_timer(unit) # channeling timer
+	unit.setup_channeling_timer()
 	game.ui.minimap.setup_symbol(unit)
 	if unit.type == "leader":
 		WorldState.get_state("all_leaders").append(unit)
@@ -54,6 +54,7 @@ func create(template, lane, team, mode, point):
 		else:
 			WorldState.get_state("enemy_leaders").append(unit)
 	return unit
+
 
 
 func leader_scene(leader_name):
@@ -82,14 +83,14 @@ func leaders():
 			var lane = "mid"
 			var map = WorldState.get_state("map")
 			var lanes_node = map.get_node_or_null("lanes")
+			# 3 lane map spawn points
+			# todo create spawn areas for barracks
 			if lanes_node and lanes_node.get_children().size() == 3:
 				if counter < 2: lane = "top"
 				if counter == 2: lane = "mid"
 				if counter > 2: lane = "bot"
-			var path = Goap.navigation.new_lane_path(lane, team)
-			var path_start = path.pop_front()
+			var path_start = Goap.get_goal("WalkLane").get_lane_path(lane, team).pop_front()
 			var leader_node = game.spawn.create(leader_scene(leader_name), lane, team, "point_random", path_start)
-			Goap.navigation.setup_unit_path(leader_node, path)
 			leader_node.setup_leader_exp()
 			if team == "red":
 				red_leaders.append(leader_node)
@@ -101,9 +102,8 @@ func leaders():
 
 
 func spawn_group_cycle():
-	Goap.get_action("ChooseTarget").apply_building_priorities()
 	leaders_cycle()
-	Goap.get_action("TaxesAction").update_taxes()
+	Goap.get_action("Taxes").update_taxes()
 	
 	for team in WorldState.teams:
 		var extra_unit = WorldState.get_state("player_extra_unit")
@@ -112,10 +112,10 @@ func spawn_group_cycle():
 		var lanes_node = map.get_node_or_null("lanes")
 		if lanes_node:
 			for lane in lanes_node.get_children():
-				send_pawn("archer", lane.name, team)
+				create_pawn("archer", lane.name, team)
 				for n in 2:
-					send_pawn("infantry", lane.name, team)
-				send_pawn(extra_unit, lane.name, team)
+					create_pawn("infantry", lane.name, team)
+				create_pawn(extra_unit, lane.name, team)
 	
 	WorldState.spawn_timer.start()
 	await WorldState.spawn_timer.timeout
@@ -137,24 +137,19 @@ func recycle(template, lane, team, point):
 		return unit
 
 
-
 func pawn_scene(pawn_name):
 	return load("res://unit/pawns/"+pawn_name+".tscn")
 
 
-func send_pawn(template_name, lane, team):
-	var path = Goap.navigation.new_lane_path(lane, team)
-	var path_start = path.pop_front()
+func create_pawn(template_name, lane, team):
+	var path_start = Goap.get_goal("WalkLane").get_lane_path(lane, team).pop_front()
 	var pawn = recycle(template_name, lane, team, path_start)
 	if not pawn:
 		pawn = game.spawn.create(pawn_scene(template_name), lane, team, "point_random", path_start)
-	Goap.navigation.setup_unit_path(pawn, path)
-	Goap.get_action("ChooseTarget").set_unit_priority(pawn)
 
 
 func leaders_cycle() -> void:
 	for leader in WorldState.get_state("player_leaders") + WorldState.get_state("enemy_leaders"):
-		Goap.get_action("ChooseTarget").set_unit_priority(leader)
 		var extra_unit = WorldState.get_state("player_extra_unit")
 		if leader.team == WorldState.get_state("enemy_team"):
 			extra_unit = WorldState.get_state("enemy_extra_unit")
@@ -168,7 +163,7 @@ func leaders_cycle() -> void:
 
 
 func spawn_unit(unit, lane, team, mode, point):
-	unit.agent._add_goal("WalkLane")
+	unit.agent.add_goal("WalkLane")
 	unit.agent.set_state("lane", lane)
 	if unit.type != "leader":
 		unit.agent.set_state("tactic", _lane_tactic(lane, team))
@@ -180,7 +175,6 @@ func spawn_unit(unit, lane, team, mode, point):
 	if mode == "random_map":
 		point = Utils.random_point()
 	unit.global_position = point
-	unit.set_state("idle")
 	return unit
 
 
@@ -230,13 +224,11 @@ func cemitery_add_leader(leader):
 	await get_tree().create_timer(respawn_time).timeout
 	
 	# respawn leader
+	leader.reset_unit()
 	var team = leader.team
 	var lane = leader.agent.get_state("lane")
-	var path = WorldState.get_state("lanes")[lane].duplicate()
-	if leader.team == "red": path.reverse()
-	var path_start = path.pop_front()
+	var path_start = Goap.get_goal("WalkLane").get_lane_path(lane, team).pop_front()
 	leader = spawn_unit(leader, lane, team, "point_random", path_start)
-	leader.reset_unit()
 
 
 

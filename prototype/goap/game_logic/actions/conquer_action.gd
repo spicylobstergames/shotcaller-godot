@@ -5,11 +5,11 @@ const conquer_time = 3
 
 
 func get_class_name() -> String:
-	return "ConquerAction"
+	return "Conquer"
 
 
 func conquer_building(unit):
-	unit.after_arive = "stop"
+	unit.agent.set_state("after_arive", "stop")
 	var point = unit.global_position
 	point.y -= WorldState.get_state("map").tile_size
 	var building = Utils.get_building(point)
@@ -22,14 +22,14 @@ func conquer_building(unit):
 			await unit.channeling_timer.timeout
 			if unit.agent.get_state("is_channeling"):
 				unit.agent.set_state("is_channeling", false)
-				unit.agent.set_state("has_player_command", false)
+				unit.agent.set_state("player_order_complete", true)
 				building.agent.set_state("is_channeling", false)
 				building.setup_team(unit.team)
 				match building.display_name:
 					"camp", "outpost":
 						building.attacks = true
 					"mine":
-						Goap.get_action("MineAction").set_mine_gold(unit.team, 1)
+						Goap.get_action("Mine").set_mine_gold(unit.team, 1)
 				var game = Goap.get_tree().get_current_scene()
 				game.ui.show_select()
 
@@ -46,7 +46,7 @@ func lose_building(building):
 		"outpost":
 			building.attacks = false
 		"mine":
-			Goap.get_action("MineAction").set_mine_gold(team, 0)
+			Goap.get_action("Mine").set_mine_gold(team, 0)
 	building.setup_team("neutral")
 	if not WorldState.get_state("map").has_neutral_buildings(team):
-		Goap.get_action("TaxesAction").remove_tax(team)
+		Goap.get_action("Taxes").remove_tax(team)

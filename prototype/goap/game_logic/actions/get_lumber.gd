@@ -8,9 +8,9 @@ const cut_time = 6
 
 
 func is_valid(_agent) -> bool:
-	# Default false: an unset flag must not return null from a typed bool
-	# (get_state returns null when the key was never set — e.g. before the
-	# game starts, or in headless/test contexts).
+	# Default to false: get_state returns null for an unset key, and a typed
+	# -> bool returning null is a script error that aborts the planner's
+	# action loop mid-search (see COVERAGE.md known bugs).
 	return WorldState.get_state("is_game_active", false)
 
 
@@ -33,9 +33,8 @@ func perform(agent, _delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	unit.agent.set_state("has_player_command", true)
 	var closest_tree = agent.get_state("closest_tree")
-	Goap.move.point(unit, closest_tree)
+	Goap.get_action("Move").point(unit, closest_tree)
 
 
 func on_arrive(agent):
@@ -48,7 +47,4 @@ func on_arrive(agent):
 	unit.channeling_timer.start()
 	# cut animation end
 	await unit.channeling_timer.timeout
-	unit.agent.set_state("has_player_command", true)
 	agent.set_state("has_wood",true)
-
-

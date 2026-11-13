@@ -111,12 +111,14 @@ script = ExtResource("7")
 
 [node name="state" parent="hud" index="0" unique_id=279554608]
 visible = false
+offset_top = -50.0
+offset_bottom = -32.0
 
 [node name="selection" parent="hud" index="1" unique_id=601893277]
 visible = false
 
 [node name="hpbar" parent="hud" index="2" unique_id=304701875]
-visible = false
+position = Vector2(0, -20)
 
 [node name="symbol" type="Sprite2D" parent="." unique_id=222958006]
 visible = false

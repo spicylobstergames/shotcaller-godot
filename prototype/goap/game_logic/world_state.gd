@@ -63,3 +63,7 @@ func setup_spawn_timers(spawn_time):
 
 func _emit_second_elapsed() -> void:
 	second_elapsed.emit()
+
+func stop_timers():
+	one_sec_timer.stop()
+	spawn_timer.stop()

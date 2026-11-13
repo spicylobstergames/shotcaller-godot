@@ -25,6 +25,11 @@ class MockAction extends RefCounted:
 	var exit_count := 0
 	var _ticks_to_complete := 1
 
+	# The agent reads action.get_class_name() during _replace_plan
+	# (state_changed emission) — real actions all define it.
+	func get_class_name() -> String:
+		return "MockAction"
+
 	func _init(ticks: int = 1) -> void:
 		_ticks_to_complete = ticks
 

@@ -13,7 +13,7 @@ func _ready():
 	game = get_tree().get_current_scene()
 
 
-func setup_order_button():
+func setup_tactics_button():
 	var order_name = self.orders[self.orders.type]
 	name_label.text = Utils.first_to_uppper(order_name)
 	var hint = str(get_index()+1)
@@ -68,19 +68,6 @@ func button_down():
 			self.disabled = true
 		
 
-		"priority":
-			if not is_first_child(self):
-				move_button_to_front(self)
-				if WorldState.get_state("selected_leader"):
-					var leader = WorldState.get_state("selected_leader")
-					Goap.get_action("ChooseTarget").prioritize_unit(
-						leader, self.orders.priority
-					)
-				else:
-					Goap.get_action("ChooseTarget").prioritize_unit(
-						selected_unit, self.orders.priority
-					)
-
 		"taxes":
 			for button in game.ui.orders.tax_buttons:
 				if button.orders.taxes == self.orders.taxes:
@@ -89,11 +76,11 @@ func button_down():
 				else: 
 					button.button_pressed = false
 					button.disabled = false
-			Goap.get_action("TaxesAction").set_taxes(self.orders.taxes, selected_unit.team)
+			Goap.get_action("Taxes").set_taxes(self.orders.taxes, selected_unit.team)
 			self.disabled = true
 
 		"gold":
-			Goap.get_action("MineAction").gold_order(self)
+			Goap.get_action("Mine").gold_order(self)
 			disable_siblings(self)
 			self.disabled = true
 

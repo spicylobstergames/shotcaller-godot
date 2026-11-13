@@ -1,5 +1,10 @@
 extends RefCounted
 
+# PORT (post-restructure): the use_native_pathfinding switch is gone —
+# NavigateAction.find() now always delegates to the global Navigation
+# autoload (path_grid + path_finder), so the backend-selector test is
+# replaced by direct dispatch assertions against that seam.
+
 const Pathfinder = preload("res://map/pathfind/jump_point_finder.gd")
 const NavigateAction = preload("res://goap/game_logic/actions/navigate_action.gd")
 
@@ -15,7 +20,6 @@ func run(harness) -> void:
 	# Use cloned grids because the pathfinder mutates node search state during each solve.
 	var ws = preload("res://tests/helpers/world_state_snapshot.gd").new()
 	ws.set_state("map", WorldState.get_state("map"))
-	var old_native_pathfinding = Goap.use_native_pathfinding
 	var grid = Pathfinder.GridGD.new().Grid.new(5, 5)
 	var finder = Pathfinder.JumpPointFinder.new()
 	var open_path = finder.findPath(0, 0, 4, 4, grid.clone())
@@ -41,24 +45,41 @@ func run(harness) -> void:
 	var blocked_path = finder.findPath(0, 0, 4, 0, grid.clone())
 	harness.check(blocked_path.is_empty(), "Pathfinder rejects a fully sealed wall.")
 
+	# --- NavigateAction dispatches to the global Navigation autoload ---
 	var map = TestMap.new()
 	harness.add_child(map)
 	ws.set_state("map", map)
-	# Exercise the public backend selector: custom search works, while the empty native map
-	# correctly produces no route.
+	var old_path_grid = Navigation.path_grid
+	var old_path_finder = Navigation.path_finder
+	Navigation.path_grid = Pathfinder.GridGD.new().Grid.new(5, 5)
+	Navigation.path_finder = finder
 	var navigate_action = NavigateAction.new()
-	navigate_action.path_grid = Pathfinder.GridGD.new().Grid.new(5, 5)
-	navigate_action.path_finder = finder
-	Goap.use_native_pathfinding = false
+	var found = navigate_action.find(Vector2(96, 96), Vector2(224, 224))
 	harness.check(
-		not navigate_action.find(Vector2(96, 96), Vector2(224, 224)).is_empty(),
-		"Legacy navigation switch dispatches to the custom pathfinder."
+		not found.is_empty(),
+		"NavigateAction.find dispatches to the global Navigation pathfinder."
 	)
-	Goap.use_native_pathfinding = true
+	if not found.is_empty():
+		# find() converts grid cells to world-space waypoints (half + cell *
+		# tile_size) and SKIPS the source cell (range starts at 1): the first
+		# waypoint is the next cell on the route.
+		harness.check_equal(
+			found.front(), Vector2(160, 160),
+			"World-space paths start at the cell AFTER the source."
+		)
+		harness.check_equal(
+			found.back(), Vector2(224, 224),
+			"World-space paths end at the destination cell center."
+		)
+
+	# An unwalkable destination yields no path.
+	Navigation.path_grid.setWalkableAt(3, 3, false)
 	harness.check(
 		navigate_action.find(Vector2(96, 96), Vector2(224, 224)).is_empty(),
-		"Native navigation switch dispatches to Godot's navigation map."
+		"NavigateAction.find returns no path to an unwalkable destination."
 	)
+
 	map.free()
 	ws.restore()
-	Goap.use_native_pathfinding = old_native_pathfinding
+	Navigation.path_grid = old_path_grid
+	Navigation.path_finder = old_path_finder

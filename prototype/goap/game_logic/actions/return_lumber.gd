@@ -17,11 +17,12 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return !!agent.get_state("returning_wood")
+	return agent.get_state("returning_wood", false)
 
 
 func enter(agent):
-	Goap.move.point(agent.get_unit(), agent.get_state("deliver_position"))
+	var unit = agent.get_unit()
+	unit.current_destination = agent.set_state("deliver_position")
 
 
 func on_arrive(agent):
@@ -36,4 +37,3 @@ func on_arrive(agent):
 
 func exit(agent):
 	agent.set_state("returning_wood", false)
-

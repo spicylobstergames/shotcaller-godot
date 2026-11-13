@@ -41,7 +41,6 @@ var mirror:bool = false
 var texture:Dictionary
 var symbol:bool = false
 var current_modifiers = Modifiers.new_modifiers()
-var ai_delay:int = randi_range(0,6)
 
 # SELECTION
 @export var selectable:bool = false
@@ -407,7 +406,6 @@ func take_hit(attacker, incoming_projectile = null, hit_modifiers = {}) -> void:
 		if self.current_hp <= 0:
 			self.current_hp = 0
 			self.die()
-			WorldState.get_state("all_units").erase(self)
 			if self.type == "leader":
 				var player_team = WorldState.get_state("player_team")
 				if self.team == player_team:

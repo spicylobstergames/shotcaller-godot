@@ -29,13 +29,13 @@ func perform(agent, _delta) -> bool:
 func enter(agent):
 	var target = agent.get_state("react_target")
 	if is_instance_valid(target):
-		Goap.navigation.point(agent.get_unit(), target.global_position)
+		Goap.get_action("Navigate").move(agent.get_unit(), target.global_position)
 
 
 func exit(agent):
 	var unit = agent.get_unit()
 	if unit and not unit.dead:
-		Goap.move.stop(unit)
+		Goap.get_action("Move").stop(unit)
 	agent.set_state("react_target", null)
 
 

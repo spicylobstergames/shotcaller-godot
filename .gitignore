@@ -35,6 +35,7 @@ mono_crash.*.json
 # Shotcaller specific ignores
 prototype/Shotcall.apk
 prototype/Shotcall.apk.idsig
+
 # AI test infrastructure
 .godot-home/
 .test-logs/

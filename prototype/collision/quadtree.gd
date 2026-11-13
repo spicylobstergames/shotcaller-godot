@@ -7,6 +7,8 @@
 # Access the autoload list in godot settings
 
 var _bounds = Rect2(Vector2.ZERO, Vector2.ONE)
+var _bounds_center := Vector2.ZERO
+var _bounds_half_size := Vector2.ZERO
 var _splitThreshold = 10
 var _maxSplits = 5
 var _curSplit = 0
@@ -18,6 +20,8 @@ var _node = null
 func _init(node,bounds,splitThreshold,maxSplits,currentSplit = 0):
 	_node = node
 	_bounds = bounds
+	_bounds_center = bounds.get_center()
+	_bounds_half_size = bounds.size / 2
 	_splitThreshold = splitThreshold
 	_maxSplits = maxSplits
 	_curSplit = currentSplit
@@ -27,13 +31,12 @@ func clear():
 	for quadrant in _quadrants:
 		quadrant.clear()
 	_bodies.clear()
-	_quadrants.clear()
 
 
 func add_body(body):
 	# Adds a body to the QuadTree
-		
-	if(_quadrants.size() != 0):
+
+	if not _quadrants.is_empty():
 		var quadrant = _get_quadrant(body.global_position)
 		quadrant.add_body(body)
 	else:
@@ -42,31 +45,31 @@ func add_body(body):
 			_split()
 
 
-func get_units_in_radius(center, radius):
-	var result = []
-	_get_bodies_in_radius(center, radius, result)
-	return result
+func get_units_in_radius(center: Vector2, radius: float) -> Array:
+	return _get_bodies_in_radius(center, radius, [])
 
-
-func _get_bodies_in_radius(center, radius, result):
-	if(_quadrants.size() == 0):
+func _get_bodies_in_radius(center: Vector2, radius: float, result: Array) -> Array:
+	if _quadrants.is_empty():
 		for body in _bodies:
 			result.append(body)
 	else:
 		for quadrant in _quadrants:
-			if(quadrant._contains_circle(center, radius)):
+			if quadrant._contains_circle(center, radius):
 				quadrant._get_bodies_in_radius(center, radius, result)
+	return result
 
 
-func _contains_circle(center, radius):
-	var bound_center = (_bounds.position + _bounds.end) / 2
-	var bound_half = _bounds.size / 2
-	var d = (center - bound_center).abs()
-	if d.x > bound_half.x + radius: return false
-	if d.y > bound_half.y + radius: return false
-	if d.x <= bound_half.x: return true
-	if d.y <= bound_half.y: return true
-	return (d - bound_half).length() <= radius;
+func _contains_circle(center: Vector2, radius: float) -> bool:
+	var distance_from_center = (center - _bounds_center).abs()
+	if distance_from_center.x > _bounds_half_size.x + radius:
+		return false
+	if distance_from_center.y > _bounds_half_size.y + radius:
+		return false
+	if distance_from_center.x <= _bounds_half_size.x:
+		return true
+	if distance_from_center.y <= _bounds_half_size.y:
+		return true
+	return (distance_from_center - _bounds_half_size).length_squared() <= radius * radius
 
 
 func _split():
@@ -93,13 +96,13 @@ func _split():
 
 func _get_quadrant(location):
 	# Gets the quadrant a Vector2 location lies in
-	if(location.x > _bounds.position.x + _bounds.size.x / 2):
-		if(location.y > _bounds.position.y + _bounds.size.y / 2):
+	if location.x > _bounds_center.x:
+		if location.y > _bounds_center.y:
 			return _quadrants[2]
 		else:
 			return _quadrants[1]
 	else:
-		if(location.y > _bounds.position.y + _bounds.size.y / 2): 
+		if location.y > _bounds_center.y:
 			return _quadrants[3]
 		return _quadrants[0]
 

@@ -1,5 +1,15 @@
 extends RefCounted
 
+# Action lifecycle semantics, exercised through the REAL production Agent
+# (plan replacement, signal-driven entry, plan following, completion).
+#
+# PORT: the previous version duplicated _replace_plan/_follow_plan into a
+# TestAgent copy — the real Agent works standalone outside the tree (see
+# test_agent_signals.gd), so the duplication is gone and the production
+# lifecycle paths are what run here.
+
+const Agent = preload("res://goap/goap_system/agent.gd")
+
 
 # Mock RetreatAction that mirrors the real RetreatAction interface
 # but doesn't depend on autoloads like WorldState/Goap.
@@ -26,98 +36,57 @@ class MockRetreatAction:
 	func exit(_agent) -> void:
 		_exit_called += 1
 
+	func get_class_name() -> String:
+		return "Retreat"
 
 
 # Lightweight unit stub that exposes only what action lifecycle methods touch.
+# Agent._unit is untyped, so a RefCounted double is sufficient.
 class TestUnit:
 	extends RefCounted
 	var moves := true
 	var team := "blue"
 	var current_path: Array = [Vector2(0, 0), Vector2(1, 0), Vector2(2, 0)]
-	var agent: TestAgent
 
 
-# Stub agent that mimics the production Agent's plan lifecycle methods.
-# Only the plan-following methods are duplicated here; action interface testing
-# is done separately with MockRetreatAction (no Agent dependency).
-class TestAgent:
+# Goal double satisfying the real agent's contract: enter/exit are called
+# unguarded on plan replacement, get_class_name() on state_changed emission.
+class TestPlanGoal:
 	extends RefCounted
-	var _unit: TestUnit
-	var state := {}
-	var _current_goal: Variant
-	var _current_plan: Array = []
-	var _current_plan_step: int = 0
-	signal plan_changed(plan)
-	signal goal_changed(goal)
-	signal action_changed(action)
-	var _current_action_entered: bool = false
 
-	func _init(unit: TestUnit):
-		_unit = unit
-		unit.agent = self
-		action_changed.connect(_on_action_changed)
+	func is_valid(_agent) -> bool:
+		return true
 
-	func get_unit() -> TestUnit:
-		return _unit
+	func priority(_agent) -> int:
+		return 1
 
-	func get_state(state_name: String, default_value = null):
-		return state.get(state_name, default_value)
+	func get_desired_state(_agent) -> Dictionary:
+		return {"plan_completed": true}
 
-	func set_state(state_name: String, value) -> void:
-		state[state_name] = value
+	func enter(_agent) -> void:
+		pass
 
-	func _on_action_changed(action):
-		if action and action.has_method("enter"):
-			action.enter(self)
-			_current_action_entered = true
+	func exit(_agent) -> void:
+		pass
 
-	func _replace_plan(goal: Variant, plan: Array) -> void:
-		_exit_current_action()
-		var previous_goal = _current_goal
-		_current_goal = goal
-		_current_plan = plan
-		_current_plan_step = 0
-		_current_action_entered = false
-		if previous_goal != goal:
-			goal_changed.emit(goal)
-		plan_changed.emit(_current_plan)
-		action_changed.emit(get_current_action())
+	func get_class_name() -> String:
+		return "TestPlanGoal"
 
-	func _exit_current_action():
-		var action = get_current_action()
-		if action and action.has_method("exit"):
-			action.exit(self)
 
-	func _follow_plan(plan: Array, _delta: float):
-		if plan == null or plan.is_empty() or _current_plan_step >= plan.size():
-			return
-		var action = plan[_current_plan_step]
-		if action == null:
-			return
-		var is_step_complete = action.perform(self, _delta)
-		if is_step_complete:
-			if _current_plan_step < plan.size() - 1:
-				if action.has_method("exit"):
-					action.exit(self)
-				_current_plan_step += 1
-				action_changed.emit(get_current_action())
-			else:
-				_exit_current_action()
-				_current_goal = null
-				_current_plan = []
-				_current_plan_step = 0
-
-	func get_current_action():
-		if _current_plan != null and _current_plan_step >= 0 and _current_plan_step < _current_plan.size():
-			return _current_plan[_current_plan_step]
-		else:
-			return null
+# Creates a REAL production Agent wired to a unit double, with the
+# action_changed -> enter path connected the same way _ready() does.
+func _make_agent(unit_moves: bool = true) -> Agent:
+	var unit = TestUnit.new()
+	unit.moves = unit_moves
+	var agent = Agent.new()
+	agent._unit = unit
+	agent.action_changed.connect(agent._on_action_changed)
+	return agent
 
 
 func run(harness) -> void:
 	var retreat = MockRetreatAction.new()
-	var unit = TestUnit.new()
-	var agent = TestAgent.new(unit)
+	var agent = _make_agent()
 
 	# --- cost ---
 	harness.check_equal(
@@ -133,9 +102,7 @@ func run(harness) -> void:
 	)
 
 	# --- is_valid ---
-	var idle_unit = TestUnit.new()
-	idle_unit.moves = false
-	var idle_agent = TestAgent.new(idle_unit)
+	var idle_agent = _make_agent(false)
 	harness.check(
 		not retreat.is_valid(idle_agent), "RetreatAction is invalid when the unit has no moves."
 	)
@@ -144,7 +111,7 @@ func run(harness) -> void:
 	)
 
 	# --- perform / exit ---
-	var idle_agent2 = TestAgent.new(TestUnit.new())
+	var idle_agent2 = _make_agent()
 	harness.check(
 		not retreat.perform(idle_agent2, 0.0),
 		"RetreatAction perform returns false when arrived_at_retreat is not set."
@@ -199,18 +166,8 @@ class TestPlanAction:
 		exited = true
 		exit_count += 1
 
-
-class TestPlanGoal:
-	extends RefCounted
-
-	func is_valid(_agent) -> bool:
-		return true
-
-	func priority(_agent) -> int:
-		return 1
-
-	func get_desired_state(_agent) -> Dictionary:
-		return {"plan_completed": true}
+	func get_class_name() -> String:
+		return "TestPlanAction"
 
 
 # Action that runs for N ticks before completing
@@ -231,6 +188,9 @@ class MultiTickAction:
 
 	func exit(_agent) -> void:
 		exit_count += 1
+
+	func get_class_name() -> String:
+		return "MultiTick"
 
 
 # Action that can be invalidated mid-execution
@@ -257,19 +217,16 @@ class RetreatingAction:
 	func invalidate() -> void:
 		_is_valid = false
 
+	func get_class_name() -> String:
+		return "Retreating"
+
 
 func _test_plan_following(harness) -> void:
 	var action = TestPlanAction.new()
 
-	var agent = TestAgent.new(TestUnit.new())
+	var agent = _make_agent()
 
-	agent._current_goal = TestPlanGoal.new()
-	agent._current_plan = [action]
-	agent._current_plan_step = 0
-
-	# Simulate _on_action_changed signal handler that enters the action.
-	if action and action.has_method("enter"):
-		action.enter(agent)
+	agent._replace_plan(TestPlanGoal.new(), [action])
 
 	# Simulate one perform tick.
 	agent._follow_plan(agent._current_plan, 0.0)
@@ -290,7 +247,7 @@ func _test_multi_step_plan(harness) -> void:
 	var first = MultiTickAction.new()   # completes on its 3rd perform tick
 	var second = TestPlanAction.new()   # completes on its 1st perform tick
 
-	var agent = TestAgent.new(TestUnit.new())
+	var agent = _make_agent()
 
 	# Enter the plan through the production path: _replace_plan emits
 	# action_changed, which enters the first action via _on_action_changed.
@@ -325,19 +282,16 @@ func _test_exit_on_plan_switch(harness) -> void:
 	var old_action = TestPlanAction.new()
 	var new_action = TestPlanAction.new()
 
-	var agent = TestAgent.new(TestUnit.new())
+	var agent = _make_agent()
 
 	# Set up old plan.
-	agent._current_goal = TestPlanGoal.new()
-	agent._current_plan = [old_action]
-	agent._current_plan_step = 0
-	old_action.enter(agent)
+	var old_goal = TestPlanGoal.new()
+	agent._replace_plan(old_goal, [old_action])
 
 	# Replace plan with a different goal — simulates goal priority change.
-	# This is the path agent.process() takes: _replace_plan(goal, plan).
+	# This is the path agent.goap_process() takes: _replace_plan(goal, plan).
 	var new_goal = TestPlanGoal.new()
-	var new_plan = [new_action]
-	agent._replace_plan(new_goal, new_plan)
+	agent._replace_plan(new_goal, [new_action])
 
 	harness.check_equal(
 		old_action.exited, true,
@@ -360,20 +314,13 @@ func _test_exit_on_plan_switch(harness) -> void:
 func _test_multi_tick_completion(harness) -> void:
 	var action = MultiTickAction.new()
 
-	var agent = TestAgent.new(TestUnit.new())
+	var agent = _make_agent()
 
-	agent._current_goal = TestPlanGoal.new()
-	agent._current_plan = [action]
-	agent._current_plan_step = 0
-
-	# Enter the action.
-	action.enter(agent)
+	agent._replace_plan(TestPlanGoal.new(), [action])
 
 	# Tick loop: the agent should keep calling _follow_plan, which calls
 	# action.perform() repeatedly until it returns true.
 	# Bounded: an action that never completes must fail the test, not hang it.
-	# (The stale manual re-enter block was removed — TestAgent enters new
-	# actions itself via the action_changed signal.)
 	var tick_guard := 0
 	while not agent._current_plan.is_empty() and tick_guard < 100:
 		agent._follow_plan(agent._current_plan, 0.0)
@@ -395,17 +342,10 @@ func _test_multi_tick_completion(harness) -> void:
 
 func _test_invalid_action_mid_execution(harness) -> void:
 	var action = RetreatingAction.new()
-	var unit = TestUnit.new()
-	unit.moves = false  # Start invalid
 
-	var agent = TestAgent.new(unit)
+	var agent = _make_agent(false)  # Start invalid
 
-	agent._current_goal = TestPlanGoal.new()
-	agent._current_plan = [action]
-	agent._current_plan_step = 0
-
-	# Enter the action — it's initially invalid but agent still starts it.
-	action.enter(agent)
+	agent._replace_plan(TestPlanGoal.new(), [action])
 
 	# Simulate one tick: the agent calls _follow_plan.
 	agent._follow_plan(agent._current_plan, 0.0)

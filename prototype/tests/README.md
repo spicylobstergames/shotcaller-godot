@@ -6,18 +6,18 @@ How to write tests for this project. Read this before adding test files.
 
 - `run_tests.gd` — explicit registry of every unit/integration test class.
   Registering a file here AND calling `.run(self)` are both required.
-- `run_suite.sh` — CI entry point: unit suite + boot smoke + script-error
-  budget in one command.
+- `run_suite.sh` — CI entry point: unit suite + boot smoke + golden replay
+  + script-error budget in one command.
 - `smoke/smoke_runner.gd` — boots the REAL game headless and asserts it
-  plays (units spawn, pathed units move). Enabled via `-- --smoke` on
-  game.tscn; the debug harness (`test_map/test.gd`) spawns the scenario.
+  plays (units spawn, the simulation moves). Enabled via `-- --smoke` on
+  game.tscn; the debug harness (`tests/debug_map.gd`) spawns the scenario.
 - `helpers/` — shared doubles (see below).
 - `unit/` — the test classes.
 
 ## Running the suite
 
 ```
-./prototype/tests/run_suite.sh          # full verification (unit + boot smoke + error budget)
+./prototype/tests/run_suite.sh          # full verification (unit + boot smoke + golden + error budget)
 ```
 
 Direct runs:
@@ -50,7 +50,7 @@ fail, revert. If the test still passes, it is testing a mock — rewrite it.
 | Helper | Purpose |
 |--------|---------|
 | `fs_scan.gd` | Whole-project file scanning for the smoke tests |
-| `world_state_snapshot.gd` | Capture/restore WorldState keys — **mandatory** for any test registered in `run_tests.gd` that touches WorldState (they share one process; leaked state makes the suite order-dependent). Exempt: `tests/test_map/test.gd` (the dev/smoke harness owns its process). |
+| `world_state_snapshot.gd` | Capture/restore WorldState keys — **mandatory** for any test registered in `run_tests.gd` that touches WorldState (they share one process; leaked state makes the suite order-dependent). Exempt: `tests/debug_map.gd` (the dev/smoke harness owns its process). |
 | `mock_goal.gd` | Canonical GOAP mock goal: extends the real GoalContract, tracks is_valid/priority call counts |
 
 Mock policy:
@@ -92,10 +92,11 @@ by design.
 ## Boot smoke test
 
 `tests/smoke/smoke_runner.gd` boots the real game through the debug harness
-(`tests/test_map/test.gd --smoke`) and asserts behavioral invariants (units
-spawn, the simulation moves, nothing crashes). Extend it when adding systems
-that should be verified end-to-end — keep assertions behavioral (what the game
-does), not structural (what the scene tree contains).
+(`tests/debug_map.gd --smoke`, on the real three-lane map) and asserts
+behavioral invariants (units spawn, the simulation moves, nothing crashes).
+Extend it when adding systems that should be verified end-to-end — keep
+assertions behavioral (what the game does), not structural (what the scene
+tree contains).
 
 ## Bug protocol
 

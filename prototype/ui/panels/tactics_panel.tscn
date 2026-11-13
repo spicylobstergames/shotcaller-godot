@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dcbdwji8lu6ta"]
+
+[ext_resource type="Theme" uid="uid://cw2dw3xus2e31" path="res://assets/ui/theme/panel_theme.tres" id="1_thcg2"]
+[ext_resource type="Script" uid="uid://doibpxhn001fx" path="res://ui/panels/tactics_panel.gd" id="2_e7xr4"]
+[ext_resource type="PackedScene" uid="uid://b4d7l4npgif2p" path="res://ui/buttons/tactics_button.tscn" id="3_o05s1"]
+
+[node name="tactics_panel" type="Panel" unique_id=697034128]
+custom_minimum_size = Vector2(280, 110)
+offset_left = -280.0
+offset_top = -264.0
+offset_bottom = -154.0
+theme = ExtResource("1_thcg2")
+script = ExtResource("2_e7xr4")
+
+[node name="container" type="VBoxContainer" parent="." unique_id=1248565450]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -43.0
+offset_right = 128.0
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="label" type="Label" parent="container" unique_id=795021565]
+layout_mode = 2
+text = "Tactics"
+
+[node name="buttons_container" type="HBoxContainer" parent="container" unique_id=1257708101]
+layout_mode = 2
+
+[node name="order_button" parent="container/buttons_container" unique_id=1879697492 instance=ExtResource("3_o05s1")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="order_button2" parent="container/buttons_container" unique_id=946218046 instance=ExtResource("3_o05s1")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="order_button3" parent="container/buttons_container" unique_id=1559681157 instance=ExtResource("3_o05s1")]
+layout_mode = 2
+focus_mode = 2
+
+[node name="order_button4" parent="container/buttons_container" unique_id=10471504 instance=ExtResource("3_o05s1")]
+layout_mode = 2
+focus_mode = 2

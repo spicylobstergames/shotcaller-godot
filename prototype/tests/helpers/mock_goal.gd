@@ -32,3 +32,10 @@ func is_valid(_agent: Variant) -> bool:
 func priority(_agent: Variant) -> int:
 	priority_calls += 1
 	return prio
+
+
+# The real goals each define get_class_name(); the agent reads it during
+# _replace_plan (state_changed emission) and _get_best_goal consumers may
+# too. The contract base class does not provide it.
+func get_class_name() -> String:
+	return "MockGoal"

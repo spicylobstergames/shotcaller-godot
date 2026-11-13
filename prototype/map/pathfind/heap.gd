@@ -51,7 +51,7 @@ class Heap:
 		_updateItem(_nodes, x, _cmp)
 
 	func clear():
-		_nodes = []
+		_nodes.clear()
 
 	func is_empty():
 		return _nodes.is_empty()
@@ -226,7 +226,6 @@ class Heap:
 			childpos = 2 * pos + 1
 		array[pos] = newitem
 		_siftdown(array, startpos, pos, cmp)
-
 
 
 

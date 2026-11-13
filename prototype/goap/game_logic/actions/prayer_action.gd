@@ -11,11 +11,11 @@ const _pray_bonuses = [
 
 
 func get_class_name() -> String:
-	return "PrayerAction"
+	return "Pray"
 
 
 func pray_in_church(unit):
-	unit.after_arive = "stop"
+	unit.agent.set_state("after_arive", "stop")
 	var point = unit.global_position
 	point.y -= WorldState.get_state("map").tile_size
 	var building = Utils.get_building(point)

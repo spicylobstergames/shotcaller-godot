@@ -15,12 +15,12 @@ extends CanvasLayer
 var inventories : Node
 var active_skills : Node
 # CONTROLS
-@onready var orders_panel := $"%orders_panel"
-@onready var unit_controls_panel := $"%unit_controls_panel"
+@onready var tactics_panel := $"%tactics_panel"
+@onready var unit_control_panel := $"%unit_control_panel"
 var orders_button : Node
 var shop_button : Node
-var unit_controls_button : Node
-@onready var control_panel := $"%control_panel"
+var unit_control_button : Node
+@onready var player_control_panel := $"%player_control_panel"
 # MENUS
 @onready var main_menu := $"%main_menu"
 @onready var pause_menu := $"%pause_menu"
@@ -34,9 +34,9 @@ func _ready():
 	inventories = stats.get_node("inventories")
 	active_skills = stats.get_node("active_skills")
 	# controls
-	unit_controls_button = control_panel.get_node("%unit_controls_button")
-	shop_button = control_panel.get_node("%shop_button")
-	orders_button = control_panel.get_node("%orders_button")
+	unit_control_button = player_control_panel.get_node("%unit_control_button")
+	shop_button = player_control_panel.get_node("%shop_button")
+	orders_button = player_control_panel.get_node("%orders_button")
 	
 	leader_select_menu.leader_selected.connect(new_game_menu.add_leader)
 	
@@ -109,7 +109,7 @@ func hide_minimap():
 
 func map_loaded():
 	buttons_update()
-	orders_panel.build()
+	tactics_panel.build()
 
 
 func process(delta):
@@ -129,8 +129,8 @@ func process(delta):
 		active_skills.process(delta)
 	
 	# hud line
-	if Goap.navigation.path_line:
-		Goap.navigation.draw(WorldState.get_state("selected_unit"))
+	if Navigation.path_line:
+		Navigation.draw(WorldState.get_state("selected_unit"))
 
 
 func hide_hpbars():
@@ -150,21 +150,21 @@ func show_hpbars():
 func show_select():
 	if WorldState.get_state("selected_unit").is_controllable():
 		orders_button.disabled = false
-	orders_panel.update()
+	tactics_panel.update()
 	buttons_update()
 
 
 func hide_unselect():
-	orders_panel.hide()
+	tactics_panel.hide()
 	orders_button.disabled = true
-	unit_controls_panel.hide()
-	unit_controls_button.disabled = true
+	unit_control_panel.hide()
+	unit_control_button.disabled = true
 	inventories.hide()
 	shop.update_buttons()
 	buttons_update()
 
 
 func buttons_update():
-	orders_button.set_pressed(orders_panel.visible)
+	orders_button.set_pressed(tactics_panel.visible)
 	shop_button.set_pressed(shop.visible)
-	unit_controls_button.set_pressed(unit_controls_panel.visible)
+	unit_control_button.set_pressed(unit_control_panel.visible)

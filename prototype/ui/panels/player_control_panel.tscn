@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://nrd8ch4qn2ev"]
 
-[ext_resource type="PackedScene" uid="uid://cpa0bkg807myp" path="res://ui/buttons/ui_button.tscn" id="1"]
-[ext_resource type="Theme" uid="uid://cw2dw3xus2e31" path="res://assets/ui/theme/panel_theme.tres" id="1_thcg2"]
-[ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="2_8sc0j"]
+[ext_resource type="Theme" uid="uid://cw2dw3xus2e31" path="res://assets/ui/theme/panel_theme.tres" id="1_kcq2p"]
+[ext_resource type="PackedScene" uid="uid://cpa0bkg807myp" path="res://ui/buttons/ui_button.tscn" id="2_gc24b"]
+[ext_resource type="Texture2D" uid="uid://dupiactdf6o7t" path="res://assets/ui/ui_icons.png" id="3_hbm7n"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_3jbbe"]
 device = -1
@@ -14,7 +14,7 @@ unicode = 97
 events = [SubResource("InputEventKey_3jbbe")]
 
 [sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("2_8sc0j")
+atlas = ExtResource("3_hbm7n")
 region = Rect2(48, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
@@ -28,7 +28,7 @@ unicode = 98
 events = [SubResource("InputEventKey_poit7")]
 
 [sub_resource type="AtlasTexture" id="4"]
-atlas = ExtResource("2_8sc0j")
+atlas = ExtResource("3_hbm7n")
 region = Rect2(480, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
@@ -42,7 +42,7 @@ unicode = 120
 events = [SubResource("InputEventKey_4myp5")]
 
 [sub_resource type="AtlasTexture" id="5"]
-atlas = ExtResource("2_8sc0j")
+atlas = ExtResource("3_hbm7n")
 region = Rect2(624, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
@@ -56,15 +56,15 @@ unicode = 121
 events = [SubResource("InputEventKey_h6k0y")]
 
 [sub_resource type="AtlasTexture" id="6"]
-atlas = ExtResource("2_8sc0j")
+atlas = ExtResource("3_hbm7n")
 region = Rect2(575, 0, 46, 46)
 margin = Rect2(2, 2, 0, 0)
 
-[node name="control_panel" type="Panel" unique_id=329997036]
+[node name="player_control_panel" type="Panel" unique_id=329997036]
 custom_minimum_size = Vector2(150, 150)
 offset_left = -150.0
 offset_top = -150.0
-theme = ExtResource("1_thcg2")
+theme = ExtResource("1_kcq2p")
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=1394919881]
 layout_mode = 1
@@ -83,7 +83,7 @@ theme_override_constants/h_separation = 6
 theme_override_constants/v_separation = 6
 columns = 2
 
-[node name="unit_controls_button" parent="GridContainer" unique_id=524770020 instance=ExtResource("1")]
+[node name="unit_control_button" parent="GridContainer" unique_id=524770020 instance=ExtResource("2_gc24b")]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -93,10 +93,10 @@ shortcut_in_tooltip = false
 icon = SubResource("3")
 value = "controls"
 
-[node name="name" parent="GridContainer/unit_controls_button" index="0" unique_id=101677071]
+[node name="name" parent="GridContainer/unit_control_button" index="0" unique_id=101677071]
 text = "Control"
 
-[node name="hint" parent="GridContainer/unit_controls_button" index="1" unique_id=1992047259]
+[node name="hint" parent="GridContainer/unit_control_button" index="1" unique_id=1992047259]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -111,7 +111,7 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "A"
 
-[node name="shop_button" parent="GridContainer" unique_id=1502101517 instance=ExtResource("1")]
+[node name="shop_button" parent="GridContainer" unique_id=1502101517 instance=ExtResource("2_gc24b")]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
@@ -139,7 +139,7 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "B"
 
-[node name="orders_button" parent="GridContainer" unique_id=608523141 instance=ExtResource("1")]
+[node name="orders_button" parent="GridContainer" unique_id=608523141 instance=ExtResource("2_gc24b")]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -167,7 +167,7 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "X"
 
-[node name="menu_button" parent="GridContainer" unique_id=422937588 instance=ExtResource("1")]
+[node name="menu_button" parent="GridContainer" unique_id=422937588 instance=ExtResource("2_gc24b")]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 2
@@ -196,7 +196,7 @@ grow_horizontal = 1
 grow_vertical = 1
 text = "Y"
 
-[editable path="GridContainer/unit_controls_button"]
+[editable path="GridContainer/unit_control_button"]
 [editable path="GridContainer/shop_button"]
 [editable path="GridContainer/orders_button"]
 [editable path="GridContainer/menu_button"]

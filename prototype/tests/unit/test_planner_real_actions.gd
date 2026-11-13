@@ -7,6 +7,11 @@ extends RefCounted
 # registry's actions can satisfy real goals' desired states under the real
 # planner. It catches contract drift — e.g. an action renamed effect key, a
 # goal desiring an unsatisfiable state, or a plan that silently becomes empty.
+#
+# PORT (post-restructure): class names are now "Move"/"Navigate"/"Retreat"/
+# "WaitForRegeneration"; wait_out was deleted and the Recover chain is now
+# Retreat -> WaitForRegeneration (via arrived_at_retreat); Move's precondition
+# is has_destiny (produced by Navigate), not has_path.
 
 const Planner = preload("res://goap/goap_system/planner.gd")
 const ActionRegistry = preload("res://goap/game_logic/action_registry.gd")
@@ -15,15 +20,17 @@ const WorldStateSnapshot = preload("res://tests/helpers/world_state_snapshot.gd"
 
 
 # Agent double exposing exactly what real actions' is_valid() reads during
-# planning: get_unit().moves / .state / .current_destiny and get_state().
+# planning: get_unit() and get_state(). The initial state mirrors the real
+# agent's reset() defaults — in particular is_stunned=false, because the
+# planner does NOT treat an unset key as false (null != false).
 class PlanAgent:
 	extends RefCounted
 	var unit
 	var state := {}
 
-	func _init(unit_moves: bool = true, unit_state: String = "move", has_path: bool = false):
-		unit = PlanUnit.new(unit_moves, unit_state)
-		state["has_path"] = has_path
+	func _init(unit_moves: bool = true):
+		unit = PlanUnit.new(unit_moves)
+		state["is_stunned"] = false
 
 	func get_unit():
 		return unit
@@ -43,6 +50,7 @@ class PlanUnit:
 	# Every property real actions' is_valid()/get_cost() touch during
 	# planning. Defaults describe a healthy melee unit that can act.
 	var moves := true
+	var regen := 1  # healthy leader: WaitForRegeneration requires regen > 0
 	var state := "move"
 	var current_destiny := Vector2(100, 100)
 	var final_destiny := Vector2(100, 100)
@@ -50,16 +58,14 @@ class PlanUnit:
 	var type := "infantry"
 	var dead := false
 	var attacks := true
-	var regen := 0
 	var target = null
 	var channeling_timer := 0.0
 	var current_path: Array = []
 	var current_step := Vector2.ZERO
 	var global_position := Vector2.ZERO
 
-	func _init(unit_moves: bool = true, unit_state: String = "move"):
+	func _init(unit_moves: bool = true):
 		moves = unit_moves
-		state = unit_state
 
 	func set_state(_s):
 		pass
@@ -89,37 +95,34 @@ func run(harness) -> void:
 	harness.check(contract_breaks.is_empty(),
 		"All production actions return an effects dictionary. Breaks: %s" % [", ".join(contract_breaks)])
 
-	# --- ArriveAtDestination plans with the real MoveAction ---
+	# --- ArriveAtDestination plans Navigate -> Move through real preconditions ---
 	var goal_registry = GoalRegistry.new()
 	var arrive_goal = goal_registry.get_goal("ArriveAtDestination")
 	harness.check(arrive_goal != null, "Goal registry provides ArriveAtDestination.")
-	var agent = PlanAgent.new(true, "move", false)
+	var agent = PlanAgent.new(true)
 	var plan = planner.get_plan(agent, arrive_goal)
 	harness.check(not plan.is_empty(),
 		"Real planner produces a plan for the real ArriveAtDestination goal.")
 	if not plan.is_empty():
-		harness.check(plan[0].get_class_name() == "MoveAction",
-			"ArriveAtDestination plans the real MoveAction (got %s)." % plan[0].get_class_name())
+		harness.check(plan[0].get_class_name() == "Navigate",
+			"ArriveAtDestination plans the real Navigate first (got %s)." % plan[0].get_class_name())
+		harness.check(plan[plan.size() - 1].get_class_name() == "Move",
+			"ArriveAtDestination plans the real Move last (got %s)." % plan[plan.size() - 1].get_class_name())
 		harness.check(plan[plan.size() - 1].get_effects().has("arrived_at_destination"),
 			"The plan's final action produces 'arrived_at_destination'.")
-
-	# --- has_path=true flips planning to NavigateAction ---
-	var navigating_agent = PlanAgent.new(true, "move", true)
-	var nav_plan = planner.get_plan(navigating_agent, arrive_goal)
-	harness.check(not nav_plan.is_empty(),
-		"A navigating unit still gets an ArriveAtDestination plan.")
-	if not nav_plan.is_empty():
-		harness.check(nav_plan[0].get_class_name() == "NavigateAction",
-			"With has_path=true the planner picks NavigateAction (got %s)." % nav_plan[0].get_class_name())
+		# Move requires has_destiny; Navigate produces it — order is contractual.
+		harness.check(plan.find(plan[plan.size() - 1]) > plan.find(plan[0]),
+			"Move is planned after Navigate (its has_destiny precondition).")
 
 	# --- a unit that cannot move gets no plan ---
-	var frozen_agent = PlanAgent.new(false, "move", false)
+	var frozen_agent = PlanAgent.new(false)
 	harness.check(planner.get_plan(frozen_agent, arrive_goal).is_empty(),
 		"A unit with moves=false gets no plan (no valid action).")
 
-	# --- Recover chains retreat -> wait_out through real preconditions ---
+	# --- Recover chains retreat -> wait_for_regeneration through real preconditions ---
 	ws.set_state("is_game_active", true)
 	var recover_goal = goal_registry.get_goal("Recover")
+	harness.check(recover_goal != null, "Goal registry provides Recover.")
 	var recover_plan = planner.get_plan(agent, recover_goal)
 	harness.check(not recover_plan.is_empty(),
 		"Real planner satisfies the Recover goal (retreat chain).")
@@ -127,14 +130,14 @@ func run(harness) -> void:
 		var plan_names: Array = []
 		for a in recover_plan:
 			plan_names.append(a.get_class_name())
-		harness.check(plan_names.has("RetreatAction"),
-			"Recover plan includes the real RetreatAction (plan: %s)" % [", ".join(plan_names)])
-		harness.check(plan_names.has("WaitOut"),
-			"Recover plan includes the real WaitOut (plan: %s)" % [", ".join(plan_names)])
-		# WaitOut requires arrived_at_retreat — it must come after RetreatAction.
-		if plan_names.has("RetreatAction") and plan_names.has("WaitOut"):
-			harness.check(plan_names.find("RetreatAction") < plan_names.find("WaitOut"),
-				"WaitOut is planned after RetreatAction (its precondition).")
+		harness.check(plan_names.has("Retreat"),
+			"Recover plan includes the real Retreat (plan: %s)" % [", ".join(plan_names)])
+		harness.check(plan_names.has("WaitForRegeneration"),
+			"Recover plan includes the real WaitForRegeneration (plan: %s)" % [", ".join(plan_names)])
+		# WaitForRegeneration requires arrived_at_retreat — it must come after Retreat.
+		if plan_names.has("Retreat") and plan_names.has("WaitForRegeneration"):
+			harness.check(plan_names.find("Retreat") < plan_names.find("WaitForRegeneration"),
+				"WaitForRegeneration is planned after Retreat (its precondition).")
 	ws.restore()
 
 	# --- NeedSafety is satisfied by Hide ---

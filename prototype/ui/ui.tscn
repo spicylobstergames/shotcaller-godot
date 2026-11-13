@@ -1,21 +1,21 @@
 [gd_scene format=3 uid="uid://ch0yy1s76b4h4"]
 
 [ext_resource type="Script" uid="uid://b6miwqe7krimx" path="res://ui/ui.gd" id="1"]
-[ext_resource type="PackedScene" path="res://ui/panels/unit_controls_panel.tscn" id="2"]
-[ext_resource type="Theme" path="res://assets/ui/theme/label_theme.tres" id="2_ple64"]
+[ext_resource type="PackedScene" uid="uid://kqcptdeibmip" path="res://ui/panels/unit_control_panel.tscn" id="2"]
+[ext_resource type="Theme" uid="uid://d0tmup6sjjcnx" path="res://assets/ui/theme/label_theme.tres" id="2_ple64"]
 [ext_resource type="PackedScene" uid="uid://cmgd1ovkvubb1" path="res://item/shop.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://ui/menus/leader_select_menu.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://ui/waterfall/waterfall_background.tscn" id="4_qgu41"]
+[ext_resource type="PackedScene" uid="uid://7hp73v8ff12o" path="res://ui/menus/leader_select_menu.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://6mtto0bwc58m" path="res://ui/waterfall/waterfall_background.tscn" id="4_qgu41"]
 [ext_resource type="PackedScene" uid="uid://dayoyriuqshie" path="res://ui/minimap.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://ui/panels/orders_panel.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://ui/panels/control_panel.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://dcbdwji8lu6ta" path="res://ui/panels/tactics_panel.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://nrd8ch4qn2ev" path="res://ui/panels/player_control_panel.tscn" id="8"]
 [ext_resource type="PackedScene" uid="uid://bbsceiobgoxeh" path="res://ui/stats.tscn" id="9"]
 [ext_resource type="PackedScene" uid="uid://cmfl0f371ixev" path="res://ui/panels/dialog_panel.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://peemsr0bhld4" path="res://ui/menus/main_menu.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://ddw46xm86ceig" path="res://ui/leaders_quick_icons.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://ui/menus/pause_menu.tscn" id="13"]
-[ext_resource type="PackedScene" path="res://ui/menus/new_game_menu.tscn" id="14"]
-[ext_resource type="PackedScene" path="res://ui/scoreboard/scoreboard.tscn" id="18"]
+[ext_resource type="PackedScene" uid="uid://cfffvdbljqggx" path="res://ui/menus/pause_menu.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://cpep1s6a77vrb" path="res://ui/menus/new_game_menu.tscn" id="14"]
+[ext_resource type="PackedScene" uid="uid://i4n5m5ibc8a4" path="res://ui/scoreboard/scoreboard.tscn" id="18"]
 [ext_resource type="Script" uid="uid://b1veigxdhexy2" path="res://ui/cheat_console.gd" id="19"]
 
 [node name="ui" type="CanvasLayer" unique_id=644866763]
@@ -217,21 +217,7 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="orders_panel" parent="bot_right" unique_id=894185540 instance=ExtResource("7")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -390.0
-offset_bottom = -190.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="unit_controls_panel" parent="bot_right" unique_id=1349880030 instance=ExtResource("2")]
+[node name="tactics_panel" parent="bot_right" unique_id=894185540 instance=ExtResource("7")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -245,7 +231,21 @@ offset_bottom = -190.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="control_panel" parent="bot_right" unique_id=314760067 instance=ExtResource("8")]
+[node name="unit_control_panel" parent="bot_right" unique_id=1349880030 instance=ExtResource("2")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -300.0
+offset_bottom = -190.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="player_control_panel" parent="bot_right" unique_id=314760067 instance=ExtResource("8")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
