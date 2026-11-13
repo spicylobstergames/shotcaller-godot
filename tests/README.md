@@ -17,14 +17,14 @@ How to write tests for this project. Read this before adding test files.
 ## Running the suite
 
 ```
-./prototype/tests/run_suite.sh          # full verification (unit + boot smoke + golden + error budget)
+./tests/run_suite.sh          # full verification (unit + boot smoke + golden + error budget)
 ```
 
 Direct runs:
 
 ```
-godot --headless --path prototype res://tests/test_runner.tscn          # unit suite
-godot --headless --path prototype res://game.tscn -- --smoke            # boot smoke
+godot --headless --path . res://tests/test_runner.tscn          # unit suite
+godot --headless --path . res://game.tscn -- --smoke            # boot smoke
 ```
 
 A change is only done when `run_suite.sh` exits 0. **Zero script errors is
@@ -75,10 +75,10 @@ by design.
 
 ## Test file shape
 
-- One file per production concern, in `prototype/tests/unit/`.
+- One file per production concern, in `tests/unit/`.
 - The file exposes `run(harness)`; `harness.check(cond, msg)` and
   `harness.check_equal(actual, expected, msg)` record assertions.
-- Register the class in `prototype/tests/run_tests.gd` (explicit registration
+- Register the class in `tests/run_tests.gd` (explicit registration
   keeps the run order predictable).
 - Test doubles are `RefCounted` — do **not** call `.free()` on them.
 

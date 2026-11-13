@@ -3,7 +3,7 @@
 **20 test classes**, **255 assertions**, **0 script errors** — all passing.
 
 ```
-./prototype/tests/run_suite.sh
+./tests/run_suite.sh
 → [1/3] TESTS_COMPLETE: passed=255 failed=0
 → [1/3] All 255 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=1 pathed_moved=1
@@ -38,7 +38,7 @@ far apart on purpose, so the AI has to move (pursue or lane-walk) to engage.
 Run it directly with:
 
 ```
-godot --headless --path prototype res://game.tscn -- --smoke --smoke-ticks=300
+godot --headless --path . res://game.tscn -- --smoke --smoke-ticks=300
 ```
 
 ### 3. Golden replay (tests/golden/)
