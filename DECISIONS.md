@@ -180,3 +180,37 @@ new base): `camp_hire` pooled-gold semantics + gold-less-leader crash,
 `modifiers` null-safe `get_value`/`get_velocity`, and the headless minimap
 stall (`frame_post_draw` never fires without a display) that blocked the
 map-ready chain before any unit spawned.
+
+## D12 — Full port: GOAP suites re-pointed, golden replay re-recorded
+
+**Decision:** contrary to the interim D11 deferral, ALL remaining GOAP-coupled
+suites were ported onto the post-restructure base, and the golden replay was
+re-recorded from scratch. Per-suite outcomes:
+
+- Ported with contract updates: planner (class names Move/Navigate/Retreat/
+  WaitForRegeneration; Recover chain Retreat -> WaitForRegeneration),
+  agent signals/target/tactic, action lifecycles (now through the REAL
+  Agent instead of a duplicated plan-follower — the duplication rule wins),
+  goal interactions, GOAP integration, movement (native switches removed;
+  blocking is soft repulsion), navigation (global Navigation autoload),
+  order action (completion via player_order_complete/has_player_command),
+  attack targeting (priority system deleted upstream; proximity + can_hit
+  pinned).
+- NOT ported, subject removed upstream: the orders-panel signal suite
+  (panel + priority-init chain deleted). The surviving successor path
+  (tactics_panel build_leaders) runs in every boot-smoke run.
+- PINNED, not "fixed": ArriveAtDestination.is_valid() hard-false (activation
+  commented out upstream; arrival is collision-driven). Re-activating it
+  would change AI behavior mid-upstream-development — that call belongs to
+  upstream. recover.gd's agent-vs-unit on_arrive inconsistency documented.
+
+**Golden replay:** the old checkpoints pinned pre-restructure behavior and
+were replaced with a fresh recording on the new base, verified
+byte-identical across two recordings. Never diff new behavior against the
+old snapshots.
+
+**Production regressions the port caught (fixed, regression-tested):**
+nine actions unplanned by the flipped action_contract.is_valid default,
+get_lumber's null-return is_valid aborting plan searches, camp_hire gold
+semantics, passive_skills counter-flag erasure + null lookups, modifiers
+null-safety, and the headless minimap stall. Full list in COVERAGE.md.
