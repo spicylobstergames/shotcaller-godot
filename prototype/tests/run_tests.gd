@@ -19,6 +19,9 @@ const SceneInstantiateTests = preload("res://tests/unit/test_scene_instantiate.g
 const HelpersTests = preload("res://tests/unit/test_helpers.gd")
 const PlannerTests = preload("res://tests/unit/test_planner.gd")
 const PlannerRealActionsTests = preload("res://tests/unit/test_planner_real_actions.gd")
+const AgentSignalsTests = preload("res://tests/unit/test_agent_signals.gd")
+const AgentTargetTests = preload("res://tests/unit/test_agent_target.gd")
+const AgentTacticTests = preload("res://tests/unit/test_agent_tactic.gd")
 
 var tests_run := 0
 var failures: Array[String] = []
@@ -37,6 +40,9 @@ func _ready() -> void:
 	HelpersTests.new().run(self)
 	PlannerTests.new().run(self)
 	PlannerRealActionsTests.new().run(self)
+	AgentSignalsTests.new().run(self)
+	AgentTargetTests.new().run(self)
+	AgentTacticTests.new().run(self)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line
 	# against the pinned EXPECTED_UNIT_TESTS count in a separate file, so a
