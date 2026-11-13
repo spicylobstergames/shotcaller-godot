@@ -34,4 +34,5 @@ mono_crash.*.json
 
 # Shotcaller specific ignores
 prototype/Shotcall.apk
-prototype/Shotcall.apk.idsig
+prototype/Shotcall.apk.idsig.godot-home/
+.test-logs/
