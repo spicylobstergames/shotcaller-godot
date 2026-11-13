@@ -8,7 +8,10 @@ const cut_time = 6
 
 
 func is_valid(_agent) -> bool:
-	return WorldState.get_state("is_game_active")
+	# Default to false: get_state returns null for an unset key, and a typed
+	# -> bool returning null is a script error that aborts the planner's
+	# action loop mid-search (see COVERAGE.md known bugs).
+	return WorldState.get_state("is_game_active", false)
 
 
 func get_cost(_agent):
