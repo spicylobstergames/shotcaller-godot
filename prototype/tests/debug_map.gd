@@ -37,14 +37,18 @@ var projectile_container:Node2D
 
 func _ready():
 	game = get_tree().get_current_scene()
-	# Smoke mode must be enabled before game._ready() reads `debug` (children
-	# ready before parents, so setting it here synchronously is safe).
-	if "--smoke" in OS.get_cmdline_user_args():
+	# Smoke/perf mode must be enabled before game._ready() reads `debug`
+	# (children ready before parents, so setting it here synchronously is safe).
+	if "--smoke" in OS.get_cmdline_user_args() or "--perf" in OS.get_cmdline_user_args():
 		debug = 1
 		unit = 1  # spawn the debug scenario (leader + pawn) — export flags default to 0
 	await get_tree().process_frame # wait for idle frame
 	if "--smoke" in OS.get_cmdline_user_args():
 		add_child(load("res://tests/smoke/smoke_runner.gd").new())
+	elif "--perf" in OS.get_cmdline_user_args():
+		# Dev diagnostic: samples engine counters while the game runs. Run
+		# with: godot --headless --path . res://game.tscn -- --perf
+		add_child(load("res://tests/perf_monitor.gd").new())
 
 
 func start():
@@ -53,9 +57,10 @@ func start():
 		# until clicked — that would freeze headless smoke runs.
 		WorldState.set_state("game_mode", "match")
 		WorldState.set_state("player_team", "blue")
-		# Smoke runs on the REAL map so lane-pathing (WalkLane) is exercised;
-		# debug_map has no lanes node, so paths could never be followed there.
-		if "--smoke" in OS.get_cmdline_user_args():
+		# Smoke/perf runs on the REAL map so lane-pathing (WalkLane) is
+		# exercised and wave spawns behave; debug_map has no lanes node and
+		# no fog, so the map-ready chain would stall there.
+		if "--smoke" in OS.get_cmdline_user_args() or "--perf" in OS.get_cmdline_user_args():
 			game.map_manager.current_map = "three_lane_map"
 		else:
 			game.map_manager.current_map = "debug_map"
@@ -65,14 +70,23 @@ func spawn_unit():
 	if stress: spawn_random_units()
 	elif leaders: spawn_leaders()
 	elif unit:
+		if "--perf" in OS.get_cmdline_user_args():
+			# Perf runs must exercise the REAL wave economy (recurring lane
+			# waves, deaths, cemetery recycling) — the debug branch below
+			# skips spawn_group_cycle/leaders by design.
+			game.spawn.leaders()
+			game.spawn.spawn_group_cycle()
 		# TEST LEADER — spawned far from the pawn on the real (three-lane) map:
 		# with an enemy that far away, the AI must move (pursue or lane-walk)
 		# to engage, which is exactly what the boot smoke asserts.
 		var leader = game.spawn.create(game.spawn.leader_scene("arthur"), "mid", "blue", "Vector2", Vector2(200, 200))
 		#leader.attacks = false
 		leader.current_path = []
-		leader.hp = 10000
-		leader.current_hp = 10000
+		# Smoke asserts nothing dies mid-run, so its scenario inflates HP;
+		# perf runs keep natural HP so combat deaths occur and accumulate.
+		if "--smoke" in OS.get_cmdline_user_args():
+			leader.hp = 10000
+			leader.current_hp = 10000
 		WorldState.set_state("player_leaders_names", [leader.name])
 		WorldState.set_state("player_leaders", [leader]);
 		WorldState.set_state("player_team", "blue")
@@ -83,8 +97,9 @@ func spawn_unit():
 		
 		# TEST PAWN — opposite corner from the leader.
 		var pawn = game.spawn.create(game.spawn.pawn_scene("infantry"), "mid", "red", "Vector2", Vector2(850, 850))
-		pawn.hp = 10000
-		pawn.current_hp = 10000
+		if "--smoke" in OS.get_cmdline_user_args():
+			pawn.hp = 10000
+			pawn.current_hp = 10000
 #		pawn.moves = false
 		
 		# TEST LUMBERJACK
