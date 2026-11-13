@@ -9,9 +9,30 @@
 - **Tests:** `prototype/tests/` (headless runner: `res://tests/test_runner.tscn`)
 - **Run the test suite:**
   ```bash
-  godot --headless --path prototype res://tests/test_runner.tscn
+  ./prototype/tests/run_suite.sh /path/to/godot     # everything (~45s)
+  # Godot binary resolution: argument > GODOT env var > "godot" on PATH.
   ```
-- **GitHub Actions workflow:** `.github/workflows/godot-tests.yml` — runs the suite on PRs and main pushes.
+- **GitHub Actions workflow:** `.github/workflows/tests.yml` — runs the suite on PRs and main pushes.
+
+## Verifying
+
+- `run_suite.sh` runs the unit suite, a 300-tick boot smoke of the real game
+  (on the three-lane map), the golden replay, and a script-error budget.
+- **Zero `SCRIPT ERROR` lines is part of green.** Script errors can silently
+  swallow assertions (a failing expression aborts the statement containing
+  it) — a "passing" suite with script errors is lying.
+- `run_suite.sh` pins the expected assertion count (`EXPECTED_UNIT_TESTS`).
+  Adding tests → bump it. The suite failing with "ran N tests, expected M"
+  is the reminder.
+- New test files must be registered in `prototype/tests/run_tests.gd` AND
+  have `run()` called in the registry list — both, or the count pin will
+  catch it.
+- A **golden replay** (`tests/golden/`) checkpoints the real game's state at
+  frames 100/200/300 of a deterministic run. If it fails, either fix the
+  regression or — if the behavior change is intended — re-record with
+  `--golden-update` and say why in the commit (DECISIONS.md D12).
+- Test conventions: `prototype/tests/README.md`. Coverage map, known bugs,
+  and pinned quirks: `prototype/tests/COVERAGE.md`.
 
 ## Architecture overview
 

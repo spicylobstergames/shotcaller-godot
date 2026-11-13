@@ -10,8 +10,15 @@ extends Node
 # Currently I'm using this method only during planning, but it could
 # also be used during execution to abort the plan in case the world state
 # does not allow this action anymore.
+#
+# Default is true: actions are plannable unless they opt out. A default of
+# false silently unplans every action that does not override this (nine
+# production actions — melee/range attack, hide, taxes, etc. — were dead in
+# the planner after the default was flipped; caught by
+# test_planner_real_actions.gd). ChooseTarget is the documented always-false
+# exception and overrides this itself.
 func is_valid(_agent) -> bool:
-	return false
+	return true
 
 
 # Action Cost. This is a function so it handles situational costs, when the world

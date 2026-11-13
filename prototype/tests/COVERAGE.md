@@ -1,0 +1,190 @@
+# Test Coverage
+
+**20 test classes**, **255 assertions**, **0 script errors** — all passing.
+
+```
+./prototype/tests/run_suite.sh
+→ [1/3] TESTS_COMPLETE: passed=255 failed=0
+→ [1/3] All 255 tests passed.
+→ [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=1 pathed_moved=1
+→ [3/3] GOLDEN_OK: 3 checkpoints identical
+→ SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
+```
+
+## Port status (post-restructure)
+
+The full CI-verified suite has been ported onto upstream main after the GOAP
+restructure (`Orders` panel removed, `ChooseTarget`/`ChooseTactics` split,
+global `Navigation`, `wait_out` deleted, contract defaults flipped). Every
+suite was re-pointed at the current API; two removed subsystems were
+re-targeted to their successors; the golden replay was re-recorded. See
+DECISIONS.md D12 for the port decisions and COVERAGE "Known bugs" for the
+production regressions the port caught.
+
+## The suite has three layers
+
+### 1. Unit + integration suite (`res://tests/test_runner.tscn`, ~1s)
+
+Fast, deterministic checks against production classes. Mocks are only ever
+used for Godot nodes/autoloads — never for game logic.
+
+### 2. Boot smoke test (`tests/smoke/smoke_runner.gd`, ~5s)
+
+Boots the **real game** (`game.tscn`) headless via the existing debug harness
+(`tests/debug_map.gd`), on the real three-lane map, runs 300 simulation ticks,
+and asserts the game actually plays: units spawn, at least one unit moves,
+nothing is freed mid-run. The debug scenario spawns the leader and test pawn
+far apart on purpose, so the AI has to move (pursue or lane-walk) to engage.
+Run it directly with:
+
+```
+godot --headless --path prototype res://game.tscn -- --smoke --smoke-ticks=300
+```
+
+### 3. Golden replay (tests/golden/)
+
+A **deterministic checkpointed end-state check** of the real game — NOT a
+per-frame replay. Seeded RNG (`seed(20240101)`) + `--fixed-fps 60` + skipping
+`game.rng.randomize()` (`--golden`) make 300 simulation frames reproducible;
+the runner serializes game state at frames 100/200/300 and compares against
+the committed snapshot (`tests/golden/replay_300.txt`).
+
+The committed snapshot was **re-recorded on the post-restructure base** — the
+pre-restructure checkpoints pinned deleted behavior (DECISIONS.md D11/D12).
+If it fails: fix the regression, or — if the behavior change is intended —
+re-record with `--golden-update` and say why in the commit.
+
+### The script-error budget
+
+`run_suite.sh` fails on **any** `SCRIPT ERROR` line in any run's output —
+even when all assertions pass. Script errors can silently swallow assertions
+(a failing expression aborts the statement containing it), so a
+"passing" suite with script errors is lying. The budget makes that impossible
+to miss.
+
+### Tamper-evidence
+
+The runner cannot *accidentally* produce a green result:
+- `run_tests.gd` must emit `TESTS_COMPLETE: passed=N failed=0`, and `N` must
+  equal `EXPECTED_UNIT_TESTS` **pinned in run_suite.sh** (a different file).
+  A crashed, hung, or accidentally-bypassed runner fails loudly, as does
+  accidental test-count drift.
+- All Godot invocations run under a per-step timeout — a hung runner fails
+  instead of hanging CI.
+- The boot smoke asserts behavior (units exist, something moves, nothing is
+  freed mid-run), and the golden replay pins the full game state, so a
+  broken simulation fails even with zero assertion errors.
+
+Honest limit: a *deliberate* forger can edit the reporter itself to print a
+fake token — self-reporting cannot exclude that, only make it conscious
+(the pin is in a second file, so drift/bypass is caught, not forgery).
+
+## Test classes
+
+| Test File | Coverage Target | Kind |
+|-----------|----------------|------|
+| `test_script_parse.gd` | Every `.gd` file compiles | Smoke |
+| `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
+| `test_helpers.gd` | Shared helpers are load-bearing (snapshot/mock-goal self-tests) | Unit |
+| `test_planner.gd` | Planner mechanics (cost ordering, precondition chains, dead ends) via contract doubles | Unit |
+| `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
+| `test_agent_signals.gd` | Real `Agent`: goal/plan/action signal wiring and lifecycle | Unit |
+| `test_agent_target.gd` | ChooseTarget.set_target sync (unit target, hunting, attack-count reset, modifier cleanup) | Unit |
+| `test_agent_tactic.gd` | Tactic speed bonuses + Recover.should_retreat thresholds | Unit |
+| `test_action_lifecycles.gd` | Action lifecycle semantics through the REAL Agent (plan replacement, signal-driven entry, multi-tick completion) | Unit |
+| `test_goal_interactions.gd` | Goal selection contract: tie-breaking, no-valid-goals, is_valid side effects, priority changes | Unit |
+| `test_goap_integration.gd` | Real Agent + real planner path: goal selection → plan install → follow → completion | Integration |
+| `test_modifiers.gd` | `skills/modifiers.gd` public methods (null-safe lookups) | Unit |
+| `test_passive_skills.gd` | `hit_modifiers` combat resolution (dodge/stun/crit/cleave/pierce/bleed/agile/counter, deterministic via skill injection) + get_value | Unit |
+| `test_spawns.gd` | `map/spawns.gd` camp_hire pooled-gold semantics, cemetery, lane tactics | Unit |
+| `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — real `_get_mirrored_coords`/`_get_changed_cells` | Unit |
+| `test_collisions.gd` | Quadtree + geometry helpers | Unit |
+| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking | Unit |
+| `test_navigation.gd` | Jump-point pathfinder (routes, walls, sealed maps) + NavigateAction→Navigation dispatch | Unit |
+| `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
+| `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
+| `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
+
+*(golden replay — snapshot file, not a test class; see section above)*
+
+## Rules for new tests (see also tests/README.md)
+
+1. Tests must **fail when production behavior breaks** — never assert what a
+   mock does. Before merging a new test, break the production line it guards
+   once and watch the test fail.
+2. Every bug fix ships with a regression test.
+3. The suite must stay green **with zero script errors**. Script errors fail
+   CI even when assertions pass.
+
+## Known bugs
+
+Production regressions found by the port and FIXED (each regression-tested):
+- `action_contract.is_valid` default was flipped to `false` in the
+  restructure, silently unplanning every action without an override — NINE
+  production actions (melee_attack, range_attack, hide, taxes, mine, prayer,
+  help_friend, return_lumber, conquer) were dead in the planner. Restored
+  the documented default (`true`); ChooseTarget remains the documented
+  always-false exception via its own override.
+- `get_lumber.is_valid` returned null for an unset `is_game_active` key
+  (typed `-> bool` null-return, the same bug class the old suite documented
+  for `wait_out`); the script error aborted the planner's action loop
+  mid-search and broke Recover/NeedSafety planning. Now
+  `get_state(key, false)`.
+- `spawns.gd camp_hire`: no affordability gate + full per-leader deduction →
+  now pooled check + even split (lumberjack_hire convention); gold-less
+  leader nodes are skipped instead of crashing.
+- `passive_skills.gd`: null-safe leader-table lookups (missing entries
+  crashed `get_value`/`hit_modifiers`) and the caller's `counter` flag is
+  preserved — resetting it to `true` silently disabled stun/critical/
+  cleave/pierce/bleed for `counter=false` callers, including the counter
+  branch itself.
+- `modifiers.gd get_value/get_velocity`: crashed on units without the
+  queried property, unknown modifier names (warned), or a missing agent.
+- `ui/minimap.gd`: headless runs stalled forever awaiting
+  `RenderingServer.frame_post_draw` (no frames are drawn headless), blocking
+  the map-ready chain before any unit spawned → headless mode short-circuits
+  to `map_loaded`.
+
+DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
+deliberately):
+- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation
+  logic commented out in the restructure). Arrival works only because
+  `Collisions` calls `is_at_destination`/`on_arrive` directly. Pinned by
+  `test_arrive_at_destination.gd`; flag for upstream — if the commented-out
+  activation is restored, this test flips with it. Note: `recover.gd
+  on_arrive` passes the AGENT into `on_arrive(unit)` — inconsistent with
+  `collisions.gd`, which passes the unit.
+- An empty skill dict in the `Skills.leader` table makes `hit_modifiers`
+  return null — a latent caller crash. Pinned by
+  `test_passive_skills.gd _test_empty_skill_dict_returns_null`
+  (production .tres data never produces empty dicts).
+- `lumberjack_hire` has no affordability gate — a 0-gold leader is driven
+  negative. Pinned by
+  `test_spawns.gd _test_lumberjack_hire_has_no_affordability_gate`.
+
+## Known coverage limits
+
+- The headless smoke boots a slightly divergent UI path: minimap skips its
+  viewport snapshot (no frames are drawn headless). UI-only tail code is
+  therefore not exercised headless.
+- The orders/tactics panel's button UI is not unit-tested in isolation: the
+  full build (`build_leaders` → tactics buttons) only works inside the live
+  game scene. The integration path (map_loaded → setup_leaders →
+  build_leaders → leaders_built) IS exercised by every boot-smoke run with
+  zero script errors.
+- `addons/` (including `addons/gui`) is excluded from the whole-project
+  smoke tests: third-party code, not ours to gate.
+- `spawns.gd` floor-split payment can leave a remainder unpaid (cost 3 across
+  2 leaders deducts 2 total). Accepted deliberately — identical to the
+  pre-existing `lumberjack_hire` convention; the pooled check still gates
+  every hire.
+- Sabotage verification (breaking a production line and watching the suite
+  fail) was performed on the pre-port suite; the ported assertions carry the
+  same structure but have not all been re-sabotaged individually.
+
+## Remaining high-priority gaps
+
+1. Per-action simulation checks: each registered action can be planned and
+   executed inside the boot smoke scenario.
+2. Economy coverage beyond camp_hire (lumber, taxes).
+3. Re-sabotage the ported planner/agent assertions against the new base.
