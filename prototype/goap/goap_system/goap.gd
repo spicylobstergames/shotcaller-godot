@@ -14,17 +14,8 @@ var _action_planner = preload("res://goap/goap_system/planner.gd").new()
 var _actions = preload("res://goap/game_logic/action_registry.gd").new()
 var _goals = preload("res://goap/game_logic/goal_registry.gd").new()
 
-@export var use_native_movement := true
-@export var use_native_blocking := true
-@export var use_native_pathfinding := false
-
-var move
-var navigation
-
 
 func _ready():
-	move = get_action("MoveAction")
-	navigation = get_action("NavigateAction")
 	_action_planner.set_actions(_actions.get_all_actions())
 
 
@@ -42,5 +33,8 @@ func get_action(action):
 
 func physics_process(units, delta):
 	for unit in units:
-		if unit.agent:
-			unit.agent.process(delta)
+		if unit.agent and !unit.dead and unit.ai_delay == 0:
+			unit.agent.goap_process(delta)
+			unit.ai_delay = 6
+		elif unit.agent and !unit.dead:
+			unit.ai_delay -= 1
