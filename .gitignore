@@ -40,3 +40,4 @@ prototype/Shotcall.apk.idsig
 .godot-home/
 .test-logs/
 .clean-verify*/
+.tools/godot/
