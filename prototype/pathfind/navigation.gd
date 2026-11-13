@@ -1,13 +1,15 @@
 extends Node
 
+const Finder = preload("jump_point_finder.gd")
+
 var path_grid
 var path_finder
 var path_line
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
-
 
 
 func setup_pathfind():
