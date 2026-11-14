@@ -104,7 +104,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
-| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
@@ -239,6 +239,17 @@ Production regressions found by the port and FIXED (each regression-tested):
   attacked" evaluation saw the desired state as already satisfied and
   planned nothing (unit frozen mid-fight). `FriendsSafe.is_valid` now resets
   the fact while the goal is valid. Regression: `test_attack_lifecycle.gd`.
+- **Pursuing a blocked tile froze the unit** (found by live debugging,
+  FIXED): `Navigation.setup_pathfind` marks building tiles unwalkable and the
+  JPS returns no path INTO them, so `Navigate.move` silently no-oped when a
+  unit pursued a tower — `PursueEnemy` looped forever with a zeroed destiny
+  (the combat exit's `Move.stop`) and the unit stood frozen next to the
+  tower it was supposed to siege. `Navigate.move` now reports the failure,
+  and `PursueEnemy`/`AttackEnemy` fall back to walking straight at the
+  target (melee closes into attack range and sieges; the pathfinder is
+  re-consulted every tick, so pathing resumes automatically if a route
+  appears). Regression: `test_attack_lifecycle.gd` (blocked-tile contract +
+  pursue fallback).
 - **Out-of-sight live target deadlock** (found by live debugging, FIXED):
   a live target was never released when it left the unit's vision — lane
   curves carry units past towers they had targeted, and at the vision

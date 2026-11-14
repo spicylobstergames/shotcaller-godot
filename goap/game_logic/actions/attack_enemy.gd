@@ -74,7 +74,11 @@ func enter(agent):
 		point(unit, target.global_position + target.collision_position)
 	else:
 		unit.final_destiny = target.global_position
-		Goap.get_action("Navigate").move(unit, target.global_position)
+		# Same fallback as PursueEnemy._approach: buildings sit on blocked
+		# tiles, so Navigate.move finds no path into them — walk straight at
+		# the target to close into attack range instead of freezing.
+		if not Goap.get_action("Navigate").move(unit, target.global_position):
+			Goap.get_action("Move").move(unit, target.global_position)
 
 
 func on_animation_end(agent):
@@ -90,7 +94,8 @@ func on_animation_end(agent):
 			point(unit, target.global_position + target.collision_position)
 		else:
 			unit.final_destiny = target.global_position
-			Goap.get_action("Navigate").move(unit, target.global_position)
+			if not Goap.get_action("Navigate").move(unit, target.global_position):
+				Goap.get_action("Move").move(unit, target.global_position)
 	else:
 		Goap.get_action("Move").stop(unit)
 

@@ -449,6 +449,49 @@ func run(harness) -> void:
 	agent9.free()
 	ws6.restore()
 
+	# --- 12. Pursuing a target on a BLOCKED tile (a building):
+	# Navigation.setup_pathfind marks building tiles unwalkable and the JPS
+	# returns no path into them — Navigate.move used to silently no-op and
+	# PursueEnemy froze forever with a zeroed destiny ("pursuing" a tower it
+	# could never reach). Navigate.move now reports the failure and PursueEnemy
+	# falls back to walking straight at the target (siege works).
+	var ws7 = WorldStateSnapshot.new()
+	ws7.set_state("map", FakeNavMap.new())
+	var saved_grid = Navigation.path_grid
+	var saved_finder = Navigation.path_finder
+	var JpsFinder = preload("res://pathfind/jump_point_finder.gd")
+	Navigation.path_grid = JpsFinder.GridGD.Grid.new(16, 16)
+	Navigation.path_finder = JpsFinder.JumpPointFinder.new()
+
+	var unit11 = TestUnit.new()
+	unit11.moves = true
+	unit11.vision = 140.0
+	unit11.global_position = Vector2(100, 100)
+	var agent11 = _make_agent(unit11)
+	var tower11 = TestUnit.new()
+	tower11.team = "red"
+	tower11.global_position = Vector2(352, 100)  # tile (5,1) — will be blocked
+	unit11.target = tower11
+
+	# Mark the tower's tile unwalkable, like setup_pathfind does for buildings.
+	Navigation.path_grid.setWalkableAt(5, 1, false)
+
+	harness.check(Goap.get_action("Navigate").move(unit11, tower11.global_position) == false,
+		"Blocked target: Navigate.move reports the failure (was a silent no-op).")
+
+	# PursueEnemy.perform falls back to a direct approach: the unit closes the
+	# distance instead of standing forever.
+	Goap.get_action("PursueEnemy").perform(agent11, 0.0)
+	harness.check(unit11.current_destiny == tower11.global_position,
+		"Blocked target: PursueEnemy falls back to approaching the tower directly.")
+	harness.check(unit11.state == "move",
+		"Blocked target: the fallback starts stepping toward the tower.")
+	agent11.free()
+
+	Navigation.path_grid = saved_grid
+	Navigation.path_finder = saved_finder
+	ws7.restore()
+
 	# --- 5. Ranged hits go to the victim, not the shooter ---
 	var range_action = RangeAttackScript.new()
 	var shooter = TestUnit.new()
@@ -486,6 +529,10 @@ class _FakeMap:
 	var size := Vector2(2048, 2048)
 
 
-# Node2D stand-in for get_lane_path's castle lookup (get_node_or_null).
+# Node2D stand-in for get_lane_path's castle lookup (get_node_or_null) and
+# find_custom_path's tile metrics (tile_size / half_tile_size).
 class FakeNavMap:
 	extends Node2D
+	var tile_size := 64
+	var half_tile_size := 32
+	var size := Vector2(2048, 2048)
