@@ -90,7 +90,7 @@
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,352.00)
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,416.00)
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,480.00)
-arthur|leader|blue|hp=10000|lvl=1|dead=false|pos=(224.73,224.76)
+arthur|leader|blue|hp=10000|lvl=1|dead=false|pos=(200.00,200.00)
 barrack_bot|building|blue|hp=2000|lvl=1|dead=false|pos=(352.00,1969.00)
 barrack_bot|building|red|hp=2000|lvl=1|dead=false|pos=(1952.00,353.00)
 barrack_mid|building|blue|hp=2000|lvl=1|dead=false|pos=(288.00,1841.00)
@@ -106,8 +106,8 @@ castle|building|blue|hp=2400|lvl=1|dead=false|pos=(156.00,1977.00)
 castle|building|red|hp=2400|lvl=1|dead=false|pos=(1956.00,169.00)
 church|building|blue|hp=3600|lvl=1|dead=false|pos=(1568.00,1778.00)
 church|building|red|hp=3600|lvl=1|dead=false|pos=(544.00,371.00)
-infantry|pawn|red|hp=10000|lvl=1|dead=false|pos=(855.77,884.52)
-lumberjack|worker|blue|hp=180|lvl=1|dead=false|pos=(514.15,1039.78)
+infantry|pawn|red|hp=10000|lvl=1|dead=false|pos=(909.86,817.21)
+lumberjack|worker|blue|hp=180|lvl=1|dead=false|pos=(479.00,1029.00)
 lumbermill|building|neutral|hp=1200|lvl=1|dead=false|pos=(419.00,566.00)
 lumbermill|building|neutral|hp=1200|lvl=1|dead=false|pos=(1693.00,1591.00)
 mine|building|neutral|hp=1000|lvl=1|dead=false|pos=(417.00,1267.00)
@@ -126,7 +126,7 @@ tower_top_1|building|blue|hp=1600|lvl=1|dead=false|pos=(158.00,412.00)
 tower_top_1|building|red|hp=1600|lvl=1|dead=false|pos=(416.00,164.00)
 tower_top_2|building|blue|hp=1600|lvl=1|dead=false|pos=(160.00,1058.00)
 tower_top_2|building|red|hp=1600|lvl=1|dead=false|pos=(1056.00,157.00)
-time=1
+time=2
 player_kills=0
 enemy_kills=0
 player_deaths=0
@@ -223,7 +223,7 @@ enemy_deaths=0
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,352.00)
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,416.00)
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,480.00)
-arthur|leader|blue|hp=10000|lvl=1|dead=false|pos=(242.05,242.10)
+arthur|leader|blue|hp=10000|lvl=1|dead=false|pos=(200.00,200.00)
 barrack_bot|building|blue|hp=2000|lvl=1|dead=false|pos=(352.00,1969.00)
 barrack_bot|building|red|hp=2000|lvl=1|dead=false|pos=(1952.00,353.00)
 barrack_mid|building|blue|hp=2000|lvl=1|dead=false|pos=(288.00,1841.00)
@@ -239,8 +239,8 @@ castle|building|blue|hp=2400|lvl=1|dead=false|pos=(156.00,1977.00)
 castle|building|red|hp=2400|lvl=1|dead=false|pos=(1956.00,169.00)
 church|building|blue|hp=3600|lvl=1|dead=false|pos=(1568.00,1778.00)
 church|building|red|hp=3600|lvl=1|dead=false|pos=(544.00,371.00)
-infantry|pawn|red|hp=10000|lvl=1|dead=false|pos=(859.81,908.68)
-lumberjack|worker|blue|hp=180|lvl=1|dead=false|pos=(538.56,1041.97)
+infantry|pawn|red|hp=10000|lvl=1|dead=false|pos=(961.02,789.18)
+lumberjack|worker|blue|hp=180|lvl=1|dead=false|pos=(479.00,1029.00)
 lumbermill|building|neutral|hp=1200|lvl=1|dead=false|pos=(419.00,566.00)
 lumbermill|building|neutral|hp=1200|lvl=1|dead=false|pos=(1693.00,1591.00)
 mine|building|neutral|hp=1000|lvl=1|dead=false|pos=(417.00,1267.00)
@@ -259,7 +259,7 @@ tower_top_1|building|blue|hp=1600|lvl=1|dead=false|pos=(158.00,412.00)
 tower_top_1|building|red|hp=1600|lvl=1|dead=false|pos=(416.00,164.00)
 tower_top_2|building|blue|hp=1600|lvl=1|dead=false|pos=(160.00,1058.00)
 tower_top_2|building|red|hp=1600|lvl=1|dead=false|pos=(1056.00,157.00)
-time=1
+time=3
 player_kills=0
 enemy_kills=0
 player_deaths=0
@@ -356,7 +356,7 @@ enemy_deaths=0
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,352.00)
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,416.00)
 @StaticBody2D@#|block||hp=100|lvl=1|dead=false|pos=(2080.00,480.00)
-arthur|leader|blue|hp=10000|lvl=1|dead=false|pos=(258.95,259.02)
+arthur|leader|blue|hp=10000|lvl=1|dead=false|pos=(200.00,200.00)
 barrack_bot|building|blue|hp=2000|lvl=1|dead=false|pos=(352.00,1969.00)
 barrack_bot|building|red|hp=2000|lvl=1|dead=false|pos=(1952.00,353.00)
 barrack_mid|building|blue|hp=2000|lvl=1|dead=false|pos=(288.00,1841.00)
@@ -372,8 +372,8 @@ castle|building|blue|hp=2400|lvl=1|dead=false|pos=(156.00,1977.00)
 castle|building|red|hp=2400|lvl=1|dead=false|pos=(1956.00,169.00)
 church|building|blue|hp=3600|lvl=1|dead=false|pos=(1568.00,1778.00)
 church|building|red|hp=3600|lvl=1|dead=false|pos=(544.00,371.00)
-infantry|pawn|red|hp=10000|lvl=1|dead=false|pos=(863.76,932.27)
-lumberjack|worker|blue|hp=180|lvl=1|dead=false|pos=(562.38,1044.11)
+infantry|pawn|red|hp=10000|lvl=1|dead=false|pos=(1012.18,761.16)
+lumberjack|worker|blue|hp=180|lvl=1|dead=false|pos=(479.00,1029.00)
 lumbermill|building|neutral|hp=1200|lvl=1|dead=false|pos=(419.00,566.00)
 lumbermill|building|neutral|hp=1200|lvl=1|dead=false|pos=(1693.00,1591.00)
 mine|building|neutral|hp=1000|lvl=1|dead=false|pos=(417.00,1267.00)
@@ -392,7 +392,7 @@ tower_top_1|building|blue|hp=1600|lvl=1|dead=false|pos=(158.00,412.00)
 tower_top_1|building|red|hp=1600|lvl=1|dead=false|pos=(416.00,164.00)
 tower_top_2|building|blue|hp=1600|lvl=1|dead=false|pos=(160.00,1058.00)
 tower_top_2|building|red|hp=1600|lvl=1|dead=false|pos=(1056.00,157.00)
-time=2
+time=5
 player_kills=0
 enemy_kills=0
 player_deaths=0
