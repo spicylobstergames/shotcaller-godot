@@ -30,6 +30,8 @@ const NavigationTests = preload("res://tests/unit/test_navigation.gd")
 const ArriveAtDestinationTests = preload("res://tests/unit/test_arrive_at_destination.gd")
 const OrderActionTests = preload("res://tests/unit/test_order_action.gd")
 const AttackPrioritiesTests = preload("res://tests/unit/test_attack_priorities.gd")
+const AttackLifecycleTests = preload("res://tests/unit/test_attack_lifecycle.gd")
+const SightRadiusTests = preload("res://tests/unit/test_sight_radius.gd")
 
 var tests_run := 0
 var failures: Array[String] = []
@@ -38,27 +40,29 @@ var failures: Array[String] = []
 func _ready() -> void:
 	# Let project autoloads finish _ready before tests call into game services.
 	await get_tree().process_frame
-	CollisionTests.new().run(self)
-	ModifiersTests.new().run(self)
-	PassiveSkillsTests.new().run(self)
-	SpawnsTests.new().run(self)
-	MirrorTilesTests.new().run(self)
-	ScriptParseTests.new().run(self)
-	SceneInstantiateTests.new().run(self)
-	HelpersTests.new().run(self)
-	PlannerTests.new().run(self)
-	PlannerRealActionsTests.new().run(self)
-	AgentSignalsTests.new().run(self)
-	AgentTargetTests.new().run(self)
-	AgentTacticTests.new().run(self)
-	ActionLifecyclesTests.new().run(self)
-	GoalInteractionsTests.new().run(self)
-	GoapIntegrationTests.new().run(self)
-	MovementTests.new().run(self)
-	NavigationTests.new().run(self)
-	ArriveAtDestinationTests.new().run(self)
-	OrderActionTests.new().run(self)
-	AttackPrioritiesTests.new().run(self)
+	_run_suite("Collision", CollisionTests)
+	_run_suite("Modifiers", ModifiersTests)
+	_run_suite("PassiveSkills", PassiveSkillsTests)
+	_run_suite("Spawns", SpawnsTests)
+	_run_suite("MirrorTiles", MirrorTilesTests)
+	_run_suite("ScriptParse", ScriptParseTests)
+	_run_suite("SceneInstantiate", SceneInstantiateTests)
+	_run_suite("Helpers", HelpersTests)
+	_run_suite("Planner", PlannerTests)
+	_run_suite("PlannerRealActions", PlannerRealActionsTests)
+	_run_suite("AgentSignals", AgentSignalsTests)
+	_run_suite("AgentTarget", AgentTargetTests)
+	_run_suite("AgentTactic", AgentTacticTests)
+	_run_suite("ActionLifecycles", ActionLifecyclesTests)
+	_run_suite("GoalInteractions", GoalInteractionsTests)
+	_run_suite("GoapIntegration", GoapIntegrationTests)
+	_run_suite("Movement", MovementTests)
+	_run_suite("Navigation", NavigationTests)
+	_run_suite("ArriveAtDestination", ArriveAtDestinationTests)
+	_run_suite("OrderAction", OrderActionTests)
+	_run_suite("AttackPriorities", AttackPrioritiesTests)
+	_run_suite("AttackLifecycle", AttackLifecycleTests)
+	_run_suite("SightRadius", SightRadiusTests)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line
 	# against the pinned EXPECTED_UNIT_TESTS count in a separate file, so a
@@ -72,6 +76,13 @@ func _ready() -> void:
 			push_error(failure)
 		push_error("%d of %d tests failed." % [failures.size(), tests_run])
 		get_tree().quit(1)
+
+
+# Print each suite as it starts: if a suite hangs, the CI log shows the
+# exact one instead of a silent gap after "[1/3] Unit + integration suite".
+func _run_suite(name: String, suite) -> void:
+	print("--- running suite: ", name)
+	suite.new().run(self)
 
 
 func check(condition: bool, description: String) -> void:

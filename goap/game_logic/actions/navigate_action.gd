@@ -143,19 +143,26 @@ func in_limits(target_point):
 	)
 
 
-func move(unit, target_point: Vector2):
+func move(unit, target_point: Vector2) -> bool:
 	if not unit or target_point == Vector2.ZERO:
-		return
+		return false
 	var path = find(unit.global_position, target_point)
 	if not path.is_empty():
 		unit.final_destiny = target_point
 		follow_path(unit, path)
-		return
+		return true
 	if _is_same_tile(unit.global_position, target_point):
 		unit.current_path.clear()
 		unit.current_destiny = target_point
 		unit.final_destiny = target_point
 		Goap.get_action("Move").point(unit, target_point)
+		return true
+	# No route to the target (e.g. it sits on a blocked tile — buildings are
+	# marked unwalkable in Navigation.setup_pathfind, and the JPS returns no
+	# path into them). Callers MUST handle the false return: silently doing
+	# nothing here left units frozen forever "pursuing" a tower they could
+	# never reach (destiny stayed zeroed after the combat exit's Move.stop).
+	return false
 
 
 func _is_same_tile(from: Vector2, to: Vector2) -> bool:
@@ -171,6 +178,13 @@ func follow_path(unit, new_path):
 		unit.agent.set_state("has_path", true)
 		unit.current_destiny = next_point
 		unit.agent.set_state("has_destiny", true)
+		# Hand the waypoint to the movement driver. Only state == "move"
+		# units are stepped (Collisions.physics_process), and Move.move is
+		# the one place that sets it — plans without a Move action (e.g. the
+		# PursueEnemy plan [ChooseTarget, PursueEnemy, AttackEnemy]) used to
+		# set current_destiny here and then stand still forever "pursuing" a
+		# target they could never reach (see COVERAGE.md known bugs).
+		Goap.get_action("Move").move(unit, next_point)
 
 
 func cut_path(unit, path):

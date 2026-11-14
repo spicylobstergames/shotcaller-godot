@@ -33,5 +33,9 @@ func get_action(action):
 
 func physics_process(units, delta):
 	for unit in units:
-		if unit.agent:
-			unit.agent.goap_process(delta)
+		if unit.agent and !unit.dead:
+			if(unit.agent.frames_til_next_process == 0):
+				unit.agent.goap_process(delta)
+				unit.agent.frames_til_next_process = 6
+			else:
+				unit.agent.frames_til_next_process -= 1

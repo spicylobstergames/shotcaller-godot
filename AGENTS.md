@@ -3,13 +3,13 @@
 ## Project context
 
 - **Engine:** Godot 4.7, GDScript
-- **Project root:** `prototype/` (relative to repo root)
-- **Main scene:** `res://game.tscn` (set in `prototype/project.godot`)
-- **GOAP system:** `prototype/goap/`
-- **Tests:** `prototype/tests/` (headless runner: `res://tests/test_runner.tscn`)
+- **Project root:** repo root (`project.godot` lives at the top level)
+- **Main scene:** `res://game.tscn` (set in `project.godot`)
+- **GOAP system:** `goap/`
+- **Tests:** `tests/` (headless runner: `res://tests/test_runner.tscn`)
 - **Run the test suite:**
   ```bash
-  ./prototype/tests/run_suite.sh /path/to/godot     # everything (~45s)
+  ./tests/run_suite.sh /path/to/godot     # everything (~45s)
   # Godot binary resolution: argument > GODOT env var > "godot" on PATH.
   ```
 - **GitHub Actions workflow:** `.github/workflows/tests.yml` — runs the suite on PRs and main pushes.
@@ -24,15 +24,15 @@
 - `run_suite.sh` pins the expected assertion count (`EXPECTED_UNIT_TESTS`).
   Adding tests → bump it. The suite failing with "ran N tests, expected M"
   is the reminder.
-- New test files must be registered in `prototype/tests/run_tests.gd` AND
+- New test files must be registered in `tests/run_tests.gd` AND
   have `run()` called in the registry list — both, or the count pin will
   catch it.
 - A **golden replay** (`tests/golden/`) checkpoints the real game's state at
   frames 100/200/300 of a deterministic run. If it fails, either fix the
   regression or — if the behavior change is intended — re-record with
   `--golden-update` and say why in the commit (DECISIONS.md D12).
-- Test conventions: `prototype/tests/README.md`. Coverage map, known bugs,
-  and pinned quirks: `prototype/tests/COVERAGE.md`.
+- Test conventions: `tests/README.md`. Coverage map, known bugs,
+  and pinned quirks: `tests/COVERAGE.md`.
 
 ## Architecture overview
 
@@ -42,14 +42,14 @@ Key files:
 
 | File | Role |
 |------|------|
-| `prototype/goap/goap_system/goap.gd` | Global autoload singleton — exposes planner, action/goal access, movement, and navigation. Calls `physics_process()` on all units each physics tick. |
-| `prototype/goap/goap_system/agent.gd` | Per-unit AI state machine — holds goals, current plan, current action, local state dictionary, and signal wiring to the unit. |
-| `prototype/goap/goap_system/planner.gd` | Backward-search planner — generates action plans and selects the lowest-cost. Rejects branches whose preconditions contradict facts already satisfied in the current branch. |
-| `prototype/goap/goap_system/action_contract.gd` | Base class for all GOAP actions. Methods: `is_valid()`, `get_cost()`, `get_preconditions()`, `get_effects()`, `enter()`, `perform()`, `exit()`. |
-| `prototype/goap/goap_system/goal_contract.gd` | Base class for all GOAP goals. Methods: `is_valid()`, `priority()`, `get_desired_state()`. |
-| `prototype/goap/game_logic/action_registry.gd` | Creates and stores all action instances (shared, singletons). |
-| `prototype/goap/game_logic/goal_registry.gd` | Stores all goal instances by name. |
-| `prototype/goap/game_logic/world_state.gd` | Global autoload for world-wide state (teams, units lists, map, etc.). |
+| `goap/goap_system/goap.gd` | Global autoload singleton — exposes planner, action/goal access, movement, and navigation. Calls `physics_process()` on all units each physics tick. |
+| `goap/goap_system/agent.gd` | Per-unit AI state machine — holds goals, current plan, current action, local state dictionary, and signal wiring to the unit. |
+| `goap/goap_system/planner.gd` | Backward-search planner — generates action plans and selects the lowest-cost. Rejects branches whose preconditions contradict facts already satisfied in the current branch. |
+| `goap/goap_system/action_contract.gd` | Base class for all GOAP actions. Methods: `is_valid()`, `get_cost()`, `get_preconditions()`, `get_effects()`, `enter()`, `perform()`, `exit()`. |
+| `goap/goap_system/goal_contract.gd` | Base class for all GOAP goals. Methods: `is_valid()`, `priority()`, `get_desired_state()`. |
+| `goap/game_logic/action_registry.gd` | Creates and stores all action instances (shared, singletons). |
+| `goap/game_logic/goal_registry.gd` | Stores all goal instances by name. |
+| `goap/game_logic/world_state.gd` | Global autoload for world-wide state (teams, units lists, map, etc.). |
 
 ### The decision loop
 
@@ -144,8 +144,8 @@ The `MoveAction` precondition requires `has_path: false`. This is only satisfied
 
 Every AI development task must include verification:
 
-- **New action or goal:** Add at least one test in `prototype/tests/unit/` that exercises the new behavior (planning, validity, lifecycle).
-- **Modified planner or agent:** Run the full test suite (`godot --headless --path prototype res://tests/test_runner.tscn`) and report results.
+- **New action or goal:** Add at least one test in `tests/unit/` that exercises the new behavior (planning, validity, lifecycle).
+- **Modified planner or agent:** Run the full test suite (`godot --headless --path . res://tests/test_runner.tscn`) and report results.
 - **Modified goal priority:** Test that the correct competing goal is selected.
 - **Modified planner precondition:** Test both a valid plan and an invalid one.
 

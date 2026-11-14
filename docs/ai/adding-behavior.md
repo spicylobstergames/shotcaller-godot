@@ -334,6 +334,6 @@ func exit(agent):
 4. [ ] Write the script extending the appropriate contract.
 5. [ ] Register in the appropriate registry (`action_registry.gd` or `goal_registry.gd`).
 6. [ ] If it's a new goal, add it to the agent's `goals_list` in the relevant scene.
-7. [ ] Add at least one test in `prototype/tests/unit/` that exercises the new behavior.
+7. [ ] Add at least one test in `tests/unit/` that exercises the new behavior.
 8. [ ] Run the full test suite.
 9. [ ] Report which checks you ran, which passed, and anything you couldn't verify.
