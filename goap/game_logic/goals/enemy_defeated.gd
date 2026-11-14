@@ -17,14 +17,22 @@ func is_valid(agent) -> bool:
 	# agent holds EnemyDefeated with no actions forever (agent.gd only replans
 	# when the goal changes).
 	agent.set_state("enemy_dead", false)
-	# Release a dead/invalid target reference. Nothing else clears unit.target
-	# if AttackEnemy never runs again after the kill: goap_process re-selects
-	# the goal BEFORE perform() sees the corpse, so a goal switch (e.g. a
-	# brief FriendsSafe window) or the target dying later to someone else
-	# leaves the corpse held — which blocks WalkLane (truthy unit.target) and
-	# ChooseTarget (!unit.target), and the unit stands idle after the fight.
+	# Release a dead/invalid/out-of-sight target reference. Nothing else
+	# clears unit.target: goap_process re-selects the goal BEFORE perform()
+	# sees a corpse, so a goal switch (e.g. a brief FriendsSafe window) or
+	# the target dying later leaves the corpse held; and a LIVE target that
+	# drifts out of vision (e.g. a lane curve taking the unit past a tower
+	# it had targeted) is likewise never released. Either way the truthy
+	# unit.target blocks WalkLane (truthy target) and ChooseTarget
+	# (!unit.target) — the unit deadlocks at goal=null between "the enemy is
+	# in sight" and "I have a target".
 	var target = unit.target
-	if target != null and (not is_instance_valid(target) or target.dead):
+	if target != null and (
+		not is_instance_valid(target)
+		or target.dead
+		or unit.global_position.distance_to(target.global_position)
+			> Modifiers.get_value(unit, "vision")
+	):
 		agent.set_state("target", null)
 	var enemies = unit.get_units_in_sight({ "team": unit.opponent_team() })
 	agent.set_state("opponents_in_sight", enemies)

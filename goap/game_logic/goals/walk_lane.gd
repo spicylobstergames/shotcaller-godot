@@ -46,6 +46,13 @@ func enter(agent):
 			is_lane_route = false
 			break
 	if is_lane_route:
+		# The route is intact, but its handoff to the stepper may have been
+		# lost: leaving a combat action zeroes current_destiny (PursueEnemy/
+		# AttackEnemy exit -> Move.stop), and Move.enter then walks toward
+		# the map origin. Re-pop the NEXT waypoint without re-deriving —
+		# this is what keeps the unit on its lane after a fight.
+		if unit.current_destiny == Vector2.ZERO:
+			Goap.get_action("Navigate").enter(agent)
 		return
 	unit.current_path = unit.cut_path(lane_path)
 	# The planner runs BEFORE goal.enter and may have skipped Navigate

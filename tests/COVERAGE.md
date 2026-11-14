@@ -104,7 +104,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
-| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop | Unit |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
@@ -239,6 +239,20 @@ Production regressions found by the port and FIXED (each regression-tested):
   attacked" evaluation saw the desired state as already satisfied and
   planned nothing (unit frozen mid-fight). `FriendsSafe.is_valid` now resets
   the fact while the goal is valid. Regression: `test_attack_lifecycle.gd`.
+- **Out-of-sight live target deadlock** (found by live debugging, FIXED):
+  a live target was never released when it left the unit's vision — lane
+  curves carry units past towers they had targeted, and at the vision
+  boundary the truthy `unit.target` blocked both EnemyDefeated (no enemies
+  in sight) and WalkLane (target held): permanent `goal=null` deadlock.
+  `EnemyDefeated.is_valid` now also releases a live target beyond vision.
+  Regression: `test_attack_lifecycle.gd`.
+- **Zeroed destiny after combat exit** (found by live debugging, FIXED):
+  leaving a combat action zeroes `current_destiny` (`PursueEnemy`/
+  `AttackEnemy` exit → `Move.stop`), and `Move.move` accepts a zero destiny
+  (`Navigate.move` guards it; `Move.move` did not) — the unit then walked
+  toward the map origin. `WalkLane.enter`'s in-progress-route branch now
+  re-pops the next waypoint (without re-deriving the route) whenever the
+  destiny was zeroed. Regression: `test_attack_lifecycle.gd`.
 - **Motionless pursuit** (found by live debugging, FIXED, inherited from
   upstream): pursuit plans (`[ChooseTarget, PursueEnemy, AttackEnemy]`)
   contain no Move action, and only `state == "move"` units are stepped by

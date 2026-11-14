@@ -40,6 +40,7 @@ class TestUnit:
 	var immune := false
 	var attacks := true
 	var moves := false  # building-like: targets must be in attack range
+	var vision := 140.0
 	var target = null
 	var last_target = null
 	var attack_count := 0
@@ -356,6 +357,29 @@ func run(harness) -> void:
 	harness.check(unit8.current_destiny == Vector2(55, 55),
 		"WalkLane: the in-flight destiny is untouched (no pinning at the lane start).")
 	agent8.free()
+
+	# --- 9c. Same, but with the destiny ZEROED by a combat action's exit
+	# (PursueEnemy/AttackEnemy exit -> Move.stop): the next waypoint must be
+	# re-popped (without re-deriving), or the unit walks toward the origin.
+	var unit10 = TestUnit.new()
+	unit10.moves = true
+	unit10.global_position = Vector2(0, 1024)
+	var agent10 = _make_agent(unit10)
+	agent10._state["lane"] = "mid"
+	agent10._state["has_destiny"] = true
+	unit10.current_path = [Vector2(2048, 1024)]
+	unit10.current_destiny = Vector2.ZERO  # Move.stop zeroed it
+
+	Goap.get_goal("WalkLane").enter(agent10)
+	# The kick hands the single remaining waypoint to the stepper
+	# (follow_path consumes it into current_destiny), so the path empties.
+	harness.check(unit10.current_path.is_empty(),
+		"Zeroed destiny: the lane route is NOT re-derived (waypoint handed to the stepper).")
+	harness.check(unit10.current_destiny == Vector2(2048, 1024),
+		"Zeroed destiny: the next waypoint is re-popped (no walk to the origin).")
+	harness.check(unit10.state == "move",
+		"Zeroed destiny: stepping resumes toward the lane waypoint.")
+	agent10.free()
 	ws5.restore()
 
 	# --- 10. FriendsSafe stale fact: HelpFriend writes friends_safe=true on
@@ -385,6 +409,45 @@ func run(harness) -> void:
 		"FriendsSafe: a stale fact no longer yields an empty plan (was frozen mid-fight).")
 	agent7.free()
 	ally_agent.free()
+
+	# --- 11. A LIVE target that drifts out of vision must be released:
+	# lane curves carry units past towers they had targeted; the truthy
+	# unit.target then blocked both EnemyDefeated (out of sight) and
+	# WalkLane (target held) — permanent deadlock at the vision boundary.
+	var ws6 = WorldStateSnapshot.new()
+	ws6.set_state("lanes", {"mid": [Vector2(0, 1024), Vector2(2048, 1024)]})
+	var unit9 = TestUnit.new()
+	unit9.moves = true
+	unit9.vision = 140
+	unit9.global_position = Vector2.ZERO
+	var agent9 = _make_agent(unit9)
+	agent9._state["lane"] = "mid"
+	var far_tower = TestUnit.new()
+	far_tower.team = "red"
+	far_tower.global_position = Vector2(500, 0)  # 500px — far beyond vision 140
+	unit9.target = far_tower
+	unit9.sight_list = []  # tower is out of sight
+
+	harness.check(Goap.get_goal("EnemyDefeated").is_valid(agent9) == false,
+		"Out-of-sight live target: EnemyDefeated is invalid.")
+	harness.check(unit9.target == null,
+		"Out-of-sight live target: released (was a permanent goal=null deadlock).")
+	var lane_goal9 = Goap.get_goal("WalkLane")
+	harness.check(lane_goal9.is_valid(agent9) == true,
+		"Out-of-sight live target: WalkLane resumes the lane walk.")
+
+	# A live target still in sight (and hittable) is KEPT — pursuit continues.
+	var near_enemy = TestUnit.new()
+	near_enemy.team = "red"
+	near_enemy.global_position = Vector2(100, 0)  # within vision 140
+	unit9.sight_list = [near_enemy]
+	unit9.target = near_enemy
+	harness.check(Goap.get_goal("EnemyDefeated").is_valid(agent9) == true,
+		"In-sight live target: EnemyDefeated stays valid.")
+	harness.check(unit9.target == near_enemy,
+		"In-sight live target: kept — pursuit continues.")
+	agent9.free()
+	ws6.restore()
 
 	# --- 5. Ranged hits go to the victim, not the shooter ---
 	var range_action = RangeAttackScript.new()
