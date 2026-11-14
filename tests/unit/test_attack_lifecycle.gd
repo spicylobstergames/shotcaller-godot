@@ -64,6 +64,8 @@ class TestUnit:
 	var ranged := false
 	var weapon = null
 	var projectiles: Array = []
+	var current_path: Array = []
+	var angle := 0.0
 
 	var hit_count := 0
 	var last_hit_attacker = null
@@ -203,6 +205,73 @@ func run(harness) -> void:
 		"Engagement: the unit aims at the live enemy.")
 	ws.restore()
 	agent.free()
+
+	# --- 6. A corpse held as unit.target is released even when the attack
+	# action never runs again (the goal re-selection race): the killer must
+	# resume lane-walking after the fight instead of idling forever.
+	var ws2 = WorldStateSnapshot.new()
+	ws2.set_state("lanes", {"mid": [Vector2(0, 1024), Vector2(2048, 1024)]})
+	var unit3 = TestUnit.new()
+	unit3.moves = true
+	unit3.global_position = Vector2.ZERO
+	var agent3 = _make_agent(unit3)
+	agent3._state["lane"] = "mid"
+	var corpse2 = TestUnit.new()
+	corpse2.team = "red"
+	corpse2.dead = true
+	unit3.target = corpse2  # killed by someone else; AttackEnemy.perform never saw it
+	unit3.sight_list = []   # no enemies left in vision
+
+	var combat_valid = Goap.get_goal("EnemyDefeated").is_valid(agent3)
+	harness.check(combat_valid == false,
+		"Post-kill: EnemyDefeated is invalid with no enemies in sight.")
+	harness.check(unit3.target == null,
+		"Post-kill: a held corpse target is released by the combat goal's fact maintenance.")
+	var lane_goal = Goap.get_goal("WalkLane")
+	harness.check(lane_goal.is_valid(agent3) == true,
+		"Post-kill: WalkLane becomes valid again (unit resumes walking, no more idle stuck).")
+	agent3.free()
+	ws2.restore()
+
+	# --- 7. An untargetable enemy (immune) in sight must not claim the goal:
+	# churches are immune and sit on the lanes; EnemyDefeated (priority 6)
+	# used to outrank WalkLane (priority 2) forever over them, freezing the
+	# unit in a plan churn that never selected a target.
+	var ws3 = WorldStateSnapshot.new()
+	ws3.set_state("lanes", {"mid": [Vector2(0, 1024), Vector2(2048, 1024)]})
+	var unit4 = TestUnit.new()
+	unit4.moves = true
+	unit4.global_position = Vector2.ZERO
+	var agent4 = _make_agent(unit4)
+	agent4._state["lane"] = "mid"
+	var shrine = TestUnit.new()
+	shrine.team = "red"
+	shrine.immune = true  # like res://unit/buildings/church.tscn
+	shrine.global_position = Vector2(50, 100)  # in vision
+	unit4.sight_list = [shrine]
+
+	harness.check(Goap.get_goal("EnemyDefeated").is_valid(agent4) == false,
+		"Immune enemy in sight: EnemyDefeated stays invalid (ChooseTarget refuses it).")
+	harness.check(lane_goal.is_valid(agent4) == true,
+		"Immune enemy in sight: WalkLane keeps the unit walking past it.")
+	agent4.free()
+	ws3.restore()
+
+	# --- 8. Pursuit movement: following a path must start stepping. Only
+	# state == "move" units are stepped, and pursue plans contain no Move
+	# action — Navigate used to set current_destiny and leave the unit frozen.
+	var unit5 = TestUnit.new()
+	unit5.moves = true
+	unit5.global_position = Vector2.ZERO
+	var agent5 = _make_agent(unit5)
+	Goap.get_action("Navigate").follow_path(unit5, [Vector2(100, 0), Vector2(200, 0)])
+	harness.check(unit5.current_destiny == Vector2(100, 0),
+		"Pursuit: follow_path sets the first waypoint as current_destiny.")
+	harness.check(unit5.state == "move",
+		"Pursuit: follow_path starts stepping (state=move) — no more motionless pursuit.")
+	harness.check(unit5.current_step != Vector2.ZERO,
+		"Pursuit: a step toward the waypoint is computed.")
+	agent5.free()
 
 	# --- 5. Ranged hits go to the victim, not the shooter ---
 	var range_action = RangeAttackScript.new()

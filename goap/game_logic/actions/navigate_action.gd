@@ -171,6 +171,13 @@ func follow_path(unit, new_path):
 		unit.agent.set_state("has_path", true)
 		unit.current_destiny = next_point
 		unit.agent.set_state("has_destiny", true)
+		# Hand the waypoint to the movement driver. Only state == "move"
+		# units are stepped (Collisions.physics_process), and Move.move is
+		# the one place that sets it — plans without a Move action (e.g. the
+		# PursueEnemy plan [ChooseTarget, PursueEnemy, AttackEnemy]) used to
+		# set current_destiny here and then stand still forever "pursuing" a
+		# target they could never reach (see COVERAGE.md known bugs).
+		Goap.get_action("Move").move(unit, next_point)
 
 
 func cut_path(unit, path):

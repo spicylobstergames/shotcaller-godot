@@ -327,7 +327,18 @@ func get_units_in_radius(radius, filters = {}, pos = self.global_position):
 
 func get_units_in_sight(filters = {}):
 	var current_vision = Modifiers.get_value(self, "vision")
-	return self.get_units_in_radius(current_vision, filters)
+	var neighbors = self.get_units_in_radius(current_vision, filters)
+	# The quadtree query over-returns: leaf cells contribute every body in any
+	# quadrant the circle merely overlaps, with no distance test. Sight is the
+	# authoritative input for targeting and goals (EnemyDefeated, ChooseTarget,
+	# NeedSafety, auras...), so enforce the real vision radius here — without
+	# this, units "see" enemies far across the map and lock onto phantoms they
+	# can never reach (post-kill chase-stuck; see COVERAGE.md known bugs).
+	var seen: Array = []
+	for unit2 in neighbors:
+		if self.global_position.distance_to(unit2.global_position) <= current_vision:
+			seen.append(unit2)
+	return seen
 
 
 func get_units_in_attack_range(filters = {}):

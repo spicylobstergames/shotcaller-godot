@@ -104,7 +104,8 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
-| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter) | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping | Unit |
+| `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
 
@@ -173,12 +174,46 @@ Production regressions found by the port and FIXED (each regression-tested):
   Fixed to `projectile.target.take_hit(unit1, projectile)` (and the pierce
   branch likewise). Regression: `test_attack_lifecycle.gd` (projectile hit
   direction).
-- Related, NOT fixed here (phantom sight): `Quadtree._get_bodies_in_radius`
-  has no per-body distance test in leaf cells — any quadrant the query
-  circle merely overlaps contributes ALL of its bodies. Sight queries
-  (vision 280) returned units 300–500px away live, keeping combat goals
-  valid with nothing near and making movers chase distant phantoms. Fixing
-  it changes sight semantics broadly; tracked separately.
+- **Phantom sight** (found by live debugging, FIXED after the stale-fact
+  freeze): `Quadtree._get_bodies_in_radius` has no per-body distance test in
+  leaf cells — any quadrant the query circle merely overlaps contributes ALL
+  of its bodies (sparse areas never split, so early-game cells span hundreds
+  of pixels). `Unit.get_units_in_sight` treated the result as authoritative:
+  live-measured sight lists contained enemies 300–500px away (vision 280)
+  and 735px away (vision 140). After the stale-fact freeze was fixed, this
+  became the remaining "stuck after killing" symptom — the killer
+  immediately re-acquired a phantom target it could never reach and stood
+  locked on it. Fixed at the sight layer: `get_units_in_sight` enforces the
+  real vision radius; raw radius queries keep their coarse semantics (every
+  other consumer — cleave, pierce, soft-repulsion — re-checks real distance
+  on candidates). Regression: `test_sight_radius.gd`.
+- **Corpse target hold** (found by live debugging, FIXED): `unit.target` was
+  never released when the attack action did not run again after the kill —
+  `goap_process` re-selects the goal BEFORE `AttackEnemy.perform` sees the
+  corpse, so a goal switch or the target dying later left the reference
+  held; the truthy `unit.target` then blocked `WalkLane.is_valid` and
+  `ChooseTarget.is_valid` and the unit idled at `goal=null` forever.
+  `EnemyDefeated.is_valid` now releases dead/invalid targets during its
+  per-frame fact maintenance. Regression: `test_attack_lifecycle.gd`.
+- **Untargetable-enemy goal hijack** (found by live debugging, FIXED):
+  `EnemyDefeated.is_valid` counted any enemy-shaped unit in sight, but
+  churches (`immune = true`) and other immune units can never be hit by
+  `ChooseTarget.can_hit`. The priority-6 combat goal therefore permanently
+  outranked WalkLane (priority 2) whenever an immune unit — a church on the
+  lane — was within vision, and the agent churned plans that never selected
+  a target: the unit stood frozen beside the church. The goal now requires
+  an actually targetable enemy (`select_target != null`). Regression:
+  `test_attack_lifecycle.gd`.
+- **Motionless pursuit** (found by live debugging, FIXED, inherited from
+  upstream): pursuit plans (`[ChooseTarget, PursueEnemy, AttackEnemy]`)
+  contain no Move action, and only `state == "move"` units are stepped by
+  `Collisions` — `Navigate.follow_path` set `current_destiny` without
+  setting the state, so a unit with a live target out of attack range stood
+  still forever "pursuing" it (the golden replay's leader stood at its spawn
+  point for 100 frames). `follow_path` now hands each waypoint to
+  `Move.move`, the established stepping driver; waypoint progression still
+  flows through the existing `ArriveAtDestination.on_arrive` →
+  `Navigate.next` machinery. Regression: `test_attack_lifecycle.gd`.
 
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):
