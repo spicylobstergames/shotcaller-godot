@@ -293,6 +293,12 @@ func run(harness) -> void:
 	# unit.current_path (PursueEnemy -> Navigate.move overwrites it with a
 	# tile path between fight points): the unit must resume its OWN lane from
 	# the NEAREST waypoint, not walk the stale path or backtrack to the start.
+	# The walking facts are seeded STALE, exactly as production leaves them
+	# after a finished route segment: has_destiny=true (set by follow_path,
+	# never cleared) makes the planner skip Navigate, and
+	# arrived_at_destination=true (on_arrive with an emptied path) makes
+	# Move.perform return false — the pre-fix unit froze at goal=WalkLane
+	# with a fresh path it never followed.
 	var ws4 = WorldStateSnapshot.new()
 	var lane_points := [Vector2(0, 1024), Vector2(2048, 1024)]
 	ws4.set_state("lanes", {"mid": lane_points})
@@ -302,27 +308,58 @@ func run(harness) -> void:
 	unit6.global_position = Vector2(600, 600)  # nearer to the first waypoint
 	var agent6 = _make_agent(unit6)
 	agent6._state["lane"] = "mid"
+	agent6._state["has_destiny"] = true            # stale: follow_path set it, nothing clears it
+	agent6._state["arrived_at_destination"] = true # stale: on_arrive with an emptied path
 	unit6.current_path = [Vector2(9999, 9999)]  # stale pursuit path from the fight
 
 	Goap.get_goal("WalkLane").enter(agent6)
+	# The kick consumed the first waypoint into current_destiny (follow_path);
+	# the remaining route must be the clean lane route, no stale points.
 	var route: Array = unit6.current_path
 	var polluted := false
 	for p in route:
 		if p == Vector2(9999, 9999):
 			polluted = true
-	harness.check(not polluted and route.size() == 2,
+	harness.check(not polluted and route.size() == 1,
 		"WalkLane: a combat-polluted path is replaced by the lane route.")
-	harness.check(not route.is_empty() and route[0] == Vector2(0, 1024),
-		"WalkLane: the route is cut to the NEAREST lane waypoint (no backtrack to the start).")
-	# Plan install then hands the route to Navigate (follow_path -> Move.move),
-	# exactly as _replace_plan does in production.
-	Goap.get_action("Navigate").enter(agent6)
 	harness.check(unit6.current_destiny == Vector2(0, 1024),
-		"WalkLane: the unit heads for its own lane's nearest waypoint.")
+		"WalkLane: the unit heads for its own lane's nearest waypoint (no backtrack to the start).")
+	# WalkLane.enter kicks Navigate directly (the planner skipped it), which
+	# resets the stale arrived fact and hands the route to the movement driver.
+	harness.check(agent6.get_state("arrived_at_destination") == false,
+		"WalkLane: stale arrived_at_destination is reset on re-entry (documented lifecycle).")
 	harness.check(unit6.state == "move",
 		"WalkLane: the resumed route starts stepping immediately.")
 	agent6.free()
 	ws4.restore()
+
+	# --- 10. FriendsSafe stale fact: HelpFriend writes friends_safe=true on
+	# completion; only the goal's enter() cleared it, but the planner runs
+	# BEFORE enter — the next "ally attacked" evaluation saw the desired
+	# state as already satisfied and planned NOTHING (frozen mid-fight).
+	var unit7 = TestUnit.new()
+	unit7.moves = true
+	var agent7 = _make_agent(unit7)
+	agent7._state["friends_safe"] = true  # stale from a previous help
+	var ally = TestUnit.new()
+	ally.team = "blue"
+	var ally_agent = _make_agent(ally)
+	ally.agent = ally_agent
+	ally_agent._state["being_attacked"] = true
+	ally_agent._state["attacker"] = corpse2  # some attacker (validity only needs non-null sight+attacker)
+	unit7.sight_list = [ally]
+
+	var friends_goal = Goap.get_goal("FriendsSafe")
+	harness.check(friends_goal.is_valid(agent7) == true,
+		"FriendsSafe: valid while an ally is under attack.")
+	harness.check(agent7.get_state("friends_safe") == false,
+		"FriendsSafe: the stale friends_safe fact is reset while the goal is valid.")
+	agent7._goals = [friends_goal]
+	agent7.goap_process(0.0)
+	harness.check(not agent7._current_plan.is_empty(),
+		"FriendsSafe: a stale fact no longer yields an empty plan (was frozen mid-fight).")
+	agent7.free()
+	ally_agent.free()
 
 	# --- 5. Ranged hits go to the victim, not the shooter ---
 	var range_action = RangeAttackScript.new()

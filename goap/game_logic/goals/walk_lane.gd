@@ -38,6 +38,17 @@ func enter(agent):
 	var lane_path = get_lane_path(agent.get_state("lane"), unit.team)
 	if not lane_path.is_empty():
 		unit.current_path = unit.cut_path(lane_path)
+		# Hand the fresh route to navigation NOW, not via the plan: the
+		# planner runs BEFORE goal.enter and skips Navigate whenever
+		# has_destiny is stale-true (follow_path sets it and nothing clears
+		# it), so the planned WalkLane plan is [Move] alone — and with
+		# arrived_at_destination also stale-true (on_arrive with an emptied
+		# path), Move.perform returns false forever. The unit then froze at
+		# goal=WalkLane with a fresh path it never followed. Navigate.enter
+		# resets arrived_at_destination (the documented lifecycle: "set to
+		# false when a new path is queued or the goal re-evaluates") and
+		# pops the route into current_destiny + starts stepping.
+		Goap.get_action("Navigate").enter(agent)
 
 
 func priority(_agent) -> int:

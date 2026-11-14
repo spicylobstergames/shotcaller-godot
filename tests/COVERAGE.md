@@ -104,7 +104,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
-| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact | Unit |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
@@ -215,6 +215,24 @@ Production regressions found by the port and FIXED (each regression-tested):
   `MoveAction.teleport`'s `resume_lane` already used), so units return to
   their own lane and continue it forward. Regression:
   `test_attack_lifecycle.gd`.
+- **WalkLane frozen on stale walking facts** (found by live debugging,
+  FIXED): `has_destiny` is set by `follow_path` and never cleared, so after
+  any pursuit or route segment the planner skips Navigate in WalkLane plans
+  (`[Move]` alone); and `arrived_at_destination` — documented as "set to
+  false when a new path is queued or the goal re-evaluates" — was set true
+  by `on_arrive` with an emptied path and never reset. The post-combat
+  WalkLane plan then had `Move.perform` return false forever: the unit froze
+  at `goal=WalkLane action=Move` with a fresh path it never followed.
+  `WalkLane.enter` now re-derives the route AND kicks `Navigate.enter`
+  directly (resetting the stale arrived fact and popping the route into
+  `current_destiny` + stepping), since the planner runs before goal.enter.
+  Regression: `test_attack_lifecycle.gd`.
+- **FriendsSafe stale fact** (same class, FIXED preventively): HelpFriend
+  writes `friends_safe=true` on completion and only the goal's enter()
+  cleared it — but the planner runs BEFORE enter, so the next "ally
+  attacked" evaluation saw the desired state as already satisfied and
+  planned nothing (unit frozen mid-fight). `FriendsSafe.is_valid` now resets
+  the fact while the goal is valid. Regression: `test_attack_lifecycle.gd`.
 - **Motionless pursuit** (found by live debugging, FIXED, inherited from
   upstream): pursuit plans (`[ChooseTarget, PursueEnemy, AttackEnemy]`)
   contain no Move action, and only `state == "move"` units are stepped by
