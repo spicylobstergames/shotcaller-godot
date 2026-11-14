@@ -20,7 +20,7 @@ jobs:
           sudo mv Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
 
       - name: Run full suite (unit tests + boot smoke + script-error budget)
-        run: ./prototype/tests/run_suite.sh "$(which godot)"
+        run: ./tests/run_suite.sh "$(which godot)"
 
       - name: Upload diagnostic logs
         if: failure()

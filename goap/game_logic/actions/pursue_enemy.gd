@@ -47,8 +47,18 @@ func perform(agent, _delta) -> bool:
 		or unit.current_destiny.distance_to(target.global_position) > 8
 	):
 		unit.final_destiny = target.global_position
-		Goap.get_action("Navigate").move(unit, target.global_position)
+		_approach(unit, target.global_position)
 	return in_range
+
+
+func _approach(unit, target_point: Vector2) -> void:
+	# Pathfind first; fall back to walking straight at the target when no
+	# route exists (buildings sit on blocked tiles, so the JPS returns no
+	# path into them). Without the fallback the unit froze forever "pursuing"
+	# a tower it could never reach — Navigate.move silently no-oped and the
+	# destiny stayed zeroed after the combat exit's Move.stop.
+	if not Goap.get_action("Navigate").move(unit, target_point):
+		Goap.get_action("Move").move(unit, target_point)
 
 
 func enter(agent):
@@ -65,7 +75,7 @@ func enter(agent):
 	if not unit.moves:
 		return
 	unit.final_destiny = unit.target.global_position
-	Goap.get_action("Navigate").move(unit, unit.target.global_position)
+	_approach(unit, unit.target.global_position)
 
 
 func exit(agent):

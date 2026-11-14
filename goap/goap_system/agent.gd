@@ -19,11 +19,12 @@ var _unit
 var _state: Dictionary = {}
 
 var attacked_timer := 2
+var frames_til_next_process:int
 
 
 func _ready():
 	_unit = get_parent()
-	
+	frames_til_next_process = randi_range(0,6)
 	_goals = []
 	if goals_list.size() > 0:
 		for goal in goals_list:

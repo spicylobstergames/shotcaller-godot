@@ -5,7 +5,7 @@ extends RefCounted
 # autoload (path_grid + path_finder), so the backend-selector test is
 # replaced by direct dispatch assertions against that seam.
 
-const Pathfinder = preload("res://map/pathfind/jump_point_finder.gd")
+const Pathfinder = preload("res://pathfind/jump_point_finder.gd")
 const NavigateAction = preload("res://goap/game_logic/actions/navigate_action.gd")
 
 

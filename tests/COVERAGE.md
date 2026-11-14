@@ -3,7 +3,7 @@
 **20 test classes**, **255 assertions**, **0 script errors** — all passing.
 
 ```
-./prototype/tests/run_suite.sh
+./tests/run_suite.sh
 → [1/3] TESTS_COMPLETE: passed=255 failed=0
 → [1/3] All 255 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=1 pathed_moved=1
@@ -38,7 +38,7 @@ far apart on purpose, so the AI has to move (pursue or lane-walk) to engage.
 Run it directly with:
 
 ```
-godot --headless --path prototype res://game.tscn -- --smoke --smoke-ticks=300
+godot --headless --path . res://game.tscn -- --smoke --smoke-ticks=300
 ```
 
 ### 3. Golden replay (tests/golden/)
@@ -104,6 +104,8 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
+| `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
 
@@ -144,6 +146,134 @@ Production regressions found by the port and FIXED (each regression-tested):
   `RenderingServer.frame_post_draw` (no frames are drawn headless), blocking
   the map-ready chain before any unit spawned → headless mode short-circuits
   to `map_loaded`.
+- **Stale-fact planning freeze** (found by live debugging, FIXED): a kill
+  recorded by `AttackEnemy.perform` left `enemy_dead: true` in agent state
+  with no cleanup on any reachable path (`ChooseTarget.set_target` only
+  resets it when a NEW target is set, which can never be planned while the
+  fact is stale). `planner._build_plans` treats agent state as already
+  satisfied, so the goal's desired state was met with an EMPTY plan;
+  `Agent.goap_process` only replans when the goal CHANGES, so the agent held
+  `EnemyDefeated` with no actions forever — units stood idle mid-fight and
+  buildings froze after their first kill. The dead branch also left
+  `enemy_in_attack_range: true` stale, which alone degraded the next plan to
+  a bare `[AttackEnemy]` with no target acquisition. Fixed at the documented
+  lifecycle points: `EnemyDefeated.is_valid` resets `enemy_dead` every frame
+  the goal is valid (as `docs/ai/world-state.md` always claimed), and
+  `AttackEnemy`'s dead branches clear `enemy_in_attack_range`. Regression:
+  `test_attack_lifecycle.gd` (drives a kill through the real `perform()`,
+  then re-plans through the real agent + planner).
+- **Inverted ranged hit** (found by live debugging, FIXED, inherited from
+  upstream prototype code — oldest commit b0b19c6 already had it):
+  `RangeAttack.projectile_loop` called `unit1.take_hit(projectile.target, ...)`
+  on the SHOOTER (melee does `unit.target.take_hit(unit)`). Ranged units —
+  including every attacking building — damaged themselves per shot and never
+  killed the target, so `AttackEnemy` never reached its dead branch and
+  buildings sat in `state=attack` until they died to their own shots; the
+  misdirected `attacker` also made `projectile_stuck` erase from the
+  victim's projectile list, leaking the shooter's in-flight entries forever.
+  Fixed to `projectile.target.take_hit(unit1, projectile)` (and the pierce
+  branch likewise). Regression: `test_attack_lifecycle.gd` (projectile hit
+  direction).
+- **Phantom sight** (found by live debugging, FIXED after the stale-fact
+  freeze): `Quadtree._get_bodies_in_radius` has no per-body distance test in
+  leaf cells — any quadrant the query circle merely overlaps contributes ALL
+  of its bodies (sparse areas never split, so early-game cells span hundreds
+  of pixels). `Unit.get_units_in_sight` treated the result as authoritative:
+  live-measured sight lists contained enemies 300–500px away (vision 280)
+  and 735px away (vision 140). After the stale-fact freeze was fixed, this
+  became the remaining "stuck after killing" symptom — the killer
+  immediately re-acquired a phantom target it could never reach and stood
+  locked on it. Fixed at the sight layer: `get_units_in_sight` enforces the
+  real vision radius; raw radius queries keep their coarse semantics (every
+  other consumer — cleave, pierce, soft-repulsion — re-checks real distance
+  on candidates). Regression: `test_sight_radius.gd`.
+- **Corpse target hold** (found by live debugging, FIXED): `unit.target` was
+  never released when the attack action did not run again after the kill —
+  `goap_process` re-selects the goal BEFORE `AttackEnemy.perform` sees the
+  corpse, so a goal switch or the target dying later left the reference
+  held; the truthy `unit.target` then blocked `WalkLane.is_valid` and
+  `ChooseTarget.is_valid` and the unit idled at `goal=null` forever.
+  `EnemyDefeated.is_valid` now releases dead/invalid targets during its
+  per-frame fact maintenance. Regression: `test_attack_lifecycle.gd`.
+- **Untargetable-enemy goal hijack** (found by live debugging, FIXED):
+  `EnemyDefeated.is_valid` counted any enemy-shaped unit in sight, but
+  churches (`immune = true`) and other immune units can never be hit by
+  `ChooseTarget.can_hit`. The priority-6 combat goal therefore permanently
+  outranked WalkLane (priority 2) whenever an immune unit — a church on the
+  lane — was within vision, and the agent churned plans that never selected
+  a target: the unit stood frozen beside the church. The goal now requires
+  an actually targetable enemy (`select_target != null`). Regression:
+  `test_attack_lifecycle.gd`.
+- **Lane route lost after combat** (found by live debugging, FIXED, twice —
+  the first attempt over-corrected): combat navigation (`PursueEnemy` →
+  `Navigate.move` → `follow_path`) overwrites `unit.current_path` with a
+  tile path between arbitrary fight points, and `WalkLane.enter` originally
+  kept whatever path was there — units "walked their lane" toward wherever
+  the fight happened, or backtracked to the lane's first waypoint. The first
+  fix re-derived the route on EVERY entry, which pinned units at the lane
+  start instead: `WalkLane.enter` runs on every plan re-install (the `[Move]`
+  plan completes each tick), and re-popping the nearest waypoint — which for
+  a unit standing on waypoint 0 is waypoint 0 — overwrote the destiny
+  `on_arrive` had just advanced. Final behavior: an in-progress route whose
+  remaining points all belong to the lane definition is left untouched (the
+  `on_arrive` → `Navigate.next` loop drives it); a missing or polluted path
+  (tile-path points are not lane waypoints) is re-derived and cut to the
+  NEAREST waypoint, with `Navigate.enter` kicked to reset the stale arrived
+  fact and start stepping. Regressions: `test_attack_lifecycle.gd`
+  (polluted-path re-derivation, in-progress-route untouched).
+- **WalkLane frozen on stale walking facts** (found by live debugging,
+  FIXED): `has_destiny` is set by `follow_path` and never cleared, so after
+  any pursuit or route segment the planner skips Navigate in WalkLane plans
+  (`[Move]` alone); and `arrived_at_destination` — documented as "set to
+  false when a new path is queued or the goal re-evaluates" — was set true
+  by `on_arrive` with an emptied path and never reset. The post-combat
+  WalkLane plan then had `Move.perform` return false forever: the unit froze
+  at `goal=WalkLane action=Move` with a fresh path it never followed.
+  `WalkLane.enter` now re-derives the route AND kicks `Navigate.enter`
+  directly (resetting the stale arrived fact and popping the route into
+  `current_destiny` + stepping), since the planner runs before goal.enter.
+  Regression: `test_attack_lifecycle.gd`.
+- **FriendsSafe stale fact** (same class, FIXED preventively): HelpFriend
+  writes `friends_safe=true` on completion and only the goal's enter()
+  cleared it — but the planner runs BEFORE enter, so the next "ally
+  attacked" evaluation saw the desired state as already satisfied and
+  planned nothing (unit frozen mid-fight). `FriendsSafe.is_valid` now resets
+  the fact while the goal is valid. Regression: `test_attack_lifecycle.gd`.
+- **Pursuing a blocked tile froze the unit** (found by live debugging,
+  FIXED): `Navigation.setup_pathfind` marks building tiles unwalkable and the
+  JPS returns no path INTO them, so `Navigate.move` silently no-oped when a
+  unit pursued a tower — `PursueEnemy` looped forever with a zeroed destiny
+  (the combat exit's `Move.stop`) and the unit stood frozen next to the
+  tower it was supposed to siege. `Navigate.move` now reports the failure,
+  and `PursueEnemy`/`AttackEnemy` fall back to walking straight at the
+  target (melee closes into attack range and sieges; the pathfinder is
+  re-consulted every tick, so pathing resumes automatically if a route
+  appears). Regression: `test_attack_lifecycle.gd` (blocked-tile contract +
+  pursue fallback).
+- **Out-of-sight live target deadlock** (found by live debugging, FIXED):
+  a live target was never released when it left the unit's vision — lane
+  curves carry units past towers they had targeted, and at the vision
+  boundary the truthy `unit.target` blocked both EnemyDefeated (no enemies
+  in sight) and WalkLane (target held): permanent `goal=null` deadlock.
+  `EnemyDefeated.is_valid` now also releases a live target beyond vision.
+  Regression: `test_attack_lifecycle.gd`.
+- **Zeroed destiny after combat exit** (found by live debugging, FIXED):
+  leaving a combat action zeroes `current_destiny` (`PursueEnemy`/
+  `AttackEnemy` exit → `Move.stop`), and `Move.move` accepts a zero destiny
+  (`Navigate.move` guards it; `Move.move` did not) — the unit then walked
+  toward the map origin. `WalkLane.enter`'s in-progress-route branch now
+  re-pops the next waypoint (without re-deriving the route) whenever the
+  destiny was zeroed. Regression: `test_attack_lifecycle.gd`.
+- **Motionless pursuit** (found by live debugging, FIXED, inherited from
+  upstream): pursuit plans (`[ChooseTarget, PursueEnemy, AttackEnemy]`)
+  contain no Move action, and only `state == "move"` units are stepped by
+  `Collisions` — `Navigate.follow_path` set `current_destiny` without
+  setting the state, so a unit with a live target out of attack range stood
+  still forever "pursuing" it (the golden replay's leader stood at its spawn
+  point for 100 frames). `follow_path` now hands each waypoint to
+  `Move.move`, the established stepping driver; waypoint progression still
+  flows through the existing `ArriveAtDestination.on_arrive` →
+  `Navigate.next` machinery. Regression: `test_attack_lifecycle.gd`.
 
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):

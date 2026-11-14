@@ -9,7 +9,15 @@ func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var ready_to_fight = agent.get_state("ready_to_fight", true)
 	var friend_attacker = ally_attacked(unit)
-	return ready_to_fight and unit.attacks and friend_attacker
+	if !ready_to_fight or !unit.attacks or !friend_attacker:
+		return false
+	# Same stale-fact trap as EnemyDefeated/enemy_dead: HelpFriend writes
+	# friends_safe=true when it completes and only the goal's enter() clears
+	# it — but the planner runs BEFORE enter, so the next "ally attacked"
+	# goal evaluation saw the desired state as already satisfied and planned
+	# nothing. Reset while the goal is valid, before planning.
+	agent.set_state("friends_safe", false)
+	return true
 
 
 func enter(agent):

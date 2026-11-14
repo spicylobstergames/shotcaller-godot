@@ -37,6 +37,10 @@ func perform(agent, _delta) -> bool:
 	if target.dead:
 		agent.set_state("enemy_dead", true)
 		agent.set_state("target", null)
+		# A dead target is never in range: leaving the previous `true` here
+		# makes the planner satisfy AttackEnemy's precondition without
+		# PursueEnemy/ChooseTarget on the next plan (see COVERAGE.md known bug).
+		agent.set_state("enemy_in_attack_range", false)
 		return true
 	if not choose_target.can_hit(unit, target):
 		agent.set_state("target", null)
@@ -59,6 +63,7 @@ func enter(agent):
 	if target.dead:
 		agent.set_state("enemy_dead", true)
 		agent.set_state("target", null)
+		agent.set_state("enemy_in_attack_range", false)
 		return
 	if not Goap.get_action("ChooseTarget").can_hit(unit, target):
 		agent.set_state("target", null)
@@ -69,7 +74,11 @@ func enter(agent):
 		point(unit, target.global_position + target.collision_position)
 	else:
 		unit.final_destiny = target.global_position
-		Goap.get_action("Navigate").move(unit, target.global_position)
+		# Same fallback as PursueEnemy._approach: buildings sit on blocked
+		# tiles, so Navigate.move finds no path into them — walk straight at
+		# the target to close into attack range instead of freezing.
+		if not Goap.get_action("Navigate").move(unit, target.global_position):
+			Goap.get_action("Move").move(unit, target.global_position)
 
 
 func on_animation_end(agent):
@@ -85,7 +94,8 @@ func on_animation_end(agent):
 			point(unit, target.global_position + target.collision_position)
 		else:
 			unit.final_destiny = target.global_position
-			Goap.get_action("Navigate").move(unit, target.global_position)
+			if not Goap.get_action("Navigate").move(unit, target.global_position):
+				Goap.get_action("Move").move(unit, target.global_position)
 	else:
 		Goap.get_action("Move").stop(unit)
 

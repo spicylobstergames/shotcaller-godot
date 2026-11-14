@@ -25,8 +25,44 @@ func is_valid(agent) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	if not unit.current_path or unit.current_path.is_empty():
-		unit.current_path = get_lane_path(agent.get_state("lane"), unit.team)
+	# This runs on EVERY plan re-install (the [Move] plan completes each tick
+	# while arrived_at_destination is false), so it must not touch an
+	# in-progress route: re-deriving and re-popping the nearest waypoint
+	# every tick pinned units at the lane's first waypoint (nearest == where
+	# they stand) and overwrote the destiny that on_arrive had just advanced.
+	#
+	# Re-derive ONLY when the current path is gone or was polluted by combat
+	# navigation (PursueEnemy -> Navigate.move -> follow_path overwrites
+	# current_path with tile paths between fight points — those are not lane
+	# waypoints). An in-progress route's remaining points all come from the
+	# lane definition, so membership is a cheap pollution test.
+	var lane_path = get_lane_path(agent.get_state("lane"), unit.team)
+	if lane_path.is_empty():
+		return
+	var current: Array = unit.current_path
+	var is_lane_route = not current.is_empty()
+	for point in current:
+		if not lane_path.has(point):
+			is_lane_route = false
+			break
+	if is_lane_route:
+		# The route is intact, but its handoff to the stepper may have been
+		# lost: leaving a combat action zeroes current_destiny (PursueEnemy/
+		# AttackEnemy exit -> Move.stop), and Move.enter then walks toward
+		# the map origin. Re-pop the NEXT waypoint without re-deriving —
+		# this is what keeps the unit on its lane after a fight.
+		if unit.current_destiny == Vector2.ZERO:
+			Goap.get_action("Navigate").enter(agent)
+		return
+	unit.current_path = unit.cut_path(lane_path)
+	# The planner runs BEFORE goal.enter and may have skipped Navigate
+	# (has_destiny stale-true) while arrived_at_destination is stale-true
+	# from on_arrive — either would freeze the fresh route. Navigate.enter
+	# resets the arrived fact (documented lifecycle) and pops the first
+	# waypoint into current_destiny + starts stepping. It runs at most once
+	# per re-derivation: afterwards the route's remaining points are lane
+	# waypoints and the on_arrive -> Navigate.next loop drives progression.
+	Goap.get_action("Navigate").enter(agent)
 
 
 func priority(_agent) -> int:

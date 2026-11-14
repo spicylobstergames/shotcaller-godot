@@ -214,3 +214,83 @@ nine actions unplanned by the flipped action_contract.is_valid default,
 get_lumber's null-return is_valid aborting plan searches, camp_hire gold
 semantics, passive_skills counter-flag erasure + null lookups, modifiers
 null-safety, and the headless minimap stall. Full list in COVERAGE.md.
+
+## D13 — main's GOAP perf fix did not survive the merge; re-port it as its own change
+
+**Decision:** the merged tree keeps **upstream's** pump — `Goap.physics_process`
+iterates every unit with only an `if unit.agent` guard
+(`goap/goap_system/goap.gd:34`). main's pre-merge perf commit `d15ca30` is NOT
+re-applied: not the `ai_delay` stagger (`Unit.ai_delay = randi_range(0,6)`;
+process a unit only when `ai_delay == 0`, then reset to 6, else decrement — a
+~7-frame planning interval per unit with randomized phase), and not the
+`all_units.erase(self)` on death that came with the `!unit.dead` guard. The gap
+is recorded here, measured on the new base, and left open as a follow-up instead
+of being resolved inside the merge.
+
+**Alternatives:** graft both back during conflict resolution (rejected —
+`goap.gd` and `Unit.gd` conflicted on both sides; a scheduling change smuggled
+into a 36-conflict merge hides a behavior change in a merge commit, and both
+mechanisms move frame-by-frame agent state, which is exactly what the golden
+replay now pins at frames 100/200/300 — D5/D6/D12). Re-port after the merge as a
+standalone, measured change with its own tests and a `--golden-update`
+re-record (chosen). Do nothing (rejected — the cost is measurable, below).
+
+**Why — measured on the merged tree:** `godot --headless --path prototype
+res://game.tscn -- --perf` (`tests/perf_monitor.gd`, added by fbe1822). fps
+holds at ~145 for the first ~35 s, then collapses deeper each cycle — 6 at
+t=37 s, 5 at t=52 s, sustained 3–4 from t=68 s — while `all_units` grows
+monotonically 151 → 175 → 197 → 213 → 228 and ticks/s falls from ~60 to ~30.
+The *simulation* is stalling, not just rendering. Memory stays flat (127 →
+135 MB) while node count climbs (2949 → 5114): growing per-tick work, not a
+leak. `dup=0` because `recycle()` (`map/spawns.gd:129`) reuses cemetery units
+without re-appending; the growth is new wave spawns on top of permanent corpses.
+
+**What the gap costs on this base:** nothing in production code removes from
+`all_units` (appends only: `map/spawns.gd:45`, `collision/collisions.gd:41`,
+`map/map_manager.gd:107`); `Unit.die()` (`unit/Unit.gd:493`) hides the corpse
+and hands it to the cemetery but leaves the entry in the list; and neither the
+pump nor `Agent.goap_process` (`goap/goap_system/agent.gd:168`) checks `dead` —
+so every corpse keeps full goal evaluation and planning every physics tick,
+forever.
+
+**Trap to avoid when re-porting:** `d15ca30`'s erase-on-death had no matching
+re-append — only `create()` appended (`map/spawns.gd:45`), `recycle()` never
+did. Erasing a corpse therefore removed it from the simulation permanently: its
+respawn came back through `recycle()` invisible to the GOAP pump, to selection,
+and to the UI. A re-port must either re-append on recycle or prefer the
+pump-side guard (`if unit.agent and not unit.dead`), which skips corpse work
+without mutating a list every other system owns.
+
+**Also found while measuring:** the pump runs at 60 ticks/s, not the 30 Hz the
+docs claim — `Engine.get_physics_ticks_per_second()` reports 60 even though
+`project.godot` sets `common/physics_fps=30` (Godot 4 renamed that key to
+`physics/common/physics_ticks_per_second`; the legacy name is ignored). So GOAP
+planning costs 2× the documented rate, and the whole golden replay is recorded
+at 60 Hz. Fixing the setting is the same class of decision as the stagger: it
+changes frame-by-frame state and needs its own re-record, not a drive-by edit.
+
+**Consequences:** the fps decay is live on main and invisible to the suite —
+`run_suite.sh` gates on 300 ticks, not wall-clock, and `--perf` is deliberately
+never part of gating. Re-entry criteria for the re-port: (1) measure before and
+after with `--perf` and put the numbers in the commit message, (2) a regression
+test that dead units are not planned for, (3) a golden re-record with the reason
+stated in the commit (D6/D12), (4) keep it upstream-facing — `goap.gd` is
+upstream-owned, so a fork-only divergence there conflicts again.
+
+## D14 — Golden replay: ±1 hp tolerance under the staggered agent cadence
+
+With the staggered agent pump (`goap_process` every 7th physics tick,
+per-unit random start frame), the golden replay's exact-hp comparison became
+racy: units regenerate +1 hp per second, and the regen tick straddles a
+checkpoint boundary in ~50% of runs — observed as a stable 9910 vs 9911 flip
+on the smoke pawn at checkpoint 1 (frame 100) across otherwise identical
+runs (same seed, same `--fixed-fps 60`). The flip is timing quantization,
+not a gameplay change: a real combat regression shifts hp by a hit (~45),
+never by 1.
+
+`smoke_runner._lines_match` therefore tolerates ±1 hp (positions keep their
+existing drift tolerance; every other field stays exact). Re-recording does
+NOT fix a 50/50 boundary race, and loosening further (e.g. ±5) would mask
+real damage regressions — do not widen it. Note also that manual golden
+checks must use the canonical flags (`--headless --fixed-fps 60`): the
+checkpoints are frame-indexed and headless frames otherwise run uncapped.

@@ -23,7 +23,7 @@ STEP_TIMEOUT="${STEP_TIMEOUT:-180}"
 # file than the reporter: a runner that crashes, hangs, or is bypassed cannot
 # fake a green result without editing both files. Bump this when you add
 # tests — the suite will fail with the actual count until you do.
-EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-255}"
+EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-306}"
 
 # Godot binary: argument > GODOT env var > "godot" on PATH.
 GODOT="${1:-${GODOT:-godot}}"
@@ -34,7 +34,7 @@ SMOKE_TICKS="${SMOKE_TICKS:-300}"
 export HOME="${GODOT_HOME:-$PROJECT_DIR/../.godot-home}"
 mkdir -p "$HOME"
 
-LOG_DIR="$PROJECT_DIR/../.test-logs"
+LOG_DIR="${TEST_LOG_DIR:-$PROJECT_DIR/../.test-logs}"
 mkdir -p "$LOG_DIR"
 
 failures=0
