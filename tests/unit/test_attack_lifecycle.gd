@@ -94,6 +94,22 @@ class TestUnit:
 		return Utils.circle_point_collision(
 			point, global_position + collision_position, collision_radius + offset)
 
+	func cut_path(path: Array) -> Array:
+		# Same contract as Unit.cut_path: resume the path from the waypoint
+		# nearest to the unit (biased toward later points).
+		if path.is_empty():
+			return []
+		var first_point = path[0]
+		var distances := []
+		for index in path.size():
+			distances.append({
+				"distance": global_position.distance_to(path[index])
+					- global_position.distance_to(first_point) / 10.0,
+				"index": index,
+			})
+		distances.sort_custom(func(a, b): return a.distance < b.distance)
+		return path.slice(distances[0].index, path.size())
+
 	func set_state(s) -> void:
 		state = s
 
@@ -273,6 +289,41 @@ func run(harness) -> void:
 		"Pursuit: a step toward the waypoint is computed.")
 	agent5.free()
 
+	# --- 9. WalkLane re-derives the lane route after combat polluted
+	# unit.current_path (PursueEnemy -> Navigate.move overwrites it with a
+	# tile path between fight points): the unit must resume its OWN lane from
+	# the NEAREST waypoint, not walk the stale path or backtrack to the start.
+	var ws4 = WorldStateSnapshot.new()
+	var lane_points := [Vector2(0, 1024), Vector2(2048, 1024)]
+	ws4.set_state("lanes", {"mid": lane_points})
+	ws4.set_state("map", FakeNavMap.new())  # get_lane_path looks up the castle node
+	var unit6 = TestUnit.new()
+	unit6.moves = true
+	unit6.global_position = Vector2(600, 600)  # nearer to the first waypoint
+	var agent6 = _make_agent(unit6)
+	agent6._state["lane"] = "mid"
+	unit6.current_path = [Vector2(9999, 9999)]  # stale pursuit path from the fight
+
+	Goap.get_goal("WalkLane").enter(agent6)
+	var route: Array = unit6.current_path
+	var polluted := false
+	for p in route:
+		if p == Vector2(9999, 9999):
+			polluted = true
+	harness.check(not polluted and route.size() == 2,
+		"WalkLane: a combat-polluted path is replaced by the lane route.")
+	harness.check(not route.is_empty() and route[0] == Vector2(0, 1024),
+		"WalkLane: the route is cut to the NEAREST lane waypoint (no backtrack to the start).")
+	# Plan install then hands the route to Navigate (follow_path -> Move.move),
+	# exactly as _replace_plan does in production.
+	Goap.get_action("Navigate").enter(agent6)
+	harness.check(unit6.current_destiny == Vector2(0, 1024),
+		"WalkLane: the unit heads for its own lane's nearest waypoint.")
+	harness.check(unit6.state == "move",
+		"WalkLane: the resumed route starts stepping immediately.")
+	agent6.free()
+	ws4.restore()
+
 	# --- 5. Ranged hits go to the victim, not the shooter ---
 	var range_action = RangeAttackScript.new()
 	var shooter = TestUnit.new()
@@ -308,3 +359,8 @@ func run(harness) -> void:
 class _FakeMap:
 	var tile_size := 64
 	var size := Vector2(2048, 2048)
+
+
+# Node2D stand-in for get_lane_path's castle lookup (get_node_or_null).
+class FakeNavMap:
+	extends Node2D

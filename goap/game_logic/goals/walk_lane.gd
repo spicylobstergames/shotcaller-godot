@@ -25,8 +25,19 @@ func is_valid(agent) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	if not unit.current_path or unit.current_path.is_empty():
-		unit.current_path = get_lane_path(agent.get_state("lane"), unit.team)
+	# Always re-derive the lane route from the lane definition instead of
+	# keeping unit.current_path: combat navigation (PursueEnemy ->
+	# Navigate.move -> follow_path) overwrites current_path with tile paths
+	# between arbitrary fight points, so the old "keep the existing path"
+	# guard made units walk toward wherever the fight happened instead of
+	# back to their lane. Cutting the fresh route to the NEAREST waypoint
+	# keeps mid-route resume (same semantics as MoveAction.teleport's
+	# resume_lane) without sending the unit all the way back to the lane
+	# start. Navigate.enter consumes the first waypoint via follow_path, so
+	# only slice here — do not follow.
+	var lane_path = get_lane_path(agent.get_state("lane"), unit.team)
+	if not lane_path.is_empty():
+		unit.current_path = unit.cut_path(lane_path)
 
 
 func priority(_agent) -> int:

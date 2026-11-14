@@ -104,7 +104,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
-| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint | Unit |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
@@ -203,6 +203,17 @@ Production regressions found by the port and FIXED (each regression-tested):
   lane — was within vision, and the agent churned plans that never selected
   a target: the unit stood frozen beside the church. The goal now requires
   an actually targetable enemy (`select_target != null`). Regression:
+  `test_attack_lifecycle.gd`.
+- **Lane route lost after combat** (found by live debugging, FIXED): combat
+  navigation (`PursueEnemy` → `Navigate.move` → `follow_path`) overwrites
+  `unit.current_path` with a tile path between arbitrary fight points, and
+  `WalkLane.enter` kept whatever path was already there — so post-kill units
+  "walked their lane" toward wherever the fight happened, or (with an
+  unpolluted path) backtracked all the way to the lane's first waypoint
+  before proceeding. `WalkLane.enter` now re-derives the route from the lane
+  definition and cuts it to the NEAREST waypoint (the same resume semantics
+  `MoveAction.teleport`'s `resume_lane` already used), so units return to
+  their own lane and continue it forward. Regression:
   `test_attack_lifecycle.gd`.
 - **Motionless pursuit** (found by live debugging, FIXED, inherited from
   upstream): pursuit plans (`[ChooseTarget, PursueEnemy, AttackEnemy]`)
