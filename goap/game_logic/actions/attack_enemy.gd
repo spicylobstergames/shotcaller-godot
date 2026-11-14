@@ -37,6 +37,10 @@ func perform(agent, _delta) -> bool:
 	if target.dead:
 		agent.set_state("enemy_dead", true)
 		agent.set_state("target", null)
+		# A dead target is never in range: leaving the previous `true` here
+		# makes the planner satisfy AttackEnemy's precondition without
+		# PursueEnemy/ChooseTarget on the next plan (see COVERAGE.md known bug).
+		agent.set_state("enemy_in_attack_range", false)
 		return true
 	if not choose_target.can_hit(unit, target):
 		agent.set_state("target", null)
@@ -59,6 +63,7 @@ func enter(agent):
 	if target.dead:
 		agent.set_state("enemy_dead", true)
 		agent.set_state("target", null)
+		agent.set_state("enemy_in_attack_range", false)
 		return
 	if not Goap.get_action("ChooseTarget").can_hit(unit, target):
 		agent.set_state("target", null)

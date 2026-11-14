@@ -104,6 +104,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
+| `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
 
@@ -144,6 +145,40 @@ Production regressions found by the port and FIXED (each regression-tested):
   `RenderingServer.frame_post_draw` (no frames are drawn headless), blocking
   the map-ready chain before any unit spawned → headless mode short-circuits
   to `map_loaded`.
+- **Stale-fact planning freeze** (found by live debugging, FIXED): a kill
+  recorded by `AttackEnemy.perform` left `enemy_dead: true` in agent state
+  with no cleanup on any reachable path (`ChooseTarget.set_target` only
+  resets it when a NEW target is set, which can never be planned while the
+  fact is stale). `planner._build_plans` treats agent state as already
+  satisfied, so the goal's desired state was met with an EMPTY plan;
+  `Agent.goap_process` only replans when the goal CHANGES, so the agent held
+  `EnemyDefeated` with no actions forever — units stood idle mid-fight and
+  buildings froze after their first kill. The dead branch also left
+  `enemy_in_attack_range: true` stale, which alone degraded the next plan to
+  a bare `[AttackEnemy]` with no target acquisition. Fixed at the documented
+  lifecycle points: `EnemyDefeated.is_valid` resets `enemy_dead` every frame
+  the goal is valid (as `docs/ai/world-state.md` always claimed), and
+  `AttackEnemy`'s dead branches clear `enemy_in_attack_range`. Regression:
+  `test_attack_lifecycle.gd` (drives a kill through the real `perform()`,
+  then re-plans through the real agent + planner).
+- **Inverted ranged hit** (found by live debugging, FIXED, inherited from
+  upstream prototype code — oldest commit b0b19c6 already had it):
+  `RangeAttack.projectile_loop` called `unit1.take_hit(projectile.target, ...)`
+  on the SHOOTER (melee does `unit.target.take_hit(unit)`). Ranged units —
+  including every attacking building — damaged themselves per shot and never
+  killed the target, so `AttackEnemy` never reached its dead branch and
+  buildings sat in `state=attack` until they died to their own shots; the
+  misdirected `attacker` also made `projectile_stuck` erase from the
+  victim's projectile list, leaking the shooter's in-flight entries forever.
+  Fixed to `projectile.target.take_hit(unit1, projectile)` (and the pierce
+  branch likewise). Regression: `test_attack_lifecycle.gd` (projectile hit
+  direction).
+- Related, NOT fixed here (phantom sight): `Quadtree._get_bodies_in_radius`
+  has no per-body distance test in leaf cells — any quadrant the query
+  circle merely overlaps contributes ALL of its bodies. Sight queries
+  (vision 280) returned units 300–500px away live, keeping combat goals
+  valid with nothing near and making movers chase distant phantoms. Fixing
+  it changes sight semantics broadly; tracked separately.
 
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):

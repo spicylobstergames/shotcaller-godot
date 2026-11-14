@@ -67,14 +67,19 @@ func projectile_loop(unit1, delta):
 			else:
 				if projectile.target:
 					if projectile.target.point_collision(projectile_position):
-						unit1.take_hit(projectile.target, projectile);
+						# The projectile reached its target: the TARGET takes the
+						# hit from the shooter (mirrors MeleeAttack.hit). Passing
+						# the victim as `attacker` here made ranged units damage
+						# THEMSELVES and erased the projectile from the victim's
+						# list, leaking it in the shooter's list forever.
+						projectile.target.take_hit(unit1, projectile);
 				else: # pierces
-					var targets = Collisions.get_units_in_radius(projectile_position, 1) 
+					var targets = Collisions.get_units_in_radius(projectile_position, 1)
 					for target in targets:
 						if (Goap.get_action("ChooseTarget").can_hit(unit1, target) and
 								projectile.targets.find(target) < 0 and
 								target.point_collision(projectile_position) ):
-							unit1.take_hit(target, projectile)
+							target.take_hit(unit1, projectile)
 				# move projectile
 				if not projectile.stuck: Goap.get_action("RangeAttack").projectile_step(delta, projectile)
 
