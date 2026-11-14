@@ -333,6 +333,31 @@ func run(harness) -> void:
 	agent6.free()
 	ws4.restore()
 
+	# --- 9b. An IN-PROGRESS lane route must be left alone: WalkLane.enter
+	# runs on every plan re-install, and re-deriving + re-popping the nearest
+	# waypoint each time pinned units at the lane's first waypoint (nearest ==
+	# where they stand), overwriting the destiny on_arrive had just advanced.
+	var ws5 = WorldStateSnapshot.new()
+	ws5.set_state("lanes", {"mid": lane_points})
+	ws5.set_state("map", FakeNavMap.new())
+	var unit8 = TestUnit.new()
+	unit8.moves = true
+	unit8.global_position = Vector2(0, 1024)  # standing ON the first waypoint
+	var agent8 = _make_agent(unit8)
+	agent8._state["lane"] = "mid"
+	agent8._state["has_destiny"] = true
+	agent8._state["arrived_at_destination"] = false
+	unit8.current_path = [Vector2(2048, 1024)]  # in-progress route: lane waypoints only
+	unit8.current_destiny = Vector2(55, 55)  # distinctive in-flight destiny
+
+	Goap.get_goal("WalkLane").enter(agent8)
+	harness.check(unit8.current_path == [Vector2(2048, 1024)],
+		"WalkLane: an in-progress lane route is NOT re-derived or re-popped.")
+	harness.check(unit8.current_destiny == Vector2(55, 55),
+		"WalkLane: the in-flight destiny is untouched (no pinning at the lane start).")
+	agent8.free()
+	ws5.restore()
+
 	# --- 10. FriendsSafe stale fact: HelpFriend writes friends_safe=true on
 	# completion; only the goal's enter() cleared it, but the planner runs
 	# BEFORE enter — the next "ally attacked" evaluation saw the desired

@@ -204,17 +204,23 @@ Production regressions found by the port and FIXED (each regression-tested):
   a target: the unit stood frozen beside the church. The goal now requires
   an actually targetable enemy (`select_target != null`). Regression:
   `test_attack_lifecycle.gd`.
-- **Lane route lost after combat** (found by live debugging, FIXED): combat
-  navigation (`PursueEnemy` → `Navigate.move` → `follow_path`) overwrites
-  `unit.current_path` with a tile path between arbitrary fight points, and
-  `WalkLane.enter` kept whatever path was already there — so post-kill units
-  "walked their lane" toward wherever the fight happened, or (with an
-  unpolluted path) backtracked all the way to the lane's first waypoint
-  before proceeding. `WalkLane.enter` now re-derives the route from the lane
-  definition and cuts it to the NEAREST waypoint (the same resume semantics
-  `MoveAction.teleport`'s `resume_lane` already used), so units return to
-  their own lane and continue it forward. Regression:
-  `test_attack_lifecycle.gd`.
+- **Lane route lost after combat** (found by live debugging, FIXED, twice —
+  the first attempt over-corrected): combat navigation (`PursueEnemy` →
+  `Navigate.move` → `follow_path`) overwrites `unit.current_path` with a
+  tile path between arbitrary fight points, and `WalkLane.enter` originally
+  kept whatever path was there — units "walked their lane" toward wherever
+  the fight happened, or backtracked to the lane's first waypoint. The first
+  fix re-derived the route on EVERY entry, which pinned units at the lane
+  start instead: `WalkLane.enter` runs on every plan re-install (the `[Move]`
+  plan completes each tick), and re-popping the nearest waypoint — which for
+  a unit standing on waypoint 0 is waypoint 0 — overwrote the destiny
+  `on_arrive` had just advanced. Final behavior: an in-progress route whose
+  remaining points all belong to the lane definition is left untouched (the
+  `on_arrive` → `Navigate.next` loop drives it); a missing or polluted path
+  (tile-path points are not lane waypoints) is re-derived and cut to the
+  NEAREST waypoint, with `Navigate.enter` kicked to reset the stale arrived
+  fact and start stepping. Regressions: `test_attack_lifecycle.gd`
+  (polluted-path re-derivation, in-progress-route untouched).
 - **WalkLane frozen on stale walking facts** (found by live debugging,
   FIXED): `has_destiny` is set by `follow_path` and never cleared, so after
   any pursuit or route segment the planner skips Navigate in WalkLane plans
