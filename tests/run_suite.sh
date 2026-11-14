@@ -34,7 +34,7 @@ SMOKE_TICKS="${SMOKE_TICKS:-300}"
 export HOME="${GODOT_HOME:-$PROJECT_DIR/../.godot-home}"
 mkdir -p "$HOME"
 
-LOG_DIR="$PROJECT_DIR/../.test-logs"
+LOG_DIR="${TEST_LOG_DIR:-$PROJECT_DIR/../.test-logs}"
 mkdir -p "$LOG_DIR"
 
 failures=0
