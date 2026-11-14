@@ -41,3 +41,6 @@ prototype/Shotcall.apk.idsig
 .test-logs/
 .clean-verify*/
 .tools/godot/
+
+# local test-run logs (created by manual suite invocations)
+.tmp_logs/
