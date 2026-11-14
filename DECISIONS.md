@@ -276,3 +276,21 @@ after with `--perf` and put the numbers in the commit message, (2) a regression
 test that dead units are not planned for, (3) a golden re-record with the reason
 stated in the commit (D6/D12), (4) keep it upstream-facing — `goap.gd` is
 upstream-owned, so a fork-only divergence there conflicts again.
+
+## D14 — Golden replay: ±1 hp tolerance under the staggered agent cadence
+
+With the staggered agent pump (`goap_process` every 7th physics tick,
+per-unit random start frame), the golden replay's exact-hp comparison became
+racy: units regenerate +1 hp per second, and the regen tick straddles a
+checkpoint boundary in ~50% of runs — observed as a stable 9910 vs 9911 flip
+on the smoke pawn at checkpoint 1 (frame 100) across otherwise identical
+runs (same seed, same `--fixed-fps 60`). The flip is timing quantization,
+not a gameplay change: a real combat regression shifts hp by a hit (~45),
+never by 1.
+
+`smoke_runner._lines_match` therefore tolerates ±1 hp (positions keep their
+existing drift tolerance; every other field stays exact). Re-recording does
+NOT fix a 50/50 boundary race, and loosening further (e.g. ±5) would mask
+real damage regressions — do not widen it. Note also that manual golden
+checks must use the canonical flags (`--headless --fixed-fps 60`): the
+checkpoints are frame-indexed and headless frames otherwise run uncapped.
