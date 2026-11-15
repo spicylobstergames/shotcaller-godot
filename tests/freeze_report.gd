@@ -59,6 +59,10 @@ func _sample(now: int) -> void:
 		# Attacking in place is legitimate; anything else should be moving.
 		if is_instance_valid(unit.target) and Goap.get_action("ChooseTarget").in_range(unit, unit.target):
 			continue
+		# Nothing to do (no target, nowhere to walk) is legitimately idle, not
+		# stuck — e.g. a lumberjack mid-cut (current_destiny == Vector2.ZERO).
+		if not is_instance_valid(unit.target) and unit.current_destiny == Vector2.ZERO:
+			continue
 		var last: int = int(_last_report.get(id, -REPORT_COOLDOWN_MS))
 		if now - last < REPORT_COOLDOWN_MS:
 			continue
@@ -83,7 +87,14 @@ func _report(unit, pos: Vector2) -> void:
 		"is_stunned", "being_attacked", "tactic",
 	]:
 		facts[key] = agent.get_state(key)
-	print("FREEZE_REPORT unit=%s type=%s team=%s pos=(%.0f,%.0f) state=%s goal=%s action=%s plan=%s target=%s destiny=%s path=%d facts=%s" % [
+	var speed: float = Modifiers.get_value(unit, "speed") if unit.agent != null else 0.0
+	var near := 0
+	if "collision_radius" in unit:
+		near = Collisions.get_units_in_radius(
+			unit.global_position + unit.collision_position,
+			maxf(unit.collision_radius * 2.0, 8.0)
+		).size()
+	print("FREEZE_REPORT unit=%s type=%s team=%s pos=(%.0f,%.0f) state=%s goal=%s action=%s plan=%s target=%s destiny=%s path=%d ffp=%s moves=%s speed=%.1f step=%s near=%d facts=%s" % [
 		unit.name,
 		unit.type,
 		unit.team,
@@ -96,5 +107,10 @@ func _report(unit, pos: Vector2) -> void:
 		(unit.target.name if is_instance_valid(unit.target) else "null"),
 		str(unit.current_destiny),
 		unit.current_path.size() if "current_path" in unit else -1,
+		str(agent.frames_til_next_process),
+		str(unit.moves),
+		speed,
+		str(unit.current_step),
+		near,
 		str(facts),
 	])

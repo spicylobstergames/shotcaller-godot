@@ -1,13 +1,13 @@
 # Test Coverage
 
-**27 test classes**, **340 assertions**, **0 script errors** — all passing.
+**27 test classes**, **341 assertions**, **0 script errors** — all passing.
 (The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
 bump it whenever you add tests.)
 
 ```
 ./tests/run_suite.sh
-→ [1/3] TESTS_COMPLETE: passed=340 failed=0
-→ [1/3] All 340 tests passed.
+→ [1/3] TESTS_COMPLETE: passed=341 failed=0
+→ [1/3] All 341 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
@@ -101,7 +101,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_spawns.gd` | `map/spawns.gd` camp_hire pooled-gold semantics, cemetery, lane tactics | Unit |
 | `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — real `_get_mirrored_coords`/`_get_changed_cells` | Unit |
 | `test_collisions.gd` | Quadtree + geometry helpers | Unit |
-| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking | Unit |
+| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking, crowded-blocking forward-progress floor | Unit |
 | `test_navigation.gd` | Jump-point pathfinder (routes, walls, sealed maps) + NavigateAction→Navigation dispatch | Unit |
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
@@ -311,6 +311,22 @@ Production regressions found by the port and FIXED (each regression-tested):
   disable WalkLane"), which failed with 2 assertions before the fix;
   lane-completion semantics (reset path + fallback behavior) are a separate
   open decision in `plans/E5.md`.
+
+- **Crowded units jittered in place forever** (found with the `--freeze-report`
+  census in 90s+ live runs, FIXED): `Move._resolve_blocking` summed
+  `diff * 0.05` repulsion from every overlapping neighbour. At lane choke
+  points (7–12 overlapping units) the sum exceeded the per-tick step (~0.6px
+  at 35px/s), so `resolved_motion` cancelled or reversed and packed units
+  froze: `state=move`, a live `WalkLane` plan, a non-zero `current_step`, and
+  no movement — i.e. survivors of a lane fight simply stood there. It
+  reproduced on upstream main too (17 freeze reports in 170s vs 9 on this
+  branch), so it is pre-existing, not an arrival-fix regression. Fix: a
+  forward-progress floor in `_resolve_blocking` — repulsion may remove at most
+  40% of the intended step along the original direction, while sideways
+  deflection is preserved. Regression: `tests/unit/test_movement.gd`
+  ("A crowded unit still advances", 1 assertion failing before the fix).
+  Validated by the census: 9 → 0 freeze reports in a 170s run (main: 17).
+  Golden replay unchanged (the smoke scenario has no crowds).
 
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation

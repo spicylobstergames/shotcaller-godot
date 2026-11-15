@@ -129,6 +129,19 @@ func _resolve_blocking(unit, motion: Vector2) -> Vector2:
 				var diff = destination - other_position
 				resolved_motion += diff * 0.05 # small reppelling force 
 
+	# Forward-progress floor: in a dense crowd the accumulated repulsion can
+	# cancel (even reverse) the step, and packed units then jitter in place at
+	# lane choke points forever. Repulsion is meant to soften overlaps, not to
+	# stop movement, so never let it remove more than 40% of the intended step
+	# along the original direction. Sideways deflection is preserved.
+	# Regression: tests/unit/test_movement.gd ("crowded unit still advances").
+	if motion.length_squared() > 0.0:
+		var forward := motion.normalized()
+		var along: float = resolved_motion.dot(forward)
+		var minimum := motion.length() * 0.6
+		if along < minimum:
+			resolved_motion += forward * (minimum - along)
+
 	return resolved_motion
 
 
