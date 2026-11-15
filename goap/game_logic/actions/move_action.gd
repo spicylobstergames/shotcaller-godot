@@ -1,3 +1,25 @@
+# =============================================================================
+# GOAP-GUIDE: Move - action (goap/game_logic/actions/move_action.gd)
+# =============================================================================
+# Purpose   : Hand unit.current_destiny to the movement driver. The actual
+#             stepping happens in Collisions.physics_process for units whose
+#             unit.state == "move".
+# Plannable : yes - the movement step of most plans.
+# is_valid  : unit.moves
+# precond   : {"has_destiny": true, "is_stunned": false}
+# effects   : {"arrived_at_destination": true, "lane_route_finished": true}
+# enter     : move(unit, unit.current_destiny).
+# perform   : returns false ONLY when already arrived; otherwise true. That
+#             one-shot shape is intentional: plans are re-installed each tick
+#             while a goal keeps producing them (see WalkLane.enter).
+# Helpers   : point / in_bounds / move / calc_step / step / _resolve_blocking /
+#             resume / stop / teleport.
+# Writes    : unit.current_destiny, current_step, angle, state via unit.set_state.
+# Traps     : stop() zeroes current_destiny and final_destiny; a zeroed destiny
+#             that reaches move() walks the unit toward the map origin.
+# See       : tests/unit/test_movement.gd.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 const teleport_time = 3

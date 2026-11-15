@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: ReturnLumber - action (goap/game_logic/actions/return_lumber.gd)
+# =============================================================================
+# Purpose   : Carry has_wood back to deliver_position, heal friendly buildings,
+#             and satisfy the goal fact collected_wood.
+# Plannable : yes - NeedLumber plan: GetLumber -> ReturnLumber.
+# cost      : 5 (deliberately above GetLumber's 1)
+# precond   : {"has_wood": true}
+# effects   : {"collected_wood": true}
+# enter     : Navigate.move(unit, deliver_position), with the Move fallback
+#             when no route exists.
+# perform   : returns returning_wood.
+# on_arrive : returning_wood = true; has_wood = false; heals every friendly
+#             building by its regen.
+# exit      : returning_wood = false.
+# Traps     : previously assigned set_state()'s null return to a nonexistent
+#             unit property and never moved; keep the navigation explicit.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

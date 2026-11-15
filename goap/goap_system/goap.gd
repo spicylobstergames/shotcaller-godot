@@ -1,3 +1,19 @@
+# =============================================================================
+# GOAP-GUIDE: Goap autoload (goap/goap_system/goap.gd)
+# =============================================================================
+# Public API: get_action_planner(), get_goal(name), get_action(name),
+#             physics_process(units, delta).
+# There is NO move / navigation member -- use Goap.get_action("Move") /
+# ("Navigate") and the Navigation autoload.
+# Owns      : one shared Planner plus the action and goal registries.
+# Pump      : called from game.gd:_physics_process while "is_game_active".
+#             Skips dead units and runs each agent every 7th physics tick
+#             (frames_til_next_process, seeded randi_range(0,6)) -- at 60 Hz
+#             that is ~8.6 Hz per unit. It is deliberately NOT named
+#             _physics_process; do not rename it.
+# See       : ARCHITECTURE.md "GOAP (the AI core)"; IMPROVEMENT_PLAN.md.
+# =============================================================================
+
 extends Node
 
 # Goap global class.
@@ -34,6 +50,8 @@ func get_action(action):
 func physics_process(units, delta):
 	for unit in units:
 		if unit.agent and !unit.dead:
+			# Staggered cadence: each agent runs every 7th physics tick
+			# (~8.6 Hz at 60 Hz physics). Dead units are skipped above.
 			if(unit.agent.frames_til_next_process == 0):
 				unit.agent.goap_process(delta)
 				unit.agent.frames_til_next_process = 6

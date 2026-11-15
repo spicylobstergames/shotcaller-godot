@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: Planner - backward search (goap/goap_system/planner.gd)
+# =============================================================================
+# get_plan(agent, goal) returns the cheapest action chain (Array) that makes
+# goal.get_desired_state(agent) true, or [] when no chain exists.
+# Search    : satisfaction is checked against agent state first, then
+#             WorldState; an Object value counts as true.
+# Bounds    : MAX_PLAN_DEPTH (64) plus a per-branch visited-state signature.
+# Cost      : every solution is materialized, then the lowest summed get_cost()
+#             wins; ties keep the first-built plan (registry order).
+# IMPORTANT : there is NO contradiction check. Preconditions are merged by
+#             dictionary assignment, so a conflicting value silently OVERWRITES
+#             an earlier requirement -- a goal can receive a plan that falsifies
+#             one of its own facts. Keep preconditions consistent by hand; see
+#             IMPROVEMENT_PLAN.md Track C (prior art on
+#             planner-precondition-safety).
+# See       : tests/unit/test_planner.gd, test_planner_real_actions.gd.
+# =============================================================================
+
 extends Node
 
 # self = GoapActionPlanner
@@ -108,6 +127,10 @@ func _build_plans(step, agent, visited_states: Dictionary = {}, depth: int = 0):
 		if should_use_action:
 			# Add action preconditions to the desired state.
 			var preconditions: Dictionary = action.get_preconditions()
+			# NOTE: no contradiction check here. Assignment silently overwrites
+			# any requirement this branch (or an ancestor) already holds, which
+			# can yield a plan that falsifies the goal. See the file banner and
+			# IMPROVEMENT_PLAN.md Track C before relying on ordering.
 			for precondition in preconditions:
 				desired_state[precondition] = preconditions[precondition]
 

@@ -1,3 +1,24 @@
+# =============================================================================
+# GOAP-GUIDE: WalkLane - goal (goap/game_logic/goals/walk_lane.gd)
+# =============================================================================
+# Purpose   : Default behavior -- walk the unit's assigned lane toward the
+#             enemy castle.
+# priority  : 2 (above NeedLumber, below combat/safety goals)
+# desired   : {"lane_route_finished": true}
+# is_valid  : lane set and known, no unit.target, moves, not dead, no player
+#             command, not retreating, ready_to_fight, not channeling, and
+#             route not already finished.
+# enter     : re-derives the route ONLY when it is missing or polluted by
+#             combat navigation; otherwise preserves the in-progress lane route
+#             and re-pops the next waypoint if the destiny was zeroed.
+# on_arrive : sets lane_route_finished when current_path is empty.
+# Helpers   : get_lane_path / closest_lane / change_lane / resume_lane.
+# Traps     : enter() runs on EVERY plan re-install (Move completes each tick).
+#             Re-deriving there pins units at the lane start -- read the long
+#             comment in enter() before touching it.
+# See       : tests/unit/test_attack_lifecycle.gd (lane-route cases).
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 

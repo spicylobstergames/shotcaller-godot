@@ -1,3 +1,17 @@
+# =============================================================================
+# GOAP-GUIDE: ChooseTactics - action (goap/game_logic/actions/choose_tactics.gd)
+# =============================================================================
+# Purpose   : DEAD STUB. No behavior, no callers.
+# Plannable : no - is_valid() hard-returns false.
+# is_valid  : false
+# cost      : 1 (default)
+# precond   : {}
+# effects   : {}
+# Traps     : Extends Node instead of action_contract.gd (contract violation)
+#             and is referenced only by action_registry.gd. Do NOT copy it as a
+#             template; it is slated for deletion (IMPROVEMENT_PLAN.md Track E1).
+# =============================================================================
+
 extends Node
 
 

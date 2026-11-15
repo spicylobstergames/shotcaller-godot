@@ -1,3 +1,13 @@
+# =============================================================================
+# GOAP-GUIDE: Goal registry (goap/game_logic/goal_registry.gd)
+# =============================================================================
+# Name -> goal instance (shared singleton). Which goals a unit evaluates is
+# SCENE DATA: the "goals_list" export on its goap_agent node, and
+# map/spawns.gd appends WalkLane at spawn.
+# Adding a goal: create the script, register it here, then add its name to the
+# unit scenes that should consider it.
+# =============================================================================
+
 extends Node
 
 # self = Goap.Goals

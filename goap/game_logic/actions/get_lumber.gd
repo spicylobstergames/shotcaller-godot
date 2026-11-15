@@ -1,3 +1,24 @@
+# =============================================================================
+# GOAP-GUIDE: GetLumber - action (goap/game_logic/actions/get_lumber.gd)
+# =============================================================================
+# Purpose   : Send a lumberjack to closest_tree, play the cut channel, and
+#             produce has_wood.
+# Plannable : yes - NeedLumber({collected_wood: true}) -> GetLumber -> ReturnLumber.
+# is_valid  : WorldState "is_game_active" is true (read with default false: a
+#             typed -> bool must never return the null of an unset key).
+# cost      : 1
+# precond   : {}
+# effects   : {"has_wood": true}
+# enter     : Move.point(unit, closest_tree).
+# perform   : returns has_wood.
+# on_arrive : attack animation + channeling_timer (cut_time = 6s), then
+#             has_wood = true -- this is a coroutine (await), so the fact is
+#             NOT set synchronously.
+# Traps     : on_arrive only runs because Collisions emits unit_arrived
+#             (Agent.on_arrive dispatch). closest_tree is set at spawn.
+# See       : docs/ai/world-state.md (has_wood, collected_wood).
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

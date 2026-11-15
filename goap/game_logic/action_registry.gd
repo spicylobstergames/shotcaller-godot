@@ -1,3 +1,19 @@
+# =============================================================================
+# GOAP-GUIDE: Action registry (goap/game_logic/action_registry.gd)
+# =============================================================================
+# Creates every action ONCE as a shared singleton. Never store per-unit mutable
+# state on an instance (the one documented exception is team-scoped:
+# Taxes.player_tax / enemy_tax).
+# Plannable (real preconditions/effects): Move, Navigate, ChooseTarget,
+#   PursueEnemy, AttackEnemy, Retreat, WaitForRegeneration, Hide, HelpFriend,
+#   GetLumber, ReturnLumber.
+# Service / signal-driven (never selected): RangeAttack, MeleeAttack, Order,
+#   Taxes, Mine, Conquer, Pray, ChooseTactics (dead -- Track E1).
+# get_action() accepts an int index or a class-name String.
+# Adding an action: create the script, add it here, and keep the registry count
+# in tests/unit/test_planner_real_actions.gd in sync.
+# =============================================================================
+
 extends Node
 
 # Lists all actions.

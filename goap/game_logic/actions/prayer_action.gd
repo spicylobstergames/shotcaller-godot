@@ -1,3 +1,15 @@
+# =============================================================================
+# GOAP-GUIDE: Pray - action (goap/game_logic/actions/prayer_action.gd)
+# =============================================================================
+# Purpose   : Channel 10s inside a friendly church for a random modifier, then
+#             put the building on a 60s cooldown.
+# Plannable : no - service object reached via Goap.get_action("Pray").
+# Called by : OrderAction.on_arrive when after_arive == "pray".
+# Writes    : building/agent is_channeling, has_player_command, unit modifiers.
+# Traps     : picks the bonus with the global randf()/randi() RNG (determinism);
+#             the cooldown is modelled as building is_channeling.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

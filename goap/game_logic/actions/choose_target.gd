@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: ChooseTarget - action (goap/game_logic/actions/choose_target.gd)
+# =============================================================================
+# Purpose   : Target acquisition: filter the enemies in sight, pick the closest
+#             hittable one, and commit it to unit.target.
+# Plannable : yes - PursueEnemy needs has_attack_target.
+# is_valid  : unit.attacks and not unit.target
+# cost      : 1 (default)
+# precond   : {"is_stunned": false}
+# effects   : {"has_attack_target": true}
+# enter     : select_target(unit, enemies in sight) -> set_target.
+# perform   : true immediately (one-shot); the plan advances on the next step.
+# Writes    : unit.target (the only writer), has_attack_target, hunting,
+#             enemy_dead = false; resets attack_count and drops "agile".
+# Traps     : set_target is also reached through agent.set_state("target", ...).
+#             Treat it as the single entry point for (re)targeting.
+# See       : tests/unit/test_agent_target.gd, test_attack_priorities.gd.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 
