@@ -1,13 +1,13 @@
 # Test Coverage
 
-**27 test classes**, **341 assertions**, **0 script errors** — all passing.
+**27 test classes**, **348 assertions**, **0 script errors** — all passing.
 (The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
 bump it whenever you add tests.)
 
 ```
 ./tests/run_suite.sh
-→ [1/3] TESTS_COMPLETE: passed=341 failed=0
-→ [1/3] All 341 tests passed.
+→ [1/3] TESTS_COMPLETE: passed=348 failed=0
+→ [1/3] All 348 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
@@ -92,7 +92,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
 | `test_agent_signals.gd` | Real `Agent`: goal/plan/action signal wiring and lifecycle | Unit |
 | `test_agent_target.gd` | ChooseTarget.set_target sync (unit target, hunting, attack-count reset, modifier cleanup) | Unit |
-| `test_agent_tactic.gd` | Tactic speed bonuses + Recover.should_retreat thresholds | Unit |
+| `test_agent_tactic.gd` | Tactic speed bonuses, Recover.should_retreat thresholds, Recover's planner-fact maintenance (ready_to_fight/is_retreating) | Unit |
 | `test_action_lifecycles.gd` | Action lifecycle semantics through the REAL Agent (plan replacement, signal-driven entry, multi-tick completion) | Unit |
 | `test_goal_interactions.gd` | Goal selection contract: tie-breaking, no-valid-goals, is_valid side effects, priority changes | Unit |
 | `test_goap_integration.gd` | Real Agent + real planner path: goal selection → plan install → follow → completion | Integration |
@@ -101,7 +101,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_spawns.gd` | `map/spawns.gd` camp_hire pooled-gold semantics, cemetery, lane tactics | Unit |
 | `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — real `_get_mirrored_coords`/`_get_changed_cells` | Unit |
 | `test_collisions.gd` | Quadtree + geometry helpers | Unit |
-| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking, crowded-blocking forward-progress floor | Unit |
+| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking, crowded-blocking forward-progress floor, perform() advancing the plan after arrival | Unit |
 | `test_navigation.gd` | Jump-point pathfinder (routes, walls, sealed maps) + NavigateAction→Navigation dispatch | Unit |
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
@@ -327,6 +327,31 @@ Production regressions found by the port and FIXED (each regression-tested):
   ("A crowded unit still advances", 1 assertion failing before the fix).
   Validated by the census: 9 → 0 freeze reports in a 170s run (main: 17).
   Golden replay unchanged (the smoke scenario has no crowds).
+
+- **`Move.perform` parked the plan after arrival** (traced from a live "units
+  fight, kill, then stand still" report back through history, FIXED): PR #233
+  (`73f69c0`) changed `Move.perform` from "always complete" to
+  `if arrived_at_destination: return false`. The agent only replans when the
+  GOAL changes, so once an arrival set `arrived_at_destination` the plan could
+  never complete: the unit sat on a dead `[Move]` plan with its goal frozen —
+  no lane walking and no target re-acquisition until some other goal outranked
+  it. Fix: restore the pre-#233 contract (`return true`; the step itself is
+  driven by `Collisions`). Regression: `tests/unit/test_movement.gd`
+  ("Move.perform completes after arrival"), failing before the fix. Golden
+  replay unchanged.
+- **`Recover` stranded `ready_to_fight` / `is_retreating`** (found by the
+  `--freeze-report` census, FIXED): `ready_to_fight` was cleared in
+  `Recover.enter()`, which runs AFTER `get_plan()` — so the first low-HP
+  evaluation saw the desired state already satisfied and planned nothing,
+  while `enter()` still set `is_retreating = true`. Only
+  `RetreatAction.exit()` clears `is_retreating`, and it never runs for an
+  empty plan, so `WalkLane` (is_retreating gate) and `EnemyDefeated`
+  (ready_to_fight gate) stayed blocked and the unit ended at `goal=null`,
+  standing still. Fix: maintain both facts in `Recover.is_valid()` before
+  planning — the same pattern `EnemyDefeated`/`FriendsSafe` use for
+  `enemy_dead`/`friends_safe`. Regression:
+  `tests/unit/test_agent_tactic.gd` (3 assertions failing before the fix).
+  Census: 1 report → 0 in a 170s run.
 
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation

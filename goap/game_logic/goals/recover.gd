@@ -30,6 +30,21 @@ func get_desired_state(_agent) -> Dictionary:
 func is_valid(agent) -> bool:
 	var unit = agent.get_unit()
 	var is_low_hp = should_retreat(unit)
+	if is_low_hp:
+		# Maintain the fact BEFORE planning. Recover.enter() runs AFTER
+		# get_plan(), so with ready_to_fight still true the desired state
+		# looked satisfied and the planner returned an EMPTY plan — the unit
+		# never actually retreated.
+		agent.set_state("ready_to_fight", false)
+	else:
+		# Stale-fact maintenance (same pattern as EnemyDefeated/FriendsSafe).
+		# RetreatAction.exit() is the only other place that clears
+		# is_retreating, and it never runs when the Recover plan is empty.
+		# Left set, is_retreating blocks WalkLane (its gate) and
+		# ready_to_fight=false blocks EnemyDefeated — the unit ends at
+		# goal=null and stands still forever.
+		agent.set_state("is_retreating", false)
+		agent.set_state("ready_to_fight", true)
 	return is_low_hp
 
 

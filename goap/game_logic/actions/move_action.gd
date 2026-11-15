@@ -9,9 +9,10 @@
 # precond   : {"has_destiny": true, "is_stunned": false}
 # effects   : {"arrived_at_destination": true, "lane_route_finished": true}
 # enter     : move(unit, unit.current_destiny).
-# perform   : returns false ONLY when already arrived; otherwise true. That
-#             one-shot shape is intentional: plans are re-installed each tick
-#             while a goal keeps producing them (see WalkLane.enter).
+# perform   : always true -- a one-shot plan step. The step itself is driven
+#             by Collisions for state == "move" units. Returning false after
+#             arrival (PR #233) parked the plan forever and froze arrived
+#             units: the agent only replans when the goal CHANGES.
 # Helpers   : point / in_bounds / move / calc_step / step / _resolve_blocking /
 #             resume / stop / teleport.
 # Writes    : unit.current_destiny, current_step, angle, state via unit.set_state.
@@ -54,8 +55,14 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	if agent.get_state("arrived_at_destination"):
-		return false
+	# Always complete: the step itself is driven by Collisions for units whose
+	# state == "move", and the agent only replans when the goal CHANGES. PR #233
+	# (73f69c0) made this return false once arrived_at_destination was set,
+	# which parks the plan forever — an arrived unit sat on a dead [Move] plan
+	# with its goal frozen ("fights, kills, then stands still"). The original
+	# contract was "the step is done, advance me" (it returned true always).
+	# Regression: tests/unit/test_movement.gd ("Move.perform completes after
+	# arrival"), and ARCHITECTURE.md "State facts".
 	return true
 
 
