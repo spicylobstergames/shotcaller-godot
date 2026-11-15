@@ -46,6 +46,7 @@ class SignalRecorder:
 	var goals: Array = []
 	var plans: Array = []
 	var actions: Array = []
+	var states: Array = []
 
 	func on_goal_changed(goal) -> void:
 		goals.append(goal)
@@ -55,6 +56,9 @@ class SignalRecorder:
 
 	func on_action_changed(action) -> void:
 		actions.append(action)
+
+	func on_state_changed(text) -> void:
+		states.append(text)
 
 
 func run(harness) -> void:
@@ -68,12 +72,30 @@ func run(harness) -> void:
 	agent.goal_changed.connect(recorder.on_goal_changed)
 	agent.plan_changed.connect(recorder.on_plan_changed)
 	agent.action_changed.connect(recorder.on_action_changed)
+	agent.state_changed.connect(recorder.on_state_changed)
+
+	# state_changed must be declared with exactly ONE argument (the combined
+	# "Goal Action" debug string). It used to declare (goal, action) while
+	# being emitted with a single string; the HUD's update_state(text) is the
+	# production consumer. D4.
+	var state_signal_info := {}
+	for sig in agent.get_signal_list():
+		if sig.name == "state_changed":
+			state_signal_info = sig
+	harness.check_equal(
+		state_signal_info.args.size(), 1,
+		"state_changed declares exactly one argument (the debug text)."
+	)
 
 	agent._replace_plan(goal, [first_action, second_action])
 	harness.check_equal(recorder.goals, [goal], "Agent emits a goal change for the selected goal.")
 	harness.check_equal(recorder.plans.size(), 1, "Agent emits the newly assigned plan.")
 	harness.check_equal(
 		recorder.actions, [first_action], "Agent emits and enters the first planned action."
+	)
+	harness.check_equal(
+		recorder.states, ["TestGoal TestAction"],
+		"state_changed carries the combined goal/action debug string."
 	)
 	harness.check_equal(first_action.enter_count, 1, "The first action enters when selected.")
 
@@ -97,5 +119,9 @@ func run(harness) -> void:
 		"Completing the plan clears the active action."
 	)
 	harness.check_equal(second_action.exit_count, 1, "The final action exits on plan completion.")
+	harness.check_equal(
+		recorder.states.size(), 1,
+		"state_changed is not emitted for a cleared goal (needs goal AND action)."
+	)
 
 	agent.free()

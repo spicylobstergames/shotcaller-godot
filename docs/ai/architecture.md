@@ -257,9 +257,8 @@ The agent connects to unit signals in `_ready()`:
 
 Signals that exist but are **not** connected to the agent: `unit_move_ended`,
 `unit_stuned`, `unit_started_channeling`, `unit_healed`, `unit_leveled_up`.
-`state_changed` is declared `(goal, action)` but emitted with a single
-combined `"Goal Action"` string, so `hud.update_state(text)` receives one
-argument.
+`state_changed` carries a single combined `"Goal Action"` debug string, and
+`hud.update_state(text)` receives it as its one argument.
 
 ## State flow
 

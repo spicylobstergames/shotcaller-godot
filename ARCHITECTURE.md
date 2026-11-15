@@ -155,9 +155,9 @@ Not wired: **`unit_arrived` and `unit_move_ended`**. `Unit.on_arrive()` emits
 is handled entirely by `Collisions` (next section). This is a live wiring bug,
 not a design choice; see Known gaps #1.
 
-`state_changed` is declared `(goal, action)` but emitted with a single
-`"Goal Action"` string (`agent.gd:156`); Godot fills the missing arg with null,
-so `hud.update_state(text)` receives the combined string. The signature lies.
+`state_changed` is declared and emitted with a single combined
+`"Goal Action"` string; `hud.update_state(text)` consumes it. (Track D4 fixed
+the old two-arg declaration that disagreed with its emission.)
 
 ### Planner (`goap/goap_system/planner.gd`)
 
@@ -444,12 +444,11 @@ is fixed yet. Ordered by expected impact.
    *Direction:* replace with `Navigate.move(unit, agent.get_state("deliver_position"))`
    and add a lumberjack integration test.
 7. **Dead/duplicated plumbing.** `opponents_in_sight` allocates an array
-   per enemy-goal evaluation for no consumer. `state_changed` is emitted with
-   one arg against a two-arg declaration. `WorldState.setup_timers()` creates
+   per enemy-goal evaluation for no consumer. `WorldState.setup_timers()` creates
    and adds a new `Timer` on every `game.start()` while `clear_state()` does
    not stop the old ones.
    *Direction:* drop or consume
-   `opponents_in_sight`; make `state_changed` match its emission; make timer
+   `opponents_in_sight`; make timer
    setup idempotent. (The dead `ChooseTactics` action was deleted — Track E1.)
 8. **Corpse and growth costs.** Dead units stay in `all_units` (the pump now
    skips them, but `WorldState.second_elapsed` → `Agent.on_every_second` still

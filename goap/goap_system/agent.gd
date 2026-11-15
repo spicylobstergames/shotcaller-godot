@@ -25,7 +25,10 @@ extends Node
 signal plan_changed(plan)
 signal goal_changed(goal)
 signal action_changed(action)
-signal state_changed(goal, action)
+# Emitted with ONE combined "Goal Action" debug string by _replace_plan
+# (never with a goal/action pair -- the old two-arg declaration lied, and the
+# connected hud.update_state(text) would have received a null second arg).
+signal state_changed(text)
 
 @export var goals_list: Array = []
 
