@@ -59,9 +59,10 @@ func _sample(now: int) -> void:
 		# Attacking in place is legitimate; anything else should be moving.
 		if is_instance_valid(unit.target) and Goap.get_action("ChooseTarget").in_range(unit, unit.target):
 			continue
-		# Nothing to do (no target, nowhere to walk) is legitimately idle, not
-		# stuck — e.g. a lumberjack mid-cut (current_destiny == Vector2.ZERO).
-		if not is_instance_valid(unit.target) and unit.current_destiny == Vector2.ZERO:
+		# Workers between jobs are legitimately idle (cutting, returning).
+		var current = unit.agent.get_current_action()
+		var current_name: String = current.get_class_name() if current != null else ""
+		if unit.type == "worker" or current_name in ["GetLumber", "ReturnLumber", "Hide"]:
 			continue
 		var last: int = int(_last_report.get(id, -REPORT_COOLDOWN_MS))
 		if now - last < REPORT_COOLDOWN_MS:

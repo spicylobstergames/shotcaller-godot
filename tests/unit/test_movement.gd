@@ -159,6 +159,23 @@ func run(harness) -> void:
 		w.free()
 	crowd.free()
 
+	# --- perform() must complete so the agent can re-plan ---
+	# PR #233 (73f69c0) changed this to `false` once arrived_at_destination is
+	# set, which parks the plan forever: the agent only replans when the GOAL
+	# changes, so an arrived unit stands with a dead [Move] plan ("fights,
+	# kills, then stands still"). The pre-refactor contract was "the step is
+	# done, advance me"; stepping is Collisions' job either way.
+	unit.agent.set_state("arrived_at_destination", true)
+	harness.check(
+		move_action.perform(unit.agent, 0.0),
+		"Move.perform completes after arrival so the agent re-plans instead of parking."
+	)
+	unit.agent.set_state("arrived_at_destination", false)
+	harness.check(
+		move_action.perform(unit.agent, 0.0),
+		"Move.perform completes while stepping (one-shot plan step)."
+	)
+
 	harness.check(
 		Goap.get_action("Move") != null,
 		"Move action is registered with the GOAP action registry."
