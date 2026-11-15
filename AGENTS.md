@@ -173,11 +173,10 @@ attack count/modifiers. Read `unit.target`, never `agent.get_state("target")`.
 `[ChooseTarget, PursueEnemy, AttackEnemy]`. It is **not** a documented
 always-invalid service object — that was the pre-restructure behavior.
 
-### Dead code (do not copy)
+### Dead code (removed)
 
-`ChooseTactics` extends `Node` instead of the action contract, always returns
-`is_valid() == false`, and is referenced by nothing but the registry. Do not
-use it as a template; see `IMPROVEMENT_PLAN.md` (Track E1) for its removal.
+`ChooseTactics` (a `Node`-extending stub that was never valid) was deleted in
+Track E1; do not reintroduce it or use old copies as a template.
 
 ## Completion requirements
 

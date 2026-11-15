@@ -53,7 +53,6 @@ Which goals a unit evaluates is **scene data** (`goals_list` on its
 | `ReturnLumber` | yes | `has_wood` → `collected_wood` |
 | `WaitForRegeneration` | yes | `arrived_at_retreat` → `ready_to_fight` |
 | `Conquer` `MeleeAttack` `Mine` `Pray` `RangeAttack` `Taxes` | no | service / signal-driven (`Goap.get_action(...)`) |
-| `ChooseTactics` | no | dead stub — slated for removal (Track E1) |
 
 ## Facts you will touch most
 

@@ -197,7 +197,7 @@ noted future option but do not exist.
   declared on the base; every action defines it for registry lookup.
 - `goap/goap_system/goal_contract.gd` — `is_valid()` (true), `priority()` (1),
   `get_desired_state()` (`{}`), `enter()`/`exit()`.
-- **19 actions** in `goap/game_logic/action_registry.gd`, **8 goals** in
+- **18 actions** in `goap/game_logic/action_registry.gd`, **8 goals** in
   `goap/game_logic/goal_registry.gd` (asserted by
   `tests/unit/test_planner_real_actions.gd`).
 
@@ -205,14 +205,12 @@ Planning-relevant vs. service actions:
 
 | Plannable (real preconditions/effects) | Service / signal-driven (never selected) |
 |----------------------------------------|------------------------------------------|
-| `Move`, `Navigate`, `ChooseTarget`, `PursueEnemy`, `AttackEnemy`, `Retreat`, `WaitForRegeneration`, `Hide`, `HelpFriend`, `GetLumber`, `ReturnLumber` | `RangeAttack`, `MeleeAttack`, `Order`, `Taxes`, `Mine`, `Conquer`, `Pray`, `ChooseTactics` |
+| `Move`, `Navigate`, `ChooseTarget`, `PursueEnemy`, `AttackEnemy`, `Retreat`, `WaitForRegeneration`, `Hide`, `HelpFriend`, `GetLumber`, `ReturnLumber` | `RangeAttack`, `MeleeAttack`, `Order`, `Taxes`, `Mine`, `Conquer`, `Pray` |
 
 `ChooseTarget.is_valid()` is `unit.attacks and !unit.target` — it **is** planned
 as a target-acquisition step (e.g. `[ChooseTarget, PursueEnemy, AttackEnemy]`),
-so `AGENTS.md`'s "always returns false / not planned" exception is stale. Its
-sibling `ChooseTactics` is dead: it extends `Node` (not the action contract),
-hard-returns `is_valid() == false`, and is referenced by nothing but the
-registry.
+so `AGENTS.md`'s "always returns false / not planned" exception is stale.
+(The dead `ChooseTactics` stub was deleted — IMPROVEMENT_PLAN.md Track E1.)
 
 ### Arrival is collision-driven, not goal-driven
 
@@ -445,15 +443,14 @@ is fixed yet. Ordered by expected impact.
    reach the mill. Reachability is currently masked by gap #1.
    *Direction:* replace with `Navigate.move(unit, agent.get_state("deliver_position"))`
    and add a lumberjack integration test.
-7. **Dead/duplicated plumbing.** `ChooseTactics` is unreferenced dead code
-   (extends `Node`, always invalid). `opponents_in_sight` allocates an array
+7. **Dead/duplicated plumbing.** `opponents_in_sight` allocates an array
    per enemy-goal evaluation for no consumer. `state_changed` is emitted with
    one arg against a two-arg declaration. `WorldState.setup_timers()` creates
    and adds a new `Timer` on every `game.start()` while `clear_state()` does
    not stop the old ones.
-   *Direction:* delete or implement `ChooseTactics`; drop or consume
+   *Direction:* drop or consume
    `opponents_in_sight`; make `state_changed` match its emission; make timer
-   setup idempotent.
+   setup idempotent. (The dead `ChooseTactics` action was deleted — Track E1.)
 8. **Corpse and growth costs.** Dead units stay in `all_units` (the pump now
    skips them, but `WorldState.second_elapsed` → `Agent.on_every_second` still
    fires for every corpse, and `all_units` grows monotonically with wave

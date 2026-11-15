@@ -89,7 +89,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
 | `test_helpers.gd` | Shared helpers are load-bearing (snapshot/mock-goal self-tests) | Unit |
 | `test_planner.gd` | Planner mechanics (cost ordering, precondition chains, dead ends) via contract doubles | Unit |
-| `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
+| `test_planner_real_actions.gd` | Planner + real 18-action registry + real goals (contract drift) | Integration |
 | `test_agent_signals.gd` | Real `Agent`: goal/plan/action signal wiring and lifecycle | Unit |
 | `test_agent_target.gd` | ChooseTarget.set_target sync (unit target, hunting, attack-count reset, modifier cleanup) | Unit |
 | `test_agent_tactic.gd` | Tactic speed bonuses, Recover.should_retreat thresholds, Recover's planner-fact maintenance (ready_to_fight/is_retreating) | Unit |

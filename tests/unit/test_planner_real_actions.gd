@@ -86,8 +86,8 @@ func run(harness) -> void:
 	planner.set_actions(actions)
 
 	# --- registry sanity: every real action honors the production contract ---
-	harness.check_equal(actions.size(), 19,
-		"Action registry holds all 19 production actions.")
+	harness.check_equal(actions.size(), 18,
+		"Action registry holds all 18 production actions.")
 	var contract_breaks: Array[String] = []
 	for action in actions:
 		if action.get_effects() == null:

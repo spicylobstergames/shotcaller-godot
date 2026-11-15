@@ -14,7 +14,7 @@
 # get_class_name() is NOT declared here; each action defines it for the
 # registry and Goap.get_action(name).
 # SERVICE actions (RangeAttack, MeleeAttack, Taxes, Mine, Conquer, Pray,
-# Order, ChooseTactics) also extend this file but are never selected by the
+# Order) also extend this file but are never selected by the
 # planner; they are called directly or from signals.
 # See: ARCHITECTURE.md "Contracts and registries"; docs/ai/adding-behavior.md.
 # =============================================================================

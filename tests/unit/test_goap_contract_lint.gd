@@ -29,7 +29,6 @@ const GOAL_NAMES := [
 # the planner. Adding a new no-effect action must fail this test on purpose:
 # either give it effects or add it here and document it as a service object.
 const SERVICE_ACTIONS := [
-	"ChooseTactics",
 	"Conquer",
 	"MeleeAttack",
 	"Mine",
@@ -58,7 +57,7 @@ func run(harness) -> void:
 		if not FileAccess.get_file_as_string(path).contains("GOAP-GUIDE"):
 			missing.append(path)
 	harness.check(
-		files.size() >= 35, "Banner scan covered the GOAP tree (%d scripts)." % files.size()
+		files.size() >= 34, "Banner scan covered the GOAP tree (%d scripts)." % files.size()
 	)
 	harness.check(
 		missing.is_empty(),

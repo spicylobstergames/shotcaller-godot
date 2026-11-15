@@ -298,8 +298,8 @@ The prioritized, implementation-ready list now lives in
 - **Track D — state-fact hygiene.** Replace string keys with constants,
   document the reset contract for facts such as `has_destiny` and
   `arrived_at_retreat`, and remove dead keys.
-- **Track E — performance and cleanup.** Guard corpse per-second work, delete
-  the dead `ChooseTactics` action, and measure planner cost.
+- **Track E — performance and cleanup.** Guard corpse per-second work and
+  measure planner cost. (The dead `ChooseTactics` action was deleted — E1.)
 - **Track F — test hardening.** Replace mock-only assertions and re-sabotage
   the ported planner/agent tests.
 
