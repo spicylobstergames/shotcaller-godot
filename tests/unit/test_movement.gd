@@ -131,6 +131,34 @@ func run(harness) -> void:
 		"Soft blocking does not hard-stop movement."
 	)
 
+	# --- crowded blocking must not deadlock forward progress ---
+	# Packed units used to sum enough repulsion to cancel (and reverse) the
+	# step, so they jittered in place forever at lane choke points (seen in
+	# 90s+ live runs on both this branch and upstream main). A step must keep
+	# a forward floor no matter how many neighbours overlap.
+	var crowd = TestUnit.new()
+	crowd.collision_radius = 40.0
+	crowd.global_position = Vector2(100, 32)
+	crowd.current_destiny = Vector2(200, 32)
+	Collisions.quad.add_body(crowd)
+	var wall: Array = []
+	for k in range(-25, 26, 5):
+		var wall_unit = TestUnit.new()
+		wall_unit.collide = true
+		# 20px to the right of the next position (110, 32): inside the 48px
+		# overlap test, all on the far side, so repulsion is -x.
+		wall_unit.global_position = Vector2(130, 32 + k)
+		Collisions.quad.add_body(wall_unit)
+		wall.append(wall_unit)
+	move_action.step(crowd, 1.0)
+	harness.check(
+		crowd.global_position.x > 100.0,
+		"A crowded unit still advances instead of jittering in place (no repulsion deadlock)."
+	)
+	for w in wall:
+		w.free()
+	crowd.free()
+
 	harness.check(
 		Goap.get_action("Move") != null,
 		"Move action is registered with the GOAP action registry."

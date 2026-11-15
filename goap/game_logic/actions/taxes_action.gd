@@ -1,3 +1,15 @@
+# =============================================================================
+# GOAP-GUIDE: Taxes - action (goap/game_logic/actions/taxes_action.gd)
+# =============================================================================
+# Purpose   : Tax-rate service: the per-team tax level drives extra gold and a
+#             conquer-limit table.
+# Plannable : no - service object, set from the UI.
+# State     : holds team-scoped mutable state (player_tax / enemy_tax) on a
+#             SHARED singleton. This is the documented exception to "no
+#             per-unit state in shared actions" -- it is team-scoped, not
+#             unit-scoped. Do not add per-unit data here.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

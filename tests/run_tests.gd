@@ -2,12 +2,11 @@ extends Node
 
 # Keep suite registration explicit so the headless run order is predictable.
 #
-# PORT NOTE: The GOAP-coupled suites from the original CI-verified suite
-# (planner, agent, goal, navigation, movement, action-lifecycle tests) are
-# DEFERRED until the upstream GOAP restructure settles. See COVERAGE.md
-# ("Deferred coverage"). Only suites targeting stable production seams
-# (skills, modifiers, spawns, collisions, map tools, parse/scene sanity)
-# run here.
+# PORT NOTE: contrary to the interim deferral (DECISIONS.md D11), the full
+# CI-verified suite is active again on the post-restructure base (D12): all 25
+# test classes below are registered and run, and EXPECTED_UNIT_TESTS in
+# run_suite.sh pins the assertion count. Adding a test file requires an entry
+# here AND a _run_suite(...) call below.
 
 const CollisionTests = preload("res://tests/unit/test_collisions.gd")
 const ModifiersTests = preload("res://tests/unit/test_modifiers.gd")
@@ -31,13 +30,32 @@ const ArriveAtDestinationTests = preload("res://tests/unit/test_arrive_at_destin
 const OrderActionTests = preload("res://tests/unit/test_order_action.gd")
 const AttackPrioritiesTests = preload("res://tests/unit/test_attack_priorities.gd")
 const AttackLifecycleTests = preload("res://tests/unit/test_attack_lifecycle.gd")
+const ArrivalDispatchTests = preload("res://tests/unit/test_arrival_dispatch.gd")
 const SightRadiusTests = preload("res://tests/unit/test_sight_radius.gd")
+const StateKeysTests = preload("res://tests/unit/test_state_keys.gd")
+const GoapContractLintTests = preload("res://tests/unit/test_goap_contract_lint.gd")
+const GoapIndexTests = preload("res://tests/unit/test_goap_index.gd")
+const GoapIndex = preload("res://tools/goap_index.gd")
 
 var tests_run := 0
 var failures: Array[String] = []
+var _only: Array = []
 
 
 func _ready() -> void:
+	# Tooling entry point: regenerate docs/ai/goap-index.md from the banners.
+	#   ... res://tests/test_runner.tscn -- --gen-goap-index
+	if "--gen-goap-index" in OS.get_cmdline_user_args():
+		var written := GoapIndex.write()
+		print("GOAP_INDEX_WRITTEN: %d bytes" % written)
+		get_tree().quit(0 if written >= 0 else 1)
+		return
+	# Optional subset filter for tight iteration:
+	#   ... res://tests/test_runner.tscn -- --only=Planner,StateKeys
+	# run_suite.sh never passes it, so the pinned full count is unaffected.
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--only="):
+			_only = arg.trim_prefix("--only=").split(",")
 	# Let project autoloads finish _ready before tests call into game services.
 	await get_tree().process_frame
 	_run_suite("Collision", CollisionTests)
@@ -62,7 +80,11 @@ func _ready() -> void:
 	_run_suite("OrderAction", OrderActionTests)
 	_run_suite("AttackPriorities", AttackPrioritiesTests)
 	_run_suite("AttackLifecycle", AttackLifecycleTests)
+	_run_suite("ArrivalDispatch", ArrivalDispatchTests)
 	_run_suite("SightRadius", SightRadiusTests)
+	_run_suite("StateKeys", StateKeysTests)
+	_run_suite("GoapContractLint", GoapContractLintTests)
+	_run_suite("GoapIndex", GoapIndexTests)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line
 	# against the pinned EXPECTED_UNIT_TESTS count in a separate file, so a
@@ -81,6 +103,8 @@ func _ready() -> void:
 # Print each suite as it starts: if a suite hangs, the CI log shows the
 # exact one instead of a silent gap after "[1/3] Unit + integration suite".
 func _run_suite(name: String, suite) -> void:
+	if not _only.is_empty() and not name in _only:
+		return
 	print("--- running suite: ", name)
 	suite.new().run(self)
 

@@ -1,3 +1,14 @@
+# =============================================================================
+# GOAP-GUIDE: Mine - action (goap/game_logic/actions/mine_action.gd)
+# =============================================================================
+# Purpose   : Mine UI/channeling service: collect gold for the team or destroy
+#             the mine (turning it neutral).
+# Plannable : no - service object driven by order buttons.
+# Writes    : is_channeling, leader gold, mine gold/team.
+# Traps     : async recursion over channeling_timer (1s ticks); not part of
+#             GOAP planning at all, despite living in actions/.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

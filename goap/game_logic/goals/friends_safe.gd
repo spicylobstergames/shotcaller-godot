@@ -1,3 +1,18 @@
+# =============================================================================
+# GOAP-GUIDE: FriendsSafe - goal (goap/game_logic/goals/friends_safe.gd)
+# =============================================================================
+# Purpose   : Go help a nearby teammate who is being attacked.
+# priority  : 5
+# desired   : {"friends_safe": true}
+# is_valid  : ready_to_fight, unit.attacks, and an ally in sight has
+#             being_attacked set.
+# Side effects (REQUIRED): resets friends_safe = false before planning -- the
+#             same stale-fact trap as enemy_dead (the planner runs before
+#             enter(), so only this reset makes a repeat help possible).
+# enter     : sets react_target to the ally's attacker (consumed by HelpFriend).
+# See       : tests/unit/test_attack_lifecycle.gd.
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 

@@ -1,3 +1,15 @@
+# =============================================================================
+# GOAP-GUIDE: ObeyPlayer - goal (goap/game_logic/goals/obey_player.gd)
+# =============================================================================
+# Purpose   : Execute the player's current order (highest priority in the game).
+# priority  : 100
+# desired   : {"player_order_complete": true}   (produced by Order)
+# is_valid  : unit.type == "leader", controllable, not dead, and player_order
+#             is a non-empty Dictionary.
+# Traps     : non-leader units never take this path -- OrderAction executes
+#             their orders immediately instead.
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 

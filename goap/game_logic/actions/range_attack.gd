@@ -1,3 +1,16 @@
+# =============================================================================
+# GOAP-GUIDE: RangeAttack - action (goap/game_logic/actions/range_attack.gd)
+# =============================================================================
+# Purpose   : Projectile lifecycle for ranged units and buildings: release,
+#             flight, hit detection, stuck-sprite handling.
+# Plannable : no - signal-driven service. unit_attack_release ->
+#             Agent.on_attack_release; Collisions calls projectile_loop for
+#             every unit each physics tick.
+# Traps     : the TARGET takes the hit from the shooter. An old regression had
+#             the shooter damaging itself and leaking projectile entries
+#             (COVERAGE.md). Uses randf() for stuck-sprite variation.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

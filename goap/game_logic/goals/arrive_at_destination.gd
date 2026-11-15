@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: ArriveAtDestination - goal
+#            (goap/game_logic/goals/arrive_at_destination.gd)
+# =============================================================================
+# Purpose   : Arrival SERVICE/LIBRARY goal -- path advancement and destination
+#             collision checks. NOT a selectable goal.
+# Plannable : NO - is_valid() hard-returns false (activation is disabled and
+#             pinned by tests/unit/test_arrive_at_destination.gd).
+# priority  : 3 (unused while is_valid() is false)
+# desired   : {"arrived_at_destination": true}
+# enter     : records has_path and clears arrived_at_destination.
+# API       : is_at_destination(unit) and on_arrive(unit) -- both are called by
+#             Collisions.physics_process, not by the planner or the agent.
+# Traps     : on_arrive() takes the UNIT. Collisions passes the unit; the old
+#             Recover delegation passed the AGENT and would double-advance the
+#             path. Do not re-enable activation without a golden re-record.
+# See       : ARCHITECTURE.md "Arrival is collision-driven, not goal-driven".
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 

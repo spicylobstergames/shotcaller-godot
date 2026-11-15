@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: Hide - action (goap/game_logic/actions/hide.gd)
+# =============================================================================
+# Purpose   : Run to deliver_position and hide until the threat passes (or the
+#             hide timer expires).
+# Plannable : yes - NeedSafety({is_threatened: false}) -> Hide.
+# cost      : 1 (default)
+# precond   : {}
+# effects   : {"is_threatened": false}
+# enter     : Move.point(unit, deliver_position); is_running = true.
+# on_arrive : unit.hide(); is_running = false; is_hiding = true;
+#             hiding_counter = 0.
+# perform   : true once hiding_counter > max_wait_seconds (5).
+# exit      : unit.show(); clears is_hiding / is_threatened / hiding_counter.
+# Traps     : NeedSafety is only in the lumberjack's goals_list, and
+#             deliver_position is set at spawn. on_arrive needs the arrival
+#             dispatch (Collisions -> unit_arrived).
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

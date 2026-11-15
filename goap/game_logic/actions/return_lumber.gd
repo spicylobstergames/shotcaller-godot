@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: ReturnLumber - action (goap/game_logic/actions/return_lumber.gd)
+# =============================================================================
+# Purpose   : Carry has_wood back to deliver_position, heal friendly buildings,
+#             and satisfy the goal fact collected_wood.
+# Plannable : yes - NeedLumber plan: GetLumber -> ReturnLumber.
+# cost      : 5 (deliberately above GetLumber's 1)
+# precond   : {"has_wood": true}
+# effects   : {"collected_wood": true}
+# enter     : Navigate.move(unit, deliver_position), with the Move fallback
+#             when no route exists.
+# perform   : returns returning_wood.
+# on_arrive : returning_wood = true; has_wood = false; heals every friendly
+#             building by its regen.
+# exit      : returning_wood = false.
+# Traps     : previously assigned set_state()'s null return to a nonexistent
+#             unit property and never moved; keep the navigation explicit.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 
@@ -22,7 +41,13 @@ func perform(agent, _delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	unit.current_destination = agent.set_state("deliver_position")
+	var deliver_position = agent.get_state("deliver_position")
+	if deliver_position == null:
+		return
+	# Pathfind first; fall back to walking straight there when no route
+	# exists (the established pattern in PursueEnemy/AttackEnemy).
+	if not Goap.get_action("Navigate").move(unit, deliver_position):
+		Goap.get_action("Move").move(unit, deliver_position)
 
 
 func on_arrive(agent):

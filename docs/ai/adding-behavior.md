@@ -9,7 +9,7 @@ This document provides a practical recipe for adding new actions and goals to Sh
 Before writing a new action, read 2–3 existing actions to understand the established pattern. Good reference examples:
 
 - **`AttackEnemy`** (`goap/game_logic/actions/attack_enemy.gd`) — clear lifecycle with enter/perform/exit; uses `ChooseTarget` for range checking.
-- **`MoveAction`** (`goap/game_logic/actions/move_action.gd`) — drives movement through `Goap.move`; manages path state.
+- **`MoveAction`** (`goap/game_logic/actions/move_action.gd`) — drives movement through `Goap.get_action("Move")`; manages path state.
 - **`NavigateAction`** (`goap/game_logic/actions/navigate_action.gd`) — pathfinding-driven movement; sets up navigation paths.
 - **`PursueEnemy`** (`goap/game_logic/actions/pursue_enemy.gd`) — moves toward an enemy target.
 - **`OrderAction`** (`goap/game_logic/actions/order_action.gd`) — processes player orders.
@@ -63,11 +63,11 @@ func get_cost(agent) -> int:
 
 ### Step 6: Implement `get_preconditions() -> Dictionary`
 
-Describe facts that must hold **before** the action can run. The planner uses these to determine ordering and to perform contradiction checking.
+Describe facts that must hold **before** the action can run. The planner uses these to determine ordering. **The planner does not detect contradictions** (see below), so consistency is on you.
 
 **Critical rules:**
 - Preconditions must agree with `is_valid()` — if `is_valid()` requires a fact to be true, the precondition should not require it to be false (or vice versa).
-- Preconditions must not contradict facts that an ancestor in the planning tree already requires to stay satisfied. The planner will reject such branches.
+- Preconditions must not contradict facts that an ancestor in the planning tree already requires to stay satisfied. **The planner will NOT reject such branches** — it merges preconditions by dictionary assignment, so a conflicting value silently overwrites the ancestor's requirement and the plan can falsify the goal. Keep preconditions consistent by hand and add a `tests/unit/test_planner.gd` case if your action depends on ordering.
 - A precondition of `false` is not satisfied by an unset state key (`null != false` in GDScript).
 
 ```gdscript
@@ -113,7 +113,7 @@ func perform(agent, delta) -> bool:
 1. Handle the failure internally (e.g., set a state flag that causes `perform()` to return `true`).
 2. Rely on the agent's goal change mechanism (another goal with higher priority triggers replanning).
 
-This is a known limitation. See `docs/ai/architecture.md` for planned improvements.
+This is a known limitation. See `IMPROVEMENT_PLAN.md` (Track C) for the planned planner work; the verified system map is `ARCHITECTURE.md`.
 
 ### Step 10: Implement `exit(agent)`
 
@@ -123,7 +123,7 @@ Called once when the action ends (completes normally or is interrupted). Clean u
 func exit(agent):
     var unit = agent.get_unit()
     # Stop movement, release resources, etc.
-    Goap.move.stop(unit)
+    Goap.get_action("Move").stop(unit)
 ```
 
 ### Step 11: Register the action
@@ -168,11 +168,11 @@ func get_class_name() -> String:
 
 ### Step 4: Implement `is_valid(agent) -> bool`
 
-Determine whether the goal is currently eligible. This is called **every physics tick (30 Hz) for every goal of every unit**.
+Determine whether the goal is currently eligible. This is called for every goal of every unit on that unit's staggered turn (~8.6 Hz; physics is 60 Hz).
 
 **Critical rule:** `is_valid()` must not mutate agent state. It should be a pure function that returns a boolean. Side effects in `is_valid()` create order-dependent behavior and make the system harder to reason about.
 
-Current exceptions (goals that do mutate state in `is_valid()`): `EnemyDefeated`, `WalkLane`, `ArriveAtDestination`, `NeedSafety`, `FriendsSafe`, `Recover`. These should be refactored. See `docs/ai/architecture.md` for planned improvements.
+Current exceptions (goals that mutate state in `is_valid()`): `EnemyDefeated`, `FriendsSafe`, `NeedSafety`. They do it deliberately to reset stale success facts (see `tests/unit/test_attack_lifecycle.gd`); `WalkLane` mutates in `enter()`, `ArriveAtDestination.is_valid()` hard-returns `false`, and `Recover` is pure. See `ARCHITECTURE.md` "State facts" and `IMPROVEMENT_PLAN.md` Track D for the planned cleanup.
 
 ```gdscript
 func is_valid(agent) -> bool:
@@ -239,7 +239,7 @@ The agent loads goals from its `goals_list` export variable. To make the new goa
 | Method | Called | Responsibility |
 |--------|--------|----------------|
 | `get_class_name()` | Registry lookup | Return the goal's identifier. |
-| `is_valid(agent) -> bool` | Every tick (30 Hz) for every unit | Determine eligibility. Must be pure (no side effects). |
+| `is_valid(agent) -> bool` | Every goal of every unit on its staggered turn (~8.6 Hz) | Determine eligibility. Should be pure; the documented exceptions reset stale facts. |
 | `priority(agent) -> int` | Every tick when evaluating goals | Return priority (higher = more important). |
 | `get_desired_state(agent) -> Dictionary` | Planning (goal evaluation) | Return desired facts for the planner. |
 
@@ -248,14 +248,14 @@ The agent loads goals from its `goals_list` export variable. To make the new goa
 ### Actions must not
 
 - **Store per-unit mutable state in the action object.** The action registry creates action instances once and shares them across all units. Per-unit data belongs in the agent's state dictionary or the unit itself.
-- **Reimplement movement or combat** when an existing game system already provides it. Use `Goap.move`, `Goap.navigation`, `Goap.get_action(...)`, or unit methods.
+- **Reimplement movement or combat** when an existing game system already provides it. Use `Goap.get_action("Move")` / `Goap.get_action("Navigate")`, the `Navigation` autoload, or unit methods.
 - **Modify WorldState** except for explicitly game-state facts (kills, deaths, team changes).
 - **Have preconditions that contradict `is_valid()`**. If `is_valid()` requires a fact to be true, the precondition should not require it to be false.
 - **Have effects that describe what the action hopes to achieve** rather than what is true after completion. Effects are used by the planner to match goal requirements.
 
 ### Goals must not
 
-- **Mutate agent state in `is_valid()`**. This creates order-dependent behavior. `is_valid()` is called 30 Hz for every goal of every unit.
+- **Mutate agent state in `is_valid()`**. This creates order-dependent behavior. `is_valid()` is called on each unit's staggered turn (~8.6 Hz). The documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`) reset stale success facts.
 - **Have `get_desired_state()` return an empty dictionary** unless the goal is truly a no-op (e.g., "wait" as a passive goal). An empty desired state causes the planner to return an empty plan.
 - **Have priorities that are always equal to other active goals** without a tiebreaker. The agent picks the first goal with the highest priority.
 
@@ -307,11 +307,11 @@ func enter(agent):
         point(unit, target.global_position + target.collision_position)
     else:
         unit.final_destiny = target.global_position
-        Goap.navigation.move(unit, target.global_position, false)
+        Goap.get_action("Navigate").move(unit, target.global_position)
 
 func exit(agent):
     var unit = agent.get_unit()
-    Goap.move.stop(unit)
+    Goap.get_action("Move").stop(unit)
 ```
 
 ### Why this is a good reference

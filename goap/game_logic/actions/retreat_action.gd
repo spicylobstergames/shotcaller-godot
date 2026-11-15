@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: Retreat - action (goap/game_logic/actions/retreat_action.gd)
+# =============================================================================
+# Purpose   : Walk back to the start of the unit's lane (its recovery point).
+# Plannable : yes - Recover({ready_to_fight: true}) -> Retreat ->
+#             WaitForRegeneration.
+# is_valid  : unit.moves
+# precond   : {} (default)
+# effects   : {"arrived_at_retreat": true}
+# enter     : is_retreating = true; follows the lane path from waypoint 0 with
+#             a small random jitter.
+# perform   : returns arrived_at_retreat.
+# on_arrive : sets arrived_at_retreat = true.
+# exit      : is_retreating = false.
+# Traps     : arrival must come through Collisions -> unit_arrived; Recover no
+#             longer delegates into ArriveAtDestination (wrong arg + double
+#             path advance).
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

@@ -1,3 +1,24 @@
+# =============================================================================
+# GOAP-GUIDE: EnemyDefeated - goal
+#            (goap/game_logic/goals/enemy_defeated.gd)
+# =============================================================================
+# Purpose   : Kill the nearest targetable enemy.
+# priority  : 6
+# desired   : {"enemy_dead": true}
+# is_valid  : ready_to_fight, unit.attacks, and ChooseTarget.select_target() is
+#             non-null for the enemies in sight (immune units such as churches
+#             can never be targeted, so they must not claim this goal).
+# Side effects (REQUIRED, do not remove):
+#             - resets enemy_dead = false on every valid evaluation;
+#             - releases unit.target when it is dead/invalid/out of vision
+#               (nothing else clears it);
+#             - writes opponents_in_sight (currently unused).
+# Traps     : a stale enemy_dead makes the planner treat the desired state as
+#             already satisfied, return an empty plan, and freeze the agent on
+#             this goal (agent only replans when the goal changes).
+# See       : tests/unit/test_attack_lifecycle.gd; ARCHITECTURE.md "State facts".
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 

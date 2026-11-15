@@ -1,3 +1,24 @@
+# =============================================================================
+# GOAP-GUIDE: AttackEnemy - action (goap/game_logic/actions/attack_enemy.gd)
+# =============================================================================
+# Purpose   : Attack unit.target in range; close the distance when out of range.
+# Plannable : yes - EnemyDefeated ({enemy_dead: true}) -> AttackEnemy.
+# is_valid  : unit.attacks
+# cost      : 1
+# precond   : {"enemy_in_attack_range": true}
+# effects   : {"enemy_dead": true, "friends_safe": true}
+# enter     : reject an invalid/dead/unhittable target (clearing its facts),
+#             otherwise aim (point) or approach.
+# perform   : true when the target vanished/died/cannot be hit; otherwise
+#             refresh enemy_in_attack_range and return (not in_range).
+# exit      : Move.stop
+# Reads     : unit.target; ChooseTarget.can_hit / in_range
+# Writes    : enemy_in_attack_range, enemy_dead, target (via agent.set_state)
+# Traps     : every dead/invalid branch MUST clear enemy_in_attack_range, or
+#             the planner satisfies the precondition with no real target.
+# See       : tests/unit/test_attack_lifecycle.gd; ARCHITECTURE.md "State facts".
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

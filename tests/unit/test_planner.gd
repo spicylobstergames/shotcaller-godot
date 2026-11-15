@@ -89,3 +89,47 @@ func run(harness) -> void:
 		planner.get_plan(agent, goal).is_empty(),
 		"Planner returns no plan when no action can satisfy the goal."
 	)
+
+	# --- explain(): the diagnostic used to debug "unit is frozen" ---
+	planner.set_actions([cheap_action])
+	var explained = planner.explain(agent, goal)
+	harness.check_equal(
+		explained["plan"], ["Cheap"], "explain() reports the plan get_plan() would return."
+	)
+	harness.check_equal(explained["reason"], "", "explain() gives no reason when a plan is found.")
+	harness.check_equal(
+		explained["unsatisfied"], {"finished": true}, "explain() lists the unmet desired fact."
+	)
+	harness.check_equal(
+		explained["produced_by"],
+		{"finished": ["Cheap"]},
+		"explain() maps each unmet fact to the actions that produce it."
+	)
+
+	var satisfied_agent = TestAgent.new()
+	satisfied_agent.state["finished"] = true
+	var satisfied = planner.explain(satisfied_agent, goal)
+	harness.check_equal(
+		satisfied["plan"], [], "explain() reports an empty plan when the desired state already holds."
+	)
+	harness.check_equal(
+		satisfied["unsatisfied"], {}, "explain() marks an already-satisfied fact as met."
+	)
+	harness.check(
+		satisfied["reason"].contains("already satisfied"),
+		"explain() names the stale-fact cause for an already-satisfied goal."
+	)
+
+	var impossible = planner.explain(agent, TestGoal.new({"nothing_produces_this": true}))
+	harness.check_equal(
+		impossible["plan"], [], "explain() reports an empty plan for an impossible goal."
+	)
+	harness.check(
+		impossible["reason"].contains("no action chain"),
+		"explain() names the no-chain cause for an impossible goal."
+	)
+	harness.check_equal(
+		impossible["produced_by"],
+		{"nothing_produces_this": []},
+		"explain() shows no producers for an unproducible fact."
+	)

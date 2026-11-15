@@ -1,3 +1,24 @@
+# =============================================================================
+# GOAP-GUIDE: Action contract (goap/goap_system/action_contract.gd)
+# =============================================================================
+# Every PLANNABLE action extends this file and overrides the methods below.
+# Planning reads is_valid / get_cost / get_preconditions / get_effects;
+# execution calls enter / perform / exit.
+# Defaults here are deliberately permissive:
+#   is_valid              -> true   (actions opt OUT; a false default once
+#                                    silently unplanned nine shipped actions)
+#   get_cost              -> 1
+#   get_preconditions     -> {}
+#   get_effects           -> {}
+#   perform               -> false  (runs forever unless overridden)
+# get_class_name() is NOT declared here; each action defines it for the
+# registry and Goap.get_action(name).
+# SERVICE actions (RangeAttack, MeleeAttack, Taxes, Mine, Conquer, Pray,
+# Order, ChooseTactics) also extend this file but are never selected by the
+# planner; they are called directly or from signals.
+# See: ARCHITECTURE.md "Contracts and registries"; docs/ai/adding-behavior.md.
+# =============================================================================
+
 extends Node
 
 # self = Goap.Action

@@ -1,3 +1,15 @@
+# =============================================================================
+# GOAP-GUIDE: NeedSafety - goal (goap/game_logic/goals/need_safety.gd)
+# =============================================================================
+# Purpose   : Hide from nearby enemies.
+# priority  : 10 (ties with Recover; on a tie the earlier-registered goal wins)
+# desired   : {"is_threatened": false}   (produced by Hide)
+# is_valid  : any enemy in sight; writes is_threatened on every evaluation.
+# Traps     : this goal is only in the lumberjack's goals_list, and Hide needs
+#             deliver_position (set at spawn). See the goal's note in
+#             docs/ai/world-state.md.
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 

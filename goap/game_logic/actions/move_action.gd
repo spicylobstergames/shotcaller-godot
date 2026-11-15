@@ -1,3 +1,25 @@
+# =============================================================================
+# GOAP-GUIDE: Move - action (goap/game_logic/actions/move_action.gd)
+# =============================================================================
+# Purpose   : Hand unit.current_destiny to the movement driver. The actual
+#             stepping happens in Collisions.physics_process for units whose
+#             unit.state == "move".
+# Plannable : yes - the movement step of most plans.
+# is_valid  : unit.moves
+# precond   : {"has_destiny": true, "is_stunned": false}
+# effects   : {"arrived_at_destination": true, "lane_route_finished": true}
+# enter     : move(unit, unit.current_destiny).
+# perform   : returns false ONLY when already arrived; otherwise true. That
+#             one-shot shape is intentional: plans are re-installed each tick
+#             while a goal keeps producing them (see WalkLane.enter).
+# Helpers   : point / in_bounds / move / calc_step / step / _resolve_blocking /
+#             resume / stop / teleport.
+# Writes    : unit.current_destiny, current_step, angle, state via unit.set_state.
+# Traps     : stop() zeroes current_destiny and final_destiny; a zeroed destiny
+#             that reaches move() walks the unit toward the map origin.
+# See       : tests/unit/test_movement.gd.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 const teleport_time = 3
@@ -106,6 +128,19 @@ func _resolve_blocking(unit, motion: Vector2) -> Vector2:
 			if destination.distance_to(other_position) < minimum_distance:
 				var diff = destination - other_position
 				resolved_motion += diff * 0.05 # small reppelling force 
+
+	# Forward-progress floor: in a dense crowd the accumulated repulsion can
+	# cancel (even reverse) the step, and packed units then jitter in place at
+	# lane choke points forever. Repulsion is meant to soften overlaps, not to
+	# stop movement, so never let it remove more than 40% of the intended step
+	# along the original direction. Sideways deflection is preserved.
+	# Regression: tests/unit/test_movement.gd ("crowded unit still advances").
+	if motion.length_squared() > 0.0:
+		var forward := motion.normalized()
+		var along: float = resolved_motion.dot(forward)
+		var minimum := motion.length() * 0.6
+		if along < minimum:
+			resolved_motion += forward * (minimum - along)
 
 	return resolved_motion
 

@@ -1,3 +1,21 @@
+# =============================================================================
+# GOAP-GUIDE: WaitForRegeneration - action
+#            (goap/game_logic/actions/wait_for_regeneration.gd)
+# =============================================================================
+# Purpose   : Hold at the retreat point until HP recovers past 90% of max.
+# Plannable : yes - the second step of the Recover plan.
+# is_valid  : unit.regen > 0
+# cost      : 1
+# precond   : {"arrived_at_retreat": true}
+# effects   : {"ready_to_fight": true}
+# enter     : Move.stop.
+# perform   : true when current_hp > 90% of max hp.
+# every_sec : unit.regenerate(+20).
+# exit      : ready_to_fight = true.
+# Traps     : pair with RetreatAction; without arrived_at_retreat the planner
+#             cannot build this plan.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 const _wait_regen_bonus = 20
