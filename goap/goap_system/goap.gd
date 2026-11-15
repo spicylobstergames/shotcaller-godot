@@ -30,6 +30,11 @@ var _action_planner = preload("res://goap/goap_system/planner.gd").new()
 var _actions = preload("res://goap/game_logic/action_registry.gd").new()
 var _goals = preload("res://goap/game_logic/goal_registry.gd").new()
 
+# When true, Agent.goap_process logs a planner explanation whenever a selected
+# goal yields an EMPTY plan -- the usual "unit is frozen" symptom. Off by
+# default (set it from a debugger or a test); see Planner.explain().
+var debug_planning := false
+
 
 func _ready():
 	_action_planner.set_actions(_actions.get_all_actions())

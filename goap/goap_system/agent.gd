@@ -205,6 +205,14 @@ func goap_process(delta):
 		var plan: Array = []
 		if goal:
 			plan = Goap.get_action_planner().get_plan(self, goal)
+			# An empty plan for a selected goal is the classic freeze: log why
+			# when Goap.debug_planning is on (off by default, zero cost when off).
+			if plan.is_empty() and Goap.debug_planning:
+				var why: Dictionary = Goap.get_action_planner().explain(self, goal)
+				push_warning(
+					"GOAP empty plan: unit=%s goal=%s reason=%s unsatisfied=%s produced_by=%s"
+					% [_unit.name, why["goal"], why["reason"], why["unsatisfied"], why["produced_by"]]
+				)
 		_replace_plan(goal, plan)
 	else:
 		_follow_plan(_current_plan, delta)

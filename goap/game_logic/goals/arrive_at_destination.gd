@@ -6,6 +6,7 @@
 #             collision checks. NOT a selectable goal.
 # Plannable : NO - is_valid() hard-returns false (activation is disabled and
 #             pinned by tests/unit/test_arrive_at_destination.gd).
+# priority  : 3 (unused while is_valid() is false)
 # desired   : {"arrived_at_destination": true}
 # enter     : records has_path and clears arrived_at_destination.
 # API       : is_at_destination(unit) and on_arrive(unit) -- both are called by

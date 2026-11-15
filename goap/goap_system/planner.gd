@@ -39,6 +39,69 @@ func get_plan(agent, goal) -> Array:
 	return _find_best_plan(goal, desired_state, agent)
 
 
+# Diagnostic helper -- never used by planning itself. Explains why get_plan()
+# returned what it did, for tests, the debugger, and the common "this unit is
+# frozen" investigation. Returns:
+#   goal         : goal class name
+#   desired      : the goal's desired state
+#   already      : desired facts already true in agent/WorldState
+#   unsatisfied  : desired facts still to achieve (pre-planning view)
+#   produced_by  : for each unsatisfied fact, the actions whose effects match it
+#   plan         : the action class names get_plan() returned
+#   reason       : "" when a plan was found, else a short explanation
+func explain(agent, goal) -> Dictionary:
+	var desired: Dictionary = goal.get_desired_state(agent)
+	var already := {}
+	var unsatisfied := {}
+	for key in desired:
+		var expected = desired[key]
+		var actual = agent.get_state(key)
+		if actual is Object:
+			actual = true
+		var world = WorldState.get_state(key)
+		if world is Object:
+			world = true
+		if expected == actual or expected == world:
+			already[key] = expected
+		else:
+			unsatisfied[key] = expected
+
+	var produced_by := {}
+	for key in unsatisfied:
+		var names: Array[String] = []
+		for action in _actions:
+			if action.get_effects().get(key, null) == unsatisfied[key]:
+				names.append(action.get_class_name())
+		produced_by[key] = names
+
+	var plan := get_plan(agent, goal)
+	var plan_names: Array[String] = []
+	for action in plan:
+		plan_names.append(action.get_class_name())
+
+	var reason := ""
+	if plan.is_empty():
+		if desired.is_empty():
+			reason = "the goal has an empty desired state"
+		elif unsatisfied.is_empty():
+			reason = "the desired state is already satisfied in agent/WorldState (stale fact?)"
+		else:
+			reason = "no action chain satisfies the remaining facts"
+
+	var goal_name := str(goal)
+	if goal.has_method("get_class_name"):
+		goal_name = goal.get_class_name()
+	return {
+		"goal": goal_name,
+		"desired": desired,
+		"already": already,
+		"unsatisfied": unsatisfied,
+		"produced_by": produced_by,
+		"plan": plan_names,
+		"reason": reason,
+	}
+
+
 func _find_best_plan(goal, desired_state: Dictionary, agent):
 	# Goal is set as root action.
 	var root = {

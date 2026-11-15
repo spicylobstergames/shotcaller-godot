@@ -1,13 +1,13 @@
 # Test Coverage
 
-**24 test classes**, **313 assertions**, **0 script errors** — all passing.
+**27 test classes**, **337 assertions**, **0 script errors** — all passing.
 (The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
 bump it whenever you add tests.)
 
 ```
 ./tests/run_suite.sh
-→ [1/3] TESTS_COMPLETE: passed=313 failed=0
-→ [1/3] All 313 tests passed.
+→ [1/3] TESTS_COMPLETE: passed=337 failed=0
+→ [1/3] All 337 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
@@ -108,6 +108,9 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
 | `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
 | `test_arrival_dispatch.gd` | `Agent._ready` wires `unit_arrived` → action/goal `on_arrive` exactly once; `ReturnLumber.enter` routes to `deliver_position` | Unit |
+| `test_state_keys.gd` | Every GOAP state key is documented in `world-state.md`; every required fact has a producer (effects or `*_state()`) | Lint |
+| `test_goap_contract_lint.gd` | GOAP-GUIDE banners, registry contract integrity, the exact service-action set, goal desired-fact satisfiability | Lint |
+| `test_goap_index.gd` | `docs/ai/goap-index.md` matches the GOAP-GUIDE banners | Lint |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*

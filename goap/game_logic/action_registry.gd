@@ -63,3 +63,28 @@ func get_action(action_name, default = null):
 
 func set_action(action_name, value):
 	_actions[action_name] = value
+
+
+# Debug/lint helper: returns human-readable contract problems ([] when clean).
+# Checks identity, uniqueness, and the action contract methods. Used by
+# tests/unit/test_goap_contract_lint.gd and callable from the debugger.
+func validate() -> Array[String]:
+	var problems: Array[String] = []
+	var seen := {}
+	for action in _actions:
+		if action == null:
+			problems.append("registry contains a null action")
+			continue
+		if not action.has_method("get_class_name"):
+			problems.append("action without get_class_name(): %s" % action)
+			continue
+		var action_name: String = action.get_class_name()
+		if action_name.is_empty():
+			problems.append("action with an empty class name: %s" % action)
+		elif seen.has(action_name):
+			problems.append("duplicate action class name: %s" % action_name)
+		seen[action_name] = true
+		for method in ["is_valid", "get_cost", "get_preconditions", "get_effects", "enter", "perform", "exit"]:
+			if not action.has_method(method):
+				problems.append("%s is missing %s()" % [action_name, method])
+	return problems

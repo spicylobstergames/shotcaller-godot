@@ -93,6 +93,17 @@ cheap and makes D/C safer; D removes the string-key traps that make C harder to
 trust; C is a behavior change that should ride on D's hygiene; E needs
 measurement and should not be bundled.
 
+**Tooling landed alongside this plan (2026-11-14):** state-key lint and
+contract lint (plus a GOAP-GUIDE banner test) in `test_state_keys.gd` /
+`test_goap_contract_lint.gd`; a fast GOAP gate (`tests/run_goap_lint.sh`) with
+a `--only=` filter in `run_tests.gd`; a generated `docs/ai/goap-index.md`
+(`tools/gen_goap_index.sh`, freshness-tested); `docs/ai/goap-cheatsheet.md`;
+`Planner.explain()` plus `Goap.debug_planning` empty-plan logging; field-level
+golden diffs and `tests/record_golden.sh`; action/goal templates and
+`tools/new_goap_{action,goal}.sh`; and `plans/` machine-readable work items.
+**This completes Track D5.** Remaining items in `plans/` carry machine-readable
+acceptance criteria.
+
 ---
 
 ## Track A — Documentation truth pass (DONE)

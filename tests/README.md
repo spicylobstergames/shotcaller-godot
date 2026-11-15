@@ -20,6 +20,20 @@ How to write tests for this project. Read this before adding test files.
 ./tests/run_suite.sh          # full verification (unit + boot smoke + golden + error budget)
 ```
 
+Faster loops and tooling:
+
+```
+./tests/run_goap_lint.sh      # GOAP-only gate: parse + planner + state-key/contract lint (seconds)
+./tests/record_golden.sh      # re-record the golden replay (INTENDED behavior changes only; D6/D12)
+./tools/gen_goap_index.sh     # regenerate docs/ai/goap-index.md from the GOAP-GUIDE banners
+```
+
+`test_runner.tscn` also accepts a subset filter for tight iteration:
+
+```
+godot --headless --path . res://tests/test_runner.tscn -- --only=Planner,StateKeys
+```
+
 Direct runs:
 
 ```
