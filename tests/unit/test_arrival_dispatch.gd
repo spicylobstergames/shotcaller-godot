@@ -40,6 +40,7 @@ class TestUnit:
 	var speed := 100.0
 	var attacks := true
 	var dead := false
+	var team := "blue"
 	var state := "idle"
 	var target = null
 	var last_target = null
@@ -59,6 +60,9 @@ class TestUnit:
 
 	func mirror_look_at(_point):
 		pass
+
+	func cut_path(path):
+		return path
 
 
 class TestMap:
@@ -149,6 +153,49 @@ func run(harness) -> void:
 	harness.check_equal(
 		action.arrived_count, 2, "Each emission dispatches exactly once (no double connection)."
 	)
+
+	# --- Regression: an arrival must NOT permanently disable WalkLane ---
+	# WalkLane.on_arrive used to set lane_route_finished=true whenever the
+	# path was empty. That fact is a hard gate in WalkLane.is_valid and has no
+	# reset in normal play (only change_lane/teleport clear it), so the first
+	# empty-path arrival killed the goal for good: units fought, killed an
+	# enemy, then stood still. Main was fine only because the arrival dispatch
+	# was dead. This drives the real runtime path (Collisions -> Unit.on_arrive
+	# -> Agent.on_arrive -> goal hook).
+	var lane_map = TestMap.new()
+	harness.add_child(lane_map)
+	ws.set_state("map", lane_map)
+	ws.set_state("lanes", {"mid": [Vector2(96, 96), Vector2(160, 96), Vector2(224, 96)]})
+	unit.moves = true
+	unit.dead = false
+	unit.target = null
+	unit.global_position = Vector2(224, 96)
+	unit.current_path = []
+	agent.set_state("lane", "mid")
+	agent.erase_state("lane_route_finished")
+	agent.set_state("ready_to_fight", true)
+	agent.set_state("has_player_command", false)
+	agent.set_state("is_retreating", false)
+	agent.set_state("is_channeling", false)
+
+	var lane_goal = Goap.get_goal("WalkLane")
+	harness.check(lane_goal.is_valid(agent), "WalkLane is valid before the arrival (setup check).")
+	agent._replace_plan(lane_goal, [])
+	# The exact runtime state when Collisions emits the arrival for a
+	# consumed route: ArriveAtDestination.on_arrive(unit) has already emptied
+	# current_path and stopped the unit, and THEN unit.on_arrive() fires.
+	unit.current_path = []
+	unit.current_destiny = Vector2.ZERO
+	unit.unit_arrived.emit()
+	harness.check(
+		not agent.get_state("lane_route_finished", false),
+		"Arrival does not mark the lane route finished (that write-once fact would disable WalkLane)."
+	)
+	harness.check(
+		lane_goal.is_valid(agent),
+		"WalkLane stays valid after arrival, so the unit resumes walking instead of standing still."
+	)
+	lane_map.free()
 
 	# --- ReturnLumber.enter navigates instead of assigning set_state()'s null ---
 	var map = TestMap.new()

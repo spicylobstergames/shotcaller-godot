@@ -1,13 +1,13 @@
 # Test Coverage
 
-**27 test classes**, **337 assertions**, **0 script errors** — all passing.
+**27 test classes**, **340 assertions**, **0 script errors** — all passing.
 (The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
 bump it whenever you add tests.)
 
 ```
 ./tests/run_suite.sh
-→ [1/3] TESTS_COMPLETE: passed=337 failed=0
-→ [1/3] All 337 tests passed.
+→ [1/3] TESTS_COMPLETE: passed=340 failed=0
+→ [1/3] All 340 tests passed.
 → [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
@@ -298,9 +298,22 @@ Production regressions found by the port and FIXED (each regression-tested):
   replay was unchanged — the debug smoke scenario does not exercise the
   lumberjack/hide/retreat hooks.
 
+- **Arrival dispatch permanently disabled `WalkLane`** (found in play after the
+  arrival fix, FIXED): wiring `unit_arrived` to `Agent.on_arrive` also made
+  `WalkLane.on_arrive` live for the first time. It set
+  `lane_route_finished = true` on any empty-path arrival, and that fact is
+  write-once (only `change_lane`/`Move.teleport` clear it) and a hard gate in
+  `WalkLane.is_valid()`. The first unit to consume its lane therefore lost its
+  default goal for good — units fought, killed an enemy, then stood still.
+  Upstream main never hit this because the arrival dispatch was dead there.
+  Fix: the arrival hook no longer writes the fact. Regression:
+  `tests/unit/test_arrival_dispatch.gd` ("an arrival must NOT permanently
+  disable WalkLane"), which failed with 2 assertions before the fix;
+  lane-completion semantics (reset path + fallback behavior) are a separate
+  open decision in `plans/E5.md`.
+
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
-deliberately):
-- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation
+deliberately):- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation
   logic commented out in the restructure). Arrival works only because
   `Collisions` calls `is_at_destination`/`on_arrive` directly. Pinned by
   `test_arrive_at_destination.gd`; flag for upstream — if the commented-out
