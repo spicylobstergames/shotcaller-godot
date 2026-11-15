@@ -40,7 +40,8 @@ acceptance: [...]          # observable, testable outcomes
 | C2 | C | open (do together with C1) |
 | D1–D4 | D | open |
 | E1 | E | done 2026-11-14 |
-| E2–E4 | E | open |
+| E2, E3 | E | open |
+| E4 | E | done 2026-11-14 |
 | F1 | F | done 2026-11-14 |
 | F2 | F | open |
 

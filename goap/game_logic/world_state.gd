@@ -9,9 +9,10 @@
 #       holding null still returns null and breaks the return type.
 #   second_elapsed -> emitted once per game second; the Agent uses it for
 #       regen, damage-over-time and per-second action/goal callbacks.
-# Timers: setup_timers()/setup_spawn_timers() add child Timers and are NOT
-# idempotent (a second game.start() adds new timers) -- see
-# IMPROVEMENT_PLAN.md Track E4.
+# Timers: setup_timers()/setup_spawn_timers() tear down any previous timer
+# before creating a new one, so a second game.start() cannot stack a second
+# live timer (or a second external timeout connection, e.g. game.gd's
+# one_sec_cycle) -- IMPROVEMENT_PLAN.md Track E4.
 # =============================================================================
 
 extends Node
@@ -67,22 +68,35 @@ func clear_state():
 	_state.clear()
 	
 func setup_timers():
+	_dispose_timer(one_sec_timer)
 	one_sec_timer = Timer.new()
 	one_sec_timer.wait_time = 1
 	one_sec_timer.name = "one_sec_timer"
 	one_sec_timer.timeout.connect(_emit_second_elapsed)
-	add_child(WorldState.one_sec_timer)
-	
+	add_child(one_sec_timer)
+
 func setup_spawn_timers(spawn_time):
+	_dispose_timer(spawn_timer)
 	spawn_timer = Timer.new()
 	spawn_timer.wait_time = spawn_time
 	spawn_timer.name = "unit_spawn_timer"
 	spawn_timer.one_shot = true
-	add_child(WorldState.spawn_timer)
+	add_child(spawn_timer)
+
+# Frees a previous timer (stopped, and detached so its name is released
+# immediately) so re-running setup cannot leave a live stale timer with its
+# old connections behind.
+func _dispose_timer(timer: Timer) -> void:
+	if timer != null and is_instance_valid(timer):
+		timer.stop()
+		remove_child(timer)
+		timer.queue_free()
 
 func _emit_second_elapsed() -> void:
 	second_elapsed.emit()
 
 func stop_timers():
-	one_sec_timer.stop()
-	spawn_timer.stop()
+	if one_sec_timer != null:
+		one_sec_timer.stop()
+	if spawn_timer != null:
+		spawn_timer.stop()
