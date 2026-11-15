@@ -77,5 +77,10 @@ func physics_process(delta):
 			if unit1.moves and unit1.state == "move":
 				if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
 					Goap.get_goal("ArriveAtDestination").on_arrive(unit1)
+					# Emit the unit's arrival so Agent.on_arrive dispatches to
+					# the current action/goal on_arrive hooks (GetLumber, Hide,
+					# RetreatAction, OrderAction). Path advancement above runs
+					# first so WalkLane sees the post-advance current_path.
+					unit1.on_arrive()
 				else:
 					Goap.get_action("Move").step(unit1, delta)

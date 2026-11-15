@@ -11,6 +11,8 @@
   ```bash
   ./tests/run_suite.sh /path/to/godot     # everything (~45s)
   # Godot binary resolution: argument > GODOT env var > "godot" on PATH.
+  # If the default log dir ($PROJECT_DIR/../.test-logs) is not writable
+  # (sandboxed/CI checkouts), set TEST_LOG_DIR to a writable path.
   ```
 - **GitHub Actions workflow:** `.github/workflows/tests.yml` — runs the suite on PRs and main pushes.
 
@@ -42,11 +44,11 @@ Key files:
 
 | File | Role |
 |------|------|
-| `goap/goap_system/goap.gd` | Global autoload singleton — exposes planner, action/goal access, movement, and navigation. Calls `physics_process()` on all units each physics tick. |
+| `goap/goap_system/goap.gd` | Global autoload singleton — owns the planner and both registries, exposing `get_action()`/`get_goal()`/`get_action_planner()`. Its `physics_process()` pump (called from `game.gd`) runs each unit's agent on a staggered cadence (every 7th physics tick). There are no `move`/`navigation` members. |
 | `goap/goap_system/agent.gd` | Per-unit AI state machine — holds goals, current plan, current action, local state dictionary, and signal wiring to the unit. |
-| `goap/goap_system/planner.gd` | Backward-search planner — generates action plans and selects the lowest-cost. Rejects branches whose preconditions contradict facts already satisfied in the current branch. |
+| `goap/goap_system/planner.gd` | Backward-search planner — generates action plans and selects the lowest-cost (depth-capped at 64, per-branch visited-state memo). **It does NOT detect contradictions**: preconditions are merged by assignment, so a conflicting fact silently overwrites an earlier requirement. Keep preconditions consistent with goals/ancestors by hand. |
 | `goap/goap_system/action_contract.gd` | Base class for all GOAP actions. Methods: `is_valid()`, `get_cost()`, `get_preconditions()`, `get_effects()`, `enter()`, `perform()`, `exit()`. |
-| `goap/goap_system/goal_contract.gd` | Base class for all GOAP goals. Methods: `is_valid()`, `priority()`, `get_desired_state()`. |
+| `goap/goap_system/goal_contract.gd` | Base class for all GOAP goals. Methods: `is_valid()`, `priority()`, `get_desired_state()`, plus `enter()`/`exit()` (called by the agent on goal change; the planner ignores them). |
 | `goap/game_logic/action_registry.gd` | Creates and stores all action instances (shared, singletons). |
 | `goap/game_logic/goal_registry.gd` | Stores all goal instances by name. |
 | `goap/game_logic/world_state.gd` | Global autoload for world-wide state (teams, units lists, map, etc.). |
@@ -57,7 +59,9 @@ Key files:
   Unit / World State
        |
        v
-  Goap.Agent.process(delta)  [called from game.gd:physics_process]
+  Agent.goap_process(delta)  [pumped by Goap.physics_process from
+                              game.gd:_physics_process; each unit on its
+                              own staggered turn, ~8.6 Hz]
        |
        v
   _get_best_goal()  — evaluates all goals, picks highest priority valid one
@@ -76,10 +80,10 @@ Key files:
 
 GOAP actions do **not** reimplement movement or combat. Instead:
 
-- **`MoveAction`** and **`NavigateAction`** drive the unit's movement system through `Goap.move` and `Goap.navigation` helpers.
+- **`MoveAction`** and **`NavigateAction`** drive the unit's movement system through `Goap.get_action("Move")` / `Goap.get_action("Navigate")` and the `Navigation` autoload. There is **no** `Goap.move` / `Goap.navigation` API.
 - **`AttackEnemy`**, **`MeleeAttack`**, **`RangeAttack`** fire the unit's weapon/attack system.
 - **`OrderAction`** processes player orders.
-- The **agent** connects to unit signals (arrival, death, stun, etc.) and translates them into state changes that the GOAP planner consumes.
+- The **agent** connects to unit signals (death, stun, idle, attack, animation, `unit_arrived`) and translates them into state changes that the GOAP planner consumes. Movement arrival itself is detected by `Collisions` (which calls `ArriveAtDestination` and emits `unit_arrived`); `MoveAction`/`NavigateAction` only *request* movement.
 
 **Do not introduce a second implementation of unit movement or combat when an existing game system already provides it.** Reuse the established system through its intended interface.
 
@@ -87,7 +91,7 @@ GOAP actions do **not** reimplement movement or combat. Instead:
 
 The planner uses string-keyed dictionaries for preconditions, effects, goals, and agent state. Spelling errors or incorrect assumptions silently break planning.
 
-**Read `docs/ai/world-state.md`** before adding or modifying any state fact. It is the authoritative catalog of every key, its scope (agent vs. world), type, producer, consumer, and lifecycle.
+**Read `docs/ai/world-state.md`** before adding or modifying any state fact — it is the intended catalog of every key, its scope (agent vs. world), type, producer, consumer, and lifecycle. It **has drifted**, so verify any entry against the current code; `ARCHITECTURE.md` is the verified system map.
 
 **Important rule:** A precondition of `false` is not satisfied by an unset state key. The agent state reads `null`, and `null != false` in GDScript. A fact must be explicitly set for it to be matched.
 
@@ -97,7 +101,7 @@ The planner uses string-keyed dictionaries for preconditions, effects, goals, an
 - **World-wide state** belongs in the `WorldState` singleton.
 - **Team-specific state** (player team, enemy team, team unit lists) belongs in `WorldState`.
 - **Unit-specific mutable data** must never be stored in globally shared action objects. The action registry creates action instances once and shares them across all units.
-- **ChooseTarget** is a documented exception — it holds team-level priority dictionaries intentionally. See below.
+- **Team-scoped mutable state in a shared action is the documented exception** — today only `Taxes` (`player_tax`/`enemy_tax`) does this. `ChooseTarget` no longer holds priority dictionaries (the priority system was removed) and is a normal plannable target-acquisition action.
 
 ## Architectural invariants
 
@@ -109,7 +113,7 @@ The planner uses string-keyed dictionaries for preconditions, effects, goals, an
 | State facts have documented ownership and semantics (see `docs/ai/world-state.md`). | Reduces misspelled keys and incorrect assumptions. |
 | Actions and goals must follow the agreed contracts. | Keeps the codebase consistent as more behaviors are added. |
 | Planner and lifecycle changes require regression tests. | Protects existing behavior during architectural work. |
-| Goal `is_valid()` must not mutate state. It is called every physics tick (30 Hz) for every goal of every unit. | Prevents order-dependent behavior and hidden side effects. |
+| Goal `is_valid()` should not mutate state. It is called for every goal of every unit on that unit's staggered turn (~8.6 Hz; physics is 60 Hz). Documented exceptions are stale-fact maintenance (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`). | Prevents order-dependent behavior and hidden side effects. |
 
 ## Required behavior when editing AI
 
@@ -123,22 +127,57 @@ The planner uses string-keyed dictionaries for preconditions, effects, goals, an
 
 ## Known exceptions
 
-### ChooseTarget (action_registry entry)
+### Arrival is collision-driven
 
-`ChooseTarget` extends the action contract but always returns `false` from `is_valid()`. It is **not** planned as an action — it is a service object for target selection and lane/leader priority management. Its mutable priority dictionaries are shared intentionally at the team level.
+`ArriveAtDestination.is_valid()` hard-returns `false` (activation is disabled;
+pinned by `tests/unit/test_arrive_at_destination.gd`). It is a service/library
+goal, not a selectable one. The real arrival machinery is in
+`collision/collisions.gd`: when a `move` unit reaches `current_destiny`,
+`Collisions` calls `ArriveAtDestination.on_arrive(unit)` to advance the path,
+then `unit.on_arrive()` — which emits `unit_arrived` → `Agent.on_arrive` →
+the current action/goal `on_arrive` hooks. Do not re-enable the goal's
+activation and do not connect `unit_arrived` a second time.
 
 ### The process pump
 
-`Goap.physics_process(all_units, delta)` is called explicitly from `game.gd` each physics tick (30 Hz). It is deliberately named without an underscore (`physics_process`, not `_physics_process`) to distinguish it from Godot virtual methods. Do not change this to `_process` or `_physics_process`.
+`Goap.physics_process(all_units, delta)` is called explicitly from `game.gd`
+each physics tick, which is **60 Hz**: `project.godot` sets
+`common/physics_fps=30`, but that is the Godot 3 key name and is ignored
+(Godot 4 reads `physics/common/physics_ticks_per_second`). The pump skips dead
+units and runs each agent every 7th tick (`frames_til_next_process`, seeded
+with `randi_range(0, 6)` to stagger units), so **per-unit goal evaluation is
+~8.6 Hz, not 30 Hz**. The method is deliberately named without an underscore
+(`physics_process`, not `_physics_process`) to distinguish it from Godot
+virtual methods. Do not change this to `_process` or `_physics_process`.
 
-### `has_path` and the `null` vs `false` trap
+### `has_destiny` and the `null` vs `false` trap
 
-The `MoveAction` precondition requires `has_path: false`. This is only satisfied because goal `is_valid()` methods (specifically `WalkLane` and `ArriveAtDestination`) write `has_path` to the agent state every frame. If a goal fails to call `set_state("has_path", ...)`, the planner will see `null` and treat the precondition as unmet. The world-state catalog documents this dependency.
+`Move.get_preconditions()` is `{has_destiny: true, is_stunned: false}`.
+`has_destiny` is set by `Navigate.follow_path` when a route is queued and is
+**never cleared**, so after any route the planner can satisfy `Move` without
+`Navigate`. `has_path` is still written by `Navigate`/`ArriveAtDestination`
+but no precondition reads it. A precondition of `false` is not satisfied by an
+unset key (`null != false`), so a fact must be explicitly set to `false` to
+match.
 
-### Stale references
+### `agent.set_state("target", v)` is special-cased
 
-- `goal_contract.gd` line 16 references `goals/keep_fed.gd` (leftover from the GOAP tutorial this was based on). This file no longer exists.
-- `move_action.smart` checks `get_state("stunned")` (line 165) while the canonical key is `"is_stunned"`. This guard is silently inactive.
+It does not write the agent state dictionary; it calls
+`ChooseTarget.set_target(agent, v)`, which writes `unit.target` and resets
+attack count/modifiers. Read `unit.target`, never `agent.get_state("target")`.
+
+### ChooseTarget
+
+`ChooseTarget` is a normal plannable action (`is_valid()` =
+`unit.attacks and !unit.target`) used for target acquisition, e.g.
+`[ChooseTarget, PursueEnemy, AttackEnemy]`. It is **not** a documented
+always-invalid service object — that was the pre-restructure behavior.
+
+### Dead code (do not copy)
+
+`ChooseTactics` extends `Node` instead of the action contract, always returns
+`is_valid() == false`, and is referenced by nothing but the registry. Do not
+use it as a template; see `IMPROVEMENT_PLAN.md` (Track E1) for its removal.
 
 ## Completion requirements
 

@@ -1,12 +1,14 @@
 # Test Coverage
 
-**20 test classes**, **255 assertions**, **0 script errors** — all passing.
+**24 test classes**, **313 assertions**, **0 script errors** — all passing.
+(The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
+bump it whenever you add tests.)
 
 ```
 ./tests/run_suite.sh
-→ [1/3] TESTS_COMPLETE: passed=255 failed=0
-→ [1/3] All 255 tests passed.
-→ [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=1 pathed_moved=1
+→ [1/3] TESTS_COMPLETE: passed=313 failed=0
+→ [1/3] All 313 tests passed.
+→ [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
 ```
@@ -105,6 +107,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
 | `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
+| `test_arrival_dispatch.gd` | `Agent._ready` wires `unit_arrived` → action/goal `on_arrive` exactly once; `ReturnLumber.enter` routes to `deliver_position` | Unit |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
@@ -274,6 +277,23 @@ Production regressions found by the port and FIXED (each regression-tested):
   `Move.move`, the established stepping driver; waypoint progression still
   flows through the existing `ArriveAtDestination.on_arrive` →
   `Navigate.next` machinery. Regression: `test_attack_lifecycle.gd`.
+
+- **Arrival dispatch was never wired** (found during the architecture review,
+  FIXED): `Unit.on_arrive()` emits `unit_arrived`, but no code connected it and
+  nothing called `Unit.on_arrive()`, so `Agent.on_arrive` and every action
+  `on_arrive` hook were dead in production — `GetLumber` never set `has_wood`
+  (lumberjacks could never deliver wood), `Hide` never set `is_hiding`,
+  `RetreatAction.on_arrive` never set `arrived_at_retreat`, and
+  `OrderAction.on_arrive` never ran the conquer/pray follow-up. `Collisions`
+  now calls `unit.on_arrive()` after `ArriveAtDestination.on_arrive(unit)`;
+  `Agent._ready()` connects `unit_arrived` → `on_arrive` exactly once;
+  `Recover.on_arrive`'s agent-vs-unit delegation was removed (it would have
+  double-advanced the path); and `ReturnLumber.enter` now navigates to
+  `deliver_position` instead of assigning `set_state()`'s null return to a
+  nonexistent unit property. Regression: `tests/unit/test_arrival_dispatch.gd`
+  (sabotage-verified: reverting either production line fails it). The golden
+  replay was unchanged — the debug smoke scenario does not exercise the
+  lumberjack/hide/retreat hooks.
 
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):

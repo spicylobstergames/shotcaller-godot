@@ -37,5 +37,10 @@ func should_retreat(unit) -> bool:
 	return false
 
 
-func on_arrive(agent):
-	agent.get_goal("ArriveAtDestination").on_arrive(agent)
+# NOTE: no on_arrive hook here. Arrival is dispatched by Collisions:
+# ArriveAtDestination.on_arrive(unit) advances the path, then
+# unit.on_arrive() -> Agent.on_arrive fires the current action hook
+# (RetreatAction.on_arrive sets arrived_at_retreat, which this goal's plan
+# needs). The old delegation passed the AGENT into
+# ArriveAtDestination.on_arrive(unit), which double-advanced the path and
+# read current_path off the agent once the arrival signal was wired.

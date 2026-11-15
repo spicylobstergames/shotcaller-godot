@@ -13,25 +13,31 @@ Every string-keyed state fact used by the GOAP planner and the game is listed be
 | **Consumer** | Who reads the value (goals, actions, planner, other systems). |
 | **Lifecycle** | When the key is cleared, reset, or invalidated. |
 
+> **Drift warning:** this catalog was written against an older revision. Line
+> numbers are approximate and several entries are stale (notably `has_path`,
+> `target`, `stunned`, and the `ArriveAtDestination` producer list). Verify any
+> entry against the current code before relying on it; `ARCHITECTURE.md` is the
+> verified system map and `IMPROVEMENT_PLAN.md` Track D tracks the cleanup.
+
 ## Important: the `null` vs `false` rule
 
 When the planner checks a fact, it reads `agent.get_state(key)`. If the key is **not set**, this returns `null`. In GDScript, `null != false`. Therefore:
 
 - A precondition of `false` (e.g., `{"has_path": false}`) is **not** satisfied by an unset key.
 - The fact must be **explicitly set** to `false` for the precondition to match.
-- This is why `WalkLane.is_valid()` and `ArriveAtDestination.is_valid()` call `set_state("has_path", ...)` every frame — without that, the planner would never satisfy `MoveAction`'s `has_path: false` precondition.
+- This matters for any precondition or desired state whose expected value is `false` (for example `has_path: false`, `enemy_dead: false`): the fact must be written explicitly. `ArriveAtDestination.is_valid()` hard-returns `false` and no longer maintains `has_path`; `Move`'s real precondition is `has_destiny: true`.
 
 ## State facts
 
 ### Agent-specific facts
 
 #### `target`
-- **Scope:** agent
+- **Scope:** unit (`agent.set_state("target", …)` is intercepted and routed to `ChooseTarget.set_target`, which writes `unit.target`; the agent's own dictionary never holds it)
 - **Type:** Object (Node) or null
 - **Default:** null (no target)
-- **Producer:** `_set_target()` in agent; `ChooseTarget` actions; `OrderAction`
-- **Consumer:** `EnemyDefeated` (validity, desired state), `AttackEnemy` (is_valid), `NavigateAction.point()`
-- **Lifecycle:** Set on goal selection or order; cleared on death, retreat, or when no valid target exists. Clears attack count and attack speed modifiers.
+- **Producer:** `ChooseTarget.set_target()` via `agent.set_state("target", …)`; `AttackEnemy.point()`; `NavigateAction.point()`; `OrderAction`
+- **Consumer:** `EnemyDefeated` (validity, desired state), `AttackEnemy` (is_valid), `NavigateAction.point()`, `WalkLane.is_valid()`, `ChooseTarget.is_valid()`
+- **Lifecycle:** Set on goal selection or order; cleared on death, retreat, or when no valid target exists. Clears attack count and attack speed modifiers and sets `hunting`/`has_attack_target`.
 
 #### `has_attack_target`
 - **Scope:** agent
@@ -51,9 +57,17 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false (but see `null` vs `false` rule above)
-- **Producer:** `WalkLane.is_valid()` (line 37), `ArriveAtDestination.is_valid()` (line 11), `ArriveAtDestination.on_arrive()` (line 44), `NavigateAction` (not directly, through unit.current_path)
-- **Consumer:** `MoveAction` (precondition, is_valid), `NavigateAction` (is_valid)
-- **Lifecycle:** Updated every frame by `WalkLane` and `ArriveAtDestination` based on `unit.current_path.is_empty()`. Cleared when path is exhausted (`on_arrive`).
+- **Producer:** `NavigateAction.follow_path()` (sets true), `ArriveAtDestination.on_arrive()` (sets false). `WalkLane`/`ArriveAtDestination.is_valid()` do **not** write it.
+- **Consumer:** Nothing in the planner — no `get_preconditions()` reads `has_path`, and `Move.is_valid()` is `unit.moves`. It survives as bookkeeping for movement/UI.
+- **Lifecycle:** Set true when a path is queued; set false when a path is exhausted.
+
+#### `has_destiny`
+- **Scope:** agent
+- **Type:** bool
+- **Default:** false (but see `null` vs `false` rule above)
+- **Producer:** `NavigateAction.follow_path()` (sets true)
+- **Consumer:** `MoveAction.get_preconditions()` (`has_destiny: true`)
+- **Lifecycle:** Set when a route is queued and **never cleared** — a known stale-fact trap (after any route the planner can satisfy `Move` without `Navigate`). See `IMPROVEMENT_PLAN.md` Track D.
 
 #### `arrived_at_destination`
 - **Scope:** agent
@@ -132,7 +146,7 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Type:** bool
 - **Default:** false
 - **Producer:** `Unit.stun()` / `Unit.unstun()` (sets both `stunned` and `is_stunned`)
-- **Consumer:** `MoveAction.smart()` (line 165 — **this guard is silently inactive**: `smart` checks `get_state("stunned")` which reads the stale alias; the canonical key is `"is_stunned"`)
+- **Consumer:** `OrderAction` reads it defensively alongside `is_stunned` (`order_action.gd:102,138`). Nothing else reads it; **consider removing the alias** (Track D).
 - **Lifecycle:** Same as `is_stunned`. **Consider removing this alias.**
 
 #### `is_retreating`
@@ -275,9 +289,17 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `GetLumber.perform()` (line 18)
+- **Producer:** `GetLumber.on_arrive()` (line 50, after the cut timer; `perform()` only reads it)
 - **Consumer:** `ReturnLumber` (precondition)
 - **Lifecycle:** Set to `true` when lumber is collected; set to `false` when delivered.
+
+#### `collected_wood`
+- **Scope:** agent (goal desired state)
+- **Type:** bool
+- **Default:** false
+- **Producer:** `ReturnLumber.get_effects()` (planning claim; `on_arrive` sets `returning_wood` and clears `has_wood`)
+- **Consumer:** `NeedLumber.get_desired_state()`
+- **Lifecycle:** A planning goal fact, not a runtime flag; `ReturnLumber`'s completion is what satisfies it.
 
 #### `returning_wood`
 - **Scope:** agent
@@ -343,7 +365,21 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Consumer:** (internal unit state machine, not consumed by GOAP)
 - **Lifecycle:** Set/cleared as the unit transitions between movement states.
 
-#### `arrived_at_retreat` (duplicate listing — see RetreatAction above)
+### Undocumented, dead, or duplicate keys (Track D)
+
+- `opponents_in_sight` — written every frame by `EnemyDefeated.is_valid()`
+  (`enemy_defeated.gd:38`), never read. Allocates a full sight list per enemy
+  goal evaluation for no consumer.
+- `after_arive` (typo for `after_arrive`) — set by `OrderAction`,
+  `Conquer`, and `Pray`; read by `OrderAction.on_arrive`.
+- `resume_path` / `lane_resume_path` — written/erased by `WalkLane` and
+  `MoveAction.teleport`, but their readers in `NavigateAction` are commented
+  out.
+- `death` — set by `Unit.die()`; superseded by `Unit.dead`.
+- `move` / `attack` / `idle` — unit animation state set through
+  `Unit.set_state()`; not consumed by the planner.
+- `arrived_at_retreat` was listed twice in this catalog; the
+  `RetreatAction` entry above is the canonical one.
 
 ### WorldState facts
 
@@ -473,9 +509,9 @@ Some facts have implicit dependencies — one system's behavior depends on anoth
 
 | Dependency | Description | Risk |
 |------------|-------------|------|
-| `has_path` depends on `WalkLane` and `ArriveAtDestination` | `MoveAction`'s `is_valid()` requires `not has_path`. The planner's precondition `has_path: false` is only satisfied because goal `is_valid()` methods explicitly write `has_path` every frame. | If a goal forgets to set `has_path`, `MoveAction` becomes unreachable. |
+| `has_destiny` is write-only | `Navigate.follow_path` sets `has_destiny = true` and nothing clears it; `Move.get_preconditions()` requires it. | After any route the planner can satisfy `Move` without `Navigate`; the stale `true` is a known freeze cause. |
 | `hunting` depends on `target` being set | `Modifiers` checks `hunting` for attack speed bonuses. | If `target` is set without `hunting`, attack speed bonus is lost. |
 | `is_stunned` vs `stunned` alias | `MoveAction.smart()` checks the stale `stunned` alias; all other code uses `is_stunned`. | `smart()`'s stun guard is silently inactive. |
 | `target` side effects | `_set_target()` clears `attack_count`, removes `agile` modifier, sets `hunting`. These are side effects that any code setting `target` inherits. | Setting `target` without understanding these side effects causes unintended behavior. |
-| `EnemyDefeated.is_valid()` scans every frame | Every tick, `EnemyDefeated.is_valid()` calls `get_units_in_attack_range()`, `select_target()`, and potentially `get_units_in_sight()` on every unit. | Performance cost at 30 Hz per unit. |
+| `EnemyDefeated.is_valid()` scans every frame | On every goal evaluation, `EnemyDefeated.is_valid()` calls `get_units_in_sight()`, `select_target()`, and writes `opponents_in_sight`. | Performance cost on each staggered evaluation (~8.6 Hz per unit). |
 | `ChooseTarget` is a shared singleton | `ChooseTarget` holds mutable team-level priority dictionaries but is a globally shared action instance. | Safe because it's team-scoped, but needs documentation to prevent future misuse. |

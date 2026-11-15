@@ -2,12 +2,11 @@ extends Node
 
 # Keep suite registration explicit so the headless run order is predictable.
 #
-# PORT NOTE: The GOAP-coupled suites from the original CI-verified suite
-# (planner, agent, goal, navigation, movement, action-lifecycle tests) are
-# DEFERRED until the upstream GOAP restructure settles. See COVERAGE.md
-# ("Deferred coverage"). Only suites targeting stable production seams
-# (skills, modifiers, spawns, collisions, map tools, parse/scene sanity)
-# run here.
+# PORT NOTE: contrary to the interim deferral (DECISIONS.md D11), the full
+# CI-verified suite is active again on the post-restructure base (D12): all 23
+# test classes below are registered and run, and EXPECTED_UNIT_TESTS in
+# run_suite.sh pins the assertion count. Adding a test file requires an entry
+# here AND a _run_suite(...) call below.
 
 const CollisionTests = preload("res://tests/unit/test_collisions.gd")
 const ModifiersTests = preload("res://tests/unit/test_modifiers.gd")
@@ -31,6 +30,7 @@ const ArriveAtDestinationTests = preload("res://tests/unit/test_arrive_at_destin
 const OrderActionTests = preload("res://tests/unit/test_order_action.gd")
 const AttackPrioritiesTests = preload("res://tests/unit/test_attack_priorities.gd")
 const AttackLifecycleTests = preload("res://tests/unit/test_attack_lifecycle.gd")
+const ArrivalDispatchTests = preload("res://tests/unit/test_arrival_dispatch.gd")
 const SightRadiusTests = preload("res://tests/unit/test_sight_radius.gd")
 
 var tests_run := 0
@@ -62,6 +62,7 @@ func _ready() -> void:
 	_run_suite("OrderAction", OrderActionTests)
 	_run_suite("AttackPriorities", AttackPrioritiesTests)
 	_run_suite("AttackLifecycle", AttackLifecycleTests)
+	_run_suite("ArrivalDispatch", ArrivalDispatchTests)
 	_run_suite("SightRadius", SightRadiusTests)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line

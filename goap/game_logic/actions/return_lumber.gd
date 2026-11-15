@@ -22,7 +22,13 @@ func perform(agent, _delta) -> bool:
 
 func enter(agent):
 	var unit = agent.get_unit()
-	unit.current_destination = agent.set_state("deliver_position")
+	var deliver_position = agent.get_state("deliver_position")
+	if deliver_position == null:
+		return
+	# Pathfind first; fall back to walking straight there when no route
+	# exists (the established pattern in PursueEnemy/AttackEnemy).
+	if not Goap.get_action("Navigate").move(unit, deliver_position):
+		Goap.get_action("Move").move(unit, deliver_position)
 
 
 func on_arrive(agent):

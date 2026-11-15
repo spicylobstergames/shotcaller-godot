@@ -42,6 +42,10 @@ func _ready():
 	_unit.unit_died.connect(on_died)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
+	# Arrival is emitted by Collisions (via Unit.on_arrive) once the unit
+	# reaches its current_destiny. Connect exactly once: a second connection
+	# would double-fire every action/goal on_arrive hook.
+	_unit.unit_arrived.connect(on_arrive)
 	
 	WorldState.second_elapsed.connect(on_every_second)
 	
