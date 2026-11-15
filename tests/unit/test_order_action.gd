@@ -7,6 +7,7 @@ extends RefCounted
 # moved into agent.gd. These tests pin the current contract.
 
 const OrderAction = preload("res://goap/game_logic/actions/order_action.gd")
+const Agent = preload("res://goap/goap_system/agent.gd")
 
 
 class TestUnit:
@@ -40,9 +41,21 @@ class TestAgent:
 	func erase_state(state_name: String) -> void:
 		state.erase(state_name)
 
-	func cancel_player_order() -> void:
-		erase_state("player_order")
-		set_state("player_order_cancelled", true)
+
+# Minimal goal double so the REAL Agent can install a plan (_replace_plan
+# calls enter/exit unguarded on goal change). get_class_name() feeds the
+# state_changed emission.
+class ObeyPlayerGoal:
+	extends RefCounted
+
+	func enter(_agent) -> void:
+		pass
+
+	func exit(_agent) -> void:
+		pass
+
+	func get_class_name() -> String:
+		return "ObeyPlayer"
 
 
 func run(harness) -> void:
@@ -99,13 +112,43 @@ func run(harness) -> void:
 		"The completed move order is removed."
 	)
 
-	# --- a dead unit cancels its order ---
-	var dead_agent = TestAgent.new()
-	dead_agent.unit.dead = true
-	dead_agent.set_state("player_order", {"type": "move"})
-	harness.check(action.perform(dead_agent, 0.0), "A dead unit's order completes (cancelled).")
-	harness.check_equal(
-		dead_agent.get_state("player_order_cancelled"),
-		true,
-		"A dead unit's order is cancelled, not completed normally."
+	# --- a dead unit cancels its order through the REAL Agent path ---
+	# Production Agent.cancel_player_order() clears the plan and sets
+	# player_order_complete / has_player_command (agent.gd). The old version
+	# of this test asserted "player_order_cancelled", a key only its own
+	# TestAgent double ever set — it was testing the mock, not the game.
+	var real_agent = Agent.new()
+	real_agent._unit = TestUnit.new()
+	real_agent._unit.dead = true
+	real_agent.set_state("player_order", {"type": "move"})
+	real_agent.set_state("player_order_complete", false)
+	real_agent.set_state("has_player_command", true)
+	var order_step = OrderAction.new()
+	real_agent._replace_plan(ObeyPlayerGoal.new(), [order_step])
+	harness.check(
+		real_agent.get_current_action() == order_step,
+		"The order action is installed as the agent's current plan step."
 	)
+	harness.check(
+		order_step.perform(real_agent, 0.0),
+		"A dead unit's order completes (cancelled)."
+	)
+	harness.check(
+		real_agent.get_state("player_order") == null,
+		"A dead unit's order is erased from the agent state."
+	)
+	harness.check_equal(
+		real_agent.get_state("player_order_complete"),
+		true,
+		"Cancellation marks the order complete for the ObeyPlayer goal."
+	)
+	harness.check_equal(
+		real_agent.get_state("has_player_command"),
+		false,
+		"Cancellation clears the player-command state."
+	)
+	harness.check(
+		real_agent.get_current_action() == null and real_agent.get_current_goal() == null,
+		"Cancellation clears the agent's plan and goal."
+	)
+	real_agent.free()
