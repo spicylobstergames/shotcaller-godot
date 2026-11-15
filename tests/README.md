@@ -28,6 +28,16 @@ Faster loops and tooling:
 ./tools/gen_goap_index.sh     # regenerate docs/ai/goap-index.md from the GOAP-GUIDE banners
 ```
 
+Capturing a stuck unit during normal play (read-only, opt-in):
+
+```
+godot --path . -- --freeze-report
+```
+
+Any unit that is stationary for ~6s while not attacking an in-range target is
+printed as `FREEZE_REPORT ... goal=... action=... plan=... facts=...`. Paste
+those lines when reporting a "units stand still" bug.
+
 `test_runner.tscn` also accepts a subset filter for tight iteration:
 
 ```
