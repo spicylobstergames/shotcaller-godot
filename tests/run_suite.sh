@@ -23,7 +23,7 @@ STEP_TIMEOUT="${STEP_TIMEOUT:-180}"
 # file than the reporter: a runner that crashes, hangs, or is bypassed cannot
 # fake a green result without editing both files. Bump this when you add
 # tests — the suite will fail with the actual count until you do.
-EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-364}"
+EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-394}"
 
 # Godot binary: argument > GODOT env var > "godot" on PATH.
 GODOT="${1:-${GODOT:-godot}}"
@@ -33,6 +33,11 @@ SMOKE_TICKS="${SMOKE_TICKS:-300}"
 # Keep Godot's user-data writes inside the repo (sandbox/CI friendly).
 export HOME="${GODOT_HOME:-$PROJECT_DIR/../.godot-home}"
 mkdir -p "$HOME"
+# user:// (e.g. tests writing temp scenes) resolves under XDG_DATA_HOME, not
+# HOME, so redirect it the same way for sandboxed/CI checkouts where the real
+# $HOME is not writable.
+export XDG_DATA_HOME="${GODOT_DATA_HOME:-$PROJECT_DIR/../.godot-home}"
+mkdir -p "$XDG_DATA_HOME"
 
 LOG_DIR="${TEST_LOG_DIR:-$PROJECT_DIR/../.test-logs}"
 mkdir -p "$LOG_DIR"

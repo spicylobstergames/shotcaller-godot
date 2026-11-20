@@ -38,6 +38,7 @@ prototype/Shotcall.apk.idsig
 
 # AI test infrastructure
 .godot-home/
+.godot-data/
 .test-logs/
 .clean-verify*/
 .tools/godot/

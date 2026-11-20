@@ -36,6 +36,7 @@ const StateKeysTests = preload("res://tests/unit/test_state_keys.gd")
 const GoapContractLintTests = preload("res://tests/unit/test_goap_contract_lint.gd")
 const GoapIndexTests = preload("res://tests/unit/test_goap_index.gd")
 const WorldStateTimersTests = preload("res://tests/unit/test_world_state_timers.gd")
+const MapEditorTests = preload("res://tests/unit/test_map_editor.gd")
 const GoapIndex = preload("res://tools/goap_index.gd")
 
 var tests_run := 0
@@ -87,6 +88,7 @@ func _ready() -> void:
 	_run_suite("GoapContractLint", GoapContractLintTests)
 	_run_suite("GoapIndex", GoapIndexTests)
 	_run_suite("WorldStateTimers", WorldStateTimersTests)
+	_run_suite("MapEditor", MapEditorTests)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line
 	# against the pinned EXPECTED_UNIT_TESTS count in a separate file, so a

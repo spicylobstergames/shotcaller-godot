@@ -19,3 +19,11 @@ Tile-map battlefields and everything that populates them.
 - `tool/mirror_tiles.gd` — @tool map-editor TileMap (mirror painting).
   Its coordinate math is regression-tested against production methods in
   `tests/unit/test_mirror_tiles.gd`.
+- `../addons/map_editor/` — editor plugin (enable it in Project Settings →
+  Plugins): a dock with **New map scene** (scaffolds a contract-satisfying
+  map — tiles/ground|walls|trees TileMapLayers with the shared TileSets,
+  fog, `buildings/<team>/<building>`, a default `mid` lane, `closest_tree`
+  markers) and **Validate open map** (checks the runtime contract that
+  `map_manager.gd`/`spawns.gd` read by path, including building `subtype`
+  matching a lane). Scaffold and validator are editor-free RefCounted code,
+  regression-tested in `tests/unit/test_map_editor.gd`.
