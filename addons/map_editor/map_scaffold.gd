@@ -94,8 +94,14 @@ func write_map(path: String) -> int:
 	return ResourceSaver.save(packed, path)
 
 
+# Only claims nodes that belong to NO scene yet (owner == null): instanced
+# building subtrees keep their internal owner, so pack() serializes them as
+# instances instead of flattening their internals into the map file (which
+# produced "name clashes with buildings/blue/castle/hud" on load).
 func _assign_owner(node: Node, owner: Node) -> void:
 	for child in node.get_children():
+		if child.get_owner() != null:
+			continue
 		child.owner = owner
 		_assign_owner(child, owner)
 

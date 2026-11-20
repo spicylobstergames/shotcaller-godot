@@ -47,7 +47,16 @@ func _ready() -> void:
 	_save_dialog.filters = PackedStringArray(["*.tscn ; Godot scene"])
 	_save_dialog.current_dir = "res://map/maps"
 	_save_dialog.file_selected.connect(_on_save_path_chosen)
-	add_child(_save_dialog)
+	# A Window (FileDialog) must live directly under the root viewport for
+	# popup() to work; parenting it to this dock Control makes popup() fail
+	# ("attempting to parent and popup a dialog that already has a parent").
+	get_tree().root.add_child.call_deferred(_save_dialog)
+
+
+func _exit_tree() -> void:
+	if _save_dialog != null and is_instance_valid(_save_dialog):
+		_save_dialog.queue_free()
+		_save_dialog = null
 
 
 func _on_new_map_pressed() -> void:

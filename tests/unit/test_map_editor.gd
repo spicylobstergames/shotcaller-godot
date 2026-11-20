@@ -135,6 +135,18 @@ func _test_write_and_reload_roundtrip(harness) -> void:
 			var problems: Array = Validator.new().validate(reloaded)
 			harness.check_equal(_errors(problems).size(), 0,
 					"reloaded scaffold still validates with zero errors%s" % _describe(problems))
+			# Instance internals must stay owned by their building instance —
+			# flattening them into the map scene caused load-time name-clash
+			# errors ("buildings/blue/castle/hud") on the first scaffold use.
+			var castle: Node = reloaded.get_node("buildings/blue/castle")
+			var hud: Node = castle.get_node_or_null("hud")
+			harness.check(hud != null and hud.get_owner() == castle,
+					"reloaded castle keeps its hud owned by the instance (no flattening)")
+			# Genuine additions to an instance stay owned by the map scene,
+			# mirroring the shipping maps' editable-instance overrides.
+			var closest: Node = reloaded.get_node_or_null("buildings/blue/blacksmith/closest_tree")
+			harness.check(closest != null and closest.get_owner() == reloaded,
+					"reloaded closest_tree stays owned by the map scene (editable addition)")
 			reloaded.free()
 		else:
 			harness.check(false, "reloaded scaffold scene could be loaded")
