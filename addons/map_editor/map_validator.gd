@@ -102,7 +102,10 @@ func _check_tiles(map: Node, problems: Array) -> void:
 	# shipping maps run an (8, 8) ground cell size against tile_size 64.)
 	var walls: TileMapLayer = map.get_node_or_null("tiles/walls/Walls")
 	var tile_size = map.get("tile_size")
-	if walls != null and walls is TileMapLayer and walls.tile_set != null and tile_size is int and tile_size > 0:
+	# base_map.gd declares tile_size untyped, so the inspector can hand us a
+	# float; accept any numeric value.
+	if walls != null and walls is TileMapLayer and walls.tile_set != null \
+			and (tile_size is int or tile_size is float) and tile_size > 0:
 		var cell_size: Vector2i = walls.tile_set.tile_size
 		if cell_size.x != tile_size or cell_size.y != tile_size:
 			_fail(problems, "walls TileMapLayer cell size %s does not match 'tile_size' %d — painted walls would block the wrong pathfinding cells (navigation.gd grids walls cells by tile_size)" % [cell_size, tile_size])
@@ -170,7 +173,9 @@ func _check_buildings(map: Node, lane_names: Dictionary, problems: Array) -> voi
 
 	for team in _TEAM_DIRECTORIES:
 		if buildings_node.get_node_or_null(team) == null:
-			_fail(problems, "missing required 'buildings/%s' node" % team)
+			# Runtime tolerates a missing team (campaign_map legitimately ships
+			# blue-only), but a battle map without one can't be won/lost.
+			_warn(problems, "missing 'buildings/%s' node (fine for a campaign-style map; a battle map needs it)" % team)
 
 
 func _check_team(team_node: Node, team: String, lane_names: Dictionary, problems: Array) -> void:

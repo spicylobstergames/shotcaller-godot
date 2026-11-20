@@ -19,6 +19,7 @@ const Scaffold = preload("res://addons/map_editor/map_scaffold.gd")
 const Validator = preload("res://addons/map_editor/map_validator.gd")
 const OneLaneMap = preload("res://map/maps/one_lane_map.tscn")
 const ThreeLaneMap = preload("res://map/maps/three_lane_map.tscn")
+const CampaignMap = preload("res://map/maps/campaign_map.tscn")
 
 
 func run(harness) -> void:
@@ -141,11 +142,13 @@ func _test_write_and_reload_roundtrip(harness) -> void:
 
 
 # ---------------------------------------------------------------------------
-# The validator accepts the shipping maps
+# The validator accepts the shipping maps (including campaign_map, which
+# legitimately ships blue-only — a missing team directory is a warning)
 # ---------------------------------------------------------------------------
 
 func _test_existing_maps_pass(harness) -> void:
-	for entry in [["one_lane_map", OneLaneMap], ["three_lane_map", ThreeLaneMap]]:
+	for entry in [["one_lane_map", OneLaneMap], ["three_lane_map", ThreeLaneMap],
+			["campaign_map", CampaignMap]]:
 		var map: Node = (entry[1] as PackedScene).instantiate()
 		var problems: Array = Validator.new().validate(map)
 		harness.check_equal(_errors(problems).size(), 0,
@@ -211,6 +214,19 @@ func _test_contract_gaps(harness) -> void:
 			"map without a 'mid' lane is an error (spawns.gd leader crash)")
 	no_mid.free()
 
+	# Exactly three lanes with non top/mid/bot names would send three-lane
+	# leader spawning to nonexistent lanes.
+	var misnamed: Node = Scaffold.new().build_map()
+	misnamed.get_node("lanes/mid").name = "a"
+	for extra_lane_name in ["b", "c"]:
+		var lane := Line2D.new()
+		lane.name = extra_lane_name
+		lane.points = PackedVector2Array([Vector2.ZERO, Vector2(10, 10)])
+		misnamed.get_node("lanes").add_child(lane)
+	harness.check(_has_problem(v.validate(misnamed), "warning", "not named top/mid/bot"),
+			"three misnamed lanes warn (three-lane leader spawning assumes top/mid/bot)")
+	misnamed.free()
+
 	# setup_buildings treats every child of 'buildings' as a team directory.
 	var stray: Node = Scaffold.new().build_map()
 	var extra := Node2D.new()
@@ -247,6 +263,14 @@ func _test_contract_gaps(harness) -> void:
 	harness.check(_has_problem(v.validate(bad_tile_size), "error", "walls TileMapLayer cell size"),
 			"walls TileSet cell size mismatching tile_size is an error")
 	bad_tile_size.free()
+
+	# base_map.gd's tile_size is untyped: a float value must still be checked,
+	# not silently skipped.
+	var float_tile_size: Node = Scaffold.new().build_map()
+	float_tile_size.set("tile_size", 64.0)
+	harness.check(not _has_problem(v.validate(float_tile_size), "error", "walls TileMapLayer cell size"),
+			"float tile_size equal to walls cell size does not error")
+	float_tile_size.free()
 
 	# The minimap's zoomed-out view degrades silently without this sprite.
 	var no_zoom: Node = Scaffold.new().build_map()
