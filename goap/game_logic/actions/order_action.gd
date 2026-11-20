@@ -1,3 +1,25 @@
+# =============================================================================
+# GOAP-GUIDE: Order - action (goap/game_logic/actions/order_action.gd)
+# =============================================================================
+# Purpose   : Execute the player's current order (move/advance/attack/lane/
+#             teleport/stand) through the ObeyPlayer goal.
+# Plannable : yes - ObeyPlayer({player_order_complete: true}) -> Order.
+# is_valid  : player_order is a non-empty Dictionary.
+# precond   : {} (default)
+# effects   : {"player_order_complete": true}
+# enter     : execute_player_order.
+# perform   : is_player_order_complete -- for move orders that means the unit is
+#             idle with no path and no destinies; a dead unit cancels instead.
+# resume    : re-executes after a stun ends.
+# exit      : Move.stop.
+# API       : issue_player_order(unit, type, point) is the UI entry point.
+# Writes    : player_order, player_order_complete, has_player_command,
+#             after_arive, is_channeling, player_order_id.
+# Traps     : "after_arive" is a misspelled key shared with on_arrive for
+#             conquer/pray (Track D). Non-leaders execute orders immediately and
+#             bypass the goal.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

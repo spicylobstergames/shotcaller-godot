@@ -1,3 +1,21 @@
+# =============================================================================
+# GOAP-GUIDE: Goal contract (goap/goap_system/goal_contract.gd)
+# =============================================================================
+# Every active goal extends this file.
+#   is_valid(agent)          -> may this goal be chosen right now?
+#   priority(agent)          -> higher wins; strict >, so the first-registered
+#                               goal wins a tie
+#   get_desired_state(agent) -> the facts the planner must achieve
+#   enter / exit(agent)      -> called by the Agent on goal change; the planner
+#                               ignores them
+# is_valid() runs for every goal of every unit on that unit's staggered turn
+# (~8.6 Hz). It SHOULD be pure; the four documented exceptions (EnemyDefeated,
+# FriendsSafe, NeedSafety, Recover) reset stale success facts there on
+# purpose -- without that reset the planner sees the desired state as already
+# satisfied and returns an empty plan.
+# See: ARCHITECTURE.md "State facts"; docs/ai/adding-behavior.md.
+# =============================================================================
+
 extends Node
 
 # self = Goap.Goal

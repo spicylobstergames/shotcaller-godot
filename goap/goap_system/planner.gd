@@ -1,3 +1,22 @@
+# =============================================================================
+# GOAP-GUIDE: Planner - backward search (goap/goap_system/planner.gd)
+# =============================================================================
+# get_plan(agent, goal) returns the cheapest action chain (Array) that makes
+# goal.get_desired_state(agent) true, or [] when no chain exists.
+# Search    : satisfaction is checked against agent state first, then
+#             WorldState; an Object value counts as true.
+# Bounds    : MAX_PLAN_DEPTH (64) plus a per-branch visited-state signature.
+# Cost      : every solution is materialized, then the lowest summed get_cost()
+#             wins; ties keep the first-built plan (registry order).
+# IMPORTANT : there is NO contradiction check. Preconditions are merged by
+#             dictionary assignment, so a conflicting value silently OVERWRITES
+#             an earlier requirement -- a goal can receive a plan that falsifies
+#             one of its own facts. Keep preconditions consistent by hand; see
+#             IMPROVEMENT_PLAN.md Track C (prior art on
+#             planner-precondition-safety).
+# See       : tests/unit/test_planner.gd, test_planner_real_actions.gd.
+# =============================================================================
+
 extends Node
 
 # self = GoapActionPlanner
@@ -18,6 +37,69 @@ func get_plan(agent, goal) -> Array:
 	if desired_state.is_empty():
 		return []
 	return _find_best_plan(goal, desired_state, agent)
+
+
+# Diagnostic helper -- never used by planning itself. Explains why get_plan()
+# returned what it did, for tests, the debugger, and the common "this unit is
+# frozen" investigation. Returns:
+#   goal         : goal class name
+#   desired      : the goal's desired state
+#   already      : desired facts already true in agent/WorldState
+#   unsatisfied  : desired facts still to achieve (pre-planning view)
+#   produced_by  : for each unsatisfied fact, the actions whose effects match it
+#   plan         : the action class names get_plan() returned
+#   reason       : "" when a plan was found, else a short explanation
+func explain(agent, goal) -> Dictionary:
+	var desired: Dictionary = goal.get_desired_state(agent)
+	var already := {}
+	var unsatisfied := {}
+	for key in desired:
+		var expected = desired[key]
+		var actual = agent.get_state(key)
+		if actual is Object:
+			actual = true
+		var world = WorldState.get_state(key)
+		if world is Object:
+			world = true
+		if expected == actual or expected == world:
+			already[key] = expected
+		else:
+			unsatisfied[key] = expected
+
+	var produced_by := {}
+	for key in unsatisfied:
+		var names: Array[String] = []
+		for action in _actions:
+			if action.get_effects().get(key, null) == unsatisfied[key]:
+				names.append(action.get_class_name())
+		produced_by[key] = names
+
+	var plan := get_plan(agent, goal)
+	var plan_names: Array[String] = []
+	for action in plan:
+		plan_names.append(action.get_class_name())
+
+	var reason := ""
+	if plan.is_empty():
+		if desired.is_empty():
+			reason = "the goal has an empty desired state"
+		elif unsatisfied.is_empty():
+			reason = "the desired state is already satisfied in agent/WorldState (stale fact?)"
+		else:
+			reason = "no action chain satisfies the remaining facts"
+
+	var goal_name := str(goal)
+	if goal.has_method("get_class_name"):
+		goal_name = goal.get_class_name()
+	return {
+		"goal": goal_name,
+		"desired": desired,
+		"already": already,
+		"unsatisfied": unsatisfied,
+		"produced_by": produced_by,
+		"plan": plan_names,
+		"reason": reason,
+	}
 
 
 func _find_best_plan(goal, desired_state: Dictionary, agent):
@@ -108,6 +190,10 @@ func _build_plans(step, agent, visited_states: Dictionary = {}, depth: int = 0):
 		if should_use_action:
 			# Add action preconditions to the desired state.
 			var preconditions: Dictionary = action.get_preconditions()
+			# NOTE: no contradiction check here. Assignment silently overwrites
+			# any requirement this branch (or an ancestor) already holds, which
+			# can yield a plan that falsifies the goal. See the file banner and
+			# IMPROVEMENT_PLAN.md Track C before relying on ordering.
 			for precondition in preconditions:
 				desired_state[precondition] = preconditions[precondition]
 

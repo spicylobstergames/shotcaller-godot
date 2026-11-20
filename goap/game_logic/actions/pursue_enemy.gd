@@ -1,3 +1,21 @@
+# =============================================================================
+# GOAP-GUIDE: PursueEnemy - action (goap/game_logic/actions/pursue_enemy.gd)
+# =============================================================================
+# Purpose   : Close the distance to unit.target until it is in attack range.
+# Plannable : yes - bridges has_attack_target -> enemy_in_attack_range.
+# is_valid  : unit.attacks
+# cost      : 1
+# precond   : {"is_stunned": false, "ready_to_fight": true,
+#              "has_attack_target": true}
+# effects   : {"enemy_in_attack_range": true}
+# enter     : sets final_destiny and calls _approach.
+# perform   : true once in range or the target is gone; otherwise re-approaches.
+# exit      : Move.stop.
+# Traps     : _approach falls back to a straight-line Move.move when
+#             Navigate.move finds no route (buildings sit on unwalkable tiles).
+# See       : tests/unit/test_attack_lifecycle.gd.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

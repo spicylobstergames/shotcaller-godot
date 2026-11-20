@@ -1,3 +1,16 @@
+# =============================================================================
+# GOAP-GUIDE: MeleeAttack - action (goap/game_logic/actions/melee_attack.gd)
+# =============================================================================
+# Purpose   : Apply melee damage (plus leader cleave) when unit_attack_hitted
+#             fires.
+# Plannable : no - service object. It overrides no effects, so the planner can
+#             never match it. Reached via Agent.on_attack_hit.
+# Writes    : target hp through take_hit.
+# Traps     : damage must be applied to the TARGET, never the attacker (the
+#             ranged equivalent once damaged the shooter -- see COVERAGE.md).
+#             cleave only for leaders whose skill dict has "cleave".
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

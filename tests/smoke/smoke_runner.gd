@@ -190,17 +190,30 @@ func _normalize_node_name(n: String) -> String:
 
 # Field-wise comparison: strings exact, numbers within tolerance
 # (platform float drift must not read as a gameplay regression).
+const MAX_GOLDEN_DIFF_LINES := 10
+
 func _states_match(expected: String, actual: String, out_diff: Array) -> bool:
 	var exp_lines: PackedStringArray = expected.split("\n")
 	var got_lines: PackedStringArray = actual.split("\n")
 	if exp_lines.size() != got_lines.size():
 		out_diff.append("state line count differs: %d expected vs %d actual" % [exp_lines.size(), got_lines.size()])
 		return false
+	# Report EVERY differing line (up to a cap), not just the first: a reader
+	# debugging a golden failure needs the whole delta, and a single field is
+	# rarely the story. Pass/fail semantics are unchanged.
+	var mismatches := 0
 	for i in range(exp_lines.size()):
-		if not _lines_match(exp_lines[i], got_lines[i]):
-			out_diff.append("state line %d differs:\n  expected: %s\n  actual:   %s" % [i, exp_lines[i], got_lines[i]])
-			return false
-	return true
+		if _lines_match(exp_lines[i], got_lines[i]):
+			continue
+		mismatches += 1
+		if out_diff.size() < MAX_GOLDEN_DIFF_LINES:
+			out_diff.append(
+				"line %d:\n    %s" % [i, _describe_line_diff(exp_lines[i], got_lines[i])]
+			)
+	if mismatches == 0:
+		return true
+	out_diff.append("%d line(s) differ in this checkpoint." % mismatches)
+	return false
 
 func _lines_match(exp: String, got: String) -> bool:
 	# POSITIONS get tolerance (platform float drift in movement), and HP gets
@@ -246,6 +259,46 @@ func _pos_close(e: String, g: String) -> bool:
 		if absf(e_coords[i].to_float() - g_coords[i].to_float()) > 0.51:
 			return false
 	return true
+
+# Field-level, human-readable description of one differing golden state line.
+# Reporting only: it never decides pass/fail (see _lines_match/_states_match).
+func _describe_line_diff(exp: String, got: String) -> String:
+	var exp_f := exp.split("|")
+	var got_f := got.split("|")
+	if exp_f.size() != got_f.size():
+		return (
+			"field count differs (expected %d, actual %d)\n    expected: %s\n    actual:   %s"
+			% [exp_f.size(), got_f.size(), exp, got]
+		)
+	var parts: Array[String] = []
+	for i in range(exp_f.size()):
+		if exp_f[i] == got_f[i]:
+			continue
+		var note := "  [exact field]"
+		if exp_f[i].begins_with("pos=(") and got_f[i].begins_with("pos=("):
+			note = "  [position; exceeded the 0.51 drift tolerance]"
+		elif exp_f[i].begins_with("hp=") and got_f[i].begins_with("hp="):
+			note = "  [hp; differed by more than 1]"
+		parts.append(
+			"%s: expected %s, actual %s%s" % [_field_label(exp_f, i), exp_f[i], got_f[i], note]
+		)
+	if parts.is_empty():
+		return "raw: %s != %s" % [exp, got]
+	return "\n    ".join(parts)
+
+func _field_label(fields: PackedStringArray, index: int) -> String:
+	var field := fields[index]
+	var eq := field.find("=")
+	if eq > 0:
+		return field.substr(0, eq)
+	match index:
+		0:
+			return "name"
+		1:
+			return "type"
+		2:
+			return "team"
+	return "field %d" % index
 
 func _golden_report() -> void:
 	checkpoints.append(_serialize_state())  # final frame

@@ -1,3 +1,24 @@
+# =============================================================================
+# GOAP-GUIDE: Navigate - action (goap/game_logic/actions/navigate_action.gd)
+# =============================================================================
+# Purpose   : Build a JPS route through the global Navigation autoload and hand
+#             waypoints to Move; also the "point/advance" player-order pathing.
+# Plannable : yes - with Move.
+# is_valid  : unit.moves
+# precond   : {"is_stunned": false}
+# effects   : {"has_destiny": true}
+# enter     : resets arrived_at_destination, then follow_path(unit.current_path).
+# perform   : returns has_destiny, which follow_path set -- so it completes as
+#             soon as a route exists.
+# Helpers   : find / find_custom_path / move / cut_path / resume_path / next /
+#             point (full approach incl. target acquisition) / follow_path.
+# Writes    : current_path, current_destiny, final_destiny, has_path, has_destiny.
+# Traps     : has_destiny is set here and NEVER cleared (stale true lets the
+#             planner skip Navigate). move() returns false when no route exists
+#             into a blocked tile -- callers must fall back to Move.move.
+# See       : tests/unit/test_navigation.gd, test_attack_lifecycle.gd.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

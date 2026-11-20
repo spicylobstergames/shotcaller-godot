@@ -49,6 +49,10 @@ func _ready():
 		# Dev diagnostic: samples engine counters while the game runs. Run
 		# with: godot --headless --path . res://game.tscn -- --perf
 		add_child(load("res://tests/perf_monitor.gd").new())
+	if "--freeze-report" in OS.get_cmdline_user_args():
+		# Opt-in freeze diagnostic for normal play (does NOT force debug, so
+		# the menu flow runs): godot --path . -- --freeze-report
+		add_child(load("res://tests/freeze_report.gd").new())
 
 
 func start():

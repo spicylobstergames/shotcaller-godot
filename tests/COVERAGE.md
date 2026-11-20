@@ -1,12 +1,14 @@
 # Test Coverage
 
-**20 test classes**, **255 assertions**, **0 script errors** — all passing.
+**28 test classes**, **364 assertions**, **0 script errors** — all passing.
+(The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
+bump it whenever you add tests.)
 
 ```
 ./tests/run_suite.sh
-→ [1/3] TESTS_COMPLETE: passed=255 failed=0
-→ [1/3] All 255 tests passed.
-→ [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=1 pathed_moved=1
+→ [1/3] TESTS_COMPLETE: passed=348 failed=0
+→ [1/3] All 348 tests passed.
+→ [2/3] SMOKE_RESULT: frames=300 units=127 leaders=1 moved=3 pathed_moved=2
 → [3/3] GOLDEN_OK: 3 checkpoints identical
 → SUITE GREEN: unit tests, boot smoke, golden replay, zero script errors
 ```
@@ -87,10 +89,10 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
 | `test_helpers.gd` | Shared helpers are load-bearing (snapshot/mock-goal self-tests) | Unit |
 | `test_planner.gd` | Planner mechanics (cost ordering, precondition chains, dead ends) via contract doubles | Unit |
-| `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
+| `test_planner_real_actions.gd` | Planner + real 18-action registry + real goals (contract drift) | Integration |
 | `test_agent_signals.gd` | Real `Agent`: goal/plan/action signal wiring and lifecycle | Unit |
 | `test_agent_target.gd` | ChooseTarget.set_target sync (unit target, hunting, attack-count reset, modifier cleanup) | Unit |
-| `test_agent_tactic.gd` | Tactic speed bonuses + Recover.should_retreat thresholds | Unit |
+| `test_agent_tactic.gd` | Tactic speed bonuses, Recover.should_retreat thresholds, Recover's planner-fact maintenance (ready_to_fight/is_retreating) | Unit |
 | `test_action_lifecycles.gd` | Action lifecycle semantics through the REAL Agent (plan replacement, signal-driven entry, multi-tick completion) | Unit |
 | `test_goal_interactions.gd` | Goal selection contract: tie-breaking, no-valid-goals, is_valid side effects, priority changes | Unit |
 | `test_goap_integration.gd` | Real Agent + real planner path: goal selection → plan install → follow → completion | Integration |
@@ -99,12 +101,17 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_spawns.gd` | `map/spawns.gd` camp_hire pooled-gold semantics, cemetery, lane tactics | Unit |
 | `test_mirror_tiles.gd` | `map/tool/mirror_tiles.gd` — real `_get_mirrored_coords`/`_get_changed_cells` | Unit |
 | `test_collisions.gd` | Quadtree + geometry helpers | Unit |
-| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking | Unit |
+| `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking, crowded-blocking forward-progress floor, perform() advancing the plan after arrival | Unit |
 | `test_navigation.gd` | Jump-point pathfinder (routes, walls, sealed maps) + NavigateAction→Navigation dispatch | Unit |
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
-| `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
+| `test_order_action.gd` | OrderAction completion/cancellation semantics (cancellation driven through the real Agent) | Unit |
+| `test_world_state_timers.gd` | WorldState timer setup idempotency (double-start, teardown, second_elapsed relay) | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
 | `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
+| `test_arrival_dispatch.gd` | `Agent._ready` wires `unit_arrived` → action/goal `on_arrive` exactly once; `ReturnLumber.enter` routes to `deliver_position` | Unit |
+| `test_state_keys.gd` | Every GOAP state key is documented in `world-state.md`; every required fact has a producer (effects or `*_state()`) | Lint |
+| `test_goap_contract_lint.gd` | GOAP-GUIDE banners, registry contract integrity, the exact service-action set, goal desired-fact satisfiability | Lint |
+| `test_goap_index.gd` | `docs/ai/goap-index.md` matches the GOAP-GUIDE banners | Lint |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
@@ -275,9 +282,80 @@ Production regressions found by the port and FIXED (each regression-tested):
   flows through the existing `ArriveAtDestination.on_arrive` →
   `Navigate.next` machinery. Regression: `test_attack_lifecycle.gd`.
 
+- **Arrival dispatch was never wired** (found during the architecture review,
+  FIXED): `Unit.on_arrive()` emits `unit_arrived`, but no code connected it and
+  nothing called `Unit.on_arrive()`, so `Agent.on_arrive` and every action
+  `on_arrive` hook were dead in production — `GetLumber` never set `has_wood`
+  (lumberjacks could never deliver wood), `Hide` never set `is_hiding`,
+  `RetreatAction.on_arrive` never set `arrived_at_retreat`, and
+  `OrderAction.on_arrive` never ran the conquer/pray follow-up. `Collisions`
+  now calls `unit.on_arrive()` after `ArriveAtDestination.on_arrive(unit)`;
+  `Agent._ready()` connects `unit_arrived` → `on_arrive` exactly once;
+  `Recover.on_arrive`'s agent-vs-unit delegation was removed (it would have
+  double-advanced the path); and `ReturnLumber.enter` now navigates to
+  `deliver_position` instead of assigning `set_state()`'s null return to a
+  nonexistent unit property. Regression: `tests/unit/test_arrival_dispatch.gd`
+  (sabotage-verified: reverting either production line fails it). The golden
+  replay was unchanged — the debug smoke scenario does not exercise the
+  lumberjack/hide/retreat hooks.
+
+- **Arrival dispatch permanently disabled `WalkLane`** (found in play after the
+  arrival fix, FIXED): wiring `unit_arrived` to `Agent.on_arrive` also made
+  `WalkLane.on_arrive` live for the first time. It set
+  `lane_route_finished = true` on any empty-path arrival, and that fact is
+  write-once (only `change_lane`/`Move.teleport` clear it) and a hard gate in
+  `WalkLane.is_valid()`. The first unit to consume its lane therefore lost its
+  default goal for good — units fought, killed an enemy, then stood still.
+  Upstream main never hit this because the arrival dispatch was dead there.
+  Fix: the arrival hook no longer writes the fact. Regression:
+  `tests/unit/test_arrival_dispatch.gd` ("an arrival must NOT permanently
+  disable WalkLane"), which failed with 2 assertions before the fix;
+  lane-completion semantics (reset path + fallback behavior) are a separate
+  open decision in `plans/E5.md`.
+
+- **Crowded units jittered in place forever** (found with the `--freeze-report`
+  census in 90s+ live runs, FIXED): `Move._resolve_blocking` summed
+  `diff * 0.05` repulsion from every overlapping neighbour. At lane choke
+  points (7–12 overlapping units) the sum exceeded the per-tick step (~0.6px
+  at 35px/s), so `resolved_motion` cancelled or reversed and packed units
+  froze: `state=move`, a live `WalkLane` plan, a non-zero `current_step`, and
+  no movement — i.e. survivors of a lane fight simply stood there. It
+  reproduced on upstream main too (17 freeze reports in 170s vs 9 on this
+  branch), so it is pre-existing, not an arrival-fix regression. Fix: a
+  forward-progress floor in `_resolve_blocking` — repulsion may remove at most
+  40% of the intended step along the original direction, while sideways
+  deflection is preserved. Regression: `tests/unit/test_movement.gd`
+  ("A crowded unit still advances", 1 assertion failing before the fix).
+  Validated by the census: 9 → 0 freeze reports in a 170s run (main: 17).
+  Golden replay unchanged (the smoke scenario has no crowds).
+
+- **`Move.perform` parked the plan after arrival** (traced from a live "units
+  fight, kill, then stand still" report back through history, FIXED): PR #233
+  (`73f69c0`) changed `Move.perform` from "always complete" to
+  `if arrived_at_destination: return false`. The agent only replans when the
+  GOAL changes, so once an arrival set `arrived_at_destination` the plan could
+  never complete: the unit sat on a dead `[Move]` plan with its goal frozen —
+  no lane walking and no target re-acquisition until some other goal outranked
+  it. Fix: restore the pre-#233 contract (`return true`; the step itself is
+  driven by `Collisions`). Regression: `tests/unit/test_movement.gd`
+  ("Move.perform completes after arrival"), failing before the fix. Golden
+  replay unchanged.
+- **`Recover` stranded `ready_to_fight` / `is_retreating`** (found by the
+  `--freeze-report` census, FIXED): `ready_to_fight` was cleared in
+  `Recover.enter()`, which runs AFTER `get_plan()` — so the first low-HP
+  evaluation saw the desired state already satisfied and planned nothing,
+  while `enter()` still set `is_retreating = true`. Only
+  `RetreatAction.exit()` clears `is_retreating`, and it never runs for an
+  empty plan, so `WalkLane` (is_retreating gate) and `EnemyDefeated`
+  (ready_to_fight gate) stayed blocked and the unit ended at `goal=null`,
+  standing still. Fix: maintain both facts in `Recover.is_valid()` before
+  planning — the same pattern `EnemyDefeated`/`FriendsSafe` use for
+  `enemy_dead`/`friends_safe`. Regression:
+  `tests/unit/test_agent_tactic.gd` (3 assertions failing before the fix).
+  Census: 1 report → 0 in a 170s run.
+
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
-deliberately):
-- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation
+deliberately):- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation
   logic commented out in the restructure). Arrival works only because
   `Collisions` calls `is_at_destination`/`on_arrive` directly. Pinned by
   `test_arrive_at_destination.gd`; flag for upstream — if the commented-out

@@ -1,3 +1,28 @@
+# =============================================================================
+# GOAP-GUIDE: WalkLane - goal (goap/game_logic/goals/walk_lane.gd)
+# =============================================================================
+# Purpose   : Default behavior -- walk the unit's assigned lane toward the
+#             enemy castle.
+# priority  : 2 (above NeedLumber, below combat/safety goals)
+# desired   : {"lane_route_finished": true}
+# is_valid  : lane set and known, no unit.target, moves, not dead, no player
+#             command, not retreating, ready_to_fight, not channeling, and
+#             route not already finished.
+# enter     : re-derives the route ONLY when it is missing or polluted by
+#             combat navigation; otherwise preserves the in-progress lane route
+#             and re-pops the next waypoint if the destiny was zeroed.
+# on_arrive : NONE on purpose -- lane completion must not be set on arrival
+#             (lane_route_finished is write-once and would disable the goal
+#             forever; see the note in the body).
+# Helpers   : get_lane_path / closest_lane / change_lane / resume_lane.
+# Traps     : enter() runs on EVERY plan re-install (Move completes each tick).
+#             Re-deriving there pins units at the lane start -- read the long
+#             comment in enter() before touching it.
+#             lane_route_finished is write-once: only change_lane()/teleport
+#             clear it, and is_valid() treats it as a hard gate.
+# See       : tests/unit/test_attack_lifecycle.gd (lane-route cases).
+# =============================================================================
+
 extends "res://goap/goap_system/goal_contract.gd"
 
 
@@ -131,9 +156,20 @@ func resume_lane(unit) -> void:
 	Goap.get_action("Navigate").cut_path(unit, path)
 
 
-func on_arrive(agent) -> void:
-	var route_finished = agent.get_unit().current_path.is_empty()
-	if route_finished:
-		agent.set_state("lane_route_finished", true)
-		agent.erase_state("lane_resume_path")
-	
+# Deliberately NO on_arrive hook.
+#
+# This used to set lane_route_finished = true whenever current_path was empty,
+# which looked correct but froze units: lane_route_finished is a WRITE-ONCE
+# fact (only change_lane() and Move.teleport() clear it) and is_valid() treats
+# it as a hard gate. The arrival dispatch is live (Collisions -> unit.on_arrive
+# -> Agent.on_arrive -> this hook), so the first empty-path arrival -- e.g. the
+# terminal lane waypoint at the enemy castle -- disabled WalkLane for the rest
+# of that unit's life. After the fight it had no valid goal and stood still
+# (upstream main never hit this because the arrival dispatch was dead).
+#
+# Regression: tests/unit/test_arrival_dispatch.gd, "an arrival must NOT
+# permanently disable WalkLane".
+#
+# If finishing a lane SHOULD end the goal, it needs (a) a reset path so the
+# fact is not write-once and (b) a fallback behavior for a unit whose lane is
+# done. Tracked in plans/E5.md; do not re-add the write without both.

@@ -1,3 +1,16 @@
+# =============================================================================
+# GOAP-GUIDE: Conquer - action (goap/game_logic/actions/conquer_action.gd)
+# =============================================================================
+# Purpose   : Channel for a few seconds to convert a full-HP neutral building
+#             to the unit's team; also the lose_building bookkeeping.
+# Plannable : no - service object reached via Goap.get_action("Conquer").
+# Called by : OrderAction.on_arrive when after_arive == "conquer".
+# Writes    : building team + attacks flag, is_channeling, player_order_complete,
+#             WorldState "player_extra_unit"/"enemy_extra_unit".
+# Traps     : finds the building from the tile one row ABOVE the unit, so the
+#             unit must stand on the front-door tile; requires channel_start.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

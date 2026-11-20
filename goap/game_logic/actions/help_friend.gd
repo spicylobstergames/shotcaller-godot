@@ -1,3 +1,18 @@
+# =============================================================================
+# GOAP-GUIDE: HelpFriend - action (goap/game_logic/actions/help_friend.gd)
+# =============================================================================
+# Purpose   : Move to the attacker of a nearby ally until the ally is safe.
+# Plannable : yes - FriendsSafe({friends_safe: true}) -> HelpFriend.
+# cost      : 1
+# precond   : {"react_target": true}
+# effects   : {"friends_safe": true}
+# enter     : Navigate.move(unit, react_target.global_position).
+# perform   : true once react_target is gone/dead or is no longer attacking a
+#             friendly unit (re-checks every tick).
+# exit      : Move.stop; clears react_target.
+# Traps     : react_target is planted by FriendsSafe.enter, not here.
+# =============================================================================
+
 extends "res://goap/goap_system/action_contract.gd"
 
 

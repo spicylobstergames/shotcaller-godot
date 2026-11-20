@@ -1,3 +1,23 @@
+# =============================================================================
+# GOAP-GUIDE: Agent - per-unit GOAP controller (goap/goap_system/agent.gd)
+# =============================================================================
+# One Agent node ("goap_agent") is a child of every Unit. It:
+#   1. loads goals_list (map/spawns.gd appends WalkLane at spawn),
+#   2. picks the highest-priority valid goal each turn (_get_best_goal),
+#   3. plans ONLY when the goal identity changes (goap_process),
+#   4. follows the plan through perform() and advances on true (_follow_plan),
+#   5. keeps the string-keyed state dictionary the planner reads,
+#   6. translates unit signals into state changes / action+goal callbacks.
+# Traps:
+#   - set_state("target", v) is INTERCEPTED: it writes unit.target through
+#     ChooseTarget.set_target, never _state["target"].
+#   - a stale success fact makes the planner return an empty plan and the
+#     agent holds a goal with no actions (see EnemyDefeated/FriendsSafe).
+#   - the plan is never revalidated mid-execution; only a goal change replans.
+#   - unit_arrived is emitted by Collisions and wired to on_arrive exactly once.
+# See: ARCHITECTURE.md "GOAP (the AI core)"; docs/ai/architecture.md.
+# =============================================================================
+
 extends Node
 
 # self = Goap.Agent
@@ -5,7 +25,10 @@ extends Node
 signal plan_changed(plan)
 signal goal_changed(goal)
 signal action_changed(action)
-signal state_changed(goal, action)
+# Emitted with ONE combined "Goal Action" debug string by _replace_plan
+# (never with a goal/action pair -- the old two-arg declaration lied, and the
+# connected hud.update_state(text) would have received a null second arg).
+signal state_changed(text)
 
 @export var goals_list: Array = []
 
@@ -42,6 +65,10 @@ func _ready():
 	_unit.unit_died.connect(on_died)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
+	# Arrival is emitted by Collisions (via Unit.on_arrive) once the unit
+	# reaches its current_destiny. Connect exactly once: a second connection
+	# would double-fire every action/goal on_arrive hook.
+	_unit.unit_arrived.connect(on_arrive)
 	
 	WorldState.second_elapsed.connect(on_every_second)
 	
@@ -71,6 +98,9 @@ func get_state(state_name, default = null):
 	return default
 
 
+# Writes the agent's state dictionary, EXCEPT "target": that key is routed to
+# ChooseTarget.set_target and lands on unit.target (with attack-count and
+# modifier side effects). Nothing reads agent.get_state("target").
 func set_state(state_name, value):
 	if state_name == "target":
 		Goap.get_action("ChooseTarget").set_target(self, value)
@@ -137,6 +167,12 @@ func _exit_current_action():
 		action.exit(self)
 
 
+# Installs a goal + plan and fires the wiring signals in this order:
+#   goal_changed (only on a real goal change) -> goal.enter
+#   plan_changed (always) -> action_changed (always) -> action.enter
+#   state_changed (debug string)
+# The previous action and goal are exited first. The planner runs BEFORE
+# goal.enter, so enter() must not assume it sees a pristine agent.
 func _replace_plan(goal, plan: Array) -> void:
 	_exit_current_action()
 	var previous_goal = _current_goal
@@ -172,12 +208,23 @@ func goap_process(delta):
 		var plan: Array = []
 		if goal:
 			plan = Goap.get_action_planner().get_plan(self, goal)
+			# An empty plan for a selected goal is the classic freeze: log why
+			# when Goap.debug_planning is on (off by default, zero cost when off).
+			if plan.is_empty() and Goap.debug_planning:
+				var why: Dictionary = Goap.get_action_planner().explain(self, goal)
+				push_warning(
+					"GOAP empty plan: unit=%s goal=%s reason=%s unsatisfied=%s produced_by=%s"
+					% [_unit.name, why["goal"], why["reason"], why["unsatisfied"], why["produced_by"]]
+				)
 		_replace_plan(goal, plan)
 	else:
 		_follow_plan(_current_plan, delta)
 
 
 # Returns the highest priority goal available.
+# Highest-priority valid goal. Strict > means the first goal in goals_list wins
+# a tie. is_valid() may have side effects by design (stale-fact maintenance),
+# and the incumbent's priority() is re-evaluated on every comparison.
 func _get_best_goal():
 	var highest_priority = null
 	for goal in _goals:
