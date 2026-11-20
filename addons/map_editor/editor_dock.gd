@@ -4,18 +4,23 @@ extends Control
 # =============================================================================
 # Map editor dock (addons/map_editor/editor_dock.gd)
 # =============================================================================
-# Thin UI shell for the map editor plugin: two buttons and a log. ALL logic
-# lives in map_scaffold.gd and map_validator.gd, which are editor-free and
-# covered by the headless unit suite (tests/unit/test_map_editor.gd).
-# This file is only ever loaded by the Godot editor (plugin.cfg), never at
-# game runtime.
+# Thin UI shell for the map editor plugin: scaffold/validate buttons, the
+# lane-drawing mode toggle, and a log. ALL logic lives in map_scaffold.gd,
+# map_validator.gd, and lane_logic.gd, which are editor-free and covered by
+# the headless unit suite (tests/unit/test_map_editor.gd,
+# test_lane_logic.gd, test_map_loader.gd). This file is only ever loaded by
+# the Godot editor (plugin.cfg), never at game runtime.
 # =============================================================================
+
+signal lane_mode_requested(active: bool)
+signal new_lane_requested
 
 const Scaffold := preload("res://addons/map_editor/map_scaffold.gd")
 const Validator := preload("res://addons/map_editor/map_validator.gd")
 
 var _log: RichTextLabel
 var _save_dialog: FileDialog
+var _lane_mode_button: Button
 
 
 func _ready() -> void:
@@ -34,6 +39,18 @@ func _ready() -> void:
 	validate_button.text = "Validate open map"
 	validate_button.pressed.connect(_on_validate_pressed)
 	box.add_child(validate_button)
+
+	_lane_mode_button = Button.new()
+	_lane_mode_button.text = "Draw lanes"
+	_lane_mode_button.toggle_mode = true
+	_lane_mode_button.toggled.connect(func(active: bool): lane_mode_requested.emit(active))
+	_lane_mode_button.tooltip_text = "Left-click on the map to add snapped points to the selected lane. Escape exits."
+	box.add_child(_lane_mode_button)
+
+	var new_lane_button := Button.new()
+	new_lane_button.text = "New lane"
+	new_lane_button.pressed.connect(func(): new_lane_requested.emit())
+	box.add_child(new_lane_button)
 
 	_log = RichTextLabel.new()
 	_log.bbcode_enabled = false
@@ -57,6 +74,13 @@ func _exit_tree() -> void:
 	if _save_dialog != null and is_instance_valid(_save_dialog):
 		_save_dialog.queue_free()
 		_save_dialog = null
+
+
+# Called by the plugin when lane mode changes outside the button (Escape),
+# so the toggle stays in sync without re-emitting the signal.
+func set_lane_mode_active(active: bool) -> void:
+	if _lane_mode_button != null:
+		_lane_mode_button.set_pressed_no_signal(active)
 
 
 func _on_new_map_pressed() -> void:

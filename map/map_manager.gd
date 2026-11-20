@@ -18,7 +18,11 @@ func load_current_map():
 
 func load_map(map_name):
 	current_map = map_name
-	var map = self[map_name].instantiate()
+	var map_scene := _resolve_map_scene(map_name)
+	if map_scene == null:
+		push_error("map_manager: unknown map '%s' (no preloaded var, no res://map/maps/%s.tscn)" % [map_name, map_name])
+		return
+	var map = map_scene.instantiate()
 	self.add_child(map)
 	WorldState.set_state("map", map)
 	map.hide()
@@ -33,6 +37,16 @@ func load_map(map_name):
 	WorldState.set_state("map_mid", mid)
 	WorldState.set_state("map_camera_limit", map.camera_limit)
 	WorldState.set_state("zoom_limit", map.zoom_limit)
+
+
+# Maps authored with the map editor plugin exist only as map/maps/<name>.tscn
+# files, so resolve them dynamically; the preloaded vars stay the fast path
+# for the shipping maps (and debug_map).
+func _resolve_map_scene(map_name: String) -> PackedScene:
+	var preloaded = get(map_name)
+	if preloaded is PackedScene:
+		return preloaded
+	return load("res://map/maps/%s.tscn" % map_name)
 
 
 func create_container(container_name):
