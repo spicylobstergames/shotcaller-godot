@@ -8,8 +8,8 @@
 # desired   : TODO {"fact": value} -- must be producible by some action's
 #             effects; an empty desired state returns an empty plan.
 # is_valid  : TODO eligibility. Keep it PURE; the documented exceptions
-#             (EnemyDefeated/FriendsSafe/NeedSafety) reset stale success facts
-#             here on purpose.
+#             (EnemyDefeated/FriendsSafe/NeedSafety/Recover) reset stale
+#             success facts here on purpose.
 # enter     : TODO (runs on goal change; the planner runs BEFORE this).
 # Traps     : TODO stale-fact risk, scene availability, etc.
 # See       : docs/ai/adding-behavior.md; docs/ai/world-state.md.

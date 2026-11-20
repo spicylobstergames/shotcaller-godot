@@ -172,7 +172,7 @@ Determine whether the goal is currently eligible. This is called for every goal 
 
 **Critical rule:** `is_valid()` must not mutate agent state. It should be a pure function that returns a boolean. Side effects in `is_valid()` create order-dependent behavior and make the system harder to reason about.
 
-Current exceptions (goals that mutate state in `is_valid()`): `EnemyDefeated`, `FriendsSafe`, `NeedSafety`. They do it deliberately to reset stale success facts (see `tests/unit/test_attack_lifecycle.gd`); `WalkLane` mutates in `enter()`, `ArriveAtDestination.is_valid()` hard-returns `false`, and `Recover` is pure. See `ARCHITECTURE.md` "State facts" and `IMPROVEMENT_PLAN.md` Track D for the planned cleanup.
+Current exceptions (goals that mutate state in `is_valid()`): `EnemyDefeated`, `FriendsSafe`, `NeedSafety`, `Recover`. They do it deliberately to reset stale success facts (see `tests/unit/test_attack_lifecycle.gd`; Recover's in `tests/unit/test_agent_tactic.gd`); `WalkLane` mutates in `enter()`, and `ArriveAtDestination.is_valid()` hard-returns `false`. See `ARCHITECTURE.md` "State facts" and `IMPROVEMENT_PLAN.md` Track D for the planned cleanup.
 
 ```gdscript
 func is_valid(agent) -> bool:
@@ -255,7 +255,7 @@ The agent loads goals from its `goals_list` export variable. To make the new goa
 
 ### Goals must not
 
-- **Mutate agent state in `is_valid()`**. This creates order-dependent behavior. `is_valid()` is called on each unit's staggered turn (~8.6 Hz). The documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`) reset stale success facts.
+- **Mutate agent state in `is_valid()`**. This creates order-dependent behavior. `is_valid()` is called on each unit's staggered turn (~8.6 Hz). The documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`, `Recover`) reset stale success facts.
 - **Have `get_desired_state()` return an empty dictionary** unless the goal is truly a no-op (e.g., "wait" as a passive goal). An empty desired state causes the planner to return an empty plan.
 - **Have priorities that are always equal to other active goals** without a tiebreaker. The agent picks the first goal with the highest priority.
 

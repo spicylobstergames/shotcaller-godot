@@ -36,8 +36,9 @@ extends Node
 # false silently unplans every action that does not override this (nine
 # production actions — melee/range attack, hide, taxes, etc. — were dead in
 # the planner after the default was flipped; caught by
-# test_planner_real_actions.gd). ChooseTarget is the documented always-false
-# exception and overrides this itself.
+# test_planner_real_actions.gd). Overrides gate on unit capability or world
+# state (e.g. GetLumber returns WorldState.is_game_active); ChooseTarget is a
+# NORMAL plannable action (unit.attacks and !unit.target), not an exception.
 func is_valid(_agent) -> bool:
 	return true
 

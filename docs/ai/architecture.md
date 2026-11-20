@@ -148,7 +148,7 @@ Every active GOAP goal extends this base class. Methods:
 | Method | Responsibility |
 |--------|----------------|
 | `get_class_name()` | Returns the identifier used by the goal registry. |
-| `is_valid(agent) -> bool` | Determines whether the goal is currently eligible. Called on each unit's staggered turn (~8.6 Hz). Should be pure; the documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`) reset stale success facts deliberately. |
+| `is_valid(agent) -> bool` | Determines whether the goal is currently eligible. Called on each unit's staggered turn (~8.6 Hz). Should be pure; the documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`, `Recover`) reset stale success facts deliberately. |
 | `priority(agent) -> int` | Returns the goal's priority. Higher values win. Can be dynamic. |
 | `get_desired_state(agent) -> Dictionary` | Returns the facts the planner must achieve. These become the root requirements for backward search. |
 | `enter(agent)` / `exit(agent)` | Called by the agent when the goal is selected/replaced. The planner ignores them (it only calls `get_desired_state`). |

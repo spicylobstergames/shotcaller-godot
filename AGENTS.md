@@ -113,7 +113,7 @@ The planner uses string-keyed dictionaries for preconditions, effects, goals, an
 | State facts have documented ownership and semantics (see `docs/ai/world-state.md`). | Reduces misspelled keys and incorrect assumptions. |
 | Actions and goals must follow the agreed contracts. | Keeps the codebase consistent as more behaviors are added. |
 | Planner and lifecycle changes require regression tests. | Protects existing behavior during architectural work. |
-| Goal `is_valid()` should not mutate state. It is called for every goal of every unit on that unit's staggered turn (~8.6 Hz; physics is 60 Hz). Documented exceptions are stale-fact maintenance (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`). | Prevents order-dependent behavior and hidden side effects. |
+| Goal `is_valid()` should not mutate state. It is called for every goal of every unit on that unit's staggered turn (~8.6 Hz; physics is 60 Hz). Documented exceptions are stale-fact maintenance (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`, `Recover`). | Prevents order-dependent behavior and hidden side effects. |
 
 ## Required behavior when editing AI
 
