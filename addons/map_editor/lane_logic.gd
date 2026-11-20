@@ -9,8 +9,10 @@ extends RefCounted
 # plugin only forwards editor input/output to these functions.
 #
 # Coordinate spaces:
-#   - click positions from _forward_canvas_gui_input arrive in CANVAS (world)
-#     space; lane points are LOCAL to their Line2D.
+#   - clicks from _forward_canvas_gui_input arrive in the 2D editor's
+#     VIEWPORT (screen) space; the plugin converts them to world coordinates
+#     via the viewport's canvas_transform.affine_inverse() before calling
+#     these helpers. Lane points are LOCAL to their Line2D.
 #   - snap to base_map's tile grid so lanes line up with painted tiles.
 # =============================================================================
 

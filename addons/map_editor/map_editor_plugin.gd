@@ -118,7 +118,7 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 	return false
 
 
-func _add_lane_point(canvas_pos: Vector2) -> void:
+func _add_lane_point(viewport_pos: Vector2) -> void:
 	var map_root := _map_root()
 	if map_root == null:
 		return
@@ -127,8 +127,12 @@ func _add_lane_point(canvas_pos: Vector2) -> void:
 		push_warning("Map Editor: no lane to draw on — select a lane or use 'New lane'.")
 		return
 
-	# Click positions arrive in canvas (world) space; Line2D points are local.
-	var local := lane.to_local(LaneLogic.snap_point(canvas_pos))
+	# Clicks arrive in the 2D editor's VIEWPORT space (the built-in tools all
+	# convert with transform.affine_inverse()); convert to world coordinates
+	# via the viewport's canvas transform before snapping to the tile grid.
+	# Line2D points are local to their node.
+	var world := EditorInterface.get_editor_viewport_2d().canvas_transform.affine_inverse() * viewport_pos
+	var local := lane.to_local(LaneLogic.snap_point(world))
 	var index := LaneLogic.insertion_index(lane, local)
 
 	var undo_redo := get_undo_redo()
@@ -137,7 +141,9 @@ func _add_lane_point(canvas_pos: Vector2) -> void:
 	undo_redo.add_undo_method(lane, "remove_point", index)
 	undo_redo.commit_action()
 	if _dock != null:
-		_dock.log_line("Added point %d at %s to '%s' (Ctrl+Z undoes)." % [index, local, lane.name])
+		_dock.log_line("Added point %d at %s to '%s' (clicked %s; Ctrl+Z undoes)" % [
+			index, local, lane.name, viewport_pos,
+		])
 	update_overlays()
 
 
