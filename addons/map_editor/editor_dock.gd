@@ -92,26 +92,26 @@ func _on_save_path_chosen(path: String) -> void:
 		path += ".tscn"
 	var err: int = Scaffold.new().write_map(path)
 	if err != OK:
-		_log_line("FAILED: could not save %s (error %d)" % [path, err])
+		log_line("FAILED: could not save %s (error %d)" % [path, err])
 		return
-	_log_line("Created %s — paint tiles, move buildings, then Validate." % path)
+	log_line("Created %s — paint tiles, move buildings, then Validate." % path)
 	EditorInterface.open_scene_from_path(path)
 
 
 func _on_validate_pressed() -> void:
 	var root := EditorInterface.get_edited_scene_root()
 	if root == null:
-		_log_line("No scene open.")
+		log_line("No scene open.")
 		return
 	var problems: Array = Validator.new().validate(root)
 	if problems.is_empty():
-		_log_line("OK: '%s' satisfies the map contract." % root.name)
+		log_line("OK: '%s' satisfies the map contract." % root.name)
 		return
 	var errors := problems.filter(func(p): return p.level == "error")
-	_log_line("'%s': %d error(s), %d warning(s)" % [root.name, errors.size(), problems.size() - errors.size()])
+	log_line("'%s': %d error(s), %d warning(s)" % [root.name, errors.size(), problems.size() - errors.size()])
 	for problem in problems:
-		_log_line("[%s] %s" % [problem.level.to_upper(), problem.message])
+		log_line("[%s] %s" % [problem.level.to_upper(), problem.message])
 
 
-func _log_line(line: String) -> void:
+func log_line(line: String) -> void:
 	_log.text += line + "\n"

@@ -14,6 +14,11 @@ var _lane_mode := false
 
 
 func _enter_tree() -> void:
+	# Without this, _forward_canvas_gui_input/_forward_canvas_draw_over_viewport
+	# are not called for our plugin (input forwarding is opt-in per plugin),
+	# so lane-drawing clicks are silently dropped. (Renamed from the 3.x
+	# ..._always_relevant in Godot 4.)
+	set_input_event_forwarding_always_enabled()
 	_dock = DockScript.new()
 	_dock.name = "Map Editor"
 	_dock.lane_mode_requested.connect(_set_lane_mode)
@@ -39,6 +44,14 @@ func _set_lane_mode(active: bool) -> void:
 	_lane_mode = active
 	if _dock != null:
 		_dock.set_lane_mode_active(active)  # keep the toggle in sync on Escape
+	if active:
+		var lane := LaneLogic.target_lane(_map_root(), _selected_nodes())
+		if lane != null:
+			_dock.log_line("Draw-lanes ON: left-click adds snapped points to '%s'; Escape exits." % lane.name)
+		else:
+			_dock.log_line("Draw-lanes ON, but there is no lane to edit — use 'New lane' first.")
+	else:
+		_dock.log_line("Draw-lanes OFF.")
 	update_overlays()  # redraw the overlay when entering/leaving the mode
 
 
@@ -98,6 +111,8 @@ func _add_lane_point(canvas_pos: Vector2) -> void:
 	undo_redo.add_do_method(lane, "add_point", index, local)
 	undo_redo.add_undo_method(lane, "remove_point", index)
 	undo_redo.commit_action()
+	if _dock != null:
+		_dock.log_line("Added point %d at %s to '%s' (Ctrl+Z undoes)." % [index, local, lane.name])
 	update_overlays()
 
 
