@@ -148,7 +148,7 @@ Every active GOAP goal extends this base class. Methods:
 | Method | Responsibility |
 |--------|----------------|
 | `get_class_name()` | Returns the identifier used by the goal registry. |
-| `is_valid(agent) -> bool` | Determines whether the goal is currently eligible. Called on each unit's staggered turn (~8.6 Hz). Should be pure; the documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`) reset stale success facts deliberately. |
+| `is_valid(agent) -> bool` | Determines whether the goal is currently eligible. Called on each unit's staggered turn (~8.6 Hz). Should be pure; the documented exceptions (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`, `Recover`) reset stale success facts deliberately. |
 | `priority(agent) -> int` | Returns the goal's priority. Higher values win. Can be dynamic. |
 | `get_desired_state(agent) -> Dictionary` | Returns the facts the planner must achieve. These become the root requirements for backward search. |
 | `enter(agent)` / `exit(agent)` | Called by the agent when the goal is selected/replaced. The planner ignores them (it only calls `get_desired_state`). |
@@ -257,9 +257,8 @@ The agent connects to unit signals in `_ready()`:
 
 Signals that exist but are **not** connected to the agent: `unit_move_ended`,
 `unit_stuned`, `unit_started_channeling`, `unit_healed`, `unit_leveled_up`.
-`state_changed` is declared `(goal, action)` but emitted with a single
-combined `"Goal Action"` string, so `hud.update_state(text)` receives one
-argument.
+`state_changed` carries a single combined `"Goal Action"` debug string, and
+`hud.update_state(text)` receives it as its one argument.
 
 ## State flow
 
@@ -298,8 +297,8 @@ The prioritized, implementation-ready list now lives in
 - **Track D — state-fact hygiene.** Replace string keys with constants,
   document the reset contract for facts such as `has_destiny` and
   `arrived_at_retreat`, and remove dead keys.
-- **Track E — performance and cleanup.** Guard corpse per-second work, delete
-  the dead `ChooseTactics` action, and measure planner cost.
+- **Track E — performance and cleanup.** Guard corpse per-second work and
+  measure planner cost. (The dead `ChooseTactics` action was deleted — E1.)
 - **Track F — test hardening.** Replace mock-only assertions and re-sabotage
   the ported planner/agent tests.
 

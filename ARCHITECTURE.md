@@ -6,11 +6,11 @@ Planning) AI. This document is the map an AI agent (or human) needs before
 changing anything. Read it fully before editing; the "do not touch" list at the
 end marks the landmines.
 
-> **Verified against `d527203`** (repo-root layout: `project.godot` at the top
-> level, tests in `tests/`). Several companion docs still describe the deleted
-> `prototype/` tree or an older GOAP API — see **Documentation drift** under
-> "Known gaps" before trusting `AGENTS.md`, `docs/ai/*`, or `tests/COVERAGE.md`
-> verbatim.
+> **Verified against `0926d47`** (repo-root layout: `project.godot` at the top
+> level, tests in `tests/`). The companion docs (`AGENTS.md`, `docs/ai/*`,
+> `tests/COVERAGE.md`) were reconciled with this file in `562d7fb`; remaining
+> drift is limited to line references inside `docs/ai/world-state.md` (its fact
+> entries are current, the cited line numbers predate the comment banners).
 
 ## Boot flow
 
@@ -59,7 +59,7 @@ reimplementing them.
         |  per unit: only on its staggered turn (see cadence), and only while
         |  WorldState "is_game_active" is true; dead units are skipped
         v
-  Agent.goap_process(delta)                [agent.gd:169]
+  Agent.goap_process(delta)                [agent.gd:205]
         |
         |-- _get_best_goal()               highest-priority valid goal (strict >)
         |       goal != current? -> Goap.get_action_planner().get_plan(agent, goal)
@@ -147,17 +147,23 @@ agent-scope key; it is really unit state.
 | `unit_died` | `on_died` → `RangeAttack.clear_stuck` |
 | `unit_animation_ended` | `on_animation_end` |
 | `unit_was_attacked` | `was_attacked` |
+| `unit_arrived` | `on_arrive` (connected exactly once; see below) |
 | `WorldState.second_elapsed` | `on_every_second` |
 
-Not wired: **`unit_arrived` and `unit_move_ended`**. `Unit.on_arrive()` emits
-`unit_arrived` (`unit/Unit.gd:369`) but nothing listens, so `Agent.on_arrive()`
-— and every action's `on_arrive()` hook — is dead code in production. Arrival
-is handled entirely by `Collisions` (next section). This is a live wiring bug,
-not a design choice; see Known gaps #1.
+**Wired once: `unit_arrived` → `Agent.on_arrive`** (`agent.gd:71`; fixed in
+`dd68c35`, pinned by `tests/unit/test_arrival_dispatch.gd`). `Unit.on_arrive()`
+emits `unit_arrived` (`unit/Unit.gd:369`), which dispatches to the current
+action/goal `on_arrive` hook (`Hide.on_arrive`, `GetLumber.on_arrive`,
+`ReturnLumber.on_arrive`, `RetreatAction.on_arrive`, `OrderAction.on_arrive`).
+The emission point is `Collisions` (next section), which calls
+`unit1.on_arrive()` after `ArriveAtDestination.on_arrive` advances the path.
+**Do not connect `unit_arrived` a second time** — a second connection
+double-fires every hook. `unit_move_ended` remains declared and emitted
+(`unit/Unit.gd:365`) but unwired.
 
-`state_changed` is declared `(goal, action)` but emitted with a single
-`"Goal Action"` string (`agent.gd:156`); Godot fills the missing arg with null,
-so `hud.update_state(text)` receives the combined string. The signature lies.
+`state_changed` is declared and emitted with a single combined
+`"Goal Action"` string; `hud.update_state(text)` consumes it. (Track D4 fixed
+the old two-arg declaration that disagreed with its emission.)
 
 ### Planner (`goap/goap_system/planner.gd`)
 
@@ -172,7 +178,7 @@ Backward search from `goal.get_desired_state(agent)`:
    fact; that action's `get_preconditions()` are merged into the branch's
    desired state; recursion continues.
 4. Guard rails: `MAX_PLAN_DEPTH = 64` and a per-branch visited-state set keyed
-   by a sorted `_state_signature` (`planner.gd:85-92, 130`).
+   by a sorted `_state_signature` (`planner.gd:146-174, 216`).
 5. The full solution tree is materialized and the **lowest summed
    `get_cost()`** plan wins (`_transform_tree_into_array` /
    `_get_cheapest_plan`). Ties keep the first-built plan (registry order).
@@ -182,8 +188,8 @@ assignment, so a precondition overwrites a fact the same branch already
 requires. Verified empirically: a goal requiring `{b: true, x: true}` with
 `MakeX` (`{b: false} → {x: true}`) plus `MakeNotB` (`{} → {b: false}`) yields
 the plan `["MakeNotB", "MakeX"]`, which cannot satisfy the goal's `b: true`.
-`AGENTS.md` and `docs/ai/architecture.md`/`adding-behavior.md` claim the
-planner rejects contradicting branches — it does not (see Known gaps #2).
+(The docs used to claim the planner rejects contradicting branches; they were
+corrected in `562d7fb` — see Known gaps #2 for the still-open check itself.)
 
 The planner itself is a **shared singleton** created in `Goap._ready()` with
 the registry's action list set once. Multiple planners per faction are a
@@ -197,7 +203,7 @@ noted future option but do not exist.
   declared on the base; every action defines it for registry lookup.
 - `goap/goap_system/goal_contract.gd` — `is_valid()` (true), `priority()` (1),
   `get_desired_state()` (`{}`), `enter()`/`exit()`.
-- **19 actions** in `goap/game_logic/action_registry.gd`, **8 goals** in
+- **18 actions** in `goap/game_logic/action_registry.gd`, **8 goals** in
   `goap/game_logic/goal_registry.gd` (asserted by
   `tests/unit/test_planner_real_actions.gd`).
 
@@ -205,14 +211,12 @@ Planning-relevant vs. service actions:
 
 | Plannable (real preconditions/effects) | Service / signal-driven (never selected) |
 |----------------------------------------|------------------------------------------|
-| `Move`, `Navigate`, `ChooseTarget`, `PursueEnemy`, `AttackEnemy`, `Retreat`, `WaitForRegeneration`, `Hide`, `HelpFriend`, `GetLumber`, `ReturnLumber` | `RangeAttack`, `MeleeAttack`, `Order`, `Taxes`, `Mine`, `Conquer`, `Pray`, `ChooseTactics` |
+| `Move`, `Navigate`, `ChooseTarget`, `PursueEnemy`, `AttackEnemy`, `Retreat`, `WaitForRegeneration`, `Hide`, `HelpFriend`, `GetLumber`, `ReturnLumber` | `RangeAttack`, `MeleeAttack`, `Order`, `Taxes`, `Mine`, `Conquer`, `Pray` |
 
 `ChooseTarget.is_valid()` is `unit.attacks and !unit.target` — it **is** planned
 as a target-acquisition step (e.g. `[ChooseTarget, PursueEnemy, AttackEnemy]`),
-so `AGENTS.md`'s "always returns false / not planned" exception is stale. Its
-sibling `ChooseTactics` is dead: it extends `Node` (not the action contract),
-hard-returns `is_valid() == false`, and is referenced by nothing but the
-registry.
+so `AGENTS.md`'s "always returns false / not planned" exception is stale.
+(The dead `ChooseTactics` stub was deleted — IMPROVEMENT_PLAN.md Track E1.)
 
 ### Arrival is collision-driven, not goal-driven
 
@@ -223,47 +227,59 @@ goal**, not a selectable one. The real arrival machinery lives in the physics
 loop:
 
 ```gdscript
-# collision/collisions.gd:73-80
+# collision/collisions.gd:78-86
 if unit1.moves and unit1.state == "move":
     if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
         Goap.get_goal("ArriveAtDestination").on_arrive(unit1)   # UNIT arg, not agent
+        unit1.on_arrive()   # emits unit_arrived -> Agent.on_arrive dispatch
     else:
         Goap.get_action("Move").step(unit1, delta)
 ```
 
 `ArriveAtDestination.on_arrive(unit)` either advances the path via
 `Navigate.next(unit)` or, when the path is empty, sets
-`has_path=false` / `arrived_at_destination=true` and stops the unit. Note the
-argument inconsistency: `Recover.on_arrive(agent)` calls
-`ArriveAtDestination.on_arrive(agent)` with the **agent**, while `Collisions`
-passes the **unit** — that path is currently dead (see Known gaps #1).
+`has_path=false` / `arrived_at_destination=true` and stops the unit. Path
+advancement runs BEFORE `unit1.on_arrive()` so the dispatched hooks
+(`GetLumber.on_arrive`, `RetreatAction.on_arrive`, ...) see the
+post-advance `current_path`. Note `Recover` deliberately has **no**
+`on_arrive` hook: its old delegation into
+`ArriveAtDestination.on_arrive(agent)` passed the wrong argument type and
+double-advanced the path, and was removed (`recover.gd` banner).
 
 ### State facts
 
 The planner matches string keys from four sources: agent `_state`, WorldState,
 action preconditions/effects, and goal desired states. `docs/ai/world-state.md`
-is the intended catalog, but it has drifted (see Known gaps #3).
+is the intended catalog; its fact entries are current but some cited line
+numbers predate the comment banners.
 
 - **`null != false`.** A precondition of `false` is not satisfied by an unset
   key; the fact must be explicitly set. Any function with a typed `-> bool`
   return must read `get_state(key, false)`, never bare `get_state(key)`.
 - **`has_destiny`, not `has_path`, is Move's precondition.**
   `Move.get_preconditions()` is `{has_destiny: true, is_stunned: false}`
-  (`move_action.gd:20`). `Navigate.follow_path` sets `has_destiny = true` and
-  **never clears it** (`navigate_action.gd:180`), so after any route the
+  (`move_action.gd:43`). `Navigate.follow_path` sets `has_destiny = true` and
+  **never clears it** (`navigate_action.gd:194-201`), so after any route the
   planner can skip `Navigate` and emit a bare `[Move]`. `has_path` is still
   written (`follow_path`, `ArriveAtDestination`) but no precondition reads it.
 - **Stale-fact resets are load-bearing.** `EnemyDefeated.is_valid` resets
   `enemy_dead` every frame and releases dead/out-of-sight targets;
   `FriendsSafe.is_valid` resets `friends_safe`; `NeedSafety.is_valid` writes
-  `is_threatened`. These side effects in `is_valid()` are intentional
-  workarounds for the "planner sees a stale success fact and plans nothing"
-  class of bug — the fix pattern is always in
-  `tests/unit/test_attack_lifecycle.gd`.
-- `Move.perform()` is inverted-looking but intentional: it returns `false`
-  only when `arrived_at_destination` is already true, otherwise `true`
-  (a one-shot step). `WalkLane.enter` and the plan re-install loop are written
-  around that behavior.
+  `is_threatened`; `Recover.is_valid` maintains `ready_to_fight` /
+  `is_retreating` (added in `22af94a` — without it the first low-hp
+  evaluation saw the desired state as already satisfied, planned nothing,
+  and left the unit stranded between goals). These side effects in
+  `is_valid()` are intentional workarounds for the "planner sees a stale
+  success fact and plans nothing" class of bug — the fix pattern is always
+  in `tests/unit/test_attack_lifecycle.gd` (Recover's in
+  `tests/unit/test_agent_tactic.gd`).
+- `Move.perform()` always returns `true` (a one-shot step). The step itself
+  is driven by `Collisions` for `state == "move"` units, and the agent only
+  replans when the goal CHANGES — returning `false` after arrival (PR #233)
+  parked the plan forever and froze arrived units ("fights, kills, then
+  stands still"; fixed in `22af94a`, regression in
+  `tests/unit/test_movement.gd`). `WalkLane.enter` and the plan re-install
+  loop are written around the always-complete contract.
 
 ### Integration boundaries
 
@@ -329,13 +345,14 @@ regression-tested.
 ## Tests
 
 `tests/` — read `tests/README.md` before adding tests, and
-`tests/COVERAGE.md` for what is covered (its summary counts are stale; trust
-`run_suite.sh` and `run_tests.gd`). One command verifies everything:
-`./tests/run_suite.sh [godot-binary]` (unit suite + 300-tick boot smoke of the
-real game + golden replay + script-error budget). CI runs it on every push.
-`run_suite.sh` pins `EXPECTED_UNIT_TESTS` (currently **306**); adding tests
-requires bumping it. Test log output defaults to `$PROJECT_DIR/../.test-logs`;
-override with `TEST_LOG_DIR` when that location is read-only.
+`tests/COVERAGE.md` for what is covered (its summary counts are maintained;
+trust `run_suite.sh` and `run_tests.gd` for the live numbers). One command
+verifies everything: `./tests/run_suite.sh [godot-binary]` (unit suite +
+300-tick boot smoke of the real game + golden replay + script-error budget).
+CI runs it on every push. `run_suite.sh` pins `EXPECTED_UNIT_TESTS` (currently
+**364**); adding tests requires bumping it. Test log output defaults to
+`$PROJECT_DIR/../.test-logs`; override with `TEST_LOG_DIR` when that location
+is read-only.
 
 ## Architectural invariants
 
@@ -347,7 +364,7 @@ override with `TEST_LOG_DIR` when that location is read-only.
 | State facts have documented ownership and semantics (`docs/ai/world-state.md`, with drift caveats). | Reduces misspelled keys and incorrect assumptions. |
 | Actions and goals must follow the agreed contracts. | Keeps the codebase consistent as more behaviors are added. |
 | Planner and lifecycle changes require regression tests. | Protects existing behavior during architectural work. |
-| Goal `is_valid()` should not mutate state — the documented exceptions are stale-fact maintenance (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`). | Prevents order-dependent behavior and hidden side effects. |
+| Goal `is_valid()` should not mutate state — the documented exceptions are stale-fact maintenance (`EnemyDefeated`, `FriendsSafe`, `NeedSafety`, `Recover`). | Prevents order-dependent behavior and hidden side effects. |
 | `perform()` returning `true` means "advance the plan", not "the world now matches my effects". | Effects are planning claims; runtime cleanup is separate. |
 
 ## Do not touch without understanding
@@ -363,8 +380,9 @@ override with `TEST_LOG_DIR` when that location is read-only.
   damage). Its unit reads go through `unit.get(property)` with null checks —
   keep them; a bare property access breaks test doubles and optional props.
 - **Unit signal names** are wired in `Agent._ready()` and emitted across
-  `Unit.gd`, actions, and UI. Renames break silently. (`unit_arrived` is
-  already unwired — see Known gaps #1.)
+  `Unit.gd`, actions, and UI. Renames break silently. (`unit_move_ended` is
+  still unwired; `unit_arrived` is wired exactly once — see the agent
+  section.)
 - **The minimap headless guard** (see boot flow) — removing it breaks every
   headless run including CI.
 - **`hit_modifiers`' early return**: a unit present in the leader table with
@@ -384,92 +402,84 @@ override with `TEST_LOG_DIR` when that location is read-only.
 
 ## Known gaps and improvement candidates
 
-Verified on `d527203`. Each item lists evidence and a proposed direction; none
-is fixed yet. Ordered by expected impact.
+Statuses updated on `0926d47` (original findings verified on `d527203`).
+Numbering is kept stable for cross-references; fixed items are marked rather
+than removed so the history (and IMPROVEMENT_PLAN.md tracks) still line up.
 
-1. **Arrival dispatch is broken (dead `on_arrive` hooks).** `Unit.on_arrive()`
-   emits `unit_arrived`, but no one connects it; `Agent.on_arrive()` has no
-   caller. Consequently `Hide.on_arrive`, `GetLumber.on_arrive` (sets
-   `has_wood`), `ReturnLumber.on_arrive`, `RetreatAction.on_arrive` (sets
-   `arrived_at_retreat`), and `OrderAction.on_arrive` (conquer/pray) never fire
-   in production. `tests/unit/test_arrive_at_destination.gd` and
-   `test_action_lifecycles.gd` exercise arrival by calling goal/action methods
-   directly, so the suite is green while the wiring is absent.
-   *Direction:* connect `unit_arrived` → `Agent.on_arrive` (single connection;
-   do **not** also connect `OrderAction.on_arrive` — the old double-connect bug
-   in `docs/ai/architecture.md`), or call `Agent.on_arrive` from the collision
-   branch. Add a boot-level regression that a lumberjack actually obtains
-   `has_wood`, and a unit-level test that the signal reaches the action.
-2. **The planner has no contradiction check, but the docs say it does.**
-   `planner.gd:110-112` merges preconditions by assignment; empirically a goal
-   `{b: true, x: true}` plans `["MakeNotB", "MakeX"]` (which falsifies `b`).
-   `AGENTS.md`, `docs/ai/architecture.md`, and `docs/ai/adding-behavior.md`
-   describe rejection of contradicting branches.
+1. **FIXED (`dd68c35`) — arrival dispatch.** `unit_arrived` →
+   `Agent.on_arrive` is now connected exactly once (`agent.gd:71`), and
+   `Collisions` calls `unit1.on_arrive()` after path advancement
+   (`collisions.gd:78-86`), so the action `on_arrive` hooks (`Hide`,
+   `GetLumber`, `ReturnLumber`, `RetreatAction`, `OrderAction`) fire in
+   production. Pinned by `tests/unit/test_arrival_dispatch.gd`. The follow-up
+   hazard this exposed — arrival setting write-once facts that disable goals
+   (`WalkLane`/`lane_route_finished`) — is fixed in `d825c2a`; lane-completion
+   semantics remain an open decision (plans/E5.md).
+2. **OPEN (documented, not implemented) — the planner has no contradiction
+   check.** `planner.gd` merges preconditions by assignment; empirically a
+   goal `{b: true, x: true}` plans `["MakeNotB", "MakeX"]` (which falsifies
+   `b`). The docs no longer claim otherwise (this file, `AGENTS.md`, and
+   `planner.gd`'s banner all state the limitation), but the check itself is
+   still missing.
    *Direction:* either implement contradiction rejection (reject a branch when
    a new precondition conflicts with an existing unsatisfied requirement, and
    when it conflicts with an ancestor requirement) with dedicated
-   `test_planner.gd` cases, or document the limitation and audit actions whose
-   preconditions assume the check. Planner behavior changes → golden re-record
-   with a stated reason (D6/D12).
-3. **Documentation drift across every AI doc.** `AGENTS.md` claims 30 Hz,
-   `ChooseTarget` is an always-false non-action, `Move` requires
-   `has_path: false`, `Goap.move`/`Goap.navigation` exist, `goal_contract.gd`
-   references `keep_fed.gd`, and `move_action.smart` checks `stunned` — none of
-   which is true (`ChooseTarget` is planned; `Move` requires `has_destiny`;
-   there is no `smart`; no `keep_fed` reference). `docs/ai/architecture.md`
-   describes a `unit_arrived` double-connect and 30 Hz. `tests/COVERAGE.md`
-   says 255 assertions / 20 classes; the suite reports 306 / 23.
-   `tests/run_tests.gd`'s header says the GOAP suites are "DEFERRED" while all
-   23 are registered. *Direction:* one documentation-truth pass, with each doc
-   pointing at this file and `docs/ai/world-state.md` as the single source for
-   state facts.
-4. **Stale-fact lifecycle is ad hoc.** `has_destiny` is set by
-   `Navigate.follow_path` and never cleared; `arrived_at_destination` is set
-   in several places. This exact class has already caused multiple frozen-unit
-   regressions (see `tests/COVERAGE.md` "Known bugs").
+   `test_planner.gd` cases, or keep documenting the limitation and audit
+   actions whose preconditions assume the check. Planner behavior changes →
+   golden re-record with a stated reason (D6/D12).
+3. **MOSTLY FIXED (`562d7fb`) — documentation drift.** `AGENTS.md`,
+   `docs/ai/architecture.md`, `docs/ai/adding-behavior.md`, and
+   `tests/COVERAGE.md` were reconciled (8.6 Hz cadence, `has_destiny`,
+   plannable `ChooseTarget`, no `Goap.move`, 28 classes / 364 assertions,
+   `run_tests.gd` header). Remaining drift: `docs/ai/world-state.md` fact
+   entries are current but their cited line numbers predate the comment
+   banners added across `goap/`.
+4. **PARTIALLY ADDRESSED — stale-fact lifecycle is ad hoc.** `has_destiny` is
+   still set by `Navigate.follow_path` and never cleared;
+   `arrived_at_destination` is set in several places. The frozen-unit class
+   this causes got three real fixes (`22af94a` dead plans/stranded retreat
+   facts, `d825c2a` WalkLane, `34ebeeb` crowd progress floor) and an opt-in
+   `--freeze-report` census (`ba990d8`), but the underlying fact-reset
+   contract is still undocumented.
    *Direction:* define and document a per-plan/per-goal fact reset contract
    (who clears what, when), or track `has_destiny` on the unit path object
    rather than agent state.
-5. **State keys are untyped string literals.** Misspellings break planning
-   silently (the `stunned` alias, `collected_wood` vs `has_wood`,
+5. **OPEN — state keys are untyped string literals.** Misspellings break
+   planning silently (the `stunned` alias, `collected_wood` vs `has_wood`,
    `after_arive` typo) and several keys are undocumented:
-   `opponents_in_sight` (written per frame by `EnemyDefeated`, never read),
-   `after_arive`, `resume_path`/`lane_resume_path` (writers/erasers only,
-   readers commented out), `move`/`attack`/`idle`/`death` on agent state.
+   `opponents_in_sight` (written per evaluation by `EnemyDefeated`, never
+   read — noted in that file's banner), `after_arive`,
+   `resume_path`/`lane_resume_path` (writers/erasers only, readers commented
+   out), `move`/`attack`/`idle`/`death` on agent state.
    *Direction:* state-key constants plus a completeness test that greps
    `set_state("...")` keys against the catalog.
-6. **`ReturnLumber.enter` cannot work.** `return_lumber.gd:25` does
-   `unit.current_destination = agent.set_state("deliver_position")` —
-   `set_state` returns null, and `Unit` has no `current_destination`
-   property; the action also never calls `Navigate`/`Move`, so it cannot
-   reach the mill. Reachability is currently masked by gap #1.
-   *Direction:* replace with `Navigate.move(unit, agent.get_state("deliver_position"))`
-   and add a lumberjack integration test.
-7. **Dead/duplicated plumbing.** `ChooseTactics` is unreferenced dead code
-   (extends `Node`, always invalid). `opponents_in_sight` allocates an array
-   per enemy-goal evaluation for no consumer. `state_changed` is emitted with
-   one arg against a two-arg declaration. `WorldState.setup_timers()` creates
-   and adds a new `Timer` on every `game.start()` while `clear_state()` does
-   not stop the old ones.
-   *Direction:* delete or implement `ChooseTactics`; drop or consume
-   `opponents_in_sight`; make `state_changed` match its emission; make timer
-   setup idempotent.
-8. **Corpse and growth costs.** Dead units stay in `all_units` (the pump now
-   skips them, but `WorldState.second_elapsed` → `Agent.on_every_second` still
-   fires for every corpse, and `all_units` grows monotonically with wave
-   spawns). `DECISIONS.md` D13 measured an fps collapse as the list grows.
+6. **FIXED — `ReturnLumber.enter` works.** It now calls
+   `Navigate.move(unit, deliver_position)` with the straight-line `Move`
+   fallback when no route exists (`return_lumber.gd:42-50`), the established
+   PursueEnemy/AttackEnemy pattern; a lumberjack integration test would still
+   strengthen the suite.
+7. **MOSTLY FIXED — dead/duplicated plumbing.** Timer setup is idempotent
+   (`f2a94ef`, `WorldState._dispose_timer`, pinned by
+   `tests/unit/test_world_state_timers.gd`) and the dead `ChooseTactics`
+   action is deleted (`27e7773`, Track E1). Still open: `opponents_in_sight`
+   allocates an array per enemy-goal evaluation for no consumer.
+   *Direction:* drop or consume `opponents_in_sight`.
+8. **OPEN — corpse and growth costs.** Dead units stay in `all_units` (the
+   pump skips them, but `WorldState.second_elapsed` → `Agent.on_every_second`
+   still fires for every corpse, and `all_units` grows monotonically with
+   wave spawns). `DECISIONS.md` D13 measured an fps collapse as the list
+   grows.
    *Direction:* disconnect/guard per-second work for dead agents and/or
    revisit the `all_units` ownership question with a `--perf` before/after
    (D13 re-entry criteria).
-9. **Planner cost/scale.** Every replan enumerates the full solution tree and
-   only then picks the cheapest; `_get_best_goal` re-calls `priority()` on the
-   incumbent each comparison. With ~127 units replanning at ~8.6 Hz this is the
-   hottest AI path. *Direction:* measure first (`tests/perf_monitor.gd`),
-   then consider branch-and-bound / cheapest-first search and caching
-   `priority()` once per goal per evaluation.
-10. **Order-cancellation test tests the mock.** `tests/unit/test_order_action.gd`
-    asserts `player_order_cancelled`, a key set only by its own `TestAgent`
-    double; production `Agent.cancel_player_order()` sets
-    `player_order_complete`/`has_player_command`. *Direction:* assert the
-    production keys (and drive the real `Agent` where cheap), per the
-    tests/README "never test the mock" rule.
+9. **OPEN — planner cost/scale.** Every replan enumerates the full solution
+   tree and only then picks the cheapest; `_get_best_goal` re-calls
+   `priority()` on the incumbent each comparison. With ~127 units replanning
+   at ~8.6 Hz this is the hottest AI path. *Direction:* measure first
+   (`tests/perf_monitor.gd`), then consider branch-and-bound / cheapest-first
+   search and caching `priority()` once per goal per evaluation.
+10. **FIXED (`3f560c6`) — order-cancellation test drives the real Agent.**
+    `tests/unit/test_order_action.gd` now asserts the production keys
+    (`player_order_complete` / `has_player_command`) set by
+    `Agent.cancel_player_order()`, per the tests/README "never test the mock"
+    rule.

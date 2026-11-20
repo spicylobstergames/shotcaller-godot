@@ -14,7 +14,7 @@
 # get_class_name() is NOT declared here; each action defines it for the
 # registry and Goap.get_action(name).
 # SERVICE actions (RangeAttack, MeleeAttack, Taxes, Mine, Conquer, Pray,
-# Order, ChooseTactics) also extend this file but are never selected by the
+# Order) also extend this file but are never selected by the
 # planner; they are called directly or from signals.
 # See: ARCHITECTURE.md "Contracts and registries"; docs/ai/adding-behavior.md.
 # =============================================================================
@@ -36,8 +36,9 @@ extends Node
 # false silently unplans every action that does not override this (nine
 # production actions — melee/range attack, hide, taxes, etc. — were dead in
 # the planner after the default was flipped; caught by
-# test_planner_real_actions.gd). ChooseTarget is the documented always-false
-# exception and overrides this itself.
+# test_planner_real_actions.gd). Overrides gate on unit capability or world
+# state (e.g. GetLumber returns WorldState.is_game_active); ChooseTarget is a
+# NORMAL plannable action (unit.attacks and !unit.target), not an exception.
 func is_valid(_agent) -> bool:
 	return true
 

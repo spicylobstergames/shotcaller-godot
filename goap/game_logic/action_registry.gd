@@ -8,7 +8,7 @@
 #   PursueEnemy, AttackEnemy, Retreat, WaitForRegeneration, Hide, HelpFriend,
 #   GetLumber, ReturnLumber.
 # Service / signal-driven (never selected): RangeAttack, MeleeAttack, Order,
-#   Taxes, Mine, Conquer, Pray, ChooseTactics (dead -- Track E1).
+#   Taxes, Mine, Conquer, Pray.
 # get_action() accepts an int index or a class-name String.
 # Adding an action: create the script, add it here, and keep the registry count
 # in tests/unit/test_planner_real_actions.gd in sync.
@@ -19,7 +19,6 @@ extends Node
 # Lists all actions.
 var _actions: Array = [
 	preload("res://goap/game_logic/actions/attack_enemy.gd").new(),
-	preload("res://goap/game_logic/actions/choose_tactics.gd").new(),
 	preload("res://goap/game_logic/actions/choose_target.gd").new(),
 	preload("res://goap/game_logic/actions/conquer_action.gd").new(),
 	preload("res://goap/game_logic/actions/get_lumber.gd").new(),

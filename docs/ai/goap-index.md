@@ -21,12 +21,11 @@ Companion docs: `ARCHITECTURE.md` (system map), `goap-cheatsheet.md`
 | Recover | 10 | {"ready_to_fight": true} | `goap/game_logic/goals/recover.gd` |
 | WalkLane | 2 (above NeedLumber, below combat/safety goals) | {"lane_route_finished": true} | `goap/game_logic/goals/walk_lane.gd` |
 
-## Actions (19)
+## Actions (18)
 
 | Action | Plannable | Preconditions | Effects | File |
 |--------|-----------|---------------|---------|------|
 | AttackEnemy | yes - EnemyDefeated ({enemy_dead: true}) -> AttackEnemy. | {"enemy_in_attack_range": true} | {"enemy_dead": true, "friends_safe": true} | `goap/game_logic/actions/attack_enemy.gd` |
-| ChooseTactics | no - is_valid() hard-returns false. | {} | {} | `goap/game_logic/actions/choose_tactics.gd` |
 | ChooseTarget | yes - PursueEnemy needs has_attack_target. | {"is_stunned": false} | {"has_attack_target": true} | `goap/game_logic/actions/choose_target.gd` |
 | Conquer | no - service object reached via Goap.get_action("Conquer"). | - | - | `goap/game_logic/actions/conquer_action.gd` |
 | GetLumber | yes - NeedLumber({collected_wood: true}) -> GetLumber -> ReturnLumber. | {} | {"has_wood": true} | `goap/game_logic/actions/get_lumber.gd` |

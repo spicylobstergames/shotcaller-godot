@@ -9,10 +9,10 @@
 #   enter / exit(agent)      -> called by the Agent on goal change; the planner
 #                               ignores them
 # is_valid() runs for every goal of every unit on that unit's staggered turn
-# (~8.6 Hz). It SHOULD be pure; the three documented exceptions (EnemyDefeated,
-# FriendsSafe, NeedSafety) reset stale success facts there on purpose -- without
-# that reset the planner sees the desired state as already satisfied and
-# returns an empty plan.
+# (~8.6 Hz). It SHOULD be pure; the four documented exceptions (EnemyDefeated,
+# FriendsSafe, NeedSafety, Recover) reset stale success facts there on
+# purpose -- without that reset the planner sees the desired state as already
+# satisfied and returns an empty plan.
 # See: ARCHITECTURE.md "State facts"; docs/ai/adding-behavior.md.
 # =============================================================================
 

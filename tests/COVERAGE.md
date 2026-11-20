@@ -1,6 +1,6 @@
 # Test Coverage
 
-**27 test classes**, **348 assertions**, **0 script errors** — all passing.
+**28 test classes**, **364 assertions**, **0 script errors** — all passing.
 (The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
 bump it whenever you add tests.)
 
@@ -89,7 +89,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_scene_instantiate.gd` | Every `.tscn` loads + instantiates | Smoke |
 | `test_helpers.gd` | Shared helpers are load-bearing (snapshot/mock-goal self-tests) | Unit |
 | `test_planner.gd` | Planner mechanics (cost ordering, precondition chains, dead ends) via contract doubles | Unit |
-| `test_planner_real_actions.gd` | Planner + real 19-action registry + real goals (contract drift) | Integration |
+| `test_planner_real_actions.gd` | Planner + real 18-action registry + real goals (contract drift) | Integration |
 | `test_agent_signals.gd` | Real `Agent`: goal/plan/action signal wiring and lifecycle | Unit |
 | `test_agent_target.gd` | ChooseTarget.set_target sync (unit target, hunting, attack-count reset, modifier cleanup) | Unit |
 | `test_agent_tactic.gd` | Tactic speed bonuses, Recover.should_retreat thresholds, Recover's planner-fact maintenance (ready_to_fight/is_retreating) | Unit |
@@ -104,7 +104,8 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_movement.gd` | MoveAction.step clamping, move() gates (moves/is_stunned), soft-repulsion blocking, crowded-blocking forward-progress floor, perform() advancing the plan after arrival | Unit |
 | `test_navigation.gd` | Jump-point pathfinder (routes, walls, sealed maps) + NavigateAction→Navigation dispatch | Unit |
 | `test_arrive_at_destination.gd` | Arrival goal contract (PINNED: self-activation disabled; see Known bugs) | Unit |
-| `test_order_action.gd` | OrderAction completion/cancellation semantics | Unit |
+| `test_order_action.gd` | OrderAction completion/cancellation semantics (cancellation driven through the real Agent) | Unit |
+| `test_world_state_timers.gd` | WorldState timer setup idempotency (double-start, teardown, second_elapsed relay) | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
 | `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
 | `test_arrival_dispatch.gd` | `Agent._ready` wires `unit_arrived` → action/goal `on_arrive` exactly once; `ReturnLumber.enter` routes to `deliver_position` | Unit |

@@ -17,7 +17,7 @@ func run(harness) -> void:
 	scan.scan()
 
 	harness.check(
-		scan.files.size() >= 35,
+		scan.files.size() >= 34,
 		"State-key scan covered the GOAP tree (%d scripts)." % scan.files.size()
 	)
 	harness.check(
