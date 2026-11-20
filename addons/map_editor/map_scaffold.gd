@@ -67,6 +67,14 @@ func build_map() -> Node2D:
 	_build_fog(map)
 	_build_buildings(map)
 	_build_lanes(map)
+	# Matches the shipping maps: ui/minimap.gd snapshots the zoomed-out view
+	# into this sprite (it stays invisible; the minimap fills it in).
+	var zoom_out := Sprite2D.new()
+	zoom_out.name = "zoom_out_sprite"
+	zoom_out.visible = false
+	zoom_out.z_index = -1
+	zoom_out.position = Vector2(528, 528)
+	map.add_child(zoom_out)
 	return map
 
 

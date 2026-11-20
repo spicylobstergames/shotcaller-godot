@@ -5,13 +5,13 @@ extends EditorPlugin
 # validates them against the runtime contract. All logic lives in
 # map_scaffold.gd / map_validator.gd (headless-testable).
 
-const EditorDock := preload("res://addons/map_editor/editor_dock.gd")
+const DockScript := preload("res://addons/map_editor/editor_dock.gd")
 
 var _dock: Control
 
 
 func _enter_tree() -> void:
-	_dock = EditorDock.new()
+	_dock = DockScript.new()
 	_dock.name = "Map Editor"
 	add_control_to_dock(DOCK_SLOT_LEFT_UR, _dock)
 

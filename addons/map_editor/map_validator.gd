@@ -20,6 +20,9 @@ const _BASE_MAP_SCRIPT_PATH := "res://map/maps/base_map.gd"
 # Team-colored structures: their `team` must match the directory they sit in.
 const _TEAM_STRUCTURE_NAMES := ["castle", "barrack", "tower"]
 
+# The team directories map_manager.setup_buildings iterates.
+const _TEAM_DIRECTORIES := ["blue", "red"]
+
 # The three TileMapLayers base_map.gd reads in @onready; navigation.gd also
 # reads `map.walls` for jump-point pathfinding.
 const _REQUIRED_TILE_LAYERS := [
@@ -32,7 +35,7 @@ const _REQUIRED_TILE_LAYERS := [
 func validate(map: Node) -> Array:
 	var problems: Array = []
 	_check_root(map, problems)
-	_check_tile_layers(map, problems)
+	_check_tiles(map, problems)
 	var lane_names := _check_lanes(map, problems)
 	_check_buildings(map, lane_names, problems)
 	return problems
@@ -56,10 +59,15 @@ func _check_root(map: Node, problems: Array) -> void:
 		_fail(problems, "'fog' must be a CanvasModulate (got %s)" % fog.get_class())
 
 	var size = map.get("size")
-	if size == null or not size is Vector2:
-		_warn(problems, "map 'size' export is missing or not a Vector2 (map_manager publishes WorldState map_size from it)")
-	elif size.x <= 0 or size.y <= 0:
-		_warn(problems, "map 'size' must be a positive Vector2 (got %s)" % size)
+	# A BaseMap-rooted scene always has a valid exported default; this only
+	# fires when a map explicitly overrides size with a non-positive value.
+	if size is Vector2 and (size.x <= 0 or size.y <= 0):
+		_warn(problems, "map 'size' must be a positive Vector2 (got %s); WorldState map_size is published from it" % size)
+
+	# ui/minimap.gd reads this with get_node_or_null to snapshot the zoomed-out
+	# view; both shipping maps carry it, so absence degrades the minimap.
+	if map.get_node_or_null("zoom_out_sprite") == null:
+		_warn(problems, "no 'zoom_out_sprite' Sprite2D (minimap's zoomed-out view falls back silently)")
 
 
 func _script_is_base_map(script) -> bool:
@@ -75,7 +83,7 @@ func _script_is_base_map(script) -> bool:
 # Tile layers
 # ---------------------------------------------------------------------------
 
-func _check_tile_layers(map: Node, problems: Array) -> void:
+func _check_tiles(map: Node, problems: Array) -> void:
 	for path in _REQUIRED_TILE_LAYERS:
 		var layer = map.get_node_or_null(path)
 		if layer == null:
@@ -86,6 +94,18 @@ func _check_tile_layers(map: Node, problems: Array) -> void:
 			continue
 		if layer.tile_set == null:
 			_fail(problems, "TileMapLayer '%s' has no tile_set assigned" % path)
+
+	# navigation.gd feeds the WALLS layer's used-cell coordinates directly into
+	# a pathfinding grid built from base_map's `tile_size`, so a walls TileSet
+	# with a different cell size makes painted walls block the wrong cells.
+	# (The ground/trees TileSets are visual and may legitimately differ — the
+	# shipping maps run an (8, 8) ground cell size against tile_size 64.)
+	var walls: TileMapLayer = map.get_node_or_null("tiles/walls/Walls")
+	var tile_size = map.get("tile_size")
+	if walls != null and walls is TileMapLayer and walls.tile_set != null and tile_size is int and tile_size > 0:
+		var cell_size: Vector2i = walls.tile_set.tile_size
+		if cell_size.x != tile_size or cell_size.y != tile_size:
+			_fail(problems, "walls TileMapLayer cell size %s does not match 'tile_size' %d — painted walls would block the wrong pathfinding cells (navigation.gd grids walls cells by tile_size)" % [cell_size, tile_size])
 
 
 # ---------------------------------------------------------------------------
@@ -113,6 +133,17 @@ func _check_lanes(map: Node, problems: Array) -> Dictionary:
 	if not found_line:
 		_fail(problems, "'lanes' contains no Line2D lanes (spawns.gd iterates them to spawn pawns)")
 
+	# spawns.gd spawns LEADERS on the hardcoded "mid" lane unless the map has
+	# exactly three lanes (then top/mid/bot by counter). Without a "mid" lane
+	# leader spawning crashes (get_lane_path returns [] -> pop_front() null).
+	if not lane_names.has("mid"):
+		_fail(problems, "no lane named 'mid' (spawns.gd hardcodes it for leader spawning)")
+
+	# Three lanes with other names would send leaders to nonexistent
+	# top/mid/bot lanes.
+	if lane_names.size() == 3 and not (lane_names.has("top") and lane_names.has("mid") and lane_names.has("bot")):
+		_warn(problems, "map has exactly three lanes but they are not named top/mid/bot (three-lane leader spawning assumes those names)")
+
 	return lane_names
 
 
@@ -126,18 +157,31 @@ func _check_buildings(map: Node, lane_names: Dictionary, problems: Array) -> voi
 		_fail(problems, "missing required 'buildings' node (map_manager.setup_buildings reads buildings/<team>/<building>)")
 		return
 
-	for team in ["blue", "red"]:
-		var team_node = buildings_node.get_node_or_null(team)
-		if team_node == null:
-			_fail(problems, "missing required 'buildings/%s' node" % team)
+	for child in buildings_node.get_children():
+		# setup_buildings treats EVERY child of 'buildings' as a team and
+		# iterates its children as buildings; a stray node here means error
+		# spam (reset_unit/agent/... on a non-building).
+		if not child.name in _TEAM_DIRECTORIES:
+			_fail(problems, "unexpected child '%s' under 'buildings' (expected only %s team directories)" % [
+				child.name, " and ".join(PackedStringArray(_TEAM_DIRECTORIES)),
+			])
 			continue
-		_check_team(team_node, team, lane_names, problems)
+		_check_team(child, child.name, lane_names, problems)
+
+	for team in _TEAM_DIRECTORIES:
+		if buildings_node.get_node_or_null(team) == null:
+			_fail(problems, "missing required 'buildings/%s' node" % team)
 
 
 func _check_team(team_node: Node, team: String, lane_names: Dictionary, problems: Array) -> void:
 	var names := {}
 	for building in team_node.get_children():
 		names[building.name] = true
+
+	# map_manager.gd resolves buildings/<team>/<building> with get_node, which
+	# returns the FIRST match — duplicates below silently shadow each other.
+	if names.size() != team_node.get_child_count():
+		_warn(problems, "buildings/%s has duplicate building names (get_node resolves only the first)" % team)
 
 	if not names.has("castle"):
 		_fail(problems, "buildings/%s is missing its castle (the win condition)" % team)

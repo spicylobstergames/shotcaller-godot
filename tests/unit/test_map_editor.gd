@@ -22,12 +22,28 @@ const ThreeLaneMap = preload("res://map/maps/three_lane_map.tscn")
 
 
 func run(harness) -> void:
+	_test_plugin_scripts_parse(harness)
 	_test_scaffold_passes_validation(harness)
 	_test_scaffold_structure(harness)
 	_test_write_and_reload_roundtrip(harness)
 	_test_existing_maps_pass(harness)
 	_test_error_detection(harness)
+	_test_contract_gaps(harness)
 	_test_warning_detection(harness)
+
+
+# ---------------------------------------------------------------------------
+# The plugin/dock layer itself parses (the dock is editor-only and otherwise
+# untested headless; a native-class shadow here killed the plugin once while
+# the scaffold/validator suites stayed green — import.log's SCRIPT ERROR
+# check in run_suite.sh is the other backstop).
+# ---------------------------------------------------------------------------
+
+func _test_plugin_scripts_parse(harness) -> void:
+	harness.check(load("res://addons/map_editor/map_editor_plugin.gd") != null,
+			"map_editor_plugin.gd compiles (no native-class shadow)")
+	harness.check(load("res://addons/map_editor/editor_dock.gd") != null,
+			"editor_dock.gd compiles")
 
 
 # ---------------------------------------------------------------------------
@@ -49,6 +65,7 @@ func _test_scaffold_structure(harness) -> void:
 	# Root script + fog + tile layers with real TileSets, nothing pre-painted.
 	harness.check(map is BaseMap, "scaffold root script is BaseMap")
 	harness.check(map.get_node("fog") is CanvasModulate, "scaffold fog is CanvasModulate")
+	harness.check(map.get_node("zoom_out_sprite") is Sprite2D, "scaffold ships the minimap zoom_out_sprite")
 	harness.check(map.get_node("tiles/ground/Ground").tile_set != null, "scaffold Ground layer has a tile_set")
 	harness.check(map.get_node("tiles/walls/Walls").tile_set != null, "scaffold Walls layer has a tile_set")
 	harness.check(map.get_node("tiles/trees/Trees").tile_set != null, "scaffold Trees layer has a tile_set")
@@ -180,6 +197,66 @@ func _test_error_detection(harness) -> void:
 
 
 # ---------------------------------------------------------------------------
+# Regression tests for contract gaps found in adversarial review
+# ---------------------------------------------------------------------------
+
+func _test_contract_gaps(harness) -> void:
+	var v := Validator.new()
+
+	# spawns.gd hardcodes the "mid" lane for leader spawning (unless the map
+	# has exactly top/mid/bot); without it, leader spawn crashes at runtime.
+	var no_mid: Node = Scaffold.new().build_map()
+	no_mid.get_node("lanes/mid").name = "top"
+	harness.check(_has_problem(v.validate(no_mid), "error", "no lane named"),
+			"map without a 'mid' lane is an error (spawns.gd leader crash)")
+	no_mid.free()
+
+	# setup_buildings treats every child of 'buildings' as a team directory.
+	var stray: Node = Scaffold.new().build_map()
+	var extra := Node2D.new()
+	extra.name = "extra"
+	stray.get_node("buildings").add_child(extra)
+	harness.check(_has_problem(v.validate(stray), "error", "unexpected child"),
+			"stray node under 'buildings' is an error (setup_buildings error spam)")
+	stray.free()
+
+	# Duplicate building names silently shadow each other via get_node. The
+	# Node API cannot create them (add_child and the name setter both
+	# auto-dedupe), so the fixture goes through the scene loader — the same
+	# path a text-edited .tscn takes.
+	var fixture_path := "user://map_editor_dupe_fixture.tscn"
+	var fixture := FileAccess.open(fixture_path, FileAccess.WRITE)
+	fixture.store_string(DUPE_FIXTURE_SCENE)
+	fixture.close()
+	var packed = load(fixture_path)
+	if packed != null:
+		var dupe_map: Node = (packed as PackedScene).instantiate()
+		harness.check(_has_problem(v.validate(dupe_map), "warning", "duplicate"),
+				"duplicate building names warn (get_node resolves only the first)")
+		dupe_map.free()
+	else:
+		harness.check(false, "duplicate-name fixture loads")
+	DirAccess.remove_absolute(fixture_path)
+
+	# navigation.gd grids the WALLS layer's cells by base_map's tile_size;
+	# a mismatching walls TileSet cell size blocks the wrong pathfinding
+	# cells. (Ground/trees TileSets are visual and may differ — shipping
+	# maps run an (8, 8) ground cell size against tile_size 64.)
+	var bad_tile_size: Node = Scaffold.new().build_map()
+	bad_tile_size.set("tile_size", 32)
+	harness.check(_has_problem(v.validate(bad_tile_size), "error", "walls TileMapLayer cell size"),
+			"walls TileSet cell size mismatching tile_size is an error")
+	bad_tile_size.free()
+
+	# The minimap's zoomed-out view degrades silently without this sprite.
+	var no_zoom: Node = Scaffold.new().build_map()
+	no_zoom.get_node("zoom_out_sprite").free()
+	harness.check(_has_problem(v.validate(no_zoom), "warning", "zoom_out_sprite"),
+			"missing zoom_out_sprite is a warning")
+	no_zoom.free()
+
+
+# ---------------------------------------------------------------------------
 # Optional features degrade to warnings
 # ---------------------------------------------------------------------------
 
@@ -200,6 +277,34 @@ func _test_warning_detection(harness) -> void:
 			"blacksmith without closest_tree is a warning (lumberjack hiring degrades)")
 
 	map.free()
+
+
+# Minimal hand-authored-style map whose blue team has two nodes named "tower"
+# — exercises the duplicate-name warning through the scene loader.
+const DUPE_FIXTURE_SCENE := """[gd_scene format=3]
+
+[ext_resource type="Script" path="res://map/maps/base_map.gd" id="1"]
+
+[node name="map" type="Node2D"]
+script = ExtResource("1")
+
+[node name="fog" type="CanvasModulate" parent="."]
+
+[node name="lanes" type="Node2D" parent="."]
+
+[node name="mid" type="Line2D" parent="lanes"]
+points = PackedVector2Array(0, 0, 10, 10)
+
+[node name="buildings" type="Node2D" parent="."]
+
+[node name="blue" type="Node2D" parent="buildings"]
+
+[node name="tower" type="Node2D" parent="buildings/blue"]
+
+[node name="tower" type="Node2D" parent="buildings/blue"]
+
+[node name="red" type="Node2D" parent="buildings"]
+"""
 
 
 # ---------------------------------------------------------------------------
