@@ -14,16 +14,35 @@ var _lane_mode := false
 
 
 func _enter_tree() -> void:
-	# Without this, _forward_canvas_gui_input/_forward_canvas_draw_over_viewport
-	# are not called for our plugin (input forwarding is opt-in per plugin),
-	# so lane-drawing clicks are silently dropped. (Renamed from the 3.x
-	# ..._always_relevant in Godot 4.)
-	set_input_event_forwarding_always_enabled()
 	_dock = DockScript.new()
 	_dock.name = "Map Editor"
 	_dock.lane_mode_requested.connect(_set_lane_mode)
 	_dock.new_lane_requested.connect(_add_lane)
 	add_control_to_dock(DOCK_SLOT_LEFT_UR, _dock)
+
+
+# Canvas input forwarding is gated on the plugin HANDLING the currently
+# edited object (see EditorPlugin._handles docs): without _handles the editor
+# never calls _forward_canvas_gui_input/_forward_canvas_draw_over_viewport
+# and lane-drawing clicks are silently dropped. We handle any node that
+# belongs to a BaseMap scene, so the mode survives selecting lanes/buildings
+# while editing a map — and never fires in unrelated scenes.
+func _handles(object: Object) -> bool:
+	if not (object is Node):
+		return false
+	var node := object as Node
+	if not node.is_inside_tree() or node.get_tree() == null:
+		return false
+	return node.get_tree().edited_scene_root is BaseMap
+
+
+# Required companions of _handles; the lane tool keeps no per-object state.
+func _edit(_object: Object) -> void:
+	pass
+
+
+func _make_visible(_visible: bool) -> void:
+	pass
 
 
 func _exit_tree() -> void:
@@ -45,7 +64,13 @@ func _set_lane_mode(active: bool) -> void:
 	if _dock != null:
 		_dock.set_lane_mode_active(active)  # keep the toggle in sync on Escape
 	if active:
-		var lane := LaneLogic.target_lane(_map_root(), _selected_nodes())
+		# Make the editor treat the map root as the edited object right now, so
+		# _handles/_forward_canvas_gui_input kick in even if the user has
+		# nothing selected (or a non-map scene object was last edited).
+		var map_root := _map_root()
+		if map_root != null:
+			EditorInterface.edit_node(map_root)
+		var lane := LaneLogic.target_lane(map_root, _selected_nodes())
 		if lane != null:
 			_dock.log_line("Draw-lanes ON: left-click adds snapped points to '%s'; Escape exits." % lane.name)
 		else:
