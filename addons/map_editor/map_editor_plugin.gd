@@ -127,12 +127,14 @@ func _add_lane_point(viewport_pos: Vector2) -> void:
 		push_warning("Map Editor: no lane to draw on — select a lane or use 'New lane'.")
 		return
 
-	# Clicks arrive in the 2D editor's VIEWPORT space (the built-in tools all
-	# convert with transform.affine_inverse()); convert to world coordinates
-	# via the viewport's canvas transform before snapping to the tile grid.
-	# Line2D points are local to their node.
-	var world := EditorInterface.get_editor_viewport_2d().canvas_transform.affine_inverse() * viewport_pos
-	var local := lane.to_local(LaneLogic.snap_point(world))
+	# Clicks arrive in the 2D editor's VIEWPORT space. The built-in Line2D/
+	# polygon editors convert with CanvasItemEditor.get_canvas_transform()
+	# (internal C++); the GDScript-accessible equivalent is the item's own
+	# get_global_transform_with_canvas() — item-local -> viewport space via
+	# the same render pipeline, so it always tracks pan/zoom. Its inverse
+	# yields lane-local coordinates directly (Line2D points are local).
+	var xform := lane.get_global_transform_with_canvas()
+	var local := LaneLogic.snap_point(xform.affine_inverse() * viewport_pos)
 	var index := LaneLogic.insertion_index(lane, local)
 
 	var undo_redo := get_undo_redo()
@@ -141,8 +143,8 @@ func _add_lane_point(viewport_pos: Vector2) -> void:
 	undo_redo.add_undo_method(lane, "remove_point", index)
 	undo_redo.commit_action()
 	if _dock != null:
-		_dock.log_line("Added point %d at %s to '%s' (clicked %s; Ctrl+Z undoes)" % [
-			index, local, lane.name, viewport_pos,
+		_dock.log_line("Added point %d at %s to '%s' (clicked %s; lane xform origin %s)" % [
+			index, local, lane.name, viewport_pos, xform.origin,
 		])
 	update_overlays()
 
@@ -157,18 +159,17 @@ func _forward_canvas_draw_over_viewport(viewport_control: Control) -> void:
 	if lane == null:
 		return
 
-	# Show the user which lane is live and where its points are.
+	# Show the user which lane is live and where its points are. Same
+	# item->viewport transform as the input path, so overlay and clicks agree
+	# and the overlay tracks the world when panning/zooming.
+	var xform := lane.get_global_transform_with_canvas()
 	var points := PackedVector2Array()
 	for i in lane.get_point_count():
-		points.append(_to_viewport(lane, lane.get_point_position(i)))
+		points.append(xform * lane.get_point_position(i))
 	if points.size() >= 2:
 		viewport_control.draw_polyline(points, Color(0.3, 0.7, 1.0, 0.9), 2.0)
 	for point in points:
 		viewport_control.draw_circle(point, 4.0, Color(0.3, 0.7, 1.0, 1.0))
-
-
-func _to_viewport(lane: Line2D, local_point: Vector2) -> Vector2:
-	return EditorInterface.get_editor_viewport_2d().canvas_transform * lane.to_global(local_point)
 
 
 func _map_root() -> Node:
