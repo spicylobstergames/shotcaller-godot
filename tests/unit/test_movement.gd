@@ -30,6 +30,7 @@ class TestUnit:
 	var level := 1
 	var current_step := Vector2.ZERO
 	var current_destiny := Vector2.ZERO
+	var final_destiny := Vector2.ZERO
 	var collision_position := Vector2.ZERO
 	var collision_radius := 8.0
 	var collide := false
@@ -179,6 +180,25 @@ func run(harness) -> void:
 	harness.check(
 		Goap.get_action("Move") != null,
 		"Move action is registered with the GOAP action registry."
+	)
+
+	# --- arrival-fact contract (PR #239 feedback) ---
+	# Any newly issued movement revokes a previous arrival, and stopping
+	# drops the routing fact: together these make the planner produce
+	# Navigate > Move deterministically and let plan actions observe THEIR
+	# OWN arrival instead of a stale one.
+	unit.agent.set_state("arrived_at_destination", true)  # stale from before
+	move_action.move(unit, Vector2(64, 64))
+	harness.check(
+		unit.agent.get_state("arrived_at_destination", true) == false,
+		"Move.move resets a stale arrived_at_destination when issuing movement."
+	)
+	unit.agent.set_state("has_destiny", true)
+	unit.agent.set_state("arrived_at_destination", true)
+	move_action.stop(unit)
+	harness.check(
+		unit.agent.get_state("has_destiny", true) == false,
+		"Move.stop clears has_destiny (the planner cannot skip Navigate afterwards)."
 	)
 
 	unit.free()

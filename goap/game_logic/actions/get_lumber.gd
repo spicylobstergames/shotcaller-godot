@@ -10,12 +10,13 @@
 # precond   : {}
 # effects   : {"has_wood": true}
 # enter     : Move.point(unit, closest_tree).
-# perform   : returns has_wood.
-# on_arrive : attack animation + channeling_timer (cut_time = 6s), then
-#             has_wood = true -- this is a coroutine (await), so the fact is
-#             NOT set synchronously.
-# Traps     : on_arrive only runs because Collisions emits unit_arrived
-#             (Agent.on_arrive dispatch). closest_tree is set at spawn.
+# perform   : false until the FINAL arrival (arrived_at_destination latched by
+#             Collisions); then starts the cut channel once (cutting latch)
+#             and completes when has_wood is set -- this is a coroutine (await),
+#             so the fact is NOT set synchronously.
+# exit      : cutting = false (a pending cut continuation no longer pays off).
+# Traps     : the arrival facts are the interface (Collisions ->
+#             ArriveAtDestination.advance_path). closest_tree is set at spawn.
 # See       : docs/ai/world-state.md (has_wood, collected_wood).
 # =============================================================================
 
@@ -49,7 +50,14 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return !!agent.get_state("has_wood")
+	if agent.get_state("has_wood", false):
+		return true
+	if not agent.get_state("arrived_at_destination", false):
+		return false
+	if not agent.get_state("cutting", false):
+		agent.set_state("cutting", true)
+		_cut(agent)  # fire-and-forget coroutine (see _cut)
+	return false
 
 
 func enter(agent):
@@ -58,14 +66,21 @@ func enter(agent):
 	Goap.get_action("Move").point(unit, closest_tree)
 
 
-func on_arrive(agent):
+func exit(agent):
+	# A goal switch mid-cut must cancel the pending continuation: the await
+	# below only pays has_wood while `cutting` is still true.
+	agent.set_state("cutting", false)
+
+
+func _cut(agent) -> void:
 	var unit = agent.get_unit()
 	# fake cut animation
 	unit.set_state("attack")
-	if unit.channeling_timer.time_left > 0: 
+	if unit.channeling_timer.time_left > 0:
 		unit.channeling_timer.stop()
 	unit.channeling_timer.wait_time = cut_time
 	unit.channeling_timer.start()
 	# cut animation end
 	await unit.channeling_timer.timeout
-	agent.set_state("has_wood",true)
+	if agent.get_state("cutting", false):
+		agent.set_state("has_wood", true)

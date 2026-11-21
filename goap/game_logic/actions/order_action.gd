@@ -8,16 +8,20 @@
 # precond   : {} (default)
 # effects   : {"player_order_complete": true}
 # enter     : execute_player_order.
-# perform   : is_player_order_complete -- for move orders that means the unit is
-#             idle with no path and no destinies; a dead unit cancels instead.
+# perform   : dispatches the after_arive follow-up (conquer/pray) ONCE on the
+#             FINAL arrival, then is_player_order_complete -- for move orders
+#             that means the unit is idle with no path and no destinies; a
+#             dead unit cancels instead.
 # resume    : re-executes after a stun ends.
 # exit      : Move.stop.
 # API       : issue_player_order(unit, type, point) is the UI entry point.
 # Writes    : player_order, player_order_complete, has_player_command,
 #             after_arive, is_channeling, player_order_id.
-# Traps     : "after_arive" is a misspelled key shared with on_arrive for
-#             conquer/pray (Track D). Non-leaders execute orders immediately and
-#             bypass the goal.
+# Traps     : "after_arive" is a misspelled key shared with the arrival
+#             follow-up (Track D). The follow-up used to ride an on_arrive
+#             hook that fired on EVERY route waypoint; it now dispatches only
+#             on the final arrival (arrived_at_destination), from perform().
+#             Non-leaders execute orders immediately and bypass the goal.
 # =============================================================================
 
 extends "res://goap/goap_system/action_contract.gd"
@@ -44,7 +48,26 @@ func enter(agent):
 
 
 func perform(agent, _delta) -> bool:
+	_dispatch_arrival(agent)
 	return is_player_order_complete(agent)
+
+
+# Conquer/pray run when the unit reaches its front-door tile: dispatch the
+# after_arive follow-up exactly once, on the FINAL arrival (the facts latched
+# by Collisions -> ArriveAtDestination.advance_path). The old on_arrive hook
+# fired on every route waypoint, so multi-waypoint orders could conquer/pray
+# before reaching the building.
+func _dispatch_arrival(agent):
+	if not agent.get_state("arrived_at_destination", false):
+		return
+	var unit = agent.get_unit()
+	match agent.get_state("after_arive"):
+		"conquer":
+			agent.set_state("after_arive", "stop")
+			Goap.get_action("Conquer").conquer_building(unit)
+		"pray":
+			agent.set_state("after_arive", "stop")
+			Goap.get_action("Pray").pray_in_church(unit)
 
 
 func resume(unit):
@@ -102,18 +125,8 @@ func get_order_point(unit, point):
 					# pray on friendly churches
 					if building.display_name == "church":
 						unit.agent.set_state("after_arive", "pray")
-		
+
 		return point
-
-
-
-func on_arrive(agent):
-	var unit = agent.get_unit()
-	match agent.get_state("after_arive"):
-		"conquer":
-			Goap.get_action("Conquer").conquer_building(unit)
-		"pray":
-			Goap.get_action("Pray").pray_in_church(unit)
 
 
 func execute_player_order(agent):

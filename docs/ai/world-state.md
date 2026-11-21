@@ -161,9 +161,17 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `RetreatAction.on_arrive()` (line 37)
+- **Producer:** `RetreatAction.perform()` (latched from `arrived_at_destination` on the final arrival)
 - **Consumer:** `RetreatAction.perform()`, `Recover` (desired state)
-- **Lifecycle:** Set when the unit reaches its retreat position.
+- **Lifecycle:** Set when the unit reaches its retreat position (final arrival); reset by `Recover.enter()`.
+
+#### `cutting`
+- **Scope:** agent
+- **Type:** bool
+- **Default:** false
+- **Producer:** `GetLumber.perform()` (latched when the cut channel starts on the final arrival), cleared by `GetLumber.exit()`
+- **Consumer:** `GetLumber._cut()` (the channel-await continuation only pays `has_wood` while `cutting` is still true)
+- **Lifecycle:** True while the lumberjack's cut channel is running; cleared by `exit()` (goal switch) or `reset()`.
 
 #### `is_channeling`
 - **Scope:** agent

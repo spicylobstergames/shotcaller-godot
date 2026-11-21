@@ -2,9 +2,9 @@ extends RefCounted
 
 # PORT (post-restructure): the arrival goal's is_valid() now hard-returns
 # false (activation logic commented out in production) — arrival is handled
-# by Collisions calling is_at_destination/on_arrive directly. This test PINS
-# that contract: goal selection never activates it, its state management
-# (enter/on_arrive) still works when invoked directly, and the collision
+# by Collisions calling is_at_destination/advance_path directly. This test
+# PINS that contract: goal selection never activates it, its state management
+# (enter/advance_path) still works when invoked directly, and the collision
 # callback keeps using the map tolerance for autonomous movement. If the
 # commented-out activation logic is ever restored, this test must be
 # deliberately flipped.
@@ -73,7 +73,7 @@ func run(harness) -> void:
 
 	# PINNED (see file header): the goal never self-activates — regardless of
 	# unit state. Arrival is driven by Collisions calling is_at_destination /
-	# on_arrive directly.
+	# advance_path directly.
 	unit.state = "move"
 	unit.current_destiny = Vector2(100, 50)
 	harness.check(not goal.is_valid(agent),
@@ -83,7 +83,7 @@ func run(harness) -> void:
 		"PINNED: a queued path does not self-activate the arrival goal either.")
 
 	# enter() state management still works when invoked (the goal stays in
-	# agents' goals_list, and Recover chains into it via on_arrive).
+	# agents' goals_list as a service/library goal).
 	goal.enter(agent)
 	harness.check_equal(agent.get_state("has_path"), true, "enter() reflects the queued path in state.")
 	harness.check_equal(
@@ -113,9 +113,13 @@ func run(harness) -> void:
 	unit.target = null
 
 	# Finishing the last waypoint clears planner state and stops direct movement.
-	# on_arrive takes the UNIT — that is how collisions.gd invokes it.
-	goal.on_arrive(unit)
+	# advance_path takes the UNIT — that is how collisions.gd invokes it.
+	goal.advance_path(unit)
 	harness.check_equal(agent.get_state("has_path"), false, "Completing a path clears path state.")
+	harness.check_equal(
+		agent.get_state("has_destiny"), false,
+		"Completing a path also clears has_destiny (no stale routing fact for the planner)."
+	)
 	harness.check_equal(
 		agent.get_state("arrived_at_destination"), true, "Completing a path sets the arrived state."
 	)

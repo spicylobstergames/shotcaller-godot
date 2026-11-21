@@ -204,7 +204,7 @@ func run(harness) -> void:
 	var arrive_goal = ArriveAtDestination.new()
 	var unit = agent.get_unit()
 	unit.current_path = [Vector2(192, 64)]
-	arrive_goal.on_arrive(unit)
+	arrive_goal.advance_path(unit)
 	# The waypoint record carries the destiny just reached; on_arrive then
 	# advances the path (which logs its own navigate/move_request records).
 	harness.check(
@@ -212,7 +212,7 @@ func run(harness) -> void:
 		"A mid-path arrival records a waypoint advance (not the final fact)."
 	)
 	unit.current_path = []
-	arrive_goal.on_arrive(unit)
+	arrive_goal.advance_path(unit)
 	harness.check(agent.history_summary().back().begins_with("arrive:"),
 		"The final arrival (empty path) records the arrive event.")
 	harness.check(

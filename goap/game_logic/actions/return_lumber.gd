@@ -9,12 +9,15 @@
 # effects   : {"collected_wood": true}
 # enter     : Navigate.move(unit, deliver_position), with the Move fallback
 #             when no route exists.
-# perform   : returns returning_wood.
-# on_arrive : returning_wood = true; has_wood = false; heals every friendly
-#             building by its regen.
+# perform   : false until the FINAL arrival (arrived_at_destination latched by
+#             Collisions); then delivers ONCE (returning_wood latch: deliver,
+#             clear has_wood, heal buildings) and completes.
 # exit      : returning_wood = false.
-# Traps     : previously assigned set_state()'s null return to a nonexistent
-#             unit property and never moved; keep the navigation explicit.
+# Traps     : the delivery used to ride an on_arrive hook that fired on EVERY
+#             route waypoint -- multi-waypoint deliveries healed buildings
+#             early and completed the plan before reaching deliver_position.
+#             The arrival facts are the interface (Collisions ->
+#             ArriveAtDestination.advance_path).
 # =============================================================================
 
 extends "res://goap/goap_system/action_contract.gd"
@@ -36,7 +39,20 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return agent.get_state("returning_wood", false)
+	if agent.get_state("returning_wood", false):
+		return true
+	# Deliver exactly once, on the FINAL arrival (empty route), never on an
+	# intermediate waypoint.
+	if agent.get_state("arrived_at_destination", false):
+		var unit = agent.get_unit()
+		agent.set_state("returning_wood", true)
+		agent.set_state("has_wood", false)
+		# heal all player buildings
+		for building in WorldState.get_state("all_buildings"):
+			if unit.team == building.team:
+					building.heal(building.regen)
+		return true
+	return false
 
 
 func enter(agent):
@@ -48,16 +64,6 @@ func enter(agent):
 	# exists (the established pattern in PursueEnemy/AttackEnemy).
 	if not Goap.get_action("Navigate").move(unit, deliver_position):
 		Goap.get_action("Move").move(unit, deliver_position)
-
-
-func on_arrive(agent):
-	var unit = agent.get_unit()
-	agent.set_state("returning_wood", true)
-	agent.set_state("has_wood", false)
-	# heal all player buildings
-	for building in WorldState.get_state("all_buildings"):
-		if unit.team == building.team:
-				building.heal(building.regen)
 
 
 func exit(agent):

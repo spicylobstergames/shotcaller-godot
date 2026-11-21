@@ -14,7 +14,8 @@
 #   - a stale success fact makes the planner return an empty plan and the
 #     agent holds a goal with no actions (see EnemyDefeated/FriendsSafe).
 #   - the plan is never revalidated mid-execution; only a goal change replans.
-#   - unit_arrived is emitted by Collisions and wired to on_arrive exactly once.
+#   - arrival is NOT signal-dispatched: Collisions latches the arrival facts
+#     (ArriveAtDestination.advance_path) and actions read them in perform().
 # See: ARCHITECTURE.md "GOAP (the AI core)"; docs/ai/architecture.md.
 # =============================================================================
 
@@ -77,11 +78,11 @@ func _ready():
 	_unit.unit_died.connect(on_died)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
-	# Arrival is emitted by Collisions (via Unit.on_arrive) once the unit
-	# reaches its current_destiny. Connect exactly once: a second connection
-	# would double-fire every action/goal on_arrive hook.
-	_unit.unit_arrived.connect(on_arrive)
-	
+	# NOTE: arrival is NOT wired here. It is a GOAP state transition detected
+	# by Collisions (ArriveAtDestination.advance_path latches the facts) and
+	# observed by actions through perform() (PR #239 feedback). unit_arrived
+	# stays declared/emitted on Unit but nothing connects it.
+
 	WorldState.second_elapsed.connect(on_every_second)
 	
 	reset()
@@ -388,14 +389,6 @@ func on_animation_end():
 	if has_goal_function("on_animation_end"):
 		get_current_goal().on_animation_end(self)
 
-
-func on_arrive():
-	if has_action_function("on_arrive"):
-		get_current_action().on_arrive(self)
-		
-	if has_goal_function("on_arrive"):
-		get_current_goal().on_arrive(self)
-	
 #func clear_orders():
 #	for s in _state:
 #		print(s)
