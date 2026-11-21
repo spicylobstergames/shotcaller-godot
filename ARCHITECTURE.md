@@ -147,19 +147,21 @@ agent-scope key; it is really unit state.
 | `unit_died` | `on_died` → `RangeAttack.clear_stuck` |
 | `unit_animation_ended` | `on_animation_end` |
 | `unit_was_attacked` | `was_attacked` |
-| `unit_arrived` | `on_arrive` (connected exactly once; see below) |
 | `WorldState.second_elapsed` | `on_every_second` |
 
-**Wired once: `unit_arrived` → `Agent.on_arrive`** (`agent.gd:71`; fixed in
-`dd68c35`, pinned by `tests/unit/test_arrival_dispatch.gd`). `Unit.on_arrive()`
-emits `unit_arrived` (`unit/Unit.gd:369`), which dispatches to the current
-action/goal `on_arrive` hook (`Hide.on_arrive`, `GetLumber.on_arrive`,
-`ReturnLumber.on_arrive`, `RetreatAction.on_arrive`, `OrderAction.on_arrive`).
-The emission point is `Collisions` (next section), which calls
-`unit1.on_arrive()` after `ArriveAtDestination.on_arrive` advances the path.
-**Do not connect `unit_arrived` a second time** — a second connection
-double-fires every hook. `unit_move_ended` remains declared and emitted
-(`unit/Unit.gd:365`) but unwired.
+**`unit_arrived` is NOT wired.** Arrival is a GOAP state transition, not a
+signal (PR #239 feedback rework; pinned by `tests/unit/test_arrival_dispatch.gd`):
+`Collisions` calls `ArriveAtDestination.advance_path(unit)` in its single
+movement loop, which latches the arrival facts; actions drive their arrival
+effects from `perform()` by reading them. `Unit.on_arrive()`/`unit_arrived`
+remain declared/emitted on Unit but nothing connects them — like
+`unit_move_ended`. **Do not reintroduce signal-based arrival dispatch.**
+
+**Execution history.** Each agent keeps a bounded (64-entry) log of
+goal/plan/action transitions plus movement/arrival/service sub-events
+(`Agent.record_event`, `get_history()`, `history_summary()`; diagnostics only —
+nothing in planning reads it). `tests/freeze_report.gd` prints the tail for
+stuck units.
 
 `state_changed` is declared and emitted with a single combined
 `"Goal Action"` string; `hud.update_state(text)` consumes it. (Track D4 fixed
@@ -218,7 +220,7 @@ as a target-acquisition step (e.g. `[ChooseTarget, PursueEnemy, AttackEnemy]`),
 so `AGENTS.md`'s "always returns false / not planned" exception is stale.
 (The dead `ChooseTactics` stub was deleted — IMPROVEMENT_PLAN.md Track E1.)
 
-### Arrival is collision-driven, not goal-driven
+### Arrival is a GOAP state transition, not goal- or signal-driven
 
 `ArriveAtDestination.is_valid()` hard-returns `false` (activation logic is
 commented out; pinned by `tests/unit/test_arrive_at_destination.gd`). It is
@@ -227,24 +229,39 @@ goal**, not a selectable one. The real arrival machinery lives in the physics
 loop:
 
 ```gdscript
-# collision/collisions.gd:78-86
+# collision/collisions.gd
 if unit1.moves and unit1.state == "move":
     if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
-        Goap.get_goal("ArriveAtDestination").on_arrive(unit1)   # UNIT arg, not agent
-        unit1.on_arrive()   # emits unit_arrived -> Agent.on_arrive dispatch
+        Goap.get_goal("ArriveAtDestination").advance_path(unit1)
     else:
         Goap.get_action("Move").step(unit1, delta)
 ```
 
-`ArriveAtDestination.on_arrive(unit)` either advances the path via
-`Navigate.next(unit)` or, when the path is empty, sets
-`has_path=false` / `arrived_at_destination=true` and stops the unit. Path
-advancement runs BEFORE `unit1.on_arrive()` so the dispatched hooks
-(`GetLumber.on_arrive`, `RetreatAction.on_arrive`, ...) see the
-post-advance `current_path`. Note `Recover` deliberately has **no**
-`on_arrive` hook: its old delegation into
+`ArriveAtDestination.advance_path(unit)` either advances the path via
+`Navigate.next(unit)` (a waypoint) or, when the path is empty, latches the
+final-arrival facts — `has_path=false`, `has_destiny=false`,
+`arrived_at_destination=true` — and stops the unit. Those facts are the
+interface: plan actions drive their arrival effects from `perform()` by
+reading `arrived_at_destination` behind per-action latches (`cutting`,
+`is_hiding`, `returning_wood`, `arrived_at_retreat`, `after_arive`). Arrival
+effects therefore run on the agent's next staggered turn (up to ~116 ms after
+the collision), while collision detection and path advancement stay immediate.
+`Recover` deliberately has **no** arrival hook: its old delegation into
 `ArriveAtDestination.on_arrive(agent)` passed the wrong argument type and
 double-advanced the path, and was removed (`recover.gd` banner).
+
+Expected plan sequences (the plannable prefixes; the movement/attack
+sub-events ride the agent history):
+
+| Goal | Plan | Notable sub-events (history) |
+|------|------|------------------------------|
+| `ArriveAtDestination` (service) | `Navigate > Move` | waypoint/arrive |
+| `WalkLane` | `Navigate > Move` | navigate_request/move_request per waypoint |
+| `EnemyDefeated` | `ChooseTarget > PursueEnemy > AttackEnemy` | navigate/move, then `MeleeAttack`/`RangeAttack` |
+| `Recover` | `Retreat > WaitForRegeneration` | navigate/move, arrive |
+| `NeedLumber` | `GetLumber > ReturnLumber` | move, arrive, cut channel |
+| `NeedSafety` | `Hide` | arrive |
+| `ObeyPlayer` | `Order` | navigate/move, arrive, Conquer/Pray |
 
 ### State facts
 
@@ -258,10 +275,13 @@ numbers predate the comment banners.
   return must read `get_state(key, false)`, never bare `get_state(key)`.
 - **`has_destiny`, not `has_path`, is Move's precondition.**
   `Move.get_preconditions()` is `{has_destiny: true, is_stunned: false}`
-  (`move_action.gd:43`). `Navigate.follow_path` sets `has_destiny = true` and
-  **never clears it** (`navigate_action.gd:194-201`), so after any route the
-  planner can skip `Navigate` and emit a bare `[Move]`. `has_path` is still
-  written (`follow_path`, `ArriveAtDestination`) but no precondition reads it.
+  (`move_action.gd`). `Navigate.follow_path` sets `has_destiny = true`;
+  `Move.stop` and the final arrival (`ArriveAtDestination.advance_path`) clear
+  it, so the planner orders `Navigate` before `Move` deterministically instead
+  of skipping `Navigate` on a stale fact. `has_path` is still written
+  (`follow_path`, `advance_path`) but no precondition reads it.
+  `arrived_at_destination` is reset by `Move.move`/`Navigate.follow_path` on
+  any newly issued movement and latched by the final arrival.
 - **Stale-fact resets are load-bearing.** `EnemyDefeated.is_valid` resets
   `enemy_dead` every frame and releases dead/out-of-sight targets;
   `FriendsSafe.is_valid` resets `friends_safe`; `NeedSafety.is_valid` writes
@@ -380,9 +400,9 @@ is read-only.
   damage). Its unit reads go through `unit.get(property)` with null checks —
   keep them; a bare property access breaks test doubles and optional props.
 - **Unit signal names** are wired in `Agent._ready()` and emitted across
-  `Unit.gd`, actions, and UI. Renames break silently. (`unit_move_ended` is
-  still unwired; `unit_arrived` is wired exactly once — see the agent
-  section.)
+  `Unit.gd`, actions, and UI. Renames break silently. (`unit_move_ended` and
+  `unit_arrived` are declared/emitted but unwired — arrival is a GOAP state
+  transition; see the agent section.)
 - **The minimap headless guard** (see boot flow) — removing it breaks every
   headless run including CI.
 - **`hit_modifiers`' early return**: a unit present in the leader table with
@@ -396,9 +416,11 @@ is read-only.
   `unit.target` through `ChooseTarget.set_target` and triggers
   attack-count/modifier side effects. Do not "simplify" it without auditing
   every caller.
-- **Arrival is collision-driven.** `ArriveAtDestination.is_valid()` is pinned
-  false and `Collisions` calls `is_at_destination`/`on_arrive` directly. Do not
-  re-enable the goal's activation without a golden re-record and new tests.
+- **Arrival is a GOAP state transition.** `ArriveAtDestination.is_valid()` is
+  pinned false and `Collisions` calls `is_at_destination`/`advance_path`
+  directly; there is no `unit_arrived` wiring and no per-action `on_arrive`
+  hook. Do not re-enable the goal's activation or reintroduce signal-based
+  arrival dispatch without a golden re-record and new tests.
 
 ## Known gaps and improvement candidates
 
@@ -406,15 +428,14 @@ Statuses updated on `0926d47` (original findings verified on `d527203`).
 Numbering is kept stable for cross-references; fixed items are marked rather
 than removed so the history (and IMPROVEMENT_PLAN.md tracks) still line up.
 
-1. **FIXED (`dd68c35`) — arrival dispatch.** `unit_arrived` →
-   `Agent.on_arrive` is now connected exactly once (`agent.gd:71`), and
-   `Collisions` calls `unit1.on_arrive()` after path advancement
-   (`collisions.gd:78-86`), so the action `on_arrive` hooks (`Hide`,
-   `GetLumber`, `ReturnLumber`, `RetreatAction`, `OrderAction`) fire in
-   production. Pinned by `tests/unit/test_arrival_dispatch.gd`. The follow-up
-   hazard this exposed — arrival setting write-once facts that disable goals
-   (`WalkLane`/`lane_route_finished`) — is fixed in `d825c2a`; lane-completion
-   semantics remain an open decision (plans/E5.md).
+1. **FIXED (`dd68c35`), then SUPERSEDED — arrival dispatch.** The signal
+   wiring (`unit_arrived` → `Agent.on_arrive` + per-action `on_arrive` hooks)
+   was itself replaced after PR #239 review: arrival is now a GOAP state
+   transition (`Collisions` → `ArriveAtDestination.advance_path` latches the
+   facts; actions gate their effects in `perform()`). The follow-up hazard
+   the signal fix exposed — arrival setting write-once facts that disable
+   goals (`WalkLane`/`lane_route_finished`) — remains fixed in `d825c2a`;
+   lane-completion semantics remain an open decision (plans/E5.md).
 2. **OPEN (documented, not implemented) — the planner has no contradiction
    check.** `planner.gd` merges preconditions by assignment; empirically a
    goal `{b: true, x: true}` plans `["MakeNotB", "MakeX"]` (which falsifies
@@ -434,16 +455,15 @@ than removed so the history (and IMPROVEMENT_PLAN.md tracks) still line up.
    `run_tests.gd` header). Remaining drift: `docs/ai/world-state.md` fact
    entries are current but their cited line numbers predate the comment
    banners added across `goap/`.
-4. **PARTIALLY ADDRESSED — stale-fact lifecycle is ad hoc.** `has_destiny` is
-   still set by `Navigate.follow_path` and never cleared;
-   `arrived_at_destination` is set in several places. The frozen-unit class
-   this causes got three real fixes (`22af94a` dead plans/stranded retreat
-   facts, `d825c2a` WalkLane, `34ebeeb` crowd progress floor) and an opt-in
-   `--freeze-report` census (`ba990d8`), but the underlying fact-reset
-   contract is still undocumented.
-   *Direction:* define and document a per-plan/per-goal fact reset contract
-   (who clears what, when), or track `has_destiny` on the unit path object
-   rather than agent state.
+4. **FIXED — stale movement-fact lifecycle.** `has_destiny` is now cleared by
+   `Move.stop` and the final arrival, and `arrived_at_destination` is reset by
+   `Move.move`/`Navigate.follow_path` on any newly issued movement — the
+   planner orders `Navigate > Move` deterministically instead of skipping
+   `Navigate` on a stale fact. The frozen-unit class this caused got three
+   real fixes (`22af94a` dead plans/stranded retreat facts, `d825c2a`
+   WalkLane, `34ebeeb` crowd progress floor) and an opt-in `--freeze-report`
+   census (`ba990d8`); the reset contract is now documented here and in
+   `AGENTS.md`.
 5. **OPEN — state keys are untyped string literals.** Misspellings break
    planning silently (the `stunned` alias, `collected_wood` vs `has_wood`,
    `after_arive` typo) and several keys are undocumented:
