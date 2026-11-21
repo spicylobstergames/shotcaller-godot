@@ -57,6 +57,14 @@ func is_at_destination(unit) -> bool:
 
 
 func on_arrive(unit):
+	# History sub-event (best effort: test doubles may not carry the record
+	# API). Distinguishes an intermediate waypoint advance from the FINAL
+	# arrival that latches arrived_at_destination.
+	if unit.agent != null and unit.agent.has_method("record_event"):
+		unit.agent.record_event(
+			"arrive" if unit.current_path.is_empty() else "waypoint",
+			unit.current_destiny
+		)
 	if not unit.current_path.is_empty():
 		Goap.get_action("Navigate").next(unit)
 	else:

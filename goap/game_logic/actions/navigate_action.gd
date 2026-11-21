@@ -199,6 +199,10 @@ func follow_path(unit, new_path):
 		unit.agent.set_state("has_path", true)
 		unit.current_destiny = next_point
 		unit.agent.set_state("has_destiny", true)
+		# History sub-event (best effort: test doubles may not carry the
+		# record API). Nothing in planning reads the history.
+		if unit.agent != null and unit.agent.has_method("record_event"):
+			unit.agent.record_event("navigate_request", next_point)
 		# Hand the waypoint to the movement driver. Only state == "move"
 		# units are stepped (Collisions.physics_process), and Move.move is
 		# the one place that sets it — plans without a Move action (e.g. the

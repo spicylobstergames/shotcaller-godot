@@ -89,6 +89,10 @@ func in_bounds(target_point: Vector2) -> bool:
 
 func move(unit, destiny):
 	if unit.moves and not unit.agent.get_state("is_stunned"):
+		# History sub-event (best effort: test doubles may not carry the
+		# record API). Nothing in planning reads the history.
+		if unit.agent != null and unit.agent.has_method("record_event"):
+			unit.agent.record_event("move_request", destiny)
 		unit.current_destiny = destiny
 		var current_speed = max(Modifiers.get_value(unit, "speed"), 0.0)
 		calc_step(unit, current_speed)
