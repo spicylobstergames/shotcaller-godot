@@ -139,7 +139,7 @@ func _add_lane_point(viewport_pos: Vector2) -> void:
 
 	var undo_redo := get_undo_redo()
 	undo_redo.create_action("Add lane point")
-	undo_redo.add_do_method(lane, "add_point", index, local)
+	undo_redo.add_do_method(lane, "add_point", local, index)
 	undo_redo.add_undo_method(lane, "remove_point", index)
 	undo_redo.commit_action()
 	if _dock != null:
