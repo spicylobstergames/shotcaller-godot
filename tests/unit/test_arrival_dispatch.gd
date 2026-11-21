@@ -314,16 +314,34 @@ func run(harness) -> void:
 	var first_session: int = agent.get_state("cutting_id", 0)
 	agent.set_state("arrived_at_destination", true)
 	GetLumber.new().perform(agent, 0.0)  # starts a fresh cut session
+	var current_session: int = agent.get_state("cutting_id", 0)
 	harness.check(
-		agent.get_state("cutting_id", 0) == first_session + 1,
+		GetLumber.new()._session_is_current(agent, current_session),
+		"The active cut session's token is current."
+	)
+	# exit() must INVALIDATE the token, not just clear the latch: the hole
+	# was exit-without-re-entry -- no new session ever starts, so without the
+	# bump the abandoned coroutine still saw its own id as current when the
+	# timer fired and paid has_wood for a cancelled cut.
+	GetLumber.new().exit(agent)
+	harness.check(
+		not GetLumber.new()._session_is_current(agent, current_session),
+		"exit() invalidates the cut session token (exit WITHOUT re-entry kills the pending continuation)."
+	)
+	# A later re-entry starts yet another session; the older ones stay dead.
+	agent.set_state("arrived_at_destination", true)
+	GetLumber.new().perform(agent, 0.0)
+	var renewed_session: int = agent.get_state("cutting_id", 0)
+	harness.check(
+		renewed_session > current_session,
 		"GetLumber bumps the cut session token per attempt (abandoned continuations become no-ops)."
 	)
 	harness.check(
-		not GetLumber.new()._session_is_current(agent, first_session),
+		not GetLumber.new()._session_is_current(agent, current_session),
 		"The ABANDONED session's token is no longer current (its continuation would not pay)."
 	)
 	harness.check(
-		GetLumber.new()._session_is_current(agent, first_session + 1),
+		GetLumber.new()._session_is_current(agent, renewed_session),
 		"The CURRENT session's token still pays."
 	)
 	GetLumber.new().exit(agent)

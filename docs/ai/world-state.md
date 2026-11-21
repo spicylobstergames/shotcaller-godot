@@ -177,9 +177,9 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** int (session token)
 - **Default:** 0
-- **Producer:** `GetLumber.perform()` (increments per cut session)
-- **Consumer:** `GetLumber._cut()` (the channel-await continuation pays `has_wood` only if its OWN session id is still current)
-- **Lifecycle:** Monotonic per agent; a goal switch + re-entry bumps it, which turns any abandoned coroutine's continuation into a no-op even though the shared `channeling_timer` gets restarted by the new session.
+- **Producer:** `GetLumber.perform()` (increments per cut session) and `GetLumber.exit()` (increments to INVALIDATE the current session)
+- **Consumer:** `GetLumber._cut()` via `_session_is_current()` (the channel-await continuation pays `has_wood` only if its OWN session id is still current)
+- **Lifecycle:** Monotonic per agent; `exit()` bumps it so an abandoned continuation is a no-op even when NO new session starts before the shared `channeling_timer` fires (exit-without-re-entry). A re-entry bumps it again for the fresh session.
 
 #### `is_channeling`
 - **Scope:** agent

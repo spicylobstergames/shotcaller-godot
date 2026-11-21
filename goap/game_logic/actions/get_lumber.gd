@@ -14,8 +14,9 @@
 #             Collisions); then starts the cut channel once (cutting latch)
 #             and completes when has_wood is set -- this is a coroutine (await),
 #             so the fact is NOT set synchronously.
-# exit      : cutting = false (the cut session token becomes stale, so a
-#             pending cut continuation no longer pays off).
+# exit      : cutting = false AND cutting_id bumped -- the cancelled
+#             session's token is invalidated, so a pending cut continuation
+#             becomes a no-op even with no re-entry before the timer fires.
 # Traps     : the arrival facts are the interface (Collisions ->
 #             ArriveAtDestination.advance_path). closest_tree is set at spawn.
 # See       : docs/ai/world-state.md (has_wood, collected_wood).
@@ -74,10 +75,13 @@ func enter(agent):
 
 
 func exit(agent):
-	# A goal switch mid-cut cancels the session: the next cut starts a fresh
-	# one with a new id, so the pending continuation becomes a no-op even if
-	# it resumes later.
+	# Cancel the session AND invalidate its token: bumping cutting_id here
+	# turns any pending continuation into a no-op even if NO new cut session
+	# starts before the shared timer fires (exit without re-entry). A bare
+	# "cutting = false" left the abandoned session id current, so the old
+	# coroutine still paid has_wood after being cancelled.
 	agent.set_state("cutting", false)
+	agent.set_state("cutting_id", int(agent.get_state("cutting_id", 0)) + 1)
 
 
 func _cut(agent, session: int) -> void:
