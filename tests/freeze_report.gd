@@ -89,13 +89,18 @@ func _report(unit, pos: Vector2) -> void:
 	]:
 		facts[key] = agent.get_state(key)
 	var speed: float = Modifiers.get_value(unit, "speed") if unit.agent != null else 0.0
+	# Tail of the agent's execution history (goal/plan/action/arrival/movement
+	# sub-events) — the "is this unit doing the expected sequence" view.
+	var recent: Array = []
+	if unit.agent != null and unit.agent.has_method("history_summary"):
+		recent = unit.agent.history_summary(8)
 	var near := 0
 	if "collision_radius" in unit:
 		near = Collisions.get_units_in_radius(
 			unit.global_position + unit.collision_position,
 			maxf(unit.collision_radius * 2.0, 8.0)
 		).size()
-	print("FREEZE_REPORT unit=%s type=%s team=%s pos=(%.0f,%.0f) state=%s goal=%s action=%s plan=%s target=%s destiny=%s path=%d ffp=%s moves=%s speed=%.1f step=%s near=%d facts=%s" % [
+	print("FREEZE_REPORT unit=%s type=%s team=%s pos=(%.0f,%.0f) state=%s goal=%s action=%s plan=%s target=%s destiny=%s path=%d ffp=%s moves=%s speed=%.1f step=%s near=%d recent=%s facts=%s" % [
 		unit.name,
 		unit.type,
 		unit.team,
@@ -113,5 +118,6 @@ func _report(unit, pos: Vector2) -> void:
 		speed,
 		str(unit.current_step),
 		near,
+		str(recent),
 		str(facts),
 	])

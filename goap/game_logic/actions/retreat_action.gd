@@ -9,12 +9,13 @@
 # effects   : {"arrived_at_retreat": true}
 # enter     : is_retreating = true; follows the lane path from waypoint 0 with
 #             a small random jitter.
-# perform   : returns arrived_at_retreat.
-# on_arrive : sets arrived_at_retreat = true.
+# perform   : false until the FINAL arrival (arrived_at_destination latched by
+#             Collisions); then latches arrived_at_retreat exactly once and
+#             completes. Intermediate waypoints only advance the route.
 # exit      : is_retreating = false.
-# Traps     : arrival must come through Collisions -> unit_arrived; Recover no
-#             longer delegates into ArriveAtDestination (wrong arg + double
-#             path advance).
+# Traps     : the arrival facts are the interface (Collisions ->
+#             ArriveAtDestination.advance_path); arrival used to ride the
+#             unit_arrived signal dispatch.
 # =============================================================================
 
 extends "res://goap/goap_system/action_contract.gd"
@@ -33,7 +34,12 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return agent.get_state("arrived_at_retreat", false)
+	if agent.get_state("arrived_at_retreat", false):
+		return true
+	if agent.get_state("arrived_at_destination", false):
+		agent.set_state("arrived_at_retreat", true)
+		return true
+	return false
 
 
 func enter(agent):
@@ -49,11 +55,7 @@ func enter(agent):
 	recover_point.y += (randf() * 2 * half) - half
 	unit.final_destiny = recover_point
 	Goap.get_action("Navigate").follow_path(unit, path)
-	
 
-func on_arrive(agent):
-	agent.set_state("arrived_at_retreat", true)
-	
-	
+
 func exit(agent):
 	agent.set_state("is_retreating", false)

@@ -12,10 +12,12 @@
 #             soon as a route exists.
 # Helpers   : find / find_custom_path / move / cut_path / resume_path / next /
 #             point (full approach incl. target acquisition) / follow_path.
-# Writes    : current_path, current_destiny, final_destiny, has_path, has_destiny.
-# Traps     : has_destiny is set here and NEVER cleared (stale true lets the
-#             planner skip Navigate). move() returns false when no route exists
-#             into a blocked tile -- callers must fall back to Move.move.
+# Writes    : current_path, current_destiny, final_destiny, has_path,
+#             has_destiny, arrived_at_destination.
+# Traps     : has_destiny is set here and cleared by Move.stop / the final
+#             arrival (ArriveAtDestination.advance_path). move() returns false
+#             when no route exists into a blocked tile -- callers must fall
+#             back to Move.move.
 # See       : tests/unit/test_navigation.gd, test_attack_lifecycle.gd.
 # =============================================================================
 
@@ -199,6 +201,14 @@ func follow_path(unit, new_path):
 		unit.agent.set_state("has_path", true)
 		unit.current_destiny = next_point
 		unit.agent.set_state("has_destiny", true)
+		# A fresh route revokes any previous arrival (same contract as
+		# Move.move): arrival facts must read false until the new route's
+		# own FINAL waypoint is reached.
+		unit.agent.set_state("arrived_at_destination", false)
+		# History sub-event (best effort: test doubles may not carry the
+		# record API). Nothing in planning reads the history.
+		if unit.agent != null and unit.agent.has_method("record_event"):
+			unit.agent.record_event("navigate_request", next_point)
 		# Hand the waypoint to the movement driver. Only state == "move"
 		# units are stepped (Collisions.physics_process), and Move.move is
 		# the one place that sets it — plans without a Move action (e.g. the

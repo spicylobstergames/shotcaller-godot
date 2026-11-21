@@ -14,7 +14,8 @@
 #   - a stale success fact makes the planner return an empty plan and the
 #     agent holds a goal with no actions (see EnemyDefeated/FriendsSafe).
 #   - the plan is never revalidated mid-execution; only a goal change replans.
-#   - unit_arrived is emitted by Collisions and wired to on_arrive exactly once.
+#   - arrival is NOT signal-dispatched: Collisions latches the arrival facts
+#     (ArriveAtDestination.advance_path) and actions read them in perform().
 # See: ARCHITECTURE.md "GOAP (the AI core)"; docs/ai/architecture.md.
 # =============================================================================
 
@@ -44,6 +45,18 @@ var _state: Dictionary = {}
 var attacked_timer := 2
 var frames_til_next_process:int
 
+# Execution history: a bounded per-agent log of goal/plan/action transitions
+# and the movement/service sub-events actions trigger. Purpose (PR #239
+# feedback): verify that units perform the expected actions IN SEQUENCE, e.g.
+#   EnemyDefeated: ChooseTarget > PursueEnemy > navigate > move > AttackEnemy
+#                  > (MeleeAttack | RangeAttack)
+# It is diagnostics only: nothing in planning or execution reads it. Bounded
+# at HISTORY_LIMIT entries (oldest dropped) so a long match cannot grow it.
+# Cleared on reset() (unit recycle). Inspect via get_history()/
+# history_summary(); freeze_report prints the tail.
+const HISTORY_LIMIT := 64
+var history: Array = []
+
 
 func _ready():
 	_unit = get_parent()
@@ -65,11 +78,11 @@ func _ready():
 	_unit.unit_died.connect(on_died)
 	_unit.unit_animation_ended.connect(on_animation_end)
 	_unit.unit_was_attacked.connect(was_attacked)
-	# Arrival is emitted by Collisions (via Unit.on_arrive) once the unit
-	# reaches its current_destiny. Connect exactly once: a second connection
-	# would double-fire every action/goal on_arrive hook.
-	_unit.unit_arrived.connect(on_arrive)
-	
+	# NOTE: arrival is NOT wired here. It is a GOAP state transition detected
+	# by Collisions (ArriveAtDestination.advance_path latches the facts) and
+	# observed by actions through perform() (PR #239 feedback). unit_arrived
+	# stays declared/emitted on Unit but nothing connects it.
+
 	WorldState.second_elapsed.connect(on_every_second)
 	
 	reset()
@@ -114,6 +127,29 @@ func erase_state(state_name):
 	_state.erase(state_name)
 
 
+# Appends one event to the execution history (see the history comment near the
+# top of this file). `detail` is free-form: a goal/action name, a plan summary,
+# a destination, etc. Oldest entries are dropped past HISTORY_LIMIT.
+func record_event(kind: String, detail = null) -> void:
+	history.append({"kind": kind, "detail": detail})
+	if history.size() > HISTORY_LIMIT:
+		history.pop_front()
+
+
+func get_history() -> Array:
+	return history.duplicate()
+
+
+# Readable tail for freeze_report/tests: ["goal:EnemyDefeated", "plan:...", ...]
+func history_summary(limit: int = HISTORY_LIMIT) -> Array:
+	var lines: Array = []
+	var start: int = maxi(history.size() - limit, 0)
+	for i in range(start, history.size()):
+		var event = history[i]
+		lines.append("%s:%s" % [event["kind"], event["detail"]])
+	return lines
+
+
 func clear_state():
 	_state.clear()
 
@@ -123,6 +159,9 @@ func reset():
 	var tactic = get_state("tactic", "default")
 	var unit = get_unit()
 	clear_state()
+	# History is per-life: a recycled unit starts a clean log.
+	history.clear()
+	record_event("reset", unit.name if unit else null)
 	set_state("target", null)
 	set_state("is_stunned", false)
 	if lane != null:
@@ -183,10 +222,16 @@ func _replace_plan(goal, plan: Array) -> void:
 	_current_plan_step = 0
 	if previous_goal != goal:
 		goal_changed.emit(goal)
+		record_event("goal", goal.get_class_name() if goal else "NONE")
 		if goal:
 			goal.enter(self)
 	var action = get_current_action()
 	plan_changed.emit(_current_plan)
+	if goal:
+		var plan_names: Array[String] = []
+		for planned_action in plan:
+			plan_names.append(planned_action.get_class_name() if planned_action else "null")
+		record_event("plan", ", ".join(plan_names))
 	action_changed.emit(action)
 	if (goal and action):
 		state_changed.emit(goal.get_class_name() + " " + action.get_class_name())
@@ -195,6 +240,8 @@ func _replace_plan(goal, plan: Array) -> void:
 
 
 func _on_action_changed(action) -> void:
+	if action:
+		record_event("action", action.get_class_name())
 	if action and action.has_method("enter"):
 		action.enter(self)
 
@@ -246,8 +293,12 @@ func _follow_plan(plan, delta):
 	if action == null:
 		return
 	var is_step_complete = action.perform(self, delta)
-		
+
 	if is_step_complete:
+		# Distinguish "ran but never finished" from "finished": diagnosing
+		# actions that repeatedly execute without ever completing is a main
+		# use of the history.
+		record_event("completed", action.get_class_name())
 		if _current_plan_step < plan.size() - 1:
 			if action.has_method("exit"):
 				action.exit(self)
@@ -281,10 +332,12 @@ func on_idle_end():
 
 
 func on_attack_release() -> void:
+	record_event("range_release")
 	Goap.get_action("RangeAttack").projectile_release(_unit)
 
 
 func on_attack_hit() -> void:
+	record_event("melee_hit")
 	Goap.get_action("MeleeAttack").hit(_unit)
 
 
@@ -293,6 +346,7 @@ func on_died(unit) -> void:
 
 
 func on_stun_end():
+	record_event("stun_end")
 	if has_action_function("resume"):
 		get_current_action().resume(_unit)
 	if has_goal_function("resume"):
@@ -311,6 +365,7 @@ func on_death_started():
 
 
 func cancel_player_order():
+	record_event("order_cancelled")
 	clear_plan()
 	erase_state("player_order")
 	set_state("player_order_complete", true)
@@ -320,6 +375,7 @@ func cancel_player_order():
 func was_attacked(attacker, damage):
 	set_state("being_attacked", attacked_timer)
 	set_state("attacker", attacker)
+	record_event("was_attacked", attacker.name if is_instance_valid(attacker) else null)
 	if has_action_function("was_attacked"):
 		get_current_action().was_attacked(self, attacker, damage)
 	if has_goal_function("was_attacked"):
@@ -337,14 +393,6 @@ func on_animation_end():
 	if has_goal_function("on_animation_end"):
 		get_current_goal().on_animation_end(self)
 
-
-func on_arrive():
-	if has_action_function("on_arrive"):
-		get_current_action().on_arrive(self)
-		
-	if has_goal_function("on_arrive"):
-		get_current_goal().on_arrive(self)
-	
 #func clear_orders():
 #	for s in _state:
 #		print(s)

@@ -83,7 +83,7 @@ GOAP actions do **not** reimplement movement or combat. Instead:
 - **`MoveAction`** and **`NavigateAction`** drive the unit's movement system through `Goap.get_action("Move")` / `Goap.get_action("Navigate")` and the `Navigation` autoload. There is **no** `Goap.move` / `Goap.navigation` API.
 - **`AttackEnemy`**, **`MeleeAttack`**, **`RangeAttack`** fire the unit's weapon/attack system.
 - **`OrderAction`** processes player orders.
-- The **agent** connects to unit signals (death, stun, idle, attack, animation, `unit_arrived`) and translates them into state changes that the GOAP planner consumes. Movement arrival itself is detected by `Collisions` (which calls `ArriveAtDestination` and emits `unit_arrived`); `MoveAction`/`NavigateAction` only *request* movement.
+- The **agent** connects to unit signals (death, stun, idle, attack, animation) and translates them into state changes that the GOAP planner consumes. Movement arrival is **not** signal-dispatched: `Collisions` detects it in its single movement loop and calls `ArriveAtDestination.advance_path(unit)`, which latches the arrival facts (`arrived_at_destination`, `has_path`, `has_destiny`); actions drive their arrival effects from `perform()` by reading those facts. `MoveAction`/`NavigateAction` only *request* movement.
 
 **Do not introduce a second implementation of unit movement or combat when an existing game system already provides it.** Reuse the established system through its intended interface.
 
@@ -127,16 +127,20 @@ The planner uses string-keyed dictionaries for preconditions, effects, goals, an
 
 ## Known exceptions
 
-### Arrival is collision-driven
+### Arrival is a GOAP state transition, not a signal
 
 `ArriveAtDestination.is_valid()` hard-returns `false` (activation is disabled;
 pinned by `tests/unit/test_arrive_at_destination.gd`). It is a service/library
 goal, not a selectable one. The real arrival machinery is in
 `collision/collisions.gd`: when a `move` unit reaches `current_destiny`,
-`Collisions` calls `ArriveAtDestination.on_arrive(unit)` to advance the path,
-then `unit.on_arrive()` — which emits `unit_arrived` → `Agent.on_arrive` →
-the current action/goal `on_arrive` hooks. Do not re-enable the goal's
-activation and do not connect `unit_arrived` a second time.
+`Collisions` calls `ArriveAtDestination.advance_path(unit)` — on a waypoint it
+advances the path; on the FINAL arrival it latches `has_path=false`,
+`has_destiny=false`, `arrived_at_destination=true` and stops the unit. Actions
+drive their arrival effects from `perform()` by reading those facts. There is
+**no** `unit_arrived` wiring and **no** per-action `on_arrive` hook (removed in
+the PR #239 feedback rework; pinned by `tests/unit/test_arrival_dispatch.gd`).
+Do not re-enable the goal's activation and do not reintroduce signal-based
+arrival dispatch.
 
 ### The process pump
 
@@ -150,15 +154,19 @@ with `randi_range(0, 6)` to stagger units), so **per-unit goal evaluation is
 (`physics_process`, not `_physics_process`) to distinguish it from Godot
 virtual methods. Do not change this to `_process` or `_physics_process`.
 
-### `has_destiny` and the `null` vs `false` trap
+### `has_destiny` lifecycle
 
 `Move.get_preconditions()` is `{has_destiny: true, is_stunned: false}`.
 `has_destiny` is set by `Navigate.follow_path` when a route is queued and is
-**never cleared**, so after any route the planner can satisfy `Move` without
-`Navigate`. `has_path` is still written by `Navigate`/`ArriveAtDestination`
-but no precondition reads it. A precondition of `false` is not satisfied by an
-unset key (`null != false`), so a fact must be explicitly set to `false` to
-match.
+cleared by `Move.stop` and by the final arrival
+(`ArriveAtDestination.advance_path`), so the planner orders `Navigate` before
+`Move` deterministically. `has_path` is still written by
+`Navigate`/`ArriveAtDestination` but no precondition reads it.
+`arrived_at_destination` is reset by `Move.move`/`Navigate.follow_path` on any
+newly issued movement and latched by the final arrival — plan actions must
+observe THEIR OWN arrival, never a stale one. A precondition of `false` is not
+satisfied by an unset key (`null != false`), so a fact must be explicitly set
+to `false` to match.
 
 ### `agent.set_state("target", v)` is special-cased
 
