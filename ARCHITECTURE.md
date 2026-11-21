@@ -158,9 +158,9 @@ remain declared/emitted on Unit but nothing connects them — like
 `unit_move_ended`. **Do not reintroduce signal-based arrival dispatch.**
 
 **Execution history.** Each agent keeps a bounded (64-entry) log of
-goal/plan/action transitions plus movement/arrival/service sub-events
-(`Agent.record_event`, `get_history()`, `history_summary()`; diagnostics only —
-nothing in planning reads it). `tests/freeze_report.gd` prints the tail for
+goal/plan/action transitions (including explicit `completed:` events) plus
+movement/arrival/service sub-events (`Agent.record_event`, `get_history()`,
+`history_summary()`; diagnostics only — nothing in planning reads it). `tests/freeze_report.gd` prints the tail for
 stuck units.
 
 `state_changed` is declared and emitted with a single combined

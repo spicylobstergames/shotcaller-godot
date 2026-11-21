@@ -135,9 +135,12 @@ func run(harness) -> void:
 	summary = agent.history_summary()
 	harness.check(summary.has("action:Second"),
 		"Advancing a completed step records the next action.")
+	harness.check(summary.has("completed:First"),
+		"A completed action is recorded explicitly (distinct from entering it).")
 	harness.check(
-		summary.find("action:First") < summary.find("action:Second"),
-		"Action records keep execution order."
+		summary.find("action:First") < summary.find("completed:First")
+		and summary.find("completed:First") < summary.find("action:Second"),
+		"History order: enter action -> completed action -> enter next action."
 	)
 
 	# --- plan completion clears the goal and records it ---

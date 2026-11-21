@@ -308,6 +308,53 @@ func run(harness) -> void:
 		agent.get_state("cutting", false) == false,
 		"GetLumber.exit cancels the pending cut."
 	)
+	# Session token: a re-entered cut session gets a NEW id, so an abandoned
+	# coroutine can never mistake the restarted session for its own (the
+	# shared channeling timer is restarted by the new session).
+	var first_session: int = agent.get_state("cutting_id", 0)
+	agent.set_state("arrived_at_destination", true)
+	GetLumber.new().perform(agent, 0.0)  # starts a fresh cut session
+	harness.check(
+		agent.get_state("cutting_id", 0) == first_session + 1,
+		"GetLumber bumps the cut session token per attempt (abandoned continuations become no-ops)."
+	)
+	harness.check(
+		not GetLumber.new()._session_is_current(agent, first_session),
+		"The ABANDONED session's token is no longer current (its continuation would not pay)."
+	)
+	harness.check(
+		GetLumber.new()._session_is_current(agent, first_session + 1),
+		"The CURRENT session's token still pays."
+	)
+	GetLumber.new().exit(agent)
+
+	# --- Preempted arrival (goal switch before the agent turn) ---
+	# The arrival fact latches during the collision tick; a goal change on
+	# the agent's next turn can preempt the action before perform() consumes
+	# it. The invariant: the arrival is RE-EARNED, never reused stale —
+	# every migrated action re-issues movement in enter(), and movement
+	# revokes the latch.
+	agent.set_state("has_wood", true)
+	agent.set_state("returning_wood", false)
+	agent.set_state("arrived_at_destination", false)
+	ReturnLumber.new().enter(agent)  # unit travels toward deliver_position
+	agent.set_state("arrived_at_destination", true)  # collision latches
+	# ...but a higher-priority goal preempts before perform runs:
+	ReturnLumber.new().exit(agent)
+	harness.check(
+		not agent.get_state("returning_wood", false),
+		"A preempted arrival is not delivered."
+	)
+	# The goal is re-selected later: re-entering revokes the stale latch.
+	ReturnLumber.new().enter(agent)
+	harness.check(
+		agent.get_state("arrived_at_destination", true) == false,
+		"Re-entering after a preemption revokes the stale arrival (it is re-earned by the new route)."
+	)
+	harness.check(
+		not ReturnLumber.new().perform(agent, 0.0),
+		"The re-entered action cannot deliver until the NEW arrival latches."
+	)
 
 	# --- Order: the conquer follow-up waits for the FINAL arrival ---
 	agent.set_state("after_arive", "conquer")

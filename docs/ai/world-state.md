@@ -170,8 +170,16 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Type:** bool
 - **Default:** false
 - **Producer:** `GetLumber.perform()` (latched when the cut channel starts on the final arrival), cleared by `GetLumber.exit()`
-- **Consumer:** `GetLumber._cut()` (the channel-await continuation only pays `has_wood` while `cutting` is still true)
+- **Consumer:** `GetLumber.perform()` (one cut session per latch)
 - **Lifecycle:** True while the lumberjack's cut channel is running; cleared by `exit()` (goal switch) or `reset()`.
+
+#### `cutting_id`
+- **Scope:** agent
+- **Type:** int (session token)
+- **Default:** 0
+- **Producer:** `GetLumber.perform()` (increments per cut session)
+- **Consumer:** `GetLumber._cut()` (the channel-await continuation pays `has_wood` only if its OWN session id is still current)
+- **Lifecycle:** Monotonic per agent; a goal switch + re-entry bumps it, which turns any abandoned coroutine's continuation into a no-op even though the shared `channeling_timer` gets restarted by the new session.
 
 #### `is_channeling`
 - **Scope:** agent

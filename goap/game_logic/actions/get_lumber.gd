@@ -14,7 +14,8 @@
 #             Collisions); then starts the cut channel once (cutting latch)
 #             and completes when has_wood is set -- this is a coroutine (await),
 #             so the fact is NOT set synchronously.
-# exit      : cutting = false (a pending cut continuation no longer pays off).
+# exit      : cutting = false (the cut session token becomes stale, so a
+#             pending cut continuation no longer pays off).
 # Traps     : the arrival facts are the interface (Collisions ->
 #             ArriveAtDestination.advance_path). closest_tree is set at spawn.
 # See       : docs/ai/world-state.md (has_wood, collected_wood).
@@ -56,7 +57,13 @@ func perform(agent, _delta) -> bool:
 		return false
 	if not agent.get_state("cutting", false):
 		agent.set_state("cutting", true)
-		_cut(agent)  # fire-and-forget coroutine (see _cut)
+		# Session token: each cut attempt gets a new id, and the coroutine
+		# only pays has_wood while its OWN session is still current. A plain
+		# boolean would let an abandoned coroutine mistake a restarted
+		# session for its own (review of the arrival rework).
+		var session = int(agent.get_state("cutting_id", 0)) + 1
+		agent.set_state("cutting_id", session)
+		_cut(agent, session)  # fire-and-forget coroutine (see _cut)
 	return false
 
 
@@ -67,12 +74,13 @@ func enter(agent):
 
 
 func exit(agent):
-	# A goal switch mid-cut must cancel the pending continuation: the await
-	# below only pays has_wood while `cutting` is still true.
+	# A goal switch mid-cut cancels the session: the next cut starts a fresh
+	# one with a new id, so the pending continuation becomes a no-op even if
+	# it resumes later.
 	agent.set_state("cutting", false)
 
 
-func _cut(agent) -> void:
+func _cut(agent, session: int) -> void:
 	var unit = agent.get_unit()
 	# fake cut animation
 	unit.set_state("attack")
@@ -82,5 +90,13 @@ func _cut(agent) -> void:
 	unit.channeling_timer.start()
 	# cut animation end
 	await unit.channeling_timer.timeout
-	if agent.get_state("cutting", false):
+	# Pay only if THIS session is still the current one (exit + re-enter
+	# bumps the id; the shared timer may be restarted by the new session).
+	if _session_is_current(agent, session):
 		agent.set_state("has_wood", true)
+
+
+# The continuation's guard, extracted so tests can pin the token semantics
+# without waiting out the cut timer.
+func _session_is_current(agent, session: int) -> bool:
+	return agent.get_state("cutting_id", 0) == session

@@ -265,7 +265,7 @@ removed `Agent.on_arrive` dispatch), `unit_move_ended`, `unit_stuned`,
 `hud.update_state(text)` receives it as its one argument.
 
 **Execution history.** Each agent keeps a bounded (64-entry) log of
-goal/plan/action transitions plus movement/arrival/service sub-events
+goal/plan/action transitions (including explicit `completed:` events) plus movement/arrival/service sub-events
 (`Agent.record_event` / `get_history()` / `history_summary()`). It is
 diagnostics only — nothing in planning reads it — and `tests/freeze_report.gd`
 prints the tail for stuck units. Expected plan sequences per goal are listed

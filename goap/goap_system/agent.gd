@@ -293,8 +293,12 @@ func _follow_plan(plan, delta):
 	if action == null:
 		return
 	var is_step_complete = action.perform(self, delta)
-		
+
 	if is_step_complete:
+		# Distinguish "ran but never finished" from "finished": diagnosing
+		# actions that repeatedly execute without ever completing is a main
+		# use of the history.
+		record_event("completed", action.get_class_name())
 		if _current_plan_step < plan.size() - 1:
 			if action.has_method("exit"):
 				action.exit(self)
