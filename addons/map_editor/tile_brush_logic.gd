@@ -122,9 +122,11 @@ static func block_options_for(cell_size: Vector2i, map_tile_px: int) -> Array[in
 	return options
 
 
-# A preview icon for a tile: the atlas region resized (aspect kept) to fit
-# icon_px, for the dock's tile picker. null when the tile can't be read.
-static func tile_icon(tile_set: TileSet, source_id: int, atlas_coords: Vector2i, icon_px: int = 24) -> Texture2D:
+# A preview icon for a tile: the atlas region scaled (aspect kept, nearest-
+# neighbor so pixel art stays crisp) to fit icon_px — UP or DOWN, since an
+# 8px ground cell is invisible at native size. The dock uses 96 (4x the old
+# 24px) for easy reading. null when the tile can't be read.
+static func tile_icon(tile_set: TileSet, source_id: int, atlas_coords: Vector2i, icon_px: int = 96) -> Texture2D:
 	if tile_set == null:
 		return null
 	var source = tile_set.get_source(source_id)
@@ -143,8 +145,7 @@ static func tile_icon(tile_set: TileSet, source_id: int, atlas_coords: Vector2i,
 		return null
 	var sub: Image = image.get_region(region)
 	var scale := minf(float(icon_px) / region.size.x, float(icon_px) / region.size.y)
-	if scale < 1.0:
-		sub.resize(maxi(1, int(region.size.x * scale)), maxi(1, int(region.size.y * scale)), Image.INTERPOLATE_NEAREST)
+	sub.resize(maxi(1, int(region.size.x * scale)), maxi(1, int(region.size.y * scale)), Image.INTERPOLATE_NEAREST)
 	return ImageTexture.create_from_image(sub)
 
 

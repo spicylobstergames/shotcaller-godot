@@ -249,15 +249,30 @@ func _test_tile_icon(harness) -> void:
 	image.fill_rect(Rect2i(0, 0, 64, 64), Color.RED)
 	var texture := ImageTexture.create_from_image(image)
 	source.texture = texture
+	source.texture_region_size = Vector2i(64, 64)
 	source.create_tile(Vector2i(0, 0))
 	ts.add_source(source, 0)
 
-	var icon := TileBrush.tile_icon(ts, 0, Vector2i(0, 0), 24)
+	var icon := TileBrush.tile_icon(ts, 0, Vector2i(0, 0))
 	harness.check(icon != null,
 			"a readable tile yields a preview icon")
 	if icon != null:
-		harness.check(icon.get_width() <= 24 and icon.get_height() <= 24,
-				"the preview icon is downscaled to fit the picker")
+		harness.check(icon.get_width() == 96 and icon.get_height() == 96,
+				"a 64px tile is upscaled 4x to a 96x96 icon (nearest-neighbor)")
+
+	# An 8px ground cell must upscale too — it was invisible at native size.
+	var ts_tiny := TileSet.new()
+	ts_tiny.tile_size = Vector2i(8, 8)
+	var tiny_source := TileSetAtlasSource.new()
+	var tiny_image := Image.create_empty(8, 8, false, Image.FORMAT_RGBA8)
+	tiny_image.fill_rect(Rect2i(0, 0, 8, 8), Color.BLUE)
+	tiny_source.texture = ImageTexture.create_from_image(tiny_image)
+	tiny_source.texture_region_size = Vector2i(8, 8)
+	tiny_source.create_tile(Vector2i(0, 0))
+	ts_tiny.add_source(tiny_source, 0)
+	var tiny_icon := TileBrush.tile_icon(ts_tiny, 0, Vector2i(0, 0))
+	harness.check(tiny_icon != null and tiny_icon.get_width() == 96,
+			"an 8px ground cell upscales to the 96px icon box")
 
 	harness.check_equal(TileBrush.tile_icon(ts, 5, Vector2i(0, 0)), null,
 			"a missing source yields no icon")
@@ -396,6 +411,9 @@ func _tileset_with_tiles(cell_px: int, tile_count: int) -> TileSet:
 	var texture := PlaceholderTexture2D.new()
 	texture.size = Vector2i(cell_px, cell_px)
 	source.texture = texture
+	# The region size defaults to 16x16; real atlas sources declare their own,
+	# and the icon math reads it — so tests must declare it too.
+	source.texture_region_size = Vector2i(cell_px, cell_px)
 	for i in tile_count:
 		source.create_tile(Vector2i(i, 0))
 	ts.add_source(source, 0)
