@@ -10,13 +10,30 @@ extends RefCounted
 #
 # Coordinate spaces:
 #   - clicks from _forward_canvas_gui_input arrive in the 2D editor's
-#     VIEWPORT (screen) space; the plugin converts them to world coordinates
-#     via the viewport's canvas_transform.affine_inverse() before calling
-#     these helpers. Lane points are LOCAL to their Line2D.
+#     VIEWPORT (screen) space; the plugin converts them to lane-local
+#     coordinates with viewport_to_lane_xform() before calling these
+#     helpers. Lane points are LOCAL to their Line2D.
+#     Godot 4.7: the editor camera (pan/zoom) lives in the scene SubViewport's
+#     global_canvas_transform (CanvasItemEditor pushes its transform there via
+#     EditorNode::get_scene_root()->set_global_canvas_transform()), while the
+#     plain canvas_transform stays IDENTITY — so
+#     CanvasItem.get_global_transform_with_canvas() (canvas_transform *
+#     global_transform) never sees pan/zoom. That was the "points land near
+#     the origin / overlay glued to the window" bug. Viewport's
+#     get_global_canvas_transform() IS ClassDB-exposed, so the plugin passes
+#     it in and this helper stays editor-free and unit-testable.
 #   - snap to base_map's tile grid so lanes line up with painted tiles.
 # =============================================================================
 
 const DEFAULT_GRID := 64
+
+
+# The transform from lane-local space to the editor viewport (screen) space:
+# editor camera * lane global transform. viewport_canvas_xform is the edited
+# node's Viewport.get_global_canvas_transform() — the 2D editor's pan/zoom in
+# Godot 4.7 (see the coordinate-spaces note above).
+static func viewport_to_lane_xform(lane: Line2D, viewport_canvas_xform: Transform2D) -> Transform2D:
+	return viewport_canvas_xform * lane.get_global_transform()
 
 
 # The lane a click should edit: the selected node if it is a Line2D under the

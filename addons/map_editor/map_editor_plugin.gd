@@ -127,13 +127,17 @@ func _add_lane_point(viewport_pos: Vector2) -> void:
 		push_warning("Map Editor: no lane to draw on — select a lane or use 'New lane'.")
 		return
 
-	# Clicks arrive in the 2D editor's VIEWPORT space. The built-in Line2D/
-	# polygon editors convert with CanvasItemEditor.get_canvas_transform()
-	# (internal C++); the GDScript-accessible equivalent is the item's own
-	# get_global_transform_with_canvas() — item-local -> viewport space via
-	# the same render pipeline, so it always tracks pan/zoom. Its inverse
-	# yields lane-local coordinates directly (Line2D points are local).
-	var xform := lane.get_global_transform_with_canvas()
+	# Clicks arrive in the 2D editor's VIEWPORT space. In Godot 4.7 the editor
+	# camera (pan/zoom) is the scene SubViewport's global_canvas_transform
+	# (CanvasItemEditor pushes its transform there via
+	# EditorNode::get_scene_root()->set_global_canvas_transform()); the plain
+	# canvas_transform stays identity, which is why the earlier
+	# get_global_transform_with_canvas() attempt was near-identity too.
+	# viewport_to_lane_xform() composes that camera with the lane's global
+	# transform, so its inverse yields lane-local coordinates directly
+	# (Line2D points are local) and always tracks pan/zoom.
+	var xform := LaneLogic.viewport_to_lane_xform(
+			lane, lane.get_viewport().get_global_canvas_transform())
 	var local := LaneLogic.snap_point(xform.affine_inverse() * viewport_pos)
 	var index := LaneLogic.insertion_index(lane, local)
 
@@ -160,9 +164,11 @@ func _forward_canvas_draw_over_viewport(viewport_control: Control) -> void:
 		return
 
 	# Show the user which lane is live and where its points are. Same
-	# item->viewport transform as the input path, so overlay and clicks agree
-	# and the overlay tracks the world when panning/zooming.
-	var xform := lane.get_global_transform_with_canvas()
+	# viewport->lane transform as the input path (see _add_lane_point), so
+	# overlay and clicks agree and the overlay tracks the world when
+	# panning/zooming instead of gluing to the editor window.
+	var xform := LaneLogic.viewport_to_lane_xform(
+			lane, lane.get_viewport().get_global_canvas_transform())
 	var points := PackedVector2Array()
 	for i in lane.get_point_count():
 		points.append(xform * lane.get_point_position(i))
