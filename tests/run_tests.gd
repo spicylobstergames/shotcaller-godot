@@ -39,6 +39,7 @@ const WorldStateTimersTests = preload("res://tests/unit/test_world_state_timers.
 const MapEditorTests = preload("res://tests/unit/test_map_editor.gd")
 const LaneLogicTests = preload("res://tests/unit/test_lane_logic.gd")
 const BuildingLogicTests = preload("res://tests/unit/test_building_logic.gd")
+const TileBrushLogicTests = preload("res://tests/unit/test_tile_brush_logic.gd")
 const MapLoaderTests = preload("res://tests/unit/test_map_loader.gd")
 const GoapIndex = preload("res://tools/goap_index.gd")
 
@@ -94,6 +95,7 @@ func _ready() -> void:
 	_run_suite("MapEditor", MapEditorTests)
 	_run_suite("LaneLogic", LaneLogicTests)
 	_run_suite("BuildingLogic", BuildingLogicTests)
+	_run_suite("TileBrushLogic", TileBrushLogicTests)
 	_run_suite("MapLoader", MapLoaderTests)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line

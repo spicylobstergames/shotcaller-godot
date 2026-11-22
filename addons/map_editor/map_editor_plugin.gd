@@ -9,10 +9,15 @@ extends EditorPlugin
 const DockScript := preload("res://addons/map_editor/editor_dock.gd")
 const LaneLogic := preload("res://addons/map_editor/lane_logic.gd")
 const BuildingLogic := preload("res://addons/map_editor/building_logic.gd")
+const TileBrush := preload("res://addons/map_editor/tile_brush_logic.gd")
 
 var _dock: Control
 var _lane_mode := false
 var _placement_mode := false
+var _tile_mode := false
+# Active paint stroke: {"layer": TileMapLayer, "erase": bool,
+# "undo": {"x:y": old cell state}} — one undo_redo action per stroke.
+var _stroke: Dictionary = {}
 
 
 func _enter_tree() -> void:
@@ -21,6 +26,7 @@ func _enter_tree() -> void:
 	_dock.lane_mode_requested.connect(_set_lane_mode)
 	_dock.new_lane_requested.connect(_add_lane)
 	_dock.building_mode_requested.connect(_set_building_mode)
+	_dock.tile_mode_requested.connect(_set_tile_mode)
 	add_control_to_dock(DOCK_SLOT_LEFT_UR, _dock)
 
 
@@ -67,6 +73,10 @@ func _set_lane_mode(active: bool) -> void:
 	if active and _placement_mode:
 		_placement_mode = false  # modes are mutually exclusive
 		_dock.set_building_mode_active(false)
+	if active and _tile_mode:
+		_tile_mode = false
+		_commit_stroke()
+		_dock.set_tile_mode_active(false)
 	if _dock != null:
 		_dock.set_lane_mode_active(active)  # keep the toggle in sync on Escape
 	if active:
@@ -98,6 +108,10 @@ func _set_building_mode(active: bool) -> void:
 	if active and _lane_mode:
 		_lane_mode = false  # modes are mutually exclusive
 		_dock.set_lane_mode_active(false)
+	if active and _tile_mode:
+		_tile_mode = false
+		_commit_stroke()
+		_dock.set_tile_mode_active(false)
 	if _dock != null:
 		_dock.set_building_mode_active(active)  # keep the toggle in sync on Escape
 	if active:
@@ -141,7 +155,7 @@ func _add_lane() -> void:
 
 
 func _forward_canvas_gui_input(event: InputEvent) -> bool:
-	if not (_lane_mode or _placement_mode):
+	if not (_lane_mode or _placement_mode or _tile_mode):
 		return false
 
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
@@ -149,15 +163,36 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 			_set_lane_mode(false)
 		if _placement_mode:
 			_set_building_mode(false)
+		if _tile_mode:
+			_set_tile_mode(false)
 		return true
 
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		if _lane_mode:
+	if event is InputEventMouseButton:
+		if _lane_mode and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			_add_lane_point(event.position)
 			return true
-		if _placement_mode:
+		if _placement_mode and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			_place_building(event.position)
 			return true
+		if _tile_mode:
+			# Left button paints, right button erases; both drag.
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				if event.pressed:
+					_paint_at(event.position, false)
+				else:
+					_commit_stroke()
+				return true
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				if event.pressed:
+					_paint_at(event.position, true)
+				else:
+					_commit_stroke()
+				return true
+		return false
+
+	if event is InputEventMouseMotion and _tile_mode and not _stroke.is_empty():
+		_paint_at(event.position, _stroke.erase)
+		return true
 
 	return false
 
@@ -262,6 +297,115 @@ func _place_building(viewport_pos: Vector2) -> void:
 		building.name, scene_path.get_file(), local, parent_team, building.team, building.subtype, viewport_pos,
 	])
 	update_overlays()
+
+
+# ---------------------------------------------------------------------------
+# Tile painting mode (Phase 4): ground/walls/trees brushes; left-click paints
+# the picked tile, right-click erases; both drag; one undo step per stroke.
+# ---------------------------------------------------------------------------
+
+func _set_tile_mode(active: bool) -> void:
+	if _tile_mode == active:
+		return
+	_tile_mode = active
+	if active and _lane_mode:
+		_lane_mode = false  # modes are mutually exclusive
+		_dock.set_lane_mode_active(false)
+	if active and _placement_mode:
+		_placement_mode = false
+		_dock.set_building_mode_active(false)
+	if not active:
+		_commit_stroke()
+	if _dock != null:
+		_dock.set_tile_mode_active(active)  # keep the toggle in sync on Escape
+	if active:
+		# Same _handles bootstrap as the other modes.
+		var map_root := _map_root()
+		if map_root != null:
+			EditorInterface.edit_node(map_root)
+		_dock.refresh_tile_picker()
+		var brush: String = _dock.selected_brush()
+		var layer := TileBrush.layer_for_brush(map_root, brush)
+		if layer == null:
+			_dock.log_line("Paint-tiles ON, but there is no '%s' layer in this scene." % TileBrush.BRUSHES.get(brush, brush))
+		else:
+			var guard := TileBrush.walls_guard_message(map_root, brush, layer)
+			if guard != "":
+				_dock.log_line(guard)
+			else:
+				_dock.log_line("Paint-tiles ON: '%s' brush — left-click paints, right-click erases, drag works, Escape exits." % brush)
+	else:
+		_dock.log_line("Paint-tiles OFF.")
+	update_overlays()
+
+
+func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
+	var map_root := _map_root()
+	if map_root == null:
+		return
+	var brush: String = _dock.selected_brush()
+	var layer := TileBrush.layer_for_brush(map_root, brush)
+	if layer == null:
+		return
+	var cell_size := TileBrush.cell_size_of(layer)
+	if cell_size == Vector2i.ZERO:
+		_dock.log_line("The '%s' layer has no TileSet — nothing to paint." % brush)
+		return
+	if _stroke.is_empty():
+		if brush == "walls":
+			var guard := TileBrush.walls_guard_message(map_root, brush, layer)
+			if guard != "":
+				_dock.log_line(guard)
+				return
+		# One undo_redo action per stroke: every cell touched records its
+		# previous paint state (see _paint_cell_in_stroke).
+		get_undo_redo().create_action("Erase tiles" if erase else "Paint tiles")
+		_stroke = {"layer": layer, "erase": erase, "undo": {}}
+
+	var camera := map_root.get_viewport().get_global_canvas_transform()
+	var local := TileBrush.viewport_to_local(layer, viewport_pos, camera)
+	var cells := TileBrush.paint_cells_for_local(layer, local, int(map_root.tile_size))
+	var tile: Dictionary = {} if erase else _dock.selected_tile()
+	var source_id: int = -1 if erase else tile.get("source_id", -1)
+	var atlas: Vector2i = Vector2i(-1, -1) if erase else tile.get("atlas_coords", Vector2i(-1, -1))
+	var mirror_size := TileBrush.mirror_size_for(layer)
+
+	var undo: Dictionary = _stroke.undo
+	for coords in cells:
+		_paint_cell_in_stroke(layer, coords, undo, erase, source_id, atlas)
+		var mirrored := TileBrush.mirrored_cell(coords, cell_size, mirror_size)
+		if mirrored != coords:
+			_paint_cell_in_stroke(layer, mirrored, undo, erase, source_id, atlas)
+	update_overlays()
+
+
+# Record the cell's pre-stroke state once, queue its do/undo methods into the
+# stroke's action, and apply it immediately so the canvas updates live.
+func _paint_cell_in_stroke(layer: TileMapLayer, coords: Vector2i, undo: Dictionary,
+		erase: bool, source_id: int, atlas: Vector2i) -> void:
+	var key := "%d:%d" % [coords.x, coords.y]
+	if undo.has(key):
+		return  # already handled this stroke; keep its recorded pre-state
+	undo[key] = TileBrush.get_cell_state(layer, coords)
+	var er := get_undo_redo()
+	if erase:
+		er.add_do_method(layer, "erase_cell", coords)
+	else:
+		er.add_do_method(layer, "set_cell", coords, source_id, atlas, 0)
+	er.add_undo_method(layer, "restore_cell_state", coords, undo[key])
+	if erase:
+		layer.erase_cell(coords)
+	else:
+		layer.set_cell(coords, source_id, atlas, 0)
+
+
+# Commit the active stroke's undo action (button release, mode switch, or
+# Escape). Safe to call with no stroke.
+func _commit_stroke() -> void:
+	if _stroke.is_empty():
+		return
+	get_undo_redo().commit_action()
+	_stroke = {}
 
 
 func _forward_canvas_draw_over_viewport(viewport_control: Control) -> void:

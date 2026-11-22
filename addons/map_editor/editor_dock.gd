@@ -5,21 +5,25 @@ extends Control
 # Map editor dock (addons/map_editor/editor_dock.gd)
 # =============================================================================
 # Thin UI shell for the map editor plugin: scaffold/validate buttons, the
-# lane-drawing mode toggle, the building-placement palette, and a log. ALL
-# logic lives in map_scaffold.gd, map_validator.gd, lane_logic.gd, and
-# building_logic.gd, which are editor-free and covered by the headless unit
-# suite (tests/unit/test_map_editor.gd, test_lane_logic.gd,
-# test_building_logic.gd, test_map_loader.gd). This file is only ever loaded
-# by the Godot editor (plugin.cfg), never at game runtime.
+# lane-drawing mode toggle, the building-placement palette, the tile-painting
+# brushes, and a log. ALL logic lives in map_scaffold.gd, map_validator.gd,
+# lane_logic.gd, building_logic.gd, and tile_brush_logic.gd, which are
+# editor-free and covered by the headless unit suite (tests/unit/
+# test_map_editor.gd, test_lane_logic.gd, test_building_logic.gd,
+# test_tile_brush_logic.gd, test_map_loader.gd, test_mirror_tiles.gd). This
+# file is only ever loaded by the Godot editor (plugin.cfg), never at game
+# runtime.
 # =============================================================================
 
 signal lane_mode_requested(active: bool)
 signal new_lane_requested
 signal building_mode_requested(active: bool)
+signal tile_mode_requested(active: bool)
 
 const Scaffold := preload("res://addons/map_editor/map_scaffold.gd")
 const Validator := preload("res://addons/map_editor/map_validator.gd")
 const BuildingLogic := preload("res://addons/map_editor/building_logic.gd")
+const TileBrush := preload("res://addons/map_editor/tile_brush_logic.gd")
 
 var _log: RichTextLabel
 var _save_dialog: FileDialog
@@ -27,6 +31,9 @@ var _lane_mode_button: Button
 var _building_mode_button: Button
 var _scene_option: OptionButton
 var _team_option: OptionButton
+var _tile_mode_button: Button
+var _brush_option: OptionButton
+var _tile_option: OptionButton
 
 
 func _ready() -> void:
@@ -86,6 +93,27 @@ func _ready() -> void:
 	_team_option.tooltip_text = "Team metadata for the placement: blue/red (placed under buildings/<team>) or neutral (hosted under an existing team directory; castle/barrack/tower cannot be neutral)"
 	box.add_child(_team_option)
 
+	# --- Tile painting (Phase 4): brush + tile, then click to paint ---
+	_tile_mode_button = Button.new()
+	_tile_mode_button.text = "Paint tiles"
+	_tile_mode_button.toggle_mode = true
+	_tile_mode_button.toggled.connect(func(active: bool): tile_mode_requested.emit(active))
+	_tile_mode_button.tooltip_text = "Left-click paints the selected tile, right-click erases, drag works. Escape exits."
+	box.add_child(_tile_mode_button)
+
+	_brush_option = OptionButton.new()
+	for brush in TileBrush.BRUSHES:
+		_brush_option.add_item(brush.capitalize())
+	_brush_option.select(0)
+	_brush_option.item_selected.connect(func(_index: int): refresh_tile_picker())
+	_brush_option.tooltip_text = "Which contract layer to paint (ground/walls/trees)"
+	box.add_child(_brush_option)
+
+	_tile_option = OptionButton.new()
+	_tile_option.tooltip_text = "Tile to paint — (source, atlas) pairs of the layer's TileSet. For walls, the source picks the team (0 = blue)."
+	box.add_child(_tile_option)
+	refresh_tile_picker()
+
 	_log = RichTextLabel.new()
 	_log.bbcode_enabled = false
 	_log.fit_content = true
@@ -121,6 +149,58 @@ func set_lane_mode_active(active: bool) -> void:
 func set_building_mode_active(active: bool) -> void:
 	if _building_mode_button != null:
 		_building_mode_button.set_pressed_no_signal(active)
+
+
+# Same sync contract as set_lane_mode_active, for the tile-painting toggle.
+func set_tile_mode_active(active: bool) -> void:
+	if _tile_mode_button != null:
+		_tile_mode_button.set_pressed_no_signal(active)
+
+
+# The selected brush key ("ground"/"walls"/"trees").
+func selected_brush() -> String:
+	if _brush_option == null or _brush_option.selected < 0:
+		return ""
+	var keys := TileBrush.BRUSHES.keys()
+	if _brush_option.selected >= keys.size():
+		return ""
+	return keys[_brush_option.selected]
+
+
+# The selected tile as {source_id, atlas_coords} ({} when nothing picked).
+func selected_tile() -> Dictionary:
+	if _tile_option == null or _tile_option.selected < 0:
+		return {}
+	var tiles := _picker_tiles()
+	if _tile_option.selected >= tiles.size():
+		return {}
+	return tiles[_tile_option.selected]
+
+
+# Repopulate the tile picker from the selected brush's layer TileSet. Called
+# by the plugin when tile mode turns on (the open scene may have changed) and
+# by the brush dropdown itself.
+func refresh_tile_picker() -> void:
+	if _tile_option == null:
+		return
+	_tile_option.clear()
+	var tiles := _picker_tiles()
+	if tiles.is_empty():
+		_tile_option.disabled = true
+		_tile_option.add_item("no tiles")
+		return
+	_tile_option.disabled = false
+	for tile in tiles:
+		_tile_option.add_item("s%d %s" % [tile.source_id, tile.atlas_coords])
+	_tile_option.select(0)  # selected defaults to -1 until told otherwise
+
+
+# The tile list behind the picker, re-resolved on demand so the picker
+# survives scene switches without stale indices.
+func _picker_tiles() -> Array[Dictionary]:
+	var map_root := EditorInterface.get_edited_scene_root()
+	var layer := TileBrush.layer_for_brush(map_root, selected_brush())
+	return TileBrush.list_layer_tiles(layer)
 
 
 # res:// path of the building scene the palette has selected ("" when empty).

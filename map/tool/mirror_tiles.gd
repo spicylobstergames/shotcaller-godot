@@ -1,5 +1,25 @@
 @tool
-extends TileMap
+extends TileMapLayer
+
+# =============================================================================
+# Mirror tiles (map/tool/mirror_tiles.gd) — PORTED to TileMapLayer
+# =============================================================================
+# Attach to one of a map's contract TileMapLayers (tiles/ground/Ground,
+# tiles/walls/Walls, tiles/trees/Trees): every edit made through Godot's
+# built-in tile editors is mirrored 180° around the map center on THIS layer,
+# so symmetric maps paint half and get the whole.
+#
+# Ported from the old TileMap (multi-layer, Godot-3-style API) subclass: the
+# runtime contract layers are TileMapLayer nodes (map_validator.gd), and the
+# mirror math now lives in the shared, unit-tested
+# addons/map_editor/tile_brush_logic.gd (mirrored_cell) so the plugin's
+# painting brush and this auto-mirror use the exact same formula.
+#
+# map_size is the mirror area in pixels; when ZERO it falls back to the
+# owning BaseMap's size.
+# =============================================================================
+
+const TileBrushLogic := preload("res://addons/map_editor/tile_brush_logic.gd")
 
 @export var map_size := Vector2.ZERO
 
@@ -33,28 +53,25 @@ func _sync_mirrored_cells() -> void:
 	_is_syncing = true
 	for cell_key in changed_cells:
 		var cell = changed_cells[cell_key]
-		var mirrored_coords = _get_mirrored_coords(cell.coords)
+		var mirrored_coords = _mirrored_coords(cell.coords)
 		if cell.present:
-			set_cell(cell.layer, mirrored_coords, cell.source_id, cell.atlas_coords, cell.alternative_tile)
+			set_cell(mirrored_coords, cell.source_id, cell.atlas_coords, cell.alternative_tile)
 		else:
-			erase_cell(cell.layer, mirrored_coords)
+			erase_cell(mirrored_coords)
 	_is_syncing = false
 	_cell_snapshot = _get_cell_snapshot()
 
 
 func _get_cell_snapshot() -> Dictionary:
 	var snapshot: Dictionary = {}
-	for layer in get_layers_count():
-		for coords in get_used_cells(layer):
-			var cell_key = _cell_key(layer, coords)
-			snapshot[cell_key] = {
-				"layer": layer,
-				"coords": coords,
-				"present": true,
-				"source_id": get_cell_source_id(layer, coords),
-				"atlas_coords": get_cell_atlas_coords(layer, coords),
-				"alternative_tile": get_cell_alternative_tile(layer, coords),
-			}
+	for coords in get_used_cells():
+		snapshot[_cell_key(coords)] = {
+			"coords": coords,
+			"present": true,
+			"source_id": get_cell_source_id(coords),
+			"atlas_coords": get_cell_atlas_coords(coords),
+			"alternative_tile": get_cell_alternative_tile(coords),
+		}
 	return snapshot
 
 
@@ -66,33 +83,27 @@ func _get_changed_cells(current_snapshot: Dictionary) -> Dictionary:
 	for cell_key in _cell_snapshot:
 		if not current_snapshot.has(cell_key):
 			changed_cells[cell_key] = {
-				"layer": _cell_snapshot[cell_key].layer,
 				"coords": _cell_snapshot[cell_key].coords,
 				"present": false,
 			}
 	return changed_cells
 
 
-func _cell_key(layer: int, coords: Vector2i) -> String:
-	return "%d:%d:%d" % [layer, coords.x, coords.y]
+func _cell_key(coords: Vector2i) -> String:
+	return "%d:%d" % [coords.x, coords.y]
 
 
-func _get_mirrored_coords(coords: Vector2i) -> Vector2i:
-	var cell_pos = map_to_local(coords)
-	if tile_set == null:
-		return coords
-	var tile_size = Vector2(tile_set.tile_size)
-	var mirror_size = map_size
-	if mirror_size == Vector2.ZERO:
-		var map := get_owner() as BaseMap
-		if map != null:
-			mirror_size = map.size
-	return local_to_map(Vector2(
-		(mirror_size.x - cell_pos.x) - tile_size.x,
-		(mirror_size.y - cell_pos.y) - tile_size.y
-	))
+func _mirrored_coords(coords: Vector2i) -> Vector2i:
+	return TileBrushLogic.mirrored_cell(coords, TileBrushLogic.cell_size_of(self), _mirror_size_px())
 
 
-func set_mirrored_cell(layer: int, coords: Vector2i, source_id: int = -1, atlas_coords: Vector2i = Vector2i(-1, -1), alternative_tile: int = 0) -> void:
-	super.set_cell(layer, coords, source_id, atlas_coords, alternative_tile)
-	super.set_cell(layer, _get_mirrored_coords(coords), source_id, atlas_coords, alternative_tile)
+func _mirror_size_px() -> Vector2:
+	return TileBrushLogic.mirror_size_for(self)
+
+
+# Paint a cell and its mirrored twin in one call.
+func set_mirrored_cell(coords: Vector2i, source_id: int = -1, atlas_coords: Vector2i = Vector2i(-1, -1), alternative_tile: int = 0) -> void:
+	set_cell(coords, source_id, atlas_coords, alternative_tile)
+	var mirrored := _mirrored_coords(coords)
+	if mirrored != coords:
+		set_cell(mirrored, source_id, atlas_coords, alternative_tile)
