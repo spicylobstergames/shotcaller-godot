@@ -5,22 +5,28 @@ extends Control
 # Map editor dock (addons/map_editor/editor_dock.gd)
 # =============================================================================
 # Thin UI shell for the map editor plugin: scaffold/validate buttons, the
-# lane-drawing mode toggle, and a log. ALL logic lives in map_scaffold.gd,
-# map_validator.gd, and lane_logic.gd, which are editor-free and covered by
-# the headless unit suite (tests/unit/test_map_editor.gd,
-# test_lane_logic.gd, test_map_loader.gd). This file is only ever loaded by
-# the Godot editor (plugin.cfg), never at game runtime.
+# lane-drawing mode toggle, the building-placement palette, and a log. ALL
+# logic lives in map_scaffold.gd, map_validator.gd, lane_logic.gd, and
+# building_logic.gd, which are editor-free and covered by the headless unit
+# suite (tests/unit/test_map_editor.gd, test_lane_logic.gd,
+# test_building_logic.gd, test_map_loader.gd). This file is only ever loaded
+# by the Godot editor (plugin.cfg), never at game runtime.
 # =============================================================================
 
 signal lane_mode_requested(active: bool)
 signal new_lane_requested
+signal building_mode_requested(active: bool)
 
 const Scaffold := preload("res://addons/map_editor/map_scaffold.gd")
 const Validator := preload("res://addons/map_editor/map_validator.gd")
+const BuildingLogic := preload("res://addons/map_editor/building_logic.gd")
 
 var _log: RichTextLabel
 var _save_dialog: FileDialog
 var _lane_mode_button: Button
+var _building_mode_button: Button
+var _scene_option: OptionButton
+var _team_option: OptionButton
 
 
 func _ready() -> void:
@@ -52,6 +58,31 @@ func _ready() -> void:
 	new_lane_button.pressed.connect(func(): new_lane_requested.emit())
 	box.add_child(new_lane_button)
 
+	# --- Building placement (Phase 3): palette + team, then click to place ---
+	_building_mode_button = Button.new()
+	_building_mode_button.text = "Place buildings"
+	_building_mode_button.toggle_mode = true
+	_building_mode_button.toggled.connect(func(active: bool): building_mode_requested.emit(active))
+	_building_mode_button.tooltip_text = "Left-click on the map to place the selected building under the selected team. Escape exits."
+	box.add_child(_building_mode_button)
+
+	_scene_option = OptionButton.new()
+	var scenes := BuildingLogic.list_building_scenes()
+	if scenes.is_empty():
+		_scene_option.disabled = true
+		_scene_option.text = "no building scenes"
+	else:
+		for scene_path in scenes:
+			_scene_option.add_item(BuildingLogic.building_base_name(scene_path))
+	_scene_option.tooltip_text = "Building scene to place (unit/buildings/*.tscn)"
+	box.add_child(_scene_option)
+
+	_team_option = OptionButton.new()
+	for team in BuildingLogic.TEAM_DIRECTORIES:
+		_team_option.add_item(team)
+	_team_option.tooltip_text = "Team directory the building is placed under (neutrals still get team = 'neutral')"
+	box.add_child(_team_option)
+
 	_log = RichTextLabel.new()
 	_log.bbcode_enabled = false
 	_log.fit_content = true
@@ -81,6 +112,29 @@ func _exit_tree() -> void:
 func set_lane_mode_active(active: bool) -> void:
 	if _lane_mode_button != null:
 		_lane_mode_button.set_pressed_no_signal(active)
+
+
+# Same sync contract as set_lane_mode_active, for the placement toggle.
+func set_building_mode_active(active: bool) -> void:
+	if _building_mode_button != null:
+		_building_mode_button.set_pressed_no_signal(active)
+
+
+# res:// path of the building scene the palette has selected ("" when empty).
+func selected_building_scene() -> String:
+	if _scene_option == null or _scene_option.selected < 0:
+		return ""
+	var scenes := BuildingLogic.list_building_scenes()
+	if _scene_option.selected >= scenes.size():
+		return ""
+	return scenes[_scene_option.selected]
+
+
+# Team directory placements attach to ("blue" / "red").
+func selected_team() -> String:
+	if _team_option == null or _team_option.selected < 0:
+		return ""
+	return BuildingLogic.TEAM_DIRECTORIES[_team_option.selected]
 
 
 func _on_new_map_pressed() -> void:

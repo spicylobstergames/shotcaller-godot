@@ -138,7 +138,7 @@ func _test_viewport_to_lane_xform(harness) -> void:
 	# 0.5x zoom.
 	var camera := Transform2D(Vector2(0.5, 0.0), Vector2(0.0, 0.5), Vector2(1024, 512))
 
-	var xform := LaneLogic.viewport_to_lane_xform(lane, camera)
+	var xform := LaneLogic.viewport_to_node_xform(lane, camera)
 
 	# A click ON the lane's origin must come back as local (0, 0). With the
 	# broken near-identity conversion this snapped to (768, 384) instead.
@@ -152,7 +152,7 @@ func _test_viewport_to_lane_xform(harness) -> void:
 	lane.scale = Vector2(2, 2)
 	var lane_local := Vector2(64, 0)
 	var click := camera * (Vector2(256, 128) + lane_local * lane.scale)
-	harness.check_equal(LaneLogic.viewport_to_lane_xform(lane, camera).affine_inverse() * click, lane_local,
+	harness.check_equal(LaneLogic.viewport_to_node_xform(lane, camera).affine_inverse() * click, lane_local,
 			"conversion inverts camera * lane global exactly, honoring lane scale")
 
 	# Roundtrip: overlay math (local -> viewport) and click math

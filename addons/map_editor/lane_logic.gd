@@ -11,7 +11,7 @@ extends RefCounted
 # Coordinate spaces:
 #   - clicks from _forward_canvas_gui_input arrive in the 2D editor's
 #     VIEWPORT (screen) space; the plugin converts them to lane-local
-#     coordinates with viewport_to_lane_xform() before calling these
+#     coordinates with viewport_to_node_xform() before calling these
 #     helpers. Lane points are LOCAL to their Line2D.
 #     Godot 4.7: the editor camera (pan/zoom) lives in the scene SubViewport's
 #     global_canvas_transform (CanvasItemEditor pushes its transform there via
@@ -28,12 +28,13 @@ extends RefCounted
 const DEFAULT_GRID := 64
 
 
-# The transform from lane-local space to the editor viewport (screen) space:
-# editor camera * lane global transform. viewport_canvas_xform is the edited
+# The transform from node-local space to the editor viewport (screen) space:
+# editor camera * node global transform. viewport_canvas_xform is the edited
 # node's Viewport.get_global_canvas_transform() — the 2D editor's pan/zoom in
-# Godot 4.7 (see the coordinate-spaces note above).
-static func viewport_to_lane_xform(lane: Line2D, viewport_canvas_xform: Transform2D) -> Transform2D:
-	return viewport_canvas_xform * lane.get_global_transform()
+# Godot 4.7 (see the coordinate-spaces note above). Shared by the lane and
+# building placement tools.
+static func viewport_to_node_xform(node: CanvasItem, viewport_canvas_xform: Transform2D) -> Transform2D:
+	return viewport_canvas_xform * node.get_global_transform()
 
 
 # The lane a click should edit: the selected node if it is a Line2D under the
