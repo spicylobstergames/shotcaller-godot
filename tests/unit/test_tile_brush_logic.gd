@@ -21,6 +21,9 @@ func run(harness) -> void:
 	_test_mirror_size_for(harness)
 	_test_click_math(harness)
 	_test_paint_blocks(harness)
+	_test_block_cells(harness)
+	_test_block_options(harness)
+	_test_tile_icon(harness)
 	_test_walls_guard(harness)
 	_test_list_layer_tiles(harness)
 	_test_paint_erase_restore(harness)
@@ -199,6 +202,69 @@ func _test_paint_blocks(harness) -> void:
 	walls.free()
 	ground.free()
 	trees.free()
+
+
+# ---------------------------------------------------------------------------
+# Detail blocks: n x n cells anchored at the clicked cell
+# ---------------------------------------------------------------------------
+
+func _test_block_cells(harness) -> void:
+	var block := TileBrush.block_cells(Vector2i(5, 7), 1)
+	harness.check_equal(block, [Vector2i(5, 7)] as Array[Vector2i],
+			"a 1-cell block is just the clicked cell")
+
+	var pair := TileBrush.block_cells(Vector2i(5, 7), 2)
+	harness.check_equal(pair.size(), 4,
+			"a 2-cell block covers 4 cells")
+	harness.check(Vector2i(6, 8) in pair,
+			"the block extends down-right from the clicked cell")
+
+	harness.check_equal(TileBrush.block_cells(Vector2i(3, 3), 0).size(), 1,
+			"a non-positive block size clamps to a single cell")
+
+
+func _test_block_options(harness) -> void:
+	harness.check_equal(TileBrush.block_options_for(Vector2i(8, 8), 64), [1, 2, 4, 8] as Array[int],
+			"8px ground cells offer 1/2/4/8-cell blocks (8 = full tile)")
+	harness.check_equal(TileBrush.block_options_for(Vector2i(24, 24), 64), [1, 2, 3] as Array[int],
+			"24px tree cells offer 1/2/3-cell blocks (3 = full tile)")
+	harness.check_equal(TileBrush.block_options_for(Vector2i(64, 64), 64), [1] as Array[int],
+			"64px walls offer only the single cell")
+	harness.check_equal(TileBrush.block_options_for(Vector2i.ZERO, 64), [1] as Array[int],
+			"a missing cell size offers only the single cell")
+
+
+# ---------------------------------------------------------------------------
+# Tile preview icons for the dock picker
+# ---------------------------------------------------------------------------
+
+func _test_tile_icon(harness) -> void:
+	# A real CPU-side image: GradientTexture2D.get_image() is null under the
+	# headless dummy renderer, but ImageTexture keeps its source image.
+	# 64px so the icon path exercises the downscale.
+	var ts := TileSet.new()
+	ts.tile_size = Vector2i(64, 64)
+	var source := TileSetAtlasSource.new()
+	var image := Image.create_empty(64, 64, false, Image.FORMAT_RGBA8)
+	image.fill_rect(Rect2i(0, 0, 64, 64), Color.RED)
+	var texture := ImageTexture.create_from_image(image)
+	source.texture = texture
+	source.create_tile(Vector2i(0, 0))
+	ts.add_source(source, 0)
+
+	var icon := TileBrush.tile_icon(ts, 0, Vector2i(0, 0), 24)
+	harness.check(icon != null,
+			"a readable tile yields a preview icon")
+	if icon != null:
+		harness.check(icon.get_width() <= 24 and icon.get_height() <= 24,
+				"the preview icon is downscaled to fit the picker")
+
+	harness.check_equal(TileBrush.tile_icon(ts, 5, Vector2i(0, 0)), null,
+			"a missing source yields no icon")
+	harness.check_equal(TileBrush.tile_icon(ts, 0, Vector2i(9, 9)), null,
+			"a missing atlas tile yields no icon")
+	harness.check_equal(TileBrush.tile_icon(null, 0, Vector2i(0, 0)), null,
+			"a null TileSet yields no icon")
 
 
 # ---------------------------------------------------------------------------

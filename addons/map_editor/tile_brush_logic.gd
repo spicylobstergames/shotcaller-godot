@@ -93,6 +93,61 @@ static func paint_cells_for_local(layer: TileMapLayer, local_pos: Vector2, map_t
 	return cells
 
 
+# An n x n block of cells anchored at origin (detail painting: the dock's
+# block-size choice). n <= 1 yields just the origin cell.
+static func block_cells(origin: Vector2i, n: int) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	var size := maxi(n, 1)
+	for x in size:
+		for y in size:
+			cells.append(origin + Vector2i(x, y))
+	return cells
+
+
+# Sensible block-size choices in cells for a layer with the given cell size:
+# powers of two up to the map tile, always ending with the full-tile size.
+# 8px ground -> [1, 2, 4, 8]; 24px trees -> [1, 2, 3]; 64px walls -> [1].
+static func block_options_for(cell_size: Vector2i, map_tile_px: int) -> Array[int]:
+	var options: Array[int] = [1]
+	if cell_size.x <= 0 or cell_size.y <= 0 or map_tile_px <= 0:
+		return options
+	var max_n := int(ceil(float(map_tile_px) / float(mini(cell_size.x, cell_size.y))))
+	var n := 1
+	while n < max_n:
+		n *= 2
+		if n < max_n:
+			options.append(n)
+	if max_n > 1:
+		options.append(max_n)
+	return options
+
+
+# A preview icon for a tile: the atlas region resized (aspect kept) to fit
+# icon_px, for the dock's tile picker. null when the tile can't be read.
+static func tile_icon(tile_set: TileSet, source_id: int, atlas_coords: Vector2i, icon_px: int = 24) -> Texture2D:
+	if tile_set == null:
+		return null
+	var source = tile_set.get_source(source_id)
+	if not (source is TileSetAtlasSource) or source.texture == null:
+		return null
+	if not source.has_tile(atlas_coords):
+		return null
+	var image: Image = source.texture.get_image()
+	if image == null:
+		return null
+	if image.is_compressed():
+		if image.decompress() != OK:
+			return null
+	var region: Rect2i = source.get_tile_texture_region(atlas_coords)
+	if region.size.x <= 0 or region.size.y <= 0:
+		return null
+	var sub: Image = image.get_region(region)
+	var scale := minf(float(icon_px) / region.size.x, float(icon_px) / region.size.y)
+	if scale < 1.0:
+		sub.resize(maxi(1, int(region.size.x * scale)), maxi(1, int(region.size.y * scale)), Image.INTERPOLATE_NEAREST)
+	return ImageTexture.create_from_image(sub)
+
+
 # The mirrored twin of a cell: 180° rotation of the cell's center around the
 # mirror area's center (the established formula from the old TileMap-based
 # mirror_tiles.gd, kept verbatim as cell math: mirror_px - center - cell,

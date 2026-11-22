@@ -364,7 +364,15 @@ func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
 
 	var camera := map_root.get_viewport().get_global_canvas_transform()
 	var local := TileBrush.viewport_to_local(layer, viewport_pos, camera)
-	var cells := TileBrush.paint_cells_for_local(layer, local, int(map_root.tile_size))
+	# The dock's block choice: the full-tile size snaps to whole map tiles
+	# (the M3 default behavior); smaller sizes anchor an n x n block at the
+	# clicked cell for detail work.
+	var cells: Array[Vector2i]
+	if _dock.selected_block_is_full_tile():
+		cells = TileBrush.paint_cells_for_local(layer, local, int(map_root.tile_size))
+	else:
+		cells = TileBrush.block_cells(TileBrush.viewport_to_cell(layer, viewport_pos, camera),
+				_dock.selected_block_cells())
 	var tile: Dictionary = {} if erase else _dock.selected_tile()
 	var source_id: int = -1 if erase else tile.get("source_id", -1)
 	var atlas: Vector2i = Vector2i(-1, -1) if erase else tile.get("atlas_coords", Vector2i(-1, -1))
@@ -380,19 +388,27 @@ func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
 
 
 # Record the cell's pre-stroke state once, queue its do/undo methods into the
-# stroke's action, and apply it immediately so the canvas updates live.
+# stroke's action, and apply it immediately so the canvas updates live. The
+# undo methods must be real TileMapLayer methods — a Callable to a method the
+# object lacks is invalid and UndoRedo errors on every add
+# (undo_redo.cpp "!p_callable.is_valid()"), which is what broke undo.
 func _paint_cell_in_stroke(layer: TileMapLayer, coords: Vector2i, undo: Dictionary,
 		erase: bool, source_id: int, atlas: Vector2i) -> void:
 	var key := "%d:%d" % [coords.x, coords.y]
 	if undo.has(key):
 		return  # already handled this stroke; keep its recorded pre-state
-	undo[key] = TileBrush.get_cell_state(layer, coords)
+	var state: Dictionary = TileBrush.get_cell_state(layer, coords)
+	undo[key] = state
 	var er := get_undo_redo()
 	if erase:
 		er.add_do_method(layer, "erase_cell", coords)
 	else:
 		er.add_do_method(layer, "set_cell", coords, source_id, atlas, 0)
-	er.add_undo_method(layer, "restore_cell_state", coords, undo[key])
+	if state.get("present", false):
+		er.add_undo_method(layer, "set_cell", coords, state.get("source_id", -1),
+				state.get("atlas_coords", Vector2i(-1, -1)), state.get("alternative_tile", 0))
+	else:
+		er.add_undo_method(layer, "erase_cell", coords)
 	if erase:
 		layer.erase_cell(coords)
 	else:

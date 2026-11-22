@@ -34,6 +34,8 @@ var _team_option: OptionButton
 var _tile_mode_button: Button
 var _brush_option: OptionButton
 var _tile_option: OptionButton
+var _block_option: OptionButton
+var _block_values: Array[int] = []
 
 
 func _ready() -> void:
@@ -109,6 +111,10 @@ func _ready() -> void:
 	_brush_option.tooltip_text = "Which contract layer to paint (ground/walls/trees)"
 	box.add_child(_brush_option)
 
+	_block_option = OptionButton.new()
+	_block_option.tooltip_text = "How many cells one click covers. The full-tile size (largest) keeps the whole 64px tile painted; smaller sizes paint detail."
+	box.add_child(_block_option)
+
 	_tile_option = OptionButton.new()
 	_tile_option.tooltip_text = "Tile to paint — (source, atlas) pairs of the layer's TileSet. For walls, the source picks the team (0 = blue)."
 	box.add_child(_tile_option)
@@ -177,30 +183,73 @@ func selected_tile() -> Dictionary:
 	return tiles[_tile_option.selected]
 
 
-# Repopulate the tile picker from the selected brush's layer TileSet. Called
-# by the plugin when tile mode turns on (the open scene may have changed) and
-# by the brush dropdown itself.
+# How many cells one click covers (the dock's block choice).
+func selected_block_cells() -> int:
+	if _block_values.is_empty() or _block_option == null \
+			or _block_option.selected < 0 or _block_option.selected >= _block_values.size():
+		return 1
+	return _block_values[_block_option.selected]
+
+
+# True when the block choice is the largest (full-tile) size, whose strokes
+# snap to whole 64px map tiles; smaller sizes anchor at the clicked cell.
+func selected_block_is_full_tile() -> bool:
+	return _block_values.is_empty() \
+			or (_block_option != null and _block_option.selected >= _block_values.size() - 1)
+
+
+# Repopulate the tile picker (with preview icons) and the block-size choices
+# from the selected brush's layer. Called by the plugin when tile mode turns
+# on (the open scene may have changed) and by the brush dropdown itself.
 func refresh_tile_picker() -> void:
-	if _tile_option == null:
+	if _tile_option == null or _block_option == null:
 		return
+	var layer := _picker_layer()
+
+	# Block sizes: powers of two up to the layer's full-tile cell count.
+	_block_option.clear()
+	_block_values = []
+	var map_root := EditorInterface.get_edited_scene_root()
+	var map_tile: int = 64
+	if map_root != null:
+		var exported = map_root.get("tile_size")
+		if (exported is int or exported is float) and exported > 0:
+			map_tile = int(exported)
+	for n in TileBrush.block_options_for(TileBrush.cell_size_of(layer), map_tile):
+		_block_values.append(n)
+		if n == _block_values[-1] and n > 1:
+			_block_option.add_item("%dx%d (full tile)" % [n, n])
+		else:
+			_block_option.add_item("%dx%d" % [n, n])
+	_block_option.select(_block_values.size() - 1)  # default: the full tile
+
+	# Tiles, with a preview icon per entry.
 	_tile_option.clear()
-	var tiles := _picker_tiles()
+	var tiles := TileBrush.list_layer_tiles(layer)
 	if tiles.is_empty():
 		_tile_option.disabled = true
 		_tile_option.add_item("no tiles")
 		return
 	_tile_option.disabled = false
 	for tile in tiles:
+		var icon: Texture2D = TileBrush.tile_icon(layer.tile_set, tile.source_id, tile.atlas_coords)
+		# OptionButton.add_item takes an int id here (not an icon); icons are
+		# set on the underlying popup per item index.
+		var index: int = _tile_option.item_count
 		_tile_option.add_item("s%d %s" % [tile.source_id, tile.atlas_coords])
+		if icon != null:
+			_tile_option.get_popup().set_item_icon(index, icon)
 	_tile_option.select(0)  # selected defaults to -1 until told otherwise
 
 
-# The tile list behind the picker, re-resolved on demand so the picker
-# survives scene switches without stale indices.
+# The layer behind the brush/tile pickers, re-resolved on demand so the
+# pickers survive scene switches without stale indices.
+func _picker_layer() -> TileMapLayer:
+	return TileBrush.layer_for_brush(EditorInterface.get_edited_scene_root(), selected_brush())
+
+
 func _picker_tiles() -> Array[Dictionary]:
-	var map_root := EditorInterface.get_edited_scene_root()
-	var layer := TileBrush.layer_for_brush(map_root, selected_brush())
-	return TileBrush.list_layer_tiles(layer)
+	return TileBrush.list_layer_tiles(_picker_layer())
 
 
 # res:// path of the building scene the palette has selected ("" when empty).
