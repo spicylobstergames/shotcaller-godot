@@ -360,7 +360,13 @@ camp hiring) is a SIBLING node driven by `game.gd` via `%spawn` — map_manager
 does not own it; it also assigns `lane`, `tactic`, and the `WalkLane` goal.
 `map/tool/mirror_tiles.gd` is a @tool TileMap for the map editor — its mirror
 math (`_get_mirrored_coords`) and diff (`_get_changed_cells`) are
-regression-tested.
+regression-tested. `addons/map_editor/` (editor-only plugin) scaffolds new
+contract-satisfying map scenes, validates maps against the contract above,
+and provides a lane-drawing canvas mode; its scaffold/validator/lane logic is
+editor-free and regression-tested in `tests/unit/test_map_editor.gd` and
+`test_lane_logic.gd`. `map_manager.gd` resolves map names generically
+(preloaded vars first, then `map/maps/<name>.tscn`), so plugin-authored maps
+load by name.
 
 ## Tests
 

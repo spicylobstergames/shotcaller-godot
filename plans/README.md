@@ -10,7 +10,7 @@ files carry the machine-checkable fields.
 ---
 id: E1                     # stable id, matches the file name
 title: ...                 # short imperative title
-track: A|B|C|D|E|F         # IMPROVEMENT_PLAN track
+track: A|B|C|D|E|F|M       # IMPROVEMENT_PLAN track
 status: open|blocked-on-decision|done
 decision_required: false   # true => do not start without the owner's call
 depends_on: [C1]           # ids that must land first
@@ -44,6 +44,9 @@ acceptance: [...]          # observable, testable outcomes
 | E4 | E | done 2026-11-14 |
 | F1 | F | done 2026-11-14 |
 | F2 | F | open |
+| M1 | M | done 2026-11-21 (coordinate fix 52792ac; user-verified in editor) |
+| M2 | M | done 2026-11-21 (user-verified in editor) |
+| M3 | M | implemented 2026-11-21 (TileMapLayer port done; awaiting user editor verification) |
 
 Already landed (do not redo): Track A documentation truth pass; Track B
 arrival-dispatch fix + ReturnLumber; state-key lint + contract lint +

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://blahk7lfa8l5m"]
 
-[ext_resource type="Script" uid="uid://wbppf7q1rtk5" path="res://unit/Unit.gd" id="1"]
+[ext_resource type="Script" uid="uid://chdtxuwnfgrt5" path="res://unit/Unit.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://whgtykrtiaca" path="res://assets/map/light.png" id="2_fiakn"]
 
 [sub_resource type="CircleShape2D" id="1"]

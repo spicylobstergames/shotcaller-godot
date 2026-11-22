@@ -23,7 +23,7 @@ STEP_TIMEOUT="${STEP_TIMEOUT:-180}"
 # file than the reporter: a runner that crashes, hangs, or is bypassed cannot
 # fake a green result without editing both files. Bump this when you add
 # tests — the suite will fail with the actual count until you do.
-EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-422}"
+EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-590}"
 
 # Godot binary: argument > GODOT env var > "godot" on PATH.
 GODOT="${1:-${GODOT:-godot}}"
@@ -33,6 +33,12 @@ SMOKE_TICKS="${SMOKE_TICKS:-300}"
 # Keep Godot's user-data writes inside the repo (sandbox/CI friendly).
 export HOME="${GODOT_HOME:-$PROJECT_DIR/../.godot-home}"
 mkdir -p "$HOME"
+# user:// (e.g. tests writing temp scenes) resolves under XDG_DATA_HOME, not
+# HOME, so redirect it the same way for sandboxed/CI checkouts where the real
+# $HOME is not writable. An existing XDG_DATA_HOME wins so a dev's user://
+# data never silently splits across trees.
+export XDG_DATA_HOME="${GODOT_DATA_HOME:-${XDG_DATA_HOME:-$PROJECT_DIR/../.godot-home}}"
+mkdir -p "$XDG_DATA_HOME"
 
 LOG_DIR="${TEST_LOG_DIR:-$PROJECT_DIR/../.test-logs}"
 mkdir -p "$LOG_DIR"
@@ -48,6 +54,15 @@ if [ "$import_rc" -ne 0 ]; then
 fi
 if [ ! -f "$PROJECT_DIR/.godot/global_script_class_cache.cfg" ]; then
 	echo "FAIL: --import did not produce the global script class cache — see $LOG_DIR/import.log"
+	failures=$((failures + 1))
+fi
+# The import step runs the real editor, so it compiles every @tool plugin
+# script. A plugin parse error (e.g. a const shadowing a native class) would
+# otherwise ship a broken editor feature while suite/smoke/golden stay green.
+import_errors=$(grep -c "SCRIPT ERROR" "$LOG_DIR/import.log" || true)
+if [ "$import_errors" -gt 0 ]; then
+	echo "FAIL: --import produced $import_errors SCRIPT ERROR(s) — see $LOG_DIR/import.log"
+	grep "SCRIPT ERROR" "$LOG_DIR/import.log" | sort -u | head -10
 	failures=$((failures + 1))
 fi
 
