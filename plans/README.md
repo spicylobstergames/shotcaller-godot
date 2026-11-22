@@ -47,6 +47,7 @@ acceptance: [...]          # observable, testable outcomes
 | M1 | M | done 2026-11-21 (coordinate fix 52792ac; user-verified in editor) |
 | M2 | M | done 2026-11-21 (user-verified in editor) |
 | M3 | M | implemented 2026-11-21 (TileMapLayer port done; awaiting user editor verification) |
+| M4 | M | open 2026-11-22 (runtime/in-game map editor MVP; plan ready) |
 
 Already landed (do not redo): Track A documentation truth pass; Track B
 arrival-dispatch fix + ReturnLumber; state-key lint + contract lint +
