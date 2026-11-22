@@ -78,12 +78,36 @@ func _test_place_target(harness) -> void:
 			"an existing team directory is the placement target")
 	harness.check_equal(BuildingLogic.place_target(map, "green"), null,
 			"a nonexistent team directory resolves to null (dock errors instead of crashing)")
+	harness.check_equal(BuildingLogic.neutral_host_team(map), "blue",
+			"neutrals host under the first team directory (blue)")
+
+	var red_only := Node2D.new()
+	var buildings := Node2D.new()
+	buildings.name = "buildings"
+	var red_dir := Node2D.new()
+	red_dir.name = "red"
+	buildings.add_child(red_dir)
+	red_only.add_child(buildings)
+	harness.check_equal(BuildingLogic.neutral_host_team(red_only), "red",
+			"with only red present, neutrals host under red")
 
 	var bare := Node2D.new()
 	harness.check_equal(BuildingLogic.place_target(bare, "blue"), null,
 			"a map without a 'buildings' node resolves to null")
+	harness.check_equal(BuildingLogic.neutral_host_team(bare), "",
+			"no team directories means no neutral host (dock errors)")
+
+	harness.check(BuildingLogic.is_placement_allowed("tower", "red"),
+			"a team structure can be team-owned")
+	harness.check(not BuildingLogic.is_placement_allowed("castle", "neutral"),
+			"a team structure cannot be neutral (validator fails it; win condition needs it)")
+	harness.check(BuildingLogic.is_placement_allowed("blacksmith", "neutral"),
+			"a neutral building can be placed neutral")
+	harness.check(BuildingLogic.is_placement_allowed("church", "neutral"),
+			"church may be placed neutral (validator accepts it)")
 
 	map.free()
+	red_only.free()
 	bare.free()
 
 
@@ -139,6 +163,17 @@ func _test_apply_building_meta(harness) -> void:
 	harness.check_equal(castle.subtype, lane_name,
 			"a team structure's subtype is the active lane (WalkLane reads it)")
 
+	# THE placement regression: metadata keys off the building KIND, not the
+	# minted node name — the scaffold already owns "tower", so a user
+	# placement is minted "tower_2", and matching on that name made every
+	# second+ structure placement silently neutral.
+	var tower: Node = (load("res://unit/buildings/tower.tscn") as PackedScene).instantiate()
+	BuildingLogic.apply_building_meta(tower, "tower", "red", "top")
+	harness.check_equal(tower.team, "red",
+			"a minted-name placement (tower_2) still gets its kind's team via base_name")
+	harness.check_equal(tower.subtype, "top",
+			"a minted-name placement still gets the lane subtype")
+
 	# church ships team-owned in the shipping maps (three_lane_map carries
 	# team = "red" for the red church) — regression: it was briefly treated
 	# as neutral, so placements under red silently lost their team.
@@ -149,6 +184,14 @@ func _test_apply_building_meta(harness) -> void:
 	harness.check_equal(church.subtype, BuildingLogic.NEUTRAL_SUBTYPE,
 			"a team-owned building (church) keeps the backwood subtype")
 
+	# Neutral as an explicit placement choice.
+	var camp: Node = (load("res://unit/buildings/camp.tscn") as PackedScene).instantiate()
+	BuildingLogic.apply_building_meta(camp, "camp", "neutral", lane_name)
+	harness.check_equal(camp.team, "neutral",
+			"a placement with the neutral choice carries team = neutral")
+	harness.check_equal(camp.subtype, BuildingLogic.NEUTRAL_SUBTYPE,
+			"a neutral placement carries the backwood subtype")
+
 	var blacksmith: Node = (load("res://unit/buildings/blacksmith.tscn") as PackedScene).instantiate()
 	BuildingLogic.apply_building_meta(blacksmith, "blacksmith", "red", lane_name)
 	harness.check_equal(blacksmith.team, "neutral",
@@ -158,7 +201,9 @@ func _test_apply_building_meta(harness) -> void:
 
 	scaffold_map.free()
 	castle.free()
+	tower.free()
 	church.free()
+	camp.free()
 	blacksmith.free()
 
 

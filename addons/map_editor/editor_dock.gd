@@ -74,13 +74,16 @@ func _ready() -> void:
 	else:
 		for scene_path in scenes:
 			_scene_option.add_item(BuildingLogic.building_base_name(scene_path))
+		_scene_option.select(0)  # selected defaults to -1 until told otherwise
 	_scene_option.tooltip_text = "Building scene to place (unit/buildings/*.tscn)"
 	box.add_child(_scene_option)
 
 	_team_option = OptionButton.new()
 	for team in BuildingLogic.TEAM_DIRECTORIES:
 		_team_option.add_item(team)
-	_team_option.tooltip_text = "Team directory the building is placed under (neutrals still get team = 'neutral')"
+	_team_option.add_item("neutral")
+	_team_option.select(0)
+	_team_option.tooltip_text = "Team metadata for the placement: blue/red (placed under buildings/<team>) or neutral (hosted under an existing team directory; castle/barrack/tower cannot be neutral)"
 	box.add_child(_team_option)
 
 	_log = RichTextLabel.new()
@@ -130,10 +133,13 @@ func selected_building_scene() -> String:
 	return scenes[_scene_option.selected]
 
 
-# Team directory placements attach to ("blue" / "red").
+# Team metadata for placements: "blue"/"red" (placed under buildings/<team>)
+# or "neutral" (the plugin hosts it under an existing team directory).
 func selected_team() -> String:
 	if _team_option == null or _team_option.selected < 0:
 		return ""
+	if _team_option.selected >= BuildingLogic.TEAM_DIRECTORIES.size():
+		return "neutral"
 	return BuildingLogic.TEAM_DIRECTORIES[_team_option.selected]
 
 

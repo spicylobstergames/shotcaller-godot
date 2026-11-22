@@ -68,6 +68,25 @@ static func place_target(map_root: Node, team: String) -> Node:
 	return buildings_node.get_node_or_null(team)
 
 
+# Neutrals must sit under a team directory (validator: only blue/red children
+# under 'buildings'), so a "neutral" placement hosts under the first team
+# directory that exists — blue by convention, else red, else "" (dock errors).
+static func neutral_host_team(map_root: Node) -> String:
+	for team in TEAM_DIRECTORIES:
+		if place_target(map_root, team) != null:
+			return team
+	return ""
+
+
+# Whether the chosen team is legal for this building KIND. Team structures
+# (castle/barrack/tower) must be team-owned: the validator fails a neutral
+# castle and the win condition looks up buildings/<team>/castle.
+static func is_placement_allowed(base_name: String, team: String) -> bool:
+	if team == "neutral" and base_name in TEAM_STRUCTURE_NAMES:
+		return false
+	return true
+
+
 # First free name for a new building: the base name itself, then
 # base_2, base_3, ... (validator warns on duplicate names — get_node
 # resolves only the first match; freed names are reusable, mirroring
@@ -82,15 +101,15 @@ static func next_building_name(team_node: Node, base_name: String) -> String:
 
 
 # Team/subtype metadata per the validator's rules and the shipping maps
-# (see the header): team structures take the directory team and the lane the
-# map is currently drawing; team-owned extras (church) take the directory
-# team with the backwood subtype; everything else is a neutral backwood
-# building.
-static func apply_building_meta(building: Node, building_name: String, team: String, lane_name: String) -> void:
-	if building_name in TEAM_STRUCTURE_NAMES:
+# (see the header). base_name is the building KIND (the scene base name,
+# e.g. "tower") — NOT the minted node name: a placed "tower_2" must still be
+# a tower, and matching on the renamed node made every second+ placement of
+# a team structure silently neutral (the bug this fixed).
+static func apply_building_meta(building: Node, base_name: String, team: String, lane_name: String) -> void:
+	if base_name in TEAM_STRUCTURE_NAMES:
 		building.team = team
 		building.subtype = lane_name
-	elif building_name in TEAM_OWNED_NAMES:
+	elif base_name in TEAM_OWNED_NAMES:
 		building.team = team
 		building.subtype = NEUTRAL_SUBTYPE
 	else:

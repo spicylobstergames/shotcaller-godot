@@ -110,7 +110,7 @@ func _set_building_mode(active: bool) -> void:
 		if scene == "":
 			_dock.log_line("Place-buildings ON, but the palette is empty — is unit/buildings/ still populated?")
 		else:
-			_dock.log_line("Place-buildings ON: left-click places '%s' under buildings/%s; Escape exits."
+			_dock.log_line("Place-buildings ON: left-click places '%s' (team '%s'); Escape exits."
 					% [BuildingLogic.building_base_name(scene), _dock.selected_team()])
 	else:
 		_dock.log_line("Place-buildings OFF.")
@@ -205,10 +205,23 @@ func _place_building(viewport_pos: Vector2) -> void:
 	if scene_path == "":
 		push_warning("Map Editor: building palette is empty — nothing to place.")
 		return
+	# The chosen team is the METADATA (blue/red/neutral); the parent
+	# directory follows it, with neutrals hosted under an existing team dir
+	# (the validator only allows blue/red children under 'buildings').
 	var team: String = _dock.selected_team()
-	var team_node := BuildingLogic.place_target(map_root, team)
+	var parent_team := team
+	if team == "neutral":
+		parent_team = BuildingLogic.neutral_host_team(map_root)
+		if parent_team == "":
+			push_warning("Map Editor: no buildings/blue or buildings/red to host a neutral building.")
+			return
+	var base_name := BuildingLogic.building_base_name(scene_path)
+	if not BuildingLogic.is_placement_allowed(base_name, team):
+		_dock.log_line("REFUSED: a %s cannot be neutral — the win condition needs buildings/<team>/%s. Pick blue or red." % [base_name, base_name])
+		return
+	var team_node := BuildingLogic.place_target(map_root, parent_team)
 	if team_node == null:
-		push_warning("Map Editor: the open scene has no 'buildings/%s' node." % team)
+		push_warning("Map Editor: the open scene has no 'buildings/%s' node." % parent_team)
 		return
 	var lane := LaneLogic.target_lane(map_root, _selected_nodes())
 	if lane == null:
@@ -227,9 +240,12 @@ func _place_building(viewport_pos: Vector2) -> void:
 	# Configure eagerly (not via undo methods): redo re-adds THIS node, and
 	# names/metadata must be final before add_child — the Node API dedupes
 	# sibling names with "@..." otherwise (scaffold gotcha).
-	building.name = BuildingLogic.next_building_name(team_node, BuildingLogic.building_base_name(scene_path))
+	building.name = BuildingLogic.next_building_name(team_node, base_name)
 	building.position = local
-	BuildingLogic.apply_building_meta(building, building.name, team, lane.name)
+	# Metadata keys off the building KIND (base_name), never the minted node
+	# name — "tower_2" must still be a tower (that mixup made every second+
+	# structure placement silently neutral).
+	BuildingLogic.apply_building_meta(building, base_name, team, lane.name)
 	# Show the runtime team color in the editor too (the scenes ship blue;
 	# Unit.setup_team only recolors at runtime).
 	BuildingLogic.apply_editor_team_visuals(building, building.team)
@@ -242,8 +258,8 @@ func _place_building(viewport_pos: Vector2) -> void:
 	undo_redo.add_undo_method(team_node, "remove_child", building)
 	undo_redo.add_undo_method(building, "queue_free")
 	undo_redo.commit_action()
-	_dock.log_line("Placed '%s' (%s) at %s under buildings/%s (subtype '%s', team '%s'; clicked %s)" % [
-		building.name, scene_path.get_file(), local, team, building.subtype, building.team, viewport_pos,
+	_dock.log_line("Placed '%s' (%s) at %s under buildings/%s (team '%s', subtype '%s'; clicked %s)" % [
+		building.name, scene_path.get_file(), local, parent_team, building.team, building.subtype, viewport_pos,
 	])
 	update_overlays()
 
