@@ -149,6 +149,44 @@ func run(harness) -> void:
 		harness.check(safety_plan[0].get_class_name() == "Hide",
 			"NeedSafety plans the real Hide action (got %s)." % safety_plan[0].get_class_name())
 
+	# --- EnemyDefeated plans the expected combat sequence ---
+	# The expected runtime sequence (see the agent execution history,
+	# test_agent_history.gd) is ChooseTarget > PursueEnemy > AttackEnemy,
+	# followed by the MeleeAttack/RangeAttack SERVICE events that AttackEnemy
+	# triggers. Melee/Range are service objects with no effects, so they can
+	# never appear in a plan -- the pin is the plannable prefix.
+	# ready_to_fight is set like the real agent's reset() does for attacking
+	# units; without it the planner chains Retreat -> WaitForRegeneration in
+	# front of the combat actions to produce the fact.
+	var combat_agent = PlanAgent.new(true)
+	combat_agent.state["ready_to_fight"] = true
+	var enemy_goal = goal_registry.get_goal("EnemyDefeated")
+	harness.check(enemy_goal != null, "Goal registry provides EnemyDefeated.")
+	var combat_plan = planner.get_plan(combat_agent, enemy_goal)
+	harness.check(not combat_plan.is_empty(),
+		"Real planner satisfies the EnemyDefeated goal (combat chain).")
+	if not combat_plan.is_empty():
+		var combat_names: Array = []
+		for a in combat_plan:
+			combat_names.append(a.get_class_name())
+		harness.check_equal(combat_names, ["ChooseTarget", "PursueEnemy", "AttackEnemy"],
+			"EnemyDefeated plans exactly ChooseTarget > PursueEnemy > AttackEnemy.")
+
+	# --- NeedLumber plans the gather sequence GetLumber > ReturnLumber ---
+	ws.set_state("is_game_active", true)
+	var lumber_goal = goal_registry.get_goal("NeedLumber")
+	harness.check(lumber_goal != null, "Goal registry provides NeedLumber.")
+	var lumber_plan = planner.get_plan(agent, lumber_goal)
+	harness.check(not lumber_plan.is_empty(),
+		"Real planner satisfies the NeedLumber goal (gather chain).")
+	if not lumber_plan.is_empty():
+		var lumber_names: Array = []
+		for a in lumber_plan:
+			lumber_names.append(a.get_class_name())
+		harness.check_equal(lumber_names, ["GetLumber", "ReturnLumber"],
+			"NeedLumber plans exactly GetLumber > ReturnLumber.")
+	ws.restore()
+
 	# --- a goal desiring an unsatisfiable state gets no plan ---
 	harness.check(planner.get_plan(agent, ImpossibleGoal.new()).is_empty(),
 		"A goal no real action can satisfy yields an empty plan.")

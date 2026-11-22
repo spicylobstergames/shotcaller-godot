@@ -294,3 +294,44 @@ NOT fix a 50/50 boundary race, and loosening further (e.g. ±5) would mask
 real damage regressions — do not widen it. Note also that manual golden
 checks must use the canonical flags (`--headless --fixed-fps 60`): the
 checkpoints are frame-indexed and headless frames otherwise run uncapped.
+
+## D15 — Arrival is a GOAP state transition, not a unit signal
+
+**Decision:** after PR #239 review (rafaelcastrocouto), the arrival dispatch
+introduced by the Track B signal fix was REPLACED. `Collisions` no longer
+calls `unit1.on_arrive()` and nothing connects `unit_arrived`. Arrival is
+detected in the single collision/movement loop and turned into state:
+`ArriveAtDestination.advance_path(unit)` (renamed from `on_arrive`) advances
+the path on a waypoint, or — on the FINAL arrival — latches
+`has_path=false`, `has_destiny=false`, `arrived_at_destination=true` and
+stops the unit. The five actions that had `on_arrive` hooks (`GetLumber`,
+`Hide`, `ReturnLumber`, `Retreat`, `Order`) drive their effects from
+`perform()` behind per-action latches (`cutting`, `is_hiding`,
+`returning_wood`, `arrived_at_retreat`, `after_arive`), gated on the FINAL
+arrival. Supporting changes: `Move.move`/`Navigate.follow_path` reset
+`arrived_at_destination` on any newly issued movement, and `Move.stop` clears
+`has_destiny` (previously never cleared), so the planner orders
+`Navigate > Move` deterministically. Also added: a bounded per-agent
+execution history (`Agent.record_event`) recording goal/plan/action
+transitions plus movement/arrival/service sub-events, so tests and
+`--freeze-report` can verify units perform the expected sequence.
+
+**Alternatives:** keep the signal dispatch (rejected — per the review, using
+`unit1.on_arrive` is a move backwards; movement checks must stay in one loop
+with global GOAP calls, not distributed via per-agent Godot signals); keep
+hooks but fire them only on final arrival via a global `Goap.arrive(unit)`
+call (rejected — still a distributed callback; the state latch keeps one
+source of truth and lets effects ride the plan system).
+
+**Why:** the old hooks fired on EVERY route waypoint, so multi-waypoint
+movements could deliver wood, hide, retreat-complete, or conquer before
+reaching the actual destination; and hook dispatch duplicated the planner's
+job of sequencing actions. The stagger cost is accepted: arrival effects now
+run on the agent's next turn (up to ~116 ms after the collision), while
+collision detection, path advancement, and targeting stay immediate.
+
+**Consequences:** `Unit.on_arrive()`/`unit_arrived` remain declared/emitted
+but unwired (like `unit_move_ended`) — do not rewire them. The old `agent.gd`
+signal connection, `Agent.on_arrive`, and every action `on_arrive` hook are
+gone; `tests/unit/test_arrival_dispatch.gd` pins the absence via a source
+lint. Golden replay unchanged; boot smoke unchanged.

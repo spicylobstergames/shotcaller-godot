@@ -1,28 +1,51 @@
 extends RefCounted
 
-# Track B regression: arrival dispatch and the ReturnLumber entry point.
+# Arrival is a GOAP state transition, NOT a unit signal (PR #239 feedback).
 #
-# Unit.on_arrive() emits `unit_arrived`; Collisions calls it when a moving unit
-# reaches current_destiny (after ArriveAtDestination.on_arrive advances the
-# path). Agent._ready() must connect that signal to Agent.on_arrive, which
-# fires the current action's and goal's on_arrive hooks. Before this fix
-# nothing connected the signal, so every action on_arrive hook was dead
-# (GetLumber never set has_wood, Hide never hid, RetreatAction never set
-# arrived_at_retreat, OrderAction never conquered/prayed).
+# Collisions detects arrival in its single movement loop and calls
+# ArriveAtDestination.advance_path(unit): on a waypoint it advances the path;
+# on the FINAL arrival it latches the facts (has_path=false, has_destiny=false,
+# arrived_at_destination=true, unit stopped). Actions drive their arrival
+# effects from perform() by reading those facts -- there is no unit_arrived
+# wiring, no Agent.on_arrive dispatch, and no per-action on_arrive hooks.
 #
-# Also covers ReturnLumber.enter, which used to assign the null return of
-# agent.set_state() to a nonexistent unit property and never move the unit.
+# This file pins that contract:
+#   - source lint: no signal dispatch in collisions/agent, no on_arrive hooks
+#     left in the game_logic actions/goals;
+#   - an arrival must NOT permanently disable WalkLane (the historical
+#     lane_route_finished write-once bug);
+#   - the migrated actions (ReturnLumber, Retreat, Hide, GetLumber, Order)
+#     gate their effects on the FINAL arrival, never on an intermediate
+#     waypoint and never before it;
+#   - ReturnLumber.enter still routes to deliver_position.
 
 const Agent = preload("res://goap/goap_system/agent.gd")
+const ArriveAtDestination = preload("res://goap/game_logic/goals/arrive_at_destination.gd")
 const ReturnLumber = preload("res://goap/game_logic/actions/return_lumber.gd")
+const RetreatAction = preload("res://goap/game_logic/actions/retreat_action.gd")
+const HideAction = preload("res://goap/game_logic/actions/hide.gd")
+const GetLumber = preload("res://goap/game_logic/actions/get_lumber.gd")
+const OrderAction = preload("res://goap/game_logic/actions/order_action.gd")
 const WorldStateSnapshot = preload("res://tests/helpers/world_state_snapshot.gd")
 const Pathfinder = preload("res://pathfind/jump_point_finder.gd")
+const FsScan = preload("res://tests/helpers/fs_scan.gd")
 
 
-# Real Node double: declares the same signals as Unit (Agent._ready connects
+# Strips comments so the source lint checks code, not prose about the old
+# dispatch (several banners deliberately MENTION unit_arrived/on_arrive).
+func _code(path: String) -> String:
+	var lines := FileAccess.get_file_as_string(path).split("\n")
+	var code: Array[String] = []
+	for line in lines:
+		var hash_index := line.find("#")
+		code.append(line if hash_index < 0 else line.substr(0, hash_index))
+	return "\n".join(code)
+
+
+# Real Node2D double: declares the same signals as Unit (Agent._ready connects
 # them all) plus the movement/combat properties the wired code touches.
 class TestUnit:
-	extends Node
+	extends Node2D
 
 	signal unit_reseted
 	signal unit_idle_ended
@@ -49,10 +72,10 @@ class TestUnit:
 	var current_path: Array = []
 	var current_destiny := Vector2.ZERO
 	var final_destiny := Vector2.ZERO
-	var global_position := Vector2.ZERO
 	var angle := 0.0
 	var current_step := Vector2.ZERO
 	var animations = null
+	var channeling_timer: Timer = null
 	var agent = null
 
 	func set_state(s):
@@ -72,96 +95,62 @@ class TestMap:
 	var size := Vector2(320, 320)
 
 
-class ArrivalAction:
-	extends RefCounted
-	var arrived_count := 0
-
-	func enter(_agent) -> void:
-		pass
-
-	func perform(_agent, _delta: float) -> bool:
-		return false
-
-	func exit(_agent) -> void:
-		pass
-
-	func on_arrive(_agent) -> void:
-		arrived_count += 1
-
-	func get_class_name() -> String:
-		return "ArrivalAction"
-
-
-class ArrivalGoal:
-	extends RefCounted
-	var arrived_count := 0
-
-	func is_valid(_agent) -> bool:
-		return true
-
-	func priority(_agent) -> int:
-		return 1
-
-	func get_desired_state(_agent) -> Dictionary:
-		return {"arrival_dispatch_probe": true}
-
-	func enter(_agent) -> void:
-		pass
-
-	func exit(_agent) -> void:
-		pass
-
-	func on_arrive(_agent) -> void:
-		arrived_count += 1
-
-	func get_class_name() -> String:
-		return "ArrivalGoal"
+func _make_agent(harness) -> Agent:
+	var unit = TestUnit.new()
+	unit.current_modifiers = Modifiers.new_modifiers()
+	# GetLumber's cut channel needs a real (childed) Timer; being inside the
+	# tree also lets Timer.start() actually run.
+	unit.channeling_timer = Timer.new()
+	unit.add_child(unit.channeling_timer)
+	harness.add_child(unit)
+	var agent = Agent.new()
+	unit.add_child(agent)
+	# The unit is inside the tree, so the engine fires Agent._ready() (and all
+	# its signal connections) synchronously during this add_child. Do NOT call
+	# _ready() again — that would double-connect every signal.
+	unit.agent = agent
+	return agent
 
 
 func run(harness) -> void:
 	var ws = WorldStateSnapshot.new()
-	var unit = TestUnit.new()
-	unit.current_modifiers = Modifiers.new_modifiers()
-	var agent = Agent.new()
-	unit.add_child(agent)
-	# add_child on a detached subtree does not fire _ready; run the production
-	# wiring explicitly so the unit_arrived connection under test is real.
-	agent._ready()
-	unit.agent = agent
+	var agent = _make_agent(harness)
+	var unit: TestUnit = agent.get_unit()
 
-	# --- Agent._ready wiring ---
+	# --- SOURCE LINT: no signal-based arrival dispatch anywhere ---
 	harness.check(
-		unit.unit_arrived.is_connected(agent.on_arrive),
-		"Agent._ready connects unit_arrived to Agent.on_arrive."
+		not _code("res://collision/collisions.gd").contains("on_arrive"),
+		"Collisions drives arrival through ArriveAtDestination.advance_path (no on_arrive call)."
 	)
-
-	# --- dispatch to the current action and goal ---
-	var goal = ArrivalGoal.new()
-	var action = ArrivalAction.new()
-	agent._replace_plan(goal, [action])
-	unit.unit_arrived.emit()
-	harness.check_equal(
-		action.arrived_count,
-		1,
-		"unit_arrived dispatches once to the current action's on_arrive."
+	harness.check(
+		_code("res://collision/collisions.gd").contains("advance_path"),
+		"Collisions still routes arrivals through the ArriveAtDestination service."
 	)
-	harness.check_equal(
-		goal.arrived_count, 1, "unit_arrived dispatches once to the current goal's on_arrive."
+	harness.check(
+		not _code("res://goap/goap_system/agent.gd").contains("unit_arrived"),
+		"Agent never connects unit_arrived (arrival is a state transition, not a signal)."
 	)
-	# A second connection would make every emission fire twice.
-	unit.unit_arrived.emit()
-	harness.check_equal(
-		action.arrived_count, 2, "Each emission dispatches exactly once (no double connection)."
+	harness.check(
+		not _code("res://goap/goap_system/agent.gd").contains("on_arrive"),
+		"Agent has no on_arrive dispatch method."
+	)
+	var hooked: Array[String] = []
+	var scripts: Array[String] = []
+	FsScan.collect("res://goap/game_logic", ".gd", scripts)
+	for path in scripts:
+		if _code(path).contains("func on_arrive"):
+			hooked.append(path)
+	harness.check(
+		hooked.is_empty(),
+		"No action/goal defines an on_arrive hook anymore. Offenders: %s" % [", ".join(hooked)]
 	)
 
 	# --- Regression: an arrival must NOT permanently disable WalkLane ---
-	# WalkLane.on_arrive used to set lane_route_finished=true whenever the
-	# path was empty. That fact is a hard gate in WalkLane.is_valid and has no
-	# reset in normal play (only change_lane/teleport clear it), so the first
-	# empty-path arrival killed the goal for good: units fought, killed an
-	# enemy, then stood still. Main was fine only because the arrival dispatch
-	# was dead. This drives the real runtime path (Collisions -> Unit.on_arrive
-	# -> Agent.on_arrive -> goal hook).
+	# WalkLane used to set lane_route_finished=true whenever the path was
+	# empty on arrival. That fact is a hard gate in WalkLane.is_valid and has
+	# no reset in normal play, so the first consumed route killed the goal
+	# for good: units fought, killed an enemy, then stood still. This drives
+	# the real runtime path (Collisions -> ArriveAtDestination.advance_path).
 	var lane_map = TestMap.new()
 	harness.add_child(lane_map)
 	ws.set_state("map", lane_map)
@@ -181,12 +170,11 @@ func run(harness) -> void:
 	var lane_goal = Goap.get_goal("WalkLane")
 	harness.check(lane_goal.is_valid(agent), "WalkLane is valid before the arrival (setup check).")
 	agent._replace_plan(lane_goal, [])
-	# The exact runtime state when Collisions emits the arrival for a
-	# consumed route: ArriveAtDestination.on_arrive(unit) has already emptied
-	# current_path and stopped the unit, and THEN unit.on_arrive() fires.
+	# The exact runtime state when Collisions detects the arrival for a
+	# consumed route: empty path, stopped unit.
 	unit.current_path = []
 	unit.current_destiny = Vector2.ZERO
-	unit.unit_arrived.emit()
+	Goap.get_goal("ArriveAtDestination").advance_path(unit)
 	harness.check(
 		not agent.get_state("lane_route_finished", false),
 		"Arrival does not mark the lane route finished (that write-once fact would disable WalkLane)."
@@ -195,12 +183,23 @@ func run(harness) -> void:
 		lane_goal.is_valid(agent),
 		"WalkLane stays valid after arrival, so the unit resumes walking instead of standing still."
 	)
+	# The final arrival latches the full fact set (the actions' interface).
+	harness.check(
+		agent.get_state("arrived_at_destination", false) == true,
+		"The final arrival latches arrived_at_destination."
+	)
+	harness.check(
+		agent.get_state("has_destiny", true) == false,
+		"The final arrival clears has_destiny (no stale routing fact)."
+	)
+	harness.check_equal(unit.state, "idle", "The final arrival stops the unit.")
 	lane_map.free()
 
-	# --- ReturnLumber.enter navigates instead of assigning set_state()'s null ---
+	# --- ReturnLumber: deliver ONCE, on the FINAL arrival only ---
 	var map = TestMap.new()
 	harness.add_child(map)
 	ws.set_state("map", map)
+	ws.set_state("all_buildings", [])
 	var old_grid = Navigation.path_grid
 	var old_finder = Navigation.path_finder
 	Navigation.path_grid = Pathfinder.GridGD.new().Grid.new(5, 5)
@@ -210,6 +209,10 @@ func run(harness) -> void:
 	unit.global_position = Vector2(96, 96)
 	unit.current_destiny = Vector2.ZERO
 	unit.final_destiny = Vector2.ZERO
+	unit.current_path = []
+	agent.set_state("has_wood", true)
+	agent.set_state("arrived_at_destination", false)
+	agent.set_state("returning_wood", false)
 	agent.set_state("deliver_position", deliver_position)
 	ReturnLumber.new().enter(agent)
 
@@ -224,6 +227,163 @@ func run(harness) -> void:
 	harness.check(
 		unit.current_destiny != Vector2.ZERO,
 		"ReturnLumber.enter pops a real first waypoint into current_destiny."
+	)
+	# While travelling (no arrival yet): no delivery.
+	harness.check(
+		not ReturnLumber.new().perform(agent, 0.0),
+		"ReturnLumber.perform does not complete before arrival."
+	)
+	harness.check(
+		not agent.get_state("returning_wood", false),
+		"ReturnLumber does not deliver before arrival."
+	)
+	# Final arrival: deliver exactly once.
+	agent.set_state("arrived_at_destination", true)
+	harness.check(
+		ReturnLumber.new().perform(agent, 0.0),
+		"ReturnLumber.perform completes on the final arrival."
+	)
+	harness.check(
+		agent.get_state("returning_wood", false) == true
+		and agent.get_state("has_wood", true) == false,
+		"ReturnLumber delivers on the final arrival (returning_wood latch, has_wood cleared)."
+	)
+
+	# --- Retreat: arrived_at_retreat only on the FINAL arrival ---
+	agent.set_state("arrived_at_retreat", false)
+	agent.set_state("arrived_at_destination", false)
+	harness.check(
+		not RetreatAction.new().perform(agent, 0.0),
+		"Retreat.perform does not complete before arrival."
+	)
+	agent.set_state("arrived_at_destination", true)
+	harness.check(
+		RetreatAction.new().perform(agent, 0.0)
+		and agent.get_state("arrived_at_retreat", false) == true,
+		"Retreat.perform latches arrived_at_retreat on the final arrival."
+	)
+
+	# --- Hide: hide exactly once, on the FINAL arrival ---
+	agent.set_state("is_hiding", false)
+	agent.set_state("arrived_at_destination", false)
+	harness.check(
+		not HideAction.new().perform(agent, 0.0),
+		"Hide.perform does not complete before arrival."
+	)
+	harness.check(
+		not agent.get_state("is_hiding", false),
+		"Hide does not hide before arrival."
+	)
+	agent.set_state("arrived_at_destination", true)
+	harness.check(
+		not HideAction.new().perform(agent, 0.0),
+		"Hide.perform starts hiding on the final arrival but waits out the timer."
+	)
+	harness.check(
+		agent.get_state("is_hiding", false) == true and unit.visible == false,
+		"Hide hides the unit on the final arrival (is_hiding latch)."
+	)
+
+	# --- GetLumber: the cut starts on the FINAL arrival, latched ---
+	agent.set_state("has_wood", false)
+	agent.set_state("cutting", false)
+	agent.set_state("arrived_at_destination", false)
+	harness.check(
+		not GetLumber.new().perform(agent, 0.0),
+		"GetLumber.perform does not complete before arrival."
+	)
+	agent.set_state("arrived_at_destination", true)
+	harness.check(
+		not GetLumber.new().perform(agent, 0.0),
+		"GetLumber.perform starts the cut on the final arrival but awaits the channel."
+	)
+	harness.check(
+		agent.get_state("cutting", false) == true
+		and agent.get_state("has_wood", false) == false,
+		"GetLumber latches cutting (has_wood arrives only after the channel)."
+	)
+	# exit cancels the pending cut: the continuation must not pay has_wood.
+	GetLumber.new().exit(agent)
+	harness.check(
+		agent.get_state("cutting", false) == false,
+		"GetLumber.exit cancels the pending cut."
+	)
+	# Session token: a re-entered cut session gets a NEW id, so an abandoned
+	# coroutine can never mistake the restarted session for its own (the
+	# shared channeling timer is restarted by the new session).
+	var first_session: int = agent.get_state("cutting_id", 0)
+	agent.set_state("arrived_at_destination", true)
+	GetLumber.new().perform(agent, 0.0)  # starts a fresh cut session
+	var current_session: int = agent.get_state("cutting_id", 0)
+	harness.check(
+		GetLumber.new()._session_is_current(agent, current_session),
+		"The active cut session's token is current."
+	)
+	# exit() must INVALIDATE the token, not just clear the latch: the hole
+	# was exit-without-re-entry -- no new session ever starts, so without the
+	# bump the abandoned coroutine still saw its own id as current when the
+	# timer fired and paid has_wood for a cancelled cut.
+	GetLumber.new().exit(agent)
+	harness.check(
+		not GetLumber.new()._session_is_current(agent, current_session),
+		"exit() invalidates the cut session token (exit WITHOUT re-entry kills the pending continuation)."
+	)
+	# A later re-entry starts yet another session; the older ones stay dead.
+	agent.set_state("arrived_at_destination", true)
+	GetLumber.new().perform(agent, 0.0)
+	var renewed_session: int = agent.get_state("cutting_id", 0)
+	harness.check(
+		renewed_session > current_session,
+		"GetLumber bumps the cut session token per attempt (abandoned continuations become no-ops)."
+	)
+	harness.check(
+		not GetLumber.new()._session_is_current(agent, current_session),
+		"The ABANDONED session's token is no longer current (its continuation would not pay)."
+	)
+	harness.check(
+		GetLumber.new()._session_is_current(agent, renewed_session),
+		"The CURRENT session's token still pays."
+	)
+	GetLumber.new().exit(agent)
+
+	# --- Preempted arrival (goal switch before the agent turn) ---
+	# The arrival fact latches during the collision tick; a goal change on
+	# the agent's next turn can preempt the action before perform() consumes
+	# it. The invariant: the arrival is RE-EARNED, never reused stale —
+	# every migrated action re-issues movement in enter(), and movement
+	# revokes the latch.
+	agent.set_state("has_wood", true)
+	agent.set_state("returning_wood", false)
+	agent.set_state("arrived_at_destination", false)
+	ReturnLumber.new().enter(agent)  # unit travels toward deliver_position
+	agent.set_state("arrived_at_destination", true)  # collision latches
+	# ...but a higher-priority goal preempts before perform runs:
+	ReturnLumber.new().exit(agent)
+	harness.check(
+		not agent.get_state("returning_wood", false),
+		"A preempted arrival is not delivered."
+	)
+	# The goal is re-selected later: re-entering revokes the stale latch.
+	ReturnLumber.new().enter(agent)
+	harness.check(
+		agent.get_state("arrived_at_destination", true) == false,
+		"Re-entering after a preemption revokes the stale arrival (it is re-earned by the new route)."
+	)
+	harness.check(
+		not ReturnLumber.new().perform(agent, 0.0),
+		"The re-entered action cannot deliver until the NEW arrival latches."
+	)
+
+	# --- Order: the conquer follow-up waits for the FINAL arrival ---
+	agent.set_state("after_arive", "conquer")
+	agent.set_state("arrived_at_destination", false)
+	harness.check(
+		OrderAction.new().perform(agent, 0.0),
+		"Order.perform completes an empty order (no player_order set)."
+	)
+	harness.check_equal(
+		agent.get_state("after_arive"), "conquer",
+		"Order does NOT dispatch the conquer follow-up before arrival."
 	)
 
 	Navigation.path_grid = old_grid

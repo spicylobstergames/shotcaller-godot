@@ -8,10 +8,11 @@
 #             "defend" below 50% hp, "default" below 33% hp.
 # enter     : ready_to_fight = false, is_retreating = true,
 #             arrived_at_retreat = false.
-# Traps     : deliberately has NO on_arrive hook. Arrival flows through
-#             Collisions -> ArriveAtDestination.on_arrive(unit) and then
-#             unit.on_arrive() -> RetreatAction.on_arrive. The old delegation
-#             into ArriveAtDestination.on_arrive(agent) was removed (wrong
+# Traps     : deliberately has NO arrival hook. Arrival is a GOAP state
+#             transition: Collisions -> ArriveAtDestination.advance_path
+#             latches arrived_at_destination, and RetreatAction.perform reads
+#             it to set arrived_at_retreat. The old delegation into
+#             ArriveAtDestination.on_arrive(agent) was removed (wrong
 #             argument type + double path advance).
 # See       : tests/unit/test_agent_tactic.gd.
 # =============================================================================
@@ -70,10 +71,9 @@ func should_retreat(unit) -> bool:
 	return false
 
 
-# NOTE: no on_arrive hook here. Arrival is dispatched by Collisions:
-# ArriveAtDestination.on_arrive(unit) advances the path, then
-# unit.on_arrive() -> Agent.on_arrive fires the current action hook
-# (RetreatAction.on_arrive sets arrived_at_retreat, which this goal's plan
-# needs). The old delegation passed the AGENT into
-# ArriveAtDestination.on_arrive(unit), which double-advanced the path and
-# read current_path off the agent once the arrival signal was wired.
+# NOTE: no arrival hook here. Arrival is a GOAP state transition dispatched by
+# Collisions: ArriveAtDestination.advance_path(unit) advances the path or
+# latches the final-arrival facts; RetreatAction.perform reads
+# arrived_at_destination and sets arrived_at_retreat, which this goal's plan
+# needs. The old delegation passed the AGENT into
+# ArriveAtDestination.on_arrive(unit), which double-advanced the path.

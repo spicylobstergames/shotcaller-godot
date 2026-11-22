@@ -57,25 +57,25 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false (but see `null` vs `false` rule above)
-- **Producer:** `NavigateAction.follow_path()` (sets true), `ArriveAtDestination.on_arrive()` (sets false). `WalkLane`/`ArriveAtDestination.is_valid()` do **not** write it.
+- **Producer:** `NavigateAction.follow_path()` (sets true), `ArriveAtDestination.advance_path()` (sets false on the final arrival).
 - **Consumer:** Nothing in the planner — no `get_preconditions()` reads `has_path`, and `Move.is_valid()` is `unit.moves`. It survives as bookkeeping for movement/UI.
-- **Lifecycle:** Set true when a path is queued; set false when a path is exhausted.
+- **Lifecycle:** Set true when a path is queued; set false when the route's final waypoint is consumed.
 
 #### `has_destiny`
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false (but see `null` vs `false` rule above)
-- **Producer:** `NavigateAction.follow_path()` (sets true)
+- **Producer:** `NavigateAction.follow_path()` (sets true); **cleared by** `MoveAction.stop()` and by the final arrival (`ArriveAtDestination.advance_path()`).
 - **Consumer:** `MoveAction.get_preconditions()` (`has_destiny: true`)
-- **Lifecycle:** Set when a route is queued and **never cleared** — a known stale-fact trap (after any route the planner can satisfy `Move` without `Navigate`). See `IMPROVEMENT_PLAN.md` Track D.
+- **Lifecycle:** Set when a route is queued; cleared when movement stops or the route is consumed — so the planner orders `Navigate` before `Move` deterministically instead of skipping `Navigate` on a stale fact.
 
 #### `arrived_at_destination`
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `MoveAction.perform()`, `NavigateAction.perform()`, `ArriveAtDestination.is_valid()` (line 16), `ArriveAtDestination.on_arrive()` (line 45)
-- **Consumer:** `MoveAction.perform()`, `NavigateAction.perform()`, `ArriveAtDestination` (desired state), `WalkLane` (desired state)
-- **Lifecycle:** Set to `true` when the unit reaches its destination; set to `false` when a new path is queued or the goal re-evaluates.
+- **Producer:** `ArriveAtDestination.advance_path()` (latches true on the FINAL arrival, i.e. when the path is empty); **reset to false** by `MoveAction.move()` and `NavigateAction.follow_path()` on any newly issued movement.
+- **Consumer:** The arrival effects of plan actions (`GetLumber`, `Hide`, `ReturnLumber`, `Retreat`, `Order._dispatch_arrival`), `ArriveAtDestination` (desired state).
+- **Lifecycle:** The final-arrival latch: actions must observe THEIR OWN arrival, never a stale one — any new movement revokes it, and the next collision-driven arrival re-latches it.
 
 #### `enemy_dead`
 - **Scope:** agent
@@ -161,9 +161,25 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `RetreatAction.on_arrive()` (line 37)
+- **Producer:** `RetreatAction.perform()` (latched from `arrived_at_destination` on the final arrival)
 - **Consumer:** `RetreatAction.perform()`, `Recover` (desired state)
-- **Lifecycle:** Set when the unit reaches its retreat position.
+- **Lifecycle:** Set when the unit reaches its retreat position (final arrival); reset by `Recover.enter()`.
+
+#### `cutting`
+- **Scope:** agent
+- **Type:** bool
+- **Default:** false
+- **Producer:** `GetLumber.perform()` (latched when the cut channel starts on the final arrival), cleared by `GetLumber.exit()`
+- **Consumer:** `GetLumber.perform()` (one cut session per latch)
+- **Lifecycle:** True while the lumberjack's cut channel is running; cleared by `exit()` (goal switch) or `reset()`.
+
+#### `cutting_id`
+- **Scope:** agent
+- **Type:** int (session token)
+- **Default:** 0
+- **Producer:** `GetLumber.perform()` (increments per cut session) and `GetLumber.exit()` (increments to INVALIDATE the current session)
+- **Consumer:** `GetLumber._cut()` via `_session_is_current()` (the channel-await continuation pays `has_wood` only if its OWN session id is still current)
+- **Lifecycle:** Monotonic per agent; `exit()` bumps it so an abandoned continuation is a no-op even when NO new session starts before the shared `channeling_timer` fires (exit-without-re-entry). A re-entry bumps it again for the fresh session.
 
 #### `is_channeling`
 - **Scope:** agent
@@ -217,7 +233,7 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `WalkLane.is_valid()` (line 23 — erases), `WalkLane.on_arrive()` (line 53)
+- **Producer:** `WalkLane.is_valid()` (erases), `WalkLane.enter()`, `WalkLane.change_lane()` (resets false)
 - **Consumer:** `WalkLane.is_valid()` (line 25)
 - **Lifecycle:** Erased when lane changes; set to `true` when the lane path is fully traversed.
 
@@ -289,7 +305,7 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `GetLumber.on_arrive()` (line 50, after the cut timer; `perform()` only reads it)
+- **Producer:** `GetLumber._cut()` (after the cut timer, only while `cutting` is latched; `perform()` only reads it)
 - **Consumer:** `ReturnLumber` (precondition)
 - **Lifecycle:** Set to `true` when lumber is collected; set to `false` when delivered.
 
@@ -297,7 +313,7 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent (goal desired state)
 - **Type:** bool
 - **Default:** false
-- **Producer:** `ReturnLumber.get_effects()` (planning claim; `on_arrive` sets `returning_wood` and clears `has_wood`)
+- **Producer:** `ReturnLumber.get_effects()` (planning claim; `perform()` sets `returning_wood` and clears `has_wood` on the final arrival)
 - **Consumer:** `NeedLumber.get_desired_state()`
 - **Lifecycle:** A planning goal fact, not a runtime flag; `ReturnLumber`'s completion is what satisfies it.
 
@@ -305,9 +321,9 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Scope:** agent
 - **Type:** bool
 - **Default:** false
-- **Producer:** `ReturnLumber.enter()` (line 24), `ReturnLumber.perform()` (line 34)
-- **Consumer:** `ReturnLumber` (perform check)
-- **Lifecycle:** Set when the unit starts returning; cleared when lumber is delivered.
+- **Producer:** `ReturnLumber.perform()` (latched on the final arrival)
+- **Consumer:** `ReturnLumber` (perform check), `ReturnLumber.exit()` (clears)
+- **Lifecycle:** Set ONCE when the unit completes the final arrival at `deliver_position` (the delivery: clears `has_wood`, heals buildings); cleared by `exit()`.
 
 #### `closest_tree`
 - **Scope:** agent
@@ -371,7 +387,7 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
   (`enemy_defeated.gd:38`), never read. Allocates a full sight list per enemy
   goal evaluation for no consumer.
 - `after_arive` (typo for `after_arrive`) — set by `OrderAction`,
-  `Conquer`, and `Pray`; read by `OrderAction.on_arrive`.
+  `Conquer`, and `Pray`; read by `OrderAction._dispatch_arrival` (on the final arrival).
 - `resume_path` / `lane_resume_path` — written/erased by `WalkLane` and
   `MoveAction.teleport`, but their readers in `NavigateAction` are commented
   out.
@@ -509,7 +525,7 @@ Some facts have implicit dependencies — one system's behavior depends on anoth
 
 | Dependency | Description | Risk |
 |------------|-------------|------|
-| `has_destiny` is write-only | `Navigate.follow_path` sets `has_destiny = true` and nothing clears it; `Move.get_preconditions()` requires it. | After any route the planner can satisfy `Move` without `Navigate`; the stale `true` is a known freeze cause. |
+| `has_destiny` is route-scoped | `Navigate.follow_path` sets it; `Move.stop` and the final arrival clear it; `Move.get_preconditions()` requires it. | Cleared deterministically since the arrival rework — plans order `Navigate > Move`; do not remove the clears or the stale-`true` freeze returns. |
 | `hunting` depends on `target` being set | `Modifiers` checks `hunting` for attack speed bonuses. | If `target` is set without `hunting`, attack speed bonus is lost. |
 | `is_stunned` vs `stunned` alias | `MoveAction.smart()` checks the stale `stunned` alias; all other code uses `is_stunned`. | `smart()`'s stun guard is silently inactive. |
 | `target` side effects | `_set_target()` clears `attack_count`, removes `agile` modifier, sets `hunting`. These are side effects that any code setting `target` inherits. | Setting `target` without understanding these side effects causes unintended behavior. |

@@ -10,12 +10,15 @@
 # precond   : {}
 # effects   : {"has_wood": true}
 # enter     : Move.point(unit, closest_tree).
-# perform   : returns has_wood.
-# on_arrive : attack animation + channeling_timer (cut_time = 6s), then
-#             has_wood = true -- this is a coroutine (await), so the fact is
-#             NOT set synchronously.
-# Traps     : on_arrive only runs because Collisions emits unit_arrived
-#             (Agent.on_arrive dispatch). closest_tree is set at spawn.
+# perform   : false until the FINAL arrival (arrived_at_destination latched by
+#             Collisions); then starts the cut channel once (cutting latch)
+#             and completes when has_wood is set -- this is a coroutine (await),
+#             so the fact is NOT set synchronously.
+# exit      : cutting = false AND cutting_id bumped -- the cancelled
+#             session's token is invalidated, so a pending cut continuation
+#             becomes a no-op even with no re-entry before the timer fires.
+# Traps     : the arrival facts are the interface (Collisions ->
+#             ArriveAtDestination.advance_path). closest_tree is set at spawn.
 # See       : docs/ai/world-state.md (has_wood, collected_wood).
 # =============================================================================
 
@@ -49,7 +52,20 @@ func get_effects() -> Dictionary:
 
 
 func perform(agent, _delta) -> bool:
-	return !!agent.get_state("has_wood")
+	if agent.get_state("has_wood", false):
+		return true
+	if not agent.get_state("arrived_at_destination", false):
+		return false
+	if not agent.get_state("cutting", false):
+		agent.set_state("cutting", true)
+		# Session token: each cut attempt gets a new id, and the coroutine
+		# only pays has_wood while its OWN session is still current. A plain
+		# boolean would let an abandoned coroutine mistake a restarted
+		# session for its own (review of the arrival rework).
+		var session = int(agent.get_state("cutting_id", 0)) + 1
+		agent.set_state("cutting_id", session)
+		_cut(agent, session)  # fire-and-forget coroutine (see _cut)
+	return false
 
 
 func enter(agent):
@@ -58,14 +74,33 @@ func enter(agent):
 	Goap.get_action("Move").point(unit, closest_tree)
 
 
-func on_arrive(agent):
+func exit(agent):
+	# Cancel the session AND invalidate its token: bumping cutting_id here
+	# turns any pending continuation into a no-op even if NO new cut session
+	# starts before the shared timer fires (exit without re-entry). A bare
+	# "cutting = false" left the abandoned session id current, so the old
+	# coroutine still paid has_wood after being cancelled.
+	agent.set_state("cutting", false)
+	agent.set_state("cutting_id", int(agent.get_state("cutting_id", 0)) + 1)
+
+
+func _cut(agent, session: int) -> void:
 	var unit = agent.get_unit()
 	# fake cut animation
 	unit.set_state("attack")
-	if unit.channeling_timer.time_left > 0: 
+	if unit.channeling_timer.time_left > 0:
 		unit.channeling_timer.stop()
 	unit.channeling_timer.wait_time = cut_time
 	unit.channeling_timer.start()
 	# cut animation end
 	await unit.channeling_timer.timeout
-	agent.set_state("has_wood",true)
+	# Pay only if THIS session is still the current one (exit + re-enter
+	# bumps the id; the shared timer may be restarted by the new session).
+	if _session_is_current(agent, session):
+		agent.set_state("has_wood", true)
+
+
+# The continuation's guard, extracted so tests can pin the token semantics
+# without waiting out the cut timer.
+func _session_is_current(agent, session: int) -> bool:
+	return agent.get_state("cutting_id", 0) == session

@@ -8,13 +8,14 @@
 # precond   : {}
 # effects   : {"is_threatened": false}
 # enter     : Move.point(unit, deliver_position); is_running = true.
-# on_arrive : unit.hide(); is_running = false; is_hiding = true;
-#             hiding_counter = 0.
-# perform   : true once hiding_counter > max_wait_seconds (5).
+# perform   : false until the FINAL arrival (arrived_at_destination latched by
+#             Collisions); then hides once (is_hiding latch) and completes
+#             once hiding_counter > max_wait_seconds (5, driven by
+#             on_every_second).
 # exit      : unit.show(); clears is_hiding / is_threatened / hiding_counter.
 # Traps     : NeedSafety is only in the lumberjack's goals_list, and
-#             deliver_position is set at spawn. on_arrive needs the arrival
-#             dispatch (Collisions -> unit_arrived).
+#             deliver_position is set at spawn. The arrival facts are the
+#             interface (Collisions -> ArriveAtDestination.advance_path).
 # =============================================================================
 
 extends "res://goap/goap_system/action_contract.gd"
@@ -45,11 +46,20 @@ func enter(agent):
 	agent.set_state("is_running", true)
 
 
-func on_arrive(agent):
-	agent.get_unit().hide()
-	agent.set_state("is_running", false)
-	agent.set_state("is_hiding", true)
-	agent.set_state("hiding_counter", 0)
+func perform(agent, _delta) -> bool:
+	if not agent.get_state("is_hiding", false):
+		# The FINAL arrival latches the hiding facts exactly once. (The old
+		# on_arrive hook fired on every waypoint of the route.)
+		if not agent.get_state("arrived_at_destination", false):
+			return false
+		agent.get_unit().hide()
+		agent.set_state("is_running", false)
+		agent.set_state("is_hiding", true)
+		agent.set_state("hiding_counter", 0)
+		return false
+	# hiding: counter driven by on_every_second
+	var hiding_counter = agent.get_state("hiding_counter")
+	return hiding_counter and hiding_counter > max_wait_seconds
 
 
 func on_every_second(agent):
@@ -66,11 +76,6 @@ func on_every_second(agent):
 	if agent.get_state("is_hiding") and not agent.get_state("hide_threatened"):
 		var c = agent.get_state("hiding_counter")
 		agent.set_state("hiding_counter", c+1)
-
-
-func perform(agent, _delta) -> bool:
-	var hiding_counter = agent.get_state("hiding_counter")
-	return hiding_counter and hiding_counter > max_wait_seconds
 
 
 func exit(agent):

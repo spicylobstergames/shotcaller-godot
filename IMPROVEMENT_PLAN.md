@@ -83,7 +83,7 @@ Useful facts verified on this tree:
 |----|------|--------|------|------|
 | A | Documentation truth pass | done 2026-11-14 | none | S |
 | B | Arrival dispatch + ReturnLumber | done 2026-11-14 (313 tests; golden unchanged) | medium | M |
-| C | Planner contradiction handling | **open — needs decision** | medium-high | M |
+| C | Planner contradiction handling | **dropped 2026-11-21 (owner decision)** | — | — |
 | D | State-fact hygiene | open | low-medium | M |
 | E | Perf / cleanup | open — measure first | medium | M |
 | F | Test hardening | open | low | S |
@@ -200,7 +200,16 @@ do not affect it).
 
 ---
 
-## Track B — Restore arrival dispatch + fix ReturnLumber (DONE)
+## Track B — Restore arrival dispatch + fix ReturnLumber (DONE, then SUPERSEDED)
+
+> **Superseded (2026-11-21, DECISIONS D15):** the signal-based dispatch this
+> track introduced (`unit_arrived` → `Agent.on_arrive` → per-action
+> `on_arrive` hooks) was itself replaced after PR #239 review — arrival is
+> now a GOAP state transition (`Collisions` →
+> `ArriveAtDestination.advance_path` latches the facts; actions gate their
+> effects in `perform()`). B1/B2 describe the replaced wiring; B3/B4
+> (Recover delegation removal, ReturnLumber.enter navigation) still stand.
+> The spec below is retained for the evidence and history.
 
 **Why (evidence):**
 
@@ -321,7 +330,17 @@ test must call `on_arrive` and then await/advance).
 
 ---
 
-## Track C — Planner contradiction handling (OPEN, needs a decision)
+## Track C — Planner contradiction handling (DROPPED 2026-11-21)
+
+> **Owner decision (PR #239 feedback):** none of the proposed options were
+> taken. "There's no need to change the goap system" — the planner stays as
+> it is (no contradiction rejection, no new "trap" actions). The sequencing
+> problems the tracks were meant to address are handled instead by (a) the
+> arrival state-transition rework (DECISIONS D15), (b) the deterministic
+> `Navigate > Move` ordering from clearing `has_destiny` on stop/final
+> arrival, and (c) the per-agent execution history for verifying expected
+> sequences. The evidence below is retained; do not implement C1 without a
+> new explicit owner request.
 
 **Evidence:** `planner._build_plans` merges an action's preconditions into the
 branch's desired state by dictionary assignment (`planner.gd:110-112`). No

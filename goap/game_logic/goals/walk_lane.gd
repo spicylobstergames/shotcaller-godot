@@ -11,7 +11,7 @@
 # enter     : re-derives the route ONLY when it is missing or polluted by
 #             combat navigation; otherwise preserves the in-progress lane route
 #             and re-pops the next waypoint if the destiny was zeroed.
-# on_arrive : NONE on purpose -- lane completion must not be set on arrival
+# arrival  : NONE on purpose -- lane completion must not be set on arrival
 #             (lane_route_finished is write-once and would disable the goal
 #             forever; see the note in the body).
 # Helpers   : get_lane_path / closest_lane / change_lane / resume_lane.
@@ -54,7 +54,7 @@ func enter(agent):
 	# while arrived_at_destination is false), so it must not touch an
 	# in-progress route: re-deriving and re-popping the nearest waypoint
 	# every tick pinned units at the lane's first waypoint (nearest == where
-	# they stand) and overwrote the destiny that on_arrive had just advanced.
+	# they stand) and overwrote the destiny the arrival had just advanced.
 	#
 	# Re-derive ONLY when the current path is gone or was polluted by combat
 	# navigation (PursueEnemy -> Navigate.move -> follow_path overwrites
@@ -82,11 +82,11 @@ func enter(agent):
 	unit.current_path = unit.cut_path(lane_path)
 	# The planner runs BEFORE goal.enter and may have skipped Navigate
 	# (has_destiny stale-true) while arrived_at_destination is stale-true
-	# from on_arrive — either would freeze the fresh route. Navigate.enter
+	# from the last arrival — either would freeze the fresh route. Navigate.enter
 	# resets the arrived fact (documented lifecycle) and pops the first
 	# waypoint into current_destiny + starts stepping. It runs at most once
 	# per re-derivation: afterwards the route's remaining points are lane
-	# waypoints and the on_arrive -> Navigate.next loop drives progression.
+	# waypoints and the arrival -> Navigate.next loop drives progression.
 	Goap.get_action("Navigate").enter(agent)
 
 
@@ -156,16 +156,17 @@ func resume_lane(unit) -> void:
 	Goap.get_action("Navigate").cut_path(unit, path)
 
 
-# Deliberately NO on_arrive hook.
+# Deliberately NO arrival hook.
 #
 # This used to set lane_route_finished = true whenever current_path was empty,
 # which looked correct but froze units: lane_route_finished is a WRITE-ONCE
 # fact (only change_lane() and Move.teleport() clear it) and is_valid() treats
-# it as a hard gate. The arrival dispatch is live (Collisions -> unit.on_arrive
-# -> Agent.on_arrive -> this hook), so the first empty-path arrival -- e.g. the
-# terminal lane waypoint at the enemy castle -- disabled WalkLane for the rest
-# of that unit's life. After the fight it had no valid goal and stood still
-# (upstream main never hit this because the arrival dispatch was dead).
+# it as a hard gate. The old arrival signal dispatch (Collisions -> unit.on_arrive
+# -> Agent.on_arrive -> this hook) made the first empty-path arrival -- e.g. the
+# terminal lane waypoint at the enemy castle -- disable WalkLane for the rest
+# of that unit's life. After the fight it had no valid goal and stood still.
+# (Arrival is no longer signal-dispatched at all: it is a GOAP state
+# transition latched by Collisions -> ArriveAtDestination.advance_path.)
 #
 # Regression: tests/unit/test_arrival_dispatch.gd, "an arrival must NOT
 # permanently disable WalkLane".

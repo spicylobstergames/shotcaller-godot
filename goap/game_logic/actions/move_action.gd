@@ -89,6 +89,14 @@ func in_bounds(target_point: Vector2) -> bool:
 
 func move(unit, destiny):
 	if unit.moves and not unit.agent.get_state("is_stunned"):
+		# History sub-event (best effort: test doubles may not carry the
+		# record API). Nothing in planning reads the history.
+		if unit.agent != null and unit.agent.has_method("record_event"):
+			unit.agent.record_event("move_request", destiny)
+		# Any newly issued movement revokes a previous arrival: the fact
+		# must read false until Collisions detects the NEXT arrival, or a
+		# plan action could mistake an old arrival for its own.
+		unit.agent.set_state("arrived_at_destination", false)
 		unit.current_destiny = destiny
 		var current_speed = max(Modifiers.get_value(unit, "speed"), 0.0)
 		calc_step(unit, current_speed)
@@ -162,6 +170,11 @@ func stop(unit):
 	unit.current_destiny = Vector2.ZERO
 	unit.final_destiny = Vector2.ZERO
 	unit.set_state("idle")
+	# Movement is over: drop the routing fact so the planner cannot satisfy
+	# Move without a fresh Navigate. (has_destiny used to be never cleared --
+	# the documented stale-fact trap that let plans skip Navigate.)
+	if unit.agent != null:
+		unit.agent.set_state("has_destiny", false)
 	var animations: AnimationPlayer = unit.animations
 	if animations:
 		animations.speed_scale = 1.0

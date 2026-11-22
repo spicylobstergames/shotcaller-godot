@@ -76,11 +76,12 @@ func physics_process(delta):
 		if not unit1.dead:
 			if unit1.moves and unit1.state == "move":
 				if Goap.get_goal("ArriveAtDestination").is_at_destination(unit1):
-					Goap.get_goal("ArriveAtDestination").on_arrive(unit1)
-					# Emit the unit's arrival so Agent.on_arrive dispatches to
-					# the current action/goal on_arrive hooks (GetLumber, Hide,
-					# RetreatAction, OrderAction). Path advancement above runs
-					# first so WalkLane sees the post-advance current_path.
-					unit1.on_arrive()
+					# Arrival is a GOAP state transition, not a unit signal
+					# (PR #239 feedback): the service goal advances the path
+					# on a waypoint, or latches the final-arrival facts. No
+					# unit.on_arrive() / unit_arrived dispatch — actions
+					# observe arrival through their perform() via the
+					# arrived_at_destination fact.
+					Goap.get_goal("ArriveAtDestination").advance_path(unit1)
 				else:
 					Goap.get_action("Move").step(unit1, delta)

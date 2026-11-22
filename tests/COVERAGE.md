@@ -1,6 +1,6 @@
 # Test Coverage
 
-**28 test classes**, **364 assertions**, **0 script errors** — all passing.
+**29 test classes**, **413 assertions**, **0 script errors** — all passing.
 (The exact count is pinned in `tests/run_suite.sh` as `EXPECTED_UNIT_TESTS`;
 bump it whenever you add tests.)
 
@@ -108,7 +108,8 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_world_state_timers.gd` | WorldState timer setup idempotency (double-start, teardown, second_elapsed relay) | Unit |
 | `test_attack_priorities.gd` | ChooseTarget proximity targeting (can_hit filter, closest wins, range checks) | Unit |
 | `test_attack_lifecycle.gd` | Post-kill replan (no empty-plan freeze), AttackEnemy dead-branch fact cleanup, ranged hit direction (victim, not shooter), corpse-target release, untargetable-enemy goal refusal, pursuit stepping, lane-route resume from nearest waypoint, stale walking-fact reset, FriendsSafe stale fact, out-of-sight target release, zeroed-destiny re-pop, blocked-tile pursue fallback | Unit |
-| `test_arrival_dispatch.gd` | `Agent._ready` wires `unit_arrived` → action/goal `on_arrive` exactly once; `ReturnLumber.enter` routes to `deliver_position` | Unit |
+| `test_arrival_dispatch.gd` | Arrival is a GOAP state transition, not a signal (source lint: no `unit_arrived` wiring, no `on_arrive` hooks); final-arrival-only effects for ReturnLumber/Retreat/Hide/GetLumber/Order; WalkLane write-once regression; `ReturnLumber.enter` routes to `deliver_position` | Unit |
+| `test_agent_history.gd` | Per-agent execution history: recording points, ring-buffer bound, per-agent isolation, reset contract, movement/arrival sub-events | Unit |
 | `test_state_keys.gd` | Every GOAP state key is documented in `world-state.md`; every required fact has a producer (effects or `*_state()`) | Lint |
 | `test_goap_contract_lint.gd` | GOAP-GUIDE banners, registry contract integrity, the exact service-action set, goal desired-fact satisfiability | Lint |
 | `test_goap_index.gd` | `docs/ai/goap-index.md` matches the GOAP-GUIDE banners | Lint |
@@ -279,25 +280,26 @@ Production regressions found by the port and FIXED (each regression-tested):
   still forever "pursuing" it (the golden replay's leader stood at its spawn
   point for 100 frames). `follow_path` now hands each waypoint to
   `Move.move`, the established stepping driver; waypoint progression still
-  flows through the existing `ArriveAtDestination.on_arrive` →
+  flows through the existing `ArriveAtDestination.advance_path` →
   `Navigate.next` machinery. Regression: `test_attack_lifecycle.gd`.
 
-- **Arrival dispatch was never wired** (found during the architecture review,
-  FIXED): `Unit.on_arrive()` emits `unit_arrived`, but no code connected it and
-  nothing called `Unit.on_arrive()`, so `Agent.on_arrive` and every action
-  `on_arrive` hook were dead in production — `GetLumber` never set `has_wood`
-  (lumberjacks could never deliver wood), `Hide` never set `is_hiding`,
-  `RetreatAction.on_arrive` never set `arrived_at_retreat`, and
-  `OrderAction.on_arrive` never ran the conquer/pray follow-up. `Collisions`
-  now calls `unit.on_arrive()` after `ArriveAtDestination.on_arrive(unit)`;
-  `Agent._ready()` connects `unit_arrived` → `on_arrive` exactly once;
-  `Recover.on_arrive`'s agent-vs-unit delegation was removed (it would have
-  double-advanced the path); and `ReturnLumber.enter` now navigates to
-  `deliver_position` instead of assigning `set_state()`'s null return to a
-  nonexistent unit property. Regression: `tests/unit/test_arrival_dispatch.gd`
-  (sabotage-verified: reverting either production line fails it). The golden
-  replay was unchanged — the debug smoke scenario does not exercise the
-  lumberjack/hide/retreat hooks.
+- **Arrival dispatch was never wired, then the wiring itself was replaced**
+  (found during the architecture review, FIXED in two steps): originally
+  nothing connected `unit_arrived`, so every arrival effect was dead
+  (`GetLumber` never set `has_wood`, `Hide` never hid, `Retreat` never
+  retreated, `Order` never conquered/prayed). The first fix wired the signal
+  exactly once; after PR #239 review that signal dispatch was REPLACED by a
+  GOAP state transition: `Collisions` calls
+  `ArriveAtDestination.advance_path(unit)` (renamed from `on_arrive`), which
+  latches `has_path/has_destiny/arrived_at_destination` on the final arrival,
+  and the five actions drive their effects from `perform()` behind latches —
+  gated on the FINAL arrival (the old hooks fired on every route waypoint, so
+  multi-waypoint deliveries/conquests could fire early). `Recover`'s
+  agent-vs-unit delegation was removed (it would have double-advanced the
+  path); `ReturnLumber.enter` navigates to `deliver_position`. Regression:
+  `tests/unit/test_arrival_dispatch.gd` (source lint + final-arrival pins,
+  sabotage-verified). The golden replay was unchanged by both steps — the
+  debug smoke scenario does not exercise the lumberjack/hide/retreat hooks.
 
 - **Arrival dispatch permanently disabled `WalkLane`** (found in play after the
   arrival fix, FIXED): wiring `unit_arrived` to `Agent.on_arrive` also made
@@ -306,8 +308,9 @@ Production regressions found by the port and FIXED (each regression-tested):
   write-once (only `change_lane`/`Move.teleport` clear it) and a hard gate in
   `WalkLane.is_valid()`. The first unit to consume its lane therefore lost its
   default goal for good — units fought, killed an enemy, then stood still.
-  Upstream main never hit this because the arrival dispatch was dead there.
-  Fix: the arrival hook no longer writes the fact. Regression:
+  (Upstream main never hit this because its arrival dispatch was dead; the
+  signal fix made it live here first.) Fix: the arrival hook no longer writes
+  the fact. Regression:
   `tests/unit/test_arrival_dispatch.gd` ("an arrival must NOT permanently
   disable WalkLane"), which failed with 2 assertions before the fix;
   lane-completion semantics (reset path + fallback behavior) are a separate
@@ -357,11 +360,11 @@ Production regressions found by the port and FIXED (each regression-tested):
 DOCUMENTED QUIRKS (pinned, not fixed — a fix must flip the pinning test
 deliberately):- `arrive_at_destination.gd is_valid()` hard-returns `false` (activation
   logic commented out in the restructure). Arrival works only because
-  `Collisions` calls `is_at_destination`/`on_arrive` directly. Pinned by
+  `Collisions` calls `is_at_destination`/`advance_path` directly. Pinned by
   `test_arrive_at_destination.gd`; flag for upstream — if the commented-out
-  activation is restored, this test flips with it. Note: `recover.gd
-  on_arrive` passes the AGENT into `on_arrive(unit)` — inconsistent with
-  `collisions.gd`, which passes the unit.
+  activation is restored, this test flips with it. (The old note about
+  `recover.gd` passing the AGENT is historical — that delegation was
+  removed.)
 - An empty skill dict in the `Skills.leader` table makes `hit_modifiers`
   return null — a latent caller crash. Pinned by
   `test_passive_skills.gd _test_empty_skill_dict_returns_null`

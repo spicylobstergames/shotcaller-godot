@@ -204,13 +204,16 @@ Several mechanisms:
 4. **Stun** — `on_stun_end()` attempts to resume the current action/goal.
 5. **Plan completion** — when the last action completes, the agent clears the plan and re-evaluates goals on the next turn.
 
-Arrival is not an interruption; it is collision-driven. `Collisions` detects a
-moving unit reaching `current_destiny`, calls
-`ArriveAtDestination.on_arrive(unit)` to advance the path, then calls
-`unit.on_arrive()` — which emits `unit_arrived` → `Agent.on_arrive` → the
-current action/goal `on_arrive` hooks (`GetLumber`, `Hide`, `RetreatAction`,
-`OrderAction`). `ArriveAtDestination.is_valid()` hard-returns `false`: the goal
-is a service/library goal, not a selectable one.
+Arrival is not an interruption and not a signal; it is a GOAP state
+transition. `Collisions` detects a moving unit reaching `current_destiny` and
+calls `ArriveAtDestination.advance_path(unit)`: on a waypoint it advances the
+path; on the FINAL arrival it latches `has_path=false`, `has_destiny=false`,
+`arrived_at_destination=true` and stops the unit. Plan actions drive their
+arrival effects from `perform()` by reading `arrived_at_destination` behind
+per-action latches (`GetLumber` cutting, `Hide` is_hiding, `ReturnLumber`
+delivery, `Retreat` arrived_at_retreat, `Order` conquer/pray dispatch).
+`ArriveAtDestination.is_valid()` hard-returns `false`: the goal is a
+service/library goal, not a selectable one.
 
 ### When does the agent replan?
 
@@ -252,13 +255,21 @@ The agent connects to unit signals in `_ready()`:
 | `unit_died` | `on_died()` | Clears stuck projectiles. |
 | `unit_animation_ended` | `on_animation_end()` | Decrements `being_attacked`; delegates to the current action/goal. |
 | `unit_was_attacked` | `was_attacked()` | Sets `being_attacked`/`attacker`; delegates. |
-| `unit_arrived` | `on_arrive()` | Emitted by `Collisions` → `Unit.on_arrive()`; dispatches `on_arrive` to the current action/goal. Connected exactly once. |
 | `second_elapsed` (WorldState) | `on_every_second()` | Regen, per-second action/goal callbacks, DoT damage. |
 
-Signals that exist but are **not** connected to the agent: `unit_move_ended`,
-`unit_stuned`, `unit_started_channeling`, `unit_healed`, `unit_leveled_up`.
+Signals that exist but are **not** connected to the agent: `unit_arrived`
+(arrival is a GOAP state transition — see above — and used to be wired to the
+removed `Agent.on_arrive` dispatch), `unit_move_ended`, `unit_stuned`,
+`unit_started_channeling`, `unit_healed`, `unit_leveled_up`.
 `state_changed` carries a single combined `"Goal Action"` debug string, and
 `hud.update_state(text)` receives it as its one argument.
+
+**Execution history.** Each agent keeps a bounded (64-entry) log of
+goal/plan/action transitions (including explicit `completed:` events) plus movement/arrival/service sub-events
+(`Agent.record_event` / `get_history()` / `history_summary()`). It is
+diagnostics only — nothing in planning reads it — and `tests/freeze_report.gd`
+prints the tail for stuck units. Expected plan sequences per goal are listed
+in `../../ARCHITECTURE.md` ("Arrival is a GOAP state transition").
 
 ## State flow
 
