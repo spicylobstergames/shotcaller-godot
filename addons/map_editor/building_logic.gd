@@ -23,9 +23,14 @@ const BUILDINGS_DIR := "res://unit/buildings"
 
 # Kept in sync with map_validator.gd (_TEAM_DIRECTORIES,
 # _TEAM_STRUCTURE_NAMES); the validator is the runtime contract, this is the
-# placement-side mirror of it.
+# placement-side mirror of it. TEAM_STRUCTURE_NAMES get subtype = lane and
+# team = directory (validator-enforced). TEAM_OWNED_NAMES ship team-owned in
+# the shipping maps (three_lane_map.tscn carries team = "red" for the red
+# church) but their subtype stays backwood; the validator accepts team or
+# neutral for them. Everything else is a neutral backwood building.
 const TEAM_DIRECTORIES := ["blue", "red"]
 const TEAM_STRUCTURE_NAMES := ["castle", "barrack", "tower"]
+const TEAM_OWNED_NAMES := ["church"]
 const NEUTRAL_SUBTYPE := "backwood"
 
 
@@ -76,13 +81,44 @@ static func next_building_name(team_node: Node, base_name: String) -> String:
 	return "%s_%d" % [base_name, index]
 
 
-# Team/subtype metadata per the validator's rules (see the header): team
-# structures take the directory team and the lane the map is currently
-# drawing; everything else is a neutral backwood building.
+# Team/subtype metadata per the validator's rules and the shipping maps
+# (see the header): team structures take the directory team and the lane the
+# map is currently drawing; team-owned extras (church) take the directory
+# team with the backwood subtype; everything else is a neutral backwood
+# building.
 static func apply_building_meta(building: Node, building_name: String, team: String, lane_name: String) -> void:
 	if building_name in TEAM_STRUCTURE_NAMES:
 		building.team = team
 		building.subtype = lane_name
+	elif building_name in TEAM_OWNED_NAMES:
+		building.team = team
+		building.subtype = NEUTRAL_SUBTYPE
 	else:
 		building.team = "neutral"
 		building.subtype = NEUTRAL_SUBTYPE
+
+
+# Editor-preview counterpart of Unit.set_anim: the building scenes ship with
+# the blue "default" animation, and the team recolor only happens at runtime
+# (Unit.setup_team), so a red/neutral placement would sit in the editor
+# looking blue until the game boots. Apply the same animation mapping to the
+# instance's sprites so the editor shows the team color; sprites whose
+# SpriteFrames lack the animation are skipped (same as runtime, which only
+# touches body/weapon/flags — and runtime re-applies per actual team anyway,
+# so these overrides are preview-only and save-safe).
+static func apply_editor_team_visuals(building: Node, team: String) -> void:
+	var animation := "default"
+	match team:
+		"red":
+			animation = "red"
+		"neutral":
+			animation = "neutral"
+	_set_animations(building, animation)
+
+
+static func _set_animations(node: Node, animation: String) -> void:
+	if node is AnimatedSprite2D and node.sprite_frames != null \
+			and node.sprite_frames.has_animation(animation):
+		node.animation = animation
+	for child in node.get_children():
+		_set_animations(child, animation)

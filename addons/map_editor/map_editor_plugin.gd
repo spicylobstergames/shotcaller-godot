@@ -230,6 +230,9 @@ func _place_building(viewport_pos: Vector2) -> void:
 	building.name = BuildingLogic.next_building_name(team_node, BuildingLogic.building_base_name(scene_path))
 	building.position = local
 	BuildingLogic.apply_building_meta(building, building.name, team, lane.name)
+	# Show the runtime team color in the editor too (the scenes ship blue;
+	# Unit.setup_team only recolors at runtime).
+	BuildingLogic.apply_editor_team_visuals(building, building.team)
 
 	var undo_redo := get_undo_redo()
 	undo_redo.create_action("Place building")

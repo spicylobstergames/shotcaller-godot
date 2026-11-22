@@ -20,6 +20,7 @@ func run(harness) -> void:
 	_test_place_target(harness)
 	_test_next_building_name(harness)
 	_test_apply_building_meta(harness)
+	_test_apply_editor_team_visuals(harness)
 
 
 # ---------------------------------------------------------------------------
@@ -138,6 +139,16 @@ func _test_apply_building_meta(harness) -> void:
 	harness.check_equal(castle.subtype, lane_name,
 			"a team structure's subtype is the active lane (WalkLane reads it)")
 
+	# church ships team-owned in the shipping maps (three_lane_map carries
+	# team = "red" for the red church) — regression: it was briefly treated
+	# as neutral, so placements under red silently lost their team.
+	var church: Node = (load("res://unit/buildings/church.tscn") as PackedScene).instantiate()
+	BuildingLogic.apply_building_meta(church, "church", "red", lane_name)
+	harness.check_equal(church.team, "red",
+			"a team-owned building (church) takes the directory team")
+	harness.check_equal(church.subtype, BuildingLogic.NEUTRAL_SUBTYPE,
+			"a team-owned building (church) keeps the backwood subtype")
+
 	var blacksmith: Node = (load("res://unit/buildings/blacksmith.tscn") as PackedScene).instantiate()
 	BuildingLogic.apply_building_meta(blacksmith, "blacksmith", "red", lane_name)
 	harness.check_equal(blacksmith.team, "neutral",
@@ -147,4 +158,35 @@ func _test_apply_building_meta(harness) -> void:
 
 	scaffold_map.free()
 	castle.free()
+	church.free()
 	blacksmith.free()
+
+
+# ---------------------------------------------------------------------------
+# Editor team visuals: placed buildings show their runtime color
+# ---------------------------------------------------------------------------
+
+func _test_apply_editor_team_visuals(harness) -> void:
+	var castle: Node = (load("res://unit/buildings/castle.tscn") as PackedScene).instantiate()
+	var body: AnimatedSprite2D = castle.get_node("sprites/body")
+	harness.check_equal(body.animation, "default",
+			"building scenes ship with the blue 'default' animation (precondition)")
+
+	BuildingLogic.apply_editor_team_visuals(castle, "red")
+	harness.check_equal(body.animation, "red",
+			"a red placement's body shows the red animation in the editor")
+
+	BuildingLogic.apply_editor_team_visuals(castle, "neutral")
+	harness.check_equal(body.animation, "neutral",
+			"a neutral placement's body shows the neutral animation in the editor")
+
+	# Sprites whose SpriteFrames lack the animation must be skipped, not
+	# error: point body's frames at a single-animation set and switch teams.
+	var one_anim := SpriteFrames.new()
+	one_anim.add_animation("default")
+	body.sprite_frames = one_anim
+	BuildingLogic.apply_editor_team_visuals(castle, "red")
+	harness.check_equal(body.animation, "default",
+			"a sprite without the team animation is left untouched (no error spam)")
+
+	castle.free()
