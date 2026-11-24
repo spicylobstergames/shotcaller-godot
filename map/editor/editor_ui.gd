@@ -34,6 +34,7 @@ signal exit_requested
 signal lane_mode_requested(active: bool)
 signal building_mode_requested(active: bool)
 signal tile_mode_requested(active: bool)
+signal move_mode_requested(active: bool)
 signal new_lane_requested
 signal lane_selected(lane_name: String)
 signal undo_requested
@@ -54,6 +55,8 @@ var _block_option: OptionButton
 var _lane_toggle: Button
 var _building_toggle: Button
 var _tile_toggle: Button
+var _move_toggle: Button
+var _mirror_toggle: Button
 var _log: RichTextLabel
 
 var _block_values: Array[int] = []
@@ -156,9 +159,26 @@ func _build() -> void:
 	_team_option.add_item("neutral")
 	_team_option.select(0)
 
+	# Built after Buildings and before Tiles on purpose: adjusting what the map
+	# already has comes before adding more detail.
+	_move_toggle = _add_toggle(box, "Move things",
+			func(active: bool) -> void: move_mode_requested.emit(active))
+	# One tooltip override: the shared toggle tooltip describes paint/erase.
+	_move_toggle.tooltip_text = ("Drag buildings (pre-placed ones too) and lane points. "
+			+ "Left-press grabs the nearest thing under the cursor, motion drags it on "
+			+ "the 64px grid, release commits. Escape exits.")
+
 	_section(box, "Tiles")
 	_tile_toggle = _add_toggle(box, "Paint tiles",
 			func(active: bool) -> void: tile_mode_requested.emit(active))
+	_mirror_toggle = Button.new()
+	_mirror_toggle.text = "Mirror paint"
+	_mirror_toggle.toggle_mode = true
+	_mirror_toggle.button_pressed = true
+	_mirror_toggle.tooltip_text = ("Also paint the mirrored twin across the map center, "
+			+ "matching the scaffold's symmetric look (the M3 dock contract). Turn off "
+			+ "to author asymmetric maps.")
+	box.add_child(_mirror_toggle)
 	_brush_option = OptionButton.new()
 	_brush_option.tooltip_text = "Which TileMapLayer the clicks paint."
 	box.add_child(_brush_option)
@@ -292,7 +312,7 @@ func set_mode_active(mode_name: String, active: bool) -> void:
 		return
 	toggle.set_pressed_no_signal(active)
 	if active:
-		for other in ["lane", "building", "tile"]:
+		for other in ["lane", "building", "tile", "move"]:
 			if other == mode_name:
 				continue
 			var other_toggle := _toggle_for(other)
@@ -308,6 +328,8 @@ func _toggle_for(mode_name: String) -> Button:
 			return _building_toggle
 		"tile":
 			return _tile_toggle
+		"move":
+			return _move_toggle
 	return null
 
 
@@ -480,3 +502,9 @@ func selected_block_cells() -> int:
 func selected_block_is_full_tile() -> bool:
 	return _block_values.is_empty() \
 			or (_block_option != null and _block_option.selected >= _block_values.size() - 1)
+
+
+# Read live by the host at every paint event: on = strokes write their mirrored
+# twin cells (the scaffold's symmetric look), off = only where clicked.
+func mirror_enabled() -> bool:
+	return _mirror_toggle != null and _mirror_toggle.button_pressed

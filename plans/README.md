@@ -47,7 +47,8 @@ acceptance: [...]          # observable, testable outcomes
 | M1 | M | done 2026-11-21 (coordinate fix 52792ac; user-verified in editor) |
 | M2 | M | done 2026-11-21 (user-verified in editor) |
 | M3 | M | implemented 2026-11-21 (TileMapLayer port done; awaiting user editor verification) |
-| M4 | M | implemented 2026-11-22 (runtime map editor scene + user:// map store shipped; awaiting user windowed verification) |
+| M4 | M | done 2026-11-23 (runtime map editor verified windowed by the user; suit green; two follow-up gaps found) |
+| M5 | M | implemented 2026-11-23 (Mirror paint toggle + Move things drag mode; regression-tested headlessly; awaiting user windowed verification) |
 
 Already landed (do not redo): Track A documentation truth pass; Track B
 arrival-dispatch fix + ReturnLumber; state-key lint + contract lint +

@@ -4,7 +4,9 @@ extends Node2D
 # Runtime map editor (map/editor/map_editor.gd)
 # =============================================================================
 # A scene, not an EditorPlugin: opened from the main menu, it authors maps with
-# the same three tools the Godot dock provides, and they share the dock's
+# the dock's three authoring tools (lanes, buildings, tiles — tiles with an
+# opt-out "Mirror paint" toggle, M5) plus a Move tool for repositioning
+# already-placed buildings and lane points, and they share the dock's
 # editor-free logic (lane_logic / building_logic / tile_brush_logic /
 # map_scaffold / map_validator, all RefCounted). What the dock gets from the
 # editor — UndoRedo, a canvas, a selection, click→world math — is rebuilt here:
@@ -33,6 +35,9 @@ const LaneOverlay = preload("res://map/editor/lane_overlay.gd")
 const GAME_SCENE := "res://game.tscn"
 const DEFAULT_LANE_COLOR := Color(1, 1, 1, 0.196078)
 const FALLBACK_MAP_SIZE := Vector2(1056, 1056)
+# How close a Move-tool click must land on a lane point or building, in
+# VIEWPORT pixels so the pick radius stays stable at any zoom level.
+const MOVE_PICK_RADIUS := 48.0
 
 # Typed on purpose: the tool getters (ui.selected_tile(), lane_overlay.lane) are
 # checked against their scripts at parse time instead of failing at runtime.
@@ -43,8 +48,12 @@ const FALLBACK_MAP_SIZE := Vector2(1056, 1056)
 
 var map_root: Node2D = null
 var undo_redo := UndoRedo.new()
-var mode := ""  # "", "lane", "building", "tile"
+var mode := ""  # "", "lane", "building", "tile", "move"
 var _stroke: Dictionary = {}  # {"layer": TileMapLayer, "erase": bool, "undo": {}}
+# The active drag of the Move tool: {"kind": "lane"|"building", "node",
+# "index": int (lane points), "orig": Vector2 (the node-local start position)}.
+# One drag is exactly one undo action; no motion = no history entry.
+var _drag: Dictionary = {}
 
 # Editor-only visibility bookkeeping: hidden flags are serialized into the
 # .tscn, so anything the editor hides must be remembered and put back before
@@ -70,6 +79,7 @@ func _connect_ui() -> void:
 	ui.lane_mode_requested.connect(func(active: bool) -> void: _set_mode("lane" if active else ""))
 	ui.building_mode_requested.connect(func(active: bool) -> void: _set_mode("building" if active else ""))
 	ui.tile_mode_requested.connect(func(active: bool) -> void: _set_mode("tile" if active else ""))
+	ui.move_mode_requested.connect(func(active: bool) -> void: _set_mode("move" if active else ""))
 	ui.new_lane_requested.connect(_on_new_lane)
 	ui.lane_selected.connect(_sync_overlay)
 	ui.undo_requested.connect(undo)
@@ -85,7 +95,7 @@ func _connect_ui() -> void:
 func _install_map(map: Node2D, display_name := "untitled") -> void:
 	if map == null:
 		return
-	_commit_stroke()
+	_commit_pending()
 	_set_mode("")
 
 	var old := map_root
@@ -193,7 +203,7 @@ func _on_save_map() -> void:
 	if map_root == null:
 		ui.log_line("REFUSED: nothing to save. New map first.")
 		return
-	_commit_stroke()
+	_commit_pending()
 	var err := _save_current_map()
 	if err == OK:
 		ui.log_line("Saved %s (%s)" % [MapStore.path_for(ui.map_name()),
@@ -226,7 +236,7 @@ func _on_validate() -> void:
 	if map_root == null:
 		ui.log_line("REFUSED: nothing to validate. New map first.")
 		return
-	_commit_stroke()
+	_commit_pending()
 	var problems: Array = Validator.new().validate(map_root)
 	if problems.is_empty():
 		ui.log_line("Validation: no problems.")
@@ -235,7 +245,7 @@ func _on_validate() -> void:
 
 
 func _on_exit() -> void:
-	_commit_stroke()
+	_commit_pending()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -243,7 +253,7 @@ func _on_play() -> void:
 	if map_root == null:
 		ui.log_line("REFUSED: nothing to play. New map first.")
 		return
-	_commit_stroke()
+	_commit_pending()
 	var problems: Array = Validator.new().validate(map_root)
 	_log_problems(problems)
 	for problem in problems:
@@ -310,12 +320,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_building_input(event)
 	elif mode == "tile":
 		_handle_tile_input(event)
+	elif mode == "move":
+		_handle_move_input(event)
 
 
 func _set_mode(new_mode: String) -> void:
 	if new_mode == mode:
 		return
-	_commit_stroke()
+	_commit_pending()
 	var previous := mode
 	mode = new_mode
 	if previous != "":
@@ -330,13 +342,13 @@ func _set_mode(new_mode: String) -> void:
 
 
 func undo() -> void:
-	_commit_stroke()
+	_commit_pending()
 	undo_redo.undo()
 	_refresh_after_change()
 
 
 func redo() -> void:
-	_commit_stroke()
+	_commit_pending()
 	undo_redo.redo()
 	_refresh_after_change()
 
@@ -511,14 +523,14 @@ func _handle_tile_input(event: InputEvent) -> void:
 			if click.pressed:
 				_paint_at(click.position, false)
 			else:
-				_commit_stroke()
+				_commit_pending()
 			get_viewport().set_input_as_handled()
 			return
 		if click.button_index == MOUSE_BUTTON_RIGHT:
 			if click.pressed:
 				_paint_at(click.position, true)
 			else:
-				_commit_stroke()
+				_commit_pending()
 			get_viewport().set_input_as_handled()
 			return
 	elif event is InputEventMouseMotion:
@@ -529,10 +541,132 @@ func _handle_tile_input(event: InputEvent) -> void:
 		if not (event.button_mask & held):
 			# The release was eaten by the UI panel: end the stroke rather than
 			# paint on every later mouse move.
-			_commit_stroke()
+			_commit_pending()
 			return
 		_paint_at(event.position, erase)
 		get_viewport().set_input_as_handled()
+
+
+# ---------------------------------------------------------------------------
+# Move tool (drag buildings and lane points; one undo action per drag)
+# ---------------------------------------------------------------------------
+
+func _handle_move_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var click := event as InputEventMouseButton
+		if click.button_index == MOUSE_BUTTON_LEFT:
+			if click.pressed:
+				_grab_move_target(click.position)
+			else:
+				_commit_pending()
+			get_viewport().set_input_as_handled()
+			return
+	elif event is InputEventMouseMotion:
+		if _drag.is_empty():
+			return
+		# Same guard as tile strokes: if the release was eaten by the UI panel,
+		# end the drag instead of moving on every later mouse move.
+		if not (event.button_mask & MOUSE_BUTTON_MASK_LEFT):
+			_commit_pending()
+			return
+		_drag_move(event.position)
+		get_viewport().set_input_as_handled()
+
+
+# Grab the NEAREST draggable thing under the cursor, in viewport pixels: any
+# lane point under lanes/, or any building under buildings/<team>/ (the
+# scaffold's pre-placed castle/barracks included). Position-only: names, team
+# metadata, subtypes and point counts never change; re-parenting is out of
+# scope (M5 fixed decision 3).
+func _grab_move_target(viewport_pos: Vector2) -> void:
+	var best: Dictionary = {}
+	_lanes_pick(viewport_pos, best)
+	_buildings_pick(viewport_pos, best)
+	if best.is_empty() or best.get("distance", INF) > MOVE_PICK_RADIUS:
+		return
+	# Undo side first (the original position); the do side is queued at commit,
+	# so intermediate drag positions never enter history.
+	var orig: Vector2 = best.get("orig")
+	if best.get("kind") == "lane":
+		var lane := best.get("node") as Line2D
+		undo_redo.create_action("Move lane point")
+		undo_redo.add_undo_method(lane.set_point_position.bind(int(best.get("index")), orig))
+		# The scaffold hides the lanes node by design; while a lane point is
+		# dragged the overlay shows that lane so the author sees the thing
+		# they are dragging (the lane mode's own overlay rules are untouched).
+		lane_overlay.lane = lane
+		lane_overlay.queue_redraw()
+	else:
+		var building := best.get("node") as Node2D
+		undo_redo.create_action("Move building")
+		undo_redo.add_undo_method(building.set_position.bind(orig))
+	ui.log_line("Grabbed %s (drag to move; release to commit)." % _node_label(
+			best.get("node"), int(best.get("index", -1))))
+	_drag = best
+
+
+# Nearest lane point within reach: lane-local points projected through the
+# runtime canvas transform, compared in viewport space on purpose so zoom
+# cannot change which thing is nearest.
+func _lanes_pick(viewport_pos: Vector2, best: Dictionary) -> void:
+	var lanes_node := map_root.get_node_or_null("lanes")
+	if lanes_node == null:
+		return
+	for lane in lanes_node.get_children():
+		if not (lane is Line2D):
+			continue
+		var xform := LaneLogic.viewport_to_node_xform(lane, get_viewport().get_canvas_transform())
+		for i in (lane as Line2D).get_point_count():
+			var point_viewport: Vector2 = xform * (lane as Line2D).get_point_position(i)
+			var distance := point_viewport.distance_to(viewport_pos)
+			if distance < best.get("distance", INF):
+				best["kind"] = "lane"
+				best["node"] = lane
+				best["index"] = i
+				best["orig"] = (lane as Line2D).get_point_position(i)
+				best["distance"] = distance
+
+
+# Nearest building under buildings/<team>; its position is team-node-local.
+func _buildings_pick(viewport_pos: Vector2, best: Dictionary) -> void:
+	var buildings_node := map_root.get_node_or_null("buildings")
+	if buildings_node == null:
+		return
+	for team in buildings_node.get_children():
+		var team_item := team as CanvasItem
+		if team_item == null:
+			continue
+		var xform := LaneLogic.viewport_to_node_xform(team_item, get_viewport().get_canvas_transform())
+		for building in team.get_children():
+			var distance := (xform * (building as Node2D).position).distance_to(viewport_pos)
+			if distance < best.get("distance", INF):
+				best["kind"] = "building"
+				best["node"] = building
+				best["index"] = -1
+				best["orig"] = (building as Node2D).position
+				best["distance"] = distance
+
+
+# Live drag: viewport click -> node-local point, snapped to the 64px grid
+# (placement snaps the same way, so a moved thing lands where a fresh one
+# would have).
+func _drag_move(viewport_pos: Vector2) -> void:
+	var node = _drag.get("node")
+	if node == null or not is_instance_valid(node):
+		_commit_pending()
+		return
+	var canvas := get_viewport().get_canvas_transform()
+	if _drag.get("kind") == "lane":
+		var lane := node as Line2D
+		var local := LaneLogic.snap_point(
+				LaneLogic.viewport_to_node_xform(lane, canvas).affine_inverse() * viewport_pos)
+		lane.set_point_position(int(_drag.get("index", -1)), local)
+		lane_overlay.queue_redraw()
+	else:
+		var team = node.get_parent()
+		var local := LaneLogic.snap_point(
+				LaneLogic.viewport_to_node_xform(team as CanvasItem, canvas).affine_inverse() * viewport_pos)
+		(node as Node2D).set("position", local)
 
 
 func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
@@ -545,7 +679,7 @@ func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
 	# stroke so the new layer gets its own undo action and its own walls guard
 	# instead of silently bypassing both mid-drag.
 	if not _stroke.is_empty() and layer != _stroke.get("layer"):
-		_commit_stroke()
+		_commit_pending()
 	var cell_size := TileBrush.cell_size_of(layer)
 	if cell_size == Vector2i.ZERO:
 		ui.log_line("REFUSED: the '%s' TileSet has no cell size." % brush)
@@ -578,12 +712,17 @@ func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
 	var source_id: int = -1 if erase else int(tile.get("source_id", -1))
 	var atlas: Vector2i = Vector2i(-1, -1) if erase else tile.get("atlas_coords", Vector2i(-1, -1))
 	var mirror_size := TileBrush.mirror_size_for(layer)
+	# The twin write is OPT-IN per stroke (M5): read live from the "Mirror
+	# paint" toggle so an author can turn the scaffold's symmetric mirroring
+	# off and paint only where clicked. Default on preserves the M3 contract.
+	var mirroring := ui.mirror_enabled()
 	var recorded: Dictionary = _stroke.get("undo", {})
 	for coords in cells:
 		_paint_cell_in_stroke(layer, coords, recorded, erase, source_id, atlas)
-		var mirrored := TileBrush.mirrored_cell(coords, cell_size, mirror_size)
-		if mirrored != coords:
-			_paint_cell_in_stroke(layer, mirrored, recorded, erase, source_id, atlas)
+		if mirroring:
+			var mirrored := TileBrush.mirrored_cell(coords, cell_size, mirror_size)
+			if mirrored != coords:
+				_paint_cell_in_stroke(layer, mirrored, recorded, erase, source_id, atlas)
 
 
 # Record the cell's pre-stroke state once, queue its do/undo methods into the
@@ -613,8 +752,61 @@ func _paint_cell_in_stroke(layer: TileMapLayer, coords: Vector2i, recorded: Dict
 		layer.set_cell(coords, source_id, atlas, 0)
 
 
-# Close the active stroke: release, Escape, mode switch, map install, save,
-# undo/redo. Safe to call with no stroke open.
+# Close ALL pending tool work — a move drag and a tile stroke — at the same
+# lifecycle points: release, Escape, mode switch, map install, save, validate,
+# play, exit, Undo/Redo. Safe to call when nothing is open.
+func _commit_pending() -> void:
+	_commit_drag()
+	_commit_stroke()
+
+
+# Close the active Move-tool drag as one undo action. The undo side (the
+# original position) was queued at grab; the do side (the final position) is
+# queued here so intermediates never enter history. A grab without motion
+# equivalent to the original cancels instead of recording a no-op.
+func _commit_drag() -> void:
+	if _drag.is_empty():
+		return
+	var node = _drag.get("node")
+	var final := Vector2.ZERO
+	var valid := false
+	if node != null and is_instance_valid(node):
+		valid = true
+		if _drag.get("kind") == "lane":
+			final = (node as Line2D).get_point_position(int(_drag.get("index", -1)))
+		else:
+			final = (node as Node2D).position
+	if not valid:
+		undo_redo.cancel_action()
+		_drag = {}
+		return
+	var orig: Vector2 = _drag.get("orig", final)
+	if final != orig:
+		if _drag.get("kind") == "lane":
+			undo_redo.add_do_method((node as Line2D).set_point_position.bind(int(_drag.get("index", -1)), final))
+		else:
+			undo_redo.add_do_method((node as Node2D).set_position.bind(final))
+		undo_redo.commit_action()
+		ui.log_line("Moved %s: %s -> %s" % [
+				_node_label(node, int(_drag.get("index", -1))), orig, final])
+	else:
+		# Left the click on the spot: no history entry for doing nothing.
+		undo_redo.cancel_action()
+	if _drag.get("kind") == "lane" and mode != "lane":
+		lane_overlay.lane = null  # the drag preview goes with the drag
+		lane_overlay.queue_redraw()
+	_drag = {}
+
+
+# "lanes/mid[2]" / "buildings/blue/tower_2" — for the log and nothing else.
+func _node_label(node: Node, point_index: int) -> String:
+	var label := "%s/%s" % [node.get_parent().name, node.name]
+	if point_index >= 0:
+		label += "[%d]" % point_index
+	return label
+
+
+# Close the active tile stroke. Safe to call with no stroke open.
 func _commit_stroke() -> void:
 	if _stroke.is_empty():
 		return

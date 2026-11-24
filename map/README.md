@@ -31,7 +31,7 @@ Tile-map battlefields and everything that populates them.
   editor-free RefCounted code, regression-tested in
   `tests/unit/test_map_editor.gd` / `test_lane_logic.gd` /
   `test_map_loader.gd`.
-- `editor/` — the **runtime** map editor (M4): `map_editor.tscn` with
+- `editor/` — the **runtime** map editor (M4, M5): `map_editor.tscn` with
   `map_editor.gd` / `editor_ui.gd` / `editor_camera.gd` / `lane_overlay.gd` /
   `map_store.gd`, opened by the main menu's **Map editor** button. It is a
   scene, not an EditorPlugin: it rebuilds what the dock gets from the editor
@@ -41,8 +41,14 @@ Tile-map battlefields and everything that populates them.
   saved by `map_store.gd` into **`user://maps/<name>.tscn`** — never
   `res://`, which is read-only in exported builds — and Play hands the saved
   map to `game.gd` through WorldState's `pending_map` (player blue vs enemy
-  red). The store is regression-tested in `tests/unit/test_map_store.gd`; the
-  editing UI itself is verified windowed (`plans/M4.md` checklist).
+  red). Tile strokes write their mirrored twins like the dock ("Mirror paint"
+  toggle, default on; off paints only where clicked so asymmetric maps are
+  authorable), and the **Move things** mode drags any building (pre-placed
+  ones included) or lane point on the 64px grid — position only, one undo
+  step per drag, position-only (names, teams, subtypes and point counts never
+  change). The store and the tool behaviors are regression-tested in
+  `tests/unit/test_map_store.gd` / `test_map_editor_tools.gd`; windowed feel
+  and layout are manual checks (`plans/M4.md`, `plans/M5.md`).
 - `map_manager.gd` resolves maps generically: preloaded shipping maps by var,
   then `res://map/maps/<name>.tscn`, then `user://maps/<name>.tscn`, and a
   full `res://`/`user://` path directly (the shipping path wins when a name
