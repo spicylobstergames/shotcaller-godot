@@ -114,6 +114,7 @@ fake token — self-reporting cannot exclude that, only make it conscious
 | `test_goap_contract_lint.gd` | GOAP-GUIDE banners, registry contract integrity, the exact service-action set, goal desired-fact satisfiability | Lint |
 | `test_goap_index.gd` | `docs/ai/goap-index.md` matches the GOAP-GUIDE banners | Lint |
 | `test_sight_radius.gd` | Sight is distance-filtered (no phantom targets beyond vision) | Unit |
+| `test_map_store.gd` | Runtime map store: save/load roundtrip, owner preservation, name sanitization, user:// listing/deletion | Unit |
 
 *(golden replay — snapshot file, not a test class; see section above)*
 

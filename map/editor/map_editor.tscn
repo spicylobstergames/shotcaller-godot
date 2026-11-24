@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bwwh1miw7i0di"]
+
+[ext_resource type="Script" path="res://map/editor/map_editor.gd" id="1"]
+[ext_resource type="Script" path="res://map/editor/editor_camera.gd" id="2"]
+[ext_resource type="Script" path="res://map/editor/lane_overlay.gd" id="3"]
+[ext_resource type="Script" path="res://map/editor/editor_ui.gd" id="4"]
+
+[node name="MapEditor" type="Node2D" unique_id=373518842]
+script = ExtResource("1")
+
+[node name="EditorCamera" type="Camera2D" parent="." unique_id=892347116]
+script = ExtResource("2")
+
+[node name="MapHolder" type="Node2D" parent="." unique_id=145902273]
+
+[node name="LaneOverlay" type="Node2D" parent="." unique_id=664830157]
+script = ExtResource("3")
+
+[node name="UILayer" type="CanvasLayer" parent="." unique_id=218740995]
+
+[node name="EditorUI" type="Control" parent="UILayer" unique_id=981056342]
+mouse_filter = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4")

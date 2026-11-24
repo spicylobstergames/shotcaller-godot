@@ -519,6 +519,14 @@ When the planner checks a fact, it reads `agent.get_state(key)`. If the key is *
 - **Consumer:** `crafty_camera.gd` (over_minimap, zoom_limit), `UI` (show_fps), `hud/unit_hud.gd` (hide_leaders_hud)
 - **Lifecycle:** Toggled by F-keys or minimap interaction.
 
+#### `pending_map`
+- **Scope:** world
+- **Type:** String (a map path, `user://maps/<name>.tscn`) or null
+- **Default:** null (unset)
+- **Producer:** `map/editor/map_editor.gd` (the runtime editor's Play button, after saving the map it edited)
+- **Consumer:** `game.gd:_ready` → `game.gd:start_map()` (boots that map as player blue vs enemy red instead of showing the main menu)
+- **Lifecycle:** Written immediately before `change_scene_to_file("res://game.tscn")`, read and cleared to `null` once in `game.gd:_ready`, so a normal boot (main menu, debug start, smoke/golden runners) is unaffected. Not a planner fact: no action or goal reads it (the GOAP state-key lint scans `res://goap` only).
+
 ## State dependency map
 
 Some facts have implicit dependencies — one system's behavior depends on another system writing a fact that the planner doesn't directly check.

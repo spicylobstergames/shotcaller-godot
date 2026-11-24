@@ -46,6 +46,13 @@ func on_exit():
 	game.exit()
 
 
+# The runtime map editor is a scene of its own (map/editor/map_editor.tscn),
+# not an editor plugin: it authors maps into user://maps/ and its Play button
+# hands one back to game.gd through WorldState's "pending_map".
+func open_map_editor() -> void:
+	get_tree().change_scene_to_file("res://map/editor/map_editor.tscn")
+
+
 
 func _on_options_button_pressed():
 	game.transitions.start()
