@@ -584,22 +584,17 @@ func _grab_move_target(viewport_pos: Vector2) -> void:
 	_buildings_pick(viewport_pos, best)
 	if best.is_empty() or best.get("distance", INF) > MOVE_PICK_RADIUS:
 		return
-	# Undo side first (the original position); the do side is queued at commit,
-	# so intermediate drag positions never enter history.
-	var orig: Vector2 = best.get("orig")
+	# NO UndoRedo call at grab, on purpose: a press may be released without any
+	# motion, and the runtime UndoRedo has NO cancel_action() to abandon an open
+	# action (the exact windowed crash this rework removed — only the editor's
+	# EditorUndoRedoManager can discard). The original position rides in _drag,
+	# and the single action is created at commit when both endpoints are known.
 	if best.get("kind") == "lane":
-		var lane := best.get("node") as Line2D
-		undo_redo.create_action("Move lane point")
-		undo_redo.add_undo_method(lane.set_point_position.bind(int(best.get("index")), orig))
 		# The scaffold hides the lanes node by design; while a lane point is
 		# dragged the overlay shows that lane so the author sees the thing
 		# they are dragging (the lane mode's own overlay rules are untouched).
-		lane_overlay.lane = lane
+		lane_overlay.lane = best.get("node")
 		lane_overlay.queue_redraw()
-	else:
-		var building := best.get("node") as Node2D
-		undo_redo.create_action("Move building")
-		undo_redo.add_undo_method(building.set_position.bind(orig))
 	ui.log_line("Grabbed %s (drag to move; release to commit)." % _node_label(
 			best.get("node"), int(best.get("index", -1))))
 	_drag = best
@@ -697,8 +692,11 @@ func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
 			if guard != "":
 				ui.log_line(guard)
 				return
-		undo_redo.create_action("Erase tiles" if erase else "Paint tiles")
-		_stroke = {"layer": layer, "erase": erase, "undo": {}}
+		# The UndoRedo action is NOT opened here: it is created at commit. The
+		# runtime UndoRedo has no cancel_action() (editor-only API), so a stroke
+		# that ends without touching a cell must never have opened one. Ops
+		# accumulate on the stroke and become one action at _commit_stroke.
+		_stroke = {"layer": layer, "erase": erase, "undo": {}, "do_ops": [], "undo_ops": []}
 
 	var canvas := get_viewport().get_canvas_transform()
 	var local := TileBrush.viewport_to_local(layer, viewport_pos, canvas)
@@ -725,8 +723,10 @@ func _paint_at(viewport_pos: Vector2, erase: bool) -> void:
 				_paint_cell_in_stroke(layer, mirrored, recorded, erase, source_id, atlas)
 
 
-# Record the cell's pre-stroke state once, queue its do/undo methods into the
-# stroke's action, and apply it immediately so the canvas updates live. The undo
+# Record the cell's pre-stroke state once, file its do/undo Callables into the
+# stroke's op list, and apply it immediately so the canvas updates live. The
+# action itself is created at _commit_stroke (the runtime UndoRedo has no
+# cancel_action(), so an empty stroke must never have opened one). The undo
 # methods must be real TileMapLayer methods — TileBrush.restore_cell_state is a
 # static helper on a different object, which is an invalid Callable and made
 # every undo error (the M3 bug).
@@ -737,15 +737,17 @@ func _paint_cell_in_stroke(layer: TileMapLayer, coords: Vector2i, recorded: Dict
 		return  # already handled this stroke; keep its recorded pre-state
 	var state: Dictionary = TileBrush.get_cell_state(layer, coords)
 	recorded[key] = state
+	var do_ops: Array = _stroke.get("do_ops", [])
+	var undo_ops: Array = _stroke.get("undo_ops", [])
 	if erase:
-		undo_redo.add_do_method(layer.erase_cell.bind(coords))
+		do_ops.append(layer.erase_cell.bind(coords))
 	else:
-		undo_redo.add_do_method(layer.set_cell.bind(coords, source_id, atlas, 0))
+		do_ops.append(layer.set_cell.bind(coords, source_id, atlas, 0))
 	if state.get("present", false):
-		undo_redo.add_undo_method(layer.set_cell.bind(coords, state.get("source_id", -1),
+		undo_ops.append(layer.set_cell.bind(coords, state.get("source_id", -1),
 				state.get("atlas_coords", Vector2i(-1, -1)), state.get("alternative_tile", 0)))
 	else:
-		undo_redo.add_undo_method(layer.erase_cell.bind(coords))
+		undo_ops.append(layer.erase_cell.bind(coords))
 	if erase:
 		layer.erase_cell(coords)
 	else:
@@ -760,38 +762,39 @@ func _commit_pending() -> void:
 	_commit_stroke()
 
 
-# Close the active Move-tool drag as one undo action. The undo side (the
-# original position) was queued at grab; the do side (the final position) is
-# queued here so intermediates never enter history. A grab without motion
-# equivalent to the original cancels instead of recording a no-op.
+# Close the active Move-tool drag as ONE undo action, created here at commit
+# (never at grab — see _grab_move_target on why: the runtime UndoRedo cannot
+# cancel an opened action, and a press without motion must leave no trace). A
+# changed position commits; a position back at the original leaves no history
+# entry. Undo during a drag first commits the drag at its current position.
 func _commit_drag() -> void:
 	if _drag.is_empty():
 		return
 	var node = _drag.get("node")
-	var final := Vector2.ZERO
 	var valid := false
+	var final := Vector2.ZERO
 	if node != null and is_instance_valid(node):
 		valid = true
 		if _drag.get("kind") == "lane":
 			final = (node as Line2D).get_point_position(int(_drag.get("index", -1)))
 		else:
 			final = (node as Node2D).position
-	if not valid:
-		undo_redo.cancel_action()
-		_drag = {}
-		return
 	var orig: Vector2 = _drag.get("orig", final)
-	if final != orig:
-		if _drag.get("kind") == "lane":
-			undo_redo.add_do_method((node as Line2D).set_point_position.bind(int(_drag.get("index", -1)), final))
+	if valid and final != orig:
+		var is_lane: bool = _drag.get("kind") == "lane"
+		undo_redo.create_action("Move lane point" if is_lane else "Move building")
+		if is_lane:
+			var lane := node as Line2D
+			var index := int(_drag.get("index", -1))
+			undo_redo.add_do_method(lane.set_point_position.bind(index, final))
+			undo_redo.add_undo_method(lane.set_point_position.bind(index, orig))
 		else:
-			undo_redo.add_do_method((node as Node2D).set_position.bind(final))
+			var building := node as Node2D
+			undo_redo.add_do_method(building.set_position.bind(final))
+			undo_redo.add_undo_method(building.set_position.bind(orig))
 		undo_redo.commit_action()
 		ui.log_line("Moved %s: %s -> %s" % [
 				_node_label(node, int(_drag.get("index", -1))), orig, final])
-	else:
-		# Left the click on the spot: no history entry for doing nothing.
-		undo_redo.cancel_action()
 	if _drag.get("kind") == "lane" and mode != "lane":
 		lane_overlay.lane = null  # the drag preview goes with the drag
 		lane_overlay.queue_redraw()
@@ -806,14 +809,19 @@ func _node_label(node: Node, point_index: int) -> String:
 	return label
 
 
-# Close the active tile stroke. Safe to call with no stroke open.
+# Close the active tile stroke by turning its accumulated ops into ONE action.
+# The action is created here — never at stroke open — because the runtime
+# UndoRedo has no cancel_action(): a stroke that ends without touching a cell
+# just clears, leaving no trace in history. Safe to call with no stroke open.
 func _commit_stroke() -> void:
 	if _stroke.is_empty():
 		return
-	# A stroke that never wrote a cell (a click that landed on nothing
-	# paintable) has no do/undo methods; committing an empty action errors.
-	if (_stroke.get("undo", {}) as Dictionary).is_empty():
-		undo_redo.cancel_action()
-	else:
+	var do_ops: Array = _stroke.get("do_ops", [])
+	if not do_ops.is_empty():
+		undo_redo.create_action("Erase tiles" if _stroke.get("erase") else "Paint tiles")
+		for op in do_ops:
+			undo_redo.add_do_method(op)
+		for op in _stroke.get("undo_ops", []):
+			undo_redo.add_undo_method(op)
 		undo_redo.commit_action()
 	_stroke = {}

@@ -259,6 +259,21 @@ func _test_move_wiring(harness, editor) -> void:
 	harness.check(editor.undo_redo.get_history_count() == history_before,
 			"a no-motion grab commits no history entry")
 
+	# The windowed crash (pull request feedback): press a GRABBABLE building,
+	# release without any motion. Nothing may error, no history entry may
+	# appear, the drag state must clear, and the building stays put.
+	var castle2 = editor.map_root.get_node("buildings/blue/castle")
+	var before: Vector2 = castle2.get("position")
+	var vp2: Vector2 = LaneLogic.viewport_to_node_xform(castle2.get_parent(),
+			editor.get_viewport().get_canvas_transform()) * before
+	editor._handle_move_input(_click(vp2, true))
+	harness.check(not editor._drag.is_empty(), "the crash-path press grabbed the building")
+	editor._handle_move_input(_click(vp2, false))
+	harness.check(editor._drag.is_empty(), "a press-release with no motion ends the drag cleanly")
+	harness.check(editor.undo_redo.get_history_count() == history_before,
+			"a press-release with no motion commits no history entry")
+	harness.check(castle2.get("position") == before, "a no-motion grab leaves the building in place")
+
 	# Tool toggles stay mutually exclusive, and Escape exits the mode.
 	ui_of(editor).tile_mode_requested.emit(true)
 	harness.check(ui_of(editor)._tile_toggle.button_pressed, "tiles toggle lit")
