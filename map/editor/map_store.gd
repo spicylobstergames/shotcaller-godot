@@ -31,8 +31,22 @@ const _ILLEGAL_CHARS: Array[String] = [
 	"/", "\\", ":", "*", "?", "\"", "<", ">", "|", "\n", "\r", "\t",
 ]
 
+# The maps dir as an ABSOLUTE filesystem path. Directory operations must go
+# through this, never through DirAccess on the user:// scheme directly:
+# DirAccessUnix resolves user:// with process-wide chdir bookkeeping
+# (core/os/os.cpp's data-dir string enters DirAccess::fix_path), and when that
+# data-dir string degrades, DirAccess.open("user://maps") SUCCEEDS while
+# latched onto the process CWD — the PR #242 CI flake listed the PROJECT ROOT
+# (its only root-level .tscn is game.tscn) and presented "game" as the map
+# list instead of failing. FileAccess/FileAccess-based ResourceSaver ops on
+# user:// were correct in the same failing process, which is why save and
+# load keep the scheme while every DirAccess op globalizes first.
+static func maps_dir_absolute() -> String:
+	return ProjectSettings.globalize_path(MAP_DIR)
+
+
 static func ensure_dir() -> void:
-	DirAccess.make_dir_recursive_absolute(MAP_DIR)
+	DirAccess.make_dir_recursive_absolute(maps_dir_absolute())
 
 
 # A name is a basename, not a path: whitespace becomes '_', path separators and
@@ -73,12 +87,24 @@ static func path_for(name: String) -> String:
 	return MAP_DIR + "/" + sanitize_name(name) + MAP_EXT
 
 
-# Sorted basenames of the saved maps. [] when user://maps does not exist yet;
-# directories and non-.tscn files are never listed.
+# Sorted basenames of the saved maps. [] when the maps dir does not exist
+# yet; directories and non-.tscn files are never listed. Only a listing of
+# the REAL maps dir may come back: the opened directory is verified against
+# maps_dir_absolute(), and anything else is an error, not a (possibly
+# foreign-directory) name list.
 static func list_maps() -> PackedStringArray:
 	var maps := PackedStringArray()
-	var dir := DirAccess.open(MAP_DIR)
+	var dir_path := ProjectSettings.globalize_path(MAP_DIR).simplify_path()
+	var dir := DirAccess.open(dir_path)
 	if dir == null:
+		if DirAccess.dir_exists_absolute(dir_path):
+			push_error("map_store: listing %s failed: %s" % [
+					dir_path, error_string(DirAccess.get_open_error())])
+		return maps  # absent dir = no maps saved yet
+	var opened := dir.get_current_dir().simplify_path()
+	if opened != dir_path:
+		push_error("map_store: listing %s opened %s instead — refusing to read a foreign directory" % [
+				dir_path, opened])
 		return maps
 	dir.list_dir_begin()
 	var file := dir.get_next()
@@ -119,7 +145,7 @@ static func load_map(name: String) -> Node:
 # Only files this store could have produced under MAP_DIR are deletable — the
 # path is rebuilt from the sanitized name, never taken from the caller.
 static func delete_map(name: String) -> int:
-	var path := path_for(name)
+	var path := maps_dir_absolute() + "/" + sanitize_name(name) + MAP_EXT
 	if not FileAccess.file_exists(path):
 		return ERR_FILE_NOT_FOUND
 	return DirAccess.remove_absolute(path)

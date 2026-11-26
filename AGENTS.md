@@ -11,8 +11,8 @@
   ```bash
   ./tests/run_suite.sh /path/to/godot     # everything (~45s)
   # Godot binary resolution: argument > GODOT env var > "godot" on PATH.
-  # If the default log dir ($PROJECT_DIR/../.test-logs) is not writable
-  # (sandboxed/CI checkouts), set TEST_LOG_DIR to a writable path.
+  # Logs default to $PROJECT_DIR/.test-logs (inside the checkout, so CI's
+  # test-logs artifact upload works). Set TEST_LOG_DIR to keep them elsewhere.
   ```
 - **GitHub Actions workflow:** `.github/workflows/tests.yml` — runs the suite on PRs and main pushes.
 

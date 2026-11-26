@@ -5,9 +5,10 @@ extends RefCounted
 # =============================================================================
 # map/editor/map_store.gd is the only writer of runtime maps, so it is the one
 # piece of the runtime editor that is fully testable headless: name
-# sanitization, user:// listing, save→load roundtrip through a .tscn, and the
-# owner-preservation rule that keeps placed buildings as scene INSTANCES (the
-# M1 bug was pack() flattening them).
+# sanitization, user:// listing (with a phantom-name guard: a listing must only
+# ever name real files in the maps dir), save→load roundtrip through a .tscn,
+# and the owner-preservation rule that keeps placed buildings as scene
+# INSTANCES (the M1 bug was pack() flattening them).
 #
 # The fixture is always removed before and after, so a failed assertion cannot
 # leave a stray map in user://maps (run_suite.sh redirects user:// into
@@ -179,6 +180,21 @@ func _test_roundtrip(harness) -> void:
 func _test_listing(harness) -> void:
 	var maps := MapStore.list_maps()
 	harness.check(_TMP in maps, "list_maps contains the saved map (%s)" % ", ".join(maps))
+	# Phantom-name detector (the PR #242 CI flake): a DirAccess on the user://
+	# scheme can silently latch onto the process CWD and enumerate the PROJECT
+	# ROOT instead of user://maps — its only root-level .tscn is game.tscn, so
+	# the old unchecked listing presented "game" as the map list. Every listed
+	# name must therefore exist as a real file in the (absolute) maps dir.
+	var phantom := ""
+	for map_name in maps:
+		var map_file := ProjectSettings.globalize_path(MapStore.MAP_DIR) \
+				+ "/" + map_name + MapStore.MAP_EXT
+		if not FileAccess.file_exists(map_file):
+			phantom = map_name
+			break
+	harness.check(phantom == "",
+			"every listed map exists as a file in the maps dir (phantom: %s; listed: %s)" % [
+					phantom, ", ".join(maps)])
 	var sorted := maps.duplicate()
 	sorted.sort()
 	harness.check_equal(maps, sorted, "list_maps returns sorted basenames")
