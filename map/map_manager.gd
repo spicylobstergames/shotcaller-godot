@@ -41,12 +41,25 @@ func load_map(map_name):
 
 # Maps authored with the map editor plugin exist only as map/maps/<name>.tscn
 # files, so resolve them dynamically; the preloaded vars stay the fast path
-# for the shipping maps (and debug_map).
+# for the shipping maps (and debug_map). Runtime-authored maps (M4,
+# map/editor/map_store.gd) live under user://maps/ — res:// is read-only in
+# exported builds — so a bare name checks the shipping path first, then the
+# user path. A full path is accepted directly (game.gd boots a saved map that
+# way), and an unresolvable name returns null instead of crashing on
+# self[map_name]; load_map reports and bails.
 func _resolve_map_scene(map_name: String) -> PackedScene:
+	if map_name.begins_with("user://") or map_name.begins_with("res://"):
+		return load(map_name) as PackedScene
 	var preloaded = get(map_name)
 	if preloaded is PackedScene:
 		return preloaded
-	return load("res://map/maps/%s.tscn" % map_name)
+	var res_path := "res://map/maps/%s.tscn" % map_name
+	if ResourceLoader.exists(res_path):
+		return load(res_path)
+	var user_path := "user://maps/%s.tscn" % map_name
+	if FileAccess.file_exists(user_path):
+		return load(user_path)
+	return null
 
 
 func create_container(container_name):

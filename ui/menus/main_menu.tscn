@@ -45,6 +45,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Campaign"
 
+[node name="map_editor_button" parent="VBoxContainer" unique_id=1390874221 instance=ExtResource("3")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Map editor"
+
 [node name="options_button" parent="VBoxContainer" unique_id=1871895253 instance=ExtResource("3")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -59,5 +64,6 @@ text = "Exit"
 [connection signal="pressed" from="VBoxContainer/quick_start_button" to="." method="quick_start"]
 [connection signal="pressed" from="VBoxContainer/new_game_button" to="." method="show_new_game_menu"]
 [connection signal="pressed" from="VBoxContainer/campaign_button" to="." method="campaign_start"]
+[connection signal="pressed" from="VBoxContainer/map_editor_button" to="." method="open_map_editor"]
 [connection signal="pressed" from="VBoxContainer/options_button" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/exit_button" to="." method="on_exit"]

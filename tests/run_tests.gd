@@ -3,8 +3,8 @@ extends Node
 # Keep suite registration explicit so the headless run order is predictable.
 #
 # PORT NOTE: contrary to the interim deferral (DECISIONS.md D11), the full
-# CI-verified suite is active again on the post-restructure base (D12): all 25
-# test classes below are registered and run, and EXPECTED_UNIT_TESTS in
+# CI-verified suite is active again on the post-restructure base (D12): every
+# test class below is registered and run, and EXPECTED_UNIT_TESTS in
 # run_suite.sh pins the assertion count. Adding a test file requires an entry
 # here AND a _run_suite(...) call below.
 
@@ -42,6 +42,8 @@ const LaneLogicTests = preload("res://tests/unit/test_lane_logic.gd")
 const BuildingLogicTests = preload("res://tests/unit/test_building_logic.gd")
 const TileBrushLogicTests = preload("res://tests/unit/test_tile_brush_logic.gd")
 const MapLoaderTests = preload("res://tests/unit/test_map_loader.gd")
+const MapStoreTests = preload("res://tests/unit/test_map_store.gd")
+const MapEditorToolsTests = preload("res://tests/unit/test_map_editor_tools.gd")
 const GoapIndex = preload("res://tools/goap_index.gd")
 
 var tests_run := 0
@@ -99,6 +101,8 @@ func _ready() -> void:
 	_run_suite("BuildingLogic", BuildingLogicTests)
 	_run_suite("TileBrushLogic", TileBrushLogicTests)
 	_run_suite("MapLoader", MapLoaderTests)
+	_run_suite("MapStore", MapStoreTests)
+	_run_suite("MapEditorTools", MapEditorToolsTests)
 
 	# Machine-checkable completion token: run_suite.sh verifies this line
 	# against the pinned EXPECTED_UNIT_TESTS count in a separate file, so a

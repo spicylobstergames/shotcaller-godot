@@ -23,7 +23,7 @@ STEP_TIMEOUT="${STEP_TIMEOUT:-180}"
 # file than the reporter: a runner that crashes, hangs, or is bypassed cannot
 # fake a green result without editing both files. Bump this when you add
 # tests — the suite will fail with the actual count until you do.
-EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-590}"
+EXPECTED_UNIT_TESTS="${EXPECTED_UNIT_TESTS:-707}"
 
 # Godot binary: argument > GODOT env var > "godot" on PATH.
 GODOT="${1:-${GODOT:-godot}}"
@@ -40,7 +40,11 @@ mkdir -p "$HOME"
 export XDG_DATA_HOME="${GODOT_DATA_HOME:-${XDG_DATA_HOME:-$PROJECT_DIR/../.godot-home}}"
 mkdir -p "$XDG_DATA_HOME"
 
-LOG_DIR="${TEST_LOG_DIR:-$PROJECT_DIR/../.test-logs}"
+# Logs default INSIDE the checkout: CI's upload-artifact step takes
+# .test-logs/ relative to the checkout, so the old ../.test-logs default
+# (outside it) never produced an artifact — the PR #242 failure could not be
+# diagnosed from CI at all. Override with TEST_LOG_DIR to keep logs elsewhere.
+LOG_DIR="${TEST_LOG_DIR:-$PROJECT_DIR/.test-logs}"
 mkdir -p "$LOG_DIR"
 
 failures=0

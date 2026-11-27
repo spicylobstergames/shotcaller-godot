@@ -36,8 +36,30 @@ func _ready():
 	WorldState.set_state("show_fps", true)
 	WorldState.set_state("player_leaders_names", [])
 	WorldState.set_state("enemy_leaders_names", [])
-	if test.debug: test.start()
+	# Map editor handoff (M4): map/editor/map_editor.gd's Play button saved a
+	# map into user://maps/ and left pending_map behind — boot it as blue vs red
+	# instead of showing the main menu. Consumed once, here. The smoke and
+	# golden runners never set it, so their paths are untouched.
+	var pending_map = WorldState.get_state("pending_map")
+	if pending_map:
+		WorldState.set_state("pending_map", null)
+		start_map(pending_map)
+	elif test.debug: test.start()
 	else: ui.show_main_menu()
+
+
+# Start a specific map file (a runtime-authored map: a user:// path, or any
+# loadable scene path). Same teams/leaders as the main menu's quick start:
+# player blue, enemy red.
+func start_map(map_path: String) -> void:
+	map_manager.current_map = map_path
+	WorldState.set_state("player_team", "blue")
+	WorldState.set_state("enemy_team", "red")
+	WorldState.set_state("player_leaders_names", ["arthur", "bokuden", "nagato"])
+	WorldState.set_state("enemy_leaders_names", ["lorne", "robin", "rollo"])
+	WorldState.set_state("game_mode", "match")
+	ui.hide_menus()
+	start()
 
 
 func start():
